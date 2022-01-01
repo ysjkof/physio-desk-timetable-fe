@@ -1,8 +1,7 @@
 module.exports = {
-  content: [],
+  content: ["./src/**/*.tsx"],
   theme: {
     extend: {},
   },
   plugins: [],
-  darkMode: false, // or 'media' or 'class'
 };
