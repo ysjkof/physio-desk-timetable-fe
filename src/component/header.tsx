@@ -1,19 +1,31 @@
 import { useReactiveVar } from "@apollo/client";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSignOutAlt,
+  faTable,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { isLoggedInVar } from "../apollo";
+import { LOCALSTORAGE_TOKEN } from "../constants";
 import { useMe } from "../hooks/useMe";
 import muoolLogo from "../images/logoMuoolJinBlue.svg";
 
 export const Header: React.FC = () => {
   const { data } = useMe();
   const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const navigate = useNavigate();
+  const logoutBtn = () => {
+    localStorage.removeItem(LOCALSTORAGE_TOKEN);
+    // authTokenVar(token);
+    isLoggedInVar(false);
+    navigate("/");
+  };
 
   return (
     <>
-      {isLoggedIn && !data?.me.verified && (
+      {data && !data?.me.verified && (
         <div className="bg-red-500 p-3 text-center text-base">
           <span>Please verify your email.</span>
         </div>
@@ -23,15 +35,22 @@ export const Header: React.FC = () => {
           <Link to="/">
             <img src={muoolLogo} className="w-44" alt="Muool" />
           </Link>
-          <span className="text-xs">
+          <span className="text-xs flex gap-5 items-center">
             {isLoggedIn ? (
-              <Link to="/edit-profile">
-                <FontAwesomeIcon icon={faUser} className="text-3xl" />
-                {data?.me.email}
-              </Link>
+              <>
+                <Link to="/tt">
+                  <FontAwesomeIcon icon={faTable} className="text-3xl" />
+                </Link>
+                <Link to="/edit-profile">
+                  <FontAwesomeIcon icon={faUser} className="text-3xl" />
+                </Link>
+                <button className="text-3xl" onClick={logoutBtn}>
+                  <FontAwesomeIcon icon={faSignOutAlt} className="text-3xl" />
+                </button>
+              </>
             ) : (
               <Link to="/login">
-                <span className="text-3xl">LOG-IN</span>
+                <span className="text-3xl">Log-in</span>
               </Link>
             )}
           </span>

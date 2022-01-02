@@ -18,6 +18,16 @@ export interface CreateAccountInput {
   password: string;
 }
 
+export interface CreatePatientInput {
+  id?: number | null;
+  createdAt?: any | null;
+  updatedAt?: any | null;
+  name?: string | null;
+  gender?: string | null;
+  birthday?: string | null;
+  memo?: string | null;
+}
+
 export interface EditProfileInput {
   email?: string | null;
   password?: string | null;

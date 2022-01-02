@@ -1,5 +1,5 @@
+import React from "react";
 import { gql, useApolloClient, useMutation } from "@apollo/client";
-import { data } from "autoprefixer";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +26,7 @@ export const ConfirmEmail = () => {
   }
   const [invalidCode, setInvalidCode] = useState("");
   const client = useApolloClient();
+
   const onCompleted = (data: verifyEmail) => {
     const {
       verifyEmail: { ok, error },
@@ -35,6 +36,7 @@ export const ConfirmEmail = () => {
       setInvalidCode(`${error} ${i}초 뒤에 홈으로 이동합니다.`);
       const errorMessage = () => {
         i--;
+        console.log(i);
         setInvalidCode(`${error} ${i}초 뒤에 홈으로 이동합니다.`);
         if (i < 1) {
           clearInterval(setMessage);
@@ -68,7 +70,6 @@ export const ConfirmEmail = () => {
   );
   useEffect(() => {
     const [_, code] = window.location.href.split("code=");
-    console.log("⚠️ :", code);
     verifyEmail({
       variables: {
         input: {

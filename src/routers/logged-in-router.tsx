@@ -1,16 +1,12 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Header } from "../component/header";
 import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 import { Home } from "../pages/home";
+import { CreatePatient } from "../pages/patient/create-patient";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
-
-const CLientRoutes = [
-  <Route key={1} path="confirm" element={<ConfirmEmail />} />,
-  <Route key={2} path="edit-profile" element={<EditProfile />} />,
-];
+import { TimeTable } from "../pages/user/time-table";
 
 export const LoggedInRouter = () => {
   const { data, loading, error } = useMe();
@@ -23,11 +19,15 @@ export const LoggedInRouter = () => {
   }
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />}>
+          <Route index element={<p>홈의 인덱스</p>} />,
+          <Route path="confirm" element={<ConfirmEmail />} />,
+          <Route path="edit-profile" element={<EditProfile />} />,
+          <Route path="tt" element={<TimeTable />} />,
+          <Route path="create-patient" element={<CreatePatient />} />,
+        </Route>
         <Route path="*" element={<NotFound />} />
-        {CLientRoutes}
       </Routes>
     </BrowserRouter>
   );
