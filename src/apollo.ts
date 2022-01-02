@@ -1,9 +1,32 @@
-import { ApolloClient, InMemoryCache, makeVar } from "@apollo/client";
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  makeVar,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { LOCALSTORAGE_TOKEN } from "./constants";
 
-export const isLoggedInVar = makeVar(false);
+const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
+export const isLoggedInVar = makeVar(Boolean(token));
+export const authTokenVar = makeVar(token);
+
+const httpLink = createHttpLink({
+  uri: "http://localhost:3002/graphql",
+});
+
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      // 로그인 안했을때도 이 리퀘스트는 계속 요청되니 || "" 추가.
+      "x-jwt": authTokenVar() || "",
+    },
+  };
+});
 
 export const client = new ApolloClient({
-  uri: "http://localhost:3002/graphql",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -11,6 +34,11 @@ export const client = new ApolloClient({
           isLoggedIn: {
             read() {
               return isLoggedInVar();
+            },
+          },
+          token: {
+            read() {
+              return authTokenVar();
             },
           },
         },
