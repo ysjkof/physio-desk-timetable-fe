@@ -28,9 +28,22 @@ export interface CreatePatientInput {
   memo?: string | null;
 }
 
+export interface CreateReservationInput {
+  startDate: any;
+  endDate: any;
+  memo?: string | null;
+  patientId: number;
+  therapistId?: number | null;
+  groupId?: number | null;
+}
+
 export interface EditProfileInput {
   email?: string | null;
   password?: string | null;
+}
+
+export interface FindAllPatientsInput {
+  page?: number | null;
 }
 
 export interface LoginInput {

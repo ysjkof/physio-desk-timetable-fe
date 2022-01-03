@@ -1,0 +1,152 @@
+import { gql, useMutation } from "@apollo/client";
+import React from "react";
+import { Helmet } from "react-helmet-async";
+import { useForm } from "react-hook-form";
+import { Button } from "../../component/button";
+import { FormError } from "../../component/form-error";
+import { UTC_OPTION_KST } from "../../constants";
+import {
+  createReservationMutation,
+  createReservationMutationVariables,
+} from "../../__generated__/createReservationMutation";
+
+const CREATE_RESERVATION_MUTATION = gql`
+  mutation createReservationMutation($input: CreateReservationInput!) {
+    createReservation(input: $input) {
+      ok
+      error
+    }
+  }
+`;
+
+export const CreateReservation = () => {
+  const {
+    register,
+    getValues,
+    formState: { errors, isValid },
+    handleSubmit,
+  } = useForm({ mode: "onChange" });
+
+  const [
+    createReservationMutation,
+    { loading, data: createReservationResult },
+  ] = useMutation<
+    createReservationMutation,
+    createReservationMutationVariables
+  >(CREATE_RESERVATION_MUTATION);
+
+  const onSubmit = () => {
+    if (!loading) {
+      const {
+        startDate,
+        startTime,
+        endDate,
+        endTime,
+        code,
+        memo,
+        patientId,
+        therapistId,
+        groupId,
+      } = getValues();
+
+      createReservationMutation({
+        variables: {
+          input: {
+            startDate: `${startDate}T${startTime}:00.000${UTC_OPTION_KST}`,
+            endDate: `${endDate}T${endTime}:00${UTC_OPTION_KST}`,
+            memo,
+            patientId: parseInt(patientId),
+            therapistId,
+            groupId,
+          },
+        },
+      });
+    }
+  };
+
+  const yyyyMmDd = () => {
+    const now = new Date(Date.now());
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>예약하기 | Muool</title>
+      </Helmet>
+      <h4 className="w-full font-medium text-left text-3xl mb-5">예약하기</h4>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid gap-3 mt-5 w-full mb-5"
+      >
+        {errors.startDate?.message && (
+          <FormError errorMessage={errors.startDate?.message} />
+        )}
+        <label>시작 시간</label>
+        <div className="flex">
+          <input
+            {...register("startDate", {
+              required: true,
+            })}
+            type="text"
+            className="input"
+            placeholder="yyyy-mm-dd"
+            defaultValue={yyyyMmDd()}
+          />
+          <input
+            {...register("startTime", {
+              required: true,
+            })}
+            type="text"
+            className="input"
+            placeholder="HH:MM"
+          />
+        </div>
+        <label>종료 시간</label>
+        <div className="flex">
+          <input
+            {...register("endDate", {
+              required: true,
+            })}
+            type="text"
+            className="input"
+            placeholder="yyyy-mm-dd"
+            defaultValue={yyyyMmDd()}
+          />
+          <input
+            {...register("endTime", {
+              required: true,
+            })}
+            type="text"
+            className="input"
+            placeholder="HH:MM"
+          />
+        </div>
+        <label>프로그램</label>
+        <input
+          {...register("code")}
+          type={"text"}
+          placeholder="code"
+          className="input"
+        />
+        <label>환자ID</label>
+        <input
+          {...register("patientId")}
+          type={"number"}
+          placeholder="patientId"
+          className="input"
+        />
+
+        <Button canClick={isValid} loading={loading} actionText={"환자 등록"} />
+        {createReservationResult?.createReservation.error && (
+          <FormError
+            errorMessage={createReservationResult.createReservation.error}
+          />
+        )}
+      </form>
+    </>
+  );
+};

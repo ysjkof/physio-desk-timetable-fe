@@ -4,6 +4,8 @@ import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 import { Home } from "../pages/home";
 import { CreatePatient } from "../pages/patient/create-patient";
+import { ListPatient } from "../pages/patient/list-patient";
+import { CreateReservation } from "../pages/reservation/create-reservation";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
 import { TimeTable } from "../pages/user/time-table";
@@ -26,6 +28,8 @@ export const LoggedInRouter = () => {
           <Route path="edit-profile" element={<EditProfile />} />,
           <Route path="tt" element={<TimeTable />} />,
           <Route path="create-patient" element={<CreatePatient />} />,
+          <Route path="list-patient" element={<ListPatient />} />,
+          <Route path="reserve" element={<CreateReservation />} />,
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

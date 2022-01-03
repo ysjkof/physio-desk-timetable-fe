@@ -4,7 +4,7 @@ import { Header } from "../component/header";
 
 export function Home() {
   return (
-    <div>
+    <div className="h-screen">
       <Header />
       <Outlet />
     </div>

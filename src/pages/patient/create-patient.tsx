@@ -8,6 +8,8 @@ import {
   createPatientMutationVariables,
 } from "../../__generated__/createPatientMutation";
 import { CreatePatientInput } from "../../__generated__/globalTypes";
+import { FormError } from "../../component/form-error";
+import { Button } from "../../component/button";
 
 const CREATE_PATIENT_MUTATION = gql`
   mutation createPatientMutation($createPatientInput: CreatePatientInput!) {
@@ -23,13 +25,13 @@ export const CreatePatient = () => {
     register,
     getValues,
     watch,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
-    formState,
   } = useForm<CreatePatientInput>({
     mode: "onChange",
   });
   const navigate = useNavigate();
+
   const onCompleted = (data: createPatientMutation) => {
     const {
       createPatient: { ok, error },
@@ -39,10 +41,13 @@ export const CreatePatient = () => {
       navigate("/");
     }
   };
-  const [createPatientMutation, { loading, data }] = useMutation<
+  const [
     createPatientMutation,
-    createPatientMutationVariables
-  >(CREATE_PATIENT_MUTATION, { onCompleted });
+    { loading, data: createaPatientMutationResult },
+  ] = useMutation<createPatientMutation, createPatientMutationVariables>(
+    CREATE_PATIENT_MUTATION,
+    { onCompleted }
+  );
   const onSubmit = () => {
     if (!loading) {
       const { name, gender, birthday, memo } = getValues();
@@ -56,9 +61,64 @@ export const CreatePatient = () => {
   return (
     <>
       <Helmet>
-        <title>Create Patient | Muool</title>
+        <title>환자 등록 | Muool</title>
       </Helmet>
-      <h1>환자 만들기</h1>
+      <h4 className="w-full font-medium text-left text-3xl mb-5">
+        환자 만들기
+      </h4>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid gap-3 mt-5 w-full mb-5"
+      >
+        {errors.name?.message && (
+          <FormError errorMessage={errors.name?.message} />
+        )}
+        <input
+          {...register("name", {
+            required: "Name is required",
+          })}
+          type="name"
+          placeholder="이름"
+          className="input"
+        />
+        {errors.gender?.message && (
+          <FormError errorMessage={errors.gender?.message} />
+        )}
+        <div className="flex justify-around">
+          <div>
+            <label htmlFor="gender-mele" className="px-3">
+              남성
+            </label>
+            <input
+              {...register("gender", { required: true })}
+              type="radio"
+              value="mele"
+              id="gender-mele"
+            />
+          </div>
+          <div>
+            <label htmlFor="gender-femele" className="px-3">
+              여성
+            </label>
+            <input
+              {...register("gender", { required: true })}
+              type="radio"
+              value="femele"
+              id="gender-femele"
+            />
+          </div>
+        </div>
+
+        <input {...register("birthday")} type={"datetime"} className="input" />
+        <input {...register("memo")} type={"text"} className="input" />
+
+        <Button canClick={isValid} loading={loading} actionText={"환자 등록"} />
+        {createaPatientMutationResult?.createPatient.error && (
+          <FormError
+            errorMessage={createaPatientMutationResult.createPatient.error}
+          />
+        )}
+      </form>
     </>
   );
 };
