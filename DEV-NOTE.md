@@ -97,3 +97,11 @@ const FullCalendar {
 
 - [Moment Timezone library](https://momentjs.com/timezone/)
 - [Luxon library](https://moment.github.io/luxon/#/)
+
+# 2022-01-04; 시간표 출력에 대한 고민
+
+예약하기를 만들려다 화면에 어떻게 표현할지 생각하다 시간표 출력방법을 먼저 정해야 할 것 같다고 생각함.
+
+toastUI calendar html을 클론하면서 확인, position absolute, relative로 여러 div를 겹치고 있음.
+
+무지성 따라하다가 보니 flex나 grid를 사용하면 쉽게 그릴 수 있는데 왜? 하면서 flex로 고치던 중, 혹시 D&D(drag & drop) 할 때 위치 정보 때문에 position을 사용하는 건가? 하는 생각이 듬. D&D가 어떻게 이뤄지나 확인해보자.

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 import { Home } from "../pages/home";
@@ -23,7 +23,26 @@ export const LoggedInRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />}>
-          <Route index element={<p>홈의 인덱스</p>} />,
+          <Route
+            index
+            element={
+              <>
+                <h1 className=" text-3xl">홈의 인덱스</h1>
+                <Link className="text-sky-400" to="/create-patient">
+                  Create Patient
+                </Link>
+                <br />
+                <Link className="text-sky-400" to="/list-patient">
+                  List Patient
+                </Link>
+                <br />
+                <Link className="text-sky-400" to="/reserve">
+                  Reserve
+                </Link>
+              </>
+            }
+          />
+          ,
           <Route path="confirm" element={<ConfirmEmail />} />,
           <Route path="edit-profile" element={<EditProfile />} />,
           <Route path="tt" element={<TimeTable />} />,
