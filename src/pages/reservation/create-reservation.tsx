@@ -77,76 +77,84 @@ export const CreateReservation = () => {
       <Helmet>
         <title>예약하기 | Muool</title>
       </Helmet>
-      <h4 className="w-full font-medium text-left text-3xl mb-5">예약하기</h4>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="grid gap-3 mt-5 w-full mb-5"
-      >
-        {errors.startDate?.message && (
-          <FormError errorMessage={errors.startDate?.message} />
-        )}
-        <label>시작 시간</label>
-        <div className="flex">
+      <div className="px-5 lg:px-60">
+        <h4 className=" w-full font-medium text-left text-3xl mb-5">
+          예약하기
+        </h4>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid gap-3 mt-5 w-full mb-5"
+        >
+          {errors.startDate?.message && (
+            <FormError errorMessage={errors.startDate?.message} />
+          )}
+          <label>시작 시간</label>
+          <div className="flex">
+            <input
+              {...register("startDate", {
+                required: true,
+              })}
+              type="text"
+              className="input"
+              placeholder="yyyy-mm-dd"
+              defaultValue={yyyyMmDd()}
+            />
+            <input
+              {...register("startTime", {
+                required: true,
+              })}
+              type="text"
+              className="input"
+              placeholder="HH:MM"
+            />
+          </div>
+          <label>종료 시간</label>
+          <div className="flex">
+            <input
+              {...register("endDate", {
+                required: true,
+              })}
+              type="text"
+              className="input"
+              placeholder="yyyy-mm-dd"
+              defaultValue={yyyyMmDd()}
+            />
+            <input
+              {...register("endTime", {
+                required: true,
+              })}
+              type="text"
+              className="input"
+              placeholder="HH:MM"
+            />
+          </div>
+          <label>프로그램</label>
           <input
-            {...register("startDate", {
-              required: true,
-            })}
-            type="text"
+            {...register("code")}
+            type={"text"}
+            placeholder="code"
             className="input"
-            placeholder="yyyy-mm-dd"
-            defaultValue={yyyyMmDd()}
           />
+          <label>환자ID</label>
           <input
-            {...register("startTime", {
-              required: true,
-            })}
-            type="text"
+            {...register("patientId")}
+            type={"number"}
+            placeholder="patientId"
             className="input"
-            placeholder="HH:MM"
           />
-        </div>
-        <label>종료 시간</label>
-        <div className="flex">
-          <input
-            {...register("endDate", {
-              required: true,
-            })}
-            type="text"
-            className="input"
-            placeholder="yyyy-mm-dd"
-            defaultValue={yyyyMmDd()}
-          />
-          <input
-            {...register("endTime", {
-              required: true,
-            })}
-            type="text"
-            className="input"
-            placeholder="HH:MM"
-          />
-        </div>
-        <label>프로그램</label>
-        <input
-          {...register("code")}
-          type={"text"}
-          placeholder="code"
-          className="input"
-        />
-        <label>환자ID</label>
-        <input
-          {...register("patientId")}
-          type={"number"}
-          placeholder="patientId"
-          className="input"
-        />
 
-        <Button canClick={isValid} loading={loading} actionText={"환자 등록"} />
-        {createReservationResult?.createReservation.error && (
-          <FormError
-            errorMessage={createReservationResult.createReservation.error}
+          <Button
+            canClick={isValid}
+            loading={loading}
+            actionText={"환자 등록"}
           />
-        )}
-      </form>
+          {createReservationResult?.createReservation.error && (
+            <FormError
+              errorMessage={createReservationResult.createReservation.error}
+            />
+          )}
+        </form>
+      </div>
     </>
   );
 };

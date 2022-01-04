@@ -776,11 +776,21 @@ Ensure the default browser behavior of the `hidden` attribute.
   .lg\:mt-28 {
     margin-top: 7rem;
   }
+
+  .lg\:px-60 {
+    padding-left: 15rem;
+    padding-right: 15rem;
+  }
 }
 
 @media (min-width: 1280px) {
   .xl\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
+  }
+
+  .xl\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 }
