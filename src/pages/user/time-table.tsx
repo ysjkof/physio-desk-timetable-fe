@@ -37,42 +37,42 @@ export const TimeTable = () => {
             <div className="date-column h-full border-black border-solid border-2 basis-1/6">
               <div className="schedule-block-wrap h-full relative">
                 <div className="schedule-block">
-                  <div className="schedule">hello</div>
+                  <div className="schedule">월</div>
                 </div>
               </div>
             </div>
             <div className="date-column h-full border-black border-solid border-2 basis-1/6">
               <div className="schedule-block-wrap h-full relative">
                 <div className="schedule-block">
-                  <div className="schedule">hello</div>
+                  <div className="schedule">화</div>
                 </div>
               </div>
             </div>
             <div className="date-column h-full border-black border-solid border-2 basis-1/6">
               <div className="schedule-block-wrap h-full relative">
                 <div className="schedule-block">
-                  <div className="schedule">hello</div>
+                  <div className="schedule">수</div>
                 </div>
               </div>
             </div>
             <div className="date-column h-full border-black border-solid border-2 basis-1/6">
               <div className="schedule-block-wrap h-full relative">
                 <div className="schedule-block">
-                  <div className="schedule">hello</div>
+                  <div className="schedule">목</div>
                 </div>
               </div>
             </div>
             <div className="date-column h-full border-black border-solid border-2 basis-1/6">
               <div className="schedule-block-wrap h-full relative">
                 <div className="schedule-block">
-                  <div className="schedule">hello</div>
+                  <div className="schedule">금</div>
                 </div>
               </div>
             </div>
             <div className="date-column h-full border-black border-solid border-2 basis-1/6">
               <div className="schedule-block-wrap h-full relative">
                 <div className="schedule-block">
-                  <div className="schedule">hello</div>
+                  <div className="schedule">토</div>
                 </div>
               </div>
             </div>
