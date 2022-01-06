@@ -105,3 +105,7 @@ const FullCalendar {
 toastUI calendar html을 클론하면서 확인, position absolute, relative로 여러 div를 겹치고 있음.
 
 무지성 따라하다가 보니 flex나 grid를 사용하면 쉽게 그릴 수 있는데 왜? 하면서 flex로 고치던 중, 혹시 D&D(drag & drop) 할 때 위치 정보 때문에 position을 사용하는 건가? 하는 생각이 듬. D&D가 어떻게 이뤄지나 확인해보자.
+
+# 2022-01-06; css 다시 공부... 백엔드 수정할 때가 걱정
+
+flex를 부모에 넣고 자식에 뭐를 넣고 하나도 기억안나서 시간이 많이 소비되고 있다. css를 다시 공부하고 있다. 다시 백엔드를 마저 만들기 시작하먄 백엔드도 헷갈려질텐데 이걸 몇 번 반복해야 나을까?
