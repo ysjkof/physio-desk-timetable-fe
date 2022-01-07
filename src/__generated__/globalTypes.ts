@@ -7,6 +7,12 @@
 // START Enums and Input Objects
 //==============================================================
 
+export enum ReservationState {
+  Canceled = "Canceled",
+  NoShow = "NoShow",
+  Reserved = "Reserved",
+}
+
 export enum UserRole {
   Client = "Client",
   Customer = "Customer",
@@ -44,6 +50,12 @@ export interface EditProfileInput {
 
 export interface FindAllPatientsInput {
   page?: number | null;
+}
+
+export interface ListReservationsInput {
+  date: any;
+  viewOption?: string | null;
+  groupId?: number | null;
 }
 
 export interface LoginInput {

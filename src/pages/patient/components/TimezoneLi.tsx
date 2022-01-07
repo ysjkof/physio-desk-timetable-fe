@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ITimezoneLiProps {
-  label: number;
+  label: number | string | undefined;
 }
 
 export const TimezoneLi: React.FC<ITimezoneLiProps> = ({ label }) => (
