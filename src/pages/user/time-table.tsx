@@ -54,22 +54,7 @@ export const TimeTable = () => {
     }
   }
   const [timezoneOption, setTimezoneOption] = useState(timeArr);
-  const reserves = [
-    {
-      id: 1,
-      name: "홍길동",
-      gender: "남",
-      startDate: "2022-01-06T10:00:00+0900",
-      endDate: "2022-01-06T10:30:00+0900",
-    },
-    {
-      id: 2,
-      name: "이영희",
-      gender: "여",
-      startDate: "2022-01-06T17:00:00+0900",
-      endDate: "2022-01-06T18:00:00+0900",
-    },
-  ];
+
   function getScheduleLength(startDate: any, endDate: any) {
     return (
       Math.abs(new Date(startDate).getTime() - new Date(endDate).getTime()) /
@@ -79,25 +64,11 @@ export const TimeTable = () => {
   }
 
   function getHHMM(inputDate: string) {
-    const fristSplit = inputDate.split("T", 2);
-    const secondSplit = fristSplit[1].split(":", 2);
-    return parseInt(secondSplit[0].concat(secondSplit[1]));
+    const localDate = new Date(inputDate);
+    const hh = String(localDate.getHours()).padStart(2, "0");
+    const mm = String(localDate.getMinutes()).padStart(2, "0");
+    return hh.concat(mm);
   }
-  for (const reserve of reserves) {
-    const hhmm = getHHMM(reserve.startDate);
-    const findItem = scheduleContainer.find(
-      (schedule) => schedule.timezone === hhmm
-    );
-    if (findItem) {
-      findItem.name = reserve.name;
-      findItem.gender = reserve.gender;
-    }
-  }
-  const temporaryForm = {
-    date: new Date(),
-    viewOption: null,
-    groupId: null,
-  };
 
   const { data: queryResult } = useQuery<
     listReservationsQuery,
@@ -105,14 +76,21 @@ export const TimeTable = () => {
   >(LIST_RESERVATIONS_QUERY, {
     variables: {
       input: {
-        date: temporaryForm.date,
-        viewOption: temporaryForm.viewOption,
-        groupId: temporaryForm.groupId,
+        date: new Date("2022-1-7"),
+        viewOption: null,
+        groupId: null,
       },
     },
   });
 
-  console.log("⚠️ :", queryResult?.listReservations);
+  const reserves = queryResult?.listReservations.results;
+  if (reserves) {
+    for (const reserve of reserves) {
+      const hhmm = getHHMM(reserve.startDate);
+      console.log("⚠️2 :", hhmm);
+    }
+  }
+
   return (
     <div className="time-grid container mx-auto bg-blue-500 h-full flex divide-x divide-solid">
       {/*  */}

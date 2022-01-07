@@ -146,7 +146,7 @@ export const CreateReservation = () => {
           <Button
             canClick={isValid}
             loading={loading}
-            actionText={"환자 등록"}
+            actionText={"예약 등록"}
           />
           {createReservationResult?.createReservation.error && (
             <FormError

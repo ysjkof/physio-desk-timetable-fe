@@ -109,3 +109,23 @@ toastUI calendar html을 클론하면서 확인, position absolute, relative로 
 # 2022-01-06; css 다시 공부... 백엔드 수정할 때가 걱정
 
 flex를 부모에 넣고 자식에 뭐를 넣고 하나도 기억안나서 시간이 많이 소비되고 있다. css를 다시 공부하고 있다. 다시 백엔드를 마저 만들기 시작하먄 백엔드도 헷갈려질텐데 이걸 몇 번 반복해야 나을까?
+
+# 2022-01-07; 랜더링 함수에 `new`를 사용하면 무한 반복에 빠진다
+
+결론: 랜더링 함수에 `new Date()` 같은 걸 사용하면 무한 반복에 빠진다. [참조](https://stackoverflow.com/questions/59660178/overcome-endless-looping-when-executing-usequery-apolloclient-by-defining-a-ne)
+
+`useQuery`를 테스트 하려고 `form`대신 `temporaryForm`객체를 임시로 만들어서 작동했는데 무한 반복에 빠짐. 쿼리는 잘 받아오지만 콘솔로그하면 계속 실행됨. nwe Date
+
+```js
+const temporaryForm = {
+  // 갈로 안에 값을 넣으면 문제 없음.
+  date: new Date("2022-1-7");,
+  // 갈로 안을 비우면 문제 발생
+  // date:new Date()
+};
+const { data } = useQuery(QUERY, {
+  variables: {
+      date: temporaryForm.date,
+  },
+});
+```
