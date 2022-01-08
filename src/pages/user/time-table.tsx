@@ -27,35 +27,22 @@ const LIST_RESERVATIONS_QUERY = gql`
   }
 `;
 
+interface ISchedule {
+  timezone: string;
+  reserve?: string;
+  name?: string;
+  gender?: string;
+  memo?: string | null;
+  patient?: { name?: string; gender?: string };
+  startDate?: Date;
+  endDate?: Date;
+}
+
 export const TimeTable = () => {
   const [timeoption, setTiemoption] = useState(["0900", "1900"]);
-  let timeArr = [];
-  const scheduleContainer = [];
-  for (
-    let i = parseInt(timeoption[0]);
-    i <= parseInt(timeoption[1]);
-    i = i + 100
-  ) {
-    let hhmm;
-    if (String(i).length === 4) {
-      hhmm = i;
-    } else if (String(i).length === 3) {
-      hhmm = String(i).padStart(4, "0");
-    }
-    timeArr.push(hhmm);
-    scheduleContainer.push({
-      timezone: i,
-      reserve: "",
-      name: "",
-      gender: "",
-    });
-    if (timeArr.length > 30) {
-      break;
-    }
-  }
-  const [timezoneOption, setTimezoneOption] = useState(timeArr);
+  const scheduleContainer: ISchedule[] = [];
 
-  function getScheduleLength(startDate: any, endDate: any) {
+  function getScheduleHeight(startDate: any, endDate: any) {
     return (
       Math.abs(new Date(startDate).getTime() - new Date(endDate).getTime()) /
       1000 /
@@ -83,21 +70,45 @@ export const TimeTable = () => {
     },
   });
 
-  const reserves = queryResult?.listReservations.results;
-  if (reserves) {
-    for (const reserve of reserves) {
-      const hhmm = getHHMM(reserve.startDate);
-      console.log("⚠️2 :", hhmm);
+  for (
+    let i = parseInt(timeoption[0]);
+    i <= parseInt(timeoption[1]);
+    i = i + 100
+  ) {
+    let hhmm: string = "";
+    if (String(i).length === 4) {
+      hhmm = String(i);
+    } else if (String(i).length === 3) {
+      hhmm = String(i).padStart(4, "0");
+    }
+    scheduleContainer.push({
+      timezone: hhmm,
+    });
+    if (scheduleContainer.length > 30) {
+      break;
     }
   }
+
+  const reservations = queryResult?.listReservations.results;
+  if (reservations) {
+    for (const reservation of reservations) {
+      const hhmm = getHHMM(reservation.startDate);
+      const scheduleIndex = scheduleContainer.findIndex(
+        (schedule) => schedule.timezone === hhmm
+      );
+      // console.log("⚠️ :", scheduleIndex);
+      scheduleContainer[scheduleIndex] = { timezone: hhmm, ...reservation };
+    }
+  }
+  console.log("⚠️ :", scheduleContainer);
 
   return (
     <div className="time-grid container mx-auto bg-blue-500 h-full flex divide-x divide-solid">
       {/*  */}
       <div className="time-grid-left bg-indigo-400 w-10">
         <div className="timezone-container  bg-violet-700 flex flex-col divide-y divide-solid">
-          {timezoneOption.map((timezone, index) => (
-            <TimezoneLi key={index} label={timezone} />
+          {scheduleContainer.map((schedule, index) => (
+            <TimezoneLi key={index} label={schedule.timezone} />
           ))}
         </div>
       </div>
@@ -105,23 +116,23 @@ export const TimeTable = () => {
       <div className="time-grid-right relative bg-red-300 w-full">
         {/* --- */}
         <div className="time-grid-right-row flex absolute   flex-col divide-y divide-solid w-full">
-          {timezoneOption.map((timezone, index) => (
+          {scheduleContainer.map((schedule, index) => (
             <div key={index} className="guideline flex-auto h-7"></div>
           ))}
         </div>
         {/* \\\ */}
-        <div className="time-grid-right-col absolute  h-full w-full">
-          <div className="schedule-container flex flex-col items-center w-full h-full  border-green-700">
-            {scheduleContainer.map((rr, index) => (
+        <div className="time-grid-right-col absolute h-full w-full">
+          <div className="schedule-container flex flex-col border-green-700">
+            {scheduleContainer.map((schedule, index) => (
               <div
                 key={index}
-                className="schedule h-full"
-                id={String(rr.timezone)}
+                className="schedule flex items-center justify-center"
+                id={schedule.timezone}
+                style={{ height: "28px" }}
               >
-                <div className="relative">
-                  {rr.name}
-                  {rr.gender}
-                </div>
+                <span>{schedule.patient?.name}</span>
+                <span>{schedule.patient?.gender}</span>
+                <span>{schedule.memo}</span>
               </div>
             ))}
           </div>
