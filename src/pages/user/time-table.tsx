@@ -2,8 +2,6 @@ import { gql, useQuery } from "@apollo/client";
 import {
   faAngleLeft,
   faAngleRight,
-  faArrowLeft,
-  faArrowRight,
   faFemale,
   faMale,
 } from "@fortawesome/free-solid-svg-icons";
@@ -51,7 +49,580 @@ export const TimeTable = () => {
   const [timeoption, setTiemoption] = useState(["0900", "1900"]);
   const scheduleContainer: ISchedules[] = [
     { label: true, timezone: "label", schedules: [] },
+    // {
+    //   timezone: "0010",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0020",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0030",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0040",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0050",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0100",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0110",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0120",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0130",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0140",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0150",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0200",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0210",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0220",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0230",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0240",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0250",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0300",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0310",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0320",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0330",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0340",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0350",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0400",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0410",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0420",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0430",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0440",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0450",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0500",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0510",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0520",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0530",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0540",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0550",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0600",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0610",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0620",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0630",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0640",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0650",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0700",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0710",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0720",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0730",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0740",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0750",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0800",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0810",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0820",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0830",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0840",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "0850",
+    //   schedules: [],
+    // },
+    {
+      timezone: "0900",
+      schedules: [],
+    },
+    {
+      timezone: "0910",
+      schedules: [],
+    },
+    {
+      timezone: "0920",
+      schedules: [],
+    },
+    {
+      timezone: "0930",
+      schedules: [],
+    },
+    {
+      timezone: "0940",
+      schedules: [],
+    },
+    {
+      timezone: "0950",
+      schedules: [],
+    },
+    {
+      timezone: "1000",
+      schedules: [],
+    },
+    {
+      timezone: "1010",
+      schedules: [],
+    },
+    {
+      timezone: "1020",
+      schedules: [],
+    },
+    {
+      timezone: "1030",
+      schedules: [],
+    },
+    {
+      timezone: "1040",
+      schedules: [],
+    },
+    {
+      timezone: "1050",
+      schedules: [],
+    },
+    {
+      timezone: "1100",
+      schedules: [],
+    },
+    {
+      timezone: "1110",
+      schedules: [],
+    },
+    {
+      timezone: "1120",
+      schedules: [],
+    },
+    {
+      timezone: "1130",
+      schedules: [],
+    },
+    {
+      timezone: "1140",
+      schedules: [],
+    },
+    {
+      timezone: "1150",
+      schedules: [],
+    },
+    {
+      timezone: "1200",
+      schedules: [],
+    },
+    {
+      timezone: "1210",
+      schedules: [],
+    },
+    {
+      timezone: "1220",
+      schedules: [],
+    },
+    {
+      timezone: "1230",
+      schedules: [],
+    },
+    {
+      timezone: "1240",
+      schedules: [],
+    },
+    {
+      timezone: "1250",
+      schedules: [],
+    },
+    {
+      timezone: "1300",
+      schedules: [],
+    },
+    {
+      timezone: "1310",
+      schedules: [],
+    },
+    {
+      timezone: "1320",
+      schedules: [],
+    },
+    {
+      timezone: "1330",
+      schedules: [],
+    },
+    {
+      timezone: "1340",
+      schedules: [],
+    },
+    {
+      timezone: "1350",
+      schedules: [],
+    },
+    {
+      timezone: "1400",
+      schedules: [],
+    },
+    {
+      timezone: "1410",
+      schedules: [],
+    },
+    {
+      timezone: "1420",
+      schedules: [],
+    },
+    {
+      timezone: "1430",
+      schedules: [],
+    },
+    {
+      timezone: "1440",
+      schedules: [],
+    },
+    {
+      timezone: "1450",
+      schedules: [],
+    },
+    {
+      timezone: "1500",
+      schedules: [],
+    },
+    {
+      timezone: "1510",
+      schedules: [],
+    },
+    {
+      timezone: "1520",
+      schedules: [],
+    },
+    {
+      timezone: "1530",
+      schedules: [],
+    },
+    {
+      timezone: "1540",
+      schedules: [],
+    },
+    {
+      timezone: "1550",
+      schedules: [],
+    },
+    {
+      timezone: "1600",
+      schedules: [],
+    },
+    {
+      timezone: "1610",
+      schedules: [],
+    },
+    {
+      timezone: "1620",
+      schedules: [],
+    },
+    {
+      timezone: "1630",
+      schedules: [],
+    },
+    {
+      timezone: "1640",
+      schedules: [],
+    },
+    {
+      timezone: "1650",
+      schedules: [],
+    },
+    {
+      timezone: "1700",
+      schedules: [],
+    },
+    {
+      timezone: "1710",
+      schedules: [],
+    },
+    {
+      timezone: "1720",
+      schedules: [],
+    },
+    {
+      timezone: "1730",
+      schedules: [],
+    },
+    {
+      timezone: "1740",
+      schedules: [],
+    },
+    {
+      timezone: "1750",
+      schedules: [],
+    },
+    {
+      timezone: "1800",
+      schedules: [],
+    },
+    {
+      timezone: "1810",
+      schedules: [],
+    },
+    {
+      timezone: "1820",
+      schedules: [],
+    },
+    {
+      timezone: "1830",
+      schedules: [],
+    },
+    {
+      timezone: "1840",
+      schedules: [],
+    },
+    {
+      timezone: "1850",
+      schedules: [],
+    },
+    {
+      timezone: "1900",
+      schedules: [],
+    },
+    // {
+    //   timezone: "1910",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "1920",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "1930",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "1940",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "1950",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2000",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2010",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2020",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2030",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2040",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2050",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2100",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2110",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2120",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2130",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2140",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2150",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2200",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2210",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2220",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2230",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2240",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2250",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2300",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2310",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2320",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2330",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2340",
+    //   schedules: [],
+    // },
+    // {
+    //   timezone: "2350",
+    //   schedules: [],
+    // },
   ];
+
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
   const [queryDate, setQueryDate] = useState(new Date());
 
@@ -83,25 +654,25 @@ export const TimeTable = () => {
     },
   });
 
-  for (
-    let i = parseInt(timeoption[0]);
-    i <= parseInt(timeoption[1]);
-    i = i + 100
-  ) {
-    let hhmm: string = "";
-    if (String(i).length === 4) {
-      hhmm = String(i);
-    } else if (String(i).length === 3) {
-      hhmm = String(i).padStart(4, "0");
-    }
-    scheduleContainer.push({
-      timezone: hhmm,
-      schedules: [],
-    });
-    if (scheduleContainer.length > 30) {
-      break;
-    }
-  }
+  // for (
+  //   let i = parseInt(timeoption[0]);
+  //   i <= parseInt(timeoption[1]);
+  //   i = i + 100
+  // ) {
+  //   let hhmm: string = "";
+  //   if (String(i).length === 4) {
+  //     hhmm = String(i);
+  //   } else if (String(i).length === 3) {
+  //     hhmm = String(i).padStart(4, "0");
+  //   }
+  //   scheduleContainer.push({
+  //     timezone: hhmm,
+  //     schedules: [],
+  //   });
+  //   if (scheduleContainer.length > 30) {
+  //     break;
+  //   }
+  // }
 
   const reservations = queryResult?.listReservations.results;
   if (reservations) {
@@ -148,7 +719,7 @@ export const TimeTable = () => {
             {/* 오른쪽 가로 줄, 가이드라인 */}
             <div className="time-grid-right-row flex absolute z-20 flex-col divide-y divide-solid w-full ">
               {scheduleContainer.map((schedule, index) => (
-                <div key={index} className="guideline flex-auto h-7"></div>
+                <div key={index} className="guideline flex-auto h-3"></div>
               ))}
             </div>
             {/* 오른쪽 세로 줄 */}
@@ -158,11 +729,10 @@ export const TimeTable = () => {
                 {scheduleContainer.map((scheduleBlock, index) => (
                   <div
                     key={index}
-                    className={`scheduleBlock flex flex-row gap-2 items-center justify-center px-2 hover:ring-1 ${
+                    className={`scheduleBlock flex flex-row gap-2 items-center justify-center px-2 hover:ring-1 h-3 ${
                       scheduleBlock.label ? "bg-gray-50 rounded-tr-md" : ""
                     }`}
                     id={scheduleBlock.timezone}
-                    style={{ height: "28px" }}
                   >
                     {scheduleBlock.label ? (
                       <div className="scheduleBlock-header text-sm font-extralight text-gray-400">
@@ -172,7 +742,7 @@ export const TimeTable = () => {
                     {scheduleBlock.schedules.map((schedule, index) => (
                       <div
                         key={index}
-                        className="scheduleBlock-schedule group bg-white flex flex-row gap-1 outline outline-1 rounded-sm px-1 cursor-pointer hover:bg-sky-500 hover:outline-sky-500"
+                        className="scheduleBlock-schedule group text-sm bg-white flex flex-row gap-1 outline outline-1 rounded-sm px-1 cursor-pointer hover:bg-sky-500 hover:outline-sky-500 relative top-[0.420rem]"
                       >
                         {scheduleBlock.label}
                         <div className="schedule-title flex flex-row gap-1 group-hover:text-white">
@@ -189,10 +759,10 @@ export const TimeTable = () => {
                               />
                             )}
                           </span>
-                          <span>{schedule?.patient?.name}</span>
+                          <span className="">{schedule?.patient?.name}</span>
                         </div>
                         <div>
-                          <span className="text-gray-500 text-sm group-hover:text-white">
+                          <span className="text-gray-500 text-sm  group-hover:text-white">
                             {schedule?.memo}
                           </span>
                         </div>
