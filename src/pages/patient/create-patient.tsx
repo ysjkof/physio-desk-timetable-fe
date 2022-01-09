@@ -86,25 +86,25 @@ export const CreatePatient = () => {
         )}
         <div className="flex justify-around">
           <div>
-            <label htmlFor="gender-mele" className="px-3">
+            <label htmlFor="gender-male" className="px-3">
               남성
             </label>
             <input
               {...register("gender", { required: true })}
               type="radio"
-              value="mele"
-              id="gender-mele"
+              value="male"
+              id="gender-male"
             />
           </div>
           <div>
-            <label htmlFor="gender-femele" className="px-3">
+            <label htmlFor="gender-female" className="px-3">
               여성
             </label>
             <input
               {...register("gender", { required: true })}
               type="radio"
-              value="femele"
-              id="gender-femele"
+              value="female"
+              id="gender-female"
             />
           </div>
         </div>

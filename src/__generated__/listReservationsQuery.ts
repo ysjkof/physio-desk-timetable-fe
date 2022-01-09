@@ -12,6 +12,7 @@ import { ListReservationsInput, ReservationState } from "./globalTypes";
 export interface listReservationsQuery_listReservations_results_patient {
   __typename: "Patient";
   name: string;
+  gender: string;
 }
 
 export interface listReservationsQuery_listReservations_results_lastModifier {

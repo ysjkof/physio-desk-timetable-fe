@@ -4,7 +4,7 @@ import { Header } from "../component/header";
 
 export function Home() {
   return (
-    <div className="">
+    <div className="divide-solid divide-y">
       <Header />
       <Outlet />
     </div>
