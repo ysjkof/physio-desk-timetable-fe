@@ -92,7 +92,7 @@ export const CreateReservation = () => {
           <div className="flex">
             <input
               {...register("startDate", {
-                required: true,
+                required: "시작 시간을 입력해주세요.",
               })}
               type="text"
               className="input"
@@ -135,10 +135,13 @@ export const CreateReservation = () => {
             placeholder="code"
             className="input"
           />
+          {errors.patientId?.message && (
+            <FormError errorMessage={errors.patientId?.message} />
+          )}
           <label>환자ID</label>
           <input
-            {...register("patientId")}
-            type={"number"}
+            {...register("patientId", { required: "환자ID를 입력하세요" })}
+            type="number"
             placeholder="patientId"
             className="input"
           />
