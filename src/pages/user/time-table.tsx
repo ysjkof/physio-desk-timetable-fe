@@ -624,7 +624,7 @@ export const TimeTable = () => {
   ];
 
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
-  const [queryDate, setQueryDate] = useState(new Date());
+  const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
 
   function getScheduleHeight(startDate: any, endDate: any) {
     return (
@@ -694,8 +694,8 @@ export const TimeTable = () => {
 
   return (
     <div className="bg-gray-100">
-      <div className="time-grid container mx-auto h-full flex flex-col p-3 space-y-4">
-        <h1 className="text-3xl font-bold flex flex-row justify-between px-4 py-1 items-center rounded-md bg-white shadow-cst">
+      <div className="time-grid container mx-auto h-full flex flex-col py-2 space-y-4">
+        <h1 className="text-3xl font-bold flex flex-row justify-between px-4 py-1 items-center sm:rounded-md bg-white shadow-cst">
           <button onClick={() => console.log("⚠️ :", "Left Click")}>
             <FontAwesomeIcon icon={faAngleLeft} />
           </button>
@@ -705,7 +705,7 @@ export const TimeTable = () => {
             <FontAwesomeIcon icon={faAngleRight} />
           </button>
         </h1>
-        <div className="flex flex-row rounded-md shadow-cst bg-white">
+        <div className="flex flex-row sm:rounded-md shadow-cst bg-white">
           {/*  */}
           <div className="time-grid-left">
             <div className="timezone-container w-full flex flex-col divide-y divide-solid">
