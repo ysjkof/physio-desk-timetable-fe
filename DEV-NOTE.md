@@ -129,3 +129,20 @@ const { data } = useQuery(QUERY, {
   },
 });
 ```
+
+# 2022-01-10; 대충 이러면 되야되는데? 하면 안된다
+
+```js
+// 원한 결과는 이렇게 네 줄이다
+if (hhmm[2] === "6") handleOverMinute();
+if (hhmm[2] === "7") handleOverMinute();
+// 줄여서 쓰려고 이렇게 했고 원한 동작이 안나온다
+if (hhmm[2] === "6" || "7") handleOverMinute();
+// 그건 이렇게 했어야 했다.
+if (hhmm[2] === "6" || hhmm[2] === "7") handleOverMinute();
+```
+
+그냥 "7"이라고 문자열만 써 놓으니 문자열은 true고 그래서 작동이 이상하게 됨
+
+- 참조: [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy)
+- 참조: [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)
