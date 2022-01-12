@@ -32,16 +32,16 @@ const LIST_RESERVATIONS_QUERY = gql`
   }
 `;
 
-interface ISchedules {
+interface IReservationsContainer {
   timezone: string;
-  schedules: listReservationsQuery_listReservations_results[];
+  reservations: listReservationsQuery_listReservations_results[];
 }
 
 export const TimeTable = () => {
   const timearray = [];
   // 시간표에 출력할 시간 설정
   const [timeoption, setTiemoption] = useState(["0900", "1900"]);
-  const scheduleContainer: ISchedules[] = [];
+  const schedulesContainer: IReservationsContainer[] = [];
 
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
   const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
@@ -83,12 +83,12 @@ export const TimeTable = () => {
     if (hhmm[2] === "9") handleOverMinute(0);
     // 10분 단위가 6~9인 경우 hhmm의 길이가 0이고 이때 push하지 않는다.
     if (hhmm.length !== 0)
-      scheduleContainer.push({
+      schedulesContainer.push({
         timezone: hhmm,
-        schedules: [],
+        reservations: [],
       });
 
-    if (scheduleContainer.length > 200) {
+    if (schedulesContainer.length > 200) {
       break;
     }
   }
@@ -97,11 +97,11 @@ export const TimeTable = () => {
   if (reservations) {
     for (const reservation of reservations) {
       const hhmm = getHHMM(reservation.startDate);
-      const scheduleIndex = scheduleContainer.findIndex(
+      const scheduleIndex = schedulesContainer.findIndex(
         (schedule) => schedule.timezone === hhmm
       );
-      scheduleContainer[scheduleIndex].timezone = hhmm;
-      scheduleContainer[scheduleIndex].schedules.push({
+      schedulesContainer[scheduleIndex].timezone = hhmm;
+      schedulesContainer[scheduleIndex].reservations.push({
         ...reservation,
       });
     }
@@ -128,7 +128,7 @@ export const TimeTable = () => {
               <div className="left-timezone-hour w-full text-xs font-extralight text-gray-400 px-2 h-3 bg-gray-50 rounded-tl-md get-in-line text-center">
                 시간
               </div>
-              {scheduleContainer.map((schedule, index) => (
+              {schedulesContainer.map((schedule, index) => (
                 <TimezoneLi key={index} timezone={schedule.timezone} />
               ))}
             </div>
@@ -138,7 +138,7 @@ export const TimeTable = () => {
             {/* 오른쪽 rows */}
             <div className="time-grid-right-row absolute z-20 divide-y divide-solid w-full ">
               <div className="guideline flex-auto h-3 get-in-line"></div>
-              {scheduleContainer.map((schedule, index) => (
+              {schedulesContainer.map((schedule, index) => (
                 <div
                   key={index}
                   className="guideline flex-auto h-4"
@@ -161,20 +161,20 @@ export const TimeTable = () => {
                   예약
                 </div>
               </div>
-              {scheduleContainer.map((scheduleBlock, index) => (
+              {schedulesContainer.map((schedule, index) => (
                 <div
                   key={index}
                   className="scheduleBlock w-full  px-2 hover:ring-1 h-4"
                 >
-                  {scheduleBlock.schedules.map((schedule) => (
+                  {schedule.reservations.map((reservation) => (
                     <ScheduleBlockContents
-                      key={schedule.id}
-                      timezone={scheduleBlock.timezone}
-                      gender={schedule.patient.gender}
-                      name={schedule.patient.name}
-                      memo={schedule.memo}
-                      startDate={schedule.startDate}
-                      endDate={schedule.endDate}
+                      key={reservation.id}
+                      timezone={schedule.timezone}
+                      gender={reservation.patient.gender}
+                      name={reservation.patient.name}
+                      memo={reservation.memo}
+                      startDate={reservation.startDate}
+                      endDate={reservation.endDate}
                     />
                   ))}
                 </div>
