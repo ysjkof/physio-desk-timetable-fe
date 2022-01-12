@@ -36,7 +36,6 @@ export const ConfirmEmail = () => {
       setInvalidCode(`${error} ${i}초 뒤에 홈으로 이동합니다.`);
       const errorMessage = () => {
         i--;
-        console.log(i);
         setInvalidCode(`${error} ${i}초 뒤에 홈으로 이동합니다.`);
         if (i < 1) {
           clearInterval(setMessage);

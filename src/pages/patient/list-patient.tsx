@@ -38,7 +38,6 @@ export const ListPatient = () => {
       },
     }
   );
-  console.log("⚠️ :", queryResult?.findAllPatients);
   return (
     <div className="bg-gray-100">
       <div className="container mx-auto h-full flex flex-col items-center justify-center rounded-md  p-3">

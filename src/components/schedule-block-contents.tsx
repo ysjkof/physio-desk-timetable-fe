@@ -17,7 +17,6 @@ function getScheduleHeight(startDate: any, endDate: any) {
     Math.abs(new Date(startDate).getTime() - new Date(endDate).getTime()) /
     1000 /
     60;
-  console.log("⚠️ :", Math.ceil(getMinutes / 10));
   return Math.ceil(getMinutes / 10);
 }
 

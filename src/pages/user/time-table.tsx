@@ -100,7 +100,6 @@ export const TimeTable = () => {
       const scheduleIndex = scheduleContainer.findIndex(
         (schedule) => schedule.timezone === hhmm
       );
-      // console.log("⚠️ :", scheduleIndex);
       scheduleContainer[scheduleIndex].timezone = hhmm;
       scheduleContainer[scheduleIndex].schedules.push({
         ...reservation,
