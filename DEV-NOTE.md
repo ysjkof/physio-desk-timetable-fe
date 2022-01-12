@@ -146,3 +146,7 @@ if (hhmm[2] === "6" || hhmm[2] === "7") handleOverMinute();
 
 - 참조: [Truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy)
 - 참조: [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)
+
+# 2022-01-12; 내일 할 일 캘린더를 그리드로 바꿔보자
+
+position을 이용해서 만들고 있었는데 TailwindCSS 문서 overflow에서 그리드를 사용한 캘린더 예시가 있어서 그걸로 바꾸기로 결정. 내일부터 그리드로 다시 만들어보도록.
