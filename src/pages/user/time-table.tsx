@@ -7,12 +7,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { ScheduleBlockContents } from "../../components/schedule-block-contents";
+import { TimezoneLi } from "../../components/TimezoneLi";
+import { getHHMM } from "../../hooks/getHHMM";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
   listReservationsQuery_listReservations_results,
 } from "../../__generated__/listReservationsQuery";
-import { TimezoneLi } from "../patient/components/TimezoneLi";
 
 const LIST_RESERVATIONS_QUERY = gql`
   query listReservationsQuery($input: ListReservationsInput!) {
@@ -20,6 +22,7 @@ const LIST_RESERVATIONS_QUERY = gql`
       ok
       totalCount
       results {
+        id
         startDate
         endDate
         state
@@ -52,21 +55,6 @@ export const TimeTable = () => {
 
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
   const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
-
-  function getScheduleHeight(startDate: any, endDate: any) {
-    return (
-      Math.abs(new Date(startDate).getTime() - new Date(endDate).getTime()) /
-      1000 /
-      60
-    );
-  }
-
-  function getHHMM(inputDate: string) {
-    const localDate = new Date(inputDate);
-    const hh = String(localDate.getHours()).padStart(2, "0");
-    const mm = String(localDate.getMinutes()).padStart(2, "0");
-    return hh.concat(mm);
-  }
 
   const { data: queryResult } = useQuery<
     listReservationsQuery,
@@ -129,27 +117,25 @@ export const TimeTable = () => {
       });
     }
   }
-  // console.log("⚠️ :", scheduleContainer);
-  console.log("⚠️ :", reservations);
-  console.log("⚠️ :", scheduleContainer[0]);
 
   return (
     <div className="bg-gray-100">
-      <div className="time-grid container mx-auto h-full flex flex-col py-2 space-y-4">
+      <div className="time-grid container mx-auto h-full py-2 space-y-4">
         <h1 className="text-3xl font-bold flex flex-row justify-between px-4 py-1 items-center sm:rounded-md bg-white shadow-cst">
           <button onClick={() => console.log("⚠️ :", "Left Click")}>
-            <FontAwesomeIcon icon={faAngleLeft} />
+            &larr;
           </button>
-
-          <span>오늘 예약</span>
+          <span>
+            {`${queryDate.getMonth() + 1}월 ${queryDate.getDate()}일`}
+          </span>
           <button onClick={() => console.log("⚠️ :", "Right Click")}>
-            <FontAwesomeIcon icon={faAngleRight} />
+            &rarr;
           </button>
         </h1>
         <div className="flex flex-row sm:rounded-md shadow-cst bg-white">
           {/*  */}
           <div className="time-grid-left">
-            <div className="timezone-container w-full flex flex-col divide-y divide-solid">
+            <div className="timezone-container w-full divide-y divide-solid">
               {scheduleContainer.map((schedule, index) => (
                 <TimezoneLi key={index} label={schedule.timezone} />
               ))}
@@ -157,61 +143,41 @@ export const TimeTable = () => {
           </div>
           {/*  */}
           <div className="time-grid-right relative w-full">
-            {/* 오른쪽 가로 줄, 가이드라인 */}
-            <div className="time-grid-right-row flex absolute z-20 flex-col divide-y divide-solid w-full ">
+            {/* 오른쪽 rows */}
+            <div className="time-grid-right-row absolute z-20 divide-y divide-solid w-full ">
               {scheduleContainer.map((schedule, index) => (
                 <div key={index} className="guideline flex-auto h-3"></div>
               ))}
             </div>
-            {/* 오른쪽 세로 줄 */}
+            {/* 오른쪽 columns */}
             <div className="time-grid-right-col absolute z-30 h-full w-full">
               {/* 스케쥴 컨테이터.스케쥴블럭.블럭.스케쥴 */}
-              <div className="schedule-container flex flex-col border-green-700">
-                {scheduleContainer.map((scheduleBlock, index) => (
-                  <div
-                    key={index}
-                    className={`scheduleBlock flex flex-row gap-2 items-center justify-center px-2 hover:ring-1 h-3 ${
-                      scheduleBlock.label ? "bg-gray-50 rounded-tr-md" : ""
-                    }`}
-                    id={scheduleBlock.timezone}
-                  >
-                    {scheduleBlock.label ? (
-                      <div className="scheduleBlock-header text-sm font-extralight text-gray-400">
-                        예약
-                      </div>
-                    ) : null}
-                    {scheduleBlock.schedules.map((schedule, index) => (
-                      <div
-                        key={index}
-                        className="scheduleBlock-schedule group text-sm bg-white flex flex-row gap-1 outline outline-1 rounded-sm px-1 cursor-pointer hover:bg-sky-500 hover:outline-sky-500 relative top-[0.420rem]"
-                      >
-                        {scheduleBlock.label}
-                        <div className="schedule-title flex flex-row gap-1 group-hover:text-white">
-                          <span>
-                            {schedule?.patient?.gender === "male" ? (
-                              <FontAwesomeIcon
-                                icon={faMale}
-                                className=" text-blue-500 group-hover:text-white "
-                              />
-                            ) : (
-                              <FontAwesomeIcon
-                                icon={faFemale}
-                                className="text-pink-500 group-hover:text-white"
-                              />
-                            )}
-                          </span>
-                          <span className="">{schedule?.patient?.name}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500 text-sm  group-hover:text-white">
-                            {schedule?.memo}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
+              {scheduleContainer.map((scheduleBlock, index) => (
+                <div
+                  key={index}
+                  className={`scheduleBlock w-full  px-2 hover:ring-1 h-3 ${
+                    scheduleBlock.label ? "bg-gray-50 rounded-tr-md" : ""
+                  }`}
+                  id={scheduleBlock.timezone}
+                >
+                  {scheduleBlock.label ? (
+                    <div className="scheduleBlock-header text-sm font-extralight text-gray-400">
+                      예약
+                    </div>
+                  ) : null}
+                  {scheduleBlock.schedules.map((schedule) => (
+                    <ScheduleBlockContents
+                      key={schedule.id}
+                      id={schedule.id}
+                      gender={schedule.patient.gender}
+                      name={schedule.patient.name}
+                      memo={schedule.memo}
+                      startDate={schedule.startDate}
+                      endDate={schedule.endDate}
+                    />
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         </div>

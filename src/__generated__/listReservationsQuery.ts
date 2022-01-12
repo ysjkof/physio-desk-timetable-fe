@@ -22,6 +22,7 @@ export interface listReservationsQuery_listReservations_results_lastModifier {
 
 export interface listReservationsQuery_listReservations_results {
   __typename: "Reservation";
+  id: number;
   startDate: any;
   endDate: any;
   state: ReservationState;
