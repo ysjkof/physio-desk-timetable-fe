@@ -4,7 +4,7 @@ import {
   findAllPatientsQuery,
   findAllPatientsQueryVariables,
 } from "../../__generated__/findAllPatientsQuery";
-import { Li } from "./components/Li";
+import { Li } from "../../components/Li";
 
 const FIND_ALL_PATIENTS_QUERY = gql`
   query findAllPatientsQuery($input: FindAllPatientsInput!) {

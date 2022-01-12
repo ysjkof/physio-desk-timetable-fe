@@ -3,8 +3,8 @@ import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { authTokenVar, isLoggedInVar } from "../../apollo";
-import { Button } from "../../component/button";
-import { FormError } from "../../component/form-error";
+import { Button } from "../../components/button";
+import { FormError } from "../../components/form-error";
 import {
   loginMutation,
   loginMutationVariables,

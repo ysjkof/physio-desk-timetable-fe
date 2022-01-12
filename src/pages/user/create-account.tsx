@@ -3,8 +3,8 @@ import { gql, useMutation } from "@apollo/client";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../component/button";
-import { FormError } from "../../component/form-error";
+import { Button } from "../../components/button";
+import { FormError } from "../../components/form-error";
 import {
   createAccountMutation,
   createAccountMutationVariables,
