@@ -1,11 +1,4 @@
 import { gql, useQuery } from "@apollo/client";
-import {
-  faAngleLeft,
-  faAngleRight,
-  faFemale,
-  faMale,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { ScheduleBlockContents } from "../../components/schedule-block-contents";
 import { TimezoneLi } from "../../components/TimezoneLi";
@@ -40,7 +33,6 @@ const LIST_RESERVATIONS_QUERY = gql`
 `;
 
 interface ISchedules {
-  label?: boolean;
   timezone: string;
   schedules: listReservationsQuery_listReservations_results[];
 }
@@ -49,9 +41,7 @@ export const TimeTable = () => {
   const timearray = [];
   // 시간표에 출력할 시간 설정
   const [timeoption, setTiemoption] = useState(["0900", "1900"]);
-  const scheduleContainer: ISchedules[] = [
-    { label: true, timezone: "label", schedules: [] },
-  ];
+  const scheduleContainer: ISchedules[] = [];
 
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
   const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
@@ -136,8 +126,11 @@ export const TimeTable = () => {
           {/*  */}
           <div className="time-grid-left">
             <div className="timezone-container w-full divide-y divide-solid">
+              <div className="left-timezone-hour w-full text-xs font-extralight text-gray-400 px-2 h-3 bg-gray-50 rounded-tl-md get-in-line text-center">
+                시간
+              </div>
               {scheduleContainer.map((schedule, index) => (
-                <TimezoneLi key={index} label={schedule.timezone} />
+                <TimezoneLi key={index} timezone={schedule.timezone} />
               ))}
             </div>
           </div>
@@ -145,30 +138,39 @@ export const TimeTable = () => {
           <div className="time-grid-right relative w-full">
             {/* 오른쪽 rows */}
             <div className="time-grid-right-row absolute z-20 divide-y divide-solid w-full ">
+              <div className="guideline flex-auto h-3 get-in-line"></div>
               {scheduleContainer.map((schedule, index) => (
-                <div key={index} className="guideline flex-auto h-3"></div>
+                <div
+                  key={index}
+                  className="guideline flex-auto h-4"
+                  id={schedule.timezone}
+                  style={{
+                    borderTop: `${
+                      schedule.timezone?.substring(2) !== "00" &&
+                      schedule.timezone?.substring(2) !== "30" &&
+                      "none"
+                    }`,
+                  }}
+                ></div>
               ))}
             </div>
             {/* 오른쪽 columns */}
             <div className="time-grid-right-col absolute z-30 h-full w-full">
               {/* 스케쥴 컨테이터.스케쥴블럭.블럭.스케쥴 */}
+              <div className="scheduleBlock w-full  px-2 hover:ring-1 h-3 bg-gray-50 rounded-tr-md">
+                <div className="scheduleBlock-header text-xs font-extralight text-gray-400 text-center get-in-line">
+                  예약
+                </div>
+              </div>
               {scheduleContainer.map((scheduleBlock, index) => (
                 <div
                   key={index}
-                  className={`scheduleBlock w-full  px-2 hover:ring-1 h-3 ${
-                    scheduleBlock.label ? "bg-gray-50 rounded-tr-md" : ""
-                  }`}
-                  id={scheduleBlock.timezone}
+                  className="scheduleBlock w-full  px-2 hover:ring-1 h-4"
                 >
-                  {scheduleBlock.label ? (
-                    <div className="scheduleBlock-header text-sm font-extralight text-gray-400">
-                      예약
-                    </div>
-                  ) : null}
                   {scheduleBlock.schedules.map((schedule) => (
                     <ScheduleBlockContents
                       key={schedule.id}
-                      id={schedule.id}
+                      timezone={scheduleBlock.timezone}
                       gender={schedule.patient.gender}
                       name={schedule.patient.name}
                       memo={schedule.memo}
