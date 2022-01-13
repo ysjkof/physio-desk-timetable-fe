@@ -1,5 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { ScheduleBlockContents } from "../../components/schedule-block-contents";
 import { TimezoneLi } from "../../components/TimezoneLi";
 import { getHHMM } from "../../hooks/getHHMM";
@@ -108,81 +109,42 @@ export const TimeTable = () => {
   }
 
   return (
-    <div className="bg-gray-100">
-      <div className="time-grid container mx-auto h-full py-2 space-y-4">
-        <h1 className="text-3xl font-bold flex flex-row justify-between px-4 py-1 items-center sm:rounded-md bg-white shadow-cst">
-          <button onClick={() => console.log("⚠️ :", "Left Click")}>
-            &larr;
-          </button>
-          <span>
-            {`${queryDate.getMonth() + 1}월 ${queryDate.getDate()}일`}
-          </span>
-          <button onClick={() => console.log("⚠️ :", "Right Click")}>
-            &rarr;
-          </button>
-        </h1>
-        <div className="flex flex-row sm:rounded-md shadow-cst bg-white">
-          {/*  */}
-          <div className="time-grid-left">
-            <div className="timezone-container w-full divide-y divide-solid">
-              <div className="left-timezone-hour w-full text-xs font-extralight text-gray-400 px-2 h-3 bg-gray-50 rounded-tl-md get-in-line text-center">
-                시간
-              </div>
-              {schedulesContainer.map((schedule, index) => (
-                <TimezoneLi key={index} timezone={schedule.timezone} />
-              ))}
+    <>
+      <Helmet>
+        <title>시간표 | Muool</title>
+      </Helmet>
+      <div className="container mx-auto bg-red-50 h-full">
+        <div className="header bg-blue-200 h-full"></div>
+        <div
+          className={`h-full main bg-yellow-100 grid grid-cols-[4rem,1fr] grid-rows-[repeat(${schedulesContainer.length}, 20px)]`}
+        >
+          {schedulesContainer.map((schedule, index) => (
+            <div
+              key={index}
+              className={`${schedule.timezone} bg-green-100 col-start-1 row-start-auto text-center text-xs h-6`}
+            >
+              {schedule.timezone?.substring(2) === "00" ||
+              schedule.timezone?.substring(2) === "30"
+                ? schedule.timezone
+                : ""}
             </div>
-          </div>
-          {/*  */}
-          <div className="time-grid-right relative w-full">
-            {/* 오른쪽 rows */}
-            <div className="time-grid-right-row absolute z-20 divide-y divide-solid w-full ">
-              <div className="guideline flex-auto h-3 get-in-line"></div>
-              {schedulesContainer.map((schedule, index) => (
+          ))}
+          {schedulesContainer.map((schedule, row) =>
+            schedule.reservations.map((reservation, index) => {
+              return (
                 <div
                   key={index}
-                  className="guideline flex-auto h-4"
-                  id={schedule.timezone}
-                  style={{
-                    borderTop: `${
-                      schedule.timezone?.substring(2) !== "00" &&
-                      schedule.timezone?.substring(2) !== "30" &&
-                      "none"
-                    }`,
-                  }}
-                ></div>
-              ))}
-            </div>
-            {/* 오른쪽 columns */}
-            <div className="time-grid-right-col absolute z-30 h-full w-full">
-              {/* 스케쥴 컨테이터.스케쥴블럭.블럭.스케쥴 */}
-              <div className="scheduleBlock w-full  px-2 hover:ring-1 h-3 bg-gray-50 rounded-tr-md">
-                <div className="scheduleBlock-header text-xs font-extralight text-gray-400 text-center get-in-line">
-                  예약
-                </div>
-              </div>
-              {schedulesContainer.map((schedule, index) => (
-                <div
-                  key={index}
-                  className="scheduleBlock w-full  px-2 hover:ring-1 h-4"
+                  className="col-start-2"
+                  style={{ gridRowStart: `${row + 1}` }}
                 >
-                  {schedule.reservations.map((reservation) => (
-                    <ScheduleBlockContents
-                      key={reservation.id}
-                      timezone={schedule.timezone}
-                      gender={reservation.patient.gender}
-                      name={reservation.patient.name}
-                      memo={reservation.memo}
-                      startDate={reservation.startDate}
-                      endDate={reservation.endDate}
-                    />
-                  ))}
+                  {reservation.patient.name}
+                  {getHHMM(reservation.startDate, true)}
                 </div>
-              ))}
-            </div>
-          </div>
+              );
+            })
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
