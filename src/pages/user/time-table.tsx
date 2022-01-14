@@ -1,9 +1,17 @@
 import { gql, useQuery } from "@apollo/client";
+import {
+  faFemale,
+  faMale,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { ScheduleBlockContents } from "../../components/schedule-block-contents";
-import { TimezoneLi } from "../../components/TimezoneLi";
-import { getHHMM } from "../../hooks/getHHMM";
+import {
+  getHHMM,
+  getTimeLength,
+  getYYMMDD,
+} from "../../hooks/handleTimeFormat";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
@@ -24,6 +32,8 @@ const LIST_RESERVATIONS_QUERY = gql`
         patient {
           name
           gender
+          registrationNumber
+          birthday
         }
         lastModifier {
           email
@@ -113,32 +123,95 @@ export const TimeTable = () => {
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      <div className="container mx-auto bg-red-50 h-full">
-        <div className="header bg-blue-200 h-full"></div>
+      <div className="container mx-auto  h-full">
+        <div className="header h-full flex justify-between px-4">
+          <span>&larr;</span>
+          <span>{queryDate.getDate()}</span>
+          <span>&rarr;</span>
+        </div>
         <div
-          className={`h-full main bg-yellow-100 grid grid-cols-[4rem,1fr] grid-rows-[repeat(${schedulesContainer.length}, 20px)]`}
+          className={`h-full main  grid grid-cols-[4rem,1fr] grid-rows-[repeat(${schedulesContainer.length}, 20px)] `}
         >
           {schedulesContainer.map((schedule, index) => (
-            <div
-              key={index}
-              className={`${schedule.timezone} bg-green-100 col-start-1 row-start-auto text-center text-xs h-6`}
-            >
-              {schedule.timezone?.substring(2) === "00" ||
-              schedule.timezone?.substring(2) === "30"
-                ? schedule.timezone
-                : ""}
-            </div>
+            <>
+              <div
+                key={index}
+                className={`${schedule.timezone} col-start-1  text-center text-xs h-6 border-t border-gray-200`}
+                style={{ gridRowStart: `${index + 1}` }}
+              >
+                {schedule.timezone?.substring(2) === "00" ||
+                schedule.timezone?.substring(2) === "30"
+                  ? schedule.timezone
+                  : ""}
+              </div>
+              <div
+                className={`${schedule.timezone} col-start-2 text-center text-xs h-6 border-t border-gray-200`}
+                style={{ gridRowStart: `${index + 1}` }}
+              ></div>
+            </>
           ))}
           {schedulesContainer.map((schedule, row) =>
             schedule.reservations.map((reservation, index) => {
               return (
                 <div
                   key={index}
-                  className="col-start-2"
-                  style={{ gridRowStart: `${row + 1}` }}
+                  className={`col-start-2 bg-blue-400/20 dark:bg-light-blue-600/50 border border-blue-700/10 dark:border-light-blue-500 rounded-lg m-1 p-1`}
+                  style={{
+                    // 예약의 시작, 끝 시간을 계산해 분 단위로 얻고 한 칸이 10분이라서 10으로 나눠서 gridRowEnd 길이 적용
+                    gridRow: `${row + 1}/span ${
+                      getTimeLength(
+                        reservation.startDate,
+                        reservation.endDate
+                      ) / 10
+                    }`,
+                  }}
                 >
-                  {reservation.patient.name}
-                  {getHHMM(reservation.startDate, true)}
+                  <div className="grid grid-cols-4 justify-items-center overflow-auto items-baseline">
+                    <span className="text-xs text-blue-600 dark:text-light-blue-100">
+                      {getHHMM(reservation.startDate, true)}~
+                      {getHHMM(reservation.endDate, true)}
+                    </span>
+                    {reservation.patient.registrationNumber ? (
+                      <span className="text-xs text-blue-600 dark:text-light-blue-100">
+                        R : {reservation.patient.registrationNumber}
+                      </span>
+                    ) : (
+                      <span className="text-xs text-blue-600 dark:text-light-blue-100">
+                        B : {getYYMMDD(reservation.patient.birthday)}
+                      </span>
+                    )}
+                    <div className="flex gap-2">
+                      <span>
+                        {reservation.patient.gender === "male" ? (
+                          <FontAwesomeIcon
+                            icon={faMale}
+                            className=" text-blue-500 group-hover:text-white "
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faFemale}
+                            className="text-pink-500 group-hover:text-white"
+                          />
+                        )}
+                      </span>
+                      <span className="text-sm font-medium text-blue-600 dark:text-light-blue-100">
+                        {/* <span className="font-bold text-sm group-hover:text-base"> */}
+                        {reservation.patient.name}
+                      </span>
+                    </div>
+                    <div className="flex gap-3">
+                      <span className="text-sm font-medium text-blue-600 dark:text-light-blue-100">
+                        EDIT
+                      </span>
+                      <FontAwesomeIcon
+                        icon={faTrashAlt}
+                        className="text-red-400"
+                      />
+                    </div>
+                    <span className="col-span-4  break-all text-sm text-blue-600">
+                      {reservation.memo}
+                    </span>
+                  </div>
                 </div>
               );
             })
