@@ -14,7 +14,8 @@ export interface findAllPatientsQuery_findAllPatients_results {
   id: number;
   name: string;
   gender: string;
-  birthday: string;
+  registrationNumber: string | null;
+  birthday: any | null;
 }
 
 export interface findAllPatientsQuery_findAllPatients {

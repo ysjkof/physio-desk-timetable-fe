@@ -30,7 +30,8 @@ export interface CreatePatientInput {
   updatedAt?: any | null;
   name?: string | null;
   gender?: string | null;
-  birthday?: string | null;
+  registrationNumber?: string | null;
+  birthday?: any | null;
   memo?: string | null;
 }
 

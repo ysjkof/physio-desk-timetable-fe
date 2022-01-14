@@ -1,10 +1,10 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
+import { Li } from "../../components/Li";
 import {
   findAllPatientsQuery,
   findAllPatientsQueryVariables,
 } from "../../__generated__/findAllPatientsQuery";
-import { Li } from "../../components/Li";
 
 const FIND_ALL_PATIENTS_QUERY = gql`
   query findAllPatientsQuery($input: FindAllPatientsInput!) {
@@ -17,6 +17,7 @@ const FIND_ALL_PATIENTS_QUERY = gql`
         id
         name
         gender
+        registrationNumber
         birthday
       }
     }
@@ -48,10 +49,13 @@ export const ListPatient = () => {
             <div className="flex justify-between px-10 bg-gray-50 rounded-md">
               <span className="w-1/4">이름</span>
               <span className=" text-sm w-1/4 font-extralight text-gray-400">
-                gender
+                성별
               </span>
               <span className="text-sm w-1/4 font-extralight text-gray-400">
-                birthday
+                생년월일
+              </span>
+              <span className="text-sm w-1/4 font-extralight text-gray-400">
+                등록번호
               </span>
               <span className="w-1/4 text-sky-500" />
             </div>
@@ -61,6 +65,7 @@ export const ListPatient = () => {
                 id={p.id}
                 name={p.name}
                 gender={p.gender}
+                registrationNumber={p.registrationNumber}
                 birthday={p.birthday}
                 loading={loading}
               />

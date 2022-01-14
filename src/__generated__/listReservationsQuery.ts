@@ -13,6 +13,8 @@ export interface listReservationsQuery_listReservations_results_patient {
   __typename: "Patient";
   name: string;
   gender: string;
+  registrationNumber: string | null;
+  birthday: any | null;
 }
 
 export interface listReservationsQuery_listReservations_results_lastModifier {
