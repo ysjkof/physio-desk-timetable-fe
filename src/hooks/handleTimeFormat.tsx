@@ -7,3 +7,9 @@ export const getHHMM = (inputDate: string | Date, option?: boolean) => {
   }
   return `${hh}${mm}`;
 };
+
+export const getTimeLength = (startDate: Date, endDate: Date) => {
+  const sd = new Date(startDate);
+  const ed = new Date(endDate);
+  return (ed.getTime() - sd.getTime()) / 1000 / 60;
+};

@@ -1,7 +1,7 @@
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { getHHMM } from "../hooks/getHHMM";
+import { getHHMM } from "../hooks/handleTimeFormat";
 
 interface IScheduleBlockContents {
   timezone: string;
