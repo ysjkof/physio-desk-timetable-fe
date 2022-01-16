@@ -36,6 +36,7 @@ const LIST_RESERVATIONS_QUERY = gql`
 
 interface IReservationsContainer {
   timezone: string;
+  reservationsCount: number;
   reservations: listReservationsQuery_listReservations_results[];
 }
 
@@ -99,6 +100,7 @@ export const TimeTable = () => {
     if (hhmm.length !== 0)
       reservationsContainer.push({
         timezone: hhmm,
+        reservationsCount: 0,
         reservations: [],
       });
 
@@ -121,6 +123,8 @@ export const TimeTable = () => {
           reservationsContainer[scheduleIndex].reservations.push({
             ...reservation,
           });
+          reservationsContainer[scheduleIndex].reservationsCount =
+            reservationsContainer[scheduleIndex].reservationsCount + 1;
         }
         setSchedulesContainer(reservationsContainer);
       }
@@ -162,20 +166,43 @@ export const TimeTable = () => {
             </>
           ))}
           {schedulesContainer.map((schedule, row) =>
-            schedule.reservations.map((reservation, index) => (
+            schedule.reservationsCount === 1 ? (
               <ReservationBlock
-                key={index}
+                key={schedule.reservations[0].id}
                 timezone={schedule.timezone}
                 row={row}
-                startDate={reservation.startDate}
-                endDate={reservation.endDate}
-                registrationNumber={reservation.patient.registrationNumber}
-                birthday={reservation.patient.birthday}
-                gender={reservation.patient.gender}
-                name={reservation.patient.name}
-                memo={reservation.memo}
+                startDate={schedule.reservations[0].startDate}
+                endDate={schedule.reservations[0].endDate}
+                registrationNumber={
+                  schedule.reservations[0].patient.registrationNumber
+                }
+                birthday={schedule.reservations[0].patient.birthday}
+                gender={schedule.reservations[0].patient.gender}
+                name={schedule.reservations[0].patient.name}
+                memo={schedule.reservations[0].memo}
+                reservationsCount={schedule.reservationsCount}
+                reservationIndex={0}
               />
-            ))
+            ) : (
+              schedule.reservations.map((reservation) => (
+                <ReservationBlock
+                  key={reservation.id}
+                  timezone={schedule.timezone}
+                  row={row}
+                  startDate={reservation.startDate}
+                  endDate={reservation.endDate}
+                  registrationNumber={reservation.patient.registrationNumber}
+                  birthday={reservation.patient.birthday}
+                  gender={reservation.patient.gender}
+                  name={reservation.patient.name}
+                  memo={reservation.memo}
+                  reservationsCount={schedule.reservationsCount}
+                  reservationIndex={
+                    schedule.reservations.indexOf(reservation) + 1
+                  }
+                />
+              ))
+            )
           )}
         </div>
       </div>
