@@ -1,11 +1,11 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import {
   faFemale,
   faMale,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import {
   getHHMM,
@@ -49,37 +49,37 @@ interface IReservationsContainer {
 }
 
 export const TimeTable = () => {
-  const timearray = [];
   // 시간표에 출력할 시간 설정
   const [timeoption, setTiemoption] = useState(["0900", "1900"]);
-  const schedulesContainer: IReservationsContainer[] = [];
-
+  const reservationsContainer: IReservationsContainer[] = [];
+  const [schedulesContainer, setSchedulesContainer] = useState(
+    reservationsContainer
+  );
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
   const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
 
   const onClickPrevDate = () => {
-    const prevDate = new Date(queryDate);
-    prevDate.setDate(prevDate.getDate() - 1);
+    const prevDate = new Date(queryDate.setDate(queryDate.getDate() - 1));
     setQueryDate(prevDate);
   };
   const onClickNextDate = () => {
-    const nextDate = queryDate;
-    nextDate.setDate(nextDate.getDate() + 1);
+    const nextDate = queryDate.setDate(queryDate.getDate() + 1);
     setQueryDate(new Date(nextDate));
   };
 
-  const { data: queryResult } = useQuery<
-    listReservationsQuery,
-    listReservationsQueryVariables
-  >(LIST_RESERVATIONS_QUERY, {
-    variables: {
-      input: {
-        date: queryDate,
-        viewOption: null,
-        groupId: null,
-      },
-    },
-  });
+  const [queryListReservations, { loading, error, data: queryResult }] =
+    useLazyQuery<listReservationsQuery, listReservationsQueryVariables>(
+      LIST_RESERVATIONS_QUERY,
+      {
+        variables: {
+          input: {
+            date: queryDate,
+            viewOption: null,
+            groupId: null,
+          },
+        },
+      }
+    );
 
   // 수의 증가를 위해 timeoption을 숫자로 바꿈
   for (
@@ -105,29 +105,35 @@ export const TimeTable = () => {
     if (hhmm[2] === "9") handleOverMinute(0);
     // 10분 단위가 6~9인 경우 hhmm의 길이가 0이고 이때 push하지 않는다.
     if (hhmm.length !== 0)
-      schedulesContainer.push({
+      reservationsContainer.push({
         timezone: hhmm,
         reservations: [],
       });
 
-    if (schedulesContainer.length > 200) {
+    if (reservationsContainer.length > 200) {
       break;
     }
   }
 
-  const reservations = queryResult?.listReservations.results;
-  if (reservations) {
-    for (const reservation of reservations) {
-      const hhmm = getHHMM(reservation.startDate);
-      const scheduleIndex = schedulesContainer.findIndex(
-        (schedule) => schedule.timezone === hhmm
-      );
-      schedulesContainer[scheduleIndex].timezone = hhmm;
-      schedulesContainer[scheduleIndex].reservations.push({
-        ...reservation,
-      });
+  useEffect(() => {
+    queryListReservations();
+    if (!loading && queryResult) {
+      const reservations = queryResult?.listReservations.results;
+      if (reservations) {
+        for (const reservation of reservations) {
+          const hhmm = getHHMM(reservation.startDate);
+          const scheduleIndex = reservationsContainer.findIndex(
+            (schedule) => schedule.timezone === hhmm
+          );
+          reservationsContainer[scheduleIndex].timezone = hhmm;
+          reservationsContainer[scheduleIndex].reservations.push({
+            ...reservation,
+          });
+        }
+        setSchedulesContainer(reservationsContainer);
+      }
     }
-  }
+  }, [queryDate, loading, queryResult]);
 
   return (
     <>
