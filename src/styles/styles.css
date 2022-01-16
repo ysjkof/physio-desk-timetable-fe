@@ -806,6 +806,23 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }
 
+.bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.bg-blue-100\/95 {
+  background-color: rgb(219 234 254 / 0.95);
+}
+
+.bg-blue-100\/90 {
+  background-color: rgb(219 234 254 / 0.9);
+}
+
+.bg-blue-100\/80 {
+  background-color: rgb(219 234 254 / 0.8);
+}
+
 .p-3 {
   padding: 0.75rem;
 }
@@ -1035,9 +1052,23 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(14 165 233 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-blue-100:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(219 234 254 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-blue-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(191 219 254 / var(--tw-bg-opacity));
+}
+
 .hover\:underline:hover {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
+}
+
+.hover\:opacity-100:hover {
+  opacity: 1;
 }
 
 .hover\:outline-sky-500:hover {
@@ -1057,6 +1088,16 @@ Ensure the default browser behavior of the `hidden` attribute.
 .group:hover .group-hover\:text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+@media (min-width: 640px) {
+  .sm\:m-1 {
+    margin: 0.25rem;
+  }
+
+  .sm\:p-1 {
+    padding: 0.25rem;
+  }
 }
 
 @media (min-width: 1024px) {

@@ -1,17 +1,8 @@
 import { gql, useLazyQuery } from "@apollo/client";
-import {
-  faFemale,
-  faMale,
-  faTrashAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import {
-  getHHMM,
-  getTimeLength,
-  getYYMMDD,
-} from "../../hooks/handleTimeFormat";
+import { ReservationBlock } from "../../components/reservation-block";
+import { getHHMM } from "../../hooks/handleTimeFormat";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
@@ -62,11 +53,11 @@ export const TimeTable = () => {
     const prevDate = new Date(queryDate.setDate(queryDate.getDate() - 1));
     setQueryDate(prevDate);
   };
-  const onClickToday = () => setQueryDate(new Date());
   const onClickNextDate = () => {
     const nextDate = queryDate.setDate(queryDate.getDate() + 1);
     setQueryDate(new Date(nextDate));
   };
+  const onClickToday = () => setQueryDate(new Date());
 
   const [queryListReservations, { loading, error, data: queryResult }] =
     useLazyQuery<listReservationsQuery, listReservationsQueryVariables>(
@@ -171,70 +162,20 @@ export const TimeTable = () => {
             </>
           ))}
           {schedulesContainer.map((schedule, row) =>
-            schedule.reservations.map((reservation, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`col-start-2 bg-blue-100 dark:bg-light-blue-600/50 border border-blue-700/10 dark:border-light-blue-500 rounded-lg m-1 p-1`}
-                  style={{
-                    // 예약의 시작, 끝 시간을 계산해 분 단위로 얻고 한 칸이 10분이라서 10으로 나눠서 gridRowEnd 길이 적용
-                    gridRow: `${row + 1}/span ${
-                      getTimeLength(
-                        reservation.startDate,
-                        reservation.endDate
-                      ) / 10
-                    }`,
-                  }}
-                >
-                  <div className="grid grid-cols-4 justify-items-center overflow-auto items-baseline">
-                    <span className="text-xs text-blue-600 dark:text-light-blue-100">
-                      {getHHMM(reservation.startDate, true)}~
-                      {getHHMM(reservation.endDate, true)}
-                    </span>
-                    {reservation.patient.registrationNumber ? (
-                      <span className="text-xs text-blue-600 dark:text-light-blue-100">
-                        R : {reservation.patient.registrationNumber}
-                      </span>
-                    ) : (
-                      <span className="text-xs text-blue-600 dark:text-light-blue-100">
-                        B : {getYYMMDD(reservation.patient.birthday)}
-                      </span>
-                    )}
-                    <div className="flex gap-2">
-                      <span>
-                        {reservation.patient.gender === "male" ? (
-                          <FontAwesomeIcon
-                            icon={faMale}
-                            className=" text-blue-500 group-hover:text-white "
-                          />
-                        ) : (
-                          <FontAwesomeIcon
-                            icon={faFemale}
-                            className="text-pink-500 group-hover:text-white"
-                          />
-                        )}
-                      </span>
-                      <span className="text-sm font-medium text-blue-600 dark:text-light-blue-100">
-                        {/* <span className="font-bold text-sm group-hover:text-base"> */}
-                        {reservation.patient.name}
-                      </span>
-                    </div>
-                    <div className="flex gap-3">
-                      <span className="text-sm font-medium text-blue-600 dark:text-light-blue-100">
-                        EDIT
-                      </span>
-                      <FontAwesomeIcon
-                        icon={faTrashAlt}
-                        className="text-red-400"
-                      />
-                    </div>
-                    <span className="col-span-4  break-all text-sm text-blue-600">
-                      {reservation.memo}
-                    </span>
-                  </div>
-                </div>
-              );
-            })
+            schedule.reservations.map((reservation, index) => (
+              <ReservationBlock
+                key={index}
+                timezone={schedule.timezone}
+                row={row}
+                startDate={reservation.startDate}
+                endDate={reservation.endDate}
+                registrationNumber={reservation.patient.registrationNumber}
+                birthday={reservation.patient.birthday}
+                gender={reservation.patient.gender}
+                name={reservation.patient.name}
+                memo={reservation.memo}
+              />
+            ))
           )}
         </div>
       </div>
