@@ -163,5 +163,38 @@ position을 이용해서 만들고 있었는데 TailwindCSS 문서 overflow에�
 # 2022-01-14; 다음 할 일
 
 - [ ] 시간표 동일한 칸에 있는 예약 출력 처리( 지금은 완전히 겹쳐서 출력된다. )
-- [ ] 시간표 하루 보기에서 좌우 화살표 눌러서 하루씩 이동하기
+- [x] _2022-01-16;_ 시간표 하루 보기에서 좌우 화살표 눌러서 하루씩 이동하기
 - [ ] 시간표 1주일 보기
+
+# 2022-1-16; useState에서 new Date를 사용할 때, state 변경 시 ui 렌더링이 안되는 문제
+
+결론: `useState`에서 Date 객체를 set할 때 `new Date()`를 써야 작동한다. [참조](https://stackoverflow.com/questions/64498392/react-hook-usestate-not-updating-the-ui-when-using-javascript-date-object-on-set)
+
+```js
+function App() {
+  const [queryDate, setQueryDate] = useState(new Date());
+  // 작동함
+  const first = () => {
+    const prevDate = queryDate;
+    prevDate.setDate(prevDate.getDate() - 1);
+    setQueryDate(new Date(prevDate));
+  };
+  // 작동함
+  const second = () => {
+    const prevDate = new Date(queryDate);
+    prevDate.setDate(prevDate.getDate() - 1);
+    setQueryDate(prevDate);
+  };
+  // 작동안함
+  const thrid = () => {
+    const prevDate = queryDate;
+    prevDate.setDate(prevDate.getDate() - 1);
+    setQueryDate(prevDate);
+  };
+  return (
+    <span>
+      {queryDate.getMonth() + 1}월 {queryDate.getDate()}일
+    </span>
+  );
+}
+```

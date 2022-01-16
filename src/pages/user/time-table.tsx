@@ -57,6 +57,17 @@ export const TimeTable = () => {
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
   const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
 
+  const onClickPrevDate = () => {
+    const prevDate = new Date(queryDate);
+    prevDate.setDate(prevDate.getDate() - 1);
+    setQueryDate(prevDate);
+  };
+  const onClickNextDate = () => {
+    const nextDate = queryDate;
+    nextDate.setDate(nextDate.getDate() + 1);
+    setQueryDate(new Date(nextDate));
+  };
+
   const { data: queryResult } = useQuery<
     listReservationsQuery,
     listReservationsQueryVariables
@@ -125,9 +136,11 @@ export const TimeTable = () => {
       </Helmet>
       <div className="container mx-auto  h-full">
         <div className="header h-full flex justify-between px-4">
-          <span>&larr;</span>
-          <span>{queryDate.getDate()}</span>
-          <span>&rarr;</span>
+          <button onClick={onClickPrevDate}>&larr;</button>
+          <span>
+            {queryDate.getMonth() + 1}월 {queryDate.getDate()}일
+          </span>
+          <button onClick={onClickNextDate}>&rarr;</button>
         </div>
         <div
           className={`h-full main  grid grid-cols-[4rem,1fr] grid-rows-[repeat(${schedulesContainer.length}, 20px)] `}
@@ -155,7 +168,7 @@ export const TimeTable = () => {
               return (
                 <div
                   key={index}
-                  className={`col-start-2 bg-blue-400/20 dark:bg-light-blue-600/50 border border-blue-700/10 dark:border-light-blue-500 rounded-lg m-1 p-1`}
+                  className={`col-start-2 bg-blue-100 dark:bg-light-blue-600/50 border border-blue-700/10 dark:border-light-blue-500 rounded-lg m-1 p-1`}
                   style={{
                     // 예약의 시작, 끝 시간을 계산해 분 단위로 얻고 한 칸이 10분이라서 10으로 나눠서 gridRowEnd 길이 적용
                     gridRow: `${row + 1}/span ${
