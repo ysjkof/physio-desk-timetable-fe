@@ -62,6 +62,7 @@ export const TimeTable = () => {
     const prevDate = new Date(queryDate.setDate(queryDate.getDate() - 1));
     setQueryDate(prevDate);
   };
+  const onClickToday = () => setQueryDate(new Date());
   const onClickNextDate = () => {
     const nextDate = queryDate.setDate(queryDate.getDate() + 1);
     setQueryDate(new Date(nextDate));
@@ -143,9 +144,9 @@ export const TimeTable = () => {
       <div className="container mx-auto  h-full">
         <div className="header h-full flex justify-between px-4">
           <button onClick={onClickPrevDate}>&larr;</button>
-          <span>
+          <button onClick={onClickToday}>
             {queryDate.getMonth() + 1}월 {queryDate.getDate()}일
-          </span>
+          </button>
           <button onClick={onClickNextDate}>&rarr;</button>
         </div>
         <div
