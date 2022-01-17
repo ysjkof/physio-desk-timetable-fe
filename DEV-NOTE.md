@@ -203,7 +203,7 @@ function App() {
 
 - [ ] 할일: Front-end, Back-end에서 중복 예약 방지
 
-결론: 여러개 겹치는 캘린더는 absolute, relative와 top, bottom, left, right로 일정의 크기와 위치를 조정해야 한다. **치료실 예약 시스템에서 중복되는 시간에 입력할 필요가 경우가 없기 때문에** 일단 이대로 진행하고 **Front-end, Back-end에서 중복 예약 자체을 막자**.
+결론: 여러개 겹치는 캘린더는 absolute, relative와 top, bottom, left, right로 일정의 크기와 위치를 조정해야 한다. **치료실 예약 시스템에서 중복되는 시간에 입력할 경우가 거의 없기 때문에** 일단 이대로 진행하고 **Front-end, Back-end에서 중복 예약 자체을 막자**.
 
 1. 캘린더 라이브러리들이 absolute, relative와 top, bottom, left, right로 일정의 크기와 위치를 정하길래 그렇게 만들기 시도.
 2. 만들다가 TailwindCSS 문서에서 grid를 이용한 캘린더를 발견하고 생각함.
