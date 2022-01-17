@@ -540,6 +540,30 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-column-start: 1;
 }
 
+.col-start-3 {
+  grid-column-start: 3;
+}
+
+.col-start-4 {
+  grid-column-start: 4;
+}
+
+.col-start-5 {
+  grid-column-start: 5;
+}
+
+.col-start-6 {
+  grid-column-start: 6;
+}
+
+.col-start-7 {
+  grid-column-start: 7;
+}
+
+.col-start-8 {
+  grid-column-start: 8;
+}
+
 .m-1 {
   margin: 0.25rem;
 }
@@ -636,6 +660,18 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .grid-cols-\[4rem\2c 1fr\] {
   grid-template-columns: 4rem 1fr;
+}
+
+.grid-cols-\[4rem\2c repeat\(1fr\2c 4\)\] {
+  grid-template-columns: 4rem repeat(1fr,4);
+}
+
+.grid-cols-\[4rem\2c repeat\(7\2c 1fr\)\] {
+  grid-template-columns: 4rem repeat(7,1fr);
+}
+
+.grid-cols-\[4rem\2c repeat\(1\2c 1fr\)\] {
+  grid-template-columns: 4rem repeat(1,1fr);
 }
 
 .flex-col {

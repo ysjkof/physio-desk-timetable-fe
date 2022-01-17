@@ -60,15 +60,7 @@ export const ReservationBlock: React.FC<IReservationBlock> = ({
         <span className="text-xs text-blue-600 dark:text-light-blue-100 hidden group-hover:block group-hover:absolute  group-hover:top-[-20px]">
           {getHHMM(startDate, true)}~{getHHMM(endDate, true)}
         </span>
-        {registrationNumber ? (
-          <span className="text-xs text-blue-600 dark:text-light-blue-100">
-            R : {registrationNumber}
-          </span>
-        ) : (
-          <span className="text-xs text-blue-600 dark:text-light-blue-100">
-            B : {getYYMMDD(birthday)}
-          </span>
-        )}
+
         <div className="flex gap-2 ">
           <span>
             {gender === "male" ? (
@@ -88,12 +80,15 @@ export const ReservationBlock: React.FC<IReservationBlock> = ({
             {name}
           </span>
         </div>
-        <div>
-          <FontAwesomeIcon
-            icon={faTrashAlt}
-            className="text-sm text-blue-400 dark:text-light-blue-100"
-          />
-        </div>
+        {registrationNumber ? (
+          <span className="text-xs text-blue-600 dark:text-light-blue-100">
+            R : {registrationNumber}
+          </span>
+        ) : (
+          <span className="text-xs text-blue-600 dark:text-light-blue-100">
+            B : {getYYMMDD(birthday)}
+          </span>
+        )}
       </div>
       <p className="break-all text-sm text-blue-600 text-center">{memo}</p>
     </div>

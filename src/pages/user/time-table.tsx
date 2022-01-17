@@ -49,6 +49,8 @@ export const TimeTable = () => {
   );
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
   const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
+  // 1일 보기, 1주 보기, 2주 보기, 1달 보기
+  const [tableView, setTableView] = useState("WEEK");
 
   const onClickPrevDate = () => {
     const prevDate = new Date(queryDate.setDate(queryDate.getDate() - 1));
@@ -145,7 +147,13 @@ export const TimeTable = () => {
           <button onClick={onClickNextDate}>&rarr;</button>
         </div>
         <div
-          className={`h-full main  grid grid-cols-[4rem,1fr] grid-rows-[repeat(${schedulesContainer.length}, 20px)] `}
+          className={`h-full main  ${
+            tableView === "ONEDAY"
+              ? "grid grid-cols-[4rem,1fr]"
+              : tableView === "WEEK"
+              ? "grid grid-cols-[4rem,repeat(7,1fr)]"
+              : ""
+          }  grid-rows-[repeat(${schedulesContainer.length}, 20px)] `}
         >
           {schedulesContainer.map((schedule, index) => (
             <>
@@ -162,7 +170,37 @@ export const TimeTable = () => {
               <div
                 className={`${schedule.timezone} col-start-2 text-center text-xs h-6 border-t border-gray-200`}
                 style={{ gridRowStart: `${index + 1}` }}
-              ></div>
+              />
+              {tableView === "WEEK" ? (
+                <>
+                  <div
+                    className={`${schedule.timezone} col-start-3 text-center text-xs h-6 border-t border-gray-200`}
+                    style={{ gridRowStart: `${index + 1}` }}
+                  />
+                  <div
+                    className={`${schedule.timezone} col-start-4 text-center text-xs h-6 border-t border-gray-200`}
+                    style={{ gridRowStart: `${index + 1}` }}
+                  />
+                  <div
+                    className={`${schedule.timezone} col-start-5 text-center text-xs h-6 border-t border-gray-200`}
+                    style={{ gridRowStart: `${index + 1}` }}
+                  />
+                  <div
+                    className={`${schedule.timezone} col-start-6 text-center text-xs h-6 border-t border-gray-200`}
+                    style={{ gridRowStart: `${index + 1}` }}
+                  />
+                  <div
+                    className={`${schedule.timezone} col-start-7 text-center text-xs h-6 border-t border-gray-200`}
+                    style={{ gridRowStart: `${index + 1}` }}
+                  />
+                  <div
+                    className={`${schedule.timezone} col-start-8 text-center text-xs h-6 border-t border-gray-200`}
+                    style={{ gridRowStart: `${index + 1}` }}
+                  />
+                </>
+              ) : (
+                ""
+              )}
             </>
           ))}
           {schedulesContainer.map((schedule, row) =>
