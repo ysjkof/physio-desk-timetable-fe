@@ -2,6 +2,11 @@ export const LOCALSTORAGE_TOKEN = "muool-token";
 // 한국 표준시(韓國標準時, KST, Korea Standard Time) = UTC+09:00
 export const UTC_OPTION_KST = "+0900";
 
+export const ONE_DAY = 1;
+export const ONE_WEEK = 7;
+export const TWO_WEEKS = 14;
+export const THREE_WEEKS = 21;
+
 export const TIMELIST = [
   { label: true, timezone: "label", schedules: [] },
   // {

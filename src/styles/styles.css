@@ -662,16 +662,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-template-columns: 4rem 1fr;
 }
 
-.grid-cols-\[4rem\2c repeat\(1fr\2c 4\)\] {
-  grid-template-columns: 4rem repeat(1fr,4);
-}
-
 .grid-cols-\[4rem\2c repeat\(7\2c 1fr\)\] {
   grid-template-columns: 4rem repeat(7,1fr);
-}
-
-.grid-cols-\[4rem\2c repeat\(1\2c 1fr\)\] {
-  grid-template-columns: 4rem repeat(1,1fr);
 }
 
 .flex-col {
@@ -724,6 +716,18 @@ Ensure the default browser behavior of the `hidden` attribute.
   border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
 }
 
+.divide-x > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.divide-x-0 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(0px * var(--tw-divide-x-reverse));
+  border-left-width: calc(0px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
 .divide-solid > :not([hidden]) ~ :not([hidden]) {
   border-style: solid;
 }
@@ -739,6 +743,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .divide-blue-700\/40 > :not([hidden]) ~ :not([hidden]) {
   border-color: rgb(29 78 216 / 0.4);
+}
+
+.divide-black > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-divide-opacity));
 }
 
 .break-all {
@@ -926,14 +935,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-weight: 600;
 }
 
-.font-extrabold {
-  font-weight: 800;
-}
-
-.font-black {
-  font-weight: 900;
-}
-
 .tracking-wide {
   letter-spacing: 0.025em;
 }
@@ -971,11 +972,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-pink-500 {
   --tw-text-opacity: 1;
   color: rgb(236 72 153 / var(--tw-text-opacity));
-}
-
-.text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
 }
 
 .text-lime-600 {

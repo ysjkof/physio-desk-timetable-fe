@@ -1,3 +1,5 @@
+import { ONE_WEEK } from "../constants";
+
 export const getYYMMDD = (inputDate: string | Date, option?: boolean) => {
   const localDate = new Date(inputDate);
   const yy = String(localDate.getFullYear()).substring(2);
@@ -25,7 +27,6 @@ export const getTimeLength = (startDate: Date, endDate: Date) => {
   return (ed.getTime() - sd.getTime()) / 1000 / 60;
 };
 
-const NUMBER_OF_A_WEEK = 7;
 export const getThisWeeksDate = () => {
   const thisWeeks: {
     day: number;
@@ -39,7 +40,7 @@ export const getThisWeeksDate = () => {
   const nowDate = now.getDate();
   const nowDay = now.getDay();
   const firstDate = new Date(now.setDate(nowDate - nowDay));
-  for (let i = 0; i < NUMBER_OF_A_WEEK; i++) {
+  for (let i = 0; i < ONE_WEEK; i++) {
     let date = new Date(firstDate);
     date = new Date(date.setDate(date.getDate() + i));
     const dateObj = {

@@ -2,7 +2,8 @@ import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { ReservationBlock } from "../../components/reservation-block";
-import { getHHMM } from "../../hooks/handleTimeFormat";
+import { ONE_DAY, ONE_WEEK } from "../../constants";
+import { getHHMM, getYYMMDD } from "../../hooks/handleTimeFormat";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
@@ -36,6 +37,7 @@ const LIST_RESERVATIONS_QUERY = gql`
 
 interface IReservationsContainer {
   timezone: string;
+  date: string;
   reservationsCount: number;
   reservations: listReservationsQuery_listReservations_results[];
 }
@@ -50,7 +52,7 @@ export const TimeTable = () => {
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
   const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
   // 1일 보기, 1주 보기, 2주 보기, 1달 보기
-  const [tableView, setTableView] = useState("WEEK");
+  const [tableView, setTableView] = useState(ONE_WEEK);
 
   const onClickPrevDate = () => {
     const prevDate = new Date(queryDate.setDate(queryDate.getDate() - 1));
@@ -102,6 +104,7 @@ export const TimeTable = () => {
     if (hhmm.length !== 0)
       reservationsContainer.push({
         timezone: hhmm,
+        date: getYYMMDD(queryDate),
         reservationsCount: 0,
         reservations: [],
       });
@@ -147,10 +150,10 @@ export const TimeTable = () => {
           <button onClick={onClickNextDate}>&rarr;</button>
         </div>
         <div
-          className={`h-full main  ${
-            tableView === "ONEDAY"
+          className={`h-full main ${
+            tableView === ONE_DAY
               ? "grid grid-cols-[4rem,1fr]"
-              : tableView === "WEEK"
+              : tableView === ONE_WEEK
               ? "grid grid-cols-[4rem,repeat(7,1fr)]"
               : ""
           }  grid-rows-[repeat(${schedulesContainer.length}, 20px)] `}
@@ -171,7 +174,7 @@ export const TimeTable = () => {
                 className={`${schedule.timezone} col-start-2 text-center text-xs h-6 border-t border-gray-200`}
                 style={{ gridRowStart: `${index + 1}` }}
               />
-              {tableView === "WEEK" ? (
+              {tableView === ONE_WEEK ? (
                 <>
                   <div
                     className={`${schedule.timezone} col-start-3 text-center text-xs h-6 border-t border-gray-200`}
