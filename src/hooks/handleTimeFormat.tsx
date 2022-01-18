@@ -1,4 +1,5 @@
 import { ONE_WEEK } from "../constants";
+import { ITableViewDate } from "../pages/user/time-table";
 
 export const getYYMMDD = (inputDate: string | Date, option?: boolean) => {
   const localDate = new Date(inputDate);
@@ -27,29 +28,22 @@ export const getTimeLength = (startDate: Date, endDate: Date) => {
   return (ed.getTime() - sd.getTime()) / 1000 / 60;
 };
 
-export const getThisWeeksDate = () => {
-  const thisWeeks: {
-    day: number;
-    date: number;
-    month: number;
-    year: number;
-    isToday: boolean;
-    fulldate: Date;
-  }[] = [];
-  const now = new Date();
-  const nowDate = now.getDate();
-  const nowDay = now.getDay();
-  const firstDate = new Date(now.setDate(nowDate - nowDay));
+export const getWeeksDate = (date: Date) => {
+  const thisWeeks: ITableViewDate[] = [];
+  const newDate = new Date(date);
+  const inputDate = newDate.getDate();
+  const inputDay = newDate.getDay();
+  const firstDate = new Date(newDate.setDate(inputDate - inputDay));
   for (let i = 0; i < ONE_WEEK; i++) {
-    let date = new Date(firstDate);
-    date = new Date(date.setDate(date.getDate() + i));
+    let loopDate = new Date(firstDate);
+    loopDate = new Date(loopDate.setDate(loopDate.getDate() + i));
     const dateObj = {
       day: i,
-      date: date.getDate(),
-      month: date.getMonth() + 1,
-      year: date.getFullYear(),
-      isToday: nowDate === date.getDate() && true,
-      fulldate: date,
+      date: loopDate.getDate(),
+      month: loopDate.getMonth() + 1,
+      year: loopDate.getFullYear(),
+      isToday: inputDate === loopDate.getDate() && true,
+      fulldate: loopDate,
     };
     thisWeeks.push(dateObj);
   }

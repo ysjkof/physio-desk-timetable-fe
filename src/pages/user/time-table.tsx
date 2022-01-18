@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { ReservationBlock } from "../../components/reservation-block";
 import { ONE_DAY, ONE_WEEK } from "../../constants";
-import { getHHMM, getYYMMDD } from "../../hooks/handleTimeFormat";
+import { getHHMM, getWeeksDate, getYYMMDD } from "../../hooks/handleTimeFormat";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
@@ -42,10 +42,20 @@ interface IReservationsContainer {
   reservations: listReservationsQuery_listReservations_results[];
 }
 
+export interface ITableViewDate {
+  day: number;
+  date: number;
+  month: number;
+  year: number;
+  isToday: boolean;
+  fulldate: Date;
+}
+
 export const TimeTable = () => {
   // 시간표에 출력할 시간 설정
   const [timeoption, setTiemoption] = useState(["0900", "1900"]);
   const reservationsContainer: IReservationsContainer[] = [];
+  let tableViewDate: ITableViewDate[] = [];
   const [schedulesContainer, setSchedulesContainer] = useState(
     reservationsContainer
   );
@@ -53,6 +63,24 @@ export const TimeTable = () => {
   const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
   // 1일 보기, 1주 보기, 2주 보기, 1달 보기
   const [tableView, setTableView] = useState(ONE_WEEK);
+
+  function makeTableViewDate(option: number) {
+    if (option === ONE_WEEK) {
+      tableViewDate = getWeeksDate(queryDate);
+    }
+    if (option === ONE_DAY) {
+      tableViewDate.push({
+        day: queryDate.getDay(),
+        date: queryDate.getDate(),
+        month: queryDate.getMonth() + 1,
+        year: queryDate.getFullYear(),
+        isToday: false,
+        fulldate: queryDate,
+      });
+    }
+    console.log("⚠️ :", tableViewDate);
+  }
+  makeTableViewDate(tableView);
 
   const onClickPrevDate = () => {
     const prevDate = new Date(queryDate.setDate(queryDate.getDate() - 1));
@@ -170,40 +198,14 @@ export const TimeTable = () => {
                   ? schedule.timezone
                   : ""}
               </div>
-              <div
-                className={`${schedule.timezone} col-start-2 text-center text-xs h-6 border-t border-gray-200`}
-                style={{ gridRowStart: `${index + 1}` }}
-              />
-              {tableView === ONE_WEEK ? (
-                <>
-                  <div
-                    className={`${schedule.timezone} col-start-3 text-center text-xs h-6 border-t border-gray-200`}
-                    style={{ gridRowStart: `${index + 1}` }}
-                  />
-                  <div
-                    className={`${schedule.timezone} col-start-4 text-center text-xs h-6 border-t border-gray-200`}
-                    style={{ gridRowStart: `${index + 1}` }}
-                  />
-                  <div
-                    className={`${schedule.timezone} col-start-5 text-center text-xs h-6 border-t border-gray-200`}
-                    style={{ gridRowStart: `${index + 1}` }}
-                  />
-                  <div
-                    className={`${schedule.timezone} col-start-6 text-center text-xs h-6 border-t border-gray-200`}
-                    style={{ gridRowStart: `${index + 1}` }}
-                  />
-                  <div
-                    className={`${schedule.timezone} col-start-7 text-center text-xs h-6 border-t border-gray-200`}
-                    style={{ gridRowStart: `${index + 1}` }}
-                  />
-                  <div
-                    className={`${schedule.timezone} col-start-8 text-center text-xs h-6 border-t border-gray-200`}
-                    style={{ gridRowStart: `${index + 1}` }}
-                  />
-                </>
-              ) : (
-                ""
-              )}
+              {tableViewDate.map((day) => (
+                <div
+                  className={`${schedule.timezone} col-start-${
+                    day.day + 2
+                  } text-center text-xs h-6 border-t border-gray-200`}
+                  style={{ gridRowStart: `${index + 1}` }}
+                />
+              ))}
             </>
           ))}
           {schedulesContainer.map((schedule, row) =>
