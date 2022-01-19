@@ -60,9 +60,12 @@ export const TimeTable = () => {
     reservationsContainer
   );
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
-  const [queryDate, setQueryDate] = useState(new Date("2022-01-09"));
+  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-09"));
   // 1일 보기, 1주 보기, 2주 보기, 1달 보기
+  // 예정: function initializeQueryDate( ){ localstorage에 뷰 옵션을 설정하고 불러와서 setTableView 변경 }
   const [tableView, setTableView] = useState(ONE_WEEK);
+  const onClickChangeViewOneDay = () => setTableView(ONE_DAY);
+  const onClickChangeViewOneWeek = () => setTableView(ONE_WEEK);
 
   function makeTableViewDate(option: number) {
     if (option === ONE_WEEK) {
@@ -99,7 +102,7 @@ export const TimeTable = () => {
         variables: {
           input: {
             date: queryDate,
-            viewOption: null,
+            viewOption: tableView,
             groupId: null,
           },
         },
@@ -149,6 +152,7 @@ export const TimeTable = () => {
       if (reservations) {
         for (const reservation of reservations) {
           const hhmm = getHHMM(reservation.startDate);
+          const date = getYYMMDD(reservation.startDate);
           const scheduleIndex = reservationsContainer.findIndex(
             (schedule) => schedule.timezone === hhmm
           );
@@ -164,12 +168,27 @@ export const TimeTable = () => {
     }
   }, [queryDate, loading, queryResult]);
 
+  console.log("⚠️ : 쿼리 데이터", queryResult);
   return (
     <>
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
       <div className="container mx-auto  h-full">
+        <div className="day-button-box flex justify-around items-center">
+          <button
+            className=" shadow-cst rounded-md"
+            onClick={onClickChangeViewOneDay}
+          >
+            ONE DAY
+          </button>
+          <button
+            className=" shadow-cst rounded-md"
+            onClick={onClickChangeViewOneWeek}
+          >
+            ONE WEEK
+          </button>
+        </div>
         <div className="header h-full flex justify-between px-4">
           <button onClick={onClickPrevDate}>&larr;</button>
           <button onClick={onClickToday}>
@@ -188,6 +207,7 @@ export const TimeTable = () => {
         >
           {schedulesContainer.map((schedule, index) => (
             <>
+              {/* 시간을 나타내는 레이블 */}
               <div
                 key={index}
                 className={`${schedule.timezone} col-start-1  text-center text-xs h-6 border-t border-gray-200`}
@@ -198,6 +218,7 @@ export const TimeTable = () => {
                   ? schedule.timezone
                   : ""}
               </div>
+              {/* 예약 정보가 표시되는 캘린더의 세로 줄 */}
               {tableViewDate.map((day) => (
                 <div
                   className={`${schedule.timezone} col-start-${

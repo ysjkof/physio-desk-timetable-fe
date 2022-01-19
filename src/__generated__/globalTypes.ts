@@ -55,7 +55,7 @@ export interface FindAllPatientsInput {
 
 export interface ListReservationsInput {
   date: any;
-  viewOption?: string | null;
+  viewOption: number;
   groupId?: number | null;
 }
 

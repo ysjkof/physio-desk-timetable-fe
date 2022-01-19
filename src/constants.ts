@@ -6,6 +6,8 @@ export const ONE_DAY = 1;
 export const ONE_WEEK = 7;
 export const TWO_WEEKS = 14;
 export const THREE_WEEKS = 21;
+// 할 일; 4주는 이번 달 보기로 수정예정.
+export const FOUR_WEEKS = 28;
 
 export const TIMELIST = [
   { label: true, timezone: "label", schedules: [] },
