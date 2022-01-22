@@ -1,15 +1,12 @@
-import {
-  faFemale,
-  faMale,
-  faTrashAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { getHHMM, getTimeLength, getYYMMDD } from "../hooks/handleTimeFormat";
+import { getHHMM, getTimeLength, getYMD } from "../hooks/handleTimeFormat";
 
 interface IReservationBlock {
   timezone: string;
   row: number;
+  columnNumber: number;
   startDate: Date;
   endDate: Date;
   registrationNumber: string | null;
@@ -24,6 +21,7 @@ interface IReservationBlock {
 export const ReservationBlock: React.FC<IReservationBlock> = ({
   timezone,
   row,
+  columnNumber,
   startDate,
   endDate,
   registrationNumber,
@@ -35,10 +33,11 @@ export const ReservationBlock: React.FC<IReservationBlock> = ({
   reservationIndex,
 }) => (
   <div
-    className={`reserve${timezone} col-start-2 bg-blue-100/80 dark:bg-light-blue-600/50 border border-blue-700/20 dark:border-light-blue-500 rounded-lg  p-1 hover:scale-105 hover:bg-blue-200 w-2/3 mx-auto group my-1`}
+    className={`reserve${timezone} bg-blue-100/80 dark:bg-light-blue-600/50 border border-blue-700/20 dark:border-light-blue-500 rounded-lg  p-1 hover:scale-105 hover:bg-blue-200 w-2/3 mx-auto group my-1`}
     style={
       reservationsCount > 1
         ? {
+            gridColumnStart: columnNumber,
             // 예약의 시작, 끝 시간을 계산해 분 단위로 얻고 한 칸이 10분이라서 10으로 나눠서 gridRowEnd 길이 적용
             gridRow: `${row + 1}/span ${
               getTimeLength(startDate, endDate) / 10
@@ -46,9 +45,10 @@ export const ReservationBlock: React.FC<IReservationBlock> = ({
             width: `${100 / reservationsCount}%`,
             margin: "0.25rem 0",
             position: "relative",
-            left: `${((reservationIndex - 1) / reservationsCount) * 100}%`,
+            left: `${(reservationIndex / reservationsCount) * 100}%`,
           }
         : {
+            gridColumnStart: columnNumber,
             gridRow: `${row + 1}/span ${
               getTimeLength(startDate, endDate) / 10
             }`,
@@ -86,7 +86,7 @@ export const ReservationBlock: React.FC<IReservationBlock> = ({
           </span>
         ) : (
           <span className="text-xs text-blue-600 dark:text-light-blue-100">
-            B : {getYYMMDD(birthday)}
+            B : {getYMD(birthday, "yymmdd")}
           </span>
         )}
       </div>

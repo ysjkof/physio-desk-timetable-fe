@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { ReservationBlock } from "../../components/reservation-block";
 import { ONE_DAY, ONE_WEEK } from "../../constants";
-import { getHHMM, getWeeksDate, getYYMMDD } from "../../hooks/handleTimeFormat";
+import { getHHMM, getWeeksDate, getYMD } from "../../hooks/handleTimeFormat";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
@@ -35,9 +35,8 @@ const LIST_RESERVATIONS_QUERY = gql`
   }
 `;
 
-interface IReservationsContainer {
+interface ILabelContainer {
   timezone: string;
-  date: string;
   reservationsCount: number;
   reservations: listReservationsQuery_listReservations_results[];
 }
@@ -48,28 +47,67 @@ export interface ITableViewDate {
   month: number;
   year: number;
   isToday: boolean;
-  fulldate: Date;
+  fulldate: string;
+  event: ILabelContainer[];
 }
 
 export const TimeTable = () => {
   // 시간표에 출력할 시간 설정
   const [timeoption, setTiemoption] = useState(["0900", "1900"]);
-  const reservationsContainer: IReservationsContainer[] = [];
+  const LabelContainer: ILabelContainer[] = [];
   let tableViewDate: ITableViewDate[] = [];
-  const [schedulesContainer, setSchedulesContainer] = useState(
-    reservationsContainer
-  );
+  const [schedulesContainer, setSchedulesContainer] = useState(tableViewDate);
   // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
-  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-09"));
+  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-11"));
   // 1일 보기, 1주 보기, 2주 보기, 1달 보기
   // 예정: function initializeQueryDate( ){ localstorage에 뷰 옵션을 설정하고 불러와서 setTableView 변경 }
   const [tableView, setTableView] = useState(ONE_WEEK);
   const onClickChangeViewOneDay = () => setTableView(ONE_DAY);
   const onClickChangeViewOneWeek = () => setTableView(ONE_WEEK);
 
+  // 아래 for는 timeoption에 따른 ReservationsContainer를 만든다.
+  // 수의 증가를 위해 timeoption을 숫자로 바꿈
+  for (
+    let i = parseInt(timeoption[0]);
+    i <= parseInt(timeoption[1]);
+    i = i + 10
+  ) {
+    let hhmm: string = "";
+    // i의 자릿수를 맞추기 위해서 확인하고 string으로 바꿔서 hhmm에 할당
+    if (String(i).length === 4) {
+      hhmm = String(i);
+    } else if (String(i).length === 3) {
+      hhmm = String(i).padStart(4, "0");
+    }
+    // 60분이 되면 시간이 1오르고 0분이 되야 하는데 숫자는 10진법이고, 문자열이라서 10분 단위 위치인 3번째 자리를 읽어서 확인, hhmm을 빈 문자열로 만들고 i값을 더함
+    const handleOverMinute = (number: number) => {
+      hhmm = "";
+      i = i + number;
+    };
+    if (hhmm[2] === "6") handleOverMinute(30);
+    if (hhmm[2] === "7") handleOverMinute(20);
+    if (hhmm[2] === "8") handleOverMinute(10);
+    if (hhmm[2] === "9") handleOverMinute(0);
+    // 10분 단위가 6~9인 경우 hhmm의 길이가 0이고 이때 push하지 않는다.
+    if (hhmm.length !== 0)
+      LabelContainer.push({
+        timezone: hhmm,
+        reservationsCount: 0,
+        reservations: [],
+      });
+
+    if (LabelContainer.length > 200) {
+      break;
+    }
+  }
+
   function makeTableViewDate(option: number) {
+    const label = LabelContainer;
     if (option === ONE_WEEK) {
       tableViewDate = getWeeksDate(queryDate);
+      tableViewDate.map((day) => {
+        day.event = label;
+      });
     }
     if (option === ONE_DAY) {
       tableViewDate.push({
@@ -78,10 +116,10 @@ export const TimeTable = () => {
         month: queryDate.getMonth() + 1,
         year: queryDate.getFullYear(),
         isToday: false,
-        fulldate: queryDate,
+        fulldate: queryDate.toISOString(),
+        event: label,
       });
     }
-    console.log("⚠️ :", tableViewDate);
   }
   makeTableViewDate(tableView);
 
@@ -109,66 +147,34 @@ export const TimeTable = () => {
       }
     );
 
-  // 수의 증가를 위해 timeoption을 숫자로 바꿈
-  for (
-    let i = parseInt(timeoption[0]);
-    i <= parseInt(timeoption[1]);
-    i = i + 10
-  ) {
-    let hhmm: string = "";
-    // i의 자릿수를 맞추기 위해서 확인하고 string으로 바꿔서 hhmm에 할당
-    if (String(i).length === 4) {
-      hhmm = String(i);
-    } else if (String(i).length === 3) {
-      hhmm = String(i).padStart(4, "0");
-    }
-    // 60분이 되면 시간이 1오르고 0분이 되야 하는데 숫자는 10진법이고, 문자열이라서 10분 단위 위치인 3번째 자리를 읽어서 확인, hhmm을 빈 문자열로 만들고 i값을 더함
-    const handleOverMinute = (number: number) => {
-      hhmm = "";
-      i = i + number;
-    };
-    if (hhmm[2] === "6") handleOverMinute(30);
-    if (hhmm[2] === "7") handleOverMinute(20);
-    if (hhmm[2] === "8") handleOverMinute(10);
-    if (hhmm[2] === "9") handleOverMinute(0);
-    // 10분 단위가 6~9인 경우 hhmm의 길이가 0이고 이때 push하지 않는다.
-    if (hhmm.length !== 0)
-      reservationsContainer.push({
-        timezone: hhmm,
-        date: getYYMMDD(queryDate),
-        reservationsCount: 0,
-        reservations: [],
-      });
-
-    if (reservationsContainer.length > 200) {
-      break;
-    }
-  }
-
   useEffect(() => {
     queryListReservations();
     if (!loading && queryResult) {
       const reservations = queryResult?.listReservations.results;
-      if (reservations) {
+      if (tableView === ONE_DAY && reservations) {
         for (const reservation of reservations) {
           const hhmm = getHHMM(reservation.startDate);
-          const date = getYYMMDD(reservation.startDate);
-          const scheduleIndex = reservationsContainer.findIndex(
+          const date = getYMD(reservation.startDate, "yymmdd");
+          const eventIndex = tableViewDate[ONE_DAY - 1].event.findIndex(
             (schedule) => schedule.timezone === hhmm
           );
-          reservationsContainer[scheduleIndex].timezone = hhmm;
-          reservationsContainer[scheduleIndex].reservations.push({
+          tableViewDate[ONE_DAY - 1].event[eventIndex].timezone = hhmm;
+          tableViewDate[ONE_DAY - 1].event[eventIndex].reservations.push({
             ...reservation,
           });
-          reservationsContainer[scheduleIndex].reservationsCount =
-            reservationsContainer[scheduleIndex].reservationsCount + 1;
+          tableViewDate[ONE_DAY - 1].event[eventIndex].reservationsCount =
+            tableViewDate[ONE_DAY - 1].event[eventIndex].reservationsCount + 1;
         }
-        setSchedulesContainer(reservationsContainer);
+        setSchedulesContainer(tableViewDate);
+      }
+      if (tableView === ONE_WEEK && reservations) {
       }
     }
   }, [queryDate, loading, queryResult]);
 
-  console.log("⚠️ : 쿼리 데이터", queryResult);
+  console.log("⚠️ : 예약 컨테이너", schedulesContainer);
+  // console.log("⚠️ : 테이블 뷰 날짜", tableViewDate);
+  // console.log("⚠️ : 쿼리 데이터", queryResult);
   return (
     <>
       <Helmet>
@@ -205,7 +211,7 @@ export const TimeTable = () => {
               : ""
           }  grid-rows-[repeat(${schedulesContainer.length}, 20px)] `}
         >
-          {schedulesContainer.map((schedule, index) => (
+          {LabelContainer.map((schedule, index) => (
             <>
               {/* 시간을 나타내는 레이블 */}
               <div
@@ -218,55 +224,40 @@ export const TimeTable = () => {
                   ? schedule.timezone
                   : ""}
               </div>
-              {/* 예약 정보가 표시되는 캘린더의 세로 줄 */}
-              {tableViewDate.map((day) => (
-                <div
-                  className={`${schedule.timezone} col-start-${
-                    day.day + 2
-                  } text-center text-xs h-6 border-t border-gray-200`}
-                  style={{ gridRowStart: `${index + 1}` }}
-                />
-              ))}
             </>
           ))}
-          {schedulesContainer.map((schedule, row) =>
-            schedule.reservationsCount === 1 ? (
-              <ReservationBlock
-                key={schedule.reservations[0].id}
-                timezone={schedule.timezone}
-                row={row}
-                startDate={schedule.reservations[0].startDate}
-                endDate={schedule.reservations[0].endDate}
-                registrationNumber={
-                  schedule.reservations[0].patient.registrationNumber
-                }
-                birthday={schedule.reservations[0].patient.birthday}
-                gender={schedule.reservations[0].patient.gender}
-                name={schedule.reservations[0].patient.name}
-                memo={schedule.reservations[0].memo}
-                reservationsCount={schedule.reservationsCount}
-                reservationIndex={0}
-              />
-            ) : (
-              schedule.reservations.map((reservation) => (
-                <ReservationBlock
-                  key={reservation.id}
-                  timezone={schedule.timezone}
-                  row={row}
-                  startDate={reservation.startDate}
-                  endDate={reservation.endDate}
-                  registrationNumber={reservation.patient.registrationNumber}
-                  birthday={reservation.patient.birthday}
-                  gender={reservation.patient.gender}
-                  name={reservation.patient.name}
-                  memo={reservation.memo}
-                  reservationsCount={schedule.reservationsCount}
-                  reservationIndex={
-                    schedule.reservations.indexOf(reservation) + 1
-                  }
-                />
-              ))
-            )
+          {schedulesContainer.map((schedule, columnNumber) =>
+            schedule.event.map((event, row) => {
+              return (
+                <>
+                  <div
+                    className={`${event.timezone} col-start-${
+                      columnNumber + 2
+                    } text-center text-xs h-6 border-t border-gray-200`}
+                    style={{ gridRowStart: `${row + 1}` }}
+                  />
+                  {event.reservations.map((reservation, index) => (
+                    <ReservationBlock
+                      key={reservation.id}
+                      timezone={event.timezone}
+                      row={row}
+                      columnNumber={columnNumber + 2}
+                      startDate={reservation.startDate}
+                      endDate={reservation.endDate}
+                      registrationNumber={
+                        reservation.patient.registrationNumber
+                      }
+                      birthday={reservation.patient.birthday}
+                      gender={reservation.patient.gender}
+                      name={reservation.patient.name}
+                      memo={reservation.memo}
+                      reservationsCount={event.reservationsCount}
+                      reservationIndex={index}
+                    />
+                  ))}
+                </>
+              );
+            })
           )}
         </div>
       </div>
