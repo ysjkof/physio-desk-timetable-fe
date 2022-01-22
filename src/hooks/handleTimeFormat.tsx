@@ -1,15 +1,25 @@
 import { ONE_WEEK } from "../constants";
 import { ITableViewDate } from "../pages/user/time-table";
 
-export const getYYMMDD = (inputDate: string | Date, option?: boolean) => {
+export const getYMD = (
+  inputDate: string | Date,
+  option: "yyyymmdd" | "yymmdd",
+  separator?: "-"
+) => {
   const localDate = new Date(inputDate);
-  const yy = String(localDate.getFullYear()).substring(2);
-  const mm = String(localDate.getMonth() + 1).padStart(2, "0");
-  const dd = String(localDate.getDate()).padStart(2, "0");
-  if (option) {
-    return `${yy}-${mm}-${dd}`;
+  let year;
+  if (option === "yymmdd") {
+    year = String(localDate.getFullYear()).substring(2);
   }
-  return `${yy}${mm}${dd}`;
+  if (option === "yyyymmdd") {
+    year = String(localDate.getFullYear());
+  }
+  const month = String(localDate.getMonth() + 1).padStart(2, "0");
+  const date = String(localDate.getDate()).padStart(2, "0");
+  if (separator) {
+    return `${year}-${month}-${date}`;
+  }
+  return `${year}${month}${date}`;
 };
 
 export const getHHMM = (inputDate: string | Date, option?: boolean) => {
@@ -43,7 +53,8 @@ export const getWeeksDate = (date: Date) => {
       month: loopDate.getMonth() + 1,
       year: loopDate.getFullYear(),
       isToday: inputDate === loopDate.getDate() && true,
-      fulldate: loopDate,
+      fulldate: getYMD(loopDate, "yyyymmdd", "-"),
+      event: [],
     };
     thisWeeks.push(dateObj);
   }
