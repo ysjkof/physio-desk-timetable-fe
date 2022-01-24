@@ -35,41 +35,51 @@ const LIST_RESERVATIONS_QUERY = gql`
   }
 `;
 
-interface ILabelContainer {
-  timezone: string;
-  reservationsCount: number;
-  reservations: listReservationsQuery_listReservations_results[];
+interface ILabel {
+  label: string;
 }
 
-export interface ITableViewDate {
-  day: number;
-  date: number;
-  month: number;
-  year: number;
-  isToday: boolean;
-  fulldate: string;
-  event: ILabelContainer[];
+export interface IDays {
+  date: Date;
+  reservations: any[];
+}
+
+export class Day {
+  date: Date;
+  reservations: any[];
+  constructor(date: Date, reservations: any[]) {
+    this.date = date;
+    this.reservations = reservations;
+  }
 }
 
 export const TimeTable = () => {
   // 시간표에 출력할 시간 설정
-  const [timeoption, setTiemoption] = useState(["0900", "1900"]);
-  const LabelContainer: ILabelContainer[] = [];
-  let tableViewDate: ITableViewDate[] = [];
-  const [schedulesContainer, setSchedulesContainer] = useState(tableViewDate);
-  // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
-  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-11"));
-  // 1일 보기, 1주 보기, 2주 보기, 1달 보기
-  // 예정: function initializeQueryDate( ){ localstorage에 뷰 옵션을 설정하고 불러와서 setTableView 변경 }
-  const [tableView, setTableView] = useState(ONE_WEEK);
-  const onClickChangeViewOneDay = () => setTableView(ONE_DAY);
-  const onClickChangeViewOneWeek = () => setTableView(ONE_WEEK);
+  const [tableStartAndEndTime, setTableStartAndEndTime] = useState([
+    "0900",
+    "1900",
+  ]);
+  // 칸을 그리기 위한 배열. 10분 단위로 모든 칸을 그림
+  const labels: ILabel[] = [];
+  // 예약을 담는 배열. 날짜별로 한 배열에 넣는다
+  let days: IDays[] = [];
 
-  // 아래 for는 timeoption에 따른 ReservationsContainer를 만든다.
-  // 수의 증가를 위해 timeoption을 숫자로 바꿈
+  const [schedules, setSchedules] = useState(days);
+  // 쿼리할 때 사용할 날짜로 이 값을 기준으로 날짜를 쿼리 한다.
+  const [queryDate, setQueryDate] = useState<Date>(
+    new Date("2022-01-10T00:00:00.000Z")
+  );
+  // 1일 보기, 1주 보기, 2주 보기, 1달 보기
+  // 예정: function initializeQueryDate( ){ localstorage에 뷰 옵션을 설정하고 불러와서 setViewOption 변경 }
+  const [viewOption, setViewOption] = useState(ONE_WEEK);
+  const onClickChangeViewOneDay = () => setViewOption(ONE_DAY);
+  const onClickChangeViewOneWeek = () => setViewOption(ONE_WEEK);
+
+  // 아래 for는 tableStartAndEndTime에 따른 ReservationsContainer를 만든다.
+  // 수의 증가를 위해 tableStartAndEndTime을 숫자로 바꿈
   for (
-    let i = parseInt(timeoption[0]);
-    i <= parseInt(timeoption[1]);
+    let i = parseInt(tableStartAndEndTime[0]);
+    i <= parseInt(tableStartAndEndTime[1]);
     i = i + 10
   ) {
     let hhmm: string = "";
@@ -90,38 +100,22 @@ export const TimeTable = () => {
     if (hhmm[2] === "9") handleOverMinute(0);
     // 10분 단위가 6~9인 경우 hhmm의 길이가 0이고 이때 push하지 않는다.
     if (hhmm.length !== 0)
-      LabelContainer.push({
-        timezone: hhmm,
-        reservationsCount: 0,
-        reservations: [],
+      labels.push({
+        label: hhmm,
       });
 
-    if (LabelContainer.length > 200) {
+    if (labels.length > 200) {
       break;
     }
   }
 
   function makeTableViewDate(option: number) {
-    const label = LabelContainer;
     if (option === ONE_WEEK) {
-      tableViewDate = getWeeksDate(queryDate);
-      tableViewDate.map((day) => {
-        day.event = label;
-      });
     }
     if (option === ONE_DAY) {
-      tableViewDate.push({
-        day: queryDate.getDay(),
-        date: queryDate.getDate(),
-        month: queryDate.getMonth() + 1,
-        year: queryDate.getFullYear(),
-        isToday: false,
-        fulldate: queryDate.toISOString(),
-        event: label,
-      });
     }
   }
-  makeTableViewDate(tableView);
+  makeTableViewDate(viewOption);
 
   const onClickPrevDate = () => {
     const prevDate = new Date(queryDate.setDate(queryDate.getDate() - 1));
@@ -140,7 +134,7 @@ export const TimeTable = () => {
         variables: {
           input: {
             date: queryDate,
-            viewOption: tableView,
+            viewOption: viewOption,
             groupId: null,
           },
         },
@@ -151,30 +145,28 @@ export const TimeTable = () => {
     queryListReservations();
     if (!loading && queryResult) {
       const reservations = queryResult?.listReservations.results;
-      if (tableView === ONE_DAY && reservations) {
-        for (const reservation of reservations) {
-          const hhmm = getHHMM(reservation.startDate);
-          const date = getYMD(reservation.startDate, "yymmdd");
-          const eventIndex = tableViewDate[ONE_DAY - 1].event.findIndex(
-            (schedule) => schedule.timezone === hhmm
+      if (viewOption === ONE_DAY && reservations) {
+        console.log("⚠️ :ONE_DAY TRUE");
+        days.push(new Day(queryDate, []));
+        days[ONE_DAY - 1].reservations = reservations;
+      }
+      if (viewOption === ONE_WEEK && reservations) {
+        console.log("⚠️ :ONE_DAY TRUE");
+        days = getWeeksDate(queryDate);
+        for (const day of days) {
+          day.reservations = reservations.filter(
+            (reservation) =>
+              reservation.startDate.substring(0, 11) ===
+              day.date.toISOString().substring(0, 11)
           );
-          tableViewDate[ONE_DAY - 1].event[eventIndex].timezone = hhmm;
-          tableViewDate[ONE_DAY - 1].event[eventIndex].reservations.push({
-            ...reservation,
-          });
-          tableViewDate[ONE_DAY - 1].event[eventIndex].reservationsCount =
-            tableViewDate[ONE_DAY - 1].event[eventIndex].reservationsCount + 1;
         }
-        setSchedulesContainer(tableViewDate);
       }
-      if (tableView === ONE_WEEK && reservations) {
-      }
+      setSchedules(days);
+      // console.log("⚠️ : END FOR LOOP", days);
     }
   }, [queryDate, loading, queryResult]);
 
-  console.log("⚠️ : 예약 컨테이너", schedulesContainer);
-  // console.log("⚠️ : 테이블 뷰 날짜", tableViewDate);
-  // console.log("⚠️ : 쿼리 데이터", queryResult);
+  console.log("⚠️ :", schedules);
   return (
     <>
       <Helmet>
@@ -204,61 +196,42 @@ export const TimeTable = () => {
         </div>
         <div
           className={`h-full main ${
-            tableView === ONE_DAY
+            viewOption === ONE_DAY
               ? "grid grid-cols-[4rem,1fr]"
-              : tableView === ONE_WEEK
+              : viewOption === ONE_WEEK
               ? "grid grid-cols-[4rem,repeat(7,1fr)]"
               : ""
-          }  grid-rows-[repeat(${schedulesContainer.length}, 20px)] `}
+          }`}
+          // style={{ gridTemplateRows: `repeat(${schedules.length}, 20px)` }}
         >
-          {LabelContainer.map((schedule, index) => (
+          {labels.map((label, index) => (
             <>
-              {/* 시간을 나타내는 레이블 */}
               <div
                 key={index}
-                className={`${schedule.timezone} col-start-1  text-center text-xs h-6 border-t border-gray-200`}
+                className={`${label.label} col-start-1  text-center text-xs h-6 border-t border-gray-200`}
                 style={{ gridRowStart: `${index + 1}` }}
               >
-                {schedule.timezone?.substring(2) === "00" ||
-                schedule.timezone?.substring(2) === "30"
-                  ? schedule.timezone
+                {label.label?.substring(2) === "00" ||
+                label.label?.substring(2) === "30"
+                  ? label.label
                   : ""}
               </div>
             </>
           ))}
-          {schedulesContainer.map((schedule, columnNumber) =>
-            schedule.event.map((event, row) => {
-              return (
-                <>
-                  <div
-                    className={`${event.timezone} col-start-${
-                      columnNumber + 2
-                    } text-center text-xs h-6 border-t border-gray-200`}
-                    style={{ gridRowStart: `${row + 1}` }}
-                  />
-                  {event.reservations.map((reservation, index) => (
-                    <ReservationBlock
-                      key={reservation.id}
-                      timezone={event.timezone}
-                      row={row}
-                      columnNumber={columnNumber + 2}
-                      startDate={reservation.startDate}
-                      endDate={reservation.endDate}
-                      registrationNumber={
-                        reservation.patient.registrationNumber
-                      }
-                      birthday={reservation.patient.birthday}
-                      gender={reservation.patient.gender}
-                      name={reservation.patient.name}
-                      memo={reservation.memo}
-                      reservationsCount={event.reservationsCount}
-                      reservationIndex={index}
-                    />
-                  ))}
-                </>
-              );
-            })
-          )}
+          {schedules.map((day, dayIndex) => {
+            return labels.map((label, labelIndex) => (
+              <div
+                key={labelIndex}
+                className={`${day.date.getDay()}-${
+                  label.label
+                }-${labelIndex} h-6 border-t border-gray-200 border-r`}
+                style={{
+                  gridColumnStart: `${dayIndex + 2}`,
+                  gridRowStart: `${labelIndex}`,
+                }}
+              />
+            ));
+          })}
         </div>
       </div>
     </>

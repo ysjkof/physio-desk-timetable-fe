@@ -1,5 +1,5 @@
 import { ONE_WEEK } from "../constants";
-import { ITableViewDate } from "../pages/user/time-table";
+import { Day } from "../pages/user/time-table";
 
 export const getYMD = (
   inputDate: string | Date,
@@ -39,7 +39,7 @@ export const getTimeLength = (startDate: Date, endDate: Date) => {
 };
 
 export const getWeeksDate = (date: Date) => {
-  const thisWeeks: ITableViewDate[] = [];
+  const weeks = [];
   const newDate = new Date(date);
   const inputDate = newDate.getDate();
   const inputDay = newDate.getDay();
@@ -47,16 +47,8 @@ export const getWeeksDate = (date: Date) => {
   for (let i = 0; i < ONE_WEEK; i++) {
     let loopDate = new Date(firstDate);
     loopDate = new Date(loopDate.setDate(loopDate.getDate() + i));
-    const dateObj = {
-      day: i,
-      date: loopDate.getDate(),
-      month: loopDate.getMonth() + 1,
-      year: loopDate.getFullYear(),
-      isToday: inputDate === loopDate.getDate() && true,
-      fulldate: getYMD(loopDate, "yyyymmdd", "-"),
-      event: [],
-    };
-    thisWeeks.push(dateObj);
+    const day = new Day(loopDate, []);
+    weeks.push(day);
   }
-  return thisWeeks;
+  return weeks;
 };
