@@ -47,7 +47,7 @@ export const getWeeksDate = (date: Date) => {
   for (let i = 0; i < ONE_WEEK; i++) {
     let loopDate = new Date(firstDate);
     loopDate = new Date(loopDate.setDate(loopDate.getDate() + i));
-    const day = new Day(loopDate, []);
+    const day = new Day(loopDate);
     weeks.push(day);
   }
   return weeks;

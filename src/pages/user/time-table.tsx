@@ -1,9 +1,10 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { ReservationBlock } from "../../components/reservation-block";
+import { Reservation } from "../../components/Reservation";
 import { ONE_DAY, ONE_WEEK } from "../../constants";
 import { getHHMM, getWeeksDate, getYMD } from "../../hooks/handleTimeFormat";
+import { makeLabels } from "../../hooks/makeLabels";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
@@ -35,21 +36,29 @@ const LIST_RESERVATIONS_QUERY = gql`
   }
 `;
 
-interface ILabel {
+export interface ILabel {
   label: string;
+  reservations?: listReservationsQuery_listReservations_results[];
 }
 
 export interface IDays {
   date: Date;
-  reservations: any[];
+  reservations: listReservationsQuery_listReservations_results[];
+  timezones: ILabel[];
 }
 
 export class Day {
   date: Date;
-  reservations: any[];
-  constructor(date: Date, reservations: any[]) {
+  reservations: listReservationsQuery_listReservations_results[];
+  timezones: [];
+  constructor(
+    date: Date,
+    reservations: listReservationsQuery_listReservations_results[] = [],
+    timezones = []
+  ) {
     this.date = date;
     this.reservations = reservations;
+    this.timezones = [];
   }
 }
 
@@ -60,7 +69,7 @@ export const TimeTable = () => {
     "1900",
   ]);
   // 칸을 그리기 위한 배열. 10분 단위로 모든 칸을 그림
-  const labels: ILabel[] = [];
+  const labels: ILabel[] = makeLabels(tableStartAndEndTime, "forLabel");
   // 예약을 담는 배열. 날짜별로 한 배열에 넣는다
   let days: IDays[] = [];
 
@@ -69,45 +78,12 @@ export const TimeTable = () => {
   const [queryDate, setQueryDate] = useState<Date>(
     new Date("2022-01-10T00:00:00.000Z")
   );
+
   // 1일 보기, 1주 보기, 2주 보기, 1달 보기
   // 예정: function initializeQueryDate( ){ localstorage에 뷰 옵션을 설정하고 불러와서 setViewOption 변경 }
   const [viewOption, setViewOption] = useState(ONE_WEEK);
   const onClickChangeViewOneDay = () => setViewOption(ONE_DAY);
   const onClickChangeViewOneWeek = () => setViewOption(ONE_WEEK);
-
-  // 아래 for는 tableStartAndEndTime에 따른 ReservationsContainer를 만든다.
-  // 수의 증가를 위해 tableStartAndEndTime을 숫자로 바꿈
-  for (
-    let i = parseInt(tableStartAndEndTime[0]);
-    i <= parseInt(tableStartAndEndTime[1]);
-    i = i + 10
-  ) {
-    let hhmm: string = "";
-    // i의 자릿수를 맞추기 위해서 확인하고 string으로 바꿔서 hhmm에 할당
-    if (String(i).length === 4) {
-      hhmm = String(i);
-    } else if (String(i).length === 3) {
-      hhmm = String(i).padStart(4, "0");
-    }
-    // 60분이 되면 시간이 1오르고 0분이 되야 하는데 숫자는 10진법이고, 문자열이라서 10분 단위 위치인 3번째 자리를 읽어서 확인, hhmm을 빈 문자열로 만들고 i값을 더함
-    const handleOverMinute = (number: number) => {
-      hhmm = "";
-      i = i + number;
-    };
-    if (hhmm[2] === "6") handleOverMinute(30);
-    if (hhmm[2] === "7") handleOverMinute(20);
-    if (hhmm[2] === "8") handleOverMinute(10);
-    if (hhmm[2] === "9") handleOverMinute(0);
-    // 10분 단위가 6~9인 경우 hhmm의 길이가 0이고 이때 push하지 않는다.
-    if (hhmm.length !== 0)
-      labels.push({
-        label: hhmm,
-      });
-
-    if (labels.length > 200) {
-      break;
-    }
-  }
 
   function makeTableViewDate(option: number) {
     if (option === ONE_WEEK) {
@@ -147,26 +123,36 @@ export const TimeTable = () => {
       const reservations = queryResult?.listReservations.results;
       if (viewOption === ONE_DAY && reservations) {
         console.log("⚠️ :ONE_DAY TRUE");
-        days.push(new Day(queryDate, []));
+        days.push(new Day(queryDate));
         days[ONE_DAY - 1].reservations = reservations;
       }
       if (viewOption === ONE_WEEK && reservations) {
-        console.log("⚠️ :ONE_DAY TRUE");
+        console.log("⚠️ :ONE_WEEK TRUE");
         days = getWeeksDate(queryDate);
-        for (const day of days) {
+        days.forEach((day) => {
           day.reservations = reservations.filter(
             (reservation) =>
               reservation.startDate.substring(0, 11) ===
               day.date.toISOString().substring(0, 11)
           );
-        }
+        });
       }
+      days.forEach((day) => {
+        day.timezones = makeLabels(tableStartAndEndTime);
+        day.reservations.forEach((reservation) => {
+          const hhmm = getHHMM(reservation.startDate);
+          const index = day.timezones.findIndex(
+            (labels) => labels.label === hhmm
+          );
+          day.timezones[index].reservations?.push(reservation);
+        });
+      });
       setSchedules(days);
-      // console.log("⚠️ : END FOR LOOP", days);
     }
   }, [queryDate, loading, queryResult]);
 
   console.log("⚠️ :", schedules);
+  // console.log("⚠️ :", labels);
   return (
     <>
       <Helmet>
@@ -195,7 +181,7 @@ export const TimeTable = () => {
           <button onClick={onClickNextDate}>&rarr;</button>
         </div>
         <div
-          className={`h-full main ${
+          className={`h-full main  divide-x ${
             viewOption === ONE_DAY
               ? "grid grid-cols-[4rem,1fr]"
               : viewOption === ONE_WEEK
@@ -205,32 +191,60 @@ export const TimeTable = () => {
           // style={{ gridTemplateRows: `repeat(${schedules.length}, 20px)` }}
         >
           {labels.map((label, index) => (
-            <>
-              <div
-                key={index}
-                className={`${label.label} col-start-1  text-center text-xs h-6 border-t border-gray-200`}
-                style={{ gridRowStart: `${index + 1}` }}
-              >
-                {label.label?.substring(2) === "00" ||
-                label.label?.substring(2) === "30"
-                  ? label.label
-                  : ""}
-              </div>
-            </>
+            <div
+              key={index}
+              className={`${label.label} col-start-1 text-center text-xs min-h-[1rem] border-t`}
+              style={{ gridRowStart: `${index + 1}` }}
+            >
+              {label.label?.substring(2) === "00" ||
+              label.label?.substring(2) === "30"
+                ? label.label
+                : ""}
+            </div>
           ))}
           {schedules.map((day, dayIndex) => {
-            return labels.map((label, labelIndex) => (
+            return day.timezones.map((timezone, labelIndex) => (
               <div
                 key={labelIndex}
                 className={`${day.date.getDay()}-${
-                  label.label
-                }-${labelIndex} h-6 border-t border-gray-200 border-r`}
+                  timezone.label
+                }-${labelIndex} c-col-start-${
+                  dayIndex + 2
+                } min-h-[1rem] border-t`}
                 style={{
-                  gridColumnStart: `${dayIndex + 2}`,
                   gridRowStart: `${labelIndex}`,
                 }}
               />
             ));
+          })}
+          {/* 쿼리 데이터 출력 */}
+          {schedules.map((day, dayIndex) => {
+            return day.timezones.map((timezone, tIndex) => {
+              const timezoneLength = timezone.reservations?.length;
+              return timezone.reservations?.map((reservation, rIndex) => {
+                return (
+                  <Reservation
+                    key={rIndex}
+                    date={day.date}
+                    startDate={reservation.startDate}
+                    endDate={reservation.endDate}
+                    rIndex={rIndex}
+                    gridColStart={dayIndex + 2}
+                    gridRowStart={tIndex + 1}
+                    timezoneLength={timezoneLength ? timezoneLength : 0}
+                    lastModifier={reservation.lastModifier.email}
+                    memo={reservation.memo}
+                    state={reservation.state}
+                    patientName={reservation.patient.name}
+                    patientGender={reservation.patient.gender}
+                    patientBirthday={reservation.patient.birthday}
+                    patientRegistrationNumber={
+                      reservation.patient.registrationNumber
+                    }
+                  />
+                );
+              });
+            });
           })}
         </div>
       </div>
