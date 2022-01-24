@@ -6,6 +6,7 @@ import { Home } from "../pages/home";
 import { CreatePatient } from "../pages/patient/create-patient";
 import { ListPatient } from "../pages/patient/list-patient";
 import { CreateReservation } from "../pages/reservation/create-reservation";
+import { Test } from "../pages/test";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
 import { TimeTable } from "../pages/user/time-table";
@@ -50,6 +51,7 @@ export const LoggedInRouter = () => {
           <Route path="list-patient" element={<ListPatient />} />,
           <Route path="reserve" element={<CreateReservation />} />,
         </Route>
+        <Route path="test" element={<Test />} />,
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
