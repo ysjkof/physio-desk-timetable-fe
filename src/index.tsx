@@ -6,6 +6,7 @@ import { client } from "./apollo";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./styles/styles.css";
+import "./styles/custom.css";
 
 ReactDOM.render(
   <React.StrictMode>
