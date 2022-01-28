@@ -201,7 +201,7 @@ function App() {
 
 # 2022-1-16; 캘린더에서 absolute, relative로 위치나 크기를 설정하는 이유
 
-- [ ] 할일: Front-end, Back-end에서 중복 예약 방지
+- _2022-01-28_ ~~할일: Front-end, Back-end에서 중복 예약 방지~~ 게시판처럼 목록보기 추가로 해결
 
 결론: 여러개 겹치는 캘린더는 absolute, relative와 top, bottom, left, right로 일정의 크기와 위치를 조정해야 한다. **치료실 예약 시스템에서 중복되는 시간에 입력할 경우가 거의 없기 때문에** 일단 이대로 진행하고 **Front-end, Back-end에서 중복 예약 자체을 막자**.
 
@@ -258,3 +258,9 @@ arr1.map((data, index) => {
 `col-start-[${변수}]` 이렇게 추가한 html class는 에러남.
 
 `col-start-${변수}` 이렇게 추가한 html class는 정상적으로 나오지만 TailwindCSS가 빌드하지 않아서 아무 효과가 없음.
+
+# 2022-1-28; list view 추가하기
+
+- [ ] 게시판처럼 목록으로 보기 추가
+
+예약 시간이 겹쳐서 클릭할 수 없거나 볼 수 없을 때 사용
