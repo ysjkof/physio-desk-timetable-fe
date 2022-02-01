@@ -31,11 +31,11 @@ export const Header: React.FC = () => {
         </div>
       )}
       <header className="py-4">
-        <div className="w-full px-5  xl:px-0 container mx-auto flex justify-between items-center">
+        <div className="container mx-auto  flex w-full items-center justify-between px-5 xl:px-0">
           <Link to="/">
             <img src={muoolLogo} className="w-44" alt="Muool" />
           </Link>
-          <span className="text-xs flex gap-5 items-center">
+          <span className="flex items-center gap-5 text-xs">
             {isLoggedIn ? (
               <>
                 <Link to="/tt">

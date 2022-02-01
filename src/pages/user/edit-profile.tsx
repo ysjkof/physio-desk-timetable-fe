@@ -81,14 +81,14 @@ export const EditProfile = () => {
     });
   };
   return (
-    <div className="mt-52 flex flex-col justify-center items-center">
+    <div className="mt-52 flex flex-col items-center justify-center">
       <Helmet>
         <title>Edit Profile | Muool</title>
       </Helmet>
-      <h4 className="font-semibold text-2xl mb-3">Edit Profile</h4>
+      <h4 className="mb-3 text-2xl font-semibold">Edit Profile</h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid max-w-screen-sm gap-3 mt-5 w-full mb-5"
+        className="mt-5 mb-5 grid w-full max-w-screen-sm gap-3"
       >
         <input
           {...register("email", {

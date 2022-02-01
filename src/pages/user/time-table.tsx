@@ -159,7 +159,7 @@ export const TimeTable = () => {
         <title>시간표 | Muool</title>
       </Helmet>
       <div className="container mx-auto  h-full">
-        <div className="day-button-box flex justify-around items-center">
+        <div className="day-button-box flex items-center justify-around">
           <button
             className=" shadow-cst rounded-md"
             onClick={onClickChangeViewOneDay}
@@ -173,7 +173,7 @@ export const TimeTable = () => {
             ONE WEEK
           </button>
         </div>
-        <div className="header h-full flex justify-between px-4">
+        <div className="header flex h-full justify-between px-4">
           <button onClick={onClickPrevDate}>&larr;</button>
           <button onClick={onClickToday}>
             {queryDate.getMonth() + 1}월 {queryDate.getDate()}일
@@ -181,7 +181,7 @@ export const TimeTable = () => {
           <button onClick={onClickNextDate}>&rarr;</button>
         </div>
         <div
-          className={`h-full main  divide-x ${
+          className={`main h-full  divide-x ${
             viewOption === ONE_DAY
               ? "grid grid-cols-[4rem,1fr]"
               : viewOption === ONE_WEEK
@@ -193,7 +193,7 @@ export const TimeTable = () => {
           {labels.map((label, index) => (
             <div
               key={index}
-              className={`${label.label} col-start-1 text-center text-xs min-h-[1rem] border-t`}
+              className={`${label.label} col-start-1 min-h-[1rem] border-t text-center text-xs`}
               style={{ gridRowStart: `${index + 1}` }}
             >
               {label.label?.substring(2) === "00" ||

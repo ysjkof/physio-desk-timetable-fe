@@ -41,20 +41,20 @@ export const ListPatient = () => {
   );
   return (
     <div className="bg-gray-100">
-      <div className="container mx-auto h-full flex flex-col items-center justify-center rounded-md  p-3">
+      <div className="container mx-auto flex h-full flex-col items-center justify-center rounded-md  p-3">
         <h1 className="text-3xl font-bold">List table</h1>
 
         {queryResult?.findAllPatients.results ? (
-          <ul className="rounded-lg  bg-white w-full shadow-cst divide-y">
-            <div className="flex justify-between px-10 bg-gray-50 rounded-md">
+          <ul className="shadow-cst  w-full divide-y rounded-lg bg-white">
+            <div className="flex justify-between rounded-md bg-gray-50 px-10">
               <span className="w-1/4">이름</span>
-              <span className=" text-sm w-1/4 font-extralight text-gray-400">
+              <span className=" w-1/4 text-sm font-extralight text-gray-400">
                 성별
               </span>
-              <span className="text-sm w-1/4 font-extralight text-gray-400">
+              <span className="w-1/4 text-sm font-extralight text-gray-400">
                 생년월일
               </span>
-              <span className="text-sm w-1/4 font-extralight text-gray-400">
+              <span className="w-1/4 text-sm font-extralight text-gray-400">
                 등록번호
               </span>
               <span className="w-1/4 text-sky-500" />

@@ -6,7 +6,7 @@ interface ITimezoneLiProps {
 
 export const TimezoneLi: React.FC<ITimezoneLiProps> = ({ timezone }) => (
   <div
-    className="left-timezone-hour text-xs font-extralight text-gray-400 px-2 flex flex-col justify-center content-end"
+    className="left-timezone-hour flex flex-col content-end justify-center px-2 text-xs font-extralight text-gray-400"
     style={{
       borderTop: `${
         timezone?.substring(2) !== "00" && timezone?.substring(2) !== "30"

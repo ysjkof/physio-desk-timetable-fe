@@ -78,12 +78,12 @@ export const CreateReservation = () => {
         <title>예약하기 | Muool</title>
       </Helmet>
       <div className="px-5 lg:px-60">
-        <h4 className=" w-full font-medium text-left text-3xl mb-5">
+        <h4 className=" mb-5 w-full text-left text-3xl font-medium">
           예약하기
         </h4>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid gap-3 mt-5 w-full mb-5"
+          className="mt-5 mb-5 grid w-full gap-3"
         >
           {errors.startDate?.message && (
             <FormError errorMessage={errors.startDate?.message} />

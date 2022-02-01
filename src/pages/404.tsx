@@ -3,15 +3,15 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 export const NotFound = () => (
-  <div className="h-screen flex flex-col items-center justify-center">
+  <div className="flex h-screen flex-col items-center justify-center">
     <Helmet>
       <title>Not Found | Muool</title>
     </Helmet>
-    <h2 className="font-semibold text-2xl mb-3">Page Not Found.</h2>
-    <h4 className="font-medium text-base mb-5">
+    <h2 className="mb-3 text-2xl font-semibold">Page Not Found.</h2>
+    <h4 className="mb-5 text-base font-medium">
       The page you're looking for does not exist or has moved.
     </h4>
-    <Link className="hover:underline text-lime-600" to="/">
+    <Link className="text-lime-600 hover:underline" to="/">
       Go Back home
     </Link>
   </div>

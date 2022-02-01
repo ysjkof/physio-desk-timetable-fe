@@ -39,7 +39,7 @@ export const Reservation: React.FC<IReservation> = ({
   console.log("⚠️ :", timezoneLength);
   return (
     <div
-      className={`${date.getDay()}-${rIndex} c-col-start-${gridColStart} bg-blue-100/60 dark:bg-light-blue-600/50 border border-blue-700/20 dark:border-light-blue-500 rounded-lg  p-1 hover:scale-105 hover:bg-blue-200 w-2/3 mx-auto group my-1`}
+      className={`${date.getDay()}-${rIndex} c-col-start-${gridColStart} dark:bg-light-blue-600/50 dark:border-light-blue-500 group mx-auto my-1 w-2/3  rounded-lg border border-blue-700/20 bg-blue-100/60 p-1 hover:scale-105 hover:bg-blue-200`}
       style={
         timezoneLength > 1
           ? {
@@ -62,8 +62,8 @@ export const Reservation: React.FC<IReservation> = ({
       }
     >
       <div className="flex flex-col divide-y divide-solid divide-blue-300/70">
-        <div className="flex justify-between items-baseline">
-          <span className="text-xs text-blue-600 dark:text-light-blue-100 hidden group-hover:block group-hover:absolute  group-hover:top-[-20px]">
+        <div className="flex items-baseline justify-between">
+          <span className="dark:text-light-blue-100 hidden text-xs text-blue-600 group-hover:absolute group-hover:top-[-20px]  group-hover:block">
             {getHHMM(startDate, true)}~{getHHMM(endDate, true)}
           </span>
 
@@ -81,22 +81,22 @@ export const Reservation: React.FC<IReservation> = ({
                 />
               )}
             </span>
-            <span className="text-sm font-medium text-blue-600 dark:text-light-blue-100">
+            <span className="dark:text-light-blue-100 text-sm font-medium text-blue-600">
               {/* <span className="font-bold text-sm group-hover:text-base"> */}
               {patientName}
             </span>
           </div>
           {patientRegistrationNumber ? (
-            <span className="text-xs text-blue-600 dark:text-light-blue-100">
+            <span className="dark:text-light-blue-100 text-xs text-blue-600">
               R : {patientRegistrationNumber}
             </span>
           ) : (
-            <span className="text-xs text-blue-600 dark:text-light-blue-100">
+            <span className="dark:text-light-blue-100 text-xs text-blue-600">
               B : {getYMD(patientBirthday, "yymmdd")}
             </span>
           )}
         </div>
-        <p className="break-all text-sm text-blue-600 text-center">{memo}</p>
+        <p className="break-all text-center text-sm text-blue-600">{memo}</p>
       </div>
     </div>
   );

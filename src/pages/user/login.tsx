@@ -70,12 +70,12 @@ export const Login = () => {
         <title>Login | Muool</title>
       </Helmet>
 
-      <h4 className="w-full font-medium text-left text-3xl mb-5">
+      <h4 className="mb-5 w-full text-left text-3xl font-medium">
         물리치료사를 위한 하나의 앱
       </h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid gap-3 mt-5 w-full mb-5"
+        className="mt-5 mb-5 grid w-full gap-3"
       >
         {errors.email?.message && (
           <FormError errorMessage={errors.email?.message} />

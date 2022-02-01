@@ -15,8 +15,8 @@ export const LoggedInRouter = () => {
   const { data, loading, error } = useMe();
   if (!data || loading || error) {
     return (
-      <div className="h-screen flex justify-center items-center">
-        <span className="font-medium text-xl tracking-wide">Loading...</span>
+      <div className="flex h-screen items-center justify-center">
+        <span className="text-xl font-medium tracking-wide">Loading...</span>
       </div>
     );
   }

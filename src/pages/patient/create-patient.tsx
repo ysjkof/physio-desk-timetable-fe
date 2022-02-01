@@ -63,12 +63,12 @@ export const CreatePatient = () => {
       <Helmet>
         <title>환자 등록 | Muool</title>
       </Helmet>
-      <h4 className="w-full font-medium text-left text-3xl mb-5">
+      <h4 className="mb-5 w-full text-left text-3xl font-medium">
         환자 만들기
       </h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid gap-3 mt-5 w-full mb-5"
+        className="mt-5 mb-5 grid w-full gap-3"
       >
         {errors.name?.message && (
           <FormError errorMessage={errors.name?.message} />
