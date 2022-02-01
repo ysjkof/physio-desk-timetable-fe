@@ -1,9 +1,11 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { Outlet, useLocation } from "react-router-dom";
+import { EmptyCell } from "../../components/empty-cell";
 import { Reservation } from "../../components/Reservation";
 import { ONE_DAY, ONE_WEEK } from "../../constants";
-import { getHHMM, getWeeksDate, getYMD } from "../../hooks/handleTimeFormat";
+import { getHHMM, getWeeksDate } from "../../hooks/handleTimeFormat";
 import { makeLabels } from "../../hooks/makeLabels";
 import {
   listReservationsQuery,
@@ -122,12 +124,10 @@ export const TimeTable = () => {
     if (!loading && queryResult) {
       const reservations = queryResult?.listReservations.results;
       if (viewOption === ONE_DAY && reservations) {
-        console.log("⚠️ :ONE_DAY TRUE");
         days.push(new Day(queryDate));
         days[ONE_DAY - 1].reservations = reservations;
       }
       if (viewOption === ONE_WEEK && reservations) {
-        console.log("⚠️ :ONE_WEEK TRUE");
         days = getWeeksDate(queryDate);
         days.forEach((day) => {
           day.reservations = reservations.filter(
@@ -151,10 +151,19 @@ export const TimeTable = () => {
     }
   }, [queryDate, loading, queryResult]);
 
-  console.log("⚠️ :", schedules);
-  // console.log("⚠️ :", labels);
+  const [onReserve, setOnReserve] = useState<object>();
+  const location = useLocation();
+  useEffect(() => {
+    // 타입스크립트 타입 단언 (Type assertions): ~ as ~
+    const state = location.state as { todo?: string };
+    if (state === "reserve") {
+      return setOnReserve(state);
+    }
+  }, [location.state]);
+
   return (
     <>
+      <Outlet />
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
@@ -204,16 +213,12 @@ export const TimeTable = () => {
           ))}
           {schedules.map((day, dayIndex) => {
             return day.timezones.map((timezone, labelIndex) => (
-              <div
+              <EmptyCell
                 key={labelIndex}
-                className={`${day.date.getDay()}-${
-                  timezone.label
-                }-${labelIndex} c-col-start-${
-                  dayIndex + 2
-                } min-h-[1rem] border-t`}
-                style={{
-                  gridRowStart: `${labelIndex}`,
-                }}
+                date={day.date}
+                label={timezone.label}
+                labelIndex={labelIndex + 1}
+                dayIndex={dayIndex}
               />
             ));
           })}

@@ -1,12 +1,12 @@
 import React from "react";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "../components/layout";
 import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 import { Home } from "../pages/home";
 import { CreatePatient } from "../pages/patient/create-patient";
 import { ListPatient } from "../pages/patient/list-patient";
-import { CreateReservation } from "../pages/reservation/create-reservation";
+import { Reserve } from "../pages/reservation/reserve";
 import { Test } from "../pages/test";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
@@ -21,6 +21,7 @@ export const LoggedInRouter = () => {
       </div>
     );
   }
+
   return (
     <BrowserRouter>
       <Routes>
@@ -28,10 +29,12 @@ export const LoggedInRouter = () => {
           <Route index element={<Home />} />
           <Route path="confirm" element={<ConfirmEmail />} />
           <Route path="edit-profile" element={<EditProfile />} />
-          <Route path="tt" element={<TimeTable />} />
+          <Route path="tt" element={<TimeTable />}>
+            <Route path="reserve" element={<Reserve />} />
+          </Route>
           <Route path="create-patient" element={<CreatePatient />} />
           <Route path="list-patient" element={<ListPatient />} />
-          <Route path="reserve" element={<CreateReservation />} />
+          <Route path="reserve" element={<Reserve />} />
         </Route>
         <Route path="test" element={<Test />} />
         <Route path="*" element={<NotFound />} />

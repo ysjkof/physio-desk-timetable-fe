@@ -22,7 +22,7 @@ export const getYMD = (
   return `${year}${month}${date}`;
 };
 
-export const getHHMM = (inputDate: string | Date, option?: boolean) => {
+export const getHHMM = (inputDate: string | Date, option?: ":") => {
   const localDate = new Date(inputDate);
   const hh = String(localDate.getHours()).padStart(2, "0");
   const mm = String(localDate.getMinutes()).padStart(2, "0");

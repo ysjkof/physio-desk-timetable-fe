@@ -2,6 +2,7 @@ import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import { Button } from "../../components/button";
 import { FormError } from "../../components/form-error";
 import { UTC_OPTION_KST } from "../../constants";
@@ -9,6 +10,8 @@ import {
   createReservationMutation,
   createReservationMutationVariables,
 } from "../../__generated__/createReservationMutation";
+import { ModalPortal } from "./mordal-portal";
+import { getYMD, getHHMM } from "../../hooks/handleTimeFormat";
 
 const CREATE_RESERVATION_MUTATION = gql`
   mutation createReservationMutation($input: CreateReservationInput!) {
@@ -19,7 +22,9 @@ const CREATE_RESERVATION_MUTATION = gql`
   }
 `;
 
-export const CreateReservation = () => {
+export const Reserve = () => {
+  const location = useLocation();
+  const state = location.state as { startDate: Date };
   const {
     register,
     getValues,
@@ -64,20 +69,13 @@ export const CreateReservation = () => {
     }
   };
 
-  const yyyyMmDd = () => {
-    const now = new Date(Date.now());
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const dd = String(now.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
-  };
-
+  console.log("⚠️ :1", state);
   return (
-    <>
+    <ModalPortal>
       <Helmet>
         <title>예약하기 | Muool</title>
       </Helmet>
-      <div className="px-5 lg:px-60">
+      <div className="my-auto bg-white p-5 sm:rounded-lg">
         <h4 className=" mb-5 w-full text-left text-3xl font-medium">
           예약하기
         </h4>
@@ -88,7 +86,7 @@ export const CreateReservation = () => {
           {errors.startDate?.message && (
             <FormError errorMessage={errors.startDate?.message} />
           )}
-          <label>시작 시간</label>
+          <label>예약 시간</label>
           <div className="flex">
             <input
               {...register("startDate", {
@@ -97,7 +95,9 @@ export const CreateReservation = () => {
               type="text"
               className="input"
               placeholder="yyyy-mm-dd"
-              defaultValue={yyyyMmDd()}
+              defaultValue={
+                state?.startDate ? getYMD(state.startDate, "yyyymmdd", "-") : ""
+              }
             />
             <input
               {...register("startTime", {
@@ -106,28 +106,23 @@ export const CreateReservation = () => {
               type="text"
               className="input"
               placeholder="HH:MM"
+              defaultValue={
+                state?.startDate ? getHHMM(state.startDate, ":") : ""
+              }
             />
           </div>
-          <label>종료 시간</label>
-          <div className="flex">
-            <input
-              {...register("endDate", {
-                required: true,
-              })}
-              type="text"
-              className="input"
-              placeholder="yyyy-mm-dd"
-              defaultValue={yyyyMmDd()}
-            />
-            <input
-              {...register("endTime", {
-                required: true,
-              })}
-              type="text"
-              className="input"
-              placeholder="HH:MM"
-            />
-          </div>
+
+          <label>환자</label>
+          <input
+            {...register("patientId", { required: "환자ID를 입력하세요" })}
+            type="number"
+            placeholder="patientId"
+            className="input"
+            autoFocus
+            id="patientId"
+          />
+          <datalist id="patientId">{/* 환자 찾아서 목록으로 */}</datalist>
+
           <label>프로그램</label>
           <input
             {...register("code")}
@@ -138,13 +133,6 @@ export const CreateReservation = () => {
           {errors.patientId?.message && (
             <FormError errorMessage={errors.patientId?.message} />
           )}
-          <label>환자ID</label>
-          <input
-            {...register("patientId", { required: "환자ID를 입력하세요" })}
-            type="number"
-            placeholder="patientId"
-            className="input"
-          />
 
           <Button
             canClick={isValid}
@@ -158,6 +146,6 @@ export const CreateReservation = () => {
           )}
         </form>
       </div>
-    </>
+    </ModalPortal>
   );
 };

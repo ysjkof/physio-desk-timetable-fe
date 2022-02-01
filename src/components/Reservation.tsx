@@ -36,7 +36,6 @@ export const Reservation: React.FC<IReservation> = ({
   patientBirthday,
   patientRegistrationNumber,
 }) => {
-  console.log("⚠️ :", timezoneLength);
   return (
     <div
       className={`${date.getDay()}-${rIndex} c-col-start-${gridColStart} dark:bg-light-blue-600/50 dark:border-light-blue-500 group mx-auto my-1 w-2/3  rounded-lg border border-blue-700/20 bg-blue-100/60 p-1 hover:scale-105 hover:bg-blue-200`}
@@ -64,7 +63,7 @@ export const Reservation: React.FC<IReservation> = ({
       <div className="flex flex-col divide-y divide-solid divide-blue-300/70">
         <div className="flex items-baseline justify-between">
           <span className="dark:text-light-blue-100 hidden text-xs text-blue-600 group-hover:absolute group-hover:top-[-20px]  group-hover:block">
-            {getHHMM(startDate, true)}~{getHHMM(endDate, true)}
+            {getHHMM(startDate, ":")}~{getHHMM(endDate, ":")}
           </span>
 
           <div className="flex gap-2 ">
