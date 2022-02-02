@@ -1,7 +1,7 @@
 import React from "react";
 
 interface IButtonProps {
-  canClick: boolean;
+  canClick: boolean | null;
   loading: boolean;
   actionText: string;
 }

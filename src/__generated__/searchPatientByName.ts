@@ -11,6 +11,7 @@ import { SearchPatientInput } from "./globalTypes";
 
 export interface searchPatientByName_searchPatientByName_patients {
   __typename: "Patient";
+  id: number;
   name: string;
   gender: string;
   registrationNumber: string | null;
