@@ -1,14 +1,14 @@
 import { gql, useLazyQuery } from "@apollo/client";
-import { faFemale, faMale, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { getYMD } from "../hooks/handleTimeFormat";
 import {
   searchPatientByName,
   searchPatientByNameVariables,
   searchPatientByName_searchPatientByName_patients,
 } from "../__generated__/searchPatientByName";
+import { NameTagSearch } from "./name-tag-search";
 
 const SEARCH_PATIENT_BY_NAME = gql`
   query searchPatientByName($input: SearchPatientInput!) {
@@ -18,6 +18,7 @@ const SEARCH_PATIENT_BY_NAME = gql`
       totalPages
       totalCount
       patients {
+        id
         name
         gender
         registrationNumber
@@ -61,15 +62,12 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
     searchPatientByName_searchPatientByName_patients[] | null
   >();
 
-  console.log("⚠️ :", patients);
-
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto max-w-sm rounded-lg border p-4"
+      className="mx-auto max-w-sm rounded-lg border px-4 pt-4"
     >
-      <label htmlFor="input-patient">환자검색</label>
-      <div className="relative mb-4 flex items-center">
+      <div className="relative flex items-center">
         <input
           {...register("patientName", { required: "환자 이름을 입력하세요" })}
           type="text"
@@ -78,7 +76,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
           autoFocus
           id="input-patient"
         />
-        <input id="icon-search" type="submit" value={""} />
+        <input id="icon-search" type="submit" value={" "} tabIndex={-1} />
         <label
           htmlFor="icon-search"
           className="absolute right-0 mr-4 cursor-pointer"
@@ -86,45 +84,18 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
           <FontAwesomeIcon icon={faSearch} className="text-xl" />
         </label>
       </div>
-      <div className="border p-4">
-        {searchPatientResult
-          ? searchPatientResult.searchPatientByName.patients?.map(
-              (patient, index) => (
-                <div
-                  key={index}
-                  className="flex items-baseline justify-between"
-                >
-                  <div className="flex gap-2 ">
-                    <span>
-                      {patient.gender === "male" ? (
-                        <FontAwesomeIcon
-                          icon={faMale}
-                          className=" text-blue-500 group-hover:text-white"
-                        />
-                      ) : (
-                        <FontAwesomeIcon
-                          icon={faFemale}
-                          className="text-pink-500 group-hover:text-white"
-                        />
-                      )}
-                    </span>
-                    <span className="dark:text-light-blue-100 text-sm font-medium text-blue-600">
-                      {patient.name}
-                    </span>
-                  </div>
-                  {patient.registrationNumber ? (
-                    <span className="dark:text-light-blue-100 text-xs text-blue-600">
-                      R : {patient.registrationNumber}
-                    </span>
-                  ) : (
-                    <span className="dark:text-light-blue-100 text-xs text-blue-600">
-                      B : {getYMD(patient.birthday, "yymmdd")}
-                    </span>
-                  )}
-                </div>
-              )
-            )
-          : ""}
+      <div className="mt-4">
+        {patients?.map((patient, index) => (
+          <NameTagSearch
+            key={index}
+            id={patient.id}
+            gender={patient.gender}
+            name={patient.name}
+            registrationNumber={patient.registrationNumber}
+            birthday={patient.birthday}
+            canClick
+          />
+        ))}
       </div>
     </form>
   );
