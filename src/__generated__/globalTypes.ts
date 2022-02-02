@@ -64,6 +64,11 @@ export interface LoginInput {
   password: string;
 }
 
+export interface SearchPatientInput {
+  page?: number | null;
+  query: string;
+}
+
 export interface VerifyEmailInput {
   code: string;
 }
