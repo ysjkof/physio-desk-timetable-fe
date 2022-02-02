@@ -12,6 +12,7 @@ import {
   listReservationsQueryVariables,
   listReservationsQuery_listReservations_results,
 } from "../../__generated__/listReservationsQuery";
+import { selectedPatientVar } from "../reservation/reserve";
 
 const LIST_RESERVATIONS_QUERY = gql`
   query listReservationsQuery($input: ListReservationsInput!) {
@@ -80,7 +81,7 @@ export const TimeTable = () => {
   const [queryDate, setQueryDate] = useState<Date>(
     new Date("2022-01-10T00:00:00.000Z")
   );
-
+  selectedPatientVar(null);
   // 1일 보기, 1주 보기, 2주 보기, 1달 보기
   // 예정: function initializeQueryDate( ){ localstorage에 뷰 옵션을 설정하고 불러와서 setViewOption 변경 }
   const [viewOption, setViewOption] = useState(ONE_WEEK);
