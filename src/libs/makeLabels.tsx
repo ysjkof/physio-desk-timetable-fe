@@ -1,4 +1,9 @@
-import { ILabel } from "../pages/user/time-table";
+import { listReservationsQuery_listReservations_results } from "../__generated__/listReservationsQuery";
+
+interface ILabel {
+  label: string;
+  reservations?: listReservationsQuery_listReservations_results[];
+}
 
 export const makeLabels = (
   tableStartAndEndTime: string[],

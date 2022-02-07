@@ -1,7 +1,7 @@
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { getHHMM, getTimeLength, getYMD } from "../hooks/handleTimeFormat";
+import { getHHMM, getTimeLength, getYMD } from "../libs/utils";
 
 interface IReservation {
   date: Date;

@@ -2,15 +2,15 @@ import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { authTokenVar, isLoggedInVar } from "../../apollo";
-import { Button } from "../../components/button";
-import { FormError } from "../../components/form-error";
+import { authTokenVar, isLoggedInVar } from "../apollo";
+import { Button } from "../components/button";
+import { FormError } from "../components/form-error";
 import {
   loginMutation,
   loginMutationVariables,
-} from "../../__generated__/loginMutation";
-import { LoginInput } from "../../__generated__/globalTypes";
-import { LOCALSTORAGE_TOKEN } from "../../constants";
+} from "../__generated__/loginMutation";
+import { LoginInput } from "../__generated__/globalTypes";
+import { LOCALSTORAGE_TOKEN } from "../constants";
 import { Helmet } from "react-helmet-async";
 
 const LOGIN_MUTATION = gql`

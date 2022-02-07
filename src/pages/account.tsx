@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
-import muoolLogo from "../../images/logoMuoolJinBlue.svg";
+import muoolLogo from "../images/logoMuoolJinBlue.svg";
 
 export const Account = () => {
   const location = useLocation();

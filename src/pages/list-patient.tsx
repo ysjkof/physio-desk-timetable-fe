@@ -1,10 +1,10 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import { Li } from "../../components/Li";
+import { Li } from "../components/Li";
 import {
   findAllPatientsQuery,
   findAllPatientsQueryVariables,
-} from "../../__generated__/findAllPatientsQuery";
+} from "../__generated__/findAllPatientsQuery";
 
 const FIND_ALL_PATIENTS_QUERY = gql`
   query findAllPatientsQuery($input: FindAllPatientsInput!) {

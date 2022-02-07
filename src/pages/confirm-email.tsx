@@ -3,11 +3,11 @@ import { gql, useApolloClient, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
-import { useMe } from "../../hooks/useMe";
+import { useMe } from "../hooks/useMe";
 import {
   verifyEmail,
   verifyEmailVariables,
-} from "../../__generated__/verifyEmail";
+} from "../__generated__/verifyEmail";
 
 const VERIFY_EMAIL_MUTATION = gql`
   mutation verifyEmail($input: VerifyEmailInput!) {

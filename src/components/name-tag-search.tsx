@@ -1,8 +1,8 @@
 import { makeVar, useReactiveVar } from "@apollo/client";
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getYMD } from "../hooks/handleTimeFormat";
-import { selectedPatientVar } from "../pages/reservation/reserve";
+import { getYMD } from "../libs/utils";
+import { selectedPatientVar } from "../pages/reserve";
 
 interface INameTag {
   id: number;

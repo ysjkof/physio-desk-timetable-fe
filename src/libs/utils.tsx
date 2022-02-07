@@ -1,5 +1,24 @@
 import { ONE_WEEK } from "../constants";
-import { Day } from "../pages/user/time-table";
+import { listReservationsQuery_listReservations_results } from "../__generated__/listReservationsQuery";
+
+class Day {
+  date: Date;
+  reservations: listReservationsQuery_listReservations_results[];
+  timezones: [];
+  constructor(
+    date: Date,
+    reservations: listReservationsQuery_listReservations_results[] = [],
+    timezones = []
+  ) {
+    this.date = date;
+    this.reservations = reservations;
+    this.timezones = [];
+  }
+}
+
+export function cls(...classnames: string[]) {
+  return classnames.join(" ");
+}
 
 export const getYMD = (
   inputDate: string | Date,
@@ -8,29 +27,21 @@ export const getYMD = (
 ) => {
   const localDate = new Date(inputDate);
   let year;
-  if (option === "yymmdd") {
-    year = String(localDate.getFullYear()).substring(2);
-  }
-  if (option === "yyyymmdd") {
-    year = String(localDate.getFullYear());
-  }
+  if (option === "yymmdd") year = String(localDate.getFullYear()).substring(2);
+  if (option === "yyyymmdd") year = String(localDate.getFullYear());
   const month = String(localDate.getMonth() + 1).padStart(2, "0");
   const date = String(localDate.getDate()).padStart(2, "0");
-  if (separator) {
-    return `${year}-${month}-${date}`;
-  }
+  if (separator) return `${year}-${month}-${date}`;
   return `${year}${month}${date}`;
 };
 
-export const getHHMM = (inputDate: string | Date, option?: ":") => {
-  const localDate = new Date(inputDate);
-  const hh = String(localDate.getHours()).padStart(2, "0");
-  const mm = String(localDate.getMinutes()).padStart(2, "0");
-  if (option) {
-    return `${hh}:${mm}`;
-  }
+export function getHHMM(inputDate: string | Date, seperator?: ":") {
+  const date = new Date(inputDate);
+  const hh = String(date.getHours()).padStart(2, "0");
+  const mm = String(date.getMinutes()).padStart(2, "0");
+  if (seperator === ":") return `${hh}:${mm}`;
   return `${hh}${mm}`;
-};
+}
 
 export const getTimeLength = (startDate: Date, endDate: Date) => {
   const sd = new Date(startDate);

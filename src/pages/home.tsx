@@ -3,19 +3,33 @@ import { Link } from "react-router-dom";
 
 export function Home() {
   return (
-    <div className="container mx-auto flex flex-col items-center gap-4">
-      <h1 className="text-3xl">홈</h1>
-      <button className="rounded-md border px-4 py-1">
-        <Link className="text-sky-400" to="/create-patient">
+    <div className="px-4 text-gray-700">
+      <h1 className="text-3xl font-bold">무울 Muool</h1>
+      <h2 className="mt-4 text-xl font-medium">무울에 오신 걸 환영합니다</h2>
+      <p className="mt-2">
+        무울은 물리치료사의 예약 관리 시스템입니다. 점점 용량이 커지고,
+        느려지고, 못생긴 스프레드 시트. 마찬가지로 느리고 통계를 보기 어려운
+        전자차트 프로그램. 일정한 틀이 없고, 통계 확인이 불가능한 환자 차트. 이
+        문제점을 해결하려고 만듭니다.
+      </p>
+      <p className="text-sm text-gray-500 mt-2">
+        여기에 랜딩페이지가 만들어질 것입니다.
+      </p>
+
+      <div className="mt-2 space-x-4">
+        <Link
+          className="text-sky-400 border rounded-lg px-2 py-1"
+          to="/create-patient"
+        >
           Create Patient
         </Link>
-      </button>
-
-      <button className="rounded-md border px-4 py-1">
-        <Link className="text-sky-400" to="/list-patient">
+        <Link
+          className="text-sky-400 border rounded-lg px-2 py-1"
+          to="/list-patient"
+        >
           List Patient
         </Link>
-      </button>
+      </div>
     </div>
   );
 }

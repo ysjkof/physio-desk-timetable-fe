@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import {
   createPatientMutation,
   createPatientMutationVariables,
-} from "../../__generated__/createPatientMutation";
-import { CreatePatientInput } from "../../__generated__/globalTypes";
-import { FormError } from "../../components/form-error";
-import { Button } from "../../components/button";
+} from "../__generated__/createPatientMutation";
+import { CreatePatientInput } from "../__generated__/globalTypes";
+import { FormError } from "../components/form-error";
+import { Button } from "../components/button";
 
 const CREATE_PATIENT_MUTATION = gql`
   mutation createPatientMutation($createPatientInput: CreatePatientInput!) {

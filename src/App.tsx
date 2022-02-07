@@ -4,18 +4,18 @@ import { isLoggedInVar } from "./apollo";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/layout";
 import { Home } from "./pages/home";
-import { ConfirmEmail } from "./pages/user/confirm-email";
-import { EditProfile } from "./pages/user/edit-profile";
-import { TimeTable } from "./pages/user/time-table";
-import { Reserve } from "./pages/reservation/reserve";
-import { CreatePatient } from "./pages/patient/create-patient";
-import { ListPatient } from "./pages/patient/list-patient";
+import { CreatePatient } from "./pages/create-patient";
 import { Test } from "./pages/test";
 import { NotFound } from "./pages/404";
-import { Account } from "./pages/user/account";
-import { Login } from "./pages/user/login";
-import { CreateAccount } from "./pages/user/create-account";
+import { Account } from "./pages/account";
 import { useMe } from "./hooks/useMe";
+import { ConfirmEmail } from "./pages/confirm-email";
+import { EditProfile } from "./pages/edit-profile";
+import { TimeTable } from "./pages/time-table";
+import { Reserve } from "./pages/reserve";
+import { ListPatient } from "./pages/list-patient";
+import { CreateAccount } from "./pages/create-account";
+import { Login } from "./pages/login";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);

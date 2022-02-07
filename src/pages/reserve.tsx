@@ -1,20 +1,20 @@
 import { gql, makeVar, useMutation, useReactiveVar } from "@apollo/client";
-import React, { useState } from "react";
+import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
-import { Button } from "../../components/button";
-import { FormError } from "../../components/form-error";
-import { REGEX_HHMM, REGEX_YYYYMMDD, UTC_OPTION_KST } from "../../constants";
+import { Button } from "../components/button";
+import { FormError } from "../components/form-error";
+import { NameTagSearch } from "../components/name-tag-search";
+import { SearchPatient } from "../components/search-patient";
+import { REGEX_HHMM, REGEX_YYYYMMDD, UTC_OPTION_KST } from "../constants";
+import { getHHMM, getYMD } from "../libs/utils";
 import {
   createReservationMutation,
   createReservationMutationVariables,
-} from "../../__generated__/createReservationMutation";
-import { ModalPortal } from "./mordal-portal";
-import { getYMD, getHHMM } from "../../hooks/handleTimeFormat";
-import { SearchPatient } from "../../components/search-patient";
-import { NameTagSearch } from "../../components/name-tag-search";
-import { searchPatientByName_searchPatientByName_patients } from "../../__generated__/searchPatientByName";
+} from "../__generated__/createReservationMutation";
+import { searchPatientByName_searchPatientByName_patients } from "../__generated__/searchPatientByName";
+import { ModalPortal } from "../components/mordal-portal";
 
 const CREATE_RESERVATION_MUTATION = gql`
   mutation createReservationMutation($input: CreateReservationInput!) {

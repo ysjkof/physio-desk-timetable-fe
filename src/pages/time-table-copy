@@ -2,42 +2,12 @@ import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Outlet, useLocation } from "react-router-dom";
-import { EmptyCell } from "../../components/empty-cell";
-import { Reservation } from "../../components/Reservation";
-import { ONE_DAY, ONE_WEEK } from "../../constants";
-import { getHHMM, getWeeksDate } from "../../hooks/handleTimeFormat";
-import { makeLabels } from "../../hooks/makeLabels";
-import {
-  listReservationsQuery,
-  listReservationsQueryVariables,
-  listReservationsQuery_listReservations_results,
-} from "../../__generated__/listReservationsQuery";
-import { selectedPatientVar } from "../reservation/reserve";
-
-const LIST_RESERVATIONS_QUERY = gql`
-  query listReservationsQuery($input: ListReservationsInput!) {
-    listReservations(input: $input) {
-      ok
-      totalCount
-      results {
-        id
-        startDate
-        endDate
-        state
-        memo
-        patient {
-          name
-          gender
-          registrationNumber
-          birthday
-        }
-        lastModifier {
-          email
-        }
-      }
-    }
-  }
-`;
+import { EmptyCell } from "../components/empty-cell";
+import { Reservation } from "../components/Reservation";
+import { ONE_DAY, ONE_WEEK } from "../constants";
+import { getHHMM, getWeeksDate } from "../libs/utils";
+import { makeLabels } from "../libs/makeLabels";
+import { selectedPatientVar } from "./reserve";
 
 export interface ILabel {
   label: string;
@@ -65,7 +35,7 @@ export class Day {
   }
 }
 
-export const TimeTable = () => {
+const TimeTableCopt = () => {
   // 시간표에 출력할 시간 설정
   const [tableStartAndEndTime, setTableStartAndEndTime] = useState([
     "0900",
