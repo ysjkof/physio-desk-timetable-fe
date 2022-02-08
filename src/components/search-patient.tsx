@@ -8,7 +8,7 @@ import {
   searchPatientByNameVariables,
   searchPatientByName_searchPatientByName_patients,
 } from "../__generated__/searchPatientByName";
-import { NameTagSearch } from "./name-tag-search";
+import { NameTag } from "./name-tag";
 
 const SEARCH_PATIENT_BY_NAME = gql`
   query searchPatientByName($input: SearchPatientInput!) {
@@ -86,7 +86,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
       </div>
       <div className="mt-4">
         {patients?.map((patient, index) => (
-          <NameTagSearch
+          <NameTag
             key={index}
             id={patient.id}
             gender={patient.gender}

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
-import { NameTagSearch } from "../components/name-tag-search";
+import { NameTag } from "../components/name-tag";
 import { SearchPatient } from "../components/search-patient";
 import { REGEX_HHMM, REGEX_YYYYMMDD, UTC_OPTION_KST } from "../constants";
 import { getHHMM, getYMD } from "../libs/utils";
@@ -103,7 +103,7 @@ export const Reserve = () => {
         </h4>
         {!selectedPatient && <SearchPatient />}
         {selectedPatient && (
-          <NameTagSearch
+          <NameTag
             id={selectedPatient.id}
             gender={selectedPatient.gender}
             name={selectedPatient.name}

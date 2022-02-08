@@ -1,4 +1,3 @@
-import { makeVar, useReactiveVar } from "@apollo/client";
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getYMD } from "../libs/utils";
@@ -13,7 +12,7 @@ interface INameTag {
   canClick?: boolean;
 }
 
-export const NameTagSearch: React.FC<INameTag> = ({
+export const NameTag: React.FC<INameTag> = ({
   id,
   gender,
   name,
