@@ -58,10 +58,13 @@ export const TimeTable = () => {
     end: { hours: 19, minutes: 0 },
   });
   const [viewOption, setViewOption] = useState<number>(ONE_DAY);
-  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-07"));
+  const [queryDate, setQueryDate] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState();
   const [oneWeek, setOneWeek] = useState();
   const [weeks, setWeeks] = useState<IDay[] | null>(getWeeks(new Date()));
+  const [dateOfMonth, setDateOfMonth] = useState<Date[]>(
+    getDateOfMonth(new Date())
+  );
 
   const onClickPrevWeek = () => {
     const date = new Date(queryDate);
@@ -116,6 +119,20 @@ export const TimeTable = () => {
     }
     return result;
   }
+  function getDateOfMonth(value: Date) {
+    let result = [];
+    const firstDate = new Date(value);
+    const lastDate = new Date(firstDate);
+    firstDate.setDate(1);
+    lastDate.setMonth(lastDate.getMonth() + 1);
+    lastDate.setDate(0);
+    for (let i = 1; i <= lastDate.getDate(); i++) {
+      const date = new Date(firstDate);
+      date.setDate(+i);
+      result.push(date);
+    }
+    return result;
+  }
 
   const [queryListReservations, { loading, error, data: queryResult }] =
     useLazyQuery<listReservationsQuery, listReservationsQueryVariables>(
@@ -136,6 +153,8 @@ export const TimeTable = () => {
     queryListReservations();
   }, [queryDate]);
 
+  console.log("⚠️ :", queryResult);
+
   return (
     <>
       <Outlet />
@@ -145,7 +164,7 @@ export const TimeTable = () => {
       <div className="h-full space-y-2">
         <div className="mx-8 flex items-center justify-between">
           <div className="flex w-full">
-            <span>2월</span>
+            <span>{queryDate.getMonth() + 1}월</span>
           </div>
           <div className="flex w-full justify-end space-x-8">
             <svg
