@@ -2,8 +2,10 @@ import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Outlet, useLocation } from "react-router-dom";
+import { NameTag } from "../components/name-tag";
+import { ScheduleBox } from "../components/schedule-box";
 import TableRow from "../components/table-row";
-import { cls, getHHMM } from "../libs/utils";
+import { cls, getHHMM, getTimeLength } from "../libs/utils";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
@@ -56,7 +58,7 @@ export const TimeTable = () => {
     end: { hours: 19, minutes: 0 },
   });
   const [viewOption, setViewOption] = useState<number>(ONE_DAY);
-  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-10"));
+  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-07"));
   const [schedules, setSchedules] = useState();
   const [oneWeek, setOneWeek] = useState();
   const [weeks, setWeeks] = useState<IDay[] | null>(getWeeks(new Date()));
@@ -132,10 +134,7 @@ export const TimeTable = () => {
   useEffect(() => {
     setWeeks(getWeeks(new Date(queryDate)));
     queryListReservations();
-
-    console.log("⚠️ : 유즈이펙트", queryResult);
   }, [queryDate]);
-  console.log("⚠️ : 유즈이펙트", queryResult);
 
   return (
     <>
@@ -283,21 +282,29 @@ export const TimeTable = () => {
                 gridRowStart={i + 1 + ""}
               />
             ))}
-            {/* {weeksData.days[1].rows.map((day) => {
-              const hhmm = getHHMM(day.time);
+            {queryResult?.listReservations.results?.map((reservation) => {
+              const hhmm = getHHMM(reservation.startDate);
               const index = labels.findIndex((label) => label.hhmm === hhmm);
-              console.log("⚠️ :", index);
+              const time =
+                getTimeLength(reservation.startDate, reservation.endDate) / 10;
               return (
-                <div
-                  className="col-start-2 rounded-lg border px-2"
-                  style={{ gridRowStart: index + 1 }}
-                  id={getHHMM(day.time)}
+                <ScheduleBox
+                  key={reservation.id}
+                  gridRowStart={index + 1}
+                  gridRowEnd={index + 1 + time}
+                  hhmm={getHHMM(reservation.startDate)}
                 >
-                  <span>{day.reservations[0].name}</span>
-                  <span>{day.reservations[0].program}</span>
-                </div>
+                  <NameTag
+                    id={reservation.id}
+                    gender={reservation.patient.gender}
+                    name={reservation.patient.name}
+                    registrationNumber={reservation.patient.registrationNumber}
+                    birthday={reservation.patient.birthday}
+                  />
+                  <span>{reservation.memo}</span>
+                </ScheduleBox>
               );
-            })} */}
+            })}
           </div>
         </div>
         <div className="text-medium fixed inset-x-0 bottom-0 z-50 flex h-10 items-center justify-between border-t bg-white px-2">
