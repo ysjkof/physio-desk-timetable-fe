@@ -61,7 +61,7 @@ export const TimeTable = () => {
   const [queryDate, setQueryDate] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState();
   const [oneWeek, setOneWeek] = useState();
-  const [weeks, setWeeks] = useState<IDay[] | null>(getWeeks(new Date()));
+  const [weeks, setWeeks] = useState<Date[] | null>(getWeeks(new Date()));
   const [dateOfMonth, setDateOfMonth] = useState<Date[]>(
     getDateOfMonth(new Date())
   );
@@ -100,22 +100,14 @@ export const TimeTable = () => {
   const labels = getLabels();
 
   function getWeeks(value: Date) {
-    let result = [
-      { title: "일", date: new Date() },
-      { title: "월", date: new Date() },
-      { title: "화", date: new Date() },
-      { title: "수", date: new Date() },
-      { title: "목", date: new Date() },
-      { title: "금", date: new Date() },
-      { title: "토", date: new Date() },
-    ];
+    let result = [];
     const date = new Date(value);
     const day = date.getDay();
     const sunday = new Date(date.setDate(date.getDate() - day));
     for (let i = 0; i < 7; i++) {
       const weekDate = new Date(sunday);
       weekDate.setDate(sunday.getDate() + i);
-      result[i].date = new Date(weekDate);
+      result.push(new Date(weekDate));
     }
     return result;
   }
@@ -230,11 +222,11 @@ export const TimeTable = () => {
           </div>
           {weeks?.map((week, i) => (
             <div
-              onClick={() => setQueryDate(week.date)}
+              onClick={() => setQueryDate(week)}
               key={i}
               className={cls(
                 "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                queryDate.getDate() === week.date.getDate()
+                queryDate.getDate() === week.getDate()
                   ? "border-b-2 border-sky-400 font-bold"
                   : "border-b-2 border-transparent"
               )}
@@ -242,17 +234,17 @@ export const TimeTable = () => {
               <span
                 className={cls(
                   "rounded-full",
-                  week.title === "일"
+                  week.getDay() === 0
                     ? "text-red-500"
-                    : week.title === "토"
+                    : week.getDay() === 6
                     ? "text-blue-500"
                     : "text-gray-500",
-                  queryDate.getDate() === week.date.getDate()
+                  queryDate.getDate() === week.getDate()
                     ? "opacity-100"
                     : "opacity-80"
                 )}
               >
-                {week.date.getDate()}
+                {week.getDate()}
               </span>
             </div>
           ))}
