@@ -297,6 +297,7 @@ export const TimeTable = () => {
               {labels.map((label, i) => (
                 <TableRow
                   key={label.hhmm}
+                  label={false}
                   date={label.date}
                   hhmm={label.hhmm}
                   gridRowStart={i + 1 + ""}
