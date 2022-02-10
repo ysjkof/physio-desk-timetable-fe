@@ -83,9 +83,9 @@ export const TimeTable = () => {
     setQueryDate(date);
   };
 
-  function getLabels() {
+  function getLabels(value: Date) {
     const labels: { date: Date; hhmm: string }[] = [];
-    const start = new Date();
+    const start = new Date(value);
     const end = new Date(start);
     start.setHours(tableLength.start.hours);
     start.setMinutes(tableLength.start.minutes);
@@ -95,7 +95,6 @@ export const TimeTable = () => {
     while (i !== 150) {
       const date = new Date(start);
       labels.push({ date, hhmm: getHHMM(date) });
-      const getHours = start.getHours();
       const getMinutes = start.getMinutes();
       start.setMinutes(getMinutes + 10);
       i++;
@@ -103,7 +102,7 @@ export const TimeTable = () => {
     }
     return labels;
   }
-  const labels = getLabels();
+  const labels = getLabels(queryDate);
 
   function getWeeks(value: Date) {
     let result = [];
