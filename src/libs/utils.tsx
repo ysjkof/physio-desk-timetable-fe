@@ -63,3 +63,18 @@ export const getWeeksDate = (date: Date) => {
   }
   return weeks;
 };
+
+export function getDateOfMonth(value: Date) {
+  let result = [];
+  const firstDate = new Date(value);
+  const lastDate = new Date(firstDate);
+  firstDate.setDate(1);
+  lastDate.setMonth(lastDate.getMonth() + 1);
+  lastDate.setDate(0);
+  for (let i = 1; i <= lastDate.getDate(); i++) {
+    const date = new Date(firstDate);
+    date.setDate(+i);
+    result.push(date);
+  }
+  return result;
+}
