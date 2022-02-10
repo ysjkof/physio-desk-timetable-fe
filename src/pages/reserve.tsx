@@ -7,7 +7,7 @@ import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { NameTag } from "../components/name-tag";
 import { SearchPatient } from "../components/search-patient";
-import { REGEX_HHMM, REGEX_YYYYMMDD, UTC_OPTION_KST } from "../constants";
+import { REGEX_HHMM, REGEX_YYYYMMDD, UTC_OPTION_KST } from "../libs/variables";
 import { getHHMM, getYMD } from "../libs/utils";
 import {
   createReservationMutation,

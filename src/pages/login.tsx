@@ -10,7 +10,7 @@ import {
   loginMutationVariables,
 } from "../__generated__/loginMutation";
 import { LoginInput } from "../__generated__/globalTypes";
-import { LOCALSTORAGE_TOKEN } from "../constants";
+import { LOCALSTORAGE_TOKEN } from "../libs/variables";
 import { Helmet } from "react-helmet-async";
 
 const LOGIN_MUTATION = gql`

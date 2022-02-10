@@ -1,4 +1,4 @@
-import { ONE_WEEK } from "../constants";
+import { ONE_WEEK } from "./variables";
 import { listReservationsQuery_listReservations_results } from "../__generated__/listReservationsQuery";
 
 class Day {

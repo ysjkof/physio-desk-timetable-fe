@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { isLoggedInVar } from "../apollo";
-import { LOCALSTORAGE_TOKEN } from "../constants";
+import { LOCALSTORAGE_TOKEN } from "../libs/variables";
 import { useMe } from "../hooks/useMe";
 import muoolLogo from "../images/logoMuoolJinBlue.svg";
 

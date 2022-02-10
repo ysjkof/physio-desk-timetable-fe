@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { SearchPatient } from "../components/search-patient";
-import { ONE_WEEK } from "../constants";
+import { ONE_WEEK } from "../libs/variables";
 
 interface IReservation {
   id: number;
