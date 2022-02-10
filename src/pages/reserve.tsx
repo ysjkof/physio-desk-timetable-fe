@@ -1,5 +1,5 @@
 import { gql, useMutation, useReactiveVar } from "@apollo/client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
@@ -89,7 +89,13 @@ export const Reserve = () => {
       });
     }
   };
+  const handleCancel = () => selectedPatientVar(null);
 
+  useEffect(() => {
+    return () => {
+      selectedPatientVar(null);
+    };
+  }, []);
   // console.log("⚠️ : locateState", state);
   // console.log("⚠️ : selectedPatienr ", selectedPatient);
 
@@ -104,13 +110,21 @@ export const Reserve = () => {
         </h4>
         {!selectedPatient && <SearchPatient />}
         {selectedPatient && (
-          <NameTag
-            id={selectedPatient.id}
-            gender={selectedPatient.gender}
-            name={selectedPatient.name}
-            registrationNumber={selectedPatient.registrationNumber}
-            birthday={selectedPatient.birthday}
-          />
+          <div className="flex">
+            <NameTag
+              id={selectedPatient.id}
+              gender={selectedPatient.gender}
+              name={selectedPatient.name}
+              registrationNumber={selectedPatient.registrationNumber}
+              birthday={selectedPatient.birthday}
+            />
+            <button
+              className="rounded-lg border px-3 shadow-sm flex items-center justify-center"
+              onClick={handleCancel}
+            >
+              <span>x</span>
+            </button>
+          </div>
         )}
         <form
           onSubmit={handleSubmit(onSubmit)}
