@@ -42,7 +42,6 @@ function App() {
               </Route>
               <Route path="create-patient" element={<CreatePatient />} />
               <Route path="list-patient" element={<ListPatient />} />
-              <Route path="reserve" element={<Reserve />} />
             </Route>
             <Route path="test" element={<Test />} />
           </>
