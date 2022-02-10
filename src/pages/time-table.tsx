@@ -59,26 +59,25 @@ export const TimeTable = () => {
   });
   const [viewOption, setViewOption] = useState<number>(ONE_DAY);
   const [queryDate, setQueryDate] = useState<Date>(new Date());
-  const [schedules, setSchedules] = useState();
-  const [oneWeek, setOneWeek] = useState();
-  const [weeks, setWeeks] = useState<Date[] | null>(getWeeks(new Date()));
-  const [dateOfMonth, setDateOfMonth] = useState<Date[]>(
-    getDateOfMonth(new Date())
-  );
+  const [dateNav, setDateNav] = useState<Date[][] | null>();
+  const [dateNavExpand, setDateNavExpand] = useState<boolean>(false);
   const [listView, setListView] = useState<boolean>(false);
 
   const handleListView = () => {
     setListView((current) => !current);
   };
-
-  const onClickPrevWeek = () => {
-    const date = new Date(queryDate);
-    date.setDate(date.getDate() - 7);
-    setQueryDate(date);
+  const handleExpandDateNav = () => {
+    setDateNavExpand((current) => !current);
   };
-  const onClickNextWeek = () => {
+  const handleDateNavMove = (direction: "prev" | "after") => {
     const date = new Date(queryDate);
-    date.setDate(date.getDate() + 7);
+    if (dateNavExpand === false) {
+      if (direction === "prev") date.setDate(date.getDate() - 7);
+      if (direction === "after") date.setDate(date.getDate() + 7);
+    } else if (dateNavExpand === true) {
+      if (direction === "prev") date.setMonth(date.getMonth() - 1);
+      if (direction === "after") date.setMonth(date.getMonth() + 1);
+    }
     setQueryDate(date);
   };
 
@@ -115,17 +114,18 @@ export const TimeTable = () => {
     }
     return result;
   }
-  function getDateOfMonth(value: Date) {
+  function getWeeksOfMonth(value: Date) {
     let result = [];
     const firstDate = new Date(value);
     const lastDate = new Date(firstDate);
     firstDate.setDate(1);
     lastDate.setMonth(lastDate.getMonth() + 1);
     lastDate.setDate(0);
-    for (let i = 1; i <= lastDate.getDate(); i++) {
+    for (let i = 0; i < 5; i++) {
       const date = new Date(firstDate);
-      date.setDate(+i);
-      result.push(date);
+      date.setDate(i * 7 + 1);
+      const week = getWeeks(date);
+      result.push(week);
     }
     return result;
   }
@@ -145,11 +145,15 @@ export const TimeTable = () => {
     );
 
   useEffect(() => {
-    setWeeks(getWeeks(new Date(queryDate)));
     queryListReservations();
-  }, [queryDate]);
+    if (dateNavExpand) {
+      setDateNav(getWeeksOfMonth(queryDate));
+    } else if (!dateNavExpand) {
+      setDateNav([getWeeks(queryDate)]);
+    }
+  }, [queryDate, dateNavExpand]);
 
-  console.log("⚠️ :", queryResult);
+  // console.log("⚠️ :", queryResult);
 
   return (
     <>
@@ -161,9 +165,18 @@ export const TimeTable = () => {
         <div className="space-y-2">
           <div className="mx-8 flex items-center justify-between">
             <div className="flex w-full">
-              <span>{queryDate.getMonth() + 1}월</span>
+              <span className="select-none">{queryDate.getMonth() + 1}월</span>
             </div>
-            <div className="flex w-full justify-end space-x-8">
+            <div className="flex w-full justify-end space-x-8 items-center">
+              <svg
+                onClick={handleExpandDateNav}
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 cursor-pointer hover:text-gray-500"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+              </svg>
               <svg
                 onClick={handleListView}
                 xmlns="http://www.w3.org/2000/svg"
@@ -209,8 +222,11 @@ export const TimeTable = () => {
               </svg>
             </div>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="cursor-pointer" onClick={onClickPrevWeek}>
+          <div className="flex items-center justify-between mx-4">
+            <div
+              className="cursor-pointer hover:text-gray-500"
+              onClick={() => handleDateNavMove("prev")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -226,35 +242,85 @@ export const TimeTable = () => {
                 />
               </svg>
             </div>
-            {weeks?.map((week, i) => (
-              <div
-                onClick={() => setQueryDate(week)}
-                key={i}
-                className={cls(
-                  "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                  queryDate.getDate() === week.getDate()
-                    ? "border-b-2 border-sky-400 font-bold"
-                    : "border-b-2 border-transparent"
-                )}
-              >
-                <span
-                  className={cls(
-                    "rounded-full",
-                    week.getDay() === 0
-                      ? "text-red-500"
-                      : week.getDay() === 6
-                      ? "text-blue-500"
-                      : "text-gray-500",
-                    queryDate.getDate() === week.getDate()
-                      ? "opacity-100"
-                      : "opacity-80"
-                  )}
-                >
-                  {week.getDate()}
-                </span>
-              </div>
-            ))}
-            <div className="cursor-pointer" onClick={onClickNextWeek}>
+            <div className="flex flex-col w-full">
+              {!dateNavExpand && dateNav && (
+                <div className="flex">
+                  {dateNav[0].map((week, i) => (
+                    <div
+                      onClick={() => setQueryDate(week)}
+                      key={i}
+                      className={cls(
+                        "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
+                        queryDate.getDate() === week.getDate()
+                          ? "border-b-2 border-sky-400 font-bold"
+                          : "border-b-2 border-transparent"
+                      )}
+                    >
+                      <span
+                        className={cls(
+                          "rounded-full",
+                          week.getDay() === 0
+                            ? "text-red-600"
+                            : week.getDay() === 6
+                            ? "text-blue-600"
+                            : "text-gray-600",
+                          queryDate.getDate() === week.getDate()
+                            ? "opacity-100"
+                            : "opacity-80",
+                          queryDate.getMonth() !== week.getMonth()
+                            ? "opacity-40"
+                            : ""
+                        )}
+                      >
+                        {week.getDate()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {dateNavExpand &&
+                dateNav &&
+                dateNav.map((weeks, i) => (
+                  <div key={i} className="flex">
+                    {weeks.map((week, ii) => (
+                      <div
+                        onClick={() => setQueryDate(week)}
+                        key={ii}
+                        className={cls(
+                          "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
+                          queryDate.getDate() === week.getDate() &&
+                            queryDate.getMonth() === week.getMonth()
+                            ? "border-b-2 border-sky-400 font-bold"
+                            : "border-b-2 border-transparent"
+                        )}
+                      >
+                        <span
+                          className={cls(
+                            "rounded-full",
+                            week.getDay() === 0
+                              ? "text-red-600"
+                              : week.getDay() === 6
+                              ? "text-blue-600"
+                              : "text-gray-600",
+                            queryDate.getDate() === week.getDate()
+                              ? "opacity-100"
+                              : "opacity-80",
+                            queryDate.getMonth() !== week.getMonth()
+                              ? "opacity-40"
+                              : ""
+                          )}
+                        >
+                          {week.getDate()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+            </div>
+            <div
+              className="cursor-pointer hover:text-gray-500"
+              onClick={() => handleDateNavMove("after")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -354,6 +420,7 @@ export const TimeTable = () => {
                   10;
                 return (
                   <ScheduleListBox
+                    key={reservation.id}
                     memo={reservation.memo}
                     startDate={getHHMM(reservation.startDate, ":")}
                     endDate={getHHMM(reservation.endDate, ":")}
