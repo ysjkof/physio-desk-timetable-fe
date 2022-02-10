@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { Outlet, useLocation } from "react-router-dom";
 import { NameTag } from "../components/name-tag";
 import { ScheduleBox } from "../components/schedule-box";
+import { ScheduleListBox } from "../components/schedule-list-box";
 import TableRow from "../components/table-row";
 import { cls, getHHMM, getTimeLength } from "../libs/utils";
 import {
@@ -65,6 +66,11 @@ export const TimeTable = () => {
   const [dateOfMonth, setDateOfMonth] = useState<Date[]>(
     getDateOfMonth(new Date())
   );
+  const [listView, setListView] = useState<boolean>(false);
+
+  const handleListView = () => {
+    setListView((current) => !current);
+  };
 
   const onClickPrevWeek = () => {
     const date = new Date(queryDate);
@@ -153,170 +159,206 @@ export const TimeTable = () => {
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      <div className="h-full space-y-2">
-        <div className="mx-8 flex items-center justify-between">
-          <div className="flex w-full">
-            <span>{queryDate.getMonth() + 1}월</span>
+      <div className="h-full">
+        <div className="space-y-2">
+          <div className="mx-8 flex items-center justify-between">
+            <div className="flex w-full">
+              <span>{queryDate.getMonth() + 1}월</span>
+            </div>
+            <div className="flex w-full justify-end space-x-8">
+              <svg
+                onClick={handleListView}
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 cursor-pointer hover:text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                />
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </div>
           </div>
-          <div className="flex w-full justify-end space-x-8">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="cursor-pointer" onClick={onClickPrevWeek}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </div>
-          {weeks?.map((week, i) => (
-            <div
-              onClick={() => setQueryDate(week)}
-              key={i}
-              className={cls(
-                "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                queryDate.getDate() === week.getDate()
-                  ? "border-b-2 border-sky-400 font-bold"
-                  : "border-b-2 border-transparent"
-              )}
-            >
-              <span
+          <div className="flex items-center justify-between">
+            <div className="cursor-pointer" onClick={onClickPrevWeek}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </div>
+            {weeks?.map((week, i) => (
+              <div
+                onClick={() => setQueryDate(week)}
+                key={i}
                 className={cls(
-                  "rounded-full",
-                  week.getDay() === 0
-                    ? "text-red-500"
-                    : week.getDay() === 6
-                    ? "text-blue-500"
-                    : "text-gray-500",
+                  "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
                   queryDate.getDate() === week.getDate()
-                    ? "opacity-100"
-                    : "opacity-80"
+                    ? "border-b-2 border-sky-400 font-bold"
+                    : "border-b-2 border-transparent"
                 )}
               >
-                {week.getDate()}
-              </span>
-            </div>
-          ))}
-          <div className="cursor-pointer" onClick={onClickNextWeek}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </div>
-        </div>
-        <div className="flex justify-center border-b pb-2">
-          <span className="text-sm text-gray-500">
-            {queryDate.toLocaleString("ko-KR", {
-              year: "2-digit",
-              month: "long",
-              day: "numeric",
-              weekday: "long",
-            })}
-          </span>
-        </div>
-        <div className="bg-zinc-10 h-full overflow-y-scroll pb-28">
-          <div className="main grid grid-cols-[4rem,1fr]  pt-2">
-            {labels.map((label, i) => (
-              <TableRow
-                key={label.hhmm}
-                label
-                date={label.date}
-                hhmm={label.hhmm}
-              />
-            ))}
-            {labels.map((label, i) => (
-              <TableRow
-                key={label.hhmm}
-                date={label.date}
-                hhmm={label.hhmm}
-                gridRowStart={i + 1 + ""}
-              />
-            ))}
-            {queryResult?.listReservations.results?.map((reservation) => {
-              const hhmm = getHHMM(reservation.startDate);
-              const index = labels.findIndex((label) => label.hhmm === hhmm);
-              const time =
-                getTimeLength(reservation.startDate, reservation.endDate) / 10;
-              return (
-                <ScheduleBox
-                  key={reservation.id}
-                  gridRowStart={index + 1}
-                  gridRowEnd={index + 1 + time}
-                  hhmm={getHHMM(reservation.startDate)}
+                <span
+                  className={cls(
+                    "rounded-full",
+                    week.getDay() === 0
+                      ? "text-red-500"
+                      : week.getDay() === 6
+                      ? "text-blue-500"
+                      : "text-gray-500",
+                    queryDate.getDate() === week.getDate()
+                      ? "opacity-100"
+                      : "opacity-80"
+                  )}
                 >
-                  <NameTag
-                    id={reservation.id}
-                    gender={reservation.patient.gender}
-                    name={reservation.patient.name}
-                    registrationNumber={reservation.patient.registrationNumber}
-                    birthday={reservation.patient.birthday}
-                  />
-                  <span>{reservation.memo}</span>
-                </ScheduleBox>
-              );
-            })}
+                  {week.getDate()}
+                </span>
+              </div>
+            ))}
+            <div className="cursor-pointer" onClick={onClickNextWeek}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </div>
           </div>
+          <div className="flex justify-center border-b pb-2">
+            <span className="text-sm text-gray-500">
+              {queryDate.toLocaleString("ko-KR", {
+                year: "2-digit",
+                month: "long",
+                day: "numeric",
+                weekday: "long",
+              })}
+            </span>
+          </div>
+        </div>
+        <div className="overflow-y-scroll pb-14 bg-zinc-50 h-full">
+          {!listView && (
+            <div className="main grid grid-cols-[4rem,1fr]  pt-2">
+              {labels.map((label, i) => (
+                <TableRow
+                  key={label.hhmm}
+                  label
+                  date={label.date}
+                  hhmm={label.hhmm}
+                />
+              ))}
+              {labels.map((label, i) => (
+                <TableRow
+                  key={label.hhmm}
+                  date={label.date}
+                  hhmm={label.hhmm}
+                  gridRowStart={i + 1 + ""}
+                />
+              ))}
+              {queryResult?.listReservations.results?.map((reservation) => {
+                const hhmm = getHHMM(reservation.startDate);
+                const index = labels.findIndex((label) => label.hhmm === hhmm);
+                const time =
+                  getTimeLength(reservation.startDate, reservation.endDate) /
+                  10;
+                return (
+                  <ScheduleBox
+                    key={reservation.id}
+                    gridRowStart={index + 1}
+                    gridRowEnd={index + 1 + time}
+                    hhmm={getHHMM(reservation.startDate)}
+                    memo={reservation.memo}
+                    startDate={getHHMM(reservation.startDate, ":")}
+                    endDate={getHHMM(reservation.endDate, ":")}
+                  >
+                    <NameTag
+                      id={reservation.id}
+                      gender={reservation.patient.gender}
+                      name={reservation.patient.name}
+                      registrationNumber={
+                        reservation.patient.registrationNumber
+                      }
+                      birthday={reservation.patient.birthday}
+                    />
+                  </ScheduleBox>
+                );
+              })}
+            </div>
+          )}
+          {listView && (
+            <div className="pt-1">
+              {queryResult?.listReservations.results?.map((reservation) => {
+                const time =
+                  getTimeLength(reservation.startDate, reservation.endDate) /
+                  10;
+                return (
+                  <ScheduleListBox
+                    memo={reservation.memo}
+                    startDate={getHHMM(reservation.startDate, ":")}
+                    endDate={getHHMM(reservation.endDate, ":")}
+                  >
+                    <NameTag
+                      id={reservation.id}
+                      gender={reservation.patient.gender}
+                      name={reservation.patient.name}
+                      registrationNumber={
+                        reservation.patient.registrationNumber
+                      }
+                      birthday={reservation.patient.birthday}
+                    />
+                  </ScheduleListBox>
+                );
+              })}
+            </div>
+          )}
         </div>
         <div className="text-medium fixed inset-x-0 bottom-0 z-50 flex h-10 items-center justify-between border-t bg-white px-2">
           <div>오늘</div>

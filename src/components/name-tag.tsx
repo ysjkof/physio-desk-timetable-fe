@@ -1,6 +1,6 @@
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getYMD } from "../libs/utils";
+import { cls, getYMD } from "../libs/utils";
 import { selectedPatientVar } from "../pages/reserve";
 
 interface INameTag {
@@ -31,23 +31,18 @@ export const NameTag: React.FC<INameTag> = ({
     });
   return (
     <div
-      className={`group mb-4 flex cursor-pointer items-baseline justify-between px-4 hover:bg-slate-200 ${
+      className={cls(
+        "flex cursor-pointer items-baseline justify-between px-4 w-full",
         canClick ? "" : "pointer-events-none"
-      }`}
+      )}
       onClick={onClick}
     >
       <div className="flex items-baseline gap-2">
         <span>
           {gender === "male" ? (
-            <FontAwesomeIcon
-              icon={faMale}
-              className=" text-blue-500 group-hover:text-white"
-            />
+            <FontAwesomeIcon icon={faMale} className=" text-blue-500" />
           ) : (
-            <FontAwesomeIcon
-              icon={faFemale}
-              className="text-pink-500 group-hover:text-white"
-            />
+            <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
           )}
         </span>
         <span className="dark:text-light-blue-100 font-medium text-gray-800">
