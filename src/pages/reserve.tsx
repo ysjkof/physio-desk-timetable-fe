@@ -1,4 +1,4 @@
-import { gql, makeVar, useMutation, useReactiveVar } from "@apollo/client";
+import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
@@ -7,13 +7,17 @@ import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { NameTag } from "../components/name-tag";
 import { SearchPatient } from "../components/search-patient";
-import { REGEX_HHMM, REGEX_YYYYMMDD, UTC_OPTION_KST } from "../libs/variables";
+import {
+  REGEX_HHMM,
+  REGEX_YYYYMMDD,
+  selectedPatientVar,
+  UTC_OPTION_KST,
+} from "../libs/variables";
 import { getHHMM, getYMD } from "../libs/utils";
 import {
   createReservationMutation,
   createReservationMutationVariables,
 } from "../__generated__/createReservationMutation";
-import { searchPatientByName_searchPatientByName_patients } from "../__generated__/searchPatientByName";
 import { ModalPortal } from "../components/mordal-portal";
 
 const CREATE_RESERVATION_MUTATION = gql`
@@ -24,9 +28,6 @@ const CREATE_RESERVATION_MUTATION = gql`
     }
   }
 `;
-
-export const selectedPatientVar =
-  makeVar<null | searchPatientByName_searchPatientByName_patients>(null);
 
 export const Reserve = () => {
   const location = useLocation();

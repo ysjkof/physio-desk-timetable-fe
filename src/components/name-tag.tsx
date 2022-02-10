@@ -1,7 +1,7 @@
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { cls, getYMD } from "../libs/utils";
-import { selectedPatientVar } from "../pages/reserve";
+import { selectedPatientVar } from "../libs/variables";
 
 interface INameTag {
   id: number;

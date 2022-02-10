@@ -1,7 +1,7 @@
 import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { NameTag } from "../components/name-tag";
 import { ScheduleBox } from "../components/schedule-box";
 import { ScheduleListBox } from "../components/schedule-list-box";
@@ -11,7 +11,6 @@ import {
   listReservationsQuery,
   listReservationsQueryVariables,
 } from "../__generated__/listReservationsQuery";
-import { selectedPatientVar } from "./reserve";
 
 const LIST_RESERVATIONS_QUERY = gql`
   query listReservationsQuery($input: ListReservationsInput!) {
