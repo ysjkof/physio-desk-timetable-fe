@@ -62,6 +62,7 @@ export const TimeTable = () => {
   const [dateNav, setDateNav] = useState<Date[][] | null>();
   const [dateNavExpand, setDateNavExpand] = useState<boolean>(false);
   const [listView, setListView] = useState<boolean>(false);
+  const [week, setWeek] = useState(getWeeks(queryDate));
 
   const handleListView = () => {
     setListView((current) => !current);
@@ -79,6 +80,16 @@ export const TimeTable = () => {
       if (direction === "after") date.setMonth(date.getMonth() + 1);
     }
     setQueryDate(date);
+  };
+  const handleViewOption = () => {
+    if (viewOption === ONE_DAY) {
+      setViewOption(ONE_WEEK);
+      console.log("Change View Option: to 7");
+    }
+    if (viewOption === ONE_WEEK) {
+      setViewOption(ONE_DAY);
+      console.log("Change View Option: to 1");
+    }
   };
 
   function getLabels(value: Date) {
@@ -151,6 +162,7 @@ export const TimeTable = () => {
     } else if (!dateNavExpand) {
       setDateNav([getWeeks(queryDate)]);
     }
+    setWeek(getWeeks(queryDate));
   }, [queryDate, dateNavExpand]);
 
   // console.log("⚠️ :", queryResult);
@@ -161,134 +173,125 @@ export const TimeTable = () => {
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      <div className="h-full">
-        <div className="space-y-2">
-          <div className="mx-8 flex items-center justify-between">
-            <div className="flex w-full">
-              <span className="select-none">{queryDate.getMonth() + 1}월</span>
+      <div className="h-full container mx-auto">
+        <div className="h-full">
+          <div className="table-header space-y-2 border-b">
+            <div className="mx-6 flex items-center justify-between">
+              <div className="flex w-full items-center">
+                <span className="text-sm text-gray-900 font-medium">
+                  {/* <span className="text-sm text-gray-500"> */}
+                  {queryDate.toLocaleString("ko-KR", {
+                    year: "2-digit",
+                    month: "short",
+                    day: "numeric",
+                    weekday: "short",
+                  })}
+                </span>
+              </div>
+              <div className="flex w-full justify-end space-x-8 items-center pt-1">
+                <button
+                  onClick={handleViewOption}
+                  className="hover:text-gray-500 text-sm w-20 space-x-1 flex"
+                >
+                  <span>
+                    {viewOption === ONE_DAY ? "1주 보기" : "하루 보기"}
+                  </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <svg
+                  onClick={handleExpandDateNav}
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 cursor-pointer hover:text-gray-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+                </svg>
+                <svg
+                  onClick={handleListView}
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 cursor-pointer hover:text-gray-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                  />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 cursor-pointer hover:text-gray-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {/* 이 버튼을 누르면 그룹원들 예약 동시출력 */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 cursor-pointer hover:text-gray-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
             </div>
-            <div className="flex w-full justify-end space-x-8 items-center pt-1">
-              <svg
-                onClick={handleExpandDateNav}
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 cursor-pointer hover:text-gray-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+            <div className="flex items-center justify-between mx-4">
+              <div
+                className="cursor-pointer hover:text-gray-500"
+                onClick={() => handleDateNavMove("prev")}
               >
-                <path d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
-              </svg>
-              <svg
-                onClick={handleListView}
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 cursor-pointer hover:text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                />
-              </svg>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 cursor-pointer hover:text-gray-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {/* 이 버튼을 누르면 그룹원들 예약 동시출력 */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 cursor-pointer hover:text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-            </div>
-          </div>
-          <div className="flex items-center justify-between mx-4">
-            <div
-              className="cursor-pointer hover:text-gray-500"
-              onClick={() => handleDateNavMove("prev")}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </div>
-            <div className="flex flex-col w-full">
-              {!dateNavExpand && dateNav && (
-                <div className="flex">
-                  {dateNav[0].map((week, i) => (
-                    <div
-                      onClick={() => setQueryDate(week)}
-                      key={i}
-                      className={cls(
-                        "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                        queryDate.getDate() === week.getDate()
-                          ? "border-b-2 border-sky-400 font-bold"
-                          : "border-b-2 border-transparent"
-                      )}
-                    >
-                      <span
-                        className={cls(
-                          "rounded-full",
-                          week.getDay() === 0
-                            ? "text-red-600"
-                            : week.getDay() === 6
-                            ? "text-blue-600"
-                            : "text-gray-600",
-                          queryDate.getDate() === week.getDate()
-                            ? "opacity-100"
-                            : "opacity-80",
-                          queryDate.getMonth() !== week.getMonth()
-                            ? "opacity-40"
-                            : ""
-                        )}
-                      >
-                        {week.getDate()}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {dateNavExpand &&
-                dateNav &&
-                dateNav.map((weeks, i) => (
-                  <div key={i} className="flex">
-                    {weeks.map((week, ii) => (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </div>
+              <div className="flex flex-col w-full">
+                {!dateNavExpand && dateNav && (
+                  <div className="flex">
+                    {dateNav[0].map((week, i) => (
                       <div
                         onClick={() => setQueryDate(week)}
-                        key={ii}
+                        key={i}
                         className={cls(
                           "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                          queryDate.getDate() === week.getDate() &&
-                            queryDate.getMonth() === week.getMonth()
+                          queryDate.getDate() === week.getDate()
                             ? "border-b-2 border-sky-400 font-bold"
                             : "border-b-2 border-transparent"
                         )}
@@ -314,137 +317,198 @@ export const TimeTable = () => {
                       </div>
                     ))}
                   </div>
-                ))}
-            </div>
-            <div
-              className="cursor-pointer hover:text-gray-500"
-              onClick={() => handleDateNavMove("after")}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                )}
+                {dateNavExpand &&
+                  dateNav &&
+                  dateNav.map((weeks, i) => (
+                    <div key={i} className="flex">
+                      {weeks.map((week, ii) => (
+                        <div
+                          onClick={() => setQueryDate(week)}
+                          key={ii}
+                          className={cls(
+                            "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
+                            queryDate.getDate() === week.getDate() &&
+                              queryDate.getMonth() === week.getMonth()
+                              ? "border-b-2 border-sky-400 font-bold"
+                              : "border-b-2 border-transparent"
+                          )}
+                        >
+                          <span
+                            className={cls(
+                              "rounded-full",
+                              week.getDay() === 0
+                                ? "text-red-600"
+                                : week.getDay() === 6
+                                ? "text-blue-600"
+                                : "text-gray-600",
+                              queryDate.getDate() === week.getDate()
+                                ? "opacity-100"
+                                : "opacity-80",
+                              queryDate.getMonth() !== week.getMonth()
+                                ? "opacity-40"
+                                : ""
+                            )}
+                          >
+                            {week.getDate()}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+              </div>
+              <div
+                className="cursor-pointer hover:text-gray-500"
+                onClick={() => handleDateNavMove("after")}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          </div>
-          <div className="flex justify-center border-b pb-2">
-            <span className="text-sm text-gray-500">
-              {queryDate.toLocaleString("ko-KR", {
-                year: "2-digit",
-                month: "long",
-                day: "numeric",
-                weekday: "long",
-              })}
-            </span>
-          </div>
-        </div>
-        <div className="overflow-y-scroll pb-14 bg-zinc-50 h-full">
-          {!listView && (
-            <div className="main grid grid-cols-[4rem,1fr]  pt-2">
-              {labels.map((label, i) => (
-                <TableRow
-                  key={label.hhmm}
-                  label
-                  date={label.date}
-                  hhmm={label.hhmm}
-                />
-              ))}
-              {labels.map((label, i) => (
-                <TableRow
-                  key={label.hhmm}
-                  label={false}
-                  date={label.date}
-                  hhmm={label.hhmm}
-                  gridRowStart={i + 1 + ""}
-                />
-              ))}
-              {queryResult?.listReservations.results?.map((reservation) => {
-                const hhmm = getHHMM(reservation.startDate);
-                const index = labels.findIndex((label) => label.hhmm === hhmm);
-                const time =
-                  getTimeLength(reservation.startDate, reservation.endDate) /
-                  10;
-                return (
-                  <ScheduleBox
-                    key={reservation.id}
-                    gridRowStart={index + 1}
-                    gridRowEnd={index + 1 + time}
-                    hhmm={getHHMM(reservation.startDate)}
-                    memo={reservation.memo}
-                    startDate={getHHMM(reservation.startDate, ":")}
-                    endDate={getHHMM(reservation.endDate, ":")}
-                  >
-                    <NameTag
-                      id={reservation.id}
-                      gender={reservation.patient.gender}
-                      name={reservation.patient.name}
-                      registrationNumber={
-                        reservation.patient.registrationNumber
-                      }
-                      birthday={reservation.patient.birthday}
-                    />
-                  </ScheduleBox>
-                );
-              })}
-            </div>
-          )}
-          {listView && (
-            <div className="pt-1">
-              <div className="mx-auto w-fit rounded-full mt-3 mb-4 border p-1 border-dashed border-gray-500 cursor-pointer hover:bg-zinc-200 shadow">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
                   <path
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                    clipRule="evenodd"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
                   />
                 </svg>
               </div>
-              {queryResult?.listReservations.results?.map((reservation) => {
-                const time =
-                  getTimeLength(reservation.startDate, reservation.endDate) /
-                  10;
-                return (
-                  <ScheduleListBox
-                    key={reservation.id}
-                    memo={reservation.memo}
-                    startDate={getHHMM(reservation.startDate, ":")}
-                    endDate={getHHMM(reservation.endDate, ":")}
-                  >
-                    <NameTag
-                      id={reservation.id}
-                      gender={reservation.patient.gender}
-                      name={reservation.patient.name}
-                      registrationNumber={
-                        reservation.patient.registrationNumber
-                      }
-                      birthday={reservation.patient.birthday}
-                    />
-                  </ScheduleListBox>
-                );
-              })}
             </div>
-          )}
+          </div>
+          <div
+            className={cls(
+              "table-body relative overflow-y-scroll bg-zinc-50 h-full",
+              dateNavExpand ? "pb-[19rem]" : "pb-48"
+            )}
+          >
+            {!listView && (
+              <div
+                className={cls(
+                  "main grid pt-2",
+                  viewOption === ONE_DAY
+                    ? "grid-cols-[3rem,1fr]"
+                    : "grid-cols-[3rem,repeat(7,1fr)]"
+                )}
+              >
+                {labels.map((label, i) => (
+                  <TableRow
+                    key={label.hhmm}
+                    label={true}
+                    date={label.date}
+                    labelDate={label.date}
+                    gridRowStart={i + 1}
+                  />
+                ))}
+                {viewOption === ONE_DAY &&
+                  labels.map((label, i) => (
+                    <TableRow
+                      key={label.hhmm}
+                      label={false}
+                      date={label.date}
+                      labelDate={label.date}
+                      gridRowStart={i + 1}
+                    />
+                  ))}
+                {viewOption === ONE_WEEK &&
+                  week.map((day, weekIdx) => (
+                    <>
+                      {labels.map((label, i) => (
+                        <TableRow
+                          key={label.hhmm}
+                          label={false}
+                          date={day}
+                          labelDate={label.date}
+                          gridRowStart={i + 1}
+                          gridColumnStart={weekIdx + 2}
+                        />
+                      ))}
+                    </>
+                  ))}
+                {queryResult?.listReservations.results?.map((reservation) => {
+                  const hhmm = getHHMM(reservation.startDate);
+                  const index = labels.findIndex(
+                    (label) => label.hhmm === hhmm
+                  );
+                  const time =
+                    getTimeLength(reservation.startDate, reservation.endDate) /
+                    10;
+                  return (
+                    <ScheduleBox
+                      key={reservation.id}
+                      gridRowStart={index + 1}
+                      gridRowEnd={index + 1 + time}
+                      hhmm={getHHMM(reservation.startDate)}
+                      memo={reservation.memo}
+                      startDate={getHHMM(reservation.startDate, ":")}
+                      endDate={getHHMM(reservation.endDate, ":")}
+                    >
+                      <NameTag
+                        id={reservation.id}
+                        gender={reservation.patient.gender}
+                        name={reservation.patient.name}
+                        registrationNumber={
+                          reservation.patient.registrationNumber
+                        }
+                        birthday={reservation.patient.birthday}
+                      />
+                    </ScheduleBox>
+                  );
+                })}
+              </div>
+            )}
+            {listView && (
+              <div className="pt-1">
+                <div className="mx-auto w-fit rounded-full mt-3 mb-4 border p-1 border-dashed border-gray-500 cursor-pointer hover:bg-zinc-200 shadow">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                {queryResult?.listReservations.results?.map((reservation) => {
+                  const time =
+                    getTimeLength(reservation.startDate, reservation.endDate) /
+                    10;
+                  return (
+                    <ScheduleListBox
+                      key={reservation.id}
+                      memo={reservation.memo}
+                      startDate={getHHMM(reservation.startDate, ":")}
+                      endDate={getHHMM(reservation.endDate, ":")}
+                    >
+                      <NameTag
+                        id={reservation.id}
+                        gender={reservation.patient.gender}
+                        name={reservation.patient.name}
+                        registrationNumber={
+                          reservation.patient.registrationNumber
+                        }
+                        birthday={reservation.patient.birthday}
+                      />
+                    </ScheduleListBox>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
-        <div className="text-medium fixed inset-x-0 bottom-0 z-50 flex h-10 items-center justify-between border-t bg-white px-2">
-          <div>오늘</div>
-          <div>캘린더</div>
-          <div>초대</div>
-        </div>
+        {/* <div>중간화면</div> */}
       </div>
+      {/* <div className="text-medium fixed inset-x-0 bottom-0 z-50 flex h-10 items-center justify-between border-t bg-white px-2">
+        <div>오늘</div>
+        <div>캘린더</div>
+        <div>초대</div>
+      </div> */}
     </>
   );
 };
