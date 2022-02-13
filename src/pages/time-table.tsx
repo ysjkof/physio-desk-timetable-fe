@@ -93,7 +93,7 @@ export const TimeTable = () => {
   };
 
   function getLabels(value: Date) {
-    const labels: { date: Date; hhmm: string }[] = [];
+    const labels: { date: Date }[] = [];
     const start = new Date(value);
     const end = new Date(start);
     start.setHours(tableLength.start.hours);
@@ -103,7 +103,7 @@ export const TimeTable = () => {
     let i = 0;
     while (i !== 150) {
       const date = new Date(start);
-      labels.push({ date, hhmm: getHHMM(date) });
+      labels.push({ date });
       const getMinutes = start.getMinutes();
       start.setMinutes(getMinutes + 10);
       i++;
@@ -165,7 +165,7 @@ export const TimeTable = () => {
     setWeek(getWeeks(queryDate));
   }, [queryDate, dateNavExpand]);
 
-  // console.log("⚠️ :", queryResult);
+  console.log("⚠️ : 쿼리결과", queryResult?.listReservations.results);
 
   return (
     <>
@@ -395,7 +395,7 @@ export const TimeTable = () => {
               >
                 {labels.map((label, i) => (
                   <TableRow
-                    key={label.hhmm}
+                    key={i}
                     label={true}
                     date={label.date}
                     labelDate={label.date}
@@ -405,7 +405,7 @@ export const TimeTable = () => {
                 {viewOption === ONE_DAY &&
                   labels.map((label, i) => (
                     <TableRow
-                      key={label.hhmm}
+                      key={i}
                       label={false}
                       date={label.date}
                       labelDate={label.date}
@@ -417,7 +417,7 @@ export const TimeTable = () => {
                     <>
                       {labels.map((label, i) => (
                         <TableRow
-                          key={label.hhmm}
+                          key={i}
                           label={false}
                           date={day}
                           labelDate={label.date}
@@ -430,7 +430,7 @@ export const TimeTable = () => {
                 {queryResult?.listReservations.results?.map((reservation) => {
                   const hhmm = getHHMM(reservation.startDate);
                   const index = labels.findIndex(
-                    (label) => label.hhmm === hhmm
+                    (label) => getHHMM(label.date) === hhmm
                   );
                   const time =
                     getTimeLength(reservation.startDate, reservation.endDate) /
