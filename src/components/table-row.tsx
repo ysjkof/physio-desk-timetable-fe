@@ -9,13 +9,14 @@ interface ITableRowProps {
   gridColumnStart?: number;
 }
 
-export default function TableRow({
+export const TableRow: React.FC<ITableRowProps> = ({
   label,
   date,
   labelDate,
   gridRowStart,
   gridColumnStart,
-}: ITableRowProps) {
+  children,
+}) => {
   const navigate = useNavigate();
   const onClick = () => {
     const startDate = new Date(date);
@@ -51,6 +52,8 @@ export default function TableRow({
         <div className="block min-h-[20px] group-hover:shadow group-hover:rounded-lg hover:bg-zinc-2000 mx-6 group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-500">
           <span className="mx-auto w-fit hidden group-hover:block text-sm font-medium text-white">
             {labelDate.toLocaleString("ko-KR", {
+              month: "short",
+              day: "2-digit",
               hour: "2-digit",
               minute: "2-digit",
             })}{" "}
@@ -58,6 +61,7 @@ export default function TableRow({
           </span>
         </div>
       )}
+      <div id="여기해결해야돼">{children}</div>
     </div>
   );
-}
+};

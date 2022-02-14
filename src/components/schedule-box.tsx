@@ -1,6 +1,6 @@
 interface IScheduleBox {
-  gridRowStart: number;
-  gridRowEnd: number;
+  // gridRowStart: number;
+  // gridRowEnd: number;
   hhmm: string;
   memo: string | null;
   startDate: string;
@@ -8,8 +8,8 @@ interface IScheduleBox {
 }
 
 export const ScheduleBox: React.FC<IScheduleBox> = ({
-  gridRowStart,
-  gridRowEnd,
+  // gridRowStart,
+  // gridRowEnd,
   hhmm,
   children,
   memo,
@@ -19,10 +19,10 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   return (
     <div
       className="group col-start-2 rounded-lg border px-2 mb-1 bg-white relative hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900"
-      style={{
-        gridRowStart,
-        gridRowEnd,
-      }}
+      // style={{
+      //   gridRowStart,
+      //   gridRowEnd,
+      // }}
       id={hhmm}
     >
       {children}

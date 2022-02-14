@@ -5,11 +5,12 @@ import { Outlet } from "react-router-dom";
 import { NameTag } from "../components/name-tag";
 import { ScheduleBox } from "../components/schedule-box";
 import { ScheduleListBox } from "../components/schedule-list-box";
-import TableRow from "../components/table-row";
+import { TableRow } from "../components/table-row";
 import { cls, getHHMM, getTimeLength } from "../libs/utils";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
+  listReservationsQuery_listReservations_results,
 } from "../__generated__/listReservationsQuery";
 
 const LIST_RESERVATIONS_QUERY = gql`
@@ -47,9 +48,42 @@ const ONE_WEEK = 7;
 const TWO_WEEKS = 14;
 const THREE_WEEKS = 21;
 
+interface ILabelRow {
+  labelDate: Date;
+  reservations: listReservationsQuery_listReservations_results[];
+}
+interface IUser {
+  name: string;
+  labels: ILabelRow[];
+}
 interface IDay {
-  title: string;
   date: Date;
+  users: IUser[];
+}
+class LabelRow {
+  labelDate;
+  reservations;
+  constructor({ labelDate, reservations }: ILabelRow) {
+    this.labelDate = labelDate;
+    this.reservations = reservations;
+  }
+}
+
+class User {
+  name;
+  labels;
+  constructor({ name, labels }: IUser) {
+    this.name = name;
+    this.labels = labels;
+  }
+}
+class Day {
+  date;
+  users;
+  constructor({ date, users }: IDay) {
+    this.date = date;
+    this.users = users;
+  }
 }
 
 export const TimeTable = () => {
@@ -58,11 +92,12 @@ export const TimeTable = () => {
     end: { hours: 19, minutes: 0 },
   });
   const [viewOption, setViewOption] = useState<number>(ONE_DAY);
-  const [queryDate, setQueryDate] = useState<Date>(new Date());
+  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-09"));
   const [dateNav, setDateNav] = useState<Date[][] | null>();
   const [dateNavExpand, setDateNavExpand] = useState<boolean>(false);
   const [listView, setListView] = useState<boolean>(false);
   const [week, setWeek] = useState(getWeeks(queryDate));
+  const [organizedData, setOrganizedData] = useState<IDay[]>();
 
   const handleListView = () => {
     setListView((current) => !current);
@@ -91,30 +126,31 @@ export const TimeTable = () => {
       console.log("Change View Option: to 1");
     }
   };
-
   function getLabels(value: Date) {
-    const labels: { date: Date }[] = [];
+    const user = new User({ name: "default", labels: [] });
     const start = new Date(value);
     const end = new Date(start);
     start.setHours(tableLength.start.hours);
     start.setMinutes(tableLength.start.minutes);
+    start.setSeconds(0);
     end.setHours(tableLength.end.hours);
     end.setMinutes(tableLength.end.minutes);
     let i = 0;
     while (i !== 150) {
       const date = new Date(start);
-      labels.push({ date });
+      // labels.labels.push({ labelDate:date,reservations:[] });
+      const labelRow = new LabelRow({ labelDate: date, reservations: [] });
+      user.labels.push(labelRow);
       const getMinutes = start.getMinutes();
       start.setMinutes(getMinutes + 10);
       i++;
       if (start.valueOf() > end.valueOf()) i = 150;
     }
-    return labels;
+    return user;
   }
-  const labels = getLabels(queryDate);
 
   function getWeeks(value: Date) {
-    let result = [];
+    let result: Date[] = [];
     const date = new Date(value);
     const day = date.getDay();
     const sunday = new Date(date.setDate(date.getDate() - day));
@@ -155,6 +191,7 @@ export const TimeTable = () => {
       }
     );
 
+  // 데이터 받아서 organizedDate에 넣는 거 구현해야됨.
   useEffect(() => {
     queryListReservations();
     if (dateNavExpand) {
@@ -162,10 +199,76 @@ export const TimeTable = () => {
     } else if (!dateNavExpand) {
       setDateNav([getWeeks(queryDate)]);
     }
+    console.log("쿼리날짜, 날짜안내기 갱신");
     setWeek(getWeeks(queryDate));
   }, [queryDate, dateNavExpand]);
 
-  console.log("⚠️ : 쿼리결과", queryResult?.listReservations.results);
+  useEffect(() => {
+    const newResults = [];
+    if (viewOption === ONE_WEEK) {
+      const weeks = getWeeks(queryDate);
+      weeks.forEach((day) => {
+        const newDay = new Day({
+          date: day,
+          users: [getLabels(day)],
+        });
+        newResults.push(newDay);
+      });
+    } else if (viewOption === ONE_DAY) {
+      const newDay = new Day({
+        date: queryDate,
+        users: [getLabels(queryDate)],
+      });
+      newResults.push(newDay);
+    }
+    setOrganizedData(newResults);
+    console.log("뷰옵선 갱신");
+  }, [viewOption, queryDate]);
+
+  useEffect(() => {
+    if (queryResult) {
+      const {
+        listReservations: { results },
+      } = queryResult;
+      console.log("쿼리리설트 갱신", results);
+
+      const newOrganizedData = organizedData?.map((day): IDay => {
+        return {
+          date: day.date,
+          users: [
+            ...day.users.map((user): IUser => {
+              return {
+                name: user.name,
+                labels: [
+                  ...user.labels.map((label): ILabelRow => {
+                    const matchResult = results?.filter(
+                      (result) =>
+                        new Date(result.startDate).getTime() ===
+                        label.labelDate.getTime()
+                    );
+                    if (matchResult) {
+                      return {
+                        labelDate: new Date(label.labelDate),
+                        reservations: matchResult,
+                      };
+                    } else {
+                      return {
+                        labelDate: new Date(label.labelDate),
+                        reservations: [],
+                      };
+                    }
+                  }),
+                ],
+              };
+            }),
+          ],
+        };
+      });
+      setOrganizedData(newOrganizedData);
+    }
+  }, [queryResult]);
+
+  // console.log("⚠️ : 정리된 자료", organizedData);
 
   return (
     <>
@@ -393,70 +496,133 @@ export const TimeTable = () => {
                     : "grid-cols-[3rem,repeat(7,1fr)]"
                 )}
               >
-                {labels.map((label, i) => (
-                  <TableRow
-                    key={i}
-                    label={true}
-                    date={label.date}
-                    labelDate={label.date}
-                    gridRowStart={i + 1}
-                  />
-                ))}
+                {organizedData &&
+                  organizedData.map((day) => {
+                    return day.users.map((user) => {
+                      return user.labels.map((label, i) => (
+                        <TableRow
+                          key={i}
+                          label={true}
+                          date={label.labelDate}
+                          labelDate={label.labelDate}
+                          gridRowStart={i + 1}
+                        />
+                      ));
+                    });
+                  })}
                 {viewOption === ONE_DAY &&
-                  labels.map((label, i) => (
-                    <TableRow
-                      key={i}
-                      label={false}
-                      date={label.date}
-                      labelDate={label.date}
-                      gridRowStart={i + 1}
-                    />
-                  ))}
+                  organizedData &&
+                  organizedData.map((day) => {
+                    return day.users.map((user) => {
+                      return user.labels.map((label, i) => {
+                        return (
+                          <TableRow
+                            key={i}
+                            label={false}
+                            date={label.labelDate}
+                            labelDate={label.labelDate}
+                            gridRowStart={i + 1}
+                          >
+                            {label.reservations.map((reservation, rIdx) => {
+                              return (
+                                <ScheduleBox
+                                  key={reservation.id}
+                                  hhmm={getHHMM(reservation.startDate)}
+                                  memo={reservation.memo}
+                                  startDate={getHHMM(
+                                    reservation.startDate,
+                                    ":"
+                                  )}
+                                  endDate={getHHMM(reservation.endDate, ":")}
+                                >
+                                  <NameTag
+                                    id={reservation.id}
+                                    gender={reservation.patient.gender}
+                                    name={reservation.patient.name}
+                                    registrationNumber={
+                                      reservation.patient.registrationNumber
+                                    }
+                                    birthday={reservation.patient.birthday}
+                                  />
+                                </ScheduleBox>
+                              );
+                            })}
+                          </TableRow>
+                        );
+                      });
+                    });
+                  })}
                 {viewOption === ONE_WEEK &&
-                  week.map((day, weekIdx) => (
-                    <>
-                      {labels.map((label, i) => (
+                  organizedData &&
+                  organizedData.map((day, idx) => {
+                    return day.users.map((user) => {
+                      return user.labels.map((label, i) => (
                         <TableRow
                           key={i}
                           label={false}
-                          date={day}
-                          labelDate={label.date}
+                          date={day.date}
+                          labelDate={label.labelDate}
                           gridRowStart={i + 1}
-                          gridColumnStart={weekIdx + 2}
+                          gridColumnStart={idx + 2}
+                        >
+                          {label.reservations.map((reservation, rIdx) => {
+                            return (
+                              <ScheduleBox
+                                key={reservation.id}
+                                hhmm={getHHMM(reservation.startDate)}
+                                memo={reservation.memo}
+                                startDate={getHHMM(reservation.startDate, ":")}
+                                endDate={getHHMM(reservation.endDate, ":")}
+                              >
+                                <NameTag
+                                  id={reservation.id}
+                                  gender={reservation.patient.gender}
+                                  name={reservation.patient.name}
+                                  registrationNumber={
+                                    reservation.patient.registrationNumber
+                                  }
+                                  birthday={reservation.patient.birthday}
+                                />
+                              </ScheduleBox>
+                            );
+                          })}
+                        </TableRow>
+                      ));
+                    });
+                  })}
+                {/* {organizedData &&
+                  queryResult?.listReservations.results?.map((reservation) => {
+                    const hhmm = getHHMM(reservation.startDate);
+                    const index = organizedData.findIndex(
+                      (label) => getHHMM(label.date) === hhmm
+                    );
+                    const time =
+                      getTimeLength(
+                        reservation.startDate,
+                        reservation.endDate
+                      ) / 10;
+                    return (
+                      <ScheduleBox
+                        key={reservation.id}
+                        gridRowStart={index + 1}
+                        gridRowEnd={index + 1 + time}
+                        hhmm={getHHMM(reservation.startDate)}
+                        memo={reservation.memo}
+                        startDate={getHHMM(reservation.startDate, ":")}
+                        endDate={getHHMM(reservation.endDate, ":")}
+                      >
+                        <NameTag
+                          id={reservation.id}
+                          gender={reservation.patient.gender}
+                          name={reservation.patient.name}
+                          registrationNumber={
+                            reservation.patient.registrationNumber
+                          }
+                          birthday={reservation.patient.birthday}
                         />
-                      ))}
-                    </>
-                  ))}
-                {queryResult?.listReservations.results?.map((reservation) => {
-                  const hhmm = getHHMM(reservation.startDate);
-                  const index = labels.findIndex(
-                    (label) => getHHMM(label.date) === hhmm
-                  );
-                  const time =
-                    getTimeLength(reservation.startDate, reservation.endDate) /
-                    10;
-                  return (
-                    <ScheduleBox
-                      key={reservation.id}
-                      gridRowStart={index + 1}
-                      gridRowEnd={index + 1 + time}
-                      hhmm={getHHMM(reservation.startDate)}
-                      memo={reservation.memo}
-                      startDate={getHHMM(reservation.startDate, ":")}
-                      endDate={getHHMM(reservation.endDate, ":")}
-                    >
-                      <NameTag
-                        id={reservation.id}
-                        gender={reservation.patient.gender}
-                        name={reservation.patient.name}
-                        registrationNumber={
-                          reservation.patient.registrationNumber
-                        }
-                        birthday={reservation.patient.birthday}
-                      />
-                    </ScheduleBox>
-                  );
-                })}
+                      </ScheduleBox>
+                    );
+                  })} */}
               </div>
             )}
             {listView && (
