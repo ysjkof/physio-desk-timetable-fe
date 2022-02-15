@@ -2,7 +2,7 @@ import { gql, useMutation, useReactiveVar } from "@apollo/client";
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { NameTag } from "../components/name-tag";
@@ -33,6 +33,7 @@ export const Reserve = () => {
   const location = useLocation();
   const state = location.state as { startDate: Date };
   const selectedPatient = useReactiveVar(selectedPatientVar);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -41,13 +42,20 @@ export const Reserve = () => {
     handleSubmit,
   } = useForm({ mode: "onChange" });
 
+  const onCompleted = (data: createReservationMutation) => {
+    const {
+      createReservation: { ok, error },
+    } = data;
+    navigate(-1);
+  };
+
   const [
     createReservationMutation,
     { loading, data: createReservationResult },
   ] = useMutation<
     createReservationMutation,
     createReservationMutationVariables
-  >(CREATE_RESERVATION_MUTATION);
+  >(CREATE_RESERVATION_MUTATION, { onCompleted });
 
   const programs = {
     manual: [
@@ -67,12 +75,13 @@ export const Reserve = () => {
       const index = programs.manual.findIndex(
         (id) => id.id === parseInt(program)
       );
-      if (!index) return null;
+      const findProgram = programs.manual[index];
+      if (!findProgram) return console.log("치료 프로그램을 찾을 수 없습니다.");
       const startDate = new Date(
         `${startYDM}T${startHHMM}:00.000${UTC_OPTION_KST}`
       );
       const endDate = new Date(startDate);
-      const minutes = programs.manual[index].time;
+      const minutes = findProgram.time;
       // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
       endDate.setMinutes(endDate.getMinutes() + minutes);
       createReservationMutation({
@@ -89,15 +98,12 @@ export const Reserve = () => {
       });
     }
   };
-  const handleCancel = () => selectedPatientVar(null);
 
   useEffect(() => {
     return () => {
       selectedPatientVar(null);
     };
   }, []);
-  // console.log("⚠️ : locateState", state);
-  // console.log("⚠️ : selectedPatienr ", selectedPatient);
 
   return (
     <ModalPortal>
@@ -108,24 +114,7 @@ export const Reserve = () => {
         <h4 className=" mb-5 w-full text-left text-3xl font-medium">
           예약하기
         </h4>
-        {!selectedPatient && <SearchPatient />}
-        {selectedPatient && (
-          <div className="flex">
-            <NameTag
-              id={selectedPatient.id}
-              gender={selectedPatient.gender}
-              name={selectedPatient.name}
-              registrationNumber={selectedPatient.registrationNumber}
-              birthday={selectedPatient.birthday}
-            />
-            <button
-              className="rounded-lg border px-3 shadow-sm flex items-center justify-center"
-              onClick={handleCancel}
-            >
-              <span>x</span>
-            </button>
-          </div>
-        )}
+        <SearchPatient />
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mt-5 mb-5 grid w-full gap-3"
@@ -166,9 +155,7 @@ export const Reserve = () => {
               <option value={manual.id}>{manual.name}</option>
             ))}
           </select>
-
           <Button
-            // canClick={isValid}
             canClick={selectedPatient && isValid}
             loading={loading}
             actionText={"예약 등록"}
