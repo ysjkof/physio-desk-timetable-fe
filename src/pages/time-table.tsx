@@ -99,6 +99,13 @@ export const TimeTable = () => {
   const [week, setWeek] = useState(getWeeks(queryDate));
   const [organizedData, setOrganizedData] = useState<IDay[]>();
 
+  const handleShrink = () => {
+    if (viewOption === ONE_WEEK) {
+      return true;
+    } else if (viewOption === ONE_DAY) {
+      return false;
+    }
+  };
   const handleListView = () => {
     setListView((current) => !current);
   };
@@ -543,6 +550,7 @@ export const TimeTable = () => {
                                       reservation.patient.registrationNumber
                                     }
                                     birthday={reservation.patient.birthday}
+                                    shrink={handleShrink()}
                                   />
                                 </ScheduleBox>
                               );
@@ -582,6 +590,7 @@ export const TimeTable = () => {
                                     reservation.patient.registrationNumber
                                   }
                                   birthday={reservation.patient.birthday}
+                                  shrink={handleShrink()}
                                 />
                               </ScheduleBox>
                             );

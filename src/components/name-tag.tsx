@@ -10,6 +10,7 @@ interface INameTag {
   registrationNumber: string | null;
   birthday: Date;
   canClick?: boolean;
+  shrink?: boolean;
 }
 
 export const NameTag: React.FC<INameTag> = ({
@@ -19,6 +20,7 @@ export const NameTag: React.FC<INameTag> = ({
   registrationNumber,
   birthday,
   canClick,
+  shrink = false,
 }) => {
   const onClick = () =>
     selectedPatientVar({
@@ -49,12 +51,26 @@ export const NameTag: React.FC<INameTag> = ({
           {name}
         </span>
       </div>
-      <span className="dark:text-light-blue-100 text-xs text-gray-700">
-        r.no : {registrationNumber ? registrationNumber : "미등록"}
-      </span>
-      <span className="dark:text-light-blue-100 text-xs text-gray-700">
-        b : {birthday ? getYMD(birthday, "yymmdd") : "미등록"}
-      </span>
+      {shrink ? (
+        registrationNumber ? (
+          <span className="dark:text-light-blue-100 text-xs text-gray-700">
+            r.no : {registrationNumber}
+          </span>
+        ) : (
+          <span className="dark:text-light-blue-100 text-xs text-gray-700">
+            b : {getYMD(birthday, "yymmdd")}
+          </span>
+        )
+      ) : (
+        <>
+          <span className="dark:text-light-blue-100 text-xs text-gray-700">
+            r.no : {registrationNumber ? registrationNumber : "미등록"}
+          </span>
+          <span className="dark:text-light-blue-100 text-xs text-gray-700">
+            b : {birthday ? getYMD(birthday, "yymmdd") : "미등록"}
+          </span>
+        </>
+      )}
       {/* {registrationNumber ? (
           <span className="dark:text-light-blue-100 text-xs text-blue-600">
             R : {registrationNumber}
