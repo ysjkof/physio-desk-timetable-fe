@@ -16,6 +16,9 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   startDate,
   endDate,
 }) => {
+  const onClick = () => {
+    console.log("you click ScheduleBox");
+  };
   return (
     <div
       className="group col-start-2 rounded-lg border px-2 mb-1 bg-white relative hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900"
@@ -24,6 +27,7 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
       //   gridRowEnd,
       // }}
       id={hhmm}
+      onClick={onClick}
     >
       {children}
       <span className="text-gray-600 text-sm">{memo}</span>
