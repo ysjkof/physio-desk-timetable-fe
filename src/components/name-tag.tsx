@@ -19,7 +19,7 @@ export const NameTag: React.FC<INameTag> = ({
   name,
   registrationNumber,
   birthday,
-  canClick,
+  canClick = false,
   shrink = false,
 }) => {
   const onClick = () =>
@@ -37,7 +37,7 @@ export const NameTag: React.FC<INameTag> = ({
         "flex cursor-pointer items-baseline justify-between px-4 w-full",
         canClick ? "" : "pointer-events-none"
       )}
-      onClick={onClick}
+      onClick={canClick ? onClick : undefined}
     >
       <div className="flex items-baseline gap-2">
         <span>
