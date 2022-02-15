@@ -12,7 +12,7 @@ export const ModalPortal: React.FC = ({ children }) => {
       <div
         className="modal-background absolute z-30 h-full w-full bg-black opacity-50"
         onClick={() => navigate(-1)}
-      ></div>
+      />
       <div className="modal-content relative top-1/2  left-1/2 z-50 flex w-fit -translate-x-1/2 -translate-y-1/2 flex-col">
         {children}
       </div>
