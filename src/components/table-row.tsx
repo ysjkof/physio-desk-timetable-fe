@@ -47,29 +47,25 @@ export const TableRow: React.FC<ITableRowProps> = ({
             ? getHHMM(date, ":")
             : null}
         </span>
+      ) : children?.toString() ? (
+        <div className="block min-h-[20px]">
+          <div>{children}</div>
+        </div>
       ) : (
-        <>
-          {!label && children?.toString() ? (
-            <div className="block min-h-[20px]">
-              <div id="여기해결해야돼">{children}</div>
-            </div>
-          ) : (
-            <div
-              className="block min-h-[20px] group-hover:shadow group-hover:rounded-lg hover:bg-zinc-2000 mx-6 group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-500"
-              onClick={label ? undefined : onClick}
-            >
-              <span className="mx-auto w-fit hidden group-hover:block text-sm font-medium text-white">
-                {labelDate.toLocaleString("ko-KR", {
-                  month: "short",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}{" "}
-                예약하기
-              </span>
-            </div>
-          )}
-        </>
+        <div
+          className="block min-h-[20px] group-hover:shadow group-hover:rounded-lg hover:bg-zinc-2000 mx-2 group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-500 h-full"
+          onClick={label ? undefined : onClick}
+        >
+          <span className="mx-auto w-fit hidden group-hover:block text-sm font-medium text-white">
+            {labelDate.toLocaleString("ko-KR", {
+              month: "short",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}{" "}
+            예약하기
+          </span>
+        </div>
       )}
     </div>
   );
