@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
@@ -58,6 +58,7 @@ export const CreatePatient = () => {
       });
     }
   };
+
   return (
     <>
       <Helmet>
@@ -109,8 +110,18 @@ export const CreatePatient = () => {
           </div>
         </div>
 
-        <input {...register("birthday")} type={"datetime"} className="input" />
-        <input {...register("memo")} type={"text"} className="input" />
+        <input
+          {...register("birthday", { required: true })}
+          type={"datetime"}
+          className="input"
+          placeholder="생일 yyyy-mm-dd"
+        />
+        <input
+          {...register("memo")}
+          type={"text"}
+          className="input"
+          placeholder="메모"
+        />
 
         <Button canClick={isValid} loading={loading} actionText={"환자 등록"} />
         {createaPatientMutationResult?.createPatient.error && (
