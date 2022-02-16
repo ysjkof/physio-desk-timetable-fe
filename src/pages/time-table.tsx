@@ -93,7 +93,8 @@ export const TimeTable = () => {
   });
   const [viewOption, setViewOption] = useState<number>(ONE_DAY);
   const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-09"));
-  const [dateNav, setDateNav] = useState<Date[][] | null>();
+  const [dateNavWeek, setDateNavWeek] = useState<Date[][] | null>();
+  const [dateNavMonth, setDateNavMonth] = useState<Date[][] | null>();
   const [dateNavExpand, setDateNavExpand] = useState<boolean>(false);
   const [listView, setListView] = useState<boolean>(false);
   const [week, setWeek] = useState(getWeeks(queryDate));
@@ -198,17 +199,14 @@ export const TimeTable = () => {
       }
     );
 
-  // 데이터 받아서 organizedDate에 넣는 거 구현해야됨.
+  useEffect(() => {
+    setDateNavWeek([getWeeks(queryDate)]);
+    setDateNavMonth(getWeeksOfMonth(queryDate));
+  }, []);
+
   useEffect(() => {
     queryListReservations();
-    if (dateNavExpand) {
-      setDateNav(getWeeksOfMonth(queryDate));
-    } else if (!dateNavExpand) {
-      setDateNav([getWeeks(queryDate)]);
-    }
-    console.log("쿼리날짜, 날짜안내기 갱신");
-    setWeek(getWeeks(queryDate));
-  }, [queryDate, dateNavExpand]);
+  }, [queryDate]);
 
   useEffect(() => {
     const newResults = [];
@@ -234,44 +232,66 @@ export const TimeTable = () => {
 
   useEffect(() => {
     if (queryResult) {
-      const {
-        listReservations: { results },
-      } = queryResult;
-      console.log("쿼리리설트 갱신", results);
+      const { listReservations } = queryResult;
+      if (listReservations && listReservations.results && organizedData) {
+        const results = listReservations.results;
+        console.log("쿼리리설트 갱신", results);
+        console.log("organizedData", organizedData);
 
-      const newOrganizedData = organizedData?.map((day): IDay => {
-        return {
-          date: day.date,
-          users: [
-            ...day.users.map((user): IUser => {
-              return {
-                name: user.name,
-                labels: [
-                  ...user.labels.map((label): ILabelRow => {
-                    const matchResult = results?.filter(
-                      (result) =>
-                        new Date(result.startDate).getTime() ===
-                        label.labelDate.getTime()
-                    );
-                    if (matchResult) {
-                      return {
-                        labelDate: new Date(label.labelDate),
-                        reservations: matchResult,
-                      };
-                    } else {
-                      return {
-                        labelDate: new Date(label.labelDate),
-                        reservations: [],
-                      };
-                    }
-                  }),
-                ],
-              };
-            }),
-          ],
-        };
-      });
-      setOrganizedData(newOrganizedData);
+        results.forEach((result) => {
+          const startDate = new Date(result.startDate);
+          const index = organizedData?.findIndex(
+            (e) =>
+              e.date.getFullYear() === startDate.getFullYear() &&
+              e.date.getMonth() === startDate.getMonth() &&
+              e.date.getDate() === startDate.getDate()
+          );
+          if (index && index !== -1) {
+            const labelIdx = organizedData[index].users[0].labels.findIndex(
+              (label) =>
+                label.labelDate.getHours() === startDate.getHours() &&
+                label.labelDate.getMinutes() === startDate.getMinutes()
+            );
+            organizedData[index].users[0].labels[labelIdx].reservations.push(
+              result
+            );
+          }
+        });
+
+        // const newOrganizedData = organizedData?.map((day): IDay => {
+        //   return {
+        //     date: day.date,
+        //     users: [
+        //       ...day.users.map((user): IUser => {
+        //         return {
+        //           name: user.name,
+        //           labels: [
+        //             ...user.labels.map((label): ILabelRow => {
+        //               const matchResult = results?.filter(
+        //                 (result) =>
+        //                   new Date(result.startDate).getTime() ===
+        //                   label.labelDate.getTime()
+        //               );
+        //               if (matchResult) {
+        //                 return {
+        //                   labelDate: new Date(label.labelDate),
+        //                   reservations: matchResult,
+        //                 };
+        //               } else {
+        //                 return {
+        //                   labelDate: new Date(label.labelDate),
+        //                   reservations: [],
+        //                 };
+        //               }
+        //             }),
+        //           ],
+        //         };
+        //       }),
+        //     ],
+        //   };
+        // });
+        // setOrganizedData(newOrganizedData);
+      }
     }
   }, [queryResult]);
 
@@ -393,9 +413,9 @@ export const TimeTable = () => {
                 </svg>
               </div>
               <div className="flex flex-col w-full">
-                {!dateNavExpand && dateNav && (
+                {!dateNavExpand && dateNavWeek && (
                   <div className="flex">
-                    {dateNav[0].map((week, i) => (
+                    {dateNavWeek[0].map((week, i) => (
                       <div
                         onClick={() => setQueryDate(week)}
                         key={i}
@@ -429,8 +449,8 @@ export const TimeTable = () => {
                   </div>
                 )}
                 {dateNavExpand &&
-                  dateNav &&
-                  dateNav.map((weeks, i) => (
+                  dateNavMonth &&
+                  dateNavMonth.map((weeks, i) => (
                     <div key={i} className="flex">
                       {weeks.map((week, ii) => (
                         <div
