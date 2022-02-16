@@ -81,11 +81,21 @@ export function getDateOfMonth(value: Date) {
 
 export function compareDateMatch(
   inputDate: Date,
-  comparisonDate: Date
+  comparisonDate: Date,
+  option: "ymd" | "hm"
 ): boolean {
-  return (
-    inputDate.getFullYear() === comparisonDate.getFullYear() &&
-    inputDate.getMonth() === comparisonDate.getMonth() &&
-    inputDate.getDate() === comparisonDate.getDate()
-  );
+  if (option === "ymd") {
+    return (
+      inputDate.getFullYear() === comparisonDate.getFullYear() &&
+      inputDate.getMonth() === comparisonDate.getMonth() &&
+      inputDate.getDate() === comparisonDate.getDate()
+    );
+  }
+  if (option === "hm") {
+    return (
+      inputDate.getHours() === comparisonDate.getHours() &&
+      inputDate.getMinutes() === comparisonDate.getMinutes()
+    );
+  }
+  return false;
 }

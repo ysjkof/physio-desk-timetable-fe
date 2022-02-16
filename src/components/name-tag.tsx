@@ -34,7 +34,7 @@ export const NameTag: React.FC<INameTag> = ({
   return (
     <div
       className={cls(
-        "flex w-full cursor-pointer items-baseline justify-between overflow-x-hidden px-4",
+        "flex w-full cursor-pointer items-baseline justify-around px-1",
         canClick ? "" : "pointer-events-none"
       )}
       onClick={canClick ? onClick : undefined}

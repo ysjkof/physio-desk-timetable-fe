@@ -227,7 +227,7 @@ export const TimeTable = () => {
       newResults.push(newDay);
     }
     setOrganizedData(newResults);
-    console.log("뷰옵선 갱신");
+    console.log("뷰옵선 갱신", newResults);
   }, [viewOption, queryDate]);
 
   useEffect(() => {
@@ -240,14 +240,12 @@ export const TimeTable = () => {
 
         results.forEach((result) => {
           const startDate = new Date(result.startDate);
-          const index = organizedData.findIndex((data) =>
-            compareDateMatch(data.date, startDate)
-          );
-          if (index && index !== -1) {
+          const index = organizedData.findIndex((data) => {
+            return compareDateMatch(data.date, startDate, "ymd");
+          });
+          if (index >= 0) {
             const labelIdx = organizedData[index].users[0].labels.findIndex(
-              (label) =>
-                label.labelDate.getHours() === startDate.getHours() &&
-                label.labelDate.getMinutes() === startDate.getMinutes()
+              (label) => compareDateMatch(label.labelDate, startDate, "hm")
             );
             organizedData[index].users[0].labels[labelIdx].reservations.push(
               result
@@ -542,11 +540,13 @@ export const TimeTable = () => {
                         return (
                           <>
                             <TableRow
+                              key={i}
                               selected={true}
                               date={label.labelDate}
                               labelDate={label.labelDate}
                               gridRowStart={i + 1}
                             >
+                              {/* {<div></div>label.reservations.length} */}
                               {label.reservations.map((reservation, rIdx) => {
                                 return (
                                   <ScheduleBox
@@ -591,9 +591,11 @@ export const TimeTable = () => {
                             <div className="border-r border-black">
                               {user.labels.map((label, i) => (
                                 <TableRow
+                                  key={i}
                                   selected={compareDateMatch(
                                     label.labelDate,
-                                    queryDate
+                                    queryDate,
+                                    "ymd"
                                   )}
                                   date={day.date}
                                   labelDate={label.labelDate}

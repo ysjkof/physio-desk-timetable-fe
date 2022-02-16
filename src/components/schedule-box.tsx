@@ -21,7 +21,7 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   };
   return (
     <div
-      className="group relative col-start-2 mb-1 rounded-lg border bg-white px-2 hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900"
+      className="group relative col-start-2 rounded-lg border bg-white hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900"
       // style={{
       //   gridRowStart,
       //   gridRowEnd,
@@ -30,7 +30,7 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
       onClick={onClick}
     >
       {children}
-      <span className="text-sm text-gray-600">{memo}</span>
+      <span className="block text-sm text-gray-600">{memo}</span>
       <div className="absolute right-4 -bottom-3 hidden rounded-lg border bg-white px-4 text-gray-500 group-hover:block">
         {startDate}~{endDate}
       </div>

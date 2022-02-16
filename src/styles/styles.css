@@ -601,6 +601,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-column-start: 2;
 }
 
+.row-span-2 {
+  grid-row: span 2 / span 2;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -683,6 +687,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .flex {
   display: flex;
 }
@@ -735,6 +743,26 @@ Ensure the default browser behavior of the `hidden` attribute.
   min-height: 20px;
 }
 
+.min-h-\[24px\] {
+  min-height: 24px;
+}
+
+.min-h-\[27px\] {
+  min-height: 27px;
+}
+
+.min-h-\[30px\] {
+  min-height: 30px;
+}
+
+.min-h-\[25px\] {
+  min-height: 25px;
+}
+
+.min-h-\[14px\] {
+  min-height: 14px;
+}
+
 .w-1\/4 {
   width: 25%;
 }
@@ -779,6 +807,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .min-w-\[40px\] {
   min-width: 40px;
+}
+
+.min-w-\[14px\] {
+  min-width: 14px;
 }
 
 .max-w-screen-sm {
@@ -861,6 +893,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .gap-3 {
   gap: 0.75rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {

@@ -30,8 +30,11 @@ export const TableRow: React.FC<ITableRowProps> = ({
   return (
     <div
       className={cls(
-        "group flex select-none border-t border-dashed border-gray-400 text-center text-sm text-gray-500",
-        selected ? "" : ""
+        "group flex select-none border-dashed border-gray-400 text-center text-sm text-gray-500",
+        selected ? "" : "",
+        labelDate.getMinutes() === 0 || labelDate.getMinutes() === 30
+          ? "border-t"
+          : ""
       )}
       style={{ gridRowStart, gridColumnStart }}
       id={"label" + getYMD(date, "yymmdd") + getHHMM(labelDate)}
@@ -48,12 +51,12 @@ export const TableRow: React.FC<ITableRowProps> = ({
       </span>
 
       {children?.toString() ? (
-        <div className="block min-h-[20px] w-full">
+        <div className="block min-h-[25px] w-full">
           <div>{children}</div>
         </div>
       ) : (
         <div
-          className="hover:bg-zinc-2000 mx-2 block h-full min-h-[20px] w-full group-hover:rounded-lg group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-500 group-hover:shadow"
+          className="hover:bg-zinc-2000 mx-2 block h-full min-h-[25px] w-full group-hover:rounded-lg group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-500 group-hover:shadow"
           onClick={onClick}
         >
           <span className="mx-auto hidden w-fit text-sm font-medium text-white group-hover:block">
