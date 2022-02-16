@@ -34,7 +34,7 @@ export const NameTag: React.FC<INameTag> = ({
   return (
     <div
       className={cls(
-        "flex cursor-pointer items-baseline justify-between px-4 w-full",
+        "flex w-full cursor-pointer items-baseline justify-between overflow-x-hidden px-4",
         canClick ? "" : "pointer-events-none"
       )}
       onClick={canClick ? onClick : undefined}
@@ -47,7 +47,7 @@ export const NameTag: React.FC<INameTag> = ({
             <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
           )}
         </span>
-        <span className="dark:text-light-blue-100 font-medium text-gray-800">
+        <span className="dark:text-light-blue-100 min-w-[50px] font-medium text-gray-800">
           {name}
         </span>
       </div>

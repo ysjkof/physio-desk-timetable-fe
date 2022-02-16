@@ -4,13 +4,13 @@ import { cls, getHHMM, getYMD } from "../libs/utils";
 interface ITableRowProps {
   date: Date;
   labelDate: Date;
-  label: boolean;
+  selected: boolean;
   gridRowStart?: number;
   gridColumnStart?: number;
 }
 
 export const TableRow: React.FC<ITableRowProps> = ({
-  label,
+  selected,
   date,
   labelDate,
   gridRowStart,
@@ -30,33 +30,33 @@ export const TableRow: React.FC<ITableRowProps> = ({
   return (
     <div
       className={cls(
-        label
-          ? "col-start-1 text-center text-sm text-gray-500 select-none border-x border-gray-400 "
-          : "col-start-2 border-t border-dashed text-center text-sm cursor-pointer group border-r border-gray-300"
+        "group flex select-none border-t border-dashed border-gray-400 text-center text-sm text-gray-500",
+        selected ? "" : ""
       )}
       style={{ gridRowStart, gridColumnStart }}
-      id={
-        label
-          ? "label" + getYMD(date, "yymmdd") + getHHMM(labelDate)
-          : "empty" + getYMD(date, "yymmdd") + getHHMM(labelDate)
-      }
+      id={"label" + getYMD(date, "yymmdd") + getHHMM(labelDate)}
     >
-      {label ? (
-        <span className="relative -top-2.5 block min-h-[20px]">
-          {date.getMinutes() === 0 || date.getMinutes() === 30
-            ? getHHMM(date, ":")
-            : null}
-        </span>
-      ) : children?.toString() ? (
-        <div className="block min-h-[20px]">
+      <span
+        className={cls(
+          "relative  -top-2.5 block min-h-[20px] min-w-[40px] bg-zinc-50 px-1",
+          selected ? "block" : "hidden"
+        )}
+      >
+        {labelDate.getMinutes() === 0 || labelDate.getMinutes() === 30
+          ? getHHMM(labelDate, ":")
+          : null}
+      </span>
+
+      {children?.toString() ? (
+        <div className="block min-h-[20px] w-full">
           <div>{children}</div>
         </div>
       ) : (
         <div
-          className="block min-h-[20px] group-hover:shadow group-hover:rounded-lg hover:bg-zinc-2000 mx-2 group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-500 h-full"
-          onClick={label ? undefined : onClick}
+          className="hover:bg-zinc-2000 mx-2 block h-full min-h-[20px] w-full group-hover:rounded-lg group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-500 group-hover:shadow"
+          onClick={onClick}
         >
-          <span className="mx-auto w-fit hidden group-hover:block text-sm font-medium text-white">
+          <span className="mx-auto hidden w-fit text-sm font-medium text-white group-hover:block">
             {labelDate.toLocaleString("ko-KR", {
               month: "short",
               day: "2-digit",

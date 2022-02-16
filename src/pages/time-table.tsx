@@ -6,7 +6,7 @@ import { NameTag } from "../components/name-tag";
 import { ScheduleBox } from "../components/schedule-box";
 import { ScheduleListBox } from "../components/schedule-list-box";
 import { TableRow } from "../components/table-row";
-import { cls, getHHMM, getTimeLength } from "../libs/utils";
+import { cls, compareDateMatch, getHHMM, getTimeLength } from "../libs/utils";
 import {
   listReservationsQuery,
   listReservationsQueryVariables,
@@ -240,11 +240,8 @@ export const TimeTable = () => {
 
         results.forEach((result) => {
           const startDate = new Date(result.startDate);
-          const index = organizedData?.findIndex(
-            (e) =>
-              e.date.getFullYear() === startDate.getFullYear() &&
-              e.date.getMonth() === startDate.getMonth() &&
-              e.date.getDate() === startDate.getDate()
+          const index = organizedData.findIndex((data) =>
+            compareDateMatch(data.date, startDate)
           );
           if (index && index !== -1) {
             const labelIdx = organizedData[index].users[0].labels.findIndex(
@@ -303,12 +300,12 @@ export const TimeTable = () => {
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      <div className="h-full container mx-auto">
+      <div className="container mx-auto h-full">
         <div className="h-full">
           <div className="table-header space-y-2 border-b">
             <div className="mx-6 flex items-center justify-between">
               <div className="flex w-full items-center">
-                <span className="text-sm text-gray-900 font-medium">
+                <span className="text-sm font-medium text-gray-900">
                   {/* <span className="text-sm text-gray-500"> */}
                   {queryDate.toLocaleString("ko-KR", {
                     year: "2-digit",
@@ -318,10 +315,10 @@ export const TimeTable = () => {
                   })}
                 </span>
               </div>
-              <div className="flex w-full justify-end space-x-8 items-center pt-1">
+              <div className="flex w-full items-center justify-end space-x-8 pt-1">
                 <button
                   onClick={handleViewOption}
-                  className="hover:text-gray-500 text-sm w-20 space-x-1 flex"
+                  className="flex w-20 space-x-1 text-sm hover:text-gray-500"
                 >
                   <span>
                     {viewOption === ONE_DAY ? "1주 보기" : "하루 보기"}
@@ -392,7 +389,7 @@ export const TimeTable = () => {
                 </svg>
               </div>
             </div>
-            <div className="flex items-center justify-between mx-4">
+            <div className="mx-4 flex items-center justify-between">
               <div
                 className="cursor-pointer hover:text-gray-500"
                 onClick={() => handleDateNavMove("prev")}
@@ -412,7 +409,7 @@ export const TimeTable = () => {
                   />
                 </svg>
               </div>
-              <div className="flex flex-col w-full">
+              <div className="flex w-full flex-col">
                 {!dateNavExpand && dateNavWeek && (
                   <div className="flex">
                     {dateNavWeek[0].map((week, i) => (
@@ -510,7 +507,7 @@ export const TimeTable = () => {
           </div>
           <div
             className={cls(
-              "table-body relative overflow-y-scroll bg-zinc-50 h-full",
+              "table-body relative h-full overflow-y-scroll bg-zinc-50",
               dateNavExpand ? "pb-[19rem]" : "pb-48"
             )}
           >
@@ -519,11 +516,11 @@ export const TimeTable = () => {
                 className={cls(
                   "main grid pt-2",
                   viewOption === ONE_DAY
-                    ? "grid-cols-[3rem,1fr]"
-                    : "grid-cols-[3rem,repeat(7,1fr)]"
+                    ? "grid-cols-1"
+                    : "grid-cols-[repeat(7,1fr)]"
                 )}
               >
-                {organizedData &&
+                {/* {organizedData &&
                   organizedData.map((day) => {
                     return day.users.map((user) => {
                       return user.labels.map((label, i) => (
@@ -536,46 +533,47 @@ export const TimeTable = () => {
                         />
                       ));
                     });
-                  })}
+                  })} */}
                 {viewOption === ONE_DAY &&
                   organizedData &&
                   organizedData.map((day) => {
                     return day.users.map((user) => {
                       return user.labels.map((label, i) => {
                         return (
-                          <TableRow
-                            key={i}
-                            label={false}
-                            date={label.labelDate}
-                            labelDate={label.labelDate}
-                            gridRowStart={i + 1}
-                          >
-                            {label.reservations.map((reservation, rIdx) => {
-                              return (
-                                <ScheduleBox
-                                  key={reservation.id}
-                                  hhmm={getHHMM(reservation.startDate)}
-                                  memo={reservation.memo}
-                                  startDate={getHHMM(
-                                    reservation.startDate,
-                                    ":"
-                                  )}
-                                  endDate={getHHMM(reservation.endDate, ":")}
-                                >
-                                  <NameTag
-                                    id={reservation.id}
-                                    gender={reservation.patient.gender}
-                                    name={reservation.patient.name}
-                                    registrationNumber={
-                                      reservation.patient.registrationNumber
-                                    }
-                                    birthday={reservation.patient.birthday}
-                                    shrink={handleShrink()}
-                                  />
-                                </ScheduleBox>
-                              );
-                            })}
-                          </TableRow>
+                          <>
+                            <TableRow
+                              selected={true}
+                              date={label.labelDate}
+                              labelDate={label.labelDate}
+                              gridRowStart={i + 1}
+                            >
+                              {label.reservations.map((reservation, rIdx) => {
+                                return (
+                                  <ScheduleBox
+                                    key={reservation.id}
+                                    hhmm={getHHMM(reservation.startDate)}
+                                    memo={reservation.memo}
+                                    startDate={getHHMM(
+                                      reservation.startDate,
+                                      ":"
+                                    )}
+                                    endDate={getHHMM(reservation.endDate, ":")}
+                                  >
+                                    <NameTag
+                                      id={reservation.id}
+                                      gender={reservation.patient.gender}
+                                      name={reservation.patient.name}
+                                      registrationNumber={
+                                        reservation.patient.registrationNumber
+                                      }
+                                      birthday={reservation.patient.birthday}
+                                      shrink={handleShrink()}
+                                    />
+                                  </ScheduleBox>
+                                );
+                              })}
+                            </TableRow>
+                          </>
                         );
                       });
                     });
@@ -584,39 +582,63 @@ export const TimeTable = () => {
                   organizedData &&
                   organizedData.map((day, idx) => {
                     return day.users.map((user) => {
-                      return user.labels.map((label, i) => (
-                        <TableRow
-                          key={i}
-                          label={false}
-                          date={day.date}
-                          labelDate={label.labelDate}
-                          gridRowStart={i + 1}
-                          gridColumnStart={idx + 2}
-                        >
-                          {label.reservations.map((reservation, rIdx) => {
-                            return (
-                              <ScheduleBox
-                                key={reservation.id}
-                                hhmm={getHHMM(reservation.startDate)}
-                                memo={reservation.memo}
-                                startDate={getHHMM(reservation.startDate, ":")}
-                                endDate={getHHMM(reservation.endDate, ":")}
-                              >
-                                <NameTag
-                                  id={reservation.id}
-                                  gender={reservation.patient.gender}
-                                  name={reservation.patient.name}
-                                  registrationNumber={
-                                    reservation.patient.registrationNumber
-                                  }
-                                  birthday={reservation.patient.birthday}
-                                  shrink={handleShrink()}
-                                />
-                              </ScheduleBox>
-                            );
-                          })}
-                        </TableRow>
-                      ));
+                      return (
+                        <div>
+                          <h2 className="mb-2 text-center">
+                            {day.date.getDate()}
+                          </h2>
+                          {
+                            <div className="border-r border-black">
+                              {user.labels.map((label, i) => (
+                                <TableRow
+                                  selected={compareDateMatch(
+                                    label.labelDate,
+                                    queryDate
+                                  )}
+                                  date={day.date}
+                                  labelDate={label.labelDate}
+                                  gridRowStart={i + 1}
+                                  gridColumnStart={idx + 2}
+                                >
+                                  {label.reservations.map(
+                                    (reservation, rIdx) => {
+                                      return (
+                                        <ScheduleBox
+                                          key={reservation.id}
+                                          hhmm={getHHMM(reservation.startDate)}
+                                          memo={reservation.memo}
+                                          startDate={getHHMM(
+                                            reservation.startDate,
+                                            ":"
+                                          )}
+                                          endDate={getHHMM(
+                                            reservation.endDate,
+                                            ":"
+                                          )}
+                                        >
+                                          <NameTag
+                                            id={reservation.id}
+                                            gender={reservation.patient.gender}
+                                            name={reservation.patient.name}
+                                            registrationNumber={
+                                              reservation.patient
+                                                .registrationNumber
+                                            }
+                                            birthday={
+                                              reservation.patient.birthday
+                                            }
+                                            shrink={handleShrink()}
+                                          />
+                                        </ScheduleBox>
+                                      );
+                                    }
+                                  )}
+                                </TableRow>
+                              ))}
+                            </div>
+                          }
+                        </div>
+                      );
                     });
                   })}
                 {/* {organizedData &&
@@ -656,7 +678,7 @@ export const TimeTable = () => {
             )}
             {listView && (
               <div className="pt-1">
-                <div className="mx-auto w-fit rounded-full mt-3 mb-4 border p-1 border-dashed border-gray-500 cursor-pointer hover:bg-zinc-200 shadow">
+                <div className="mx-auto mt-3 mb-4 w-fit cursor-pointer rounded-full border border-dashed border-gray-500 p-1 shadow hover:bg-zinc-200">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"
