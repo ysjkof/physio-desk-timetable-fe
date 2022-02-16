@@ -78,3 +78,14 @@ export function getDateOfMonth(value: Date) {
   }
   return result;
 }
+
+export function compareDateMatch(
+  inputDate: Date,
+  comparisonDate: Date
+): boolean {
+  return (
+    inputDate.getFullYear() === comparisonDate.getFullYear() &&
+    inputDate.getMonth() === comparisonDate.getMonth() &&
+    inputDate.getDate() === comparisonDate.getDate()
+  );
+}
