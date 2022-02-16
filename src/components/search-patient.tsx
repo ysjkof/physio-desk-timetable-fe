@@ -103,14 +103,14 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
       </div>
       <div
         className={cls(
-          "mt-4 h-28  border overflow-y-scroll p-1",
+          "mt-4 h-28  overflow-y-scroll border p-1",
           selectedPatient ? "border-none" : ""
         )}
       >
         {!selectedPatient &&
           patients &&
           patients.map((patient, index) => (
-            <div className="hover:ring-blue-500 hover:ring-2">
+            <div className="hover:ring-2 hover:ring-blue-500">
               <NameTag
                 key={index}
                 id={patient.id}
@@ -123,7 +123,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
             </div>
           ))}
         {!selectedPatient && !patients && (
-          <p className="text-sm text-gray-500 text-center">
+          <p className="text-center text-sm text-gray-500">
             환자 목록
             <br />
             검색하면 나타납니다
@@ -131,7 +131,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
         )}
         {selectedPatient && (
           <div className="flex h-full px-4">
-            <div className="flex items-center my-auto h-4/6 shadow-cst rounded-md px-2 w-full border border-blue-400">
+            <div className="shadow-cst my-auto flex h-4/6 w-full items-center rounded-md border border-blue-400 px-2">
               <NameTag
                 id={selectedPatient.id}
                 gender={selectedPatient.gender}
@@ -140,7 +140,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
                 birthday={selectedPatient.birthday}
               />
               <button
-                className="hover:bg-gray-600 hover:text-white rounded-lg border p-1 shadow-sm bg-white"
+                className="rounded-lg border bg-white p-1 shadow-sm hover:bg-gray-600 hover:text-white"
                 onClick={() => selectedPatientVar(null)}
               >
                 <svg

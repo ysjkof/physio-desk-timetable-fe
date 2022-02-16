@@ -12,19 +12,19 @@ export function Home() {
         전자차트 프로그램. 일정한 틀이 없고, 통계 확인이 불가능한 환자 차트. 이
         문제점을 해결하려고 만듭니다.
       </p>
-      <p className="text-sm text-gray-500 mt-2">
+      <p className="mt-2 text-sm text-gray-500">
         여기에 랜딩페이지가 만들어질 것입니다.
       </p>
 
       <div className="mt-2 space-x-4">
         <Link
-          className="text-sky-400 border rounded-lg px-2 py-1"
+          className="rounded-lg border px-2 py-1 text-sky-400"
           to="/create-patient"
         >
           Create Patient
         </Link>
         <Link
-          className="text-sky-400 border rounded-lg px-2 py-1"
+          className="rounded-lg border px-2 py-1 text-sky-400"
           to="/list-patient"
         >
           List Patient
