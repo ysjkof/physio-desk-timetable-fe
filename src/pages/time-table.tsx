@@ -404,21 +404,19 @@ export const TimeTable = () => {
           </div>
           <div
             className={cls(
-              "table-body relative h-full overflow-y-scroll",
+              "table-body  h-full w-full overflow-y-scroll",
               dateNavExpand ? "pb-[19rem]" : "pb-48"
             )}
           >
             {!listView && (
-              <div
-                className={cls(
-                  "main grid pt-2",
-                  viewOption === ONE_DAY
-                    ? "grid-cols-1"
-                    : "grid-cols-[repeat(7,1fr)]"
-                )}
-              >
-                <div className="in-table-header absolute mt-0.5 flex w-full items-center justify-between px-2">
-                  <div className="relative z-50">
+              <>
+                <div
+                  className={cls(
+                    "in-table-header relative flex h-9 w-full items-center bg-white",
+                    viewOption === ONE_DAY ? "z-10" : ""
+                  )}
+                >
+                  <div className="absolute left-0 z-50 flex h-9 items-center hover:cursor-pointer hover:bg-gray-300">
                     <MoveXBtn
                       direction={"prev"}
                       selectedDate={queryDate}
@@ -430,24 +428,24 @@ export const TimeTable = () => {
                     week?.map((day) => (
                       <div
                         className={cls(
-                          "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
+                          "group mt-2 mb-3.5 flex w-full cursor-pointer justify-center text-center",
                           queryDate.getDate() === day.getDate()
-                            ? "border-b-2 border-sky-400 font-bold"
-                            : "border-b-2 border-transparent"
+                            ? "rounded-md  font-extrabold opacity-100"
+                            : "opacity-80"
                         )}
                         onClick={() => setQueryDate(day)}
                       >
                         <h2
                           className={cls(
-                            "rounded-full",
-                            day.getDay() === 0
-                              ? "text-red-600"
-                              : day.getDay() === 6
-                              ? "text-blue-600"
-                              : "text-gray-600",
+                            "shadow-cst mx-1 w-full rounded-md",
                             queryDate.getDate() === day.getDate()
-                              ? "opacity-100"
-                              : "opacity-80",
+                              ? "ring-2 ring-sky-500"
+                              : "",
+                            day.getDay() === 0
+                              ? "text-red-600 group-hover:text-red-400"
+                              : day.getDay() === 6
+                              ? "text-blue-600 group-hover:text-blue-400"
+                              : "text-gray-600 group-hover:text-gray-400",
                             queryDate.getMonth() !== day.getMonth()
                               ? "opacity-40"
                               : ""
@@ -457,7 +455,7 @@ export const TimeTable = () => {
                         </h2>
                       </div>
                     ))}
-                  <div className="relative z-50">
+                  <div className="absolute right-0 z-50 flex h-9 items-center hover:cursor-pointer hover:bg-gray-300">
                     <MoveXBtn
                       direction={"after"}
                       selectedDate={queryDate}
@@ -466,107 +464,31 @@ export const TimeTable = () => {
                     />
                   </div>
                 </div>
-                {viewOption === ONE_DAY &&
-                  organizedData &&
-                  organizedData.map((day) => {
-                    return day.users.map((user) => {
-                      return (
-                        <div key={user.name}>
-                          <div className="mt-10" />
-                          {user.labels.map((label, i) => {
-                            return (
-                              <TableRow
-                                key={i}
-                                selected={true}
-                                date={label.labelDate}
-                                labelDate={label.labelDate}
-                                gridRowStart={i + 1}
-                              >
-                                {/* {<div></div>label.reservations.length} */}
-                                {label.reservations.map((reservation, rIdx) => {
-                                  return (
-                                    <ScheduleBox
-                                      key={reservation.id}
-                                      hhmm={getHHMM(reservation.startDate)}
-                                      memo={reservation.memo}
-                                      startDate={getHHMM(
-                                        reservation.startDate,
-                                        ":"
-                                      )}
-                                      endDate={getHHMM(
-                                        reservation.endDate,
-                                        ":"
-                                      )}
-                                    >
-                                      <NameTag
-                                        id={reservation.id}
-                                        gender={reservation.patient.gender}
-                                        name={reservation.patient.name}
-                                        registrationNumber={
-                                          reservation.patient.registrationNumber
-                                        }
-                                        birthday={reservation.patient.birthday}
-                                        shrink={handleShrink()}
-                                      />
-                                    </ScheduleBox>
-                                  );
-                                })}
-                              </TableRow>
-                            );
-                          })}
-                        </div>
-                      );
-                    });
-                  })}
-                {viewOption === ONE_WEEK &&
-                  organizedData &&
-                  organizedData.map((day, idx) => {
-                    return day.users.map((user) => {
-                      return (
-                        <div key={user.name}>
-                          <div
-                            className={cls(
-                              "mb-3 flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                              queryDate.getDate() === day.date.getDate()
-                                ? "border-b-2 border-sky-400 font-bold"
-                                : "border-b-2 border-transparent"
-                            )}
-                            onClick={() => setQueryDate(day.date)}
-                          >
-                            <h2
-                              className={cls(
-                                "rounded-full",
-                                day.date.getDay() === 0
-                                  ? "text-red-600"
-                                  : day.date.getDay() === 6
-                                  ? "text-blue-600"
-                                  : "text-gray-600",
-                                queryDate.getDate() === day.date.getDate()
-                                  ? "opacity-100"
-                                  : "opacity-80",
-                                queryDate.getMonth() !== day.date.getMonth()
-                                  ? "opacity-40"
-                                  : ""
-                              )}
-                            >
-                              {day.date.getDate()}
-                            </h2>
-                          </div>
-                          {
-                            <div className="border-r border-black">
-                              {user.labels.map((label, i) => (
+                <div
+                  className={cls(
+                    "in-table-body grid divide-x",
+                    viewOption === ONE_DAY
+                      ? "grid-cols-1"
+                      : "grid-cols-[repeat(7,1fr)]"
+                  )}
+                >
+                  {viewOption === ONE_DAY &&
+                    organizedData &&
+                    organizedData.map((day) => {
+                      return day.users.map((user) => {
+                        return (
+                          <div key={user.name}>
+                            <div className="mt-10" />
+                            {user.labels.map((label, i) => {
+                              return (
                                 <TableRow
                                   key={i}
-                                  selected={compareDateMatch(
-                                    label.labelDate,
-                                    queryDate,
-                                    "ymd"
-                                  )}
-                                  date={day.date}
+                                  selected={true}
+                                  date={label.labelDate}
                                   labelDate={label.labelDate}
                                   gridRowStart={i + 1}
-                                  gridColumnStart={idx + 2}
                                 >
+                                  {/* {<div></div>label.reservations.length} */}
                                   {label.reservations.map(
                                     (reservation, rIdx) => {
                                       return (
@@ -601,14 +523,116 @@ export const TimeTable = () => {
                                     }
                                   )}
                                 </TableRow>
-                              ))}
+                              );
+                            })}
+                          </div>
+                        );
+                      });
+                    })}
+                  {viewOption === ONE_WEEK &&
+                    organizedData &&
+                    organizedData.map((day, idx) => {
+                      return day.users.map((user) => {
+                        return (
+                          <div key={user.name} className="relative -top-10">
+                            <div
+                              className={cls(
+                                "group sticky top-0 z-10 mb-3.5 flex w-full cursor-pointer justify-center bg-white pt-1.5 text-center",
+                                queryDate.getDate() === day.date.getDate()
+                                  ? "font-extrabold opacity-100"
+                                  : "opacity-80"
+                              )}
+                              onClick={() => setQueryDate(day.date)}
+                            >
+                              <h2
+                                className={cls(
+                                  "shadow-cst mx-1 w-full rounded-md",
+                                  queryDate.getDate() === day.date.getDate()
+                                    ? "ring-2 ring-sky-500"
+                                    : "",
+                                  day.date.getDay() === 0
+                                    ? "text-red-600 group-hover:text-red-400"
+                                    : day.date.getDay() === 6
+                                    ? "text-blue-600 group-hover:text-blue-400"
+                                    : "text-gray-600 group-hover:text-gray-400",
+                                  queryDate.getMonth() !== day.date.getMonth()
+                                    ? "opacity-40"
+                                    : ""
+                                )}
+                              >
+                                {day.date.getDate()}
+                              </h2>
                             </div>
-                          }
-                        </div>
-                      );
-                    });
-                  })}
-              </div>
+                            {
+                              <div
+                                className={cls(
+                                  "min-w-fit",
+                                  queryDate.getDate() === day.date.getDate()
+                                    ? "ring-4 ring-inset ring-orange-400"
+                                    : ""
+                                )}
+                              >
+                                {user.labels.map((label, i) => (
+                                  <TableRow
+                                    key={i}
+                                    selected={compareDateMatch(
+                                      label.labelDate,
+                                      queryDate,
+                                      "ymd"
+                                    )}
+                                    date={day.date}
+                                    labelDate={label.labelDate}
+                                    gridRowStart={i + 1}
+                                    gridColumnStart={idx + 2}
+                                    shrink
+                                  >
+                                    {label.reservations.map(
+                                      (reservation, rIdx) => {
+                                        return (
+                                          <ScheduleBox
+                                            key={reservation.id}
+                                            hhmm={getHHMM(
+                                              reservation.startDate
+                                            )}
+                                            memo={reservation.memo}
+                                            startDate={getHHMM(
+                                              reservation.startDate,
+                                              ":"
+                                            )}
+                                            endDate={getHHMM(
+                                              reservation.endDate,
+                                              ":"
+                                            )}
+                                          >
+                                            <NameTag
+                                              id={reservation.id}
+                                              gender={
+                                                reservation.patient.gender
+                                              }
+                                              name={reservation.patient.name}
+                                              registrationNumber={
+                                                reservation.patient
+                                                  .registrationNumber
+                                              }
+                                              birthday={
+                                                reservation.patient.birthday
+                                              }
+                                              shrink={handleShrink()}
+                                            />
+                                          </ScheduleBox>
+                                        );
+                                      }
+                                    )}
+                                  </TableRow>
+                                ))}
+                              </div>
+                            }
+                          </div>
+                        );
+                      });
+                    })}
+                </div>
+              </>
             )}
             {listView && (
               <div className="pt-1">

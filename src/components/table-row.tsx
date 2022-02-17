@@ -7,6 +7,7 @@ interface ITableRowProps {
   selected: boolean;
   gridRowStart?: number;
   gridColumnStart?: number;
+  shrink?: boolean;
 }
 
 export const TableRow: React.FC<ITableRowProps> = ({
@@ -16,6 +17,7 @@ export const TableRow: React.FC<ITableRowProps> = ({
   gridRowStart,
   gridColumnStart,
   children,
+  shrink,
 }) => {
   const navigate = useNavigate();
   const onClick = () => {
@@ -30,7 +32,7 @@ export const TableRow: React.FC<ITableRowProps> = ({
   return (
     <div
       className={cls(
-        "group flex select-none border-dashed border-gray-400 text-center text-sm text-gray-500",
+        "flex select-none border-dashed border-gray-400 text-center text-sm text-gray-500",
         selected ? "" : "",
         labelDate.getMinutes() === 0 || labelDate.getMinutes() === 30
           ? "border-t"
@@ -41,7 +43,7 @@ export const TableRow: React.FC<ITableRowProps> = ({
     >
       <span
         className={cls(
-          "relative  -top-2.5 block min-h-[20px] min-w-[40px] bg-white px-1",
+          "relative -top-2.5 mx-1 block min-h-[20px] min-w-[40px] rounded-full bg-white",
           selected ? "block" : "hidden"
         )}
       >
@@ -50,26 +52,31 @@ export const TableRow: React.FC<ITableRowProps> = ({
           : null}
       </span>
 
-      {children?.toString() ? (
-        <div className="block min-h-[25px] w-full">
+      <div className="min-h-[25px] w-full min-w-[150px] px-1">
+        {children?.toString() ? (
           <div>{children}</div>
-        </div>
-      ) : (
-        <div
-          className="hover:bg-zinc-2000 mx-2 block h-full min-h-[25px] w-full group-hover:rounded-lg group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-indigo-500 group-hover:shadow"
-          onClick={onClick}
-        >
-          <span className="mx-auto hidden w-fit text-sm font-medium text-white group-hover:block">
-            {labelDate.toLocaleString("ko-KR", {
-              month: "short",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}{" "}
-            예약하기
-          </span>
-        </div>
-      )}
+        ) : (
+          <div
+            className="group flex min-h-[25px] w-full items-center hover:cursor-pointer hover:rounded-lg hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-500 hover:shadow"
+            onClick={onClick}
+          >
+            <span className="mx-auto hidden whitespace-nowrap text-sm font-medium text-white group-hover:block">
+              {shrink
+                ? labelDate.toLocaleString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : labelDate.toLocaleString("ko-KR", {
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}{" "}
+              예약하기
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
