@@ -41,7 +41,7 @@ export const TableRow: React.FC<ITableRowProps> = ({
     >
       <span
         className={cls(
-          "relative  -top-2.5 block min-h-[20px] min-w-[40px] bg-zinc-50 px-1",
+          "relative  -top-2.5 block min-h-[20px] min-w-[40px] bg-white px-1",
           selected ? "block" : "hidden"
         )}
       >
