@@ -243,40 +243,6 @@ export const TimeTable = () => {
             );
           }
         });
-
-        // const newOrganizedData = organizedData?.map((day): IDay => {
-        //   return {
-        //     date: day.date,
-        //     users: [
-        //       ...day.users.map((user): IUser => {
-        //         return {
-        //           name: user.name,
-        //           labels: [
-        //             ...user.labels.map((label): ILabelRow => {
-        //               const matchResult = results?.filter(
-        //                 (result) =>
-        //                   new Date(result.startDate).getTime() ===
-        //                   label.labelDate.getTime()
-        //               );
-        //               if (matchResult) {
-        //                 return {
-        //                   labelDate: new Date(label.labelDate),
-        //                   reservations: matchResult,
-        //                 };
-        //               } else {
-        //                 return {
-        //                   labelDate: new Date(label.labelDate),
-        //                   reservations: [],
-        //                 };
-        //               }
-        //             }),
-        //           ],
-        //         };
-        //       }),
-        //     ],
-        //   };
-        // });
-        // setOrganizedData(newOrganizedData);
       }
     }
   }, [queryResult]);
@@ -291,8 +257,8 @@ export const TimeTable = () => {
       </Helmet>
       <div className="container mx-auto h-full">
         <div className="h-full">
-          <div className="table-header space-y-2 border-b">
-            <div className="mx-2 flex items-center justify-between">
+          <div className="table-header space-y-2 border-b-2 shadow-sm">
+            <div className="mx-2 flex items-center justify-between pt-1">
               <div className="flex min-w-[120px] items-center">
                 <span className="text-sm font-medium text-gray-900">
                   {/* <span className="text-sm text-gray-500"> */}
@@ -304,13 +270,13 @@ export const TimeTable = () => {
                   })}
                 </span>
               </div>
-              <div className="flex w-full items-center justify-end space-x-5 pt-1 sm:space-x-8">
+              <div className="flex w-full items-center justify-end space-x-5 sm:space-x-8">
                 <button
                   onClick={handleViewOption}
                   className="flex space-x-1 text-sm hover:text-gray-500"
                 >
                   <span>
-                    {viewOption === ONE_DAY ? "1주 보기" : "하루 보기"}
+                    {viewOption === ONE_DAY ? "하루 보기" : "1주 보기"}
                   </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -642,39 +608,6 @@ export const TimeTable = () => {
                       );
                     });
                   })}
-                {/* {organizedData &&
-                  queryResult?.listReservations.results?.map((reservation) => {
-                    const hhmm = getHHMM(reservation.startDate);
-                    const index = organizedData.findIndex(
-                      (label) => getHHMM(label.date) === hhmm
-                    );
-                    const time =
-                      getTimeLength(
-                        reservation.startDate,
-                        reservation.endDate
-                      ) / 10;
-                    return (
-                      <ScheduleBox
-                        key={reservation.id}
-                        gridRowStart={index + 1}
-                        gridRowEnd={index + 1 + time}
-                        hhmm={getHHMM(reservation.startDate)}
-                        memo={reservation.memo}
-                        startDate={getHHMM(reservation.startDate, ":")}
-                        endDate={getHHMM(reservation.endDate, ":")}
-                      >
-                        <NameTag
-                          id={reservation.id}
-                          gender={reservation.patient.gender}
-                          name={reservation.patient.name}
-                          registrationNumber={
-                            reservation.patient.registrationNumber
-                          }
-                          birthday={reservation.patient.birthday}
-                        />
-                      </ScheduleBox>
-                    );
-                  })} */}
               </div>
             )}
             {listView && (
