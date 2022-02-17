@@ -25,7 +25,7 @@ export const MoveXBtn: React.FC<IMoveXBtn> = ({
   };
   return (
     <div
-      className="cursor-pointer hover:text-gray-500"
+      className="cursor-pointer hover:text-white"
       onClick={() => handleDateNavMove(direction)}
     >
       {direction === "prev" ? (
