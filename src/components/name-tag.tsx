@@ -34,24 +34,28 @@ export const NameTag: React.FC<INameTag> = ({
   return (
     <div
       className={cls(
-        "flex w-full cursor-pointer items-baseline justify-around px-1",
+        "flex cursor-pointer items-baseline justify-between  px-1",
+        shrink ? "h-[20px] w-[140px]" : "",
         canClick ? "" : "pointer-events-none"
       )}
       onClick={canClick ? onClick : undefined}
     >
-      <div className="flex items-baseline gap-2">
-        <span>
+      <div className="flex">
+        <span className="mx-1">
           {gender === "male" ? (
             <FontAwesomeIcon icon={faMale} className=" text-blue-500" />
           ) : (
             <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
           )}
         </span>
-        <span className="dark:text-light-blue-100 min-w-[50px] font-medium text-gray-800">
-          {name}
+        <span className="dark:text-light-blue-100 min-w-[56px] overflow-hidden whitespace-nowrap font-medium text-gray-800">
+          {name.length > 8 ? `${name.substring(0, 8)}...` : name}
         </span>
       </div>
-      {shrink ? (
+      {/* 하루 보기와 1주 보기에서 조건이 좀 다양함. 수정할 것. */}
+      {name.length > 8 ? (
+        ""
+      ) : shrink ? (
         registrationNumber ? (
           <span className="dark:text-light-blue-100 text-xs text-gray-700">
             r.no : {registrationNumber}

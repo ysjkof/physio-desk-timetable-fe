@@ -32,7 +32,7 @@ export const TableRow: React.FC<ITableRowProps> = ({
   return (
     <div
       className={cls(
-        "flex select-none border-dashed border-gray-400 text-center text-sm text-gray-500",
+        "flex h-[24px] select-none border-dashed border-gray-400 text-center text-sm text-gray-500",
         selected ? "" : "",
         labelDate.getMinutes() === 0 || labelDate.getMinutes() === 30
           ? "border-t"
@@ -52,12 +52,12 @@ export const TableRow: React.FC<ITableRowProps> = ({
           : null}
       </span>
 
-      <div className="min-h-[25px] w-full min-w-[150px] px-1">
+      <div className="w-full min-w-[150px] px-1">
         {children?.toString() ? (
           <div>{children}</div>
         ) : (
           <div
-            className="group flex min-h-[25px] w-full items-center hover:cursor-pointer hover:rounded-lg hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-500 hover:shadow"
+            className="group flex h-full w-full items-center hover:cursor-pointer hover:rounded-lg hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-500 hover:shadow"
             onClick={onClick}
           >
             <span className="mx-auto hidden whitespace-nowrap text-sm font-medium text-white group-hover:block">

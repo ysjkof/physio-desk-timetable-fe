@@ -1,3 +1,5 @@
+import { cls } from "../libs/utils";
+
 interface IScheduleBox {
   // gridRowStart: number;
   // gridRowEnd: number;
@@ -5,6 +7,7 @@ interface IScheduleBox {
   memo: string | null;
   startDate: string;
   endDate: string;
+  shrink?: boolean;
 }
 
 export const ScheduleBox: React.FC<IScheduleBox> = ({
@@ -15,13 +18,17 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   memo,
   startDate,
   endDate,
+  shrink = false,
 }) => {
   const onClick = () => {
     console.log("you click ScheduleBox");
   };
   return (
     <div
-      className="group relative col-start-2 rounded-lg border bg-white hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900"
+      className={cls(
+        "group relative col-start-2 rounded-lg border bg-white hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900",
+        shrink ? "w-[146px]" : ""
+      )}
       // style={{
       //   gridRowStart,
       //   gridRowEnd,
