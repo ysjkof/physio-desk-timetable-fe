@@ -31,10 +31,16 @@ export const Header: React.FC = () => {
         </div>
       )}
       <header className="py-4">
-        <div className="container mx-auto  flex w-full items-center justify-between px-5 xl:px-0">
+        <div className="container mx-auto  flex w-full items-center justify-between space-x-4 px-5 xl:px-0">
           <Link to="/">
             <img src={muoolLogo} className="w-36" alt="Muool" />
           </Link>
+          <div className="h-6 w-40 bg-pink-200"></div>
+          <input
+            type={"search"}
+            className="w-full rounded-full border"
+            placeholder="Search..."
+          />
           <span className="flex items-center gap-5 text-xs">
             {isLoggedIn ? (
               <>
