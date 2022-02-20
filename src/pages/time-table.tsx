@@ -1,4 +1,4 @@
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, makeVar, useLazyQuery, useReactiveVar } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
@@ -88,18 +88,25 @@ class Day {
 }
 
 export const TimeTable = () => {
+  console.time("TimeTable 시작");
+  const t22 = performance.now();
   const [tableLength, setTableLength] = useState<ITableLength>({
     start: { hours: 9, minutes: 0 },
     end: { hours: 19, minutes: 0 },
   });
   const [viewOption, setViewOption] = useState<number>(ONE_DAY);
-  const [queryDate, setQueryDate] = useState<Date>(new Date("2022-01-09"));
+  const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(
+    new Date("2022-01-09")
+  );
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    new Date("2022-01-09")
+  );
   const [dateNavWeek, setDateNavWeek] = useState<Date[][] | null>();
   const [dateNavMonth, setDateNavMonth] = useState<Date[][] | null>();
   const [dateNavExpand, setDateNavExpand] = useState<boolean>(false);
   const [listView, setListView] = useState<boolean>(false);
-  const [week, setWeek] = useState<Date[]>();
-  const [organizedData, setOrganizedData] = useState<IDay[]>();
+  const [oneDayData, setOneDayData] = useState<IDay[]>();
+  const [oneWeekData, setOneWeekData] = useState<IDay[]>();
 
   const handleShrink = () => {
     if (viewOption === ONE_WEEK) {
@@ -117,13 +124,12 @@ export const TimeTable = () => {
   const handleViewOption = () => {
     if (viewOption === ONE_DAY) {
       setViewOption(ONE_WEEK);
-      console.log("Change View Option: to 7");
     }
     if (viewOption === ONE_WEEK) {
       setViewOption(ONE_DAY);
-      console.log("Change View Option: to 1");
     }
   };
+
   function getLabels(value: Date) {
     const user = new User({ name: "default", labels: [] });
     const start = new Date(value);
@@ -153,9 +159,9 @@ export const TimeTable = () => {
     const day = date.getDay();
     const sunday = new Date(date.setDate(date.getDate() - day));
     for (let i = 0; i < 7; i++) {
-      const weekDate = new Date(sunday);
-      weekDate.setDate(sunday.getDate() + i);
-      result.push(new Date(weekDate));
+      const aDay = new Date(sunday);
+      aDay.setDate(sunday.getDate() + i);
+      result.push(aDay);
     }
     return result;
   }
@@ -175,13 +181,35 @@ export const TimeTable = () => {
     return result;
   }
 
+  const makeOneDayFrame = (inputDate: Date): IDay[] => {
+    const result: any[] = [];
+    const newDay = new Day({
+      date: inputDate,
+      users: [getLabels(inputDate)],
+    });
+    result.push(newDay);
+    return result;
+  };
+  const makeOneWeekFrame = (inputDate: Date): IDay[] => {
+    const result: any[] = [];
+    const weeks = getWeeks(inputDate);
+    weeks.forEach((day) => {
+      const newDay = new Day({
+        date: day,
+        users: [getLabels(day)],
+      });
+      result.push(newDay);
+    });
+    return result;
+  };
+
   const [queryListReservations, { loading, error, data: queryResult }] =
     useLazyQuery<listReservationsQuery, listReservationsQueryVariables>(
       LIST_RESERVATIONS_QUERY,
       {
         variables: {
           input: {
-            date: queryDate,
+            date: selectedDate,
             viewOption: viewOption,
             groupId: null,
           },
@@ -189,68 +217,97 @@ export const TimeTable = () => {
       }
     );
 
+  // const oneDayFrameVar = makeVar(makeOneDayFrame(prevSelectedDate));
+  // const oneWeekFrameVar = makeVar(makeOneWeekFrame(prevSelectedDate));
+  // const oneDayFrame = useReactiveVar(oneDayFrameVar);
+  // const oneWeekFrame = useReactiveVar(oneWeekFrameVar);
+
+  const oneDayFrame: IDay[] = makeOneDayFrame(selectedDate);
+  const oneWeekFrame: IDay[] = makeOneWeekFrame(selectedDate);
+
   useEffect(() => {
-    setDateNavWeek([getWeeks(queryDate)]);
-    setDateNavMonth(getWeeksOfMonth(queryDate));
+    console.time("이펙트1");
+    setDateNavWeek([getWeeks(selectedDate)]);
+    setDateNavMonth(getWeeksOfMonth(selectedDate));
+    setOneDayData(oneDayFrame);
+    setOneWeekData(oneWeekFrame);
+    console.timeEnd("이펙트1");
   }, []);
 
   useEffect(() => {
+    console.time("이펙트2");
+    // console.log("콘솔로그:이펙트2 / 로딩", loading);
     queryListReservations();
-    setWeek(getWeeks(queryDate));
-  }, [queryDate]);
-
-  useEffect(() => {
-    const newResults = [];
-    if (viewOption === ONE_WEEK) {
-      const weeks = getWeeks(queryDate);
-      weeks.forEach((day) => {
-        const newDay = new Day({
-          date: day,
-          users: [getLabels(day)],
-        });
-        newResults.push(newDay);
-      });
-    } else if (viewOption === ONE_DAY) {
-      const newDay = new Day({
-        date: queryDate,
-        users: [getLabels(queryDate)],
-      });
-      newResults.push(newDay);
+    if (viewOption === ONE_DAY) {
+      setOneDayData(makeOneDayFrame(selectedDate));
     }
-    setOrganizedData(newResults);
-    console.log("뷰옵선 갱신", newResults);
-  }, [viewOption, queryDate]);
-
-  useEffect(() => {
-    if (queryResult) {
-      const { listReservations } = queryResult;
-      if (listReservations && listReservations.results && organizedData) {
-        const results = listReservations.results;
-        console.log("쿼리리설트 갱신", results);
-        console.log("organizedData", organizedData);
-
-        results.forEach((result) => {
-          const startDate = new Date(result.startDate);
-          const index = organizedData.findIndex((data) => {
-            return compareDateMatch(data.date, startDate, "ymd");
-          });
-          if (index >= 0) {
-            const labelIdx = organizedData[index].users[0].labels.findIndex(
-              (label) => compareDateMatch(label.labelDate, startDate, "hm")
-            );
-            organizedData[index].users[0].labels[labelIdx].reservations.push(
-              result
-            );
-          }
-        });
+    if (selectedDate.getMonth() !== prevSelectedDate.getMonth()) {
+      setDateNavMonth(getWeeksOfMonth(selectedDate));
+    }
+    if (dateNavWeek) {
+      // queryDate가 변경됐는데 주가 바뀐다면 isThere가 -1을 반환하고 dateNavWeek를 새로 그린다.
+      const index = dateNavWeek[0].findIndex((date) =>
+        compareDateMatch(date, selectedDate, "ymd")
+      );
+      if (index === -1) {
+        setDateNavWeek([getWeeks(selectedDate)]);
       }
     }
+    setPrevSelectedDate(selectedDate);
+    console.timeEnd("이펙트2");
+  }, [selectedDate]);
+
+  useEffect(() => {
+    console.time("이펙트3");
+    console.log("로딩:", loading);
+    if (!loading && queryResult) {
+      const { listReservations } = queryResult;
+      if (listReservations && listReservations.results) {
+        const results = listReservations.results;
+        if (viewOption === ONE_DAY && oneDayData) {
+          // console.log("ONE_DAY_FRAME");
+          results.forEach((result) => {
+            const startDate = new Date(result.startDate);
+            const index = oneDayData.findIndex((data) => {
+              return compareDateMatch(data.date, startDate, "ymd");
+            });
+            if (index >= 0) {
+              const labelIdx = oneDayData[index].users[0].labels.findIndex(
+                (label) => compareDateMatch(label.labelDate, startDate, "hm")
+              );
+              oneDayData[index].users[0].labels[labelIdx].reservations.push(
+                result
+              );
+            }
+          });
+          setOneDayData(oneDayData);
+        } else if (viewOption === ONE_WEEK && oneWeekData) {
+          // console.log("ONE_WEEK_FRAME");
+          results.forEach((result) => {
+            const startDate = new Date(result.startDate);
+            const index = oneWeekFrame.findIndex((data) => {
+              return compareDateMatch(data.date, startDate, "ymd");
+            });
+            if (index >= 0) {
+              const labelIdx = oneWeekFrame[index].users[0].labels.findIndex(
+                (label) => compareDateMatch(label.labelDate, startDate, "hm")
+              );
+              oneWeekFrame[index].users[0].labels[labelIdx].reservations.push(
+                result
+              );
+            }
+          });
+          setOneWeekData(oneWeekFrame);
+        }
+      }
+    }
+    console.timeEnd("이펙트3");
   }, [queryResult]);
 
-  // console.log("⚠️ : 정리된 자료", organizedData);
-
+  console.timeEnd("TimeTable 시작");
   return (
     <>
+      {console.time("렌더시작")}
       <Outlet />
       <Helmet>
         <title>시간표 | Muool</title>
@@ -258,19 +315,75 @@ export const TimeTable = () => {
       <div className="container mx-auto h-full">
         <div className="h-full">
           <div className="table-header space-y-2 border-b-2 shadow-sm">
-            <div className="mx-2 flex items-center justify-between pt-1">
-              <div className="flex min-w-[120px] items-center">
+            <div className="mx-2 grid grid-cols-2 items-center justify-between pt-1 lg:grid-cols-6">
+              <div className="flex min-w-[120px] items-center space-x-4">
                 <span className="text-sm font-medium text-gray-900">
-                  {/* <span className="text-sm text-gray-500"> */}
-                  {queryDate.toLocaleString("ko-KR", {
+                  {selectedDate.toLocaleString("ko-KR", {
                     year: "2-digit",
                     month: "short",
                     day: "numeric",
                     weekday: "short",
                   })}
                 </span>
+                <button
+                  className="text-sm text-gray-500"
+                  onClick={() => setSelectedDate(new Date())}
+                >
+                  오늘날짜
+                </button>
               </div>
-              <div className="flex w-full items-center justify-end space-x-5 sm:space-x-8">
+              <div className="mx-4 flex items-center lg:col-span-3">
+                <MoveXBtn
+                  direction={"prev"}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  dateNavExpand={dateNavExpand}
+                />
+                <div className="w-full">
+                  {dateNavWeek?.map((weeks, i) => (
+                    <div key={i} className="flex">
+                      {weeks.map((week, ii) => (
+                        <div
+                          key={ii}
+                          className={cls(
+                            "group flex w-full cursor-pointer bg-white  text-center",
+                            selectedDate.getDate() === week.getDate()
+                              ? "font-extrabold opacity-100"
+                              : "opacity-80"
+                          )}
+                          onClick={() => setSelectedDate(week)}
+                        >
+                          <h2
+                            className={cls(
+                              "shadow-cst mx-1 w-full rounded-md",
+                              selectedDate.getDate() === week.getDate()
+                                ? "ring-2 ring-violet-400"
+                                : "",
+                              week.getDay() === 0
+                                ? "text-red-600 group-hover:text-red-400"
+                                : week.getDay() === 6
+                                ? "text-blue-600 group-hover:text-blue-400"
+                                : "text-gray-600 group-hover:text-gray-400",
+                              selectedDate.getMonth() !== week.getMonth()
+                                ? "opacity-40"
+                                : ""
+                            )}
+                          >
+                            {week.getDate()}
+                          </h2>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+                <MoveXBtn
+                  direction={"after"}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  dateNavExpand={dateNavExpand}
+                />
+              </div>
+              <div className="col-span-2 flex w-full items-center justify-end space-x-5 sm:space-x-8 ">
                 <button
                   onClick={handleViewOption}
                   className="flex space-x-1 text-sm hover:text-gray-500"
@@ -350,8 +463,8 @@ export const TimeTable = () => {
                   <div className="mx-4 flex items-center justify-between">
                     <MoveXBtn
                       direction={"prev"}
-                      selectedDate={queryDate}
-                      setQueryDate={setQueryDate}
+                      selectedDate={selectedDate}
+                      setSelectedDate={setSelectedDate}
                       dateNavExpand={dateNavExpand}
                     />
                     <div className="flex w-full flex-col">
@@ -359,12 +472,11 @@ export const TimeTable = () => {
                         <div key={i} className="flex">
                           {weeks.map((week, ii) => (
                             <div
-                              onClick={() => setQueryDate(week)}
+                              onClick={() => setSelectedDate(week)}
                               key={ii}
                               className={cls(
                                 "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                                queryDate.getDate() === week.getDate() &&
-                                  queryDate.getMonth() === week.getMonth()
+                                compareDateMatch(week, selectedDate, "ymd")
                                   ? "border-b-2 border-sky-400 font-bold"
                                   : "border-b-2 border-transparent"
                               )}
@@ -377,10 +489,10 @@ export const TimeTable = () => {
                                     : week.getDay() === 6
                                     ? "text-blue-600"
                                     : "text-gray-600",
-                                  queryDate.getDate() === week.getDate()
+                                  selectedDate.getDate() === week.getDate()
                                     ? "opacity-100"
                                     : "opacity-80",
-                                  queryDate.getMonth() !== week.getMonth()
+                                  selectedDate.getMonth() !== week.getMonth()
                                     ? "opacity-40"
                                     : ""
                                 )}
@@ -394,8 +506,8 @@ export const TimeTable = () => {
                     </div>
                     <MoveXBtn
                       direction={"after"}
-                      selectedDate={queryDate}
-                      setQueryDate={setQueryDate}
+                      selectedDate={selectedDate}
+                      setSelectedDate={setSelectedDate}
                       dateNavExpand={dateNavExpand}
                     />
                   </div>
@@ -412,225 +524,207 @@ export const TimeTable = () => {
               <>
                 <div
                   className={cls(
-                    "in-table-header relative flex h-9 w-full items-center bg-white",
-                    viewOption === ONE_DAY ? "z-10" : ""
-                  )}
-                >
-                  <div className="absolute left-0 z-50 flex h-9 items-center hover:cursor-pointer hover:bg-gray-300">
-                    <MoveXBtn
-                      direction={"prev"}
-                      selectedDate={queryDate}
-                      setQueryDate={setQueryDate}
-                      dateNavExpand={dateNavExpand}
-                    />
-                  </div>
-                  {viewOption === ONE_DAY &&
-                    week?.map((day) => (
-                      <div
-                        className={cls(
-                          "group mt-2 mb-3.5 flex w-full cursor-pointer justify-center text-center",
-                          queryDate.getDate() === day.getDate()
-                            ? "rounded-md  font-extrabold opacity-100"
-                            : "opacity-80"
-                        )}
-                        onClick={() => setQueryDate(day)}
-                      >
-                        <h2
-                          className={cls(
-                            "shadow-cst mx-1 w-full rounded-md",
-                            queryDate.getDate() === day.getDate()
-                              ? "ring-2 ring-sky-500"
-                              : "",
-                            day.getDay() === 0
-                              ? "text-red-600 group-hover:text-red-400"
-                              : day.getDay() === 6
-                              ? "text-blue-600 group-hover:text-blue-400"
-                              : "text-gray-600 group-hover:text-gray-400",
-                            queryDate.getMonth() !== day.getMonth()
-                              ? "opacity-40"
-                              : ""
-                          )}
-                        >
-                          {day.getDate()}
-                        </h2>
-                      </div>
-                    ))}
-                  <div className="absolute right-0 z-50 flex h-9 items-center hover:cursor-pointer hover:bg-gray-300">
-                    <MoveXBtn
-                      direction={"after"}
-                      selectedDate={queryDate}
-                      setQueryDate={setQueryDate}
-                      dateNavExpand={dateNavExpand}
-                    />
-                  </div>
-                </div>
-                <div
-                  className={cls(
                     "in-table-body grid divide-x",
                     viewOption === ONE_DAY
                       ? "grid-cols-1"
                       : "grid-cols-[repeat(7,1fr)]"
                   )}
                 >
-                  {viewOption === ONE_DAY &&
-                    organizedData &&
-                    organizedData.map((day) => {
-                      return day.users.map((user) => {
-                        return (
-                          <div key={user.name}>
-                            <div className="mt-10" />
-                            {user.labels.map((label, i) => {
-                              return (
-                                <TableRow
-                                  key={i}
-                                  selected={true}
-                                  date={label.labelDate}
-                                  labelDate={label.labelDate}
-                                  gridRowStart={i + 1}
-                                >
-                                  {/* {<div></div>label.reservations.length} */}
-                                  {label.reservations.map(
-                                    (reservation, rIdx) => {
-                                      return (
-                                        <ScheduleBox
-                                          key={reservation.id}
-                                          hhmm={getHHMM(reservation.startDate)}
-                                          memo={reservation.memo}
-                                          startDate={getHHMM(
-                                            reservation.startDate,
-                                            ":"
-                                          )}
-                                          endDate={getHHMM(
-                                            reservation.endDate,
-                                            ":"
-                                          )}
-                                        >
-                                          <NameTag
-                                            id={reservation.id}
-                                            gender={reservation.patient.gender}
-                                            name={reservation.patient.name}
-                                            registrationNumber={
-                                              reservation.patient
-                                                .registrationNumber
-                                            }
-                                            birthday={
-                                              reservation.patient.birthday
-                                            }
-                                            shrink={handleShrink()}
-                                          />
-                                        </ScheduleBox>
-                                      );
-                                    }
+                  {viewOption === ONE_DAY
+                    ? oneDayData?.map((day) => {
+                        return day.users.map((user) => {
+                          return (
+                            <div key={user.name}>
+                              <div className="">
+                                <div
+                                  className={cls(
+                                    "group mb-3.5 flex w-full cursor-pointer justify-center bg-white pt-1.5 text-center",
+                                    selectedDate.getDate() ===
+                                      day.date.getDate()
+                                      ? "font-extrabold opacity-100"
+                                      : "opacity-80"
                                   )}
-                                </TableRow>
-                              );
-                            })}
-                          </div>
-                        );
-                      });
-                    })}
-                  {viewOption === ONE_WEEK &&
-                    organizedData &&
-                    organizedData.map((day, idx) => {
-                      return day.users.map((user) => {
-                        return (
-                          <div key={user.name} className="relative -top-10">
-                            <div
-                              className={cls(
-                                "group sticky top-0 z-10 mb-3.5 flex w-full cursor-pointer justify-center bg-white pt-1.5 text-center",
-                                queryDate.getDate() === day.date.getDate()
-                                  ? "font-extrabold opacity-100"
-                                  : "opacity-80"
-                              )}
-                              onClick={() => setQueryDate(day.date)}
-                            >
-                              <h2
-                                className={cls(
-                                  "shadow-cst mx-1 w-full rounded-md",
-                                  queryDate.getDate() === day.date.getDate()
-                                    ? "ring-2 ring-sky-500"
-                                    : "",
-                                  day.date.getDay() === 0
-                                    ? "text-red-600 group-hover:text-red-400"
-                                    : day.date.getDay() === 6
-                                    ? "text-blue-600 group-hover:text-blue-400"
-                                    : "text-gray-600 group-hover:text-gray-400",
-                                  queryDate.getMonth() !== day.date.getMonth()
-                                    ? "opacity-40"
-                                    : ""
-                                )}
-                              >
-                                {day.date.getDate()}
-                              </h2>
+                                  onClick={() => setSelectedDate(day.date)}
+                                >
+                                  <h2
+                                    className={cls(
+                                      "mx-1 w-full",
+                                      day.date.getDay() === 0
+                                        ? "text-red-600 group-hover:text-red-400"
+                                        : day.date.getDay() === 6
+                                        ? "text-blue-600 group-hover:text-blue-400"
+                                        : "text-gray-600 group-hover:text-gray-400",
+                                      selectedDate.getMonth() !==
+                                        day.date.getMonth()
+                                        ? "opacity-40"
+                                        : ""
+                                    )}
+                                  >
+                                    {day.date.toLocaleDateString("ko-KR", {
+                                      month: "short",
+                                      day: "numeric",
+                                    })}
+                                  </h2>
+                                </div>
+                                {user.labels.map((label, i) => {
+                                  return (
+                                    <TableRow
+                                      key={i}
+                                      selected={true}
+                                      date={label.labelDate}
+                                      labelDate={label.labelDate}
+                                      gridRowStart={i + 1}
+                                    >
+                                      {label.reservations.map(
+                                        (reservation, rIdx) => {
+                                          return (
+                                            <ScheduleBox
+                                              key={reservation.id}
+                                              hhmm={getHHMM(
+                                                reservation.startDate
+                                              )}
+                                              memo={reservation.memo}
+                                              startDate={getHHMM(
+                                                reservation.startDate,
+                                                ":"
+                                              )}
+                                              endDate={getHHMM(
+                                                reservation.endDate,
+                                                ":"
+                                              )}
+                                            >
+                                              <NameTag
+                                                id={reservation.id}
+                                                gender={
+                                                  reservation.patient.gender
+                                                }
+                                                name={reservation.patient.name}
+                                                registrationNumber={
+                                                  reservation.patient
+                                                    .registrationNumber
+                                                }
+                                                birthday={
+                                                  reservation.patient.birthday
+                                                }
+                                                shrink={handleShrink()}
+                                              />
+                                            </ScheduleBox>
+                                          );
+                                        }
+                                      )}
+                                    </TableRow>
+                                  );
+                                })}
+                              </div>
                             </div>
-                            {
+                          );
+                        });
+                      })
+                    : ""}
+                  {viewOption === ONE_WEEK
+                    ? oneWeekData?.map((day, idx) => {
+                        return day.users.map((user) => {
+                          return (
+                            <div key={user.name} className="">
                               <div
                                 className={cls(
-                                  "min-w-fit",
-                                  queryDate.getDate() === day.date.getDate()
-                                    ? "ring-4 ring-inset ring-orange-400"
-                                    : ""
+                                  "group mb-3.5 flex w-full cursor-pointer justify-center bg-white pt-1.5 text-center",
+                                  selectedDate.getDate() === day.date.getDate()
+                                    ? "font-extrabold opacity-100"
+                                    : "opacity-80"
                                 )}
+                                onClick={() => setSelectedDate(day.date)}
                               >
-                                {user.labels.map((label, i) => (
-                                  <TableRow
-                                    key={i}
-                                    selected={compareDateMatch(
-                                      label.labelDate,
-                                      queryDate,
-                                      "ymd"
-                                    )}
-                                    date={day.date}
-                                    labelDate={label.labelDate}
-                                    gridRowStart={i + 1}
-                                    gridColumnStart={idx + 2}
-                                    shrink
-                                  >
-                                    {label.reservations.map(
-                                      (reservation, rIdx) => {
-                                        return (
-                                          <ScheduleBox
-                                            key={reservation.id}
-                                            hhmm={getHHMM(
-                                              reservation.startDate
-                                            )}
-                                            memo={reservation.memo}
-                                            startDate={getHHMM(
-                                              reservation.startDate,
-                                              ":"
-                                            )}
-                                            endDate={getHHMM(
-                                              reservation.endDate,
-                                              ":"
-                                            )}
-                                          >
-                                            <NameTag
-                                              id={reservation.id}
-                                              gender={
-                                                reservation.patient.gender
-                                              }
-                                              name={reservation.patient.name}
-                                              registrationNumber={
-                                                reservation.patient
-                                                  .registrationNumber
-                                              }
-                                              birthday={
-                                                reservation.patient.birthday
-                                              }
-                                              shrink={handleShrink()}
-                                            />
-                                          </ScheduleBox>
-                                        );
-                                      }
-                                    )}
-                                  </TableRow>
-                                ))}
+                                <h2
+                                  className={cls(
+                                    "mx-1 w-full",
+                                    day.date.getDay() === 0
+                                      ? "text-red-600 group-hover:text-red-400"
+                                      : day.date.getDay() === 6
+                                      ? "text-blue-600 group-hover:text-blue-400"
+                                      : "text-gray-600 group-hover:text-gray-400",
+                                    selectedDate.getMonth() !==
+                                      day.date.getMonth()
+                                      ? "opacity-40"
+                                      : ""
+                                  )}
+                                >
+                                  {day.date.toLocaleDateString("ko-KR", {
+                                    month: "short",
+                                    day: "numeric",
+                                  })}
+                                </h2>
                               </div>
-                            }
-                          </div>
-                        );
-                      });
-                    })}
+                              {
+                                <div
+                                  className={cls(
+                                    "min-w-fit",
+                                    selectedDate.getDate() ===
+                                      day.date.getDate()
+                                      ? "ring-4 ring-inset ring-violet-400"
+                                      : ""
+                                  )}
+                                >
+                                  {user.labels.map((label, i) => (
+                                    <TableRow
+                                      key={i}
+                                      selected={compareDateMatch(
+                                        label.labelDate,
+                                        selectedDate,
+                                        "ymd"
+                                      )}
+                                      date={day.date}
+                                      labelDate={label.labelDate}
+                                      gridRowStart={i + 1}
+                                      gridColumnStart={idx + 2}
+                                      shrink
+                                    >
+                                      {label.reservations.map(
+                                        (reservation, rIdx) => {
+                                          return (
+                                            <ScheduleBox
+                                              key={reservation.id}
+                                              hhmm={getHHMM(
+                                                reservation.startDate
+                                              )}
+                                              memo={reservation.memo}
+                                              startDate={getHHMM(
+                                                reservation.startDate,
+                                                ":"
+                                              )}
+                                              endDate={getHHMM(
+                                                reservation.endDate,
+                                                ":"
+                                              )}
+                                            >
+                                              <NameTag
+                                                id={reservation.id}
+                                                gender={
+                                                  reservation.patient.gender
+                                                }
+                                                name={reservation.patient.name}
+                                                registrationNumber={
+                                                  reservation.patient
+                                                    .registrationNumber
+                                                }
+                                                birthday={
+                                                  reservation.patient.birthday
+                                                }
+                                                shrink={handleShrink()}
+                                              />
+                                            </ScheduleBox>
+                                          );
+                                        }
+                                      )}
+                                    </TableRow>
+                                  ))}
+                                </div>
+                              }
+                            </div>
+                          );
+                        });
+                      })
+                    : ""}
                 </div>
               </>
             )}
@@ -684,6 +778,7 @@ export const TimeTable = () => {
         <div>캘린더</div>
         <div>초대</div>
       </div> */}
+      {console.timeEnd("렌더시작")}
     </>
   );
 };

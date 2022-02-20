@@ -3,13 +3,13 @@ import { ONE_DAY, ONE_WEEK } from "../libs/variables";
 interface IMoveXBtn {
   direction: "prev" | "after";
   selectedDate: Date;
-  setQueryDate: any;
+  setSelectedDate: any;
   dateNavExpand: boolean;
 }
 export const MoveXBtn: React.FC<IMoveXBtn> = ({
   direction,
   selectedDate,
-  setQueryDate,
+  setSelectedDate,
   dateNavExpand,
 }) => {
   const handleDateNavMove = (option: "prev" | "after") => {
@@ -21,11 +21,11 @@ export const MoveXBtn: React.FC<IMoveXBtn> = ({
       if (direction === "prev") date.setMonth(date.getMonth() - 1);
       if (direction === "after") date.setMonth(date.getMonth() + 1);
     }
-    setQueryDate(date);
+    setSelectedDate(date);
   };
   return (
     <div
-      className="cursor-pointer hover:text-white"
+      className="cursor-pointer"
       onClick={() => handleDateNavMove(direction)}
     >
       {direction === "prev" ? (
