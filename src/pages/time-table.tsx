@@ -89,7 +89,7 @@ class Day {
 
 export const TimeTable = () => {
   console.time("TimeTable 시작");
-  const t22 = performance.now();
+
   const [tableLength, setTableLength] = useState<ITableLength>({
     start: { hours: 9, minutes: 0 },
     end: { hours: 19, minutes: 0 },
@@ -142,7 +142,6 @@ export const TimeTable = () => {
     let i = 0;
     while (i !== 150) {
       const date = new Date(start);
-      // labels.labels.push({ labelDate:date,reservations:[] });
       const labelRow = new LabelRow({ labelDate: date, reservations: [] });
       user.labels.push(labelRow);
       const getMinutes = start.getMinutes();
@@ -226,17 +225,13 @@ export const TimeTable = () => {
   const oneWeekFrame: IDay[] = makeOneWeekFrame(selectedDate);
 
   useEffect(() => {
-    console.time("이펙트1");
     setDateNavWeek([getWeeks(selectedDate)]);
     setDateNavMonth(getWeeksOfMonth(selectedDate));
     setOneDayData(oneDayFrame);
     setOneWeekData(oneWeekFrame);
-    console.timeEnd("이펙트1");
   }, []);
 
   useEffect(() => {
-    console.time("이펙트2");
-    // console.log("콘솔로그:이펙트2 / 로딩", loading);
     queryListReservations();
     if (viewOption === ONE_DAY) {
       setOneDayData(makeOneDayFrame(selectedDate));
@@ -254,18 +249,14 @@ export const TimeTable = () => {
       }
     }
     setPrevSelectedDate(selectedDate);
-    console.timeEnd("이펙트2");
   }, [selectedDate]);
 
   useEffect(() => {
-    console.time("이펙트3");
-    console.log("로딩:", loading);
     if (!loading && queryResult) {
       const { listReservations } = queryResult;
       if (listReservations && listReservations.results) {
         const results = listReservations.results;
         if (viewOption === ONE_DAY && oneDayData) {
-          // console.log("ONE_DAY_FRAME");
           results.forEach((result) => {
             const startDate = new Date(result.startDate);
             const index = oneDayData.findIndex((data) => {
@@ -282,7 +273,6 @@ export const TimeTable = () => {
           });
           setOneDayData(oneDayData);
         } else if (viewOption === ONE_WEEK && oneWeekData) {
-          // console.log("ONE_WEEK_FRAME");
           results.forEach((result) => {
             const startDate = new Date(result.startDate);
             const index = oneWeekFrame.findIndex((data) => {
@@ -301,7 +291,7 @@ export const TimeTable = () => {
         }
       }
     }
-    console.timeEnd("이펙트3");
+    // console.timeEnd("이펙트3");
   }, [queryResult]);
 
   console.timeEnd("TimeTable 시작");
