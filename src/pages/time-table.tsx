@@ -593,6 +593,7 @@ export const TimeTable = () => {
                                         (reservation, rIdx) => {
                                           return (
                                             <ScheduleBox
+                                              id={reservation.id}
                                               key={reservation.id}
                                               hhmm={getHHMM(
                                                 reservation.startDate
@@ -606,23 +607,21 @@ export const TimeTable = () => {
                                                 reservation.endDate,
                                                 ":"
                                               )}
-                                            >
-                                              <NameTag
-                                                id={reservation.id}
-                                                gender={
-                                                  reservation.patient.gender
-                                                }
-                                                name={reservation.patient.name}
-                                                registrationNumber={
-                                                  reservation.patient
-                                                    .registrationNumber
-                                                }
-                                                birthday={
-                                                  reservation.patient.birthday
-                                                }
-                                                shrink={handleShrink()}
-                                              />
-                                            </ScheduleBox>
+                                              gender={
+                                                reservation.patient.gender
+                                              }
+                                              patientName={
+                                                reservation.patient.name
+                                              }
+                                              registrationNumber={
+                                                reservation.patient
+                                                  .registrationNumber
+                                              }
+                                              birthday={
+                                                reservation.patient.birthday
+                                              }
+                                              shrink={handleShrink()}
+                                            />
                                           );
                                         }
                                       )}
@@ -698,6 +697,7 @@ export const TimeTable = () => {
                                           return (
                                             <ScheduleBox
                                               key={reservation.id}
+                                              id={reservation.id}
                                               hhmm={getHHMM(
                                                 reservation.startDate
                                               )}
@@ -710,23 +710,21 @@ export const TimeTable = () => {
                                                 reservation.endDate,
                                                 ":"
                                               )}
-                                            >
-                                              <NameTag
-                                                id={reservation.id}
-                                                gender={
-                                                  reservation.patient.gender
-                                                }
-                                                name={reservation.patient.name}
-                                                registrationNumber={
-                                                  reservation.patient
-                                                    .registrationNumber
-                                                }
-                                                birthday={
-                                                  reservation.patient.birthday
-                                                }
-                                                shrink={handleShrink()}
-                                              />
-                                            </ScheduleBox>
+                                              gender={
+                                                reservation.patient.gender
+                                              }
+                                              patientName={
+                                                reservation.patient.name
+                                              }
+                                              registrationNumber={
+                                                reservation.patient
+                                                  .registrationNumber
+                                              }
+                                              birthday={
+                                                reservation.patient.birthday
+                                              }
+                                              shrink={handleShrink()}
+                                            />
                                           );
                                         }
                                       )}
