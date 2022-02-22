@@ -41,9 +41,9 @@ export const NameTag: React.FC<INameTag> = ({
       onClick={canClick ? onClick : undefined}
     >
       <div className="flex">
-        <span className="mx-1">
+        <span className="mx-1 w-1">
           {gender === "male" ? (
-            <FontAwesomeIcon icon={faMale} className=" text-blue-500" />
+            <FontAwesomeIcon icon={faMale} className="text-blue-500" />
           ) : (
             <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
           )}
