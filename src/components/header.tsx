@@ -94,8 +94,8 @@ export const Header: React.FC = () => {
                 </button>
               </>
             ) : (
-              <Link to="/login">
-                <span className="text-3xl">Log-in</span>
+              <Link to="/account/login">
+                <span className="whitespace-nowrap">로그인/회원가입</span>
               </Link>
             )}
           </span>

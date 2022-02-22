@@ -1,8 +1,11 @@
+import { useReactiveVar } from "@apollo/client";
 import React from "react";
 import { Link } from "react-router-dom";
+import { isLoggedInVar } from "../apollo";
 
 export function Home() {
   console.time("시작");
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
   console.timeEnd("시작");
   return (
     <div className="px-4 text-gray-700">
@@ -18,21 +21,22 @@ export function Home() {
       <p className="mt-2 text-sm text-gray-500">
         여기에 랜딩페이지가 만들어질 것입니다.
       </p>
-
-      <div className="mt-2 space-x-4">
-        <Link
-          className="rounded-lg border px-2 py-1 text-sky-400"
-          to="/create-patient"
-        >
-          Create Patient
-        </Link>
-        <Link
-          className="rounded-lg border px-2 py-1 text-sky-400"
-          to="/list-patient"
-        >
-          List Patient
-        </Link>
-      </div>
+      {isLoggedIn && (
+        <div className="mt-2 space-x-4">
+          <Link
+            className="rounded-lg border px-2 py-1 text-sky-400"
+            to="/create-patient"
+          >
+            Create Patient
+          </Link>
+          <Link
+            className="rounded-lg border px-2 py-1 text-sky-400"
+            to="/list-patient"
+          >
+            List Patient
+          </Link>
+        </div>
+      )}
       {console.timeEnd("렌더")}
     </div>
   );

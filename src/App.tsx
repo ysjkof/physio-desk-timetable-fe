@@ -19,22 +19,22 @@ import { Login } from "./pages/login";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
-  const { data, loading, error } = useMe();
-  if (!data || loading || error) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <span className="text-xl font-medium tracking-wide">Loading...</span>
-      </div>
-    );
-  }
+  // const { data, loading, error } = useMe();
+  // if (!data || loading || error) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center">
+  //       <span className="text-xl font-medium tracking-wide">Loading...</span>
+  //     </div>
+  //   );
+  // }
 
   return (
     <BrowserRouter>
       <Routes>
-        {isLoggedIn ? (
-          <>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          {isLoggedIn ? (
+            <>
               <Route path="confirm" element={<ConfirmEmail />} />
               <Route path="edit-profile" element={<EditProfile />} />
               <Route path="tt" element={<TimeTable />}>
@@ -42,19 +42,20 @@ function App() {
               </Route>
               <Route path="create-patient" element={<CreatePatient />} />
               <Route path="list-patient" element={<ListPatient />} />
-            </Route>
-            <Route path="test" element={<Test />} />
-          </>
-        ) : (
-          <>
-            <Route path="/" element={<Account />}>
-              <Route index element={<Login />} />
-              <Route path="create-account" element={<CreateAccount />} />
-            </Route>
-          </>
-        )}
-        <Route path="/about" element={<h1>hghh</h1>} />
-        <Route path="*" element={<NotFound />} />
+
+              <Route path="test" element={<Test />} />
+            </>
+          ) : (
+            <>
+              <Route path="/account" element={<Account />}>
+                <Route path="login" element={<Login />} />
+                <Route path="create" element={<CreateAccount />} />
+              </Route>
+            </>
+          )}
+          <Route path="/about" element={<h1>hghh</h1>} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

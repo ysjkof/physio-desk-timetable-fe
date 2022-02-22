@@ -8,13 +8,13 @@ export const Account = () => {
   return (
     <div className="mt-10 flex h-screen flex-col items-center lg:mt-28">
       <div className="flex w-full max-w-screen-sm flex-col items-center px-5">
-        <Link to="/">
+        {/* <Link to="/">
           <img alt="Muool" src={muoolLogo} className=" mb-5 w-80" />
-        </Link>
+        </Link> */}
         <Outlet />
 
         <NavLink
-          to="/create-account"
+          to="create"
           className={
             location.pathname === "/create-account"
               ? "font-bold text-sky-500 hover:underline"
@@ -26,7 +26,7 @@ export const Account = () => {
         </NavLink>
 
         <NavLink
-          to="/"
+          to="login"
           className={
             location.pathname === "/"
               ? "font-bold text-sky-500 hover:underline"
