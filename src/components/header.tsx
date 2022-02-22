@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../libs/variables";
 import { useMe } from "../hooks/useMe";
@@ -14,6 +14,8 @@ import muoolLogo from "../images/logoMuoolJinBlue.svg";
 
 export const Header: React.FC = () => {
   const { data } = useMe();
+  const location = useLocation();
+  // const state = location.state as { startDate: Date };
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const navigate = useNavigate();
   const logoutBtn = () => {
@@ -22,6 +24,7 @@ export const Header: React.FC = () => {
     isLoggedInVar(false);
     navigate("/");
   };
+  console.log("HEADER LOCATION", location);
 
   return (
     <>
@@ -35,7 +38,9 @@ export const Header: React.FC = () => {
           <Link to="/">
             <img src={muoolLogo} className="w-36" alt="Muool" />
           </Link>
-          <div className="h-6 w-40 bg-pink-200"></div>
+          <div className="h-6 w-40 bg-pink-200">
+            {location.pathname === "/tt" && ""}
+          </div>
           <input
             type={"search"}
             className="w-full rounded-full border"
