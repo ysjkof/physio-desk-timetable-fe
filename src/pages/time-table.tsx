@@ -1,4 +1,4 @@
-import { gql, makeVar, useLazyQuery, useReactiveVar } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
@@ -96,7 +96,7 @@ export const TimeTable = () => {
   });
   const [viewOption, setViewOption] = useState<number>(ONE_DAY);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(
-    new Date("2022-01-09")
+    new Date("1500-01-01")
   );
   const [selectedDate, setSelectedDate] = useState<Date>(
     new Date("2022-01-09")
@@ -152,11 +152,14 @@ export const TimeTable = () => {
     return user;
   }
 
-  function getWeeks(value: Date) {
+  function getWeeks(value: Date, option?: "sunday") {
     let result: Date[] = [];
     const date = new Date(value);
     const day = date.getDay();
     const sunday = new Date(date.setDate(date.getDate() - day));
+    if (option === "sunday") {
+      return result.concat(sunday);
+    }
     for (let i = 0; i < 7; i++) {
       const aDay = new Date(sunday);
       aDay.setDate(sunday.getDate() + i);
@@ -216,78 +219,99 @@ export const TimeTable = () => {
       }
     );
 
-  // const oneDayFrameVar = makeVar(makeOneDayFrame(prevSelectedDate));
-  // const oneWeekFrameVar = makeVar(makeOneWeekFrame(prevSelectedDate));
-  // const oneDayFrame = useReactiveVar(oneDayFrameVar);
-  // const oneWeekFrame = useReactiveVar(oneWeekFrameVar);
-
-  const oneDayFrame: IDay[] = makeOneDayFrame(selectedDate);
-  const oneWeekFrame: IDay[] = makeOneWeekFrame(selectedDate);
-
   useEffect(() => {
     setDateNavWeek([getWeeks(selectedDate)]);
     setDateNavMonth(getWeeksOfMonth(selectedDate));
-    setOneDayData(oneDayFrame);
-    setOneWeekData(oneWeekFrame);
+    setOneDayData(makeOneDayFrame(selectedDate));
+    setOneWeekData(makeOneWeekFrame(selectedDate));
   }, []);
 
   useEffect(() => {
-    queryListReservations();
-    if (viewOption === ONE_DAY) {
-      setOneDayData(makeOneDayFrame(selectedDate));
-    }
-    if (selectedDate.getMonth() !== prevSelectedDate.getMonth()) {
-      setDateNavMonth(getWeeksOfMonth(selectedDate));
-    }
-    if (dateNavWeek) {
-      // queryDate가 변경됐는데 주가 바뀐다면 isThere가 -1을 반환하고 dateNavWeek를 새로 그린다.
-      const index = dateNavWeek[0].findIndex((date) =>
-        compareDateMatch(date, selectedDate, "ymd")
-      );
-      if (index === -1) {
-        setDateNavWeek([getWeeks(selectedDate)]);
+    if (compareDateMatch(selectedDate, prevSelectedDate, "ymd") === false) {
+      if (viewOption === ONE_DAY) {
+        setOneDayData(makeOneDayFrame(selectedDate));
+      }
+      if (viewOption === ONE_WEEK) {
+        const sameSunday = compareDateMatch(
+          getWeeks(selectedDate, "sunday")[0],
+          getWeeks(prevSelectedDate, "sunday")[0],
+          "ymd"
+        );
+        if (sameSunday === false) {
+          setOneWeekData(makeOneWeekFrame(selectedDate));
+        }
+      }
+      if (selectedDate.getMonth() !== prevSelectedDate.getMonth()) {
+        setDateNavMonth(getWeeksOfMonth(selectedDate));
+      }
+      if (dateNavWeek) {
+        // queryDate가 변경됐는데 주가 바뀐다면 isThere가 -1을 반환하고 dateNavWeek를 새로 그린다.
+        const index = dateNavWeek[0].findIndex((date) =>
+          compareDateMatch(date, selectedDate, "ymd")
+        );
+        if (index === -1) {
+          setDateNavWeek([getWeeks(selectedDate)]);
+        }
+      }
+      queryListReservations();
+      setPrevSelectedDate(selectedDate);
+    } else {
+      if (viewOption === ONE_DAY) {
+        setOneDayData(makeOneDayFrame(selectedDate));
+      }
+      if (viewOption === ONE_WEEK && oneWeekData) {
+        const sameSunday =
+          getWeeks(selectedDate, "sunday") ===
+          getWeeks(oneWeekData[0].date, "sunday");
+        if (!sameSunday) {
+          setOneWeekData(makeOneWeekFrame(selectedDate));
+          queryListReservations();
+        }
       }
     }
-    setPrevSelectedDate(selectedDate);
-  }, [selectedDate]);
+  }, [selectedDate, viewOption]);
 
   useEffect(() => {
     if (!loading && queryResult) {
       const { listReservations } = queryResult;
       if (listReservations && listReservations.results) {
         const results = listReservations.results;
-        if (viewOption === ONE_DAY && oneDayData) {
+        let newData: IDay[];
+        if (viewOption === ONE_DAY) {
+          newData = makeOneDayFrame(selectedDate);
           results.forEach((result) => {
             const startDate = new Date(result.startDate);
-            const index = oneDayData.findIndex((data) => {
+            const index = newData.findIndex((data) => {
               return compareDateMatch(data.date, startDate, "ymd");
             });
             if (index >= 0) {
-              const labelIdx = oneDayData[index].users[0].labels.findIndex(
+              const labelIdx = newData[index].users[0].labels.findIndex(
                 (label) => compareDateMatch(label.labelDate, startDate, "hm")
               );
-              oneDayData[index].users[0].labels[labelIdx].reservations.push(
+              newData[index].users[0].labels[labelIdx].reservations.push(
                 result
               );
             }
           });
-          setOneDayData(oneDayData);
-        } else if (viewOption === ONE_WEEK && oneWeekData) {
+          setOneDayData(newData);
+        } else if (viewOption === ONE_WEEK) {
+          newData = makeOneWeekFrame(selectedDate);
           results.forEach((result) => {
             const startDate = new Date(result.startDate);
-            const index = oneWeekFrame.findIndex((data) => {
+            const index = newData.findIndex((data) => {
               return compareDateMatch(data.date, startDate, "ymd");
             });
             if (index >= 0) {
-              const labelIdx = oneWeekFrame[index].users[0].labels.findIndex(
+              const labelIdx = newData[index].users[0].labels.findIndex(
                 (label) => compareDateMatch(label.labelDate, startDate, "hm")
               );
-              oneWeekFrame[index].users[0].labels[labelIdx].reservations.push(
+              newData[index].users[0].labels[labelIdx].reservations.push(
                 result
               );
             }
           });
-          setOneWeekData(oneWeekFrame);
+          setOneWeekData(newData);
+          //
         }
       }
     }
