@@ -53,6 +53,10 @@ export interface FindAllPatientsInput {
   page?: number | null;
 }
 
+export interface FindReservationByIdInput {
+  reservationId: number;
+}
+
 export interface ListReservationsInput {
   date: any;
   viewOption: number;

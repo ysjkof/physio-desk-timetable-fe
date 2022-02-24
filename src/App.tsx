@@ -16,6 +16,7 @@ import { Reserve } from "./pages/reserve";
 import { ListPatient } from "./pages/list-patient";
 import { CreateAccount } from "./pages/create-account";
 import { Login } from "./pages/login";
+import { ReservationDetail } from "./pages/reservation-detail";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -39,6 +40,7 @@ function App() {
               <Route path="edit-profile" element={<EditProfile />} />
               <Route path="tt" element={<TimeTable />}>
                 <Route path="reserve" element={<Reserve />} />
+                <Route path="reservation/:id" element={<ReservationDetail />} />
               </Route>
               <Route path="create-patient" element={<CreatePatient />} />
               <Route path="list-patient" element={<ListPatient />} />

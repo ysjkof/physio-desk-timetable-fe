@@ -39,12 +39,13 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   const timeLength = getTimeLength(startDate, endDate);
   const onClick = () => {
     console.log("you click ScheduleBox");
+    navigate(`reservation/${id}`);
   };
   return (
     <>
       <div
         className={cls(
-          "group relative col-start-2 rounded-md border bg-white transition duration-200 hover:z-50 hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900",
+          "group relative col-start-2 mx-auto rounded-md border bg-white transition duration-200 hover:z-50 hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900",
           shrink ? "w-[146px]" : ""
         )}
         // style={{
