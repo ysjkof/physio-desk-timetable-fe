@@ -65,6 +65,7 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
         />
         <div
           className={cls(
+            "overflow-hidden",
             timeLength === 20
               ? "h-[24px]"
               : timeLength === 30
@@ -84,7 +85,27 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
               : ""
           )}
         >
-          <span className="block text-sm text-gray-600">{memo}</span>
+          <span className="block text-sm text-gray-600">
+            {memo
+              ? timeLength === 20
+                ? memo.substring(0, 10) + " ..."
+                : timeLength === 30
+                ? memo.substring(0, 22) + " ..."
+                : timeLength === 40
+                ? memo.substring(0, 33) + " ..."
+                : timeLength === 50
+                ? memo.substring(0, 71) + " ..."
+                : timeLength === 60
+                ? memo.substring(0, 83) + " ..."
+                : timeLength === 70
+                ? memo.substring(0, 9) + " ..."
+                : timeLength === 80
+                ? memo.substring(0, 111) + " ..."
+                : timeLength === 90
+                ? memo.substring(0, 133) + " ..."
+                : ""
+              : ""}
+          </span>
         </div>
         <div className="absolute -top-6 right-1/2 hidden translate-x-1/2 rounded-lg border bg-white px-4 text-gray-500 shadow group-hover:block group-hover:ring-2 group-hover:ring-gray-900">
           {getHHMM(startDate)}~{getHHMM(endDate)}
