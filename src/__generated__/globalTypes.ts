@@ -44,9 +44,22 @@ export interface CreateReservationInput {
   groupId?: number | null;
 }
 
+export interface DeleteReservationInput {
+  reservationId: number;
+}
+
 export interface EditProfileInput {
   email?: string | null;
   password?: string | null;
+}
+
+export interface EditReservationInput {
+  startDate?: any | null;
+  endDate?: any | null;
+  state?: ReservationState | null;
+  memo?: string | null;
+  reservationId: number;
+  groupId?: number | null;
 }
 
 export interface FindAllPatientsInput {

@@ -1,15 +1,40 @@
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { selectedPatientVar } from "../libs/variables";
 import { ModalPortal } from "../components/mordal-portal";
+import { NameTag } from "../components/name-tag";
+import { getHHMM, getTimeLength, getYMD } from "../libs/utils";
+import {
+  deleteReservationMutation,
+  deleteReservationMutationVariables,
+} from "../__generated__/deleteReservationMutation";
 import {
   findReservationById,
   findReservationByIdVariables,
 } from "../__generated__/findReservationById";
-import { NameTag } from "../components/name-tag";
-import { getHHMM, getTimeLength } from "../libs/utils";
+import {
+  editReservationMutation,
+  editReservationMutationVariables,
+} from "../__generated__/editReservationMutation";
+
+const EDIT_RESERVATION_MUTATION = gql`
+  mutation editReservationMutation($input: EditReservationInput!) {
+    editReservation(input: $input) {
+      error
+      ok
+    }
+  }
+`;
+const DELETE_RESERVATION_MUTATION = gql`
+  mutation deleteReservationMutation($input: DeleteReservationInput!) {
+    deleteReservation(input: $input) {
+      error
+      ok
+    }
+  }
+`;
 
 const FIND_RESERVATION_BY_ID_QUERY = gql`
   query findReservationById($input: FindReservationByIdInput!) {
@@ -50,6 +75,38 @@ export const ReservationDetail = () => {
   const { id } = useParams();
   const reservationId = Number(id);
 
+  const onCompleted = (data: deleteReservationMutation) => {
+    const {
+      deleteReservation: { ok, error },
+    } = data;
+    if (ok) {
+      navigate(-1);
+    }
+  };
+
+  const onCompletedEdit = (data: editReservationMutation) => {
+    const {
+      editReservation: { ok, error },
+    } = data;
+    if (ok) {
+      navigate(-1);
+    }
+  };
+
+  const [editReservationMutation, { loading: editLoading, data: editData }] =
+    useMutation<editReservationMutation, editReservationMutationVariables>(
+      EDIT_RESERVATION_MUTATION,
+      { onCompleted: onCompletedEdit }
+    );
+
+  const [
+    deleteReservationMutation,
+    { loading: deleteLoading, data: deleteData },
+  ] = useMutation<
+    deleteReservationMutation,
+    deleteReservationMutationVariables
+  >(DELETE_RESERVATION_MUTATION, { onCompleted });
+
   const { loading, data, error } = useQuery<
     findReservationById,
     findReservationByIdVariables
@@ -60,6 +117,17 @@ export const ReservationDetail = () => {
       },
     },
   });
+
+  const onClickEdit = () => {
+    // ToDo
+    // editReservationMutation({ variables: { input: { reservationId } } });
+  };
+  const onClickDelete = () => {
+    const confirmDelete = window.confirm("예약을 지우시겠습니까?");
+    if (confirmDelete) {
+      deleteReservationMutation({ variables: { input: { reservationId } } });
+    }
+  };
 
   const reservation = data?.findReservationById.reservation;
   return (
@@ -85,9 +153,32 @@ export const ReservationDetail = () => {
             />
           </svg>
         </button>
-        <h4 className="mb-5 w-full text-left text-3xl font-medium">예약하기</h4>
+        <h4 className="mb-5 text-left text-3xl font-medium">예약 자세히</h4>
+        <div className="mb-5 flex justify-around">
+          <button className="shadow-cst rounded-md px-2 font-medium text-gray-500">
+            차트
+          </button>
+          <button
+            onClick={onClickEdit}
+            className="shadow-cst rounded-md px-2 font-medium text-gray-500"
+          >
+            부도
+          </button>
+          <button
+            onClick={onClickEdit}
+            className="shadow-cst rounded-md px-2 font-medium text-gray-500"
+          >
+            취소
+          </button>
+          <button
+            className="shadow-cst rounded-md px-2 font-medium text-gray-500"
+            onClick={onClickDelete}
+          >
+            삭제
+          </button>
+        </div>
         {reservation && (
-          <div className="flex flex-col space-y-4">
+          <div className="flex max-w-sm flex-col space-y-4">
             <NameTag
               id={reservation.id}
               birthday={reservation.patient.birthday}
@@ -95,34 +186,45 @@ export const ReservationDetail = () => {
               name={reservation.patient.name}
               registrationNumber={reservation.patient.registrationNumber}
             />
-
-            <span>{reservation.startDate}</span>
-            <span>{reservation.endDate}</span>
             <div>
-              <span>치료시간 : </span>
+              <h4 className="text-sm text-gray-500">예약시각</h4>
+              <div className="space-x-4">
+                <span>{getYMD(reservation.startDate, "yyyymmdd", "-")}</span>
+                <span>
+                  {getHHMM(reservation.startDate, ":")}
+                  {" ~ "}
+                  {getHHMM(reservation.endDate, ":")}
+                </span>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm text-gray-500">치료시간</h4>
               <span>
-                {getTimeLength(reservation.startDate, reservation.endDate)}
+                {getTimeLength(reservation.startDate, reservation.endDate)}분
               </span>
             </div>
 
             <div>
-              <span>상태 : </span>
+              <h4 className="text-sm text-gray-500">상태</h4>
               <span>{reservation.state}</span>
             </div>
 
             <div>
-              <span>마지막 수정 : </span>
+              <h4 className="text-sm text-gray-500">마지막 수정</h4>
               <span>{reservation.lastModifier.email}</span>
             </div>
             <div>
-              <span>치료사 : </span>
+              <h4 className="text-sm text-gray-500">치료사</h4>
               <span>{reservation.therapist.email}</span>
             </div>
             <div>
-              <span>그룹 :</span>
+              <h4 className="text-sm text-gray-500">그룹</h4>
               <span>{reservation.group?.name}</span>
             </div>
-            <span>{reservation.memo}</span>
+            <div>
+              <h4 className="text-sm text-gray-500">메모</h4>
+              <p>{reservation.memo ? reservation.memo : ""}</p>
+            </div>
           </div>
         )}
       </div>
