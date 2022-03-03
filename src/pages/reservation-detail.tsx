@@ -1,8 +1,7 @@
-import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
-import React, { useEffect } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { selectedPatientVar } from "../libs/variables";
 import { ModalPortal } from "../components/mordal-portal";
 import { NameTag } from "../components/name-tag";
 import { getHHMM, getTimeLength, getYMD } from "../libs/utils";
@@ -11,13 +10,14 @@ import {
   deleteReservationMutationVariables,
 } from "../__generated__/deleteReservationMutation";
 import {
-  findReservationById,
-  findReservationByIdVariables,
-} from "../__generated__/findReservationById";
-import {
   editReservationMutation,
   editReservationMutationVariables,
 } from "../__generated__/editReservationMutation";
+import {
+  findReservationById,
+  findReservationByIdVariables,
+} from "../__generated__/findReservationById";
+import { ReservationState } from "../__generated__/globalTypes";
 
 const EDIT_RESERVATION_MUTATION = gql`
   mutation editReservationMutation($input: EditReservationInput!) {
@@ -117,10 +117,20 @@ export const ReservationDetail = () => {
       },
     },
   });
-
-  const onClickEdit = () => {
+  const onClickEdit = (type: "noshow" | "cancel") => {
+    if (type === "noshow") {
+      editReservationMutation({
+        variables: { input: { reservationId, state: ReservationState.NoShow } },
+      });
+    }
+    if (type === "cancel") {
+      editReservationMutation({
+        variables: {
+          input: { reservationId, state: ReservationState.Canceled },
+        },
+      });
+    }
     // ToDo
-    // editReservationMutation({ variables: { input: { reservationId } } });
   };
   const onClickDelete = () => {
     const confirmDelete = window.confirm("예약을 지우시겠습니까?");
@@ -159,13 +169,13 @@ export const ReservationDetail = () => {
             차트
           </button>
           <button
-            onClick={onClickEdit}
+            onClick={() => onClickEdit("noshow")}
             className="shadow-cst rounded-md px-2 font-medium text-gray-500"
           >
             부도
           </button>
           <button
-            onClick={onClickEdit}
+            onClick={() => onClickEdit("cancel")}
             className="shadow-cst rounded-md px-2 font-medium text-gray-500"
           >
             취소
