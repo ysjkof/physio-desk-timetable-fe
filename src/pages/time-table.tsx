@@ -86,15 +86,24 @@ class Day {
     this.users = users;
   }
 }
+export interface ViewOption {
+  dayLength: number;
+  seeCancel: boolean;
+  seeNoshow: boolean;
+}
 
 export const TimeTable = () => {
   console.time("TimeTable 시작");
-
   const [tableLength, setTableLength] = useState<ITableLength>({
     start: { hours: 9, minutes: 0 },
     end: { hours: 19, minutes: 0 },
   });
-  const [viewOption, setViewOption] = useState<number>(ONE_DAY);
+  const [viewOption, setViewOption] = useState<ViewOption>({
+    dayLength: ONE_DAY,
+    seeCancel: true,
+    seeNoshow: true,
+  });
+  // const [viewOption, setViewOption] = useState<number>(ONE_DAY);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(
     new Date("1500-01-01")
   );
@@ -109,9 +118,9 @@ export const TimeTable = () => {
   const [oneWeekData, setOneWeekData] = useState<IDay[]>();
 
   const handleShrink = () => {
-    if (viewOption === ONE_WEEK) {
+    if (viewOption.dayLength === ONE_WEEK) {
       return true;
-    } else if (viewOption === ONE_DAY) {
+    } else if (viewOption.dayLength === ONE_DAY) {
       return false;
     }
   };
@@ -122,11 +131,11 @@ export const TimeTable = () => {
     setDateNavExpand((current) => !current);
   };
   const handleViewOption = () => {
-    if (viewOption === ONE_DAY) {
-      setViewOption(ONE_WEEK);
+    if (viewOption.dayLength === ONE_DAY) {
+      setViewOption((state) => ({ ...state, dayLength: ONE_WEEK }));
     }
-    if (viewOption === ONE_WEEK) {
-      setViewOption(ONE_DAY);
+    if (viewOption.dayLength === ONE_WEEK) {
+      setViewOption((state) => ({ ...state, dayLength: ONE_DAY }));
     }
   };
 
@@ -212,7 +221,7 @@ export const TimeTable = () => {
         variables: {
           input: {
             date: selectedDate,
-            viewOption: viewOption,
+            viewOption: viewOption.dayLength,
             groupId: null,
           },
         },
@@ -228,10 +237,10 @@ export const TimeTable = () => {
 
   useEffect(() => {
     if (compareDateMatch(selectedDate, prevSelectedDate, "ymd") === false) {
-      if (viewOption === ONE_DAY) {
+      if (viewOption.dayLength === ONE_DAY) {
         setOneDayData(makeOneDayFrame(selectedDate));
       }
-      if (viewOption === ONE_WEEK) {
+      if (viewOption.dayLength === ONE_WEEK) {
         const sameSunday = compareDateMatch(
           getWeeks(selectedDate, "sunday")[0],
           getWeeks(prevSelectedDate, "sunday")[0],
@@ -256,10 +265,10 @@ export const TimeTable = () => {
       queryListReservations();
       setPrevSelectedDate(selectedDate);
     } else {
-      if (viewOption === ONE_DAY) {
+      if (viewOption.dayLength === ONE_DAY) {
         setOneDayData(makeOneDayFrame(selectedDate));
       }
-      if (viewOption === ONE_WEEK && oneWeekData) {
+      if (viewOption.dayLength === ONE_WEEK && oneWeekData) {
         const sameSunday =
           getWeeks(selectedDate, "sunday") ===
           getWeeks(oneWeekData[0].date, "sunday");
@@ -269,7 +278,7 @@ export const TimeTable = () => {
         }
       }
     }
-  }, [selectedDate, viewOption]);
+  }, [selectedDate, viewOption.dayLength]);
 
   useEffect(() => {
     if (!loading && queryResult) {
@@ -277,7 +286,7 @@ export const TimeTable = () => {
       if (listReservations && listReservations.results) {
         const results = listReservations.results;
         let newData: IDay[];
-        if (viewOption === ONE_DAY) {
+        if (viewOption.dayLength === ONE_DAY) {
           newData = makeOneDayFrame(selectedDate);
           results.forEach((result) => {
             const startDate = new Date(result.startDate);
@@ -294,7 +303,7 @@ export const TimeTable = () => {
             }
           });
           setOneDayData(newData);
-        } else if (viewOption === ONE_WEEK) {
+        } else if (viewOption.dayLength === ONE_WEEK) {
           newData = makeOneWeekFrame(selectedDate);
           results.forEach((result) => {
             const startDate = new Date(result.startDate);
@@ -330,8 +339,8 @@ export const TimeTable = () => {
         <div className="h-full">
           <div className="table-header space-y-2 border-b-2 shadow-sm">
             <div className="mx-2 grid grid-cols-2 items-center justify-between pt-1 lg:grid-cols-6">
-              <div className="flex min-w-[120px] items-center space-x-4">
-                <span className="text-sm font-medium text-gray-900">
+              <div className="flex items-center space-x-4">
+                <span className="min-w-[120px] text-sm font-medium text-gray-900">
                   {selectedDate.toLocaleString("ko-KR", {
                     year: "2-digit",
                     month: "short",
@@ -403,7 +412,9 @@ export const TimeTable = () => {
                   className="flex space-x-1 text-sm hover:text-gray-500"
                 >
                   <span>
-                    {viewOption === ONE_DAY ? "하루 보기" : "1주 보기"}
+                    {viewOption.dayLength === ONE_DAY
+                      ? "하루 보기"
+                      : "1주 보기"}
                   </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -470,6 +481,35 @@ export const TimeTable = () => {
                   />
                 </svg>
               </div>
+            </div>
+            <div className="flex space-x-3 text-sm">
+              <h3 className="">보기 설정</h3>
+              <label>
+                취소 보기
+                <input
+                  type="checkbox"
+                  checked={viewOption.seeCancel}
+                  onClick={() =>
+                    setViewOption((state) => ({
+                      ...state,
+                      seeCancel: !state.seeCancel,
+                    }))
+                  }
+                />
+              </label>
+              <label>
+                부도 보기
+                <input
+                  type="checkbox"
+                  checked={viewOption.seeNoshow}
+                  onClick={() =>
+                    setViewOption((state) => ({
+                      ...state,
+                      seeNoshow: !state.seeNoshow,
+                    }))
+                  }
+                />
+              </label>
             </div>
             {dateNavExpand &&
               dateNavMonth && {
@@ -544,12 +584,12 @@ export const TimeTable = () => {
                   <div
                     className={cls(
                       "in-table-body grid divide-x",
-                      viewOption === ONE_DAY
+                      viewOption.dayLength === ONE_DAY
                         ? "grid-cols-1"
                         : "grid-cols-[repeat(7,1fr)]"
                     )}
                   >
-                    {viewOption === ONE_DAY
+                    {viewOption.dayLength === ONE_DAY
                       ? oneDayData?.map((day) => {
                           return day.users.map((user) => {
                             return (
@@ -608,6 +648,7 @@ export const TimeTable = () => {
                                                   reservation.startDate
                                                 }
                                                 endDate={reservation.endDate}
+                                                state={reservation.state}
                                                 gender={
                                                   reservation.patient.gender
                                                 }
@@ -621,6 +662,7 @@ export const TimeTable = () => {
                                                 birthday={
                                                   reservation.patient.birthday
                                                 }
+                                                viewOption={viewOption}
                                                 shrink={handleShrink()}
                                               />
                                             );
@@ -635,7 +677,7 @@ export const TimeTable = () => {
                           });
                         })
                       : ""}
-                    {viewOption === ONE_WEEK
+                    {viewOption.dayLength === ONE_WEEK
                       ? oneWeekData?.map((day, idx) => {
                           return day.users.map((user) => {
                             return (
@@ -708,6 +750,7 @@ export const TimeTable = () => {
                                                   reservation.startDate
                                                 }
                                                 endDate={reservation.endDate}
+                                                state={reservation.state}
                                                 gender={
                                                   reservation.patient.gender
                                                 }
@@ -721,6 +764,7 @@ export const TimeTable = () => {
                                                 birthday={
                                                   reservation.patient.birthday
                                                 }
+                                                viewOption={viewOption}
                                                 shrink={handleShrink()}
                                               />
                                             );

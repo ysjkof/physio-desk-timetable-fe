@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cls, getHHMM, getTimeLength } from "../libs/utils";
+import { ViewOption } from "../pages/time-table";
 import { NameTag } from "./name-tag";
 
 interface IScheduleBox {
@@ -11,10 +11,12 @@ interface IScheduleBox {
   memo: string | null;
   startDate: Date;
   endDate: Date;
+  state: "Canceled" | "NoShow" | "Reserved";
   gender: string;
   patientName: string;
   registrationNumber: string | null;
   birthday: Date;
+  viewOption: ViewOption;
   shrink?: boolean;
   canClick?: boolean;
 }
@@ -27,10 +29,12 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   memo,
   startDate,
   endDate,
+  state,
   gender,
   patientName,
   registrationNumber,
   birthday,
+  viewOption,
   shrink = false,
   canClick,
 }) => {
@@ -41,12 +45,25 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
     console.log("you click ScheduleBox");
     navigate(`reservation/${id}`);
   };
+  switch (state) {
+    case "Canceled":
+      if (!viewOption.seeCancel) return <></>;
+      break;
+    case "NoShow":
+      if (!viewOption.seeNoshow) return <></>;
+      break;
+  }
   return (
     <>
       <div
         className={cls(
           "group relative col-start-2 mx-auto rounded-md border bg-white transition duration-200 hover:z-50 hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900",
-          shrink ? "w-[146px]" : ""
+          shrink ? "w-[146px]" : "",
+          state === "NoShow"
+            ? "border-yellow-600 bg-yellow-200 opacity-40"
+            : state === "Canceled"
+            ? "border-red-600 bg-red-200 opacity-40"
+            : ""
         )}
         // style={{
         //   gridRowStart,
