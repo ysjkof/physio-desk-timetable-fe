@@ -117,23 +117,28 @@ export const ReservationDetail = () => {
       },
     },
   });
-  const onClickEdit = (type: "noshow" | "cancel") => {
-    if (type === "noshow") {
-      editReservationMutation({
-        variables: { input: { reservationId, state: ReservationState.NoShow } },
-      });
-    }
-    if (type === "cancel") {
+  const onClickEditNoshow = () => {
+    const confirmDelete = window.confirm("예약을 취소합니다.");
+    if (confirmDelete) {
       editReservationMutation({
         variables: {
           input: { reservationId, state: ReservationState.Canceled },
         },
       });
     }
-    // ToDo
+  };
+  const onClickEditCancel = () => {
+    const confirmDelete = window.confirm("예약을 부도처리 합니다.");
+    if (confirmDelete) {
+      editReservationMutation({
+        variables: {
+          input: { reservationId, state: ReservationState.Canceled },
+        },
+      });
+    }
   };
   const onClickDelete = () => {
-    const confirmDelete = window.confirm("예약을 지우시겠습니까?");
+    const confirmDelete = window.confirm("예약을 지웁니다.");
     if (confirmDelete) {
       deleteReservationMutation({ variables: { input: { reservationId } } });
     }
@@ -169,13 +174,13 @@ export const ReservationDetail = () => {
             차트
           </button>
           <button
-            onClick={() => onClickEdit("noshow")}
+            onClick={onClickEditNoshow}
             className="shadow-cst rounded-md px-2 font-medium text-gray-500"
           >
             부도
           </button>
           <button
-            onClick={() => onClickEdit("cancel")}
+            onClick={onClickEditCancel}
             className="shadow-cst rounded-md px-2 font-medium text-gray-500"
           >
             취소
