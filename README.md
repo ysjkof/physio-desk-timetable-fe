@@ -1,3 +1,3 @@
-[DEV-NOTE](https://github.com/ysjkof/muool-frontend/blob/timetable/DEV-NOTE.md)
+[DEV-NOTE](https://github.com/ysjkof/muool-frontend/blob/dev/DEV-NOTE.md)
 
-[DEV-DESIGN](https://github.com/ysjkof/muool-frontend/blob/timetable/DEV-DESIGN.md)
+[DEV-DESIGN](https://github.com/ysjkof/muool-frontend/blob/dev/DEV-DESIGN.md)
