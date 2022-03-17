@@ -1,9 +1,10 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ModalPortal } from "../components/mordal-portal";
 import { NameTag } from "../components/name-tag";
+import { Patient } from "../components/patient";
 import { getHHMM, getTimeLength, getYMD } from "../libs/utils";
 import {
   deleteReservationMutation,
@@ -72,6 +73,7 @@ const FIND_RESERVATION_BY_ID_QUERY = gql`
 export const ReservationDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [openPatient, setOpenPatient] = useState<boolean>(false);
   const { id } = useParams();
   const reservationId = Number(id);
 
@@ -194,52 +196,101 @@ export const ReservationDetail = () => {
         </div>
         {reservation && (
           <div className="flex max-w-sm flex-col space-y-4">
-            <NameTag
-              id={reservation.id}
-              birthday={reservation.patient.birthday}
-              gender={reservation.patient.gender}
-              name={reservation.patient.name}
-              registrationNumber={reservation.patient.registrationNumber}
-            />
-            <div>
-              <h4 className="text-sm text-gray-500">예약시각</h4>
-              <div className="space-x-4">
-                <span>{getYMD(reservation.startDate, "yyyymmdd", "-")}</span>
-                <span>
-                  {getHHMM(reservation.startDate, ":")}
-                  {" ~ "}
-                  {getHHMM(reservation.endDate, ":")}
-                </span>
-              </div>
+            <div className="flex justify-between">
+              <NameTag
+                id={reservation.id}
+                birthday={reservation.patient.birthday}
+                gender={reservation.patient.gender}
+                name={reservation.patient.name}
+                registrationNumber={reservation.patient.registrationNumber}
+              />
+              {openPatient ? (
+                <svg
+                  onClick={() => setOpenPatient(false)}
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  onClick={() => setOpenPatient(true)}
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              )}
             </div>
-            <div>
-              <h4 className="text-sm text-gray-500">치료시간</h4>
-              <span>
-                {getTimeLength(reservation.startDate, reservation.endDate)}분
-              </span>
-            </div>
+            {openPatient ? (
+              <Patient
+                birthday={reservation.patient.birthday}
+                gender={reservation.patient.gender}
+                name={reservation.patient.name}
+                registrationNumber={reservation.patient.registrationNumber}
+              />
+            ) : (
+              <>
+                <div>
+                  <h4 className="text-sm text-gray-500">예약시각</h4>
+                  <div className="space-x-4">
+                    <span>
+                      {getYMD(reservation.startDate, "yyyymmdd", "-")}
+                    </span>
+                    <span>
+                      {getHHMM(reservation.startDate, ":")}
+                      {" ~ "}
+                      {getHHMM(reservation.endDate, ":")}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-sm text-gray-500">치료시간</h4>
+                  <span>
+                    {getTimeLength(reservation.startDate, reservation.endDate)}
+                    분
+                  </span>
+                </div>
 
-            <div>
-              <h4 className="text-sm text-gray-500">상태</h4>
-              <span>{reservation.state}</span>
-            </div>
+                <div>
+                  <h4 className="text-sm text-gray-500">상태</h4>
+                  <span>{reservation.state}</span>
+                </div>
 
-            <div>
-              <h4 className="text-sm text-gray-500">마지막 수정</h4>
-              <span>{reservation.lastModifier.email}</span>
-            </div>
-            <div>
-              <h4 className="text-sm text-gray-500">치료사</h4>
-              <span>{reservation.therapist.email}</span>
-            </div>
-            <div>
-              <h4 className="text-sm text-gray-500">그룹</h4>
-              <span>{reservation.group?.name}</span>
-            </div>
-            <div>
-              <h4 className="text-sm text-gray-500">메모</h4>
-              <p>{reservation.memo ? reservation.memo : ""}</p>
-            </div>
+                <div>
+                  <h4 className="text-sm text-gray-500">마지막 수정</h4>
+                  <span>{reservation.lastModifier.email}</span>
+                </div>
+                <div>
+                  <h4 className="text-sm text-gray-500">치료사</h4>
+                  <span>{reservation.therapist.email}</span>
+                </div>
+                <div>
+                  <h4 className="text-sm text-gray-500">그룹</h4>
+                  <span>{reservation.group?.name}</span>
+                </div>
+                <div>
+                  <h4 className="text-sm text-gray-500">메모</h4>
+                  <p>{reservation.memo ? reservation.memo : ""}</p>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
