@@ -216,16 +216,7 @@ export const TimeTable = () => {
 
   const [queryListReservations, { loading, error, data: queryResult }] =
     useLazyQuery<listReservationsQuery, listReservationsQueryVariables>(
-      LIST_RESERVATIONS_QUERY,
-      {
-        variables: {
-          input: {
-            date: selectedDate,
-            viewOption: viewOption.dayLength,
-            groupId: null,
-          },
-        },
-      }
+      LIST_RESERVATIONS_QUERY
     );
 
   useEffect(() => {
@@ -236,7 +227,7 @@ export const TimeTable = () => {
   }, []);
 
   useEffect(() => {
-    if (compareDateMatch(selectedDate, prevSelectedDate, "ymd") === false) {
+    if (!compareDateMatch(selectedDate, prevSelectedDate, "ymd")) {
       if (viewOption.dayLength === ONE_DAY) {
         setOneDayData(makeOneDayFrame(selectedDate));
       }
@@ -262,20 +253,47 @@ export const TimeTable = () => {
           setDateNavWeek([getWeeks(selectedDate)]);
         }
       }
-      queryListReservations();
+      queryListReservations({
+        variables: {
+          input: {
+            date: getWeeks(selectedDate, "sunday")[0],
+            viewOption: viewOption.dayLength,
+            groupId: null,
+          },
+        },
+      });
       setPrevSelectedDate(selectedDate);
     } else {
       if (viewOption.dayLength === ONE_DAY) {
         setOneDayData(makeOneDayFrame(selectedDate));
+        queryListReservations({
+          variables: {
+            input: {
+              date: selectedDate,
+              viewOption: viewOption.dayLength,
+              groupId: null,
+            },
+          },
+        });
       }
       if (viewOption.dayLength === ONE_WEEK && oneWeekData) {
-        const sameSunday =
-          getWeeks(selectedDate, "sunday") ===
-          getWeeks(oneWeekData[0].date, "sunday");
+        const sameSunday = compareDateMatch(
+          getWeeks(selectedDate, "sunday")[0],
+          getWeeks(oneWeekData[0].date, "sunday")[0],
+          "ymd"
+        );
         if (!sameSunday) {
           setOneWeekData(makeOneWeekFrame(selectedDate));
-          queryListReservations();
         }
+        queryListReservations({
+          variables: {
+            input: {
+              date: selectedDate,
+              viewOption: viewOption.dayLength,
+              groupId: null,
+            },
+          },
+        });
       }
     }
   }, [selectedDate, viewOption.dayLength]);
