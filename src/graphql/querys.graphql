@@ -1,0 +1,15 @@
+query searchPatientByName($input: SearchPatientInput!) {
+  searchPatientByName(input: $input) {
+    error
+    ok
+    totalPages
+    totalCount
+    patients {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+    }
+  }
+}

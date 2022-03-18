@@ -27,7 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "apollo:codegen": "rm -rf src/__generated__ && apollo client:codegen src/__generated__ --target=typescript --outputFlat",
+    "generate": "graphql-codegen --config codegen.yml",
     "tailwind:build": "npx tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --watch",
     "start": "npm run apollo:codegen & npm run tailwind:build & react-scripts start",
     "build": "react-scripts build",
@@ -53,6 +53,10 @@
     ]
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.6.2",
+    "@graphql-codegen/typescript": "^2.4.8",
+    "@graphql-codegen/typescript-operations": "^2.3.5",
+    "@graphql-codegen/typescript-react-apollo": "^3.2.11",
     "@types/react-helmet": "^6.1.5",
     "prettier-plugin-tailwindcss": "^0.1.8",
     "tailwindcss": "^3.0.23"
