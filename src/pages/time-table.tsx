@@ -494,7 +494,7 @@ export const TimeTable = () => {
                 취소 보기
                 <input
                   type="checkbox"
-                  checked={viewOption.seeCancel}
+                  defaultChecked={viewOption.seeCancel}
                   onClick={() =>
                     setViewOption((state) => ({
                       ...state,
@@ -507,7 +507,7 @@ export const TimeTable = () => {
                 부도 보기
                 <input
                   type="checkbox"
-                  checked={viewOption.seeNoshow}
+                  defaultChecked={viewOption.seeNoshow}
                   onClick={() =>
                     setViewOption((state) => ({
                       ...state,
