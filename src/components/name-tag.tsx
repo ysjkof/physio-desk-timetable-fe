@@ -40,14 +40,14 @@ export const NameTag: React.FC<INameTag> = ({
       onClick={canClick ? onClick : undefined}
     >
       <div className="flex">
-        <span className="mx-1 w-1">
+        <span className="mx-1">
           {gender === "male" ? (
             <FontAwesomeIcon icon={faMale} className="text-blue-500" />
           ) : (
             <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
           )}
         </span>
-        <span className="dark:text-light-blue-100 min-w-[56px] overflow-hidden whitespace-nowrap font-medium text-gray-800">
+        <span className="dark:text-light-blue-100 min-w-[56px] overflow-hidden whitespace-nowrap font-medium text-gray-800 text-center">
           {name.length > 8 ? `${name.substring(0, 8)}...` : name}
         </span>
       </div>
