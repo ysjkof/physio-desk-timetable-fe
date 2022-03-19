@@ -139,7 +139,9 @@ export const Reserve = () => {
           <label>프로그램</label>
           <select {...register("program")}>
             {programs.manual.map((manual, index) => (
-              <option value={manual.id}>{manual.name}</option>
+              <option key={index} value={manual.id}>
+                {manual.name}
+              </option>
             ))}
           </select>
           <Button
