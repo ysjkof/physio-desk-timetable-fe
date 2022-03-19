@@ -1,0 +1,30 @@
+query findReservationById($input: FindReservationByIdInput!) {
+  findReservationById(input: $input) {
+    error
+    ok
+    reservation {
+      id
+      startDate
+      endDate
+      state
+      memo
+      therapist {
+        id
+        email
+      }
+      patient {
+        name
+        gender
+        registrationNumber
+        birthday
+      }
+      group {
+        id
+        name
+      }
+      lastModifier {
+        email
+      }
+    }
+  }
+}

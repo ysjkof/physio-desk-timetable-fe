@@ -1,0 +1,6 @@
+mutation createPatient($createPatientInput: CreatePatientInput!) {
+  createPatient(input: $createPatientInput) {
+    ok
+    error
+  }
+}

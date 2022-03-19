@@ -1,30 +1,19 @@
-import React, { useEffect } from "react";
-import { gql, useMutation } from "@apollo/client";
+import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import {
-  createPatientMutation,
-  createPatientMutationVariables,
-} from "../__generated__/createPatientMutation";
-import { CreatePatientInput } from "../__generated__/globalTypes";
 import { FormError } from "../components/form-error";
 import { Button } from "../components/button";
-
-const CREATE_PATIENT_MUTATION = gql`
-  mutation createPatientMutation($createPatientInput: CreatePatientInput!) {
-    createPatient(input: $createPatientInput) {
-      ok
-      error
-    }
-  }
-`;
+import {
+  CreatePatientInput,
+  CreatePatientMutation,
+  useCreatePatientMutation,
+} from "../graphql/generated/graphql";
 
 export const CreatePatient = () => {
   const {
     register,
     getValues,
-    watch,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm<CreatePatientInput>({
@@ -32,9 +21,9 @@ export const CreatePatient = () => {
   });
   const navigate = useNavigate();
 
-  const onCompleted = (data: createPatientMutation) => {
+  const onCompleted = (data: CreatePatientMutation) => {
     const {
-      createPatient: { ok, error },
+      createPatient: { ok },
     } = data;
     if (ok) {
       alert("Patient Created! Log in now!");
@@ -44,10 +33,7 @@ export const CreatePatient = () => {
   const [
     createPatientMutation,
     { loading, data: createaPatientMutationResult },
-  ] = useMutation<createPatientMutation, createPatientMutationVariables>(
-    CREATE_PATIENT_MUTATION,
-    { onCompleted }
-  );
+  ] = useCreatePatientMutation({ onCompleted });
   const onSubmit = () => {
     if (!loading) {
       const { name, gender, birthday, memo } = getValues();

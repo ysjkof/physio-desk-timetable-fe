@@ -1,118 +1,52 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ModalPortal } from "../components/mordal-portal";
 import { NameTag } from "../components/name-tag";
 import { Patient } from "../components/patient";
+import {
+  DeleteReservationMutation,
+  EditReservationMutation,
+  ReservationState,
+  useDeleteReservationMutation,
+  useEditReservationMutation,
+  useFindReservationByIdQuery,
+} from "../graphql/generated/graphql";
 import { getHHMM, getTimeLength, getYMD } from "../libs/utils";
-import {
-  deleteReservationMutation,
-  deleteReservationMutationVariables,
-} from "../__generated__/deleteReservationMutation";
-import {
-  editReservationMutation,
-  editReservationMutationVariables,
-} from "../__generated__/editReservationMutation";
-import {
-  findReservationById,
-  findReservationByIdVariables,
-} from "../__generated__/findReservationById";
-import { ReservationState } from "../__generated__/globalTypes";
-
-const EDIT_RESERVATION_MUTATION = gql`
-  mutation editReservationMutation($input: EditReservationInput!) {
-    editReservation(input: $input) {
-      error
-      ok
-    }
-  }
-`;
-const DELETE_RESERVATION_MUTATION = gql`
-  mutation deleteReservationMutation($input: DeleteReservationInput!) {
-    deleteReservation(input: $input) {
-      error
-      ok
-    }
-  }
-`;
-
-const FIND_RESERVATION_BY_ID_QUERY = gql`
-  query findReservationById($input: FindReservationByIdInput!) {
-    findReservationById(input: $input) {
-      error
-      ok
-      reservation {
-        id
-        startDate
-        endDate
-        state
-        memo
-        therapist {
-          id
-          email
-        }
-        patient {
-          name
-          gender
-          registrationNumber
-          birthday
-        }
-        group {
-          id
-          name
-        }
-        lastModifier {
-          email
-        }
-      }
-    }
-  }
-`;
 
 export const ReservationDetail = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const [openPatient, setOpenPatient] = useState<boolean>(false);
   const { id } = useParams();
   const reservationId = Number(id);
 
-  const onCompleted = (data: deleteReservationMutation) => {
+  const onCompleted = (data: DeleteReservationMutation) => {
     const {
-      deleteReservation: { ok, error },
+      deleteReservation: { ok },
     } = data;
     if (ok) {
       navigate(-1);
     }
   };
 
-  const onCompletedEdit = (data: editReservationMutation) => {
+  const onCompletedEdit = (data: EditReservationMutation) => {
     const {
-      editReservation: { ok, error },
+      editReservation: { ok },
     } = data;
     if (ok) {
       navigate(-1);
     }
   };
 
-  const [editReservationMutation, { loading: editLoading, data: editData }] =
-    useMutation<editReservationMutation, editReservationMutationVariables>(
-      EDIT_RESERVATION_MUTATION,
-      { onCompleted: onCompletedEdit }
-    );
+  const [editReservationMutation] = useEditReservationMutation({
+    onCompleted: onCompletedEdit,
+  });
 
-  const [
-    deleteReservationMutation,
-    { loading: deleteLoading, data: deleteData },
-  ] = useMutation<
-    deleteReservationMutation,
-    deleteReservationMutationVariables
-  >(DELETE_RESERVATION_MUTATION, { onCompleted });
+  const [deleteReservationMutation] = useDeleteReservationMutation({
+    onCompleted,
+  });
 
-  const { loading, data, error } = useQuery<
-    findReservationById,
-    findReservationByIdVariables
-  >(FIND_RESERVATION_BY_ID_QUERY, {
+  const { data } = useFindReservationByIdQuery({
     variables: {
       input: {
         reservationId: reservationId,

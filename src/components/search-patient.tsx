@@ -1,44 +1,22 @@
-import { gql, useLazyQuery, useReactiveVar } from "@apollo/client";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useReactiveVar } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSearchPatientByNameLazyQuery } from "../graphql/generated/graphql";
 import { cls } from "../libs/utils";
 import { selectedPatientVar } from "../libs/variables";
-import {
-  searchPatientByName,
-  searchPatientByNameVariables,
-  searchPatientByName_searchPatientByName_patients,
-} from "../__generated__/searchPatientByName";
 import { NameTag } from "./name-tag";
-
-const SEARCH_PATIENT_BY_NAME = gql`
-  query searchPatientByName($input: SearchPatientInput!) {
-    searchPatientByName(input: $input) {
-      error
-      ok
-      totalPages
-      totalCount
-      patients {
-        id
-        name
-        gender
-        registrationNumber
-        birthday
-      }
-    }
-  }
-`;
 
 interface ISearchPatient {}
 
 export const SearchPatient: React.FC<ISearchPatient> = () => {
   const { register, getValues, handleSubmit } = useForm({ mode: "onChange" });
   const selectedPatient = useReactiveVar(selectedPatientVar);
-  const [callQuery, { loading, data: searchPatientResult }] = useLazyQuery<
-    searchPatientByName,
-    searchPatientByNameVariables
-  >(SEARCH_PATIENT_BY_NAME);
+  // const [callQuery, { loading, data: searchPatientResult }] = useLazyQuery<
+  //   searchPatientByName,
+  //   searchPatientByNameVariables
+  // >(SEARCH_PATIENT_BY_NAME);
+  const [callQuery, { loading, data: searchPatientResult }] =
+    useSearchPatientByNameLazyQuery();
 
   const onSubmit = () => {
     if (!loading) {
@@ -56,12 +34,20 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
 
   useEffect(() => {
     if (!loading && searchPatientResult) {
-      setPatients(searchPatientResult?.searchPatientByName.patients);
+      setPatients(searchPatientResult.searchPatientByName.patients);
     }
   }, [loading, searchPatientResult]);
 
   const [patients, setPatients] = useState<
-    searchPatientByName_searchPatientByName_patients[] | null
+    | {
+        __typename?: "Patient" | undefined;
+        id: number;
+        name: string;
+        gender: string;
+        registrationNumber?: string | null | undefined;
+        birthday?: any;
+      }[]
+    | null
   >();
 
   return (

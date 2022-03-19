@@ -29,7 +29,7 @@
   "scripts": {
     "generate": "graphql-codegen --config codegen.yml",
     "tailwind:build": "npx tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --watch",
-    "start": "npm run apollo:codegen & npm run tailwind:build & react-scripts start",
+    "start": "npm run tailwind:build & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

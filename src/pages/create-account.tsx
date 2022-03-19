@@ -1,30 +1,19 @@
 import React from "react";
-import { gql, useMutation } from "@apollo/client";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import {
-  createAccountMutation,
-  createAccountMutationVariables,
-} from "../__generated__/createAccountMutation";
-import { CreateAccountInput } from "../__generated__/globalTypes";
-
-const CREATE_ACCOUNT_MUTATION = gql`
-  mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
-    createAccount(input: $createAccountInput) {
-      ok
-      error
-    }
-  }
-`;
+  CreateAccountInput,
+  CreateAccountMutation,
+  useCreateAccountMutation,
+} from "../graphql/generated/graphql";
 
 export const CreateAccount = () => {
   const {
     register,
     getValues,
-    watch,
     formState: { errors },
     handleSubmit,
     formState,
@@ -32,9 +21,9 @@ export const CreateAccount = () => {
     mode: "onChange",
   });
   const navigate = useNavigate();
-  const onCompleted = (data: createAccountMutation) => {
+  const onCompleted = (data: CreateAccountMutation) => {
     const {
-      createAccount: { ok, error },
+      createAccount: { ok },
     } = data;
     if (ok) {
       alert("Account Created! Log in now!");
@@ -44,10 +33,7 @@ export const CreateAccount = () => {
   const [
     createAccountMutation,
     { loading, data: createaAccountMutationResult },
-  ] = useMutation<createAccountMutation, createAccountMutationVariables>(
-    CREATE_ACCOUNT_MUTATION,
-    { onCompleted }
-  );
+  ] = useCreateAccountMutation({ onCompleted });
   const onSubmit = () => {
     if (!loading) {
       const { email, password } = getValues();

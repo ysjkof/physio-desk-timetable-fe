@@ -1,29 +1,20 @@
 import React from "react";
-import { gql, useApolloClient, useMutation } from "@apollo/client";
+import { gql, useApolloClient } from "@apollo/client";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Button } from "../components/button";
 import { useMe } from "../hooks/useMe";
 import {
-  editProfile,
-  editProfileVariables,
-} from "../__generated__/editProfile";
-import { EditProfileInput } from "../__generated__/globalTypes";
-
-const EDIT_PROFILE_MUTATION = gql`
-  mutation editProfile($input: EditProfileInput!) {
-    editProfile(input: $input) {
-      ok
-      error
-    }
-  }
-`;
+  EditProfileInput,
+  EditProfileMutation,
+  useEditProfileMutation,
+} from "../graphql/generated/graphql";
 
 export const EditProfile = () => {
   const { data: userData } = useMe();
   const client = useApolloClient();
 
-  const onCompleted = (data: editProfile) => {
+  const onCompleted = (data: EditProfileMutation) => {
     const {
       editProfile: { ok },
     } = data;
@@ -50,10 +41,7 @@ export const EditProfile = () => {
     }
   };
 
-  const [editProfile, { loading }] = useMutation<
-    editProfile,
-    editProfileVariables
-  >(EDIT_PROFILE_MUTATION, {
+  const [editProfile, { loading }] = useEditProfileMutation({
     onCompleted,
   });
 

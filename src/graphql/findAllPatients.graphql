@@ -1,0 +1,15 @@
+query findAllPatients($input: FindAllPatientsInput!) {
+  findAllPatients(input: $input) {
+    ok
+    error
+    totalPages
+    totalCount
+    results {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+    }
+  }
+}

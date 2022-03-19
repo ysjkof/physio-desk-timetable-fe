@@ -1,9 +1,7 @@
-import { searchPatientByName_searchPatientByName_patients } from "../__generated__/searchPatientByName";
-
 interface IPatient {
   name: string;
   gender: string;
-  registrationNumber: string | null;
+  registrationNumber: string | null | undefined;
   birthday: any | null;
 }
 

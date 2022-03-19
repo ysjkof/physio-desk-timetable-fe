@@ -7,7 +7,7 @@ interface INameTag {
   id: number;
   gender: string;
   name: string;
-  registrationNumber: string | null;
+  registrationNumber: string | null | undefined;
   birthday: Date;
   canClick?: boolean;
   shrink?: boolean;
@@ -24,7 +24,6 @@ export const NameTag: React.FC<INameTag> = ({
 }) => {
   const onClick = () =>
     selectedPatientVar({
-      __typename: "Patient",
       id,
       gender,
       name,

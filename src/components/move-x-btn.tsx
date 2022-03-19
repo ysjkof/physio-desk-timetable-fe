@@ -1,5 +1,3 @@
-import { ONE_DAY, ONE_WEEK } from "../libs/variables";
-
 interface IMoveXBtn {
   direction: "prev" | "after";
   selectedDate: Date;

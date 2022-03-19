@@ -8,13 +8,13 @@ interface IScheduleBox {
   // gridRowStart: number;
   // gridRowEnd: number;
   hhmm: string;
-  memo: string | null;
+  memo: string | null | undefined;
   startDate: Date;
   endDate: Date;
   state: "Canceled" | "NoShow" | "Reserved";
   gender: string;
   patientName: string;
-  registrationNumber: string | null;
+  registrationNumber: string | null | undefined;
   birthday: Date;
   viewOption: ViewOption;
   shrink?: boolean;

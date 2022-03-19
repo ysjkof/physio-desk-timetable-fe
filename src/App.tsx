@@ -8,7 +8,6 @@ import { CreatePatient } from "./pages/create-patient";
 import { Test } from "./pages/test";
 import { NotFound } from "./pages/404";
 import { Account } from "./pages/account";
-import { useMe } from "./hooks/useMe";
 import { ConfirmEmail } from "./pages/confirm-email";
 import { EditProfile } from "./pages/edit-profile";
 import { TimeTable } from "./pages/time-table";

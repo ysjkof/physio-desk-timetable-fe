@@ -1,45 +1,16 @@
-import { gql, useQuery } from "@apollo/client";
 import React from "react";
 import { Li } from "../components/Li";
-import {
-  findAllPatientsQuery,
-  findAllPatientsQueryVariables,
-} from "../__generated__/findAllPatientsQuery";
-
-const FIND_ALL_PATIENTS_QUERY = gql`
-  query findAllPatientsQuery($input: FindAllPatientsInput!) {
-    findAllPatients(input: $input) {
-      ok
-      error
-      totalPages
-      totalCount
-      results {
-        id
-        name
-        gender
-        registrationNumber
-        birthday
-      }
-    }
-  }
-`;
+import { useFindAllPatientsQuery } from "../graphql/generated/graphql";
 
 export const ListPatient = () => {
   console.time("시작");
-  const {
-    data: queryResult,
-    loading,
-    error,
-  } = useQuery<findAllPatientsQuery, findAllPatientsQueryVariables>(
-    FIND_ALL_PATIENTS_QUERY,
-    {
-      variables: {
-        input: {
-          page: 1,
-        },
+  const { data: queryResult, loading } = useFindAllPatientsQuery({
+    variables: {
+      input: {
+        page: 1,
       },
-    }
-  );
+    },
+  });
   console.timeEnd("시작");
   return (
     <div className="bg-gray-100">

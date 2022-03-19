@@ -1,0 +1,22 @@
+query listReservations($input: ListReservationsInput!) {
+  listReservations(input: $input) {
+    ok
+    totalCount
+    results {
+      id
+      startDate
+      endDate
+      state
+      memo
+      patient {
+        name
+        gender
+        registrationNumber
+        birthday
+      }
+      lastModifier {
+        email
+      }
+    }
+  }
+}

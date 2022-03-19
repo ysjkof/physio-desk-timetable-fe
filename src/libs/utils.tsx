@@ -1,13 +1,50 @@
+import { ReservationState } from "../graphql/generated/graphql";
 import { ONE_WEEK } from "./variables";
-import { listReservationsQuery_listReservations_results } from "../__generated__/listReservationsQuery";
 
 class Day {
   date: Date;
-  reservations: listReservationsQuery_listReservations_results[];
+  reservations: {
+    __typename?: "Reservation";
+    id: number;
+    startDate: any;
+    endDate: any;
+    state: ReservationState;
+    memo?: string | null;
+    patient: {
+      __typename?: "Patient";
+      name: string;
+      gender: string;
+      registrationNumber?: string | null;
+      birthday?: any | null;
+    };
+    lastModifier: {
+      __typename?: "User";
+      email: string;
+    };
+  }[];
+
   timezones: [];
   constructor(
     date: Date,
-    reservations: listReservationsQuery_listReservations_results[] = [],
+    reservations: {
+      __typename?: "Reservation";
+      id: number;
+      startDate: any;
+      endDate: any;
+      state: ReservationState;
+      memo?: string | null;
+      patient: {
+        __typename?: "Patient";
+        name: string;
+        gender: string;
+        registrationNumber?: string | null;
+        birthday?: any | null;
+      };
+      lastModifier: {
+        __typename?: "User";
+        email: string;
+      };
+    }[] = [],
     timezones = []
   ) {
     this.date = date;

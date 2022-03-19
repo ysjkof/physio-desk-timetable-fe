@@ -1,7 +1,7 @@
 interface IScheduleListBox {
   startDate: string;
   endDate: string;
-  memo: string | null;
+  memo: string | null | undefined;
 }
 
 export const ScheduleListBox: React.FC<IScheduleListBox> = ({

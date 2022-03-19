@@ -1,11 +1,10 @@
-import { gql, useMutation, useReactiveVar } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
-import { NameTag } from "../components/name-tag";
 import { SearchPatient } from "../components/search-patient";
 import {
   REGEX_HHMM,
@@ -14,20 +13,11 @@ import {
   UTC_OPTION_KST,
 } from "../libs/variables";
 import { getHHMM, getYMD } from "../libs/utils";
-import {
-  createReservationMutation,
-  createReservationMutationVariables,
-} from "../__generated__/createReservationMutation";
 import { ModalPortal } from "../components/mordal-portal";
-
-const CREATE_RESERVATION_MUTATION = gql`
-  mutation createReservationMutation($input: CreateReservationInput!) {
-    createReservation(input: $input) {
-      ok
-      error
-    }
-  }
-`;
+import {
+  CreateReservationMutation,
+  useCreateReservationMutation,
+} from "../graphql/generated/graphql";
 
 export const Reserve = () => {
   const location = useLocation();
@@ -42,20 +32,17 @@ export const Reserve = () => {
     handleSubmit,
   } = useForm({ mode: "onChange" });
 
-  const onCompleted = (data: createReservationMutation) => {
-    const {
-      createReservation: { ok, error },
-    } = data;
+  const onCompleted = (data: CreateReservationMutation) => {
+    // const {
+    //   createReservation: { ok, error },
+    // } = data;
     navigate(-1);
   };
 
   const [
     createReservationMutation,
     { loading, data: createReservationResult },
-  ] = useMutation<
-    createReservationMutation,
-    createReservationMutationVariables
-  >(CREATE_RESERVATION_MUTATION, { onCompleted });
+  ] = useCreateReservationMutation({ onCompleted });
 
   const programs = {
     manual: [

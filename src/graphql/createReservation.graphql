@@ -1,0 +1,6 @@
+mutation createReservation($input: CreateReservationInput!) {
+  createReservation(input: $input) {
+    ok
+    error
+  }
+}

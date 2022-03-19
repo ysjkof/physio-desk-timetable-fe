@@ -1,4 +1,3 @@
-import { gql, useLazyQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
@@ -7,37 +6,11 @@ import { NameTag } from "../components/name-tag";
 import { ScheduleBox } from "../components/schedule-box";
 import { ScheduleListBox } from "../components/schedule-list-box";
 import { TableRow } from "../components/table-row";
-import { cls, compareDateMatch, getHHMM, getTimeLength } from "../libs/utils";
 import {
-  listReservationsQuery,
-  listReservationsQueryVariables,
-  listReservationsQuery_listReservations_results,
-} from "../__generated__/listReservationsQuery";
-
-const LIST_RESERVATIONS_QUERY = gql`
-  query listReservationsQuery($input: ListReservationsInput!) {
-    listReservations(input: $input) {
-      ok
-      totalCount
-      results {
-        id
-        startDate
-        endDate
-        state
-        memo
-        patient {
-          name
-          gender
-          registrationNumber
-          birthday
-        }
-        lastModifier {
-          email
-        }
-      }
-    }
-  }
-`;
+  ReservationState,
+  useListReservationsLazyQuery,
+} from "../graphql/generated/graphql";
+import { cls, compareDateMatch, getHHMM } from "../libs/utils";
 
 interface ITableLength {
   start: { hours: number; minutes: number };
@@ -46,12 +19,30 @@ interface ITableLength {
 
 const ONE_DAY = 1;
 const ONE_WEEK = 7;
-const TWO_WEEKS = 14;
-const THREE_WEEKS = 21;
+// const TWO_WEEKS = 14;
+// const THREE_WEEKS = 21;
 
 interface ILabelRow {
   labelDate: Date;
-  reservations: listReservationsQuery_listReservations_results[];
+  reservations: {
+    __typename?: "Reservation";
+    id: number;
+    startDate: any;
+    endDate: any;
+    state: ReservationState;
+    memo?: string | null;
+    patient: {
+      __typename?: "Patient";
+      name: string;
+      gender: string;
+      registrationNumber?: string | null;
+      birthday?: any | null;
+    };
+    lastModifier: {
+      __typename?: "User";
+      email: string;
+    };
+  }[];
 }
 interface IUser {
   name: string;
@@ -103,7 +94,6 @@ export const TimeTable = () => {
     seeCancel: true,
     seeNoshow: true,
   });
-  // const [viewOption, setViewOption] = useState<number>(ONE_DAY);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(
     new Date("1500-01-01")
   );
@@ -214,10 +204,8 @@ export const TimeTable = () => {
     return result;
   };
 
-  const [queryListReservations, { loading, error, data: queryResult }] =
-    useLazyQuery<listReservationsQuery, listReservationsQueryVariables>(
-      LIST_RESERVATIONS_QUERY
-    );
+  const [queryListReservations, { loading, data: queryResult }] =
+    useListReservationsLazyQuery();
 
   useEffect(() => {
     setDateNavWeek([getWeeks(selectedDate)]);
@@ -817,11 +805,11 @@ export const TimeTable = () => {
                     </svg>
                   </div>
                   {queryResult?.listReservations.results?.map((reservation) => {
-                    const time =
-                      getTimeLength(
-                        reservation.startDate,
-                        reservation.endDate
-                      ) / 10;
+                    // const time =
+                    //   getTimeLength(
+                    //     reservation.startDate,
+                    //     reservation.endDate
+                    //   ) / 10;
                     return (
                       <ScheduleListBox
                         key={reservation.id}

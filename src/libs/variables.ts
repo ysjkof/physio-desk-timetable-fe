@@ -1,5 +1,4 @@
 import { makeVar } from "@apollo/client";
-import { searchPatientByName_searchPatientByName_patients } from "../__generated__/searchPatientByName";
 
 export const LOCALSTORAGE_TOKEN = "muool-token";
 // 한국 표준시(韓國標準時, KST, Korea Standard Time) = UTC+09:00
@@ -27,5 +26,11 @@ export const REGEX_YYYYMMDD =
 // 이하는 1분 단위는 0만 가능
 export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0])$/;
 
-export const selectedPatientVar =
-  makeVar<null | searchPatientByName_searchPatientByName_patients>(null);
+export const selectedPatientVar = makeVar<null | {
+  __typename?: "Patient" | undefined;
+  id: number;
+  name: string;
+  gender: string;
+  registrationNumber?: string | null | undefined;
+  birthday?: any;
+}>(null);

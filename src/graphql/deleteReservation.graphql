@@ -1,0 +1,6 @@
+mutation deleteReservation($input: DeleteReservationInput!) {
+  deleteReservation(input: $input) {
+    error
+    ok
+  }
+}

@@ -1,27 +1,16 @@
 import React from "react";
-import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
-import {
-  loginMutation,
-  loginMutationVariables,
-} from "../__generated__/loginMutation";
-import { LoginInput } from "../__generated__/globalTypes";
 import { LOCALSTORAGE_TOKEN } from "../libs/variables";
 import { Helmet } from "react-helmet-async";
-
-const LOGIN_MUTATION = gql`
-  mutation loginMutation($loginInput: LoginInput!) {
-    login(input: $loginInput) {
-      ok
-      token
-      error
-    }
-  }
-`;
+import {
+  LoginInput,
+  LoginMutation,
+  useLoginMutation,
+} from "../graphql/generated/graphql";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -32,9 +21,9 @@ export const Login = () => {
     handleSubmit,
   } = useForm<LoginInput>({ mode: "onChange" });
 
-  const onCompleted = (data: loginMutation) => {
+  const onCompleted = (data: LoginMutation) => {
     const {
-      login: { error, ok, token },
+      login: { ok, token },
     } = data;
     if (ok && token) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
@@ -44,12 +33,10 @@ export const Login = () => {
     }
   };
 
-  const [loginMutation, { data: loginMutationResult, loading }] = useMutation<
-    loginMutation,
-    loginMutationVariables
-  >(LOGIN_MUTATION, {
-    onCompleted,
-  });
+  const [loginMutation, { data: loginMutationResult, loading }] =
+    useLoginMutation({
+      onCompleted,
+    });
   const onSubmit = () => {
     if (!loading) {
       const { email, password } = getValues();

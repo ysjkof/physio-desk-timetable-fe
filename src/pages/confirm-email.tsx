@@ -1,22 +1,13 @@
 import React from "react";
-import { gql, useApolloClient, useMutation } from "@apollo/client";
+import { gql, useApolloClient } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import { useMe } from "../hooks/useMe";
 import {
-  verifyEmail,
-  verifyEmailVariables,
-} from "../__generated__/verifyEmail";
-
-const VERIFY_EMAIL_MUTATION = gql`
-  mutation verifyEmail($input: VerifyEmailInput!) {
-    verifyEmail(input: $input) {
-      ok
-      error
-    }
-  }
-`;
+  useVerifyEmailMutation,
+  VerifyEmailMutation,
+} from "../graphql/generated/graphql";
 
 export const ConfirmEmail = () => {
   const { data: userData } = useMe();
@@ -27,7 +18,7 @@ export const ConfirmEmail = () => {
   const [invalidCode, setInvalidCode] = useState("");
   const client = useApolloClient();
 
-  const onCompleted = (data: verifyEmail) => {
+  const onCompleted = (data: VerifyEmailMutation) => {
     const {
       verifyEmail: { ok, error },
     } = data;
@@ -63,10 +54,7 @@ export const ConfirmEmail = () => {
       navigate("/");
     }
   };
-  const [verifyEmail] = useMutation<verifyEmail, verifyEmailVariables>(
-    VERIFY_EMAIL_MUTATION,
-    { onCompleted }
-  );
+  const [verifyEmail] = useVerifyEmailMutation({ onCompleted });
   useEffect(() => {
     const [_, code] = window.location.href.split("code=");
     verifyEmail({
