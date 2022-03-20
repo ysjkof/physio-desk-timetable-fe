@@ -587,6 +587,13 @@ export type SearchPatientByNameQueryVariables = Exact<{
 
 export type SearchPatientByNameQuery = { __typename?: 'Query', searchPatientByName: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }> | null } };
 
+export type FindPatientByIdQueryVariables = Exact<{
+  input: FindPatientByIdInput;
+}>;
+
+
+export type FindPatientByIdQuery = { __typename?: 'Query', findPatientById: { __typename?: 'FindPatientByIdOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
+
 export type VerifyEmailMutationVariables = Exact<{
   input: VerifyEmailInput;
 }>;
@@ -1073,6 +1080,50 @@ export function useSearchPatientByNameLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type SearchPatientByNameQueryHookResult = ReturnType<typeof useSearchPatientByNameQuery>;
 export type SearchPatientByNameLazyQueryHookResult = ReturnType<typeof useSearchPatientByNameLazyQuery>;
 export type SearchPatientByNameQueryResult = Apollo.QueryResult<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>;
+export const FindPatientByIdDocument = gql`
+    query findPatientById($input: FindPatientByIdInput!) {
+  findPatientById(input: $input) {
+    ok
+    error
+    patient {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+      memo
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindPatientByIdQuery__
+ *
+ * To run a query within a React component, call `useFindPatientByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindPatientByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindPatientByIdQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindPatientByIdQuery(baseOptions: Apollo.QueryHookOptions<FindPatientByIdQuery, FindPatientByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindPatientByIdQuery, FindPatientByIdQueryVariables>(FindPatientByIdDocument, options);
+      }
+export function useFindPatientByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindPatientByIdQuery, FindPatientByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindPatientByIdQuery, FindPatientByIdQueryVariables>(FindPatientByIdDocument, options);
+        }
+export type FindPatientByIdQueryHookResult = ReturnType<typeof useFindPatientByIdQuery>;
+export type FindPatientByIdLazyQueryHookResult = ReturnType<typeof useFindPatientByIdLazyQuery>;
+export type FindPatientByIdQueryResult = Apollo.QueryResult<FindPatientByIdQuery, FindPatientByIdQueryVariables>;
 export const VerifyEmailDocument = gql`
     mutation verifyEmail($input: VerifyEmailInput!) {
   verifyEmail(input: $input) {

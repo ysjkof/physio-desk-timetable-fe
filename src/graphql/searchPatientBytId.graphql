@@ -1,0 +1,14 @@
+query findPatientById($input: FindPatientByIdInput!) {
+  findPatientById(input: $input) {
+    ok
+    error
+    patient {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+      memo
+    }
+  }
+}
