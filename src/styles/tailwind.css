@@ -5,4 +5,11 @@
   @apply w-full border-2 border-gray-200 p-3 text-lg font-light transition-colors focus:border-gray-500 focus:outline-none;
 }
 
+.btn-sm {
+  @apply h-5 w-5 rounded-md text-sm text-gray-700 ring-1 ring-gray-400 hover:font-bold;
+}
+.btn-selected {
+  @apply font-extrabold ring-2 ring-violet-500;
+}
+
 @tailwind utilities;
