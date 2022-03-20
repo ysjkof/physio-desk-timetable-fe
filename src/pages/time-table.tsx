@@ -1,10 +1,19 @@
+import {
+  faCalendarAlt,
+  faList,
+  faUserGroup,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
+import { BtnArrow } from "../components/button-arrow";
+import { BtnDatecheck } from "../components/button-datecheck";
 import { MoveXBtn } from "../components/move-x-btn";
 import { NameTag } from "../components/name-tag";
 import { ScheduleBox } from "../components/schedule-box";
 import { ScheduleListBox } from "../components/schedule-list-box";
+import { Switch } from "../components/switch";
 import { TableRow } from "../components/table-row";
 import {
   ReservationState,
@@ -106,6 +115,21 @@ export const TimeTable = () => {
   const [listView, setListView] = useState<boolean>(false);
   const [oneDayData, setOneDayData] = useState<IDay[]>();
   const [oneWeekData, setOneWeekData] = useState<IDay[]>();
+
+  const handleDateNavMovePrev = () => {
+    const date = new Date(selectedDate);
+    !dateNavExpand
+      ? date.setDate(date.getDate() - 7)
+      : date.setMonth(date.getMonth() - 1);
+    setSelectedDate(date);
+  };
+  const handleDateNavMoveNext = () => {
+    const date = new Date(selectedDate);
+    !dateNavExpand
+      ? date.setDate(date.getDate() + 7)
+      : date.setMonth(date.getMonth() + 1);
+    setSelectedDate(date);
+  };
 
   const handleShrink = () => {
     if (viewOption.dayLength === ONE_WEEK) {
@@ -343,158 +367,66 @@ export const TimeTable = () => {
       </Helmet>
       <div className="container mx-auto h-full">
         <div className="h-full">
-          <div className="table-header space-y-2 border-b-2 shadow-sm">
-            <div className="mx-2 grid grid-cols-2 items-center justify-between pt-1 lg:grid-cols-6">
-              <div className="flex items-center space-x-4">
-                <span className="min-w-[120px] text-sm font-medium text-gray-900">
+          <div className="table-header mb-3 px-2 pb-4 shadow-b">
+            <div className="grid grid-cols-3 gap-4 lg:grid-cols-7">
+              <div className="flex lg:col-span-1">
+                <button
+                  className="min-w-[120px] text-sm font-medium text-gray-700 hover:font-bold"
+                  onClick={() => setSelectedDate(new Date())}
+                >
                   {selectedDate.toLocaleString("ko-KR", {
                     year: "2-digit",
                     month: "short",
                     day: "numeric",
                     weekday: "short",
                   })}
-                </span>
-                <button
-                  className="text-sm text-gray-500"
-                  onClick={() => setSelectedDate(new Date())}
-                >
-                  오늘날짜
                 </button>
               </div>
-              <div className="mx-4 flex items-center lg:col-span-3">
-                <MoveXBtn
-                  direction={"prev"}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  dateNavExpand={dateNavExpand}
-                />
-                <div className="w-full">
-                  {dateNavWeek?.map((weeks, i) => (
-                    <div key={i} className="flex">
-                      {weeks.map((week, ii) => (
-                        <div
-                          key={ii}
-                          className={cls(
-                            "group flex w-full cursor-pointer bg-white  text-center",
-                            selectedDate.getDate() === week.getDate()
-                              ? "font-extrabold opacity-100"
-                              : "opacity-80"
-                          )}
-                          onClick={() => setSelectedDate(week)}
-                        >
-                          <h2
-                            className={cls(
-                              "shadow-cst mx-1 w-full rounded-md",
-                              selectedDate.getDate() === week.getDate()
-                                ? "ring-2 ring-violet-400"
-                                : "",
-                              week.getDay() === 0
-                                ? "text-red-600 group-hover:text-red-400"
-                                : week.getDay() === 6
-                                ? "text-blue-600 group-hover:text-blue-400"
-                                : "text-gray-600 group-hover:text-gray-400",
-                              selectedDate.getMonth() !== week.getMonth()
-                                ? "opacity-40"
-                                : ""
-                            )}
-                          >
-                            {week.getDate()}
-                          </h2>
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-                <MoveXBtn
-                  direction={"after"}
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  dateNavExpand={dateNavExpand}
-                />
+              <div className="col-span-2 flex w-full items-center justify-between gap-1 lg:col-span-5">
+                <BtnArrow direction="prev" onClick={handleDateNavMovePrev} />
+                {dateNavWeek?.map((weeks, i) => (
+                  <>
+                    {weeks.map((week, ii) => (
+                      <BtnDatecheck
+                        key={ii}
+                        text={week.getDate() + ""}
+                        day={week.getDay()}
+                        thisMonth={selectedDate.getMonth() === week.getMonth()}
+                        selected={selectedDate.getDate() === week.getDate()}
+                        onClick={() => setSelectedDate(week)}
+                      />
+                    ))}
+                  </>
+                ))}
+                <BtnArrow direction="after" onClick={handleDateNavMoveNext} />
               </div>
-              <div className="col-span-2 flex w-full items-center justify-end space-x-5 sm:space-x-8 ">
-                <button
-                  onClick={handleViewOption}
-                  className="flex space-x-1 text-sm hover:text-gray-500"
-                >
-                  <span>
-                    {viewOption.dayLength === ONE_DAY
-                      ? "하루 보기"
-                      : "1주 보기"}
-                  </span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-                <svg
+              <div className="flex w-full items-center justify-end space-x-5 lg:col-span-1">
+                <FontAwesomeIcon
+                  icon={faCalendarAlt}
                   onClick={handleExpandDateNav}
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 cursor-pointer hover:text-gray-500"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M5 12a1 1 0 102 0V6.414l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L5 6.414V12zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
-                </svg>
-                <svg
+                  className={cls(
+                    dateNavExpand ? "text-gray-700" : "text-gray-400",
+                    "w-4 cursor-pointer  hover:text-gray-500"
+                  )}
+                />
+                <FontAwesomeIcon
+                  icon={faList}
                   onClick={handleListView}
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 cursor-pointer hover:text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                  />
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 cursor-pointer hover:text-gray-500"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                  className={cls(
+                    listView ? "text-gray-700" : "text-gray-400",
+                    "w-4 cursor-pointer  hover:text-gray-500"
+                  )}
+                />
                 {/* 이 버튼을 누르면 그룹원들 예약 동시출력 */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 cursor-pointer hover:text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
+                <FontAwesomeIcon
+                  icon={faUserGroup}
+                  className="w-4 cursor-pointer text-gray-400 hover:text-gray-500"
+                />
               </div>
-            </div>
-            <div className="flex space-x-3 text-sm">
-              <h3 className="">보기 설정</h3>
-              <label>
-                취소 보기
-                <input
-                  type="checkbox"
-                  defaultChecked={viewOption.seeCancel}
+              <div className="col-span-2 row-start-2 flex space-x-3">
+                <Switch
+                  enabled={viewOption.seeCancel}
+                  label={"취소표시"}
                   onClick={() =>
                     setViewOption((state) => ({
                       ...state,
@@ -502,12 +434,9 @@ export const TimeTable = () => {
                     }))
                   }
                 />
-              </label>
-              <label>
-                부도 보기
-                <input
-                  type="checkbox"
-                  defaultChecked={viewOption.seeNoshow}
+                <Switch
+                  enabled={viewOption.seeNoshow}
+                  label={"부도표시"}
                   onClick={() =>
                     setViewOption((state) => ({
                       ...state,
@@ -515,12 +444,17 @@ export const TimeTable = () => {
                     }))
                   }
                 />
-              </label>
+                <Switch
+                  enabled={viewOption.dayLength === ONE_DAY ? false : true}
+                  label={"1주표시"}
+                  onClick={handleViewOption}
+                />
+              </div>
             </div>
             {dateNavExpand &&
               dateNavMonth && {
                 ...(
-                  <div className="mx-4 flex items-center justify-between">
+                  <div className="mx-4 mt-4 flex items-center justify-between">
                     <MoveXBtn
                       direction={"prev"}
                       selectedDate={selectedDate}

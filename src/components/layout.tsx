@@ -4,7 +4,7 @@ import { Header } from "./header";
 
 export const Layout: React.FC = () => {
   return (
-    <div className="h-screen divide-y divide-solid overflow-hidden">
+    <div className="h-screen overflow-hidden">
       <Header />
       <Outlet />
     </div>
