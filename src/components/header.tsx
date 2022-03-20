@@ -5,6 +5,7 @@ import { isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../libs/variables";
 import { useMe } from "../hooks/useMe";
 import muoolLogo from "../images/logoMuoolJinBlue.svg";
+import { useForm } from "react-hook-form";
 
 export const Header: React.FC = () => {
   const { data } = useMe();
@@ -12,6 +13,14 @@ export const Header: React.FC = () => {
   // const state = location.state as { startDate: Date };
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const navigate = useNavigate();
+
+  const { register, handleSubmit, getValues, setValue } = useForm();
+  const onSubmitSearch = () => {
+    const { search } = getValues();
+    const searchTrim = search.trim();
+    setValue("search", searchTrim);
+    navigate(`/search?name=${searchTrim}`);
+  };
   const logoutBtn = () => {
     localStorage.removeItem(LOCALSTORAGE_TOKEN);
     // authTokenVar(token);
@@ -35,11 +44,14 @@ export const Header: React.FC = () => {
           <div className="h-6 w-40 bg-pink-200">
             {location.pathname === "/tt" && ""}
           </div>
-          <input
-            type={"search"}
-            className="w-full rounded-full border"
-            placeholder="Search..."
-          />
+          <form onSubmit={handleSubmit(onSubmitSearch)}>
+            <input
+              {...register("search", { required: true })}
+              type={"search"}
+              placeholder="Search..."
+              className="w-full rounded-full border"
+            />
+          </form>
           <span className="flex items-center gap-5 text-xs">
             {isLoggedIn ? (
               <>

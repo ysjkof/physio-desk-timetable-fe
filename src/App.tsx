@@ -16,6 +16,7 @@ import { ListPatient } from "./pages/list-patient";
 import { CreateAccount } from "./pages/create-account";
 import { Login } from "./pages/login";
 import { ReservationDetail } from "./pages/reservation-detail";
+import { Search } from "./pages/search";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -43,6 +44,7 @@ function App() {
               </Route>
               <Route path="create-patient" element={<CreatePatient />} />
               <Route path="list-patient" element={<ListPatient />} />
+              <Route path="search" element={<Search />} />
 
               <Route path="test" element={<Test />} />
             </>
