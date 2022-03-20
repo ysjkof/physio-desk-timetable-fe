@@ -5,8 +5,8 @@ import { HelmetProvider } from "react-helmet-async";
 import { client } from "./apollo";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import "./styles/styles.css";
 import "./styles/custom.css";
+import "./styles/tailwind.css";
 
 ReactDOM.render(
   <React.StrictMode>

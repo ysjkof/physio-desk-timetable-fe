@@ -14,9 +14,7 @@
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.13",
-    "autoprefixer": "^10.4.4",
     "graphql": "^16.3.0",
-    "postcss": "^8.4.12",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet-async": "^1.2.3",
@@ -28,8 +26,7 @@
   },
   "scripts": {
     "generate": "graphql-codegen --config codegen.yml",
-    "tailwind:build": "npx tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --watch",
-    "start": "npm run tailwind:build & react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -58,6 +55,8 @@
     "@graphql-codegen/typescript-operations": "^2.3.5",
     "@graphql-codegen/typescript-react-apollo": "^3.2.11",
     "@types/react-helmet": "^6.1.5",
+    "autoprefixer": "^10.4.4",
+    "postcss": "^8.4.12",
     "prettier-plugin-tailwindcss": "^0.1.8",
     "tailwindcss": "^3.0.23"
   }
