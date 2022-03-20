@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { cls, getHHMM, getTimeLength } from "../libs/utils";
+import { ONE_DAY } from "../libs/variables";
 import { ViewOption } from "../pages/time-table";
-import { NameTag } from "./name-tag";
+import { Name } from "./name";
 
 interface IScheduleBox {
   id: number;
@@ -65,20 +66,16 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
             ? "border-red-600 bg-red-200 opacity-40"
             : ""
         )}
-        // style={{
-        //   gridRowStart,
-        //   gridRowEnd,
-        // }}
         id={hhmm}
         onClick={onClick}
       >
-        <NameTag
+        <Name
           id={id}
           gender={gender}
           name={patientName}
           registrationNumber={registrationNumber}
           birthday={birthday}
-          shrink={shrink}
+          columnCount={viewOption.dayLength === ONE_DAY ? 3 : 2}
         />
         <div
           className={cls(

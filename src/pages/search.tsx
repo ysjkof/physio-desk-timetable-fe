@@ -1,14 +1,19 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate } from "react-router-dom";
-import { NameTag } from "../components/name-tag";
-import { Patient } from "../components/patient";
+import { Name } from "../components/name";
 import { useSearchPatientByNameLazyQuery } from "../graphql/generated/graphql";
 
 export const Search = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [callQuery, { loading, data }] = useSearchPatientByNameLazyQuery();
+
+  const onClick = (patientId: number) => {
+    navigate("/patient", {
+      state: { todo: "viewPatientInfoDetail", patientId },
+    });
+  };
   useEffect(() => {
     const { search } = location;
     const [_, queryName] = search.split("?name=");
@@ -25,21 +30,22 @@ export const Search = () => {
       <Helmet>
         <title>검색 | Muool</title>
       </Helmet>
-      <h1 className="text-lg font-bold">검색 PAGE</h1>
       {loading && <p>loading ...</p>}
       {!loading && data?.searchPatientByName.patients?.length === 0 ? (
         <div className="container py-20 px-10">
           <p>검색결과가 없습니다</p>
         </div>
       ) : (
-        <div className="container py-20 px-10">
+        <div className="container mx-auto divide-y">
+          <h1 className="text-lg font-bold">검색 결과</h1>
           {data?.searchPatientByName.patients?.map((patient) => (
-            <NameTag
+            <Name
               id={patient.id}
               gender={patient.gender}
               name={patient.name}
               registrationNumber={patient.registrationNumber}
               birthday={patient.birthday}
+              onClick={() => onClick(patient.id)}
             />
           ))}
         </div>
