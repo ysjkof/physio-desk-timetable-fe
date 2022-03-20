@@ -1,8 +1,10 @@
+import { faQuestion, faRotateBack } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { ModalPortal } from "../components/mordal-portal";
-import { NameTag } from "../components/name-tag";
+import { Name } from "../components/name";
 import { Patient } from "../components/patient";
 import {
   DeleteReservationMutation,
@@ -106,23 +108,23 @@ export const ReservationDetail = () => {
         </button>
         <h4 className="mb-5 text-left text-3xl font-medium">예약 자세히</h4>
         <div className="mb-5 flex justify-around">
-          <button className="shadow-cst rounded-md px-2 font-medium text-gray-500">
+          <button className="rounded-md px-2 font-medium text-gray-500 shadow-cst">
             차트
           </button>
           <button
             onClick={onClickEditNoshow}
-            className="shadow-cst rounded-md px-2 font-medium text-gray-500"
+            className="rounded-md px-2 font-medium text-gray-500 shadow-cst"
           >
             부도
           </button>
           <button
             onClick={onClickEditCancel}
-            className="shadow-cst rounded-md px-2 font-medium text-gray-500"
+            className="rounded-md px-2 font-medium text-gray-500 shadow-cst"
           >
             취소
           </button>
           <button
-            className="shadow-cst rounded-md px-2 font-medium text-gray-500"
+            className="rounded-md px-2 font-medium text-gray-500 shadow-cst"
             onClick={onClickDelete}
           >
             삭제
@@ -130,46 +132,27 @@ export const ReservationDetail = () => {
         </div>
         {reservation && (
           <div className="flex max-w-sm flex-col space-y-4">
-            <div className="flex justify-between">
-              <NameTag
+            <div className="flex items-center justify-between gap-3">
+              <Name
                 id={reservation.id}
                 birthday={reservation.patient.birthday}
                 gender={reservation.patient.gender}
                 name={reservation.patient.name}
                 registrationNumber={reservation.patient.registrationNumber}
+                columnCount={3}
               />
               {openPatient ? (
-                <svg
+                <FontAwesomeIcon
+                  icon={faRotateBack}
+                  size={"xs"}
                   onClick={() => setOpenPatient(false)}
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"
-                  />
-                </svg>
+                />
               ) : (
-                <svg
+                <FontAwesomeIcon
+                  icon={faQuestion}
+                  size={"sm"}
                   onClick={() => setOpenPatient(true)}
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+                />
               )}
             </div>
             {openPatient ? (
