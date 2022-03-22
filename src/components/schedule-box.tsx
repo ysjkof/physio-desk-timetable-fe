@@ -1,7 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { cls, getHHMM, getTimeLength } from "../libs/utils";
 import { ONE_DAY } from "../libs/variables";
+import { ReservationDetail } from "../pages/reservation-detail";
 import { ViewOption } from "../pages/time-table";
+import { ModalPortal } from "./modal-portal";
 import { Name } from "./name";
 
 interface IScheduleBox {
@@ -39,12 +41,10 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   shrink = false,
   canClick,
 }) => {
-  const navigate = useNavigate();
-  // onClick => 수정 || 삭제
+  const [openReserve, setOpenReserve] = useState(false);
   const timeLength = getTimeLength(startDate, endDate);
   const onClick = () => {
-    console.log("you click ScheduleBox");
-    navigate(`reservation/${id}`);
+    setOpenReserve(!openReserve);
   };
   switch (state) {
     case "Canceled":
@@ -56,15 +56,22 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   }
   return (
     <>
+      {openReserve ? (
+        <ModalPortal closeAction={setOpenReserve}>
+          <ReservationDetail reservationId={id} />
+        </ModalPortal>
+      ) : (
+        ""
+      )}
       <div
         className={cls(
-          "group relative col-start-2 mx-auto rounded-md border bg-white transition duration-200 hover:z-50 hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900",
+          "group relative col-start-2 mx-auto rounded-md border transition duration-200 hover:z-50 hover:cursor-pointer hover:border-transparent hover:ring-2 hover:ring-gray-900",
           shrink ? "w-[146px]" : "",
           state === "NoShow"
-            ? "border-yellow-600 bg-yellow-200 opacity-40"
+            ? "border-yellow-600 bg-yellow-100 opacity-40"
             : state === "Canceled"
-            ? "border-red-600 bg-red-200 opacity-40"
-            : ""
+            ? "border-red-600 bg-red-100 opacity-40"
+            : "border-blue-600 bg-blue-100"
         )}
         id={hhmm}
         onClick={onClick}

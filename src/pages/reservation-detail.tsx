@@ -1,9 +1,12 @@
-import { faQuestion, faRotateBack } from "@fortawesome/free-solid-svg-icons";
+import {
+  faQuestion,
+  faRotateBack,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useNavigate, useParams } from "react-router-dom";
-import { ModalPortal } from "../components/mordal-portal";
+import { useNavigate } from "react-router-dom";
 import { Name } from "../components/name";
 import { Patient } from "../components/patient";
 import {
@@ -16,11 +19,12 @@ import {
 } from "../graphql/generated/graphql";
 import { getHHMM, getTimeLength, getYMD } from "../libs/utils";
 
-export const ReservationDetail = () => {
+interface IReservationDetail {
+  reservationId: number;
+}
+export const ReservationDetail = ({ reservationId }: IReservationDetail) => {
   const navigate = useNavigate();
-  const [openPatient, setOpenPatient] = useState<boolean>(false);
-  const { id } = useParams();
-  const reservationId = Number(id);
+  const [openPatientDetail, setOpenPatientDetail] = useState<boolean>(false);
 
   const onCompleted = (data: DeleteReservationMutation) => {
     const {
@@ -84,27 +88,16 @@ export const ReservationDetail = () => {
 
   const reservation = data?.findReservationById.reservation;
   return (
-    <ModalPortal>
+    <>
       <Helmet>
         <title>예약 | Muool</title>
       </Helmet>
-      <div className="bg-white py-6 px-16 sm:rounded-lg">
+      <div className="h-[550px] w-[400px] overflow-y-scroll bg-white py-6 px-16 sm:rounded-lg">
         <button
           className="absolute right-6 hover:text-gray-400"
           onClick={() => navigate(-1)}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <FontAwesomeIcon icon={faXmark} />
         </button>
         <h4 className="mb-5 text-left text-3xl font-medium">예약 자세히</h4>
         <div className="mb-5 flex justify-around">
@@ -132,7 +125,7 @@ export const ReservationDetail = () => {
         </div>
         {reservation && (
           <div className="flex max-w-sm flex-col space-y-4">
-            <div className="flex items-center justify-between gap-3">
+            <div className="relative flex items-center justify-between gap-3 pr-5">
               <Name
                 id={reservation.id}
                 birthday={reservation.patient.birthday}
@@ -141,21 +134,23 @@ export const ReservationDetail = () => {
                 registrationNumber={reservation.patient.registrationNumber}
                 columnCount={3}
               />
-              {openPatient ? (
-                <FontAwesomeIcon
-                  icon={faRotateBack}
-                  size={"xs"}
-                  onClick={() => setOpenPatient(false)}
-                />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faQuestion}
-                  size={"sm"}
-                  onClick={() => setOpenPatient(true)}
-                />
-              )}
+              <div className="absolute right-0">
+                {openPatientDetail ? (
+                  <FontAwesomeIcon
+                    icon={faRotateBack}
+                    size={"xs"}
+                    onClick={() => setOpenPatientDetail(false)}
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faQuestion}
+                    size={"sm"}
+                    onClick={() => setOpenPatientDetail(true)}
+                  />
+                )}
+              </div>
             </div>
-            {openPatient ? (
+            {openPatientDetail ? (
               <Patient
                 birthday={reservation.patient.birthday}
                 gender={reservation.patient.gender}
@@ -211,6 +206,6 @@ export const ReservationDetail = () => {
           </div>
         )}
       </div>
-    </ModalPortal>
+    </>
   );
 };
