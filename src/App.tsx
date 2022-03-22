@@ -1,7 +1,7 @@
 import React from "react";
 import { useReactiveVar } from "@apollo/client";
 import { isLoggedInVar } from "./apollo";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Layout } from "./components/layout";
 import { Home } from "./pages/home";
 import { CreatePatient } from "./pages/create-patient";
@@ -15,12 +15,13 @@ import { Reserve } from "./pages/reserve";
 import { ListPatient } from "./pages/list-patient";
 import { CreateAccount } from "./pages/create-account";
 import { Login } from "./pages/login";
-import { ReservationDetail } from "./pages/reservation-detail";
 import { Search } from "./pages/search";
 import { PateintDetail } from "./pages/patient-detail";
+import { ModalPortal } from "./components/modal-portal";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const navigate = useNavigate();
   // const { data, loading, error } = useMe();
   // if (!data || loading || error) {
   //   return (
@@ -31,38 +32,42 @@ function App() {
   // }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          {isLoggedIn ? (
-            <>
-              <Route path="confirm" element={<ConfirmEmail />} />
-              <Route path="edit-profile" element={<EditProfile />} />
-              <Route path="tt" element={<TimeTable />}>
-                <Route path="reserve" element={<Reserve />} />
-                <Route path="reservation/:id" element={<ReservationDetail />} />
-              </Route>
-              <Route path="create-patient" element={<CreatePatient />} />
-              <Route path="list-patient" element={<ListPatient />} />
-              <Route path="search" element={<Search />} />
-              <Route path="patient" element={<PateintDetail />} />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        {isLoggedIn ? (
+          <>
+            <Route path="confirm" element={<ConfirmEmail />} />
+            <Route path="edit-profile" element={<EditProfile />} />
+            <Route path="tt" element={<TimeTable />}>
+              <Route
+                path="reserve"
+                element={
+                  <ModalPortal closeAction={() => navigate(-1)}>
+                    <Reserve />
+                  </ModalPortal>
+                }
+              />
+            </Route>
+            <Route path="create-patient" element={<CreatePatient />} />
+            <Route path="list-patient" element={<ListPatient />} />
+            <Route path="search" element={<Search />} />
+            <Route path="patient" element={<PateintDetail />} />
 
-              <Route path="test" element={<Test />} />
-            </>
-          ) : (
-            <>
-              <Route path="/account" element={<Account />}>
-                <Route path="login" element={<Login />} />
-                <Route path="create" element={<CreateAccount />} />
-              </Route>
-            </>
-          )}
-          <Route path="/about" element={<h1>hghh</h1>} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+            <Route path="test" element={<Test />} />
+          </>
+        ) : (
+          <>
+            <Route path="/account" element={<Account />}>
+              <Route path="login" element={<Login />} />
+              <Route path="create" element={<CreateAccount />} />
+            </Route>
+          </>
+        )}
+        <Route path="/about" element={<h1>hghh</h1>} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
 

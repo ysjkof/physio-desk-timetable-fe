@@ -1,5 +1,5 @@
 import { useReactiveVar } from "@apollo/client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -13,13 +13,14 @@ import {
   UTC_OPTION_KST,
 } from "../libs/variables";
 import { getHHMM, getYMD } from "../libs/utils";
-import { ModalPortal } from "../components/mordal-portal";
 import {
   CreateReservationMutation,
   useCreateReservationMutation,
 } from "../graphql/generated/graphql";
+import { CreatePatient } from "./create-patient";
 
 export const Reserve = () => {
+  const [openCreatePatient, setOpenCreatePatient] = useState(false);
   const location = useLocation();
   const state = location.state as { startDate: Date };
   const selectedPatient = useReactiveVar(selectedPatientVar);
@@ -93,7 +94,7 @@ export const Reserve = () => {
   }, []);
 
   return (
-    <ModalPortal>
+    <>
       <Helmet>
         <title>예약하기 | Muool</title>
       </Helmet>
@@ -101,61 +102,75 @@ export const Reserve = () => {
         <h4 className=" mb-5 w-full text-left text-3xl font-medium">
           예약하기
         </h4>
-        <SearchPatient />
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mt-5 mb-5 grid w-full gap-3"
-        >
-          {errors.startYDM?.message && (
-            <FormError errorMessage={errors.startYDM?.message} />
-          )}
-          <label>예약 시간</label>
-          <div className="flex">
-            <input
-              {...register("startYDM", {
-                required: "시작 시간을 입력해주세요.",
-                pattern: REGEX_YYYYMMDD,
-              })}
-              type="text"
-              className="input"
-              placeholder="yyyy-mm-dd"
-              defaultValue={
-                state?.startDate ? getYMD(state.startDate, "yyyymmdd", "-") : ""
-              }
-            />
-            <input
-              {...register("startHHMM", {
-                required: true,
-                pattern: REGEX_HHMM,
-              })}
-              type="text"
-              className="input"
-              placeholder="HH:MM"
-              defaultValue={
-                state?.startDate ? getHHMM(state.startDate, ":") : ""
-              }
-            />
-          </div>
-          <label>프로그램</label>
-          <select {...register("program")}>
-            {programs.manual.map((manual, index) => (
-              <option key={index} value={manual.id}>
-                {manual.name}
-              </option>
-            ))}
-          </select>
-          <Button
-            canClick={selectedPatient && isValid}
-            loading={loading}
-            actionText={"예약 등록"}
-          />
-          {createReservationResult?.createReservation.error && (
-            <FormError
-              errorMessage={createReservationResult.createReservation.error}
-            />
-          )}
-        </form>
+        {openCreatePatient ? (
+          <CreatePatient />
+        ) : (
+          <>
+            <button
+              className="absolute top-16 right-10 text-gray-500 hover:text-gray-700"
+              onClick={() => setOpenCreatePatient(!openCreatePatient)}
+            >
+              환자등록
+            </button>
+            <SearchPatient />
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="mt-5 mb-5 grid w-full gap-3"
+            >
+              {errors.startYDM?.message && (
+                <FormError errorMessage={errors.startYDM?.message} />
+              )}
+              <label>예약 시간</label>
+              <div className="flex">
+                <input
+                  {...register("startYDM", {
+                    required: "시작 시간을 입력해주세요.",
+                    pattern: REGEX_YYYYMMDD,
+                  })}
+                  type="text"
+                  className="input"
+                  placeholder="yyyy-mm-dd"
+                  defaultValue={
+                    state?.startDate
+                      ? getYMD(state.startDate, "yyyymmdd", "-")
+                      : ""
+                  }
+                />
+                <input
+                  {...register("startHHMM", {
+                    required: true,
+                    pattern: REGEX_HHMM,
+                  })}
+                  type="text"
+                  className="input"
+                  placeholder="HH:MM"
+                  defaultValue={
+                    state?.startDate ? getHHMM(state.startDate, ":") : ""
+                  }
+                />
+              </div>
+              <label>프로그램</label>
+              <select {...register("program")}>
+                {programs.manual.map((manual, index) => (
+                  <option key={index} value={manual.id}>
+                    {manual.name}
+                  </option>
+                ))}
+              </select>
+              <Button
+                canClick={selectedPatient && isValid}
+                loading={loading}
+                actionText={"예약 등록"}
+              />
+              {createReservationResult?.createReservation.error && (
+                <FormError
+                  errorMessage={createReservationResult.createReservation.error}
+                />
+              )}
+            </form>
+          </>
+        )}
       </div>
-    </ModalPortal>
+    </>
   );
 };
