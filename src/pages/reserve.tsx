@@ -152,6 +152,8 @@ export const Reserve = () => {
                 <input
                   {...register("startHHMM", {
                     required: true,
+                    maxLength: 5,
+                    minLength: 5,
                     pattern: {
                       value: REGEX_HHMM,
                       message: "HHMM 형식이 맞지 않습니다.",
@@ -160,6 +162,8 @@ export const Reserve = () => {
                   type="text"
                   className="input"
                   placeholder="HH:MM"
+                  minLength={5}
+                  maxLength={5}
                   defaultValue={getHHMM(state.startDate, ":")}
                 />
               </div>
