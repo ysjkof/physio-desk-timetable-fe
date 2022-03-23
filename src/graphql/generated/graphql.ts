@@ -63,6 +63,7 @@ export type CreatePatientOutput = {
   __typename?: 'CreatePatientOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
+  patient: Patient;
 };
 
 export type CreateReservationInput = {
@@ -517,7 +518,7 @@ export type CreatePatientMutationVariables = Exact<{
 }>;
 
 
-export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null } };
+export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } } };
 
 export type CreateReservationMutationVariables = Exact<{
   input: CreateReservationInput;
@@ -641,6 +642,14 @@ export const CreatePatientDocument = gql`
   createPatient(input: $createPatientInput) {
     ok
     error
+    patient {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+      memo
+    }
   }
 }
     `;
