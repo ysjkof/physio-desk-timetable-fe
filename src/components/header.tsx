@@ -6,6 +6,7 @@ import { LOCALSTORAGE_TOKEN } from "../libs/variables";
 import { useMe } from "../hooks/useMe";
 import muoolLogo from "../images/logoMuoolJinBlue.svg";
 import { useForm } from "react-hook-form";
+import { Input } from "./input";
 
 export const Header: React.FC = () => {
   const { data } = useMe();
@@ -41,15 +42,15 @@ export const Header: React.FC = () => {
           <Link to="/">
             <img src={muoolLogo} className="w-36" alt="Muool" />
           </Link>
-          <div className="h-6 w-40 bg-pink-200">
-            {location.pathname === "/tt" && ""}
-          </div>
           <form onSubmit={handleSubmit(onSubmitSearch)}>
-            <input
-              {...register("search", { required: true })}
+            <Input
+              register={register("search", { required: true })}
+              name={"input-patient"}
+              label={null}
+              placeholder={"검색..."}
+              kind={"search"}
               type={"search"}
-              placeholder="Search..."
-              className="w-full rounded-full border"
+              required={true}
             />
           </form>
           <span className="flex items-center gap-5 text-xs">
