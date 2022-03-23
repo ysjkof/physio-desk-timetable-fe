@@ -33,4 +33,5 @@ export const selectedPatientVar = makeVar<null | {
   gender: string;
   registrationNumber?: string | null | undefined;
   birthday?: any;
+  memo?: string | null | undefined;
 }>(null);
