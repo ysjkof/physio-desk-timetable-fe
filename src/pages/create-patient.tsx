@@ -9,8 +9,10 @@ import {
   CreatePatientMutation,
   useCreatePatientMutation,
 } from "../graphql/generated/graphql";
+import { Input } from "../components/input";
+import { selectedPatientVar } from "../libs/variables";
 
-export const CreatePatient = () => {
+export const CreatePatient = ({ closeModal }: any) => {
   const {
     register,
     getValues,
@@ -23,11 +25,11 @@ export const CreatePatient = () => {
 
   const onCompleted = (data: CreatePatientMutation) => {
     const {
-      createPatient: { ok },
+      createPatient: { ok, patient },
     } = data;
     if (ok) {
-      alert("Patient Created! Log in now!");
-      navigate("/");
+      selectedPatientVar(patient);
+      closeModal();
     }
   };
   const [
@@ -48,11 +50,15 @@ export const CreatePatient = () => {
   return (
     <>
       <Helmet>
-        <title>환자 등록 | Muool</title>
+        <title>환자등록 | Muool</title>
       </Helmet>
-      <h4 className="mb-5 w-full text-left text-3xl font-medium">
-        환자 만들기
-      </h4>
+      <h4 className="mb-5 w-full text-left text-3xl font-medium">환자등록</h4>
+      <button
+        className="absolute top-14 right-10 rounded-md border px-2 text-gray-500 hover:text-gray-700"
+        onClick={() => closeModal(false)}
+      >
+        돌아가기
+      </button>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-5 mb-5 grid w-full gap-3"
@@ -60,13 +66,15 @@ export const CreatePatient = () => {
         {errors.name?.message && (
           <FormError errorMessage={errors.name?.message} />
         )}
-        <input
-          {...register("name", {
+        <Input
+          label={"이름*"}
+          name={"name"}
+          placeholder={"이름을 입력하세요"}
+          register={register("name", {
             required: "Name is required",
           })}
-          type="name"
-          placeholder="이름"
-          className="input"
+          type={"name"}
+          required={true}
         />
         {errors.gender?.message && (
           <FormError errorMessage={errors.gender?.message} />
@@ -77,7 +85,7 @@ export const CreatePatient = () => {
               남성
             </label>
             <input
-              {...register("gender", { required: true })}
+              {...register("gender", { required: "성별을 선택하세요" })}
               type="radio"
               value="male"
               id="gender-male"
@@ -88,25 +96,37 @@ export const CreatePatient = () => {
               여성
             </label>
             <input
-              {...register("gender", { required: true })}
+              {...register("gender", { required: "성별을 선택하세요" })}
               type="radio"
               value="female"
               id="gender-female"
+              defaultChecked
             />
           </div>
         </div>
-
-        <input
-          {...register("birthday", { required: true })}
+        <Input
+          label={"생년월일*"}
+          name={"birthday"}
+          placeholder={"1970-01-15"}
+          register={register("birthday", { required: "생일을 입력하세요" })}
           type={"datetime"}
-          className="input"
-          placeholder="생일 yyyy-mm-dd"
+          required={true}
         />
-        <input
-          {...register("memo")}
+        <Input
+          label={"등록번호"}
+          name={"registrationNumber"}
+          placeholder={"숫자를 입력하세요"}
+          register={register("registrationNumber")}
+          type={"number"}
+          required={false}
+        />
+        <Input
+          label={"메모"}
+          name={"memo"}
+          placeholder={"메모를 입력하세요"}
+          register={register("memo")}
           type={"text"}
-          className="input"
-          placeholder="메모"
+          required={false}
         />
 
         <Button canClick={isValid} loading={loading} actionText={"환자 등록"} />
