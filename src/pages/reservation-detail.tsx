@@ -17,12 +17,16 @@ import {
   useEditReservationMutation,
   useFindReservationByIdQuery,
 } from "../graphql/generated/graphql";
-import { getHHMM, getTimeLength, getYMD } from "../libs/utils";
+import { cls, getHHMM, getTimeLength, getYMD } from "../libs/utils";
 
 interface IReservationDetail {
   reservationId: number;
+  closeAction: any;
 }
-export const ReservationDetail = ({ reservationId }: IReservationDetail) => {
+export const ReservationDetail = ({
+  reservationId,
+  closeAction,
+}: IReservationDetail) => {
   const navigate = useNavigate();
   const [openPatientDetail, setOpenPatientDetail] = useState<boolean>(false);
 
@@ -31,7 +35,8 @@ export const ReservationDetail = ({ reservationId }: IReservationDetail) => {
       deleteReservation: { ok },
     } = data;
     if (ok) {
-      navigate(-1);
+      // 캐시 수정해서 변경사항 바로 렌더링하기
+      return closeAction();
     }
   };
 
@@ -40,7 +45,8 @@ export const ReservationDetail = ({ reservationId }: IReservationDetail) => {
       editReservation: { ok },
     } = data;
     if (ok) {
-      navigate(-1);
+      // 캐시 수정해서 변경사항 바로 렌더링하기
+      return;
     }
   };
 
@@ -60,21 +66,32 @@ export const ReservationDetail = ({ reservationId }: IReservationDetail) => {
     },
   });
   const onClickEditNoshow = () => {
-    const confirmDelete = window.confirm("예약을 취소합니다.");
+    const confirmDelete = window.confirm("예약을 부도처리합니다.");
     if (confirmDelete) {
+      let state: ReservationState;
+      reservation?.state === ReservationState.NoShow
+        ? (state = ReservationState.Reserved)
+        : (state = ReservationState.NoShow);
       editReservationMutation({
         variables: {
-          input: { reservationId, state: ReservationState.Canceled },
+          input: { reservationId, state },
         },
       });
     }
   };
   const onClickEditCancel = () => {
-    const confirmDelete = window.confirm("예약을 부도처리 합니다.");
+    const confirmDelete = window.confirm("예약을 취소 합니다.");
     if (confirmDelete) {
+      let state: ReservationState;
+
+      reservation?.state === ReservationState.Canceled
+        ? (state = ReservationState.Reserved)
+        : (state = ReservationState.Canceled);
+      console.log(reservation?.state);
+      console.log(state);
       editReservationMutation({
         variables: {
-          input: { reservationId, state: ReservationState.Canceled },
+          input: { reservationId, state },
         },
       });
     }
@@ -106,13 +123,23 @@ export const ReservationDetail = ({ reservationId }: IReservationDetail) => {
           </button>
           <button
             onClick={onClickEditNoshow}
-            className="rounded-md px-2 font-medium text-gray-500 shadow-cst"
+            className={cls(
+              reservation?.state === ReservationState.NoShow
+                ? "bg-yellow-100"
+                : "",
+              "rounded-md px-2 font-medium text-gray-500 shadow-cst"
+            )}
           >
             부도
           </button>
           <button
             onClick={onClickEditCancel}
-            className="rounded-md px-2 font-medium text-gray-500 shadow-cst"
+            className={cls(
+              reservation?.state === ReservationState.Canceled
+                ? "bg-red-100 text-white"
+                : "",
+              "rounded-md px-2 font-medium text-gray-500 shadow-cst"
+            )}
           >
             취소
           </button>

@@ -58,7 +58,7 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
     <>
       {openReserve ? (
         <ModalPortal closeAction={setOpenReserve}>
-          <ReservationDetail reservationId={id} />
+          <ReservationDetail reservationId={id} closeAction={setOpenReserve} />
         </ModalPortal>
       ) : (
         ""
