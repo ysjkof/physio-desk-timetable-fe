@@ -25,12 +25,6 @@ export function Home() {
         <div className="mt-2 space-x-4">
           <Link
             className="rounded-lg border px-2 py-1 text-sky-400"
-            to="/create-patient"
-          >
-            Create Patient
-          </Link>
-          <Link
-            className="rounded-lg border px-2 py-1 text-sky-400"
             to="/list-patient"
           >
             List Patient
