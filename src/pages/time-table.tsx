@@ -154,7 +154,7 @@ export const TimeTable = () => {
   };
 
   function getLabels(value: Date) {
-    const user = new User({ name: "default", labels: [] });
+    const labels = [];
     const start = new Date(value);
     const end = new Date(start);
     start.setHours(tableLength.start.hours);
@@ -166,13 +166,13 @@ export const TimeTable = () => {
     while (i !== 150) {
       const date = new Date(start);
       const labelRow = new LabelRow({ labelDate: date, reservations: [] });
-      user.labels.push(labelRow);
+      labels.push(labelRow);
       const getMinutes = start.getMinutes();
       start.setMinutes(getMinutes + 10);
       i++;
       if (start.valueOf() > end.valueOf()) i = 150;
     }
-    return user;
+    return labels;
   }
 
   function getWeeks(value: Date, option?: "sunday") {
@@ -210,7 +210,8 @@ export const TimeTable = () => {
     const result: any[] = [];
     const newDay = new Day({
       date: inputDate,
-      users: [getLabels(inputDate)],
+      users: [new User({ name: "default", labels: getLabels(inputDate) })],
+      // users: [getLabels(inputDate)],
     });
     result.push(newDay);
     return result;
@@ -221,7 +222,8 @@ export const TimeTable = () => {
     weeks.forEach((day) => {
       const newDay = new Day({
         date: day,
-        users: [getLabels(day)],
+        users: [new User({ name: "default", labels: getLabels(day) })],
+        // users: [getLabels(day)],
       });
       result.push(newDay);
     });
