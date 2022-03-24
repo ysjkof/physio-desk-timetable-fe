@@ -28,8 +28,8 @@ export const CreatePatient = ({ closeModal }: any) => {
       createPatient: { ok, patient },
     } = data;
     if (ok) {
-      selectedPatientVar(patient);
       closeModal();
+      selectedPatientVar(patient);
     }
   };
   const [
