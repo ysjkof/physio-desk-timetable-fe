@@ -31,7 +31,12 @@ export const Name: React.FC<IName> = ({
           {getYMD(birthday, "yymmdd", "-")}
         </span>
       ) : (
-        <span className="text-right text-sm text-gray-400">
+        <span
+          className={cls(
+            registrationNumber ? "text-right" : "text-center",
+            " text-sm text-gray-400"
+          )}
+        >
           {registrationNumber ? registrationNumber : "-"}
         </span>
       )}
