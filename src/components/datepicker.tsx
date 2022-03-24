@@ -1,11 +1,48 @@
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { cls } from "../libs/utils";
 
-export const Datepicker: React.FC = () => {
+interface IDatePicker {}
+
+export const Datepicker: React.FC<IDatePicker> = () => {
   const nowDate = new Date();
+  const [open, setOpen] = useState(false);
   const [prevDate, setPrevDate] = useState(nowDate);
   const [nextDate, setNextDate] = useState(nowDate);
   const [dateOfMonth, setDateOfMonth] = useState(getWeeksOfMonth(nowDate));
+  const [minutesUnit, setMinutesUnit] = useState(10);
+  const [selectedHour, setSelectedHour] = useState(nowDate.getHours());
+  const [selectedMinutes, setSelectedMinutes] = useState(
+    Number(nowDate.getMinutes().toString().substring(0, 1) + "0")
+  );
+  const [tableLength, setTableLength] = useState({
+    start: { hours: 9, minutes: 0 },
+    end: { hours: 19, minutes: 0 },
+  });
+
+  function getHours(start: number, end: number) {
+    const hours = [];
+    let i = start;
+    while (i < end) {
+      hours.push(i);
+      i++;
+    }
+    return hours;
+  }
+  const listOfHours = getHours(tableLength.start.hours, tableLength.end.hours);
+
+  function getMinutes(minutesUnit: number) {
+    const minutes = [];
+    let i = 0;
+    while (i < 60) {
+      minutes.push(i);
+      i = i + minutesUnit;
+    }
+    return minutes;
+  }
+  const listOfMinutes = getMinutes(minutesUnit);
 
   function getWeeks(value: Date, option?: "sunday") {
     let result: Date[] = [];
@@ -33,15 +70,13 @@ export const Datepicker: React.FC = () => {
       const date = new Date(firstDate);
       date.setDate(i * 7 + 1);
       const week = getWeeks(date);
-      result.push(week);
+      result.push(...week);
     }
     return result;
   }
 
   useEffect(() => {
-    console.log(1);
     if (nextDate.getMonth() !== prevDate.getMonth()) {
-      console.log(2);
       setPrevDate(nextDate);
       setDateOfMonth(getWeeksOfMonth(nextDate));
     }
@@ -49,72 +84,120 @@ export const Datepicker: React.FC = () => {
 
   return (
     <>
-      <div className="relative text-xs text-gray-600">
-        <div className="absolute top-10 flex flex-col rounded-md border p-3">
-          <div className="navigation mb-2 flex justify-between">
-            <div>{`${dateOfMonth[2][0].getFullYear()}년 ${
-              dateOfMonth[2][0].getMonth() + 1
-            }월`}</div>
-            <div className="space-x-6">
-              <button
-                onClick={() => {
-                  const date = new Date(prevDate);
-                  date.setMonth(date.getMonth() - 1);
-                  setPrevDate(date);
-                  setDateOfMonth(getWeeksOfMonth(date));
-                }}
-              >
-                위
-              </button>
-              <button
-                onClick={() => {
-                  const date = new Date(prevDate);
-                  date.setMonth(date.getMonth() + 1);
-                  setPrevDate(date);
-                  setDateOfMonth(getWeeksOfMonth(date));
-                }}
-              >
-                아래
-              </button>
+      {open ? (
+        <div className="absolute bottom-0 w-full text-xs text-gray-600">
+          <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
+            <div className="navigation mb-1 flex justify-between border-b pb-2">
+              <div>{`${dateOfMonth[15].getFullYear()}년 ${
+                dateOfMonth[15].getMonth() + 1
+              }월`}</div>
+              <div className="space-x-6">
+                <button
+                  onClick={() => {
+                    const date = new Date(prevDate);
+                    date.setMonth(date.getMonth() - 1);
+                    setPrevDate(date);
+                    setDateOfMonth(getWeeksOfMonth(date));
+                  }}
+                >
+                  <FontAwesomeIcon icon={faArrowUp} />
+                </button>
+                <button
+                  onClick={() => {
+                    const date = new Date(prevDate);
+                    date.setMonth(date.getMonth() + 1);
+                    setPrevDate(date);
+                    setDateOfMonth(getWeeksOfMonth(date));
+                  }}
+                >
+                  <FontAwesomeIcon icon={faArrowDown} />
+                </button>
+                <button onClick={() => setNextDate(new Date())}>오늘</button>
+                <button onClick={() => setOpen(false)}>닫기</button>
+              </div>
+            </div>
+            <div className="datepicker flex divide-x">
+              <div className="datepicker-col left grid w-full grid-cols-7 pr-1.5 text-center">
+                {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
+                  <div>{day}</div>
+                ))}
+                {dateOfMonth.map((day) => (
+                  <button
+                    key={day.valueOf()}
+                    className={cls(
+                      "px-1.5 py-1",
+                      day.getMonth() !== dateOfMonth[15].getMonth()
+                        ? "opacity-40"
+                        : "",
+                      day.getDay() === 0 ? "text-red-500" : "",
+                      day.getDay() === 6 ? "text-blue-500" : "",
+                      day.getDate() === nextDate.getDate() &&
+                        day.getMonth() === nextDate.getMonth()
+                        ? "rounded-md bg-red-400 text-white"
+                        : "",
+                      day.getDate() === nowDate.getDate() &&
+                        day.getMonth() === nowDate.getMonth()
+                        ? "rounded-md border border-transparent ring-2 ring-red-500"
+                        : ""
+                    )}
+                    data-date={day}
+                    onClick={(e) =>
+                      // @ts-ignore
+                      setNextDate(new Date(e.currentTarget.dataset.date))
+                    }
+                  >
+                    {day.getDate()}
+                  </button>
+                ))}
+              </div>
+              <div className="datepicker-col right pl-2">
+                <div className="timepicker flex h-32 space-x-2 text-center">
+                  <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                    <span>시</span>
+                    {listOfHours.map((hours) => (
+                      <span
+                        className={cls(
+                          "px-1.5 text-base",
+                          selectedHour === hours
+                            ? "rounded-md bg-blue-500 text-white"
+                            : ""
+                        )}
+                        onClick={() => setSelectedHour(hours)}
+                      >
+                        {String(hours).padStart(2, "0")}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                    <span>분</span>
+                    {listOfMinutes.map((minutes) => (
+                      <span
+                        className={cls(
+                          "px-1.5 text-base",
+                          +selectedMinutes === minutes
+                            ? "rounded-md bg-blue-500 text-white"
+                            : ""
+                        )}
+                        onClick={() => setSelectedMinutes(minutes)}
+                      >
+                        {String(minutes).padStart(2, "0")}
+                      </span>
+                    ))}
+                  </div>
+                  {/* <div className="flex flex-col whitespace-nowrap">
+                    <span className="text-sm">오전</span>
+                    <span className="text-sm">오후</span>
+                  </div> */}
+                </div>
+              </div>
             </div>
           </div>
-          <div className="datepicker grid grid-cols-7 text-center">
-            {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
-              <div>{day}</div>
-            ))}
-            {dateOfMonth.map((week) =>
-              week.map((day) => (
-                <div
-                  className={cls(
-                    "px-1.5 py-1",
-                    day.getMonth() !== dateOfMonth[2][0].getMonth()
-                      ? "opacity-40"
-                      : "",
-                    day.getDay() === 0 ? "text-red-500" : "",
-                    day.getDay() === 6 ? "text-blue-500" : "",
-                    day.getDate() === nextDate.getDate() &&
-                      day.getMonth() === nextDate.getMonth()
-                      ? "rounded-md bg-red-400 text-white"
-                      : "",
-                    day.getDate() === nowDate.getDate() &&
-                      day.getMonth() === nowDate.getMonth()
-                      ? "rounded-md border border-transparent ring-2 ring-red-500"
-                      : ""
-                  )}
-                  data-date={day}
-                  onClick={(e) =>
-                    // @ts-ignore
-                    setNextDate(new Date(e.currentTarget.dataset.date))
-                  }
-                >
-                  {day.getDate()}
-                </div>
-              ))
-            )}
-          </div>
-          <div className="timepicker"></div>
         </div>
-      </div>
+      ) : (
+        <button onClick={() => setOpen(true)}>
+          <FontAwesomeIcon icon={faCalendar} />
+        </button>
+      )}
     </>
   );
 };

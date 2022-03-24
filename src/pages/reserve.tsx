@@ -20,6 +20,7 @@ import {
 import { CreatePatient } from "./create-patient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { Datepicker } from "../components/datepicker";
 
 export const Reserve = () => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
@@ -135,7 +136,7 @@ export const Reserve = () => {
                 <FormError errorMessage={errors.startHHMM?.message} />
               )}
               <label>예약 시간</label>
-              <div className="flex">
+              <div className="relative flex">
                 <input
                   {...register("startYDM", {
                     required: "시작 시간을 입력해주세요.",
@@ -147,9 +148,10 @@ export const Reserve = () => {
                   type="text"
                   className="input"
                   placeholder="yyyy-mm-dd"
-                  defaultValue={getYMD(state.startDate, "yyyymmdd", "-")}
+                  defaultValue={getYMD(state?.startDate, "yyyymmdd", "-")}
                 />
-                <input
+                <Datepicker />
+                {/* <input
                   {...register("startHHMM", {
                     required: true,
                     maxLength: 5,
@@ -165,7 +167,7 @@ export const Reserve = () => {
                   minLength={5}
                   maxLength={5}
                   defaultValue={getHHMM(state.startDate, ":")}
-                />
+                /> */}
               </div>
               <label>프로그램</label>
               <select {...register("program")}>
