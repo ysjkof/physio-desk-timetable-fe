@@ -28,3 +28,11 @@
 .c-col-start-10 {
   grid-column-start: 10;
 }
+
+.hidden-scrollbar {
+  scrollbar-width: none;
+}
+
+.hidden-scrollbar::-webkit-scrollbar {
+  width: 0px;
+}
