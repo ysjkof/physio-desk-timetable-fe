@@ -14,33 +14,44 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
   const { register, getValues, handleSubmit } = useForm({
     mode: "onChange",
   });
+  const [queryPageNumber, setQueryPageNumber] = useState(1);
   const selectedPatient = useReactiveVar(selectedPatientVar);
 
   const [callQuery, { loading, data: searchPatientResult }] =
     useSearchPatientByNameLazyQuery();
   const onSubmit = () => {
-    console.log("submit");
     if (!loading) {
       const { patientName } = getValues();
       const patientNameTrim = patientName.trim();
       callQuery({
         variables: {
           input: {
-            page: 1,
+            page: queryPageNumber,
             query: patientNameTrim,
           },
         },
       });
     }
   };
-
+  const pageNumbers = (total: number): number[] => {
+    let arr = [];
+    for (let i = 0; i < total; i++) {
+      arr.push(i);
+      if (i > 100) break;
+    }
+    return arr;
+  };
   useEffect(() => {
     if (!loading && searchPatientResult) {
       setPatients(searchPatientResult.searchPatientByName.patients);
-      console.log(searchPatientResult.searchPatientByName.patients);
+      setTotalCount(searchPatientResult.searchPatientByName.totalCount);
+      setTotalPages(searchPatientResult.searchPatientByName.totalPages);
+      console.log(searchPatientResult);
     }
   }, [loading, searchPatientResult]);
 
+  const [totalCount, setTotalCount] = useState<number | null | undefined>();
+  const [totalPages, setTotalPages] = useState<number | null | undefined>();
   const [patients, setPatients] = useState<
     | {
         __typename?: "Patient" | undefined;
@@ -85,7 +96,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
       </div>
       <div
         className={cls(
-          "mt-4 h-28 overflow-y-scroll rounded-md border border-gray-300 p-1",
+          "mt-4 h-32 overflow-y-scroll rounded-md border border-gray-300 px-1 py-0.5",
           selectedPatient ? "border-none" : ""
         )}
       >
@@ -135,6 +146,22 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
             </div>
           </div>
         )}
+      </div>
+      <div className="mt-1 h-1 space-x-4 text-center text-xs text-gray-600">
+        {totalPages
+          ? pageNumbers(totalPages).map((pageNumber) => (
+              <button
+                className={cls(
+                  queryPageNumber === pageNumber + 1
+                    ? "font-bold text-red-500"
+                    : ""
+                )}
+                onClick={() => setQueryPageNumber(pageNumber + 1)}
+              >
+                {pageNumber + 1}
+              </button>
+            ))
+          : ""}
       </div>
     </form>
   );
