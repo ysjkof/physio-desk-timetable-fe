@@ -21,6 +21,7 @@ import { CreatePatient } from "./create-patient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Datepicker } from "../components/datepicker";
+import { listReservationRefetchVar } from "../store";
 
 export const Reserve = () => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
@@ -28,6 +29,7 @@ export const Reserve = () => {
   const state = location.state as { startDate: Date };
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const navigate = useNavigate();
+  const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
 
   const {
     register,
@@ -45,6 +47,7 @@ export const Reserve = () => {
     if (error) {
       alert(`오류가 발생했습니다; ${error}`);
     }
+    listReservationRefetch();
     navigate(-1);
   };
 

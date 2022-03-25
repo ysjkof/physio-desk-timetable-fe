@@ -1,3 +1,4 @@
+import { makeVar, useReactiveVar } from "@apollo/client";
 import {
   faCalendarAlt,
   faList,
@@ -20,6 +21,7 @@ import {
   useListReservationsLazyQuery,
 } from "../graphql/generated/graphql";
 import { cls, compareDateMatch, getHHMM } from "../libs/utils";
+import { listReservationRefetchVar } from "../store";
 
 interface ITableLength {
   start: { hours: number; minutes: number };
@@ -230,8 +232,9 @@ export const TimeTable = () => {
     return result;
   };
 
-  const [queryListReservations, { loading, data: queryResult }] =
+  const [queryListReservations, { loading, data: queryResult, refetch }] =
     useListReservationsLazyQuery();
+  listReservationRefetchVar(refetch);
 
   useEffect(() => {
     setDateNavWeek([getWeeks(selectedDate)]);
