@@ -79,6 +79,7 @@ export type CreateReservationOutput = {
   __typename?: 'CreateReservationOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
+  reservation?: Maybe<Reservation>;
 };
 
 export type DeletePatientInput = {
