@@ -39,9 +39,12 @@ export const Reserve = () => {
   } = useForm({ mode: "onChange" });
 
   const onCompleted = (data: CreateReservationMutation) => {
-    // const {
-    //   createReservation: { ok, error },
-    // } = data;
+    const {
+      createReservation: { ok, error },
+    } = data;
+    if (error) {
+      alert(`오류가 발생했습니다; ${error}`);
+    }
     navigate(-1);
   };
 
