@@ -1,3 +1,4 @@
+import { useApolloClient, useReactiveVar } from "@apollo/client";
 import {
   faQuestion,
   faRotateBack,
@@ -12,12 +13,14 @@ import { Patient } from "../components/patient";
 import {
   DeleteReservationMutation,
   EditReservationMutation,
+  FindReservationByIdDocument,
   ReservationState,
   useDeleteReservationMutation,
   useEditReservationMutation,
   useFindReservationByIdQuery,
 } from "../graphql/generated/graphql";
 import { cls, getHHMM, getTimeLength, getYMD } from "../libs/utils";
+import { listReservationRefetchVar } from "../store";
 
 interface IReservationDetail {
   reservationId: number;
@@ -29,6 +32,7 @@ export const ReservationDetail = ({
 }: IReservationDetail) => {
   const navigate = useNavigate();
   const [openPatientDetail, setOpenPatientDetail] = useState<boolean>(false);
+  const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
 
   const onCompleted = (data: DeleteReservationMutation) => {
     const {
@@ -36,6 +40,7 @@ export const ReservationDetail = ({
     } = data;
     if (ok) {
       // 캐시 수정해서 변경사항 바로 렌더링하기
+      listReservationRefetch();
       return closeAction();
     }
   };
@@ -45,7 +50,6 @@ export const ReservationDetail = ({
       editReservation: { ok },
     } = data;
     if (ok) {
-      // 캐시 수정해서 변경사항 바로 렌더링하기
       return;
     }
   };
@@ -76,6 +80,30 @@ export const ReservationDetail = ({
         variables: {
           input: { reservationId, state },
         },
+        update: (cache) => {
+          cache.writeQuery({
+            query: FindReservationByIdDocument,
+            data: {
+              findReservationById: {
+                __typename: "FindReservationByIdOutput",
+                error: null,
+                ok: true,
+                reservation: {
+                  __typename: reservation?.__typename,
+                  endDate: reservation?.endDate,
+                  group: reservation?.group,
+                  id: reservation?.id,
+                  lastModifier: reservation?.lastModifier,
+                  memo: reservation?.memo,
+                  patient: reservation?.patient,
+                  startDate: reservation?.startDate,
+                  state,
+                  therapist: reservation?.therapist,
+                },
+              },
+            },
+          });
+        },
       });
     }
   };
@@ -83,15 +111,36 @@ export const ReservationDetail = ({
     const confirmDelete = window.confirm("예약을 취소 합니다.");
     if (confirmDelete) {
       let state: ReservationState;
-
       reservation?.state === ReservationState.Canceled
         ? (state = ReservationState.Reserved)
         : (state = ReservationState.Canceled);
-      console.log(reservation?.state);
-      console.log(state);
       editReservationMutation({
         variables: {
           input: { reservationId, state },
+        },
+        update: (cache) => {
+          cache.writeQuery({
+            query: FindReservationByIdDocument,
+            data: {
+              findReservationById: {
+                __typename: "FindReservationByIdOutput",
+                error: null,
+                ok: true,
+                reservation: {
+                  __typename: reservation?.__typename,
+                  endDate: reservation?.endDate,
+                  group: reservation?.group,
+                  id: reservation?.id,
+                  lastModifier: reservation?.lastModifier,
+                  memo: reservation?.memo,
+                  patient: reservation?.patient,
+                  startDate: reservation?.startDate,
+                  state,
+                  therapist: reservation?.therapist,
+                },
+              },
+            },
+          });
         },
       });
     }
