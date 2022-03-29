@@ -112,7 +112,7 @@ export const ReservationDetail = ({
       <div className="h-[550px] w-[400px] overflow-y-scroll bg-white py-6 px-16 sm:rounded-lg">
         <button
           className="absolute right-6 hover:text-gray-400"
-          onClick={() => navigate(-1)}
+          onClick={() => closeAction()}
         >
           <FontAwesomeIcon icon={faXmark} />
         </button>
