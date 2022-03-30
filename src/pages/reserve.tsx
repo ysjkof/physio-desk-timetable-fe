@@ -6,13 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { SearchPatient } from "../components/search-patient";
-import {
-  REGEX_HHMM,
-  REGEX_YYYYMMDD,
-  selectedPatientVar,
-  UTC_OPTION_KST,
-} from "../libs/variables";
-import { getHHMM, getYMD } from "../libs/utils";
+import { selectedPatientVar, UTC_OPTION_KST } from "../libs/variables";
 import {
   CreateReservationMutation,
   useCreateReservationMutation,
@@ -69,15 +63,30 @@ export const Reserve = () => {
 
   const onSubmit = () => {
     if (!loading && selectedPatient?.id) {
-      const { startYDM, startHHMM, program, memo, therapistId, groupId } =
-        getValues();
+      const {
+        inputYear,
+        inputMonth,
+        inputDate,
+        inputHours,
+        inputMinutes,
+        program,
+        memo,
+        therapistId,
+        groupId,
+      } = getValues();
       const index = programs.manual.findIndex(
         (id) => id.id === parseInt(program)
       );
       const findProgram = programs.manual[index];
       if (!findProgram) return console.log("치료 프로그램을 찾을 수 없습니다.");
       const startDate = new Date(
-        `${startYDM}T${startHHMM}:00.000${UTC_OPTION_KST}`
+        `${inputYear}-${String(inputMonth).padStart(
+          2,
+          "0"
+        )}-${inputDate.padStart(2, "0")}T${inputHours.padStart(
+          2,
+          "0"
+        )}:${inputMinutes.padStart(2, "0")}:00.000${UTC_OPTION_KST}`
       );
       const endDate = new Date(startDate);
       const minutes = findProgram.time;
@@ -99,12 +108,12 @@ export const Reserve = () => {
   };
 
   useEffect(() => {
+    if (!state.startDate) navigate(-1);
     return () => {
       selectedPatientVar(null);
     };
   }, []);
 
-  console.log(watch());
   return (
     <>
       <Helmet>
@@ -142,38 +151,97 @@ export const Reserve = () => {
                 <FormError errorMessage={errors.startHHMM?.message} />
               )}
               <label>예약 시간</label>
-              <div className="relative flex">
-                <input
-                  {...register("startYDM", {
-                    required: "시작 시간을 입력해주세요.",
-                    pattern: {
-                      value: REGEX_YYYYMMDD,
-                      message: "YMD 형식이 맞지 않습니다.",
-                    },
-                  })}
-                  type="text"
-                  className="input"
-                  placeholder="yyyy-mm-dd"
-                  defaultValue={getYMD(state?.startDate, "yyyymmdd", "-")}
+              <div className="relative flex items-center justify-between text-center">
+                <Datepicker
+                  setValue={setValue}
+                  defaultDate={state?.startDate}
                 />
-                <Datepicker />
-                {/* <input
-                  {...register("startHHMM", {
-                    required: true,
-                    maxLength: 5,
-                    minLength: 5,
-                    pattern: {
-                      value: REGEX_HHMM,
-                      message: "HHMM 형식이 맞지 않습니다.",
-                    },
-                  })}
-                  type="text"
-                  className="input"
-                  placeholder="HH:MM"
-                  minLength={5}
-                  maxLength={5}
-                  defaultValue={getHHMM(state.startDate, ":")}
-                /> */}
+                <label className="flex flex-col">
+                  <span className="text-xs text-gray-500">연도</span>
+                  <input
+                    {...register("inputYear", {
+                      required: "연도를 입력해주세요.",
+                      minLength: 4,
+                      maxLength: 4,
+                    })}
+                    type="number"
+                    className="remove-number-arrow input-number w-20"
+                    placeholder="YYYY"
+                    minLength={4}
+                    maxLength={4}
+                    max={2200}
+                    min={1970}
+                  />
+                </label>
+                <label className="flex flex-col">
+                  <span className="text-xs text-gray-500">월</span>
+                  <input
+                    {...register("inputMonth", {
+                      required: "월을 입력해주세요.",
+                      minLength: 1,
+                      maxLength: 2,
+                    })}
+                    type="number"
+                    className="remove-number-arrow input-number w-14 "
+                    placeholder="MM"
+                    minLength={1}
+                    maxLength={2}
+                    max={12}
+                    min={1}
+                  />
+                </label>
+                <label className="flex flex-col">
+                  <span className="text-xs text-gray-500">일</span>
+                  <input
+                    {...register("inputDate", {
+                      required: "날짜를 입력해주세요.",
+                      minLength: 1,
+                      maxLength: 2,
+                    })}
+                    type="number"
+                    className="remove-number-arrow input-number w-14"
+                    placeholder="DD"
+                    minLength={1}
+                    maxLength={2}
+                    max={31}
+                    min={1}
+                  />
+                </label>
+                <label className="flex flex-col">
+                  <span className="text-xs text-gray-500">시</span>
+                  <input
+                    {...register("inputHours", {
+                      required: "시간을 입력해주세요.",
+                      minLength: 1,
+                      maxLength: 2,
+                    })}
+                    type="number"
+                    className="remove-number-arrow input-number w-14"
+                    placeholder="HH"
+                    minLength={1}
+                    maxLength={2}
+                    max={23}
+                    min={1}
+                  />
+                </label>
+                <label className="flex flex-col">
+                  <span className="text-xs text-gray-500">분</span>
+                  <input
+                    {...register("inputMinutes", {
+                      required: "분을 입력해주세요.",
+                      minLength: 1,
+                      maxLength: 2,
+                    })}
+                    type="number"
+                    className="remove-number-arrow input-number w-14"
+                    placeholder="mm"
+                    minLength={1}
+                    maxLength={2}
+                    max={59}
+                    min={0}
+                    step={10}
+                  />
+                </label>
               </div>
               <label>프로그램</label>
               <select {...register("program")}>
@@ -183,7 +251,6 @@ export const Reserve = () => {
                   </option>
                 ))}
               </select>
-
               <Button
                 canClick={selectedPatient && isValid}
                 loading={loading}

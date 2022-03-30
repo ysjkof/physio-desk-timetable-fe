@@ -1,21 +1,27 @@
-import { faCalendar } from "@fortawesome/free-regular-svg-icons";
+import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import { FieldValues, UseFormSetValue } from "react-hook-form";
 import { cls } from "../libs/utils";
 
-interface IDatePicker {}
+interface IDatePicker {
+  setValue: UseFormSetValue<FieldValues>;
+  defaultDate: Date;
+}
 
-export const Datepicker: React.FC<IDatePicker> = () => {
-  const nowDate = new Date();
+export const Datepicker: React.FC<IDatePicker> = ({
+  setValue,
+  defaultDate,
+}) => {
   const [open, setOpen] = useState(false);
-  const [prevDate, setPrevDate] = useState(nowDate);
-  const [nextDate, setNextDate] = useState(nowDate);
-  const [dateOfMonth, setDateOfMonth] = useState(getWeeksOfMonth(nowDate));
-  const [minutesUnit, setMinutesUnit] = useState(10);
-  const [selectedHour, setSelectedHour] = useState(nowDate.getHours());
+  const [prevDate, setPrevDate] = useState(defaultDate);
+  const [nextDate, setNextDate] = useState(defaultDate);
+  const [dateOfMonth, setDateOfMonth] = useState(getWeeksOfMonth(defaultDate));
+  const [minutesUnit, setMinutesUnit] = useState(10); // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
+  const [selectedHour, setSelectedHour] = useState(defaultDate.getHours());
   const [selectedMinutes, setSelectedMinutes] = useState(
-    Number(nowDate.getMinutes().toString().substring(0, 1) + "0")
+    Number(defaultDate.getMinutes().toString().substring(0, 1) + "0")
   );
   const [tableLength, setTableLength] = useState({
     start: { hours: 9, minutes: 0 },
@@ -80,11 +86,48 @@ export const Datepicker: React.FC<IDatePicker> = () => {
       setPrevDate(nextDate);
       setDateOfMonth(getWeeksOfMonth(nextDate));
     }
+    console.log(nextDate);
+    setValue("inputYear", nextDate.getFullYear());
+    setValue("inputMonth", nextDate.getMonth() + 1);
+    setValue("inputDate", nextDate.getDate());
+    // return ()=>{setSelectedHour()}
   }, [nextDate]);
+
+  useEffect(() => {
+    nextDate.setHours(selectedHour);
+    setValue("inputHours", selectedHour);
+  }, [selectedHour]);
+  useEffect(() => {
+    nextDate.setMinutes(selectedMinutes);
+    setValue("inputMinutes", selectedMinutes);
+  }, [selectedMinutes]);
 
   return (
     <>
-      {open ? (
+      <button
+        onClick={() => setOpen((current) => !current)}
+        className={cls(
+          open
+            ? "text-gray-700  hover:text-gray-500"
+            : "text-gray-500 hover:text-gray-700"
+        )}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+      </button>
+      {open && (
         <div className="absolute bottom-0 w-full text-xs text-gray-600">
           <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
             <div className="navigation mb-1 flex justify-between border-b pb-2">
@@ -135,8 +178,8 @@ export const Datepicker: React.FC<IDatePicker> = () => {
                         day.getMonth() === nextDate.getMonth()
                         ? "rounded-md bg-red-400 text-white"
                         : "",
-                      day.getDate() === nowDate.getDate() &&
-                        day.getMonth() === nowDate.getMonth()
+                      day.getDate() === defaultDate.getDate() &&
+                        day.getMonth() === defaultDate.getMonth()
                         ? "rounded-md border border-transparent ring-2 ring-red-500"
                         : ""
                     )}
@@ -155,7 +198,7 @@ export const Datepicker: React.FC<IDatePicker> = () => {
                   <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
                     <span>시</span>
                     {listOfHours.map((hours) => (
-                      <span
+                      <button
                         className={cls(
                           "px-1.5 text-base",
                           selectedHour === hours
@@ -165,23 +208,25 @@ export const Datepicker: React.FC<IDatePicker> = () => {
                         onClick={() => setSelectedHour(hours)}
                       >
                         {String(hours).padStart(2, "0")}
-                      </span>
+                      </button>
                     ))}
                   </div>
                   <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
                     <span>분</span>
                     {listOfMinutes.map((minutes) => (
-                      <span
+                      <button
                         className={cls(
                           "px-1.5 text-base",
                           +selectedMinutes === minutes
                             ? "rounded-md bg-blue-500 text-white"
                             : ""
                         )}
-                        onClick={() => setSelectedMinutes(minutes)}
+                        onClick={() => {
+                          setSelectedMinutes(minutes);
+                        }}
                       >
                         {String(minutes).padStart(2, "0")}
-                      </span>
+                      </button>
                     ))}
                   </div>
                   {/* <div className="flex flex-col whitespace-nowrap">
@@ -193,10 +238,6 @@ export const Datepicker: React.FC<IDatePicker> = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <button onClick={() => setOpen(true)}>
-          <FontAwesomeIcon icon={faCalendar} />
-        </button>
       )}
     </>
   );
