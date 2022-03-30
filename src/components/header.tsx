@@ -43,14 +43,11 @@ export const Header: React.FC = () => {
             <img src={muoolLogo} className="w-36" alt="Muool" />
           </Link>
           <form onSubmit={handleSubmit(onSubmitSearch)}>
-            <Input
-              register={register("search", { required: true })}
-              name={"input-patient"}
-              label={null}
-              placeholder={"검색..."}
-              kind={"search"}
+            <input
+              {...register("search", { required: true })}
               type={"search"}
-              required={true}
+              placeholder="Search..."
+              className="input rounded-full py-0"
             />
           </form>
           <span className="flex items-center gap-5 text-xs">
