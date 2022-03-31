@@ -17,6 +17,18 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Datepicker } from "../components/datepicker";
 import { listReservationRefetchVar } from "../store";
 
+export interface ReserveForm {
+  inputYear: number;
+  inputMonth: number;
+  inputDate: number;
+  inputHours: number;
+  inputMinutes: number;
+  program: string;
+  memo: string;
+  therapistId: number;
+  groupId: number;
+}
+
 export const Reserve = () => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
   const location = useLocation();
@@ -32,7 +44,7 @@ export const Reserve = () => {
     handleSubmit,
     setValue,
     watch,
-  } = useForm({ mode: "onChange" });
+  } = useForm<ReserveForm>({ mode: "onChange" });
 
   const onCompleted = (data: CreateReservationMutation) => {
     const {
@@ -80,13 +92,11 @@ export const Reserve = () => {
       const findProgram = programs.manual[index];
       if (!findProgram) return console.log("치료 프로그램을 찾을 수 없습니다.");
       const startDate = new Date(
-        `${inputYear}-${String(inputMonth).padStart(
-          2,
-          "0"
-        )}-${inputDate.padStart(2, "0")}T${inputHours.padStart(
-          2,
-          "0"
-        )}:${inputMinutes.padStart(2, "0")}:00.000${UTC_OPTION_KST}`
+        `${inputYear}-${String(inputMonth).padStart(2, "0")}-${String(
+          inputDate
+        ).padStart(2, "0")}T${String(inputHours).padStart(2, "0")}:${String(
+          inputMinutes
+        ).padStart(2, "0")}:00.000${UTC_OPTION_KST}`
       );
       const endDate = new Date(startDate);
       const minutes = findProgram.time;
@@ -144,11 +154,20 @@ export const Reserve = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="mt-5 mb-5 grid w-full gap-3"
             >
-              {errors.startYDM?.message && (
-                <FormError errorMessage={errors.startYDM?.message} />
+              {errors.inputYear?.message && (
+                <FormError errorMessage={errors.inputYear?.message} />
               )}
-              {errors.startHHMM?.message && (
-                <FormError errorMessage={errors.startHHMM?.message} />
+              {errors.inputMonth?.message && (
+                <FormError errorMessage={errors.inputMonth?.message} />
+              )}
+              {errors.inputDate?.message && (
+                <FormError errorMessage={errors.inputDate?.message} />
+              )}
+              {errors.inputHours?.message && (
+                <FormError errorMessage={errors.inputHours?.message} />
+              )}
+              {errors.inputMinutes?.message && (
+                <FormError errorMessage={errors.inputMinutes?.message} />
               )}
               <label>예약 시간</label>
               <div className="relative flex items-center justify-between">

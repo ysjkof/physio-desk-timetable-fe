@@ -2,11 +2,12 @@ import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { FieldValues, UseFormSetValue } from "react-hook-form";
+import { UseFormSetValue } from "react-hook-form";
 import { cls } from "../libs/utils";
+import { ReserveForm } from "../pages/reserve";
 
 interface IDatePicker {
-  setValue: UseFormSetValue<FieldValues>;
+  setValue: UseFormSetValue<ReserveForm>;
   defaultDate: Date;
 }
 
