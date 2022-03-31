@@ -69,36 +69,44 @@ export const EditProfile = () => {
     });
   };
   return (
-    <div className="mt-52 flex flex-col items-center justify-center">
+    <>
       <Helmet>
         <title>Edit Profile | Muool</title>
       </Helmet>
-      <h4 className="mb-3 text-2xl font-semibold">Edit Profile</h4>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mt-5 mb-5 grid w-full max-w-screen-sm gap-3"
-      >
-        <input
-          {...register("email", {
-            pattern:
-              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          })}
-          className="input"
-          type="email"
-          placeholder="Email"
-        />
-        <input
-          {...register("password")}
-          className="input"
-          type="password"
-          placeholder="Password"
-        />
-        <Button
-          loading={loading}
-          canClick={isValid}
-          actionText="Save Profile"
-        />
-      </form>
-    </div>
+      <div className="container mx-auto h-full bg-zinc-50">
+        <h4 className="mb-3 text-2xl font-semibold">Edit Profile</h4>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mx-auto grid w-full max-w-md gap-3 space-y-4 rounded-md bg-white px-4 py-8 shadow"
+        >
+          <label>
+            <span>Email</span>
+            <input
+              {...register("email", {
+                pattern:
+                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              })}
+              className="input"
+              type="email"
+              placeholder="Email"
+            />
+          </label>
+          <label>
+            <span>비밀번호</span>
+            <input
+              {...register("password")}
+              className="input"
+              type="password"
+              placeholder="Password"
+            />
+          </label>
+          <Button
+            loading={loading}
+            canClick={isValid}
+            actionText="Save Profile"
+          />
+        </form>
+      </div>
+    </>
   );
 };
