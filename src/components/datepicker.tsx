@@ -87,11 +87,9 @@ export const Datepicker: React.FC<IDatePicker> = ({
       setPrevDate(nextDate);
       setDateOfMonth(getWeeksOfMonth(nextDate));
     }
-    console.log(nextDate);
     setValue("inputYear", nextDate.getFullYear());
     setValue("inputMonth", nextDate.getMonth() + 1);
     setValue("inputDate", nextDate.getDate());
-    // return ()=>{setSelectedHour()}
   }, [nextDate]);
 
   useEffect(() => {
@@ -105,9 +103,10 @@ export const Datepicker: React.FC<IDatePicker> = ({
 
   return (
     <>
-      <button
+      <span
         onClick={() => setOpen((current) => !current)}
         className={cls(
+          "cursor-pointer",
           open
             ? "text-gray-700  hover:text-gray-500"
             : "text-gray-500 hover:text-gray-700"
@@ -127,7 +126,7 @@ export const Datepicker: React.FC<IDatePicker> = ({
             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
           />
         </svg>
-      </button>
+      </span>
       {open && (
         <div className="absolute bottom-0 w-full text-xs text-gray-600">
           <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
@@ -136,28 +135,37 @@ export const Datepicker: React.FC<IDatePicker> = ({
                 dateOfMonth[15].getMonth() + 1
               }월`}</div>
               <div className="space-x-6">
-                <button
+                <span
                   onClick={() => {
                     const date = new Date(prevDate);
                     date.setMonth(date.getMonth() - 1);
                     setPrevDate(date);
                     setDateOfMonth(getWeeksOfMonth(date));
                   }}
+                  className="cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faArrowUp} />
-                </button>
-                <button
+                </span>
+                <span
                   onClick={() => {
                     const date = new Date(prevDate);
                     date.setMonth(date.getMonth() + 1);
                     setPrevDate(date);
                     setDateOfMonth(getWeeksOfMonth(date));
                   }}
+                  className="cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faArrowDown} />
-                </button>
-                <button onClick={() => setNextDate(new Date())}>오늘</button>
-                <button onClick={() => setOpen(false)}>닫기</button>
+                </span>
+                <span
+                  className="cursor-pointer"
+                  onClick={() => setNextDate(new Date())}
+                >
+                  오늘
+                </span>
+                <span className="cursor-pointer" onClick={() => setOpen(false)}>
+                  닫기
+                </span>
               </div>
             </div>
             <div className="datepicker flex divide-x">
@@ -166,10 +174,10 @@ export const Datepicker: React.FC<IDatePicker> = ({
                   <div>{day}</div>
                 ))}
                 {dateOfMonth.map((day) => (
-                  <button
+                  <span
                     key={day.valueOf()}
                     className={cls(
-                      "px-1.5 py-1",
+                      "cursor-pointer px-1.5 py-1",
                       day.getMonth() !== dateOfMonth[15].getMonth()
                         ? "opacity-40"
                         : "",
@@ -191,7 +199,7 @@ export const Datepicker: React.FC<IDatePicker> = ({
                     }
                   >
                     {day.getDate()}
-                  </button>
+                  </span>
                 ))}
               </div>
               <div className="datepicker-col right pl-2">
@@ -199,9 +207,9 @@ export const Datepicker: React.FC<IDatePicker> = ({
                   <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
                     <span>시</span>
                     {listOfHours.map((hours) => (
-                      <button
+                      <span
                         className={cls(
-                          "px-1.5 text-base",
+                          "cursor-pointer px-1.5 text-base",
                           selectedHour === hours
                             ? "rounded-md bg-blue-500 text-white"
                             : ""
@@ -209,15 +217,15 @@ export const Datepicker: React.FC<IDatePicker> = ({
                         onClick={() => setSelectedHour(hours)}
                       >
                         {String(hours).padStart(2, "0")}
-                      </button>
+                      </span>
                     ))}
                   </div>
                   <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
                     <span>분</span>
                     {listOfMinutes.map((minutes) => (
-                      <button
+                      <span
                         className={cls(
-                          "px-1.5 text-base",
+                          "cursor-pointer px-1.5 text-base",
                           +selectedMinutes === minutes
                             ? "rounded-md bg-blue-500 text-white"
                             : ""
@@ -227,7 +235,7 @@ export const Datepicker: React.FC<IDatePicker> = ({
                         }}
                       >
                         {String(minutes).padStart(2, "0")}
-                      </button>
+                      </span>
                     ))}
                   </div>
                   {/* <div className="flex flex-col whitespace-nowrap">

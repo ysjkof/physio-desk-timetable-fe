@@ -344,3 +344,34 @@ m1 맥북으로 확인하니 화면이 늦게 뜨는 성능문제가 없다. 렌
 # 2022-3-17; 1주 예약목록 쿼리할 때 선택된 날짜가 포함된 주의 일요일로 쿼리하도록 변경
 
 그러면 아폴로 캐시가 작동하므로 화면 깜빡이지 않는다.
+
+# 2022-3-31;
+
+## 리액트 경고
+
+```js
+// Reserve와 ReservationDetail컴포넌트에서 refetch 때문에 사용하는 ReactiveVar가 경고를 일으킴
+const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
+```
+
+> Warning: Cannot update a component (`TimeTable`) while rendering a different component (`Reserve`). To locate the bad setState() call inside `Reserve`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render
+
+구글에서는 query를 lazyQuery로 바꾸고 useEffect로 사용하라고 함. `listReservationRefetch` 지우면 경고 사라짐.
+
+## form 안에 button 요소는 자동으로 submit 역할을 한다
+
+```js
+<form>
+  // ...
+  <button>메뉴 확장</button>
+  <button>제출</button>
+</form>
+```
+
+위 코드에서 제출 버튼이 폼을 전송하기 위한 버튼인데 메뉴 확장 버튼을 눌러도 폼이 전송된다. 버튼에는 타입이 3가지 있고 "button"으로 설정하면 폼을 전송하지 않는다.
+
+```js
+<button type="submit">제출</button>
+<button type="button">제출</button>
+<button type="reset">제출</button>
+```
