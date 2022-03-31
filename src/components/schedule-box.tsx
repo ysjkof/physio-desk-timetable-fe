@@ -44,7 +44,7 @@ export const ScheduleBox: React.FC<IScheduleBox> = ({
   const [openReserve, setOpenReserve] = useState(false);
   const timeLength = getTimeLength(startDate, endDate);
   const onClick = () => {
-    setOpenReserve(!openReserve);
+    setOpenReserve((current) => !current);
   };
   switch (state) {
     case "Canceled":

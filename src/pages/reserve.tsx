@@ -43,7 +43,6 @@ export const Reserve = () => {
     formState: { errors, isValid },
     handleSubmit,
     setValue,
-    watch,
   } = useForm<ReserveForm>({ mode: "onChange" });
 
   const onCompleted = (data: CreateReservationMutation) => {
@@ -145,7 +144,7 @@ export const Reserve = () => {
             </h4>
             <button
               className="absolute top-14 right-10 rounded-md border px-2 text-gray-500 hover:text-gray-700"
-              onClick={() => setOpenCreatePatient(!openCreatePatient)}
+              onClick={() => setOpenCreatePatient((current) => !current)}
             >
               환자등록
             </button>

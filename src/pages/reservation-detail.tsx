@@ -1,4 +1,4 @@
-import { useApolloClient, useReactiveVar } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
 import {
   faQuestion,
   faRotateBack,

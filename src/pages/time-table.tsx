@@ -95,7 +95,6 @@ export interface ViewOption {
 }
 
 export const TimeTable = () => {
-  console.time("TimeTable 시작");
   const [tableLength, setTableLength] = useState<ITableLength>({
     start: { hours: 9, minutes: 0 },
     end: { hours: 19, minutes: 0 },
@@ -243,10 +242,12 @@ export const TimeTable = () => {
     setOneWeekData(makeOneWeekFrame(selectedDate));
   }, []);
 
+  let queryDate: Date;
   useEffect(() => {
     if (!compareDateMatch(selectedDate, prevSelectedDate, "ymd")) {
       if (viewOption.dayLength === ONE_DAY) {
         setOneDayData(makeOneDayFrame(selectedDate));
+        queryDate = selectedDate;
       }
       if (viewOption.dayLength === ONE_WEEK) {
         const sameSunday = compareDateMatch(
@@ -254,9 +255,10 @@ export const TimeTable = () => {
           getWeeks(prevSelectedDate, "sunday")[0],
           "ymd"
         );
-        if (sameSunday === false) {
+        if (!sameSunday) {
           setOneWeekData(makeOneWeekFrame(selectedDate));
         }
+        queryDate = getWeeks(selectedDate, "sunday")[0];
       }
       if (selectedDate.getMonth() !== prevSelectedDate.getMonth()) {
         setDateNavMonth(getWeeksOfMonth(selectedDate));
@@ -270,10 +272,11 @@ export const TimeTable = () => {
           setDateNavWeek([getWeeks(selectedDate)]);
         }
       }
+
       queryListReservations({
         variables: {
           input: {
-            date: getWeeks(selectedDate, "sunday")[0],
+            date: queryDate,
             viewOption: viewOption.dayLength,
             groupId: null,
           },
@@ -281,12 +284,13 @@ export const TimeTable = () => {
       });
       setPrevSelectedDate(selectedDate);
     } else {
+      queryDate = selectedDate;
       if (viewOption.dayLength === ONE_DAY) {
         setOneDayData(makeOneDayFrame(selectedDate));
         queryListReservations({
           variables: {
             input: {
-              date: selectedDate,
+              date: queryDate,
               viewOption: viewOption.dayLength,
               groupId: null,
             },
@@ -305,7 +309,7 @@ export const TimeTable = () => {
         queryListReservations({
           variables: {
             input: {
-              date: selectedDate,
+              date: queryDate,
               viewOption: viewOption.dayLength,
               groupId: null,
             },
@@ -359,13 +363,10 @@ export const TimeTable = () => {
         }
       }
     }
-    // console.timeEnd("이펙트3");
   }, [queryResult]);
 
-  console.timeEnd("TimeTable 시작");
   return (
     <>
-      {console.time("렌더시작")}
       <Outlet />
       <Helmet>
         <title>시간표 | Muool</title>
@@ -780,7 +781,6 @@ export const TimeTable = () => {
         <div>캘린더</div>
         <div>초대</div>
       </div> */}
-      {console.timeEnd("렌더시작")}
     </>
   );
 };
