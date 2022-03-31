@@ -151,13 +151,15 @@ export const Reserve = () => {
                 <FormError errorMessage={errors.startHHMM?.message} />
               )}
               <label>예약 시간</label>
-              <div className="relative flex items-center justify-between text-center">
+              <div className="relative flex items-center justify-between">
                 <Datepicker
                   setValue={setValue}
                   defaultDate={state?.startDate}
                 />
-                <label className="flex flex-col">
-                  <span className="text-xs text-gray-500">연도</span>
+                <label className="relative flex flex-col">
+                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
+                    년
+                  </span>
                   <input
                     {...register("inputYear", {
                       required: "연도를 입력해주세요.",
@@ -173,8 +175,10 @@ export const Reserve = () => {
                     min={1970}
                   />
                 </label>
-                <label className="flex flex-col">
-                  <span className="text-xs text-gray-500">월</span>
+                <label className="relative flex flex-col">
+                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
+                    월
+                  </span>
                   <input
                     {...register("inputMonth", {
                       required: "월을 입력해주세요.",
@@ -190,8 +194,10 @@ export const Reserve = () => {
                     min={1}
                   />
                 </label>
-                <label className="flex flex-col">
-                  <span className="text-xs text-gray-500">일</span>
+                <label className="relative flex flex-col">
+                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
+                    일
+                  </span>
                   <input
                     {...register("inputDate", {
                       required: "날짜를 입력해주세요.",
@@ -207,8 +213,10 @@ export const Reserve = () => {
                     min={1}
                   />
                 </label>
-                <label className="flex flex-col">
-                  <span className="text-xs text-gray-500">시</span>
+                <label className="relative flex flex-col">
+                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
+                    시
+                  </span>
                   <input
                     {...register("inputHours", {
                       required: "시간을 입력해주세요.",
@@ -224,8 +232,10 @@ export const Reserve = () => {
                     min={1}
                   />
                 </label>
-                <label className="flex flex-col">
-                  <span className="text-xs text-gray-500">분</span>
+                <label className="relative flex flex-col">
+                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
+                    분
+                  </span>
                   <input
                     {...register("inputMinutes", {
                       required: "분을 입력해주세요.",

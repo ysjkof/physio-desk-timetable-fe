@@ -6,7 +6,7 @@
 }
 
 .input-number {
-  @apply w-full rounded-md border border-gray-300 px-4 text-right text-lg font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
+  @apply w-full rounded-md border border-gray-300 pr-6 text-right text-lg font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
 }
 
 .btn-sm {
