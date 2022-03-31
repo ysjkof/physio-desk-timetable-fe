@@ -3,7 +3,6 @@ import { Li } from "../components/Li";
 import { useFindAllPatientsQuery } from "../graphql/generated/graphql";
 
 export const ListPatient = () => {
-  console.time("시작");
   const { data: queryResult, loading } = useFindAllPatientsQuery({
     variables: {
       input: {
@@ -11,15 +10,13 @@ export const ListPatient = () => {
       },
     },
   });
-  console.timeEnd("시작");
   return (
     <div className="bg-gray-100">
-      {console.time("렌더")}
       <div className="container mx-auto flex h-full flex-col items-center justify-center rounded-md  p-3">
         <h1 className="text-3xl font-bold">List table</h1>
 
         {queryResult?.findAllPatients.results ? (
-          <ul className="shadow-cst  w-full divide-y rounded-lg bg-white">
+          <ul className="w-full  divide-y rounded-lg bg-white shadow-cst">
             <div className="flex justify-between rounded-md bg-gray-50 px-10">
               <span className="w-1/4">이름</span>
               <span className=" w-1/4 text-sm font-extralight text-gray-400">
@@ -51,7 +48,6 @@ export const ListPatient = () => {
         <span>총 환자 수 : {queryResult?.findAllPatients.totalCount}</span>
         <span>페이지 : {queryResult?.findAllPatients.totalPages}</span>
       </div>
-      {console.timeEnd("렌더")}
     </div>
   );
 };

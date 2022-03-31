@@ -4,12 +4,9 @@ import { Link } from "react-router-dom";
 import { isLoggedInVar } from "../apollo";
 
 export function Home() {
-  console.time("시작");
   const isLoggedIn = useReactiveVar(isLoggedInVar);
-  console.timeEnd("시작");
   return (
     <div className="px-4 text-gray-700">
-      {console.time("렌더")}
       <h1 className="text-3xl font-bold">무울 Muool</h1>
       <h2 className="mt-4 text-xl font-medium">무울에 오신 걸 환영합니다</h2>
       <p className="mt-2">
@@ -31,7 +28,6 @@ export function Home() {
           </Link>
         </div>
       )}
-      {console.timeEnd("렌더")}
     </div>
   );
 }
