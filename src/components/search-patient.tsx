@@ -3,7 +3,10 @@ import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSearchPatientByNameLazyQuery } from "../graphql/generated/graphql";
+import {
+  CreatePatientInput,
+  useSearchPatientByNameLazyQuery,
+} from "../graphql/generated/graphql";
 import { cls } from "../libs/utils";
 import { selectedPatientVar } from "../libs/variables";
 import { NameTag } from "./name-tag";
@@ -16,6 +19,9 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
   });
   const [queryPageNumber, setQueryPageNumber] = useState(1);
   const selectedPatient = useReactiveVar(selectedPatientVar);
+  const [totalCount, setTotalCount] = useState<number | null | undefined>();
+  const [totalPages, setTotalPages] = useState<number | null | undefined>();
+  const [patients, setPatients] = useState<CreatePatientInput[] | null>();
 
   const [callQuery, { loading, data: searchPatientResult }] =
     useSearchPatientByNameLazyQuery();
@@ -41,28 +47,14 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
     }
     return arr;
   };
+
   useEffect(() => {
     if (!loading && searchPatientResult) {
       setPatients(searchPatientResult.searchPatientByName.patients);
       setTotalCount(searchPatientResult.searchPatientByName.totalCount);
       setTotalPages(searchPatientResult.searchPatientByName.totalPages);
-      console.log(searchPatientResult);
     }
   }, [loading, searchPatientResult]);
-
-  const [totalCount, setTotalCount] = useState<number | null | undefined>();
-  const [totalPages, setTotalPages] = useState<number | null | undefined>();
-  const [patients, setPatients] = useState<
-    | {
-        __typename?: "Patient" | undefined;
-        id: number;
-        name: string;
-        gender: string;
-        registrationNumber?: string | null | undefined;
-        birthday?: any;
-      }[]
-    | null
-  >();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-lg  pt-4">
@@ -77,7 +69,6 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
           placeholder="환자 검색"
           className="input rounded-full py-1"
           autoComplete="off"
-          autoFocus
           onFocus={() => selectedPatientVar(null)}
         />
         <label
@@ -103,9 +94,8 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
         {!selectedPatient &&
           patients &&
           patients.map((patient, index) => (
-            <div className="hover:ring-2 hover:ring-blue-500">
+            <div key={index} className="hover:ring-2 hover:ring-blue-500">
               <NameTag
-                key={index}
                 id={patient.id}
                 gender={patient.gender}
                 name={patient.name}
@@ -115,17 +105,18 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
               />
             </div>
           ))}
-        {!selectedPatient && !patients && (
+        {!selectedPatient && !patients ? (
           <p className="text-center text-sm text-gray-500">
             환자 목록
             <br />
             검색하면 나타납니다
           </p>
-        )}
-        {!selectedPatient && patients?.length === 0 && (
-          <p className="text-center text-sm text-gray-500">
-            검색결과가 없습니다.
-          </p>
+        ) : (
+          patients?.length === 0 && (
+            <p className="text-center text-sm text-gray-500">
+              검색결과가 없습니다.
+            </p>
+          )
         )}
         {selectedPatient && (
           <div className="flex h-full px-4">
@@ -151,6 +142,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
         {totalPages
           ? pageNumbers(totalPages).map((pageNumber) => (
               <button
+                key={pageNumber}
                 className={cls(
                   queryPageNumber === pageNumber + 1
                     ? "font-bold text-red-500"
