@@ -1,4 +1,3 @@
-import { makeVar, useReactiveVar } from "@apollo/client";
 import {
   faCalendarAlt,
   faList,
@@ -7,7 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { BtnArrow } from "../components/button-arrow";
 import { BtnDatecheck } from "../components/button-datecheck";
 import { MoveXBtn } from "../components/move-x-btn";
@@ -424,10 +423,12 @@ export const TimeTable = () => {
                   )}
                 />
                 {/* 이 버튼을 누르면 그룹원들 예약 동시출력 */}
-                <FontAwesomeIcon
-                  icon={faUserGroup}
-                  className="w-4 cursor-pointer text-gray-400 hover:text-gray-500"
-                />
+                <Link to={"/group"}>
+                  <FontAwesomeIcon
+                    icon={faUserGroup}
+                    className="w-4 cursor-pointer text-gray-400 hover:text-gray-500"
+                  />
+                </Link>
               </div>
               <div className="col-span-2 row-start-2 flex space-x-3">
                 <Switch

@@ -19,6 +19,8 @@ import { Search } from "./pages/search";
 import { PateintDetail } from "./pages/patient-detail";
 import { ModalPortal } from "./components/modal-portal";
 import { Dashboard } from "./pages/dash-board";
+import { Group } from "./pages/group";
+import { useMe } from "./hooks/useMe";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -55,6 +57,7 @@ function App() {
             <Route path="search" element={<Search />} />
             <Route path="patient" element={<PateintDetail />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="group" element={<Group />} />
 
             <Route path="test" element={<Test />} />
           </>
