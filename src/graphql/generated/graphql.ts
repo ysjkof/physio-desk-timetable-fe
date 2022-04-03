@@ -56,6 +56,7 @@ export type CreatePatientInput = {
   memo?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   registrationNumber?: InputMaybe<Scalars['String']>;
+  therapists?: InputMaybe<Array<UserInputType>>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -110,6 +111,7 @@ export type EditPatientInput = {
   memo?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   registrationNumber?: InputMaybe<Scalars['String']>;
+  therapists?: InputMaybe<Array<UserInputType>>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -210,9 +212,27 @@ export type Group = {
   __typename?: 'Group';
   createdAt: Scalars['DateTime'];
   id: Scalars['Float'];
-  members: Array<MemberForm>;
+  members: Array<GroupMember>;
   name: Scalars['String'];
+  patient: Array<Patient>;
+  reservations: Array<Reservation>;
   updatedAt: Scalars['DateTime'];
+};
+
+export type GroupMember = {
+  __typename?: 'GroupMember';
+  accepted: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['Float'];
+  manager: Scalars['Boolean'];
+  staying: Scalars['Boolean'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type GroupMemberInputType = {
+  accepted?: InputMaybe<Scalars['Boolean']>;
+  manager?: InputMaybe<Scalars['Boolean']>;
+  staying?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type InviteGroupInput = {
@@ -260,18 +280,6 @@ export type LoginOutput = {
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
   token?: Maybe<Scalars['String']>;
-};
-
-export type MemberForm = {
-  __typename?: 'MemberForm';
-  accepted: Scalars['Boolean'];
-  createdAt: Scalars['DateTime'];
-  group: Group;
-  id: Scalars['Float'];
-  isStaying: Scalars['Boolean'];
-  manager: Scalars['Boolean'];
-  member: User;
-  updatedAt: Scalars['DateTime'];
 };
 
 export type Mutation = {
@@ -371,6 +379,11 @@ export type Notice = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type NoticeInputType = {
+  message: Scalars['String'];
+  read?: InputMaybe<Scalars['Boolean']>;
+};
+
 export type Patient = {
   __typename?: 'Patient';
   birthday?: Maybe<Scalars['DateTime']>;
@@ -380,6 +393,7 @@ export type Patient = {
   memo?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   registrationNumber?: Maybe<Scalars['String']>;
+  therapists: Array<User>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -475,12 +489,21 @@ export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
+  groups?: Maybe<Array<GroupMember>>;
   id: Scalars['Float'];
-  memberForms: Array<MemberForm>;
   notice?: Maybe<Array<Notice>>;
   password: Scalars['String'];
   role: UserRole;
   updatedAt: Scalars['DateTime'];
+  verified: Scalars['Boolean'];
+};
+
+export type UserInputType = {
+  email: Scalars['String'];
+  groups?: InputMaybe<Array<GroupMemberInputType>>;
+  notice?: InputMaybe<Array<NoticeInputType>>;
+  password: Scalars['String'];
+  role: UserRole;
   verified: Scalars['Boolean'];
 };
 
