@@ -35,6 +35,7 @@ export const Reserve = () => {
   const state = location.state as { startDate: Date };
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const navigate = useNavigate();
+  // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
   const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
 
   const {
@@ -122,7 +123,6 @@ export const Reserve = () => {
       selectedPatientVar(null);
     };
   }, []);
-
   return (
     <>
       <Helmet>
