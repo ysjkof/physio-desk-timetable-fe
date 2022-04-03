@@ -1,7 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { FormError } from "../components/form-error";
 import { Button } from "../components/button";
 import {
@@ -21,7 +20,6 @@ export const CreatePatient = ({ closeModal }: any) => {
   } = useForm<CreatePatientInput>({
     mode: "onChange",
   });
-  const navigate = useNavigate();
 
   const onCompleted = (data: CreatePatientMutation) => {
     const {
@@ -38,10 +36,16 @@ export const CreatePatient = ({ closeModal }: any) => {
   ] = useCreatePatientMutation({ onCompleted });
   const onSubmit = () => {
     if (!loading) {
-      const { name, gender, birthday, memo } = getValues();
+      const { name, gender, registrationNumber, birthday, memo } = getValues();
       createPatientMutation({
         variables: {
-          createPatientInput: { name, gender, birthday, memo },
+          createPatientInput: {
+            name,
+            gender,
+            registrationNumber,
+            birthday,
+            memo,
+          },
         },
       });
     }
