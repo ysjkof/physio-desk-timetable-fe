@@ -3,13 +3,12 @@ import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../libs/variables";
-import { useMe } from "../hooks/useMe";
 import muoolLogo from "../images/logoMuoolJinBlue.svg";
 import { useForm } from "react-hook-form";
-import { Input } from "./input";
 
 export const Header: React.FC = () => {
-  const { data } = useMe();
+  // 비로그인일 때 useMe 호출되면 디버거 상태됨. 추후 처리할 것. 따로 모달창을 만드는 것 고려.
+  // const { data } = useMe();
   const location = useLocation();
   // const state = location.state as { startDate: Date };
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -32,11 +31,11 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      {data && !data?.me.verified && (
+      {/* {data && !data?.me.verified && (
         <div className="bg-red-500 p-3 text-center">
           <span>Please verify your email.</span>
         </div>
-      )}
+      )} */}
       <header className="py-4">
         <div className="container mx-auto  flex w-full items-center justify-between space-x-4 px-5 xl:px-0">
           <Link to="/">
