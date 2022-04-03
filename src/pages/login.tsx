@@ -25,6 +25,9 @@ export const Login = () => {
     const {
       login: { ok, token },
     } = data;
+    if (!ok) {
+      alert("로그인이 유효하지 않습니다.");
+    }
     if (ok && token) {
       localStorage.setItem(LOCALSTORAGE_TOKEN, token);
       authTokenVar(token);
