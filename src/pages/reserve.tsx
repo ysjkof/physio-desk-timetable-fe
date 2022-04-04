@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { SearchPatient } from "../components/search-patient";
-import { selectedPatientVar, UTC_OPTION_KST } from "../libs/variables";
+import { UTC_OPTION_KST } from "../libs/variables";
 import {
   CreateReservationMutation,
   useCreateReservationMutation,
@@ -15,7 +15,7 @@ import { CreatePatient } from "./create-patient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Datepicker } from "../components/datepicker";
-import { listReservationRefetchVar } from "../store";
+import { listReservationRefetchVar, selectedPatientVar } from "../store";
 
 export interface ReserveForm {
   inputYear: number;

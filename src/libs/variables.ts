@@ -1,6 +1,3 @@
-import { makeVar } from "@apollo/client";
-import { INameTag } from "../components/name-tag";
-
 export const LOCALSTORAGE_TOKEN = "muool-token";
 // 한국 표준시(韓國標準時, KST, Korea Standard Time) = UTC+09:00
 export const UTC_OPTION_KST = "+0900";
@@ -26,5 +23,3 @@ export const REGEX_YYYYMMDD =
 // export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
 // 이하는 1분 단위는 0만 가능
 export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0])$/;
-
-export const selectedPatientVar = makeVar<null | INameTag>(null);

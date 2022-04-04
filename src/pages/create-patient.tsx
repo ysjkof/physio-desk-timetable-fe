@@ -9,7 +9,7 @@ import {
   useCreatePatientMutation,
 } from "../graphql/generated/graphql";
 import { Input } from "../components/input";
-import { selectedPatientVar } from "../libs/variables";
+import { selectedPatientVar } from "../store";
 
 export const CreatePatient = ({ closeModal }: any) => {
   const {

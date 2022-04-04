@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchPatientByNameLazyQuery } from "../graphql/generated/graphql";
 import { cls } from "../libs/utils";
-import { selectedPatientVar } from "../libs/variables";
+import { selectedPatientVar } from "../store";
 import { INameTag, NameTag } from "./name-tag";
 
 interface ISearchPatient {}
