@@ -1,0 +1,15 @@
+query findMyGroups {
+  findMyGroups {
+    ok
+    error
+    groups {
+      id
+      name
+      members {
+        staying
+        accepted
+        manager
+      }
+    }
+  }
+}

@@ -163,6 +163,13 @@ export type FindGroupByIdOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type FindMyGroupsOutput = {
+  __typename?: 'FindMyGroupsOutput';
+  error?: Maybe<Scalars['String']>;
+  groups?: Maybe<Array<Group>>;
+  ok: Scalars['Boolean'];
+};
+
 export type FindPatientByIdInput = {
   patientId: Scalars['Int'];
 };
@@ -384,6 +391,7 @@ export type Query = {
   __typename?: 'Query';
   findAllPatients: FindAllPatientsOutput;
   findGroupById: FindGroupByIdOutput;
+  findMyGroups: FindMyGroupsOutput;
   findPatientById: FindPatientByIdOutput;
   findReservationById: FindReservationByIdOutput;
   findReservationByPatient: FindReservationByPatientOutput;
@@ -573,6 +581,11 @@ export type FindGroupByIdQueryVariables = Exact<{
 
 
 export type FindGroupByIdQuery = { __typename?: 'Query', findGroupById: { __typename?: 'FindGroupByIdOutput', ok: boolean, error?: string | null, group?: { __typename?: 'Group', id: number, name: string, members: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, member: { __typename?: 'User', id: number, email: string } }> } | null } };
+
+export type FindMyGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindMyGroupsQuery = { __typename?: 'Query', findMyGroups: { __typename?: 'FindMyGroupsOutput', ok: boolean, error?: string | null, groups?: Array<{ __typename?: 'Group', id: number, name: string, members: Array<{ __typename?: 'GroupMember', staying: boolean, accepted: boolean, manager: boolean }> }> | null } };
 
 export type FindReservationByIdQueryVariables = Exact<{
   input: FindReservationByIdInput;
@@ -1011,6 +1024,50 @@ export function useFindGroupByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type FindGroupByIdQueryHookResult = ReturnType<typeof useFindGroupByIdQuery>;
 export type FindGroupByIdLazyQueryHookResult = ReturnType<typeof useFindGroupByIdLazyQuery>;
 export type FindGroupByIdQueryResult = Apollo.QueryResult<FindGroupByIdQuery, FindGroupByIdQueryVariables>;
+export const FindMyGroupsDocument = gql`
+    query findMyGroups {
+  findMyGroups {
+    ok
+    error
+    groups {
+      id
+      name
+      members {
+        staying
+        accepted
+        manager
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindMyGroupsQuery__
+ *
+ * To run a query within a React component, call `useFindMyGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindMyGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindMyGroupsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindMyGroupsQuery(baseOptions?: Apollo.QueryHookOptions<FindMyGroupsQuery, FindMyGroupsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindMyGroupsQuery, FindMyGroupsQueryVariables>(FindMyGroupsDocument, options);
+      }
+export function useFindMyGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindMyGroupsQuery, FindMyGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindMyGroupsQuery, FindMyGroupsQueryVariables>(FindMyGroupsDocument, options);
+        }
+export type FindMyGroupsQueryHookResult = ReturnType<typeof useFindMyGroupsQuery>;
+export type FindMyGroupsLazyQueryHookResult = ReturnType<typeof useFindMyGroupsLazyQuery>;
+export type FindMyGroupsQueryResult = Apollo.QueryResult<FindMyGroupsQuery, FindMyGroupsQueryVariables>;
 export const FindReservationByIdDocument = gql`
     query findReservationById($input: FindReservationByIdInput!) {
   findReservationById(input: $input) {
