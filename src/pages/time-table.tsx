@@ -4,7 +4,7 @@ import {
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, Outlet } from "react-router-dom";
 import { BtnArrow } from "../components/button-arrow";
@@ -390,7 +390,7 @@ export const TimeTable = () => {
               <div className="col-span-2 flex w-full items-center justify-between gap-1 lg:col-span-5">
                 <BtnArrow direction="prev" onClick={handleDateNavMovePrev} />
                 {dateNavWeek?.map((weeks, i) => (
-                  <>
+                  <Fragment key={i}>
                     {weeks.map((week, ii) => (
                       <BtnDatecheck
                         key={ii}
@@ -401,7 +401,7 @@ export const TimeTable = () => {
                         onClick={() => setSelectedDate(week)}
                       />
                     ))}
-                  </>
+                  </Fragment>
                 ))}
                 <BtnArrow direction="after" onClick={handleDateNavMoveNext} />
               </div>
