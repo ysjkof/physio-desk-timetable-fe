@@ -3,13 +3,10 @@ import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  CreatePatientInput,
-  useSearchPatientByNameLazyQuery,
-} from "../graphql/generated/graphql";
+import { useSearchPatientByNameLazyQuery } from "../graphql/generated/graphql";
 import { cls } from "../libs/utils";
 import { selectedPatientVar } from "../libs/variables";
-import { NameTag } from "./name-tag";
+import { INameTag, NameTag } from "./name-tag";
 
 interface ISearchPatient {}
 
@@ -21,7 +18,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const [totalCount, setTotalCount] = useState<number | null | undefined>();
   const [totalPages, setTotalPages] = useState<number | null | undefined>();
-  const [patients, setPatients] = useState<CreatePatientInput[] | null>();
+  const [patients, setPatients] = useState<INameTag[] | null>();
 
   const [callQuery, { loading, data: searchPatientResult }] =
     useSearchPatientByNameLazyQuery();

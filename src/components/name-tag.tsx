@@ -4,7 +4,8 @@ import { CreatePatientInput } from "../graphql/generated/graphql";
 import { cls, getYMD } from "../libs/utils";
 import { selectedPatientVar } from "../libs/variables";
 
-interface INameTag extends CreatePatientInput {
+export interface INameTag extends CreatePatientInput {
+  id: number;
   canClick?: boolean;
   shrink?: boolean;
 }
