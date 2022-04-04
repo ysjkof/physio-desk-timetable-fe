@@ -1,0 +1,20 @@
+query findGroupById($input: FindGroupByIdInput!) {
+  findGroupById(input: $input) {
+    ok
+    error
+    group {
+      id
+      name
+      members {
+        id
+        staying
+        manager
+        accepted
+        member {
+          id
+          email
+        }
+      }
+    }
+  }
+}

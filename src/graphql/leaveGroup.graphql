@@ -1,0 +1,6 @@
+mutation leaveGroup($input: LeaveGroupInput!) {
+  leaveGroup(input: $input) {
+    ok
+    error
+  }
+}

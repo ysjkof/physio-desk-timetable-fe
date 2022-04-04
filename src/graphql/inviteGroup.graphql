@@ -1,0 +1,6 @@
+mutation inviteGroup($input: InviteGroupInput!) {
+  inviteGroup(input: $input) {
+    ok
+    error
+  }
+}
