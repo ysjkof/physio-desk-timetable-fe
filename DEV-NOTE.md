@@ -375,3 +375,10 @@ const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
 <button type="button">제출</button>
 <button type="reset">제출</button>
 ```
+
+# 2022-4-4; useMutation에 loading이 새로고침되지 않는 현상
+
+loading이 true로 바꼈다가 다시 false로 바뀌지 않는 문제가 있다.
+깃허브 이슈에서 나온 방법 다 해봐도 해결이 안된다.
+
+[깃허브 이슈](https://github.com/apollographql/apollo-client/issues/1186)
