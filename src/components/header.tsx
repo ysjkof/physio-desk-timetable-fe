@@ -1,15 +1,16 @@
 import { useReactiveVar } from "@apollo/client";
-import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { isLoggedInVar } from "../apollo";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { authTokenVar, isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../libs/variables";
 import muoolLogo from "../images/logoMuoolJinBlue.svg";
 import { useForm } from "react-hook-form";
+import { useMe } from "../hooks/useMe";
 
 export const Header: React.FC = () => {
   // 비로그인일 때 useMe 호출되면 디버거 상태됨. 추후 처리할 것. 따로 모달창을 만드는 것 고려.
-  // const { data } = useMe();
-  const location = useLocation();
+  const { error } = useMe();
+  // const location = useLocation();
   // const state = location.state as { startDate: Date };
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const navigate = useNavigate();
@@ -23,12 +24,18 @@ export const Header: React.FC = () => {
   };
   const logoutBtn = () => {
     localStorage.removeItem(LOCALSTORAGE_TOKEN);
-    // authTokenVar(token);
+    authTokenVar(null);
     isLoggedInVar(false);
     navigate("/");
   };
-  console.log("HEADER LOCATION", location);
 
+  useEffect(() => {
+    if (error) {
+      logoutBtn();
+    }
+  }, [error]);
+
+  // console.log("HEADER LOCATION", location);
   return (
     <>
       {/* {data && !data?.me.verified && (
