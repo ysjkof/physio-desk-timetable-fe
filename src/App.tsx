@@ -46,9 +46,10 @@ function App() {
               <Route
                 path="reserve"
                 element={
-                  <ModalPortal closeAction={() => navigate(-1)}>
-                    <Reserve />
-                  </ModalPortal>
+                  <ModalPortal
+                    closeAction={() => navigate(-1)}
+                    children={<Reserve />}
+                  />
                 }
               />
             </Route>

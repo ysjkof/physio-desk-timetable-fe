@@ -382,3 +382,17 @@ loading이 true로 바꼈다가 다시 false로 바뀌지 않는 문제가 있�
 깃허브 이슈에서 나온 방법 다 해봐도 해결이 안된다.
 
 [깃허브 이슈](https://github.com/apollographql/apollo-client/issues/1186)
+
+# 2022-4-8;
+
+## react-async-helmet typescript error
+
+[참조](https://github.com/staylor/react-helmet-async/pull/164)
+
+HelmetProvider와 Helmet의 타입을 아래로 바꾸면 해결
+`React.Component<HelmetProps>` -> `React.Component<React.PropsWithChildren<HelmetProps>>`
+`React.Component<ProviderProps>` -> `<React.PropsWithChildren<ProviderProps>>`
+
+## React.FC에 props에 children 사라짐
+
+[참조](https://stackoverflow.com/questions/71788254/react-18-typescript-children-fc)

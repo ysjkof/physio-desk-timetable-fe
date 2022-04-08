@@ -8,6 +8,7 @@ interface ITableRowProps {
   gridRowStart?: number;
   gridColumnStart?: number;
   shrink?: boolean;
+  children?: React.ReactNode;
 }
 
 export const TableRow: React.FC<ITableRowProps> = ({

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 
 interface IModalPortal {
   closeAction: any;
+  children?: React.ReactNode;
 }
 
 export const ModalPortal: React.FC<IModalPortal> = ({

@@ -2,6 +2,7 @@ interface IScheduleListBox {
   startDate: string;
   endDate: string;
   memo: string | null | undefined;
+  children?: React.ReactNode;
 }
 
 export const ScheduleListBox: React.FC<IScheduleListBox> = ({
