@@ -391,7 +391,7 @@ loading이 true로 바꼈다가 다시 false로 바뀌지 않는 문제가 있�
 
 HelmetProvider와 Helmet의 타입을 아래로 바꾸면 해결
 `React.Component<HelmetProps>` -> `React.Component<React.PropsWithChildren<HelmetProps>>`
-`React.Component<ProviderProps>` -> `<React.PropsWithChildren<ProviderProps>>`
+`React.Component<ProviderProps>` -> `React.Component<React.PropsWithChildren<ProviderProps>>`
 
 ## React.FC에 props에 children 사라짐
 
