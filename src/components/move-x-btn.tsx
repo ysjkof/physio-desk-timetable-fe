@@ -10,7 +10,7 @@ export const MoveXBtn: React.FC<IMoveXBtn> = ({
   setSelectedDate,
   dateNavExpand,
 }) => {
-  const handleDateNavMove = (option: "prev" | "after") => {
+  const handleDateNavMove = () => {
     const date = new Date(selectedDate);
     if (dateNavExpand === false) {
       if (direction === "prev") date.setDate(date.getDate() - 7);
@@ -22,10 +22,7 @@ export const MoveXBtn: React.FC<IMoveXBtn> = ({
     setSelectedDate(date);
   };
   return (
-    <div
-      className="cursor-pointer"
-      onClick={() => handleDateNavMove(direction)}
-    >
+    <div className="cursor-pointer" onClick={() => handleDateNavMove()}>
       {direction === "prev" ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
