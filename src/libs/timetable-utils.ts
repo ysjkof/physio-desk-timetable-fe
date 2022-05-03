@@ -7,12 +7,13 @@ import {
 } from "../graphql/generated/graphql";
 import { ONE_DAY, ONE_WEEK } from "../variables";
 
-interface ModifiedGroupMember
+interface ModifiedGroupMemberWithUserAndGroup
   extends Pick<GroupMember, "id" | "staying" | "manager" | "accepted"> {
   user: Pick<User, "id" | "name">;
   group: Pick<Group, "id" | "name">;
 }
-export interface GroupMemberWithOptions extends ModifiedGroupMember {
+export interface GroupMemberWithOptions
+  extends ModifiedGroupMemberWithUserAndGroup {
   activation: boolean;
   loginUser: boolean;
 }

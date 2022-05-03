@@ -1,0 +1,6 @@
+mutation inactivateGroup($input: InactivateGroupInput!) {
+  inactivateGroup(input: $input) {
+    ok
+    error
+  }
+}

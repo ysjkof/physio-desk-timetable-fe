@@ -25,7 +25,7 @@
 }
 
 .seperate-bar {
-  @apply border-b;
+  @apply my-4 border-b;
 }
 
 @tailwind utilities;

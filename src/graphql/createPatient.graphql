@@ -1,5 +1,5 @@
-mutation createPatient($createPatientInput: CreatePatientInput!) {
-  createPatient(input: $createPatientInput) {
+mutation createPatient($input: CreatePatientInput!) {
+  createPatient(input: $input) {
     ok
     error
     patient {

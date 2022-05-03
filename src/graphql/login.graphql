@@ -1,5 +1,5 @@
-mutation login($loginInput: LoginInput!) {
-  login(input: $loginInput) {
+mutation login($input: LoginInput!) {
+  login(input: $input) {
     ok
     token
     error

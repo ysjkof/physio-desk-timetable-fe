@@ -165,6 +165,10 @@ export type FindGroupByIdOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type FindMyGroupsInput = {
+  includeField: Scalars['String'];
+};
+
 export type FindMyGroupsOutput = {
   __typename?: 'FindMyGroupsOutput';
   error?: Maybe<Scalars['String']>;
@@ -211,6 +215,7 @@ export type FindReservationByPatientOutput = {
 
 export type Group = {
   __typename?: 'Group';
+  activate: Scalars['Boolean'];
   createdAt?: Maybe<Scalars['DateTime']>;
   id: Scalars['Float'];
   members: Array<GroupMember>;
@@ -225,11 +230,22 @@ export type GroupMember = {
   accepted: Scalars['Boolean'];
   createdAt?: Maybe<Scalars['DateTime']>;
   group: Group;
+  groupId: Scalars['Int'];
   id: Scalars['Float'];
   manager: Scalars['Boolean'];
   staying: Scalars['Boolean'];
   updatedAt?: Maybe<Scalars['DateTime']>;
   user: User;
+};
+
+export type InactivateGroupInput = {
+  groupId: Scalars['Int'];
+};
+
+export type InactivateGroupOutput = {
+  __typename?: 'InactivateGroupOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type InviteGroupInput = {
@@ -291,6 +307,7 @@ export type Mutation = {
   editPatient: EditPatientOutput;
   editProfile: EditProfileOutput;
   editReservation: EditReservationOutput;
+  inactivateGroup: InactivateGroupOutput;
   inviteGroup: InviteGroupOutput;
   leaveGroup: LeaveGroupOutput;
   login: LoginOutput;
@@ -345,6 +362,11 @@ export type MutationEditProfileArgs = {
 
 export type MutationEditReservationArgs = {
   input: EditReservationInput;
+};
+
+
+export type MutationInactivateGroupArgs = {
+  input: InactivateGroupInput;
 };
 
 
@@ -412,6 +434,11 @@ export type QueryFindAllPatientsArgs = {
 
 export type QueryFindGroupByIdArgs = {
   input: FindGroupByIdInput;
+};
+
+
+export type QueryFindMyGroupsArgs = {
+  input: FindMyGroupsInput;
 };
 
 
@@ -540,8 +567,15 @@ export type AcceptInvitationMutationVariables = Exact<{
 
 export type AcceptInvitationMutation = { __typename?: 'Mutation', acceptInvitation: { __typename?: 'AcceptInvitationOutput', ok: boolean, error?: string | null } };
 
+export type InactivateGroupMutationVariables = Exact<{
+  input: InactivateGroupInput;
+}>;
+
+
+export type InactivateGroupMutation = { __typename?: 'Mutation', inactivateGroup: { __typename?: 'InactivateGroupOutput', ok: boolean, error?: string | null } };
+
 export type CreateAccountMutationVariables = Exact<{
-  createAccountInput: CreateAccountInput;
+  input: CreateAccountInput;
 }>;
 
 
@@ -555,7 +589,7 @@ export type CreateGroupMutationVariables = Exact<{
 export type CreateGroupMutation = { __typename?: 'Mutation', createGroup: { __typename?: 'CreateGroupOutput', ok: boolean, error?: string | null } };
 
 export type CreatePatientMutationVariables = Exact<{
-  createPatientInput: CreatePatientInput;
+  input: CreatePatientInput;
 }>;
 
 
@@ -603,10 +637,12 @@ export type FindGroupByIdQueryVariables = Exact<{
 
 export type FindGroupByIdQuery = { __typename?: 'Query', findGroupById: { __typename?: 'FindGroupByIdOutput', ok: boolean, error?: string | null, group?: { __typename?: 'Group', id: number, name: string, members: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
 
-export type FindMyGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+export type FindMyGroupsQueryVariables = Exact<{
+  input: FindMyGroupsInput;
+}>;
 
 
-export type FindMyGroupsQuery = { __typename?: 'Query', findMyGroups: { __typename?: 'FindMyGroupsOutput', ok: boolean, error?: string | null, groups?: Array<{ __typename?: 'Group', id: number, name: string, members: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string }, group: { __typename?: 'Group', id: number, name: string } }> }> | null } };
+export type FindMyGroupsQuery = { __typename?: 'Query', findMyGroups: { __typename?: 'FindMyGroupsOutput', ok: boolean, error?: string | null, groups?: Array<{ __typename?: 'Group', id: number, name: string, activate: boolean, members: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string }, group: { __typename?: 'Group', id: number, name: string } }> }> | null } };
 
 export type FindReservationByIdQueryVariables = Exact<{
   input: FindReservationByIdInput;
@@ -637,7 +673,7 @@ export type ListReservationsQueryVariables = Exact<{
 export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, lastModifier: { __typename?: 'User', id: number, email: string, name: string }, group?: { __typename?: 'Group', id: number, name: string } | null }> | null } };
 
 export type LoginMutationVariables = Exact<{
-  loginInput: LoginInput;
+  input: LoginInput;
 }>;
 
 
@@ -711,9 +747,43 @@ export function useAcceptInvitationMutation(baseOptions?: Apollo.MutationHookOpt
 export type AcceptInvitationMutationHookResult = ReturnType<typeof useAcceptInvitationMutation>;
 export type AcceptInvitationMutationResult = Apollo.MutationResult<AcceptInvitationMutation>;
 export type AcceptInvitationMutationOptions = Apollo.BaseMutationOptions<AcceptInvitationMutation, AcceptInvitationMutationVariables>;
+export const InactivateGroupDocument = gql`
+    mutation inactivateGroup($input: InactivateGroupInput!) {
+  inactivateGroup(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type InactivateGroupMutationFn = Apollo.MutationFunction<InactivateGroupMutation, InactivateGroupMutationVariables>;
+
+/**
+ * __useInactivateGroupMutation__
+ *
+ * To run a mutation, you first call `useInactivateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInactivateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inactivateGroupMutation, { data, loading, error }] = useInactivateGroupMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useInactivateGroupMutation(baseOptions?: Apollo.MutationHookOptions<InactivateGroupMutation, InactivateGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InactivateGroupMutation, InactivateGroupMutationVariables>(InactivateGroupDocument, options);
+      }
+export type InactivateGroupMutationHookResult = ReturnType<typeof useInactivateGroupMutation>;
+export type InactivateGroupMutationResult = Apollo.MutationResult<InactivateGroupMutation>;
+export type InactivateGroupMutationOptions = Apollo.BaseMutationOptions<InactivateGroupMutation, InactivateGroupMutationVariables>;
 export const CreateAccountDocument = gql`
-    mutation createAccount($createAccountInput: CreateAccountInput!) {
-  createAccount(input: $createAccountInput) {
+    mutation createAccount($input: CreateAccountInput!) {
+  createAccount(input: $input) {
     ok
     error
   }
@@ -734,7 +804,7 @@ export type CreateAccountMutationFn = Apollo.MutationFunction<CreateAccountMutat
  * @example
  * const [createAccountMutation, { data, loading, error }] = useCreateAccountMutation({
  *   variables: {
- *      createAccountInput: // value for 'createAccountInput'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -780,8 +850,8 @@ export type CreateGroupMutationHookResult = ReturnType<typeof useCreateGroupMuta
 export type CreateGroupMutationResult = Apollo.MutationResult<CreateGroupMutation>;
 export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<CreateGroupMutation, CreateGroupMutationVariables>;
 export const CreatePatientDocument = gql`
-    mutation createPatient($createPatientInput: CreatePatientInput!) {
-  createPatient(input: $createPatientInput) {
+    mutation createPatient($input: CreatePatientInput!) {
+  createPatient(input: $input) {
     ok
     error
     patient {
@@ -810,7 +880,7 @@ export type CreatePatientMutationFn = Apollo.MutationFunction<CreatePatientMutat
  * @example
  * const [createPatientMutation, { data, loading, error }] = useCreatePatientMutation({
  *   variables: {
- *      createPatientInput: // value for 'createPatientInput'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -1054,13 +1124,14 @@ export type FindGroupByIdQueryHookResult = ReturnType<typeof useFindGroupByIdQue
 export type FindGroupByIdLazyQueryHookResult = ReturnType<typeof useFindGroupByIdLazyQuery>;
 export type FindGroupByIdQueryResult = Apollo.QueryResult<FindGroupByIdQuery, FindGroupByIdQueryVariables>;
 export const FindMyGroupsDocument = gql`
-    query findMyGroups {
-  findMyGroups {
+    query findMyGroups($input: FindMyGroupsInput!) {
+  findMyGroups(input: $input) {
     ok
     error
     groups {
       id
       name
+      activate
       members {
         id
         staying
@@ -1092,10 +1163,11 @@ export const FindMyGroupsDocument = gql`
  * @example
  * const { data, loading, error } = useFindMyGroupsQuery({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useFindMyGroupsQuery(baseOptions?: Apollo.QueryHookOptions<FindMyGroupsQuery, FindMyGroupsQueryVariables>) {
+export function useFindMyGroupsQuery(baseOptions: Apollo.QueryHookOptions<FindMyGroupsQuery, FindMyGroupsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<FindMyGroupsQuery, FindMyGroupsQueryVariables>(FindMyGroupsDocument, options);
       }
@@ -1302,8 +1374,8 @@ export type ListReservationsQueryHookResult = ReturnType<typeof useListReservati
 export type ListReservationsLazyQueryHookResult = ReturnType<typeof useListReservationsLazyQuery>;
 export type ListReservationsQueryResult = Apollo.QueryResult<ListReservationsQuery, ListReservationsQueryVariables>;
 export const LoginDocument = gql`
-    mutation login($loginInput: LoginInput!) {
-  login(input: $loginInput) {
+    mutation login($input: LoginInput!) {
+  login(input: $input) {
     ok
     token
     error
@@ -1325,7 +1397,7 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  * @example
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
- *      loginInput: // value for 'loginInput'
+ *      input: // value for 'input'
  *   },
  * });
  */

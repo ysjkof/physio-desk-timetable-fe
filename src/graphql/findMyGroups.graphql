@@ -1,10 +1,11 @@
-query findMyGroups {
-  findMyGroups {
+query findMyGroups($input: FindMyGroupsInput!) {
+  findMyGroups(input: $input) {
     ok
     error
     groups {
       id
       name
+      activate
       members {
         id
         staying

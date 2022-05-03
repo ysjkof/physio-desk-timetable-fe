@@ -1,5 +1,5 @@
-mutation createAccount($createAccountInput: CreateAccountInput!) {
-  createAccount(input: $createAccountInput) {
+mutation createAccount($input: CreateAccountInput!) {
+  createAccount(input: $input) {
     ok
     error
   }

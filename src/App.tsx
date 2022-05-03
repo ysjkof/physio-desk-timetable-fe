@@ -34,7 +34,9 @@ function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const navigate = useNavigate();
   const { data: meData } = useMe();
-  const { data: findMyGroupsData } = useFindMyGroupsQuery();
+  const { data: findMyGroupsData } = useFindMyGroupsQuery({
+    variables: { input: { includeField: "all" } },
+  });
 
   function filterActivatedMemberInGroup(
     data: FindMyGroupsQuery | undefined | null
