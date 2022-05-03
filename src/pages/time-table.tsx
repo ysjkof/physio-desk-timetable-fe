@@ -33,7 +33,7 @@ export const TimeTable = () => {
         <title>시간표 | Muool</title>
       </Helmet>
       <div className="container mx-auto h-full">
-        <div className="relative h-[700px]">
+        <div className="relative h-[1050px]">
           <Timetable
             tableTime={{
               start: { hours: 9, minutes: 0 },

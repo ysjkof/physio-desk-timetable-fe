@@ -1,8 +1,8 @@
 import { useReactiveVar } from "@apollo/client";
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import {
-  faBars,
   faCalendarAlt,
+  faGear,
   faList,
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
@@ -219,7 +219,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
             <div className="flex w-full items-center justify-end space-x-3">
               <div className="group-view-controller">
                 <FontAwesomeIcon
-                  icon={faBars}
+                  icon={faGear}
                   onClick={() => {
                     const newViewOptions = {
                       ...viewOptions,
