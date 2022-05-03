@@ -362,6 +362,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
             <div className="flex w-full items-center justify-end space-x-5">
               <FontAwesomeIcon
                 icon={faCalendarAlt}
+                fontSize={"large"}
                 onClick={() => {
                   const newViewOptions = {
                     ...viewOptions,
@@ -382,6 +383,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
               />
               <FontAwesomeIcon
                 icon={faList}
+                fontSize={"large"}
                 onClick={() => {
                   const newViewOptions = {
                     ...viewOptions,
@@ -398,13 +400,6 @@ export const Timetable: React.FC<ITimetableProps> = ({
                   "w-4 cursor-pointer hover:text-gray-500"
                 )}
               />
-              {/* 이 버튼을 누르면 그룹원들 예약 동시출력 */}
-              <Link to={"/group"}>
-                <FontAwesomeIcon
-                  icon={faUserGroup}
-                  className="w-4 cursor-pointer text-gray-400 hover:text-gray-500"
-                />
-              </Link>
             </div>
           </div>
           {viewOptions.navigationExpand && (

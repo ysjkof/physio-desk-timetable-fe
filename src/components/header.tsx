@@ -3,9 +3,11 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../variables";
-import muoolLogo from "../images/logoMuoolJinBlue.svg";
+// import muoolLogo from "../images/logoMuoolJinBlue.svg";
 import { useForm } from "react-hook-form";
 import { useMe } from "../hooks/useMe";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell, faUser } from "@fortawesome/free-regular-svg-icons";
 
 export const Header: React.FC = () => {
   // 비로그인일 때 useMe 호출되면 디버거 상태됨. 추후 처리할 것. 따로 모달창을 만드는 것 고려.
@@ -43,77 +45,76 @@ export const Header: React.FC = () => {
           <span>Please verify your email.</span>
         </div>
       )} */}
-      <header className="py-4">
-        <div className="container mx-auto  flex w-full items-center justify-between space-x-4 px-5 xl:px-0">
-          <Link to="/">
-            <img src={muoolLogo} className="w-36" alt="Muool" />
-          </Link>
-          <form onSubmit={handleSubmit(onSubmitSearch)}>
-            <input
-              {...register("search", { required: true })}
-              type={"search"}
-              placeholder="Search..."
-              className="input rounded-full py-0"
-            />
-          </form>
-          <span className="flex items-center gap-5 text-xs">
-            {isLoggedIn ? (
-              <>
-                <Link to="/tt">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
+      <header className="mb-2 border-b py-1">
+        <div className="container mx-auto flex w-full items-center justify-between space-x-4 px-5  xl:px-0">
+          <div className="flex w-full items-center gap-10">
+            <Link to="/">
+              {/* <img src={muoolLogo} className="w-36" alt="Muool" /> */}
+              <span className="text-2xl font-black text-sky-500">Muool</span>
+            </Link>
+            <Link to="/community">
+              <span className="text-lg text-gray-600">커뮤니티</span>
+            </Link>
+          </div>
+          <div className="flex w-full items-baseline justify-end gap-4">
+            <form onSubmit={handleSubmit(onSubmitSearch)}>
+              <input
+                {...register("search", { required: true })}
+                type={"search"}
+                placeholder="Search..."
+                className="input-search w-28 rounded-md py-0"
+              />
+            </form>
+            <span className="flex items-baseline gap-4">
+              {isLoggedIn ? (
+                <>
+                  <Link to="/tt">
+                    <span className="whitespace-nowrap text-lg text-gray-600">
+                      시간표
+                    </span>
+                  </Link>
+                  <div className="group relative cursor-pointer">
+                    <FontAwesomeIcon fontSize={"large"} icon={faBell} />
+                    <div className="dropdown absolute top-6 right-0 z-50 hidden h-80 w-60 flex-col items-center overflow-y-scroll border bg-white py-2 px-4 shadow-cst group-hover:flex">
+                      {/* <span className="break-all">
+                        apple apple apple appleappleappleapple apple apple apple
+                        apple apple apple appleapple
+                      </span> */}
+                    </div>
+                  </div>
+                  <div className="group relative cursor-pointer">
+                    <FontAwesomeIcon fontSize={"large"} icon={faUser} />
+                    <div className="dropdown absolute top-6 right-0 z-50 hidden w-40 flex-col items-center border bg-white py-2 px-4 shadow-cst group-hover:flex">
+                      <Link
+                        to="/edit-profile"
+                        className="w-full text-center hover:bg-blue-200"
+                      >
+                        프로필
+                      </Link>
+                      <div className="seperate-bar"></div>
+                      <Link
+                        to="/group"
+                        className="w-full text-center hover:bg-blue-200"
+                      >
+                        병의원
+                      </Link>
+                      <div className="seperate-bar"></div>
+                      <button
+                        className="w-full text-center hover:bg-blue-200"
+                        onClick={logoutBtn}
+                      >
+                        로그아웃
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Link to="/account/login">
+                  <span className="whitespace-nowrap">로그인/회원가입</span>
                 </Link>
-                <Link to="/edit-profile">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                </Link>
-                <button className="text-3xl" onClick={logoutBtn}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                </button>
-              </>
-            ) : (
-              <Link to="/account/login">
-                <span className="whitespace-nowrap">로그인/회원가입</span>
-              </Link>
-            )}
-          </span>
+              )}
+            </span>
+          </div>
         </div>
       </header>
     </>
