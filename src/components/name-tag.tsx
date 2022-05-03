@@ -1,7 +1,8 @@
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CreatePatientInput } from "../graphql/generated/graphql";
-import { cls, getYMD } from "../libs/utils";
+import { getYMD } from "../libs/timetable-utils";
+import { cls } from "../libs/utils";
 import { selectedPatientVar } from "../store";
 
 export interface INameTag extends CreatePatientInput {

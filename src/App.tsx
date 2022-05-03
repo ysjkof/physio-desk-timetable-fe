@@ -5,13 +5,12 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { Layout } from "./components/layout";
 import { Home } from "./pages/home";
 import { CreatePatient } from "./pages/create-patient";
-import { GroupWithOptions, Test } from "./pages/test";
+import { Test } from "./pages/test";
 import { NotFound } from "./pages/404";
 import { Account } from "./pages/account";
 import { ConfirmEmail } from "./pages/confirm-email";
 import { EditProfile } from "./pages/edit-profile";
 import { TimeTable } from "./pages/time-table";
-import { ListPatient } from "./pages/list-patient";
 import { CreateAccount } from "./pages/create-account";
 import { Login } from "./pages/login";
 import { Search } from "./pages/search";
@@ -27,7 +26,9 @@ import { defaultViewOptions, groupListsVar, viewOptionsVar } from "./store";
 import {
   LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_GROUPS,
-} from "./libs/variables";
+} from "./variables";
+import { GroupWithOptions } from "./libs/timetable-utils";
+import { ListPatient } from "./pages/list-patient";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);

@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
-import { Name } from "../components/name";
-import { Patient } from "../components/patient";
+import { Name } from "./name";
+import { Patient } from "./patient";
 import {
   DeleteReservationMutation,
   EditReservationMutation,
@@ -19,17 +19,19 @@ import {
   useEditReservationMutation,
   useFindReservationByIdQuery,
 } from "../graphql/generated/graphql";
-import { cls, getHHMM, getTimeLength, getYMD } from "../libs/utils";
+import { getHHMM, getTimeLength, getYMD } from "../libs/timetable-utils";
+import { cls } from "../libs/utils";
 import { listReservationRefetchVar } from "../store";
 
 interface IReservationDetail {
   reservationId: number;
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export const ReservationDetail = ({
+
+export const ReservationDetail: React.FC<IReservationDetail> = ({
   reservationId,
   closeAction,
-}: IReservationDetail) => {
+}) => {
   const navigate = useNavigate();
   const [openPatientDetail, setOpenPatientDetail] = useState<boolean>(false);
   const listReservationRefetch = useReactiveVar(listReservationRefetchVar);

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
-import { LOCALSTORAGE_TOKEN } from "../libs/variables";
+import { LOCALSTORAGE_TOKEN } from "../variables";
 import { Helmet } from "react-helmet-async";
 import {
   LoginInput,

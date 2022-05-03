@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { SearchPatient } from "../components/search-patient";
-import { UTC_OPTION_KST } from "../libs/variables";
+import { UTC_OPTION_KST } from "../variables";
 import {
   CreateReservationMutation,
   useCreateReservationMutation,
@@ -35,7 +35,7 @@ interface IReserve {
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Reserve2: React.FC<IReserve> = ({ startDate, closeAction }) => {
+export const Reserve: React.FC<IReserve> = ({ startDate, closeAction }) => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
   const location = useLocation();
   const selectedPatient = useReactiveVar(selectedPatientVar);

@@ -1,6 +1,35 @@
 import { ModifiedReservation } from "../components/timetable";
-import { MeQuery } from "../graphql/generated/graphql";
-import { GroupMemberWithOptions, GroupWithOptions } from "../pages/test";
+import {
+  Group,
+  GroupMember,
+  MeQuery,
+  User,
+} from "../graphql/generated/graphql";
+import { ONE_DAY, ONE_WEEK } from "../variables";
+
+interface ModifiedGroupMember
+  extends Pick<GroupMember, "id" | "staying" | "manager" | "accepted"> {
+  user: Pick<User, "id" | "name">;
+  group: Pick<Group, "id" | "name">;
+}
+export interface GroupMemberWithOptions extends ModifiedGroupMember {
+  activation: boolean;
+  loginUser: boolean;
+}
+interface ModifiedGroup extends Pick<Group, "id" | "name"> {
+  members: GroupMemberWithOptions[];
+}
+export interface GroupWithOptions extends ModifiedGroup {
+  activation: boolean;
+}
+export interface IViewOption {
+  periodToView: typeof ONE_DAY | typeof ONE_WEEK;
+  seeCancel: boolean;
+  seeNoshow: boolean;
+  seeList: boolean;
+  seeActiveOption: boolean;
+  navigationExpand: boolean;
+}
 
 export const spreadGroupMembers = (groups: GroupWithOptions[] | null) => {
   const result: GroupMemberWithOptions[] = [];
@@ -105,6 +134,35 @@ export const injectUsers = (
     });
   });
   return result;
+};
+
+export const getYMD = (
+  inputDate: string | Date,
+  option: "yyyymmdd" | "yymmdd",
+  separator?: "-"
+) => {
+  const localDate = new Date(inputDate);
+  let year;
+  if (option === "yymmdd") year = String(localDate.getFullYear()).substring(2);
+  if (option === "yyyymmdd") year = String(localDate.getFullYear());
+  const month = String(localDate.getMonth() + 1).padStart(2, "0");
+  const date = String(localDate.getDate()).padStart(2, "0");
+  if (separator) return `${year}-${month}-${date}`;
+  return `${year}${month}${date}`;
+};
+
+export function getHHMM(inputDate: string | Date, seperator?: ":") {
+  const date = new Date(inputDate);
+  const hh = String(date.getHours()).padStart(2, "0");
+  const mm = String(date.getMinutes()).padStart(2, "0");
+  if (seperator === ":") return `${hh}:${mm}`;
+  return `${hh}${mm}`;
+}
+
+export const getTimeLength = (startDate: Date, endDate: Date) => {
+  const sd = new Date(startDate);
+  const ed = new Date(endDate);
+  return (ed.getTime() - sd.getTime()) / 1000 / 60;
 };
 
 export const getWeeksOfMonth = (date: Date) => {

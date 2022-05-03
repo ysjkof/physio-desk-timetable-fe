@@ -29,20 +29,26 @@ import {
   DayWithUsers,
   injectUsers,
   spreadGroupMembers,
+  GroupMemberWithOptions,
+  GroupWithOptions,
+  IViewOption,
+  getHHMM,
+  getTimeLength,
 } from "../libs/timetable-utils";
-import { cls, getHHMM, getTimeLength } from "../libs/utils";
+import { cls } from "../libs/utils";
 import {
   LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_GROUPS,
-} from "../libs/variables";
-import { ReservationDetail } from "../pages/reservation-detail";
-import { GroupMemberWithOptions, GroupWithOptions } from "../pages/test";
+  ONE_DAY,
+  ONE_WEEK,
+} from "../variables";
+import { ReservationDetail } from "./reservation-detail";
 import { colorsObj, groupListsVar, todayVar, viewOptionsVar } from "../store";
 import { BtnArrow } from "./button-arrow";
 import { BtnDatecheck } from "./button-datecheck";
 import { ModalPortal } from "./modal-portal";
 import { MoveXBtn } from "./move-x-btn";
-import { Reserve2 } from "./reserve";
+import { Reserve } from "./reserve";
 import { Switch } from "./switch";
 import { TimeIndicatorBar } from "./time-indicator-bar";
 
@@ -50,19 +56,7 @@ interface ITimeOption {
   start: { hours: number; minutes: number };
   end: { hours: number; minutes: number };
 }
-type IONE_DAY = 1;
-type IONE_WEEK = 7;
-const ONE_DAY = 1;
-const ONE_WEEK = 7;
 
-export interface IViewOption {
-  periodToView: IONE_DAY | IONE_WEEK;
-  seeCancel: boolean;
-  seeNoshow: boolean;
-  seeList: boolean;
-  seeActiveOption: boolean;
-  navigationExpand: boolean;
-}
 interface ITimetableProps {
   tableTime: ITimeOption;
   eventsData?: ListReservationsQuery;
@@ -1041,7 +1035,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
         <ModalPortal
           closeAction={setOpenReserveModal}
           children={
-            <Reserve2
+            <Reserve
               startDate={eventStartDate!}
               closeAction={setOpenReserveModal}
             />

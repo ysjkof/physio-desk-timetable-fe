@@ -1,9 +1,8 @@
 import { makeVar } from "@apollo/client";
 import { INameTag } from "./components/name-tag";
-import { IViewOption } from "./components/timetable";
 import { ListReservationsQuery } from "./graphql/generated/graphql";
-import { LOCALSTORAGE_VIEW_OPTION, ONE_WEEK } from "./libs/variables";
-import { GroupWithOptions } from "./pages/test";
+import { GroupWithOptions, IViewOption } from "./libs/timetable-utils";
+import { ONE_WEEK } from "./variables";
 
 // 이곳에서 전역 변수 관리
 

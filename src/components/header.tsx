@@ -2,7 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authTokenVar, isLoggedInVar } from "../apollo";
-import { LOCALSTORAGE_TOKEN } from "../libs/variables";
+import { LOCALSTORAGE_TOKEN } from "../variables";
 import muoolLogo from "../images/logoMuoolJinBlue.svg";
 import { useForm } from "react-hook-form";
 import { useMe } from "../hooks/useMe";

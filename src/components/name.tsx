@@ -1,4 +1,5 @@
-import { cls, getYMD } from "../libs/utils";
+import { getYMD } from "../libs/timetable-utils";
+import { cls } from "../libs/utils";
 
 interface IName {
   id: number;
