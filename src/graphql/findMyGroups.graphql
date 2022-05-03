@@ -6,9 +6,18 @@ query findMyGroups {
       id
       name
       members {
+        id
         staying
-        accepted
         manager
+        accepted
+        user {
+          id
+          name
+        }
+        group {
+          id
+          name
+        }
       }
     }
   }

@@ -19,7 +19,7 @@ export const BtnDatecheck: React.FC<IBtnDatecheck> = ({
 }) => (
   <button
     className={cls(
-      "btn-sm",
+      "btn-sm btn-border",
       selected ? "btn-selected" : "",
       day === 0 ? "text-red-600" : "",
       day === 6 ? "text-blue-600" : "",

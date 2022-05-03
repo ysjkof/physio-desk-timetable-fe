@@ -18,7 +18,7 @@ export type Scalars = {
 };
 
 export type AcceptInvitationInput = {
-  code: Scalars['String'];
+  groupId: Scalars['Int'];
 };
 
 export type AcceptInvitationOutput = {
@@ -29,6 +29,7 @@ export type AcceptInvitationOutput = {
 
 export type CreateAccountInput = {
   email: Scalars['String'];
+  name: Scalars['String'];
   password: Scalars['String'];
 };
 
@@ -115,6 +116,7 @@ export type EditPatientOutput = {
 
 export type EditProfileInput = {
   email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
 };
 
@@ -209,25 +211,25 @@ export type FindReservationByPatientOutput = {
 
 export type Group = {
   __typename?: 'Group';
-  createdAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
   id: Scalars['Float'];
   members: Array<GroupMember>;
   name: Scalars['String'];
   patient?: Maybe<Array<Patient>>;
   reservations?: Maybe<Array<Reservation>>;
-  updatedAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type GroupMember = {
   __typename?: 'GroupMember';
   accepted: Scalars['Boolean'];
-  createdAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
   group: Group;
   id: Scalars['Float'];
   manager: Scalars['Boolean'];
-  member: User;
   staying: Scalars['Boolean'];
-  updatedAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user: User;
 };
 
 export type InviteGroupInput = {
@@ -253,7 +255,7 @@ export type LeaveGroupOutput = {
 
 export type ListReservationsInput = {
   date: Scalars['DateTime'];
-  groupId?: InputMaybe<Scalars['Int']>;
+  groupIds?: InputMaybe<Array<Scalars['Int']>>;
   viewOption: Scalars['Int'];
 };
 
@@ -367,24 +369,24 @@ export type MutationVerifyEmailArgs = {
 
 export type Notice = {
   __typename?: 'Notice';
-  createdAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
   id: Scalars['Float'];
   message: Scalars['String'];
   read: Scalars['Boolean'];
-  updatedAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type Patient = {
   __typename?: 'Patient';
   birthday?: Maybe<Scalars['DateTime']>;
-  createdAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
   gender: Scalars['String'];
   id: Scalars['Float'];
   memo?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   registrationNumber?: Maybe<Scalars['String']>;
   therapists: Array<User>;
-  updatedAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type Query = {
@@ -398,6 +400,7 @@ export type Query = {
   listReservations: ListReservationsOutput;
   me: User;
   searchPatientByName: SearchPatientOutput;
+  searchUsersByName: SearchUsersByNameOutput;
   userProfile: UserProfileOutput;
 };
 
@@ -437,13 +440,18 @@ export type QuerySearchPatientByNameArgs = {
 };
 
 
+export type QuerySearchUsersByNameArgs = {
+  input: SearchUsersByNameInput;
+};
+
+
 export type QueryUserProfileArgs = {
   userId: Scalars['Float'];
 };
 
 export type Reservation = {
   __typename?: 'Reservation';
-  createdAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
   endDate: Scalars['DateTime'];
   group?: Maybe<Group>;
   id: Scalars['Float'];
@@ -453,7 +461,7 @@ export type Reservation = {
   startDate: Scalars['DateTime'];
   state: ReservationState;
   therapist: User;
-  updatedAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export enum ReservationState {
@@ -476,16 +484,29 @@ export type SearchPatientOutput = {
   totalPages?: Maybe<Scalars['Int']>;
 };
 
+export type SearchUsersByNameInput = {
+  name: Scalars['String'];
+};
+
+export type SearchUsersByNameOutput = {
+  __typename?: 'SearchUsersByNameOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  results?: Maybe<Array<User>>;
+  totalCount?: Maybe<Scalars['Int']>;
+};
+
 export type User = {
   __typename?: 'User';
-  createdAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
   email: Scalars['String'];
   groups?: Maybe<Array<GroupMember>>;
   id: Scalars['Float'];
+  name: Scalars['String'];
   notice?: Maybe<Array<Notice>>;
   password: Scalars['String'];
   role: UserRole;
-  updatedAt: Scalars['DateTime'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
   verified: Scalars['Boolean'];
 };
 
@@ -580,19 +601,19 @@ export type FindGroupByIdQueryVariables = Exact<{
 }>;
 
 
-export type FindGroupByIdQuery = { __typename?: 'Query', findGroupById: { __typename?: 'FindGroupByIdOutput', ok: boolean, error?: string | null, group?: { __typename?: 'Group', id: number, name: string, members: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, member: { __typename?: 'User', id: number, email: string } }> } | null } };
+export type FindGroupByIdQuery = { __typename?: 'Query', findGroupById: { __typename?: 'FindGroupByIdOutput', ok: boolean, error?: string | null, group?: { __typename?: 'Group', id: number, name: string, members: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
 
 export type FindMyGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FindMyGroupsQuery = { __typename?: 'Query', findMyGroups: { __typename?: 'FindMyGroupsOutput', ok: boolean, error?: string | null, groups?: Array<{ __typename?: 'Group', id: number, name: string, members: Array<{ __typename?: 'GroupMember', staying: boolean, accepted: boolean, manager: boolean }> }> | null } };
+export type FindMyGroupsQuery = { __typename?: 'Query', findMyGroups: { __typename?: 'FindMyGroupsOutput', ok: boolean, error?: string | null, groups?: Array<{ __typename?: 'Group', id: number, name: string, members: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string }, group: { __typename?: 'Group', id: number, name: string } }> }> | null } };
 
 export type FindReservationByIdQueryVariables = Exact<{
   input: FindReservationByIdInput;
 }>;
 
 
-export type FindReservationByIdQuery = { __typename?: 'Query', findReservationById: { __typename?: 'FindReservationByIdOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, email: string }, patient: { __typename?: 'Patient', name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, group?: { __typename?: 'Group', id: number, name: string } | null, lastModifier: { __typename?: 'User', email: string } } | null } };
+export type FindReservationByIdQuery = { __typename?: 'Query', findReservationById: { __typename?: 'FindReservationByIdOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, name: string, email: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, group?: { __typename?: 'Group', id: number, name: string } | null, lastModifier: { __typename?: 'User', id: number, name: string, email: string } } | null } };
 
 export type InviteGroupMutationVariables = Exact<{
   input: InviteGroupInput;
@@ -613,7 +634,7 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, patient: { __typename?: 'Patient', name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, lastModifier: { __typename?: 'User', email: string } }> | null } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, lastModifier: { __typename?: 'User', id: number, email: string, name: string }, group?: { __typename?: 'Group', id: number, name: string } | null }> | null } };
 
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;
@@ -625,7 +646,7 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, email: string, role: UserRole, verified: boolean } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, groups?: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, group: { __typename?: 'Group', id: number, name: string } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
 
 export type SearchPatientByNameQueryVariables = Exact<{
   input: SearchPatientInput;
@@ -640,6 +661,13 @@ export type FindPatientByIdQueryVariables = Exact<{
 
 
 export type FindPatientByIdQuery = { __typename?: 'Query', findPatientById: { __typename?: 'FindPatientByIdOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
+
+export type SearchUsersByNameQueryVariables = Exact<{
+  input: SearchUsersByNameInput;
+}>;
+
+
+export type SearchUsersByNameQuery = { __typename?: 'Query', searchUsersByName: { __typename?: 'SearchUsersByNameOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'User', id: number, name: string, email: string }> | null } };
 
 export type VerifyEmailMutationVariables = Exact<{
   input: VerifyEmailInput;
@@ -987,8 +1015,9 @@ export const FindGroupByIdDocument = gql`
         staying
         manager
         accepted
-        member {
+        user {
           id
+          name
           email
         }
       }
@@ -1033,9 +1062,18 @@ export const FindMyGroupsDocument = gql`
       id
       name
       members {
+        id
         staying
-        accepted
         manager
+        accepted
+        user {
+          id
+          name
+        }
+        group {
+          id
+          name
+        }
       }
     }
   }
@@ -1081,9 +1119,11 @@ export const FindReservationByIdDocument = gql`
       memo
       therapist {
         id
+        name
         email
       }
       patient {
+        id
         name
         gender
         registrationNumber
@@ -1094,6 +1134,8 @@ export const FindReservationByIdDocument = gql`
         name
       }
       lastModifier {
+        id
+        name
         email
       }
     }
@@ -1207,14 +1249,25 @@ export const ListReservationsDocument = gql`
       endDate
       state
       memo
+      therapist {
+        id
+        name
+      }
       patient {
+        id
         name
         gender
         registrationNumber
         birthday
       }
       lastModifier {
+        id
         email
+        name
+      }
+      group {
+        id
+        name
       }
     }
   }
@@ -1287,9 +1340,24 @@ export const MeDocument = gql`
     query me {
   me {
     id
+    name
     email
     role
     verified
+    groups {
+      id
+      staying
+      manager
+      accepted
+      group {
+        id
+        name
+      }
+    }
+    notice {
+      message
+      read
+    }
   }
 }
     `;
@@ -1409,6 +1477,48 @@ export function useFindPatientByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type FindPatientByIdQueryHookResult = ReturnType<typeof useFindPatientByIdQuery>;
 export type FindPatientByIdLazyQueryHookResult = ReturnType<typeof useFindPatientByIdLazyQuery>;
 export type FindPatientByIdQueryResult = Apollo.QueryResult<FindPatientByIdQuery, FindPatientByIdQueryVariables>;
+export const SearchUsersByNameDocument = gql`
+    query searchUsersByName($input: SearchUsersByNameInput!) {
+  searchUsersByName(input: $input) {
+    ok
+    error
+    totalCount
+    results {
+      id
+      name
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchUsersByNameQuery__
+ *
+ * To run a query within a React component, call `useSearchUsersByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchUsersByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchUsersByNameQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchUsersByNameQuery(baseOptions: Apollo.QueryHookOptions<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>(SearchUsersByNameDocument, options);
+      }
+export function useSearchUsersByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>(SearchUsersByNameDocument, options);
+        }
+export type SearchUsersByNameQueryHookResult = ReturnType<typeof useSearchUsersByNameQuery>;
+export type SearchUsersByNameLazyQueryHookResult = ReturnType<typeof useSearchUsersByNameLazyQuery>;
+export type SearchUsersByNameQueryResult = Apollo.QueryResult<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>;
 export const VerifyEmailDocument = gql`
     mutation verifyEmail($input: VerifyEmailInput!) {
   verifyEmail(input: $input) {

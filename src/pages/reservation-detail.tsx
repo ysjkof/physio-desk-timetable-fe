@@ -24,7 +24,7 @@ import { listReservationRefetchVar } from "../store";
 
 interface IReservationDetail {
   reservationId: number;
-  closeAction: any;
+  closeAction: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const ReservationDetail = ({
   reservationId,
@@ -41,7 +41,7 @@ export const ReservationDetail = ({
     if (ok) {
       // 캐시 수정해서 변경사항 바로 렌더링하기
       listReservationRefetch();
-      return closeAction();
+      closeAction(false);
     }
   };
 
@@ -62,10 +62,10 @@ export const ReservationDetail = ({
     onCompleted,
   });
 
-  const { data } = useFindReservationByIdQuery({
+  const { data: findReservationData } = useFindReservationByIdQuery({
     variables: {
       input: {
-        reservationId: reservationId,
+        reservationId,
       },
     },
   });
@@ -152,7 +152,7 @@ export const ReservationDetail = ({
     }
   };
 
-  const reservation = data?.findReservationById.reservation;
+  const reservation = findReservationData?.findReservationById.reservation;
   return (
     <>
       <Helmet>
@@ -161,7 +161,7 @@ export const ReservationDetail = ({
       <div className="h-[550px] w-[400px] overflow-y-scroll bg-white py-6 px-16 sm:rounded-lg">
         <button
           className="absolute right-6 hover:text-gray-400"
-          onClick={() => closeAction()}
+          onClick={() => closeAction(false)}
         >
           <FontAwesomeIcon icon={faXmark} />
         </button>

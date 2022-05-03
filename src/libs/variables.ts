@@ -23,3 +23,6 @@ export const REGEX_YYYYMMDD =
 // export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
 // 이하는 1분 단위는 0만 가능
 export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0])$/;
+
+export const LOCALSTORAGE_VIEW_OPTION_GROUPS = "muool-view-option-groups-";
+export const LOCALSTORAGE_VIEW_OPTION = "muool-view-option-";

@@ -5,15 +5,27 @@
   @apply w-full appearance-none rounded-md border border-gray-300 px-5 py-2 text-lg font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
 }
 
+.search-result {
+  @apply w-full appearance-none rounded-b-md border border-gray-300 px-5 py-2 text-lg font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
+}
+
 .input-number {
   @apply w-full rounded-md border border-gray-300 pr-6 text-right text-lg font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
 }
 
 .btn-sm {
-  @apply h-5 w-5 rounded-md text-sm text-gray-700 ring-1 ring-gray-400 hover:font-bold;
+  @apply px-1 text-sm text-gray-700 hover:font-bold;
+}
+
+.btn-border {
+  @apply rounded-md ring-1 ring-gray-400;
 }
 .btn-selected {
   @apply font-extrabold ring-2 ring-violet-500;
+}
+
+.seperate-bar {
+  @apply border-b;
 }
 
 @tailwind utilities;

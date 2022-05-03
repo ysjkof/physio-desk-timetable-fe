@@ -8,14 +8,25 @@ query listReservations($input: ListReservationsInput!) {
       endDate
       state
       memo
+      therapist {
+        id
+        name
+      }
       patient {
+        id
         name
         gender
         registrationNumber
         birthday
       }
       lastModifier {
+        id
         email
+        name
+      }
+      group {
+        id
+        name
       }
     }
   }

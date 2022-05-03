@@ -36,10 +36,10 @@ export const CreateAccount = () => {
   ] = useCreateAccountMutation({ onCompleted });
   const onSubmit = () => {
     if (!loading) {
-      const { email, password } = getValues();
+      const { name, email, password } = getValues();
       createAccountMutation({
         variables: {
-          createAccountInput: { email, password },
+          createAccountInput: { name, email, password },
         },
       });
     }
@@ -57,6 +57,14 @@ export const CreateAccount = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="mt-5 mb-5 grid w-full gap-3"
       >
+        <input
+          {...register("name", {
+            required: "Name is required",
+          })}
+          type="text"
+          placeholder="Name"
+          className="input"
+        />
         <input
           {...register("email", {
             required: "Email is required",

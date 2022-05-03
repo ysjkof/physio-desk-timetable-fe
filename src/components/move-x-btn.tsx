@@ -12,12 +12,13 @@ export const MoveXBtn: React.FC<IMoveXBtn> = ({
 }) => {
   const handleDateNavMove = () => {
     const date = new Date(selectedDate);
+    const value = dateNavExpand ? 1 : 7;
     if (dateNavExpand === false) {
-      if (direction === "prev") date.setDate(date.getDate() - 7);
-      if (direction === "after") date.setDate(date.getDate() + 7);
+      if (direction === "prev") date.setDate(date.getDate() - value);
+      if (direction === "after") date.setDate(date.getDate() + value);
     } else if (dateNavExpand === true) {
-      if (direction === "prev") date.setMonth(date.getMonth() - 1);
-      if (direction === "after") date.setMonth(date.getMonth() + 1);
+      if (direction === "prev") date.setMonth(date.getMonth() - value);
+      if (direction === "after") date.setMonth(date.getMonth() + value);
     }
     setSelectedDate(date);
   };

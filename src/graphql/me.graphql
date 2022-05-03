@@ -1,8 +1,23 @@
 query me {
   me {
     id
+    name
     email
     role
     verified
+    groups {
+      id
+      staying
+      manager
+      accepted
+      group {
+        id
+        name
+      }
+    }
+    notice {
+      message
+      read
+    }
   }
 }

@@ -10,8 +10,9 @@ query findGroupById($input: FindGroupByIdInput!) {
         staying
         manager
         accepted
-        member {
+        user {
           id
+          name
           email
         }
       }

@@ -10,7 +10,7 @@ interface IBtnArrow {
 
 // FC = Functional Component
 export const BtnArrow: React.FC<IBtnArrow> = ({ direction, onClick }) => (
-  <button className={cls("btn-sm")} onClick={onClick}>
+  <button className={cls("btn-sm btn-border")} onClick={onClick}>
     {direction === "prev" ? (
       <FontAwesomeIcon icon={faArrowLeft} />
     ) : (

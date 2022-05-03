@@ -10,9 +10,11 @@ query findReservationById($input: FindReservationByIdInput!) {
       memo
       therapist {
         id
+        name
         email
       }
       patient {
+        id
         name
         gender
         registrationNumber
@@ -23,6 +25,8 @@ query findReservationById($input: FindReservationByIdInput!) {
         name
       }
       lastModifier {
+        id
+        name
         email
       }
     }
