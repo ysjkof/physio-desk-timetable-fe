@@ -1,14 +1,11 @@
 import { useReactiveVar } from "@apollo/client";
-import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import {
   faCalendarAlt,
   faGear,
   faList,
-  faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   Group,
   ListReservationsQuery,
@@ -37,13 +34,21 @@ import {
 } from "../libs/timetable-utils";
 import { cls } from "../libs/utils";
 import {
+  LOCALSTORAGE_FOCUS_GROUP,
   LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_GROUPS,
   ONE_DAY,
   ONE_WEEK,
 } from "../variables";
 import { ReservationDetail } from "./reservation-detail";
-import { colorsObj, groupListsVar, todayVar, viewOptionsVar } from "../store";
+import {
+  colorsObj,
+  FocusGroup,
+  focusGroupVar,
+  groupListsVar,
+  todayVar,
+  viewOptionsVar,
+} from "../store";
 import { BtnArrow } from "./button-arrow";
 import { BtnDatecheck } from "./button-datecheck";
 import { ModalPortal } from "./modal-portal";
@@ -51,6 +56,7 @@ import { MoveXBtn } from "./move-x-btn";
 import { Reserve } from "./reserve";
 import { Switch } from "./switch";
 import { TimeIndicatorBar } from "./time-indicator-bar";
+import { ButtonCheck } from "./button-check";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -103,6 +109,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
   );
   const groupLists = useReactiveVar(groupListsVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
+  const focusGroup = useReactiveVar(focusGroupVar);
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
@@ -186,15 +193,63 @@ export const Timetable: React.FC<ITimetableProps> = ({
     setADay(selectedDate);
   }, [selectedDate]);
 
-  const getActiveMembers = (groups: GroupWithOptions[]) => {
-    const activeGroups = groups?.filter((group) => group.activation === true);
-    const emptyArr: GroupMemberWithOptions[] = [];
-    return activeGroups?.reduce(
-      (previousValue, currentValue) =>
-        previousValue.concat(currentValue.members),
-      emptyArr
+  const onClickToggleGroup = (
+    groupLists: GroupWithOptions[],
+    group: GroupWithOptions
+  ) => {
+    const index = groupLists.findIndex(
+      (prevGroup) => prevGroup.id === group.id
     );
+    if (index === -1) return;
+    const newState = [...groupLists];
+    newState[index].activation =
+      newState[index].activation === true ? false : true;
+    localStorage.setItem(
+      LOCALSTORAGE_VIEW_OPTION_GROUPS + loginUser.me.id,
+      JSON.stringify(newState)
+    );
+    groupListsVar(newState);
   };
+  const onClickToggleUser = (
+    groupLists: GroupWithOptions[],
+    parentGroup: GroupWithOptions,
+    memberInGroup: GroupMemberWithOptions
+  ) => {
+    const gIndex = groupLists.findIndex(
+      (prevGroup) => prevGroup.id === parentGroup.id
+    );
+    if (gIndex === -1) return;
+    const mIndex = parentGroup.members.findIndex(
+      (prevMember) => prevMember.id === memberInGroup.id
+    );
+    if (mIndex === -1) return;
+
+    const newState = [...groupLists];
+    newState[gIndex].members[mIndex].activation =
+      newState[gIndex].members[mIndex].activation === true ? false : true;
+    localStorage.setItem(
+      LOCALSTORAGE_VIEW_OPTION_GROUPS + loginUser.me.id,
+      JSON.stringify(newState)
+    );
+    groupListsVar(newState);
+  };
+  const onClickChangeFocusGroup = ({ id, name }: FocusGroup) => {
+    let newFocusGroup: FocusGroup | null;
+    if (focusGroup && focusGroup.id === id) {
+      newFocusGroup = null;
+    } else {
+      newFocusGroup = {
+        id,
+        name,
+      };
+    }
+    localStorage.setItem(
+      LOCALSTORAGE_FOCUS_GROUP + loginUser.me.id,
+      JSON.stringify(newFocusGroup)
+    );
+    focusGroupVar(newFocusGroup);
+  };
+
   if (!viewOptions) {
     return <></>;
   }
@@ -234,82 +289,72 @@ export const Timetable: React.FC<ITimetableProps> = ({
                   className="cursor-pointer"
                 />
                 {viewOptions.seeActiveOption && (
-                  <ul className="absolute z-50 rounded-md bg-white p-4 shadow-cst">
-                    {groupLists?.map((group) => (
-                      <li key={group.id}>
-                        <Switch
-                          key={group.id}
-                          enabled={group.activation}
-                          label={group.name}
-                          onClick={() => {
-                            const index = groupLists.findIndex(
-                              (prevGroup) => prevGroup.id === group.id
-                            );
-                            if (index === -1) return;
-                            const newState = [...groupLists];
-                            newState[index].activation =
-                              newState[index].activation === true
-                                ? false
-                                : true;
-                            // setGroupLists(newState);
-                            localStorage.setItem(
-                              LOCALSTORAGE_VIEW_OPTION_GROUPS + loginUser.me.id,
-                              JSON.stringify(newState)
-                            );
-                            groupListsVar(newState);
-                          }}
-                        />
-                        <ul>
-                          {group.members.map((member) => (
-                            <li
-                              key={member.id}
-                              className={cls(
-                                group.activation ? "" : "text-gray-400",
-                                member.activation ? "" : "text-gray-400",
-                                "flex cursor-pointer items-center justify-between"
-                              )}
-                              onClick={() => {
-                                const gIndex = groupLists.findIndex(
-                                  (prevGroup) => prevGroup.id === group.id
-                                );
-                                if (gIndex === -1) return;
-                                const mIndex = group.members.findIndex(
-                                  (prevMember) => prevMember.id === member.id
-                                );
-                                if (mIndex === -1) return;
-
-                                const newState = [...groupLists];
-                                newState[gIndex].members[mIndex].activation =
-                                  newState[gIndex].members[mIndex]
-                                    .activation === true
-                                    ? false
-                                    : true;
-                                // setGroupLists(newState);
-                                localStorage.setItem(
-                                  LOCALSTORAGE_VIEW_OPTION_GROUPS +
-                                    loginUser.me.id,
-                                  JSON.stringify(newState)
-                                );
-                                groupListsVar(newState);
-                              }}
-                            >
-                              {member.user.name}
-                              <FontAwesomeIcon
-                                icon={faCheckCircle}
-                                className={cls(
-                                  group.activation
-                                    ? member.activation
-                                      ? "text-green-500"
-                                      : ""
-                                    : ""
-                                )}
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="absolute z-50 h-96 w-60 rounded-md bg-white p-4 shadow-cst">
+                    <div className="mb-2 flex justify-between border-b pb-2">
+                      <div className="w-full"></div>
+                      <div className="flex w-full">
+                        <div className="group relative w-full space-x-1 text-center">
+                          <span>보기</span>
+                          <span className="rounded-full border border-gray-400 px-1">
+                            ?
+                          </span>
+                          <p className="bubble-arrow-t absolute top-6 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
+                            시간표에 표시할 병원이나 사용자를 선택합니다.
+                          </p>
+                        </div>
+                        <div className="group relative w-full space-x-1 text-center">
+                          <span>기본</span>
+                          <span className="rounded-full border border-gray-400 px-1">
+                            ?
+                          </span>
+                          <p className="bubble-arrow-t absolute top-6 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
+                            기본 병원을 선택합니다. 예약할 때 기본 병원이
+                            자동으로 선택됩니다.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <ul className="h-full  overflow-y-scroll">
+                      {groupLists === null || groupLists.length === 0 ? (
+                        <div className="flex h-full items-center justify-center">
+                          소속된 병원이 없습니다.
+                        </div>
+                      ) : (
+                        groupLists.map((group) => (
+                          <li key={group.id} className="">
+                            <ButtonCheck
+                              groupName={group.name}
+                              groupActivation={group.activation}
+                              onClickFx={() =>
+                                onClickToggleGroup(groupLists, group)
+                              }
+                              focusGroup={focusGroup}
+                              onClickFocusGroup={() =>
+                                onClickChangeFocusGroup({
+                                  id: group.id,
+                                  name: group.name,
+                                })
+                              }
+                            />
+                            <ul>
+                              {group.members.map((member) => (
+                                <ButtonCheck
+                                  key={member.id}
+                                  groupActivation={group.activation}
+                                  memberActivation={member.activation}
+                                  memberName={member.user.name}
+                                  onClickFx={() =>
+                                    onClickToggleUser(groupLists, group, member)
+                                  }
+                                />
+                              ))}
+                            </ul>
+                            <div className="seperate-bar"></div>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  </div>
                 )}
               </div>
               <Switch

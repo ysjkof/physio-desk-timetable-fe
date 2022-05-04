@@ -23,6 +23,7 @@ interface ModifiedGroup extends Pick<Group, "id" | "name"> {
 export interface GroupWithOptions extends ModifiedGroup {
   activation: boolean;
 }
+
 export interface IViewOption {
   periodToView: typeof ONE_DAY | typeof ONE_WEEK;
   seeCancel: boolean;

@@ -14,7 +14,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Datepicker } from "../components/datepicker";
-import { listReservationRefetchVar, selectedPatientVar } from "../store";
+import {
+  focusGroupVar,
+  groupListsVar,
+  listReservationRefetchVar,
+  selectedPatientVar,
+} from "../store";
 import { CreatePatient } from "../pages/create-patient";
 import { useMe } from "../hooks/useMe";
 
@@ -43,6 +48,7 @@ export const Reserve: React.FC<IReserve> = ({ startDate, closeAction }) => {
   // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
   //   const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
   const { data: meData } = useMe();
+  const focusGroup = useReactiveVar(focusGroupVar);
 
   const {
     register,
@@ -123,6 +129,7 @@ export const Reserve: React.FC<IReserve> = ({ startDate, closeAction }) => {
       });
     }
   };
+  const groupLists = useReactiveVar(groupListsVar);
 
   useEffect(() => {
     if (!startDate) navigate(-1);
@@ -149,14 +156,21 @@ export const Reserve: React.FC<IReserve> = ({ startDate, closeAction }) => {
             <h4 className=" mb-5 w-full text-left text-3xl font-medium">
               예약하기
             </h4>
-            <select {...register("groupId")}>
-              {meData?.me.groups?.map((group) => (
-                <option key={group.id} value={group.group.id}>
-                  {group.group.name}
-                  {group.group.id}
+            <select
+              {...register("groupId")}
+              defaultValue={
+                focusGroup === null || focusGroup.id === null
+                  ? "no-select"
+                  : groupLists?.find((group) => group.id === focusGroup?.id)?.id
+              }
+            >
+              {groupLists?.map((group, i) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                  {group.id}
                 </option>
               ))}
-              <option value={undefined}>선택안함</option>
+              <option value={"no-select"}>-선택안함-</option>
             </select>
             <button
               className="absolute top-14 right-10 rounded-md border px-2 text-gray-500 hover:text-gray-700"

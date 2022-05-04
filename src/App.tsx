@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useReactiveVar } from "@apollo/client";
 import { isLoggedInVar } from "./apollo";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Layout } from "./components/layout";
 import { Home } from "./pages/home";
 import { CreatePatient } from "./pages/create-patient";
@@ -22,63 +22,95 @@ import {
   FindMyGroupsQuery,
   useFindMyGroupsQuery,
 } from "./graphql/generated/graphql";
-import { defaultViewOptions, groupListsVar, viewOptionsVar } from "./store";
 import {
+  FocusGroup,
+  focusGroupVar,
+  groupListsVar,
+  viewOptionsVar,
+} from "./store";
+import {
+  LOCALSTORAGE_FOCUS_GROUP,
   LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_GROUPS,
+  ONE_WEEK,
 } from "./variables";
-import { GroupWithOptions } from "./libs/timetable-utils";
+import { GroupWithOptions, IViewOption } from "./libs/timetable-utils";
 import { ListPatient } from "./pages/list-patient";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
-  const navigate = useNavigate();
   const { data: meData } = useMe();
   const { data: findMyGroupsData } = useFindMyGroupsQuery({
     variables: { input: { includeField: "all" } },
   });
 
   function filterActivatedMemberInGroup(
-    data: FindMyGroupsQuery | undefined | null
+    data: FindMyGroupsQuery | undefined | null,
+    loggedInUserId: number
   ) {
     const result: GroupWithOptions[] = [];
     if (data && data.findMyGroups.groups) {
       data.findMyGroups.groups.forEach((group) => {
-        const members = group.members
-          .filter((member) => member.accepted && member.staying)
-          .map((member) => ({
-            ...member,
-            activation: true,
-            loginUser: member.user.id === meData?.me.id && true,
-          }));
-        result.push({ ...group, members, activation: true });
+        const isAccepted = group.members.find(
+          (member) => member.user.id === loggedInUserId && member.accepted
+        );
+        if (isAccepted) {
+          const members = group.members
+            .filter(
+              (member) =>
+                // member.user.id === loggedInUserId &&
+                member.accepted && member.staying
+            )
+            .map((member) => ({
+              ...member,
+              activation: true,
+              loginUser: member.user.id === loggedInUserId && true,
+            }));
+          if (Array.isArray(members) && members[0]) {
+            result.push({ ...group, members, activation: true });
+          }
+        }
       });
     }
     return result;
   }
 
-  const myGroups = filterActivatedMemberInGroup(findMyGroupsData);
-  const localGroups: GroupWithOptions[] = JSON.parse(
-    localStorage.getItem(LOCALSTORAGE_VIEW_OPTION_GROUPS + meData?.me.id)!
-  );
-  const localViewOptions = JSON.parse(
-    localStorage.getItem(LOCALSTORAGE_VIEW_OPTION + meData?.me.id)!
-  );
+  const defaultViewOptions: IViewOption = {
+    periodToView: ONE_WEEK,
+    seeCancel: true,
+    seeNoshow: true,
+    seeList: false,
+    seeActiveOption: false,
+    navigationExpand: false,
+  };
 
   useEffect(() => {
-    if (meData) {
-      if (localViewOptions === null) {
-        localStorage.setItem(
-          LOCALSTORAGE_VIEW_OPTION + meData.me.id,
-          JSON.stringify(defaultViewOptions)
-        );
-      }
-      viewOptionsVar(localViewOptions);
+    if (!meData) return;
+    const localViewOptions = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_VIEW_OPTION + meData.me.id)!
+    );
+
+    if (localViewOptions === null) {
+      localStorage.setItem(
+        LOCALSTORAGE_VIEW_OPTION + meData.me.id,
+        JSON.stringify(defaultViewOptions)
+      );
     }
+    viewOptionsVar(localViewOptions);
   }, [meData]);
 
   useEffect(() => {
+    if (!meData) return;
     let updatedMyGroups: GroupWithOptions[] = [];
+    const myGroups = filterActivatedMemberInGroup(
+      findMyGroupsData,
+      meData.me.id
+    );
+
+    const localGroups: GroupWithOptions[] = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_VIEW_OPTION_GROUPS + meData.me.id)!
+    );
+
     if (Array.isArray(localGroups) && localGroups.length >= 1) {
       updatedMyGroups = myGroups.map((myGroup) => {
         const index = localGroups.findIndex(
@@ -94,25 +126,66 @@ function App() {
             if (localMemberIndex === -1) {
               return myMember;
             } else {
-              return localGroups[index].members[localMemberIndex];
+              return {
+                ...myMember,
+                activation:
+                  localGroups[index].members[localMemberIndex].activation,
+              };
             }
           });
           return {
             activation: localGroups[index].activation,
-            id: localGroups[index].id,
-            name: localGroups[index].name,
+            id: myGroup.id,
+            name: myGroup.name,
             members,
           };
         }
       });
-    } else if (meData) {
-      localStorage.setItem(
-        LOCALSTORAGE_VIEW_OPTION_GROUPS + meData.me.id,
-        JSON.stringify(myGroups)
-      );
+    } else {
+      updatedMyGroups = myGroups;
     }
+    localStorage.setItem(
+      LOCALSTORAGE_VIEW_OPTION_GROUPS + meData.me.id,
+      JSON.stringify(updatedMyGroups)
+    );
     groupListsVar(updatedMyGroups);
-  }, [myGroups]);
+
+    const localFocusGroup: FocusGroup = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_FOCUS_GROUP + meData.me.id)!
+    );
+
+    let newFocusGroup: FocusGroup | null = null;
+    if (localFocusGroup && updatedMyGroups.length >= 1) {
+      const index = updatedMyGroups.findIndex(
+        (group) =>
+          group.id === localFocusGroup.id && group.name === localFocusGroup.name
+      );
+      index !== -1
+        ? (newFocusGroup = {
+            id: updatedMyGroups[index].id,
+            name: updatedMyGroups[index].name,
+          })
+        : (newFocusGroup = {
+            id: updatedMyGroups[updatedMyGroups.length - 1].id,
+            name: updatedMyGroups[updatedMyGroups.length - 1].name,
+          });
+    } else if (!localFocusGroup && updatedMyGroups.length >= 1) {
+      newFocusGroup = {
+        id: updatedMyGroups[updatedMyGroups.length - 1].id,
+        name: updatedMyGroups[updatedMyGroups.length - 1].name,
+      };
+    }
+    if (newFocusGroup) {
+      localStorage.setItem(
+        LOCALSTORAGE_FOCUS_GROUP + meData.me.id,
+        JSON.stringify(newFocusGroup)
+      );
+      focusGroupVar(newFocusGroup);
+    } else {
+      localStorage.removeItem(LOCALSTORAGE_FOCUS_GROUP + meData.me.id);
+      focusGroupVar(null);
+    }
+  }, [findMyGroupsData]);
 
   return (
     <Routes>

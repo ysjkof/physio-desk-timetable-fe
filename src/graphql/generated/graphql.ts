@@ -682,7 +682,7 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, groups?: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, group: { __typename?: 'Group', id: number, name: string } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, groups?: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, group: { __typename?: 'Group', id: number, name: string, activate: boolean } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
 
 export type SearchPatientByNameQueryVariables = Exact<{
   input: SearchPatientInput;
@@ -1424,6 +1424,7 @@ export const MeDocument = gql`
       group {
         id
         name
+        activate
       }
     }
     notice {

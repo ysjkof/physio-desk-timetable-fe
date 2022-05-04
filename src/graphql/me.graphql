@@ -13,6 +13,7 @@ query me {
       group {
         id
         name
+        activate
       }
     }
     notice {

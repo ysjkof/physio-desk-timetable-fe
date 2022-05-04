@@ -2,7 +2,6 @@ import { makeVar } from "@apollo/client";
 import { INameTag } from "./components/name-tag";
 import { ListReservationsQuery } from "./graphql/generated/graphql";
 import { GroupWithOptions, IViewOption } from "./libs/timetable-utils";
-import { ONE_WEEK } from "./variables";
 
 // 이곳에서 전역 변수 관리
 
@@ -37,13 +36,11 @@ export const colorsObj = {
 
 export const groupListsVar = makeVar<GroupWithOptions[] | null>(null);
 
-export const defaultViewOptions: IViewOption = {
-  periodToView: ONE_WEEK,
-  seeCancel: true,
-  seeNoshow: true,
-  seeList: false,
-  seeActiveOption: false,
-  navigationExpand: false,
-};
-
 export const viewOptionsVar = makeVar<IViewOption | null>(null);
+
+export interface FocusGroup {
+  id: number;
+  name: string;
+}
+
+export const focusGroupVar = makeVar<FocusGroup | null>(null);
