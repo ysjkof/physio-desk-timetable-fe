@@ -1,8 +1,11 @@
 import { useReactiveVar } from "@apollo/client";
 import {
+  faBars,
   faCalendarAlt,
   faGear,
+  faGears,
   faList,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -57,6 +60,7 @@ import { Reserve } from "./reserve";
 import { Switch } from "./switch";
 import { TimeIndicatorBar } from "./time-indicator-bar";
 import { ButtonCheck } from "./button-check";
+import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -272,9 +276,9 @@ export const Timetable: React.FC<ITimetableProps> = ({
               </button>
             </div>
             <div className="flex w-full items-center justify-end space-x-3">
-              <div className="group-view-controller">
-                <FontAwesomeIcon
-                  icon={faGear}
+              <div className="group-view-controller relative">
+                <div
+                  className="flex cursor-pointer items-center gap-1"
                   onClick={() => {
                     const newViewOptions = {
                       ...viewOptions,
@@ -286,10 +290,12 @@ export const Timetable: React.FC<ITimetableProps> = ({
                     );
                     viewOptionsVar(newViewOptions);
                   }}
-                  className="cursor-pointer"
-                />
+                >
+                  <span>보기설정</span>
+                  <FontAwesomeIcon icon={faGear} fontSize="medium" />
+                </div>
                 {viewOptions.seeActiveOption && (
-                  <div className="absolute z-50 h-96 w-60 rounded-md bg-white p-4 shadow-cst">
+                  <div className="absolute top-6 z-50 h-96 w-60 rounded-md bg-white p-4 shadow-cst">
                     <div className="mb-2 flex justify-between border-b pb-2">
                       <div className="w-full"></div>
                       <div className="flex w-full">
