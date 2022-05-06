@@ -39,6 +39,16 @@ export type CreateAccountOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type CreateAtomPrescriptionInput = {
+  name: Scalars['String'];
+};
+
+export type CreateAtomPrescriptionOutput = {
+  __typename?: 'CreateAtomPrescriptionOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type CreateGroupInput = {
   name: Scalars['String'];
 };
@@ -64,11 +74,43 @@ export type CreatePatientOutput = {
   patient: Patient;
 };
 
+export type CreatePrescriptionBundleInput = {
+  description?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['Int']>;
+  name: Scalars['String'];
+  prescriptionOptionIds: Array<Scalars['Int']>;
+  price: Scalars['Int'];
+  timeRequire: Scalars['Int'];
+};
+
+export type CreatePrescriptionBundleOutput = {
+  __typename?: 'CreatePrescriptionBundleOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
+export type CreatePrescriptionOptionInput = {
+  description?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['Int']>;
+  name: Scalars['String'];
+  prescriptionId: Scalars['Int'];
+  price: Scalars['Int'];
+  timeRequire: Scalars['Int'];
+};
+
+export type CreatePrescriptionOptionOutput = {
+  __typename?: 'CreatePrescriptionOptionOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type CreateReservationInput = {
   endDate: Scalars['DateTime'];
   groupId?: InputMaybe<Scalars['Float']>;
   memo?: InputMaybe<Scalars['String']>;
   patientId: Scalars['Float'];
+  prescriptionBundleIds?: InputMaybe<Array<Scalars['Float']>>;
+  prescriptionOptionIds?: InputMaybe<Array<Scalars['Float']>>;
   startDate: Scalars['DateTime'];
   therapistId?: InputMaybe<Scalars['Float']>;
 };
@@ -154,6 +196,13 @@ export type FindAllPatientsOutput = {
   totalPages?: Maybe<Scalars['Int']>;
 };
 
+export type FindAtomPrescriptionsOutput = {
+  __typename?: 'FindAtomPrescriptionsOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  results?: Maybe<Array<PrescriptionAtom>>;
+};
+
 export type FindGroupByIdInput = {
   groupId: Scalars['Int'];
 };
@@ -185,6 +234,20 @@ export type FindPatientByIdOutput = {
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
   patient?: Maybe<Patient>;
+};
+
+export type FindPrescriptionsInput = {
+  groupId?: InputMaybe<Scalars['Int']>;
+  includeInactivate: Scalars['Boolean'];
+  prescriptionType: Scalars['String'];
+};
+
+export type FindPrescriptionsOutput = {
+  __typename?: 'FindPrescriptionsOutput';
+  bundleResults?: Maybe<Array<PrescriptionBundle>>;
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  optionResults?: Maybe<Array<PrescriptionOption>>;
 };
 
 export type FindReservationByIdInput = {
@@ -221,6 +284,7 @@ export type Group = {
   members: Array<GroupMember>;
   name: Scalars['String'];
   patient?: Maybe<Array<Patient>>;
+  prescriptions: Array<PrescriptionOption>;
   reservations?: Maybe<Array<Reservation>>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -299,8 +363,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   acceptInvitation: AcceptInvitationOutput;
   createAccount: CreateAccountOutput;
+  createAtomPrescription: CreateAtomPrescriptionOutput;
   createGroup: CreateGroupOutput;
   createPatient: CreatePatientOutput;
+  createPrescriptionBundle: CreatePrescriptionBundleOutput;
+  createPrescriptionOption: CreatePrescriptionOptionOutput;
   createReservation: CreateReservationOutput;
   deletePatient: DeletePatientOutput;
   deleteReservation: DeleteReservationOutput;
@@ -325,6 +392,11 @@ export type MutationCreateAccountArgs = {
 };
 
 
+export type MutationCreateAtomPrescriptionArgs = {
+  input: CreateAtomPrescriptionInput;
+};
+
+
 export type MutationCreateGroupArgs = {
   input: CreateGroupInput;
 };
@@ -332,6 +404,16 @@ export type MutationCreateGroupArgs = {
 
 export type MutationCreatePatientArgs = {
   input: CreatePatientInput;
+};
+
+
+export type MutationCreatePrescriptionBundleArgs = {
+  input: CreatePrescriptionBundleInput;
+};
+
+
+export type MutationCreatePrescriptionOptionArgs = {
+  input: CreatePrescriptionOptionInput;
 };
 
 
@@ -411,12 +493,48 @@ export type Patient = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type PrescriptionAtom = {
+  __typename?: 'PrescriptionAtom';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type PrescriptionBundle = {
+  __typename?: 'PrescriptionBundle';
+  activate: Scalars['Boolean'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  prescriptionOptions: Array<PrescriptionOption>;
+  price: Scalars['Int'];
+  timeRequire: Scalars['Int'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type PrescriptionOption = {
+  __typename?: 'PrescriptionOption';
+  activate: Scalars['Boolean'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  prescription: PrescriptionAtom;
+  price: Scalars['Int'];
+  timeRequire: Scalars['Int'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   findAllPatients: FindAllPatientsOutput;
+  findAtomPrescriptions: FindAtomPrescriptionsOutput;
   findGroupById: FindGroupByIdOutput;
   findMyGroups: FindMyGroupsOutput;
   findPatientById: FindPatientByIdOutput;
+  findPrescriptions: FindPrescriptionsOutput;
   findReservationById: FindReservationByIdOutput;
   findReservationByPatient: FindReservationByPatientOutput;
   listReservations: ListReservationsOutput;
@@ -444,6 +562,11 @@ export type QueryFindMyGroupsArgs = {
 
 export type QueryFindPatientByIdArgs = {
   input: FindPatientByIdInput;
+};
+
+
+export type QueryFindPrescriptionsArgs = {
+  input: FindPrescriptionsInput;
 };
 
 
@@ -485,6 +608,8 @@ export type Reservation = {
   lastModifier: User;
   memo?: Maybe<Scalars['String']>;
   patient: Patient;
+  prescriptionBundles?: Maybe<Array<PrescriptionBundle>>;
+  prescriptionOptions?: Maybe<Array<PrescriptionOption>>;
   startDate: Scalars['DateTime'];
   state: ReservationState;
   therapist: User;
@@ -532,6 +657,7 @@ export type User = {
   name: Scalars['String'];
   notice?: Maybe<Array<Notice>>;
   password: Scalars['String'];
+  prescriptions: Array<PrescriptionOption>;
   role: UserRole;
   updatedAt?: Maybe<Scalars['DateTime']>;
   verified: Scalars['Boolean'];
@@ -643,6 +769,13 @@ export type FindMyGroupsQueryVariables = Exact<{
 
 
 export type FindMyGroupsQuery = { __typename?: 'Query', findMyGroups: { __typename?: 'FindMyGroupsOutput', ok: boolean, error?: string | null, groups?: Array<{ __typename?: 'Group', id: number, name: string, activate: boolean, members: Array<{ __typename?: 'GroupMember', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string }, group: { __typename?: 'Group', id: number, name: string } }> }> | null } };
+
+export type FindPrescriptionsQueryVariables = Exact<{
+  input: FindPrescriptionsInput;
+}>;
+
+
+export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, optionResults?: Array<{ __typename?: 'PrescriptionOption', id: number, name: string, timeRequire: number, description?: string | null, price: number, activate: boolean, prescription: { __typename?: 'PrescriptionAtom', name: string } }> | null, bundleResults?: Array<{ __typename?: 'PrescriptionBundle', id: number, name: string, timeRequire: number, description?: string | null, price: number, activate: boolean, prescriptionOptions: Array<{ __typename?: 'PrescriptionOption', id: number, name: string, timeRequire: number, description?: string | null, price: number, activate: boolean, prescription: { __typename?: 'PrescriptionAtom', name: string } }> }> | null } };
 
 export type FindReservationByIdQueryVariables = Exact<{
   input: FindReservationByIdInput;
@@ -1178,6 +1311,72 @@ export function useFindMyGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type FindMyGroupsQueryHookResult = ReturnType<typeof useFindMyGroupsQuery>;
 export type FindMyGroupsLazyQueryHookResult = ReturnType<typeof useFindMyGroupsLazyQuery>;
 export type FindMyGroupsQueryResult = Apollo.QueryResult<FindMyGroupsQuery, FindMyGroupsQueryVariables>;
+export const FindPrescriptionsDocument = gql`
+    query findPrescriptions($input: FindPrescriptionsInput!) {
+  findPrescriptions(input: $input) {
+    ok
+    error
+    optionResults {
+      id
+      name
+      timeRequire
+      description
+      price
+      prescription {
+        name
+      }
+      activate
+    }
+    bundleResults {
+      id
+      name
+      timeRequire
+      description
+      price
+      prescriptionOptions {
+        id
+        name
+        timeRequire
+        description
+        price
+        prescription {
+          name
+        }
+        activate
+      }
+      activate
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindPrescriptionsQuery__
+ *
+ * To run a query within a React component, call `useFindPrescriptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindPrescriptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindPrescriptionsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindPrescriptionsQuery(baseOptions: Apollo.QueryHookOptions<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>(FindPrescriptionsDocument, options);
+      }
+export function useFindPrescriptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>(FindPrescriptionsDocument, options);
+        }
+export type FindPrescriptionsQueryHookResult = ReturnType<typeof useFindPrescriptionsQuery>;
+export type FindPrescriptionsLazyQueryHookResult = ReturnType<typeof useFindPrescriptionsLazyQuery>;
+export type FindPrescriptionsQueryResult = Apollo.QueryResult<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>;
 export const FindReservationByIdDocument = gql`
     query findReservationById($input: FindReservationByIdInput!) {
   findReservationById(input: $input) {

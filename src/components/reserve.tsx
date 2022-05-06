@@ -21,7 +21,7 @@ import {
   selectedPatientVar,
 } from "../store";
 import { CreatePatient } from "../pages/create-patient";
-import { useMe } from "../hooks/useMe";
+import { PrescriptionType } from "../pages/time-table";
 
 export interface ReserveForm {
   inputYear: number;
@@ -35,19 +35,32 @@ export interface ReserveForm {
   groupId: number;
 }
 
+interface SelectPrescriptionType {
+  type: "PrescriptionBundle" | "PrescriptionOption" | undefined;
+  id: number;
+  timeRequire: number;
+}
+
 interface IReserve {
   startDate: Date;
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
+  prescriptions: PrescriptionType;
 }
 
-export const Reserve: React.FC<IReserve> = ({ startDate, closeAction }) => {
+export const Reserve: React.FC<IReserve> = ({
+  startDate,
+  closeAction,
+  prescriptions,
+}) => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
+  const [selectPrescriptions, setSelectPrescriptions] = useState<
+    SelectPrescriptionType[]
+  >([]);
   const location = useLocation();
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const navigate = useNavigate();
   // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
   //   const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
-  const { data: meData } = useMe();
   const focusGroup = useReactiveVar(focusGroupVar);
 
   const {
@@ -131,12 +144,39 @@ export const Reserve: React.FC<IReserve> = ({ startDate, closeAction }) => {
   };
   const groupLists = useReactiveVar(groupListsVar);
 
+  // const onClickPrescription = ({
+  //   id,
+  //   timeRequire,
+  //   type,
+  // }: SelectPrescriptionType) => {
+  //   const exist = selectPrescriptions.find(
+  //     (current) => current.id === id && current.type === type
+  //   );
+  //   if (!exist) {
+  //     setSelectPrescriptions((currents) => [
+  //       ...currents,
+  //       { id, timeRequire, type },
+  //     ]);
+  //   } else {
+  // id나 type이 겹치면 겹치는 걸 다 지워버린다. 두 가지 옵션을 체크하지 않고 한 개만 체크한다. 여러가지 해봤는데 해결안돼, 아예 구조 바꾸기로 함.
+  //     const initailValue: SelectPrescriptionType[] = [];
+  //     const newResult = selectPrescriptions.reduce((prev, curr) => {
+  //       if (curr.id !== id && curr.type !== type) {
+  //         prev.push(curr);
+  //       }
+  //       return prev;
+  //     }, initailValue);
+  //     setSelectPrescriptions(newResult);
+  //   }
+  // };
+
   useEffect(() => {
     if (!startDate) navigate(-1);
     return () => {
       selectedPatientVar(null);
     };
   }, []);
+
   return (
     <>
       <Helmet>
@@ -305,13 +345,25 @@ export const Reserve: React.FC<IReserve> = ({ startDate, closeAction }) => {
                 </label>
               </div>
               <label>프로그램</label>
-              <select {...register("program")}>
-                {programs.manual.map((manual, index) => (
-                  <option key={index} value={manual.id}>
-                    {manual.name}
-                  </option>
+              <ul className="grid grid-cols-5">
+                {prescriptions?.map((prescription, index) => (
+                  <li
+                    key={index}
+                    value={prescription.id}
+                    onClick={() =>
+                      onClickPrescription({
+                        id: prescription.id,
+                        timeRequire: prescription.timeRequire,
+                        type: prescription.__typename,
+                      })
+                    }
+                  >
+                    <div className="btn-sm btn-border text-blue-500">
+                      {prescription.name}
+                    </div>
+                  </li>
                 ))}
-              </select>
+              </ul>
               <Button
                 canClick={selectedPatient && isValid}
                 loading={loading}

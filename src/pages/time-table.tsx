@@ -1,13 +1,53 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Timetable } from "../components/timetable";
-import { useListReservationsQuery } from "../graphql/generated/graphql";
+import {
+  useFindPrescriptionsQuery,
+  useListReservationsQuery,
+} from "../graphql/generated/graphql";
 import { useReactiveVar } from "@apollo/client";
-import { todayVar } from "../store";
+import { focusGroupVar, todayVar } from "../store";
 import { useMe } from "../hooks/useMe";
+
+export type PrescriptionType =
+  | (
+      | {
+          __typename?: "PrescriptionBundle";
+          id: number;
+          name: string;
+          timeRequire: number;
+          description?: string | null;
+          price: number;
+          activate: boolean;
+          prescriptionOptions: {
+            __typename?: "PrescriptionOption";
+            id: number;
+            name: string;
+            timeRequire: number;
+            description?: string | null;
+            price: number;
+            activate: boolean;
+            prescription: { __typename?: "PrescriptionAtom"; name: string };
+          }[];
+        }
+      | {
+          __typename?: "PrescriptionOption" | undefined;
+          id: number;
+          name: string;
+          timeRequire: number;
+          description?: string | null | undefined;
+          price: number;
+          activate: boolean;
+          prescription: {
+            __typename?: "PrescriptionAtom" | undefined;
+            name: string;
+          };
+        }
+    )[];
 
 export const TimeTable = () => {
   const today = useReactiveVar(todayVar);
+  const focusGroup = useReactiveVar(focusGroupVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const { data: meData } = useMe();
 
@@ -23,7 +63,24 @@ export const TimeTable = () => {
       },
     },
   });
-
+  const { data: prescriptionsData } = useFindPrescriptionsQuery({
+    variables: {
+      input: {
+        includeInactivate: false,
+        prescriptionType: "all",
+        groupId: focusGroup?.id,
+      },
+    },
+  });
+  let prescriptions: PrescriptionType = [];
+  if (prescriptionsData) {
+    Array.isArray(prescriptionsData.findPrescriptions.bundleResults) &&
+      Array.isArray(prescriptionsData.findPrescriptions.optionResults) &&
+      (prescriptions = [
+        ...prescriptionsData.findPrescriptions.bundleResults,
+        ...prescriptionsData.findPrescriptions.optionResults,
+      ]);
+  }
   if (!meData) {
     return <></>;
   }
@@ -42,6 +99,7 @@ export const TimeTable = () => {
             eventsData={data}
             selectedDateState={{ selectedDate, setSelectedDate }}
             loginUser={meData}
+            prescriptions={prescriptions}
           />
         </div>
       </div>

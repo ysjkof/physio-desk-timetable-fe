@@ -1,0 +1,36 @@
+query findPrescriptions($input: FindPrescriptionsInput!) {
+  findPrescriptions(input: $input) {
+    ok
+    error
+    optionResults {
+      id
+      name
+      timeRequire
+      description
+      price
+      prescription {
+        name
+      }
+      activate
+    }
+    bundleResults {
+      id
+      name
+      timeRequire
+      description
+      price
+      prescriptionOptions {
+        id
+        name
+        timeRequire
+        description
+        price
+        prescription {
+          name
+        }
+        activate
+      }
+      activate
+    }
+  }
+}

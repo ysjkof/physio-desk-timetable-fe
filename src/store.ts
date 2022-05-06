@@ -1,6 +1,10 @@
 import { makeVar } from "@apollo/client";
 import { INameTag } from "./components/name-tag";
-import { ListReservationsQuery } from "./graphql/generated/graphql";
+import {
+  ListReservationsQuery,
+  PrescriptionBundle,
+  PrescriptionOption,
+} from "./graphql/generated/graphql";
 import { GroupWithOptions, IViewOption } from "./libs/timetable-utils";
 
 // 이곳에서 전역 변수 관리
@@ -39,8 +43,46 @@ export const groupListsVar = makeVar<GroupWithOptions[] | null>(null);
 export const viewOptionsVar = makeVar<IViewOption | null>(null);
 
 export interface FocusGroup {
-  id: number;
-  name: string;
+  id: number | null;
+  name: string | null;
 }
 
 export const focusGroupVar = makeVar<FocusGroup | null>(null);
+
+type CheckboxType =
+  | (
+      | {
+          __typename?: "PrescriptionBundle";
+          id: number;
+          name: string;
+          timeRequire: number;
+          description?: string | null;
+          price: number;
+          activate: boolean;
+          prescriptionOptions: {
+            __typename?: "PrescriptionOption";
+            id: number;
+            name: string;
+            timeRequire: number;
+            description?: string | null;
+            price: number;
+            activate: boolean;
+            prescription: { __typename?: "PrescriptionAtom"; name: string };
+          }[];
+        }
+      | {
+          __typename?: "PrescriptionOption" | undefined;
+          id: number;
+          name: string;
+          timeRequire: number;
+          description?: string | null | undefined;
+          price: number;
+          activate: boolean;
+          prescription: {
+            __typename?: "PrescriptionAtom" | undefined;
+            name: string;
+          };
+        }
+    )[];
+
+export const prescriptionsVar = makeVar<CheckboxType | null>(null);

@@ -37,6 +37,15 @@ import {
 import { GroupWithOptions, IViewOption } from "./libs/timetable-utils";
 import { ListPatient } from "./pages/list-patient";
 
+const defaultViewOptions: IViewOption = {
+  periodToView: ONE_WEEK,
+  seeCancel: true,
+  seeNoshow: true,
+  seeList: false,
+  seeActiveOption: false,
+  navigationExpand: false,
+};
+
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const { data: meData } = useMe();
@@ -74,15 +83,6 @@ function App() {
     }
     return result;
   }
-
-  const defaultViewOptions: IViewOption = {
-    periodToView: ONE_WEEK,
-    seeCancel: true,
-    seeNoshow: true,
-    seeList: false,
-    seeActiveOption: false,
-    navigationExpand: false,
-  };
 
   useEffect(() => {
     if (!meData) return;
@@ -156,6 +156,7 @@ function App() {
 
     let newFocusGroup: FocusGroup | null = null;
     if (localFocusGroup && updatedMyGroups.length >= 1) {
+      if (localFocusGroup.id === null) return;
       const index = updatedMyGroups.findIndex(
         (group) =>
           group.id === localFocusGroup.id && group.name === localFocusGroup.name

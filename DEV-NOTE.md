@@ -278,9 +278,6 @@ arr1.map((data, index) => {
 
 자동완성이 사용자 경험이 빠르고 좋을 것 같다. 하지만 과정이 많다. 검색 후 선택으로 먼저 만들고 사용경험상 별로면 바꾸자.
 
-- [ ] 할 일: 치료 프로그램 커스텀 기능(가격, 시간, 종류)
-- [ ] 할 일: 치료 프로그램 백엔드에서 받아오기( 백엔드 제작 필요 )
-
 # 2022-2-10; 환자 검색 시 기능
 
 환자 이름 검색을 하는 경우
@@ -396,3 +393,21 @@ HelmetProvider와 Helmet의 타입을 아래로 바꾸면 해결
 ## React.FC에 props에 children 사라짐
 
 [참조](https://stackoverflow.com/questions/71788254/react-18-typescript-children-fc)
+
+# 2022-5-5;
+
+- [ ] 할 일: 치료 프로그램 커스텀 기능(가격, 시간, 종류)
+- [ ] 할 일: 치료 프로그램 백엔드에서 받아오기( 백엔드 제작 필요 )
+
+```ts
+interface Prescription {
+  type: "도수치료" | "충격파" | "운동치료";
+}
+
+interface PrescriptionOption {
+  시간: number;
+  설명: string;
+  가격: number;
+  그룹ID: number;
+}
+```

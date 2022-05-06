@@ -1,11 +1,8 @@
 import { useReactiveVar } from "@apollo/client";
 import {
-  faBars,
   faCalendarAlt,
   faGear,
-  faGears,
   faList,
-  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -60,7 +57,7 @@ import { Reserve } from "./reserve";
 import { Switch } from "./switch";
 import { TimeIndicatorBar } from "./time-indicator-bar";
 import { ButtonCheck } from "./button-check";
-import { faUserCircle } from "@fortawesome/free-regular-svg-icons";
+import { PrescriptionType } from "../pages/time-table";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -75,6 +72,7 @@ interface ITimetableProps {
     setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
   };
   loginUser: MeQuery;
+  prescriptions: PrescriptionType;
 }
 export interface ModifiedReservation
   extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
@@ -92,6 +90,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
   eventsData,
   selectedDateState: { selectedDate, setSelectedDate },
   loginUser,
+  prescriptions,
 }) => {
   const today = useReactiveVar(todayVar);
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[]>([]);
@@ -177,8 +176,6 @@ export const Timetable: React.FC<ITimetableProps> = ({
       );
       setWeekEvents(distributeEvents);
     }
-    // setGroupLists(groupList);
-    // }, [eventsData, groupList, groupLists]);
   }, [eventsData, groupLists]);
 
   useEffect(() => {
@@ -239,8 +236,8 @@ export const Timetable: React.FC<ITimetableProps> = ({
   };
   const onClickChangeFocusGroup = ({ id, name }: FocusGroup) => {
     let newFocusGroup: FocusGroup | null;
-    if (focusGroup && focusGroup.id === id) {
-      newFocusGroup = null;
+    if (focusGroup && focusGroup.id !== null && focusGroup.id === id) {
+      newFocusGroup = { id: null, name: null };
     } else {
       newFocusGroup = {
         id,
@@ -1084,6 +1081,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
             <Reserve
               startDate={eventStartDate!}
               closeAction={setOpenReserveModal}
+              prescriptions={prescriptions}
             />
           }
         />
