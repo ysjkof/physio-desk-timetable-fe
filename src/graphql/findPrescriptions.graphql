@@ -5,7 +5,7 @@ query findPrescriptions($input: FindPrescriptionsInput!) {
     optionResults {
       id
       name
-      timeRequire
+      requiredTime
       description
       price
       prescription {
@@ -16,13 +16,13 @@ query findPrescriptions($input: FindPrescriptionsInput!) {
     bundleResults {
       id
       name
-      timeRequire
+      requiredTime
       description
       price
       prescriptionOptions {
         id
         name
-        timeRequire
+        requiredTime
         description
         price
         prescription {

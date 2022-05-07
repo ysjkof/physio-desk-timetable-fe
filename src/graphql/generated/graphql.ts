@@ -80,7 +80,7 @@ export type CreatePrescriptionBundleInput = {
   name: Scalars['String'];
   prescriptionOptionIds: Array<Scalars['Int']>;
   price: Scalars['Int'];
-  timeRequire: Scalars['Int'];
+  requiredTime: Scalars['Int'];
 };
 
 export type CreatePrescriptionBundleOutput = {
@@ -95,7 +95,7 @@ export type CreatePrescriptionOptionInput = {
   name: Scalars['String'];
   prescriptionId: Scalars['Int'];
   price: Scalars['Int'];
-  timeRequire: Scalars['Int'];
+  requiredTime: Scalars['Int'];
 };
 
 export type CreatePrescriptionOptionOutput = {
@@ -510,7 +510,7 @@ export type PrescriptionBundle = {
   name: Scalars['String'];
   prescriptionOptions: Array<PrescriptionOption>;
   price: Scalars['Int'];
-  timeRequire: Scalars['Int'];
+  requiredTime: Scalars['Int'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -523,7 +523,7 @@ export type PrescriptionOption = {
   name: Scalars['String'];
   prescription: PrescriptionAtom;
   price: Scalars['Int'];
-  timeRequire: Scalars['Int'];
+  requiredTime: Scalars['Int'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -775,7 +775,7 @@ export type FindPrescriptionsQueryVariables = Exact<{
 }>;
 
 
-export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, optionResults?: Array<{ __typename?: 'PrescriptionOption', id: number, name: string, timeRequire: number, description?: string | null, price: number, activate: boolean, prescription: { __typename?: 'PrescriptionAtom', name: string } }> | null, bundleResults?: Array<{ __typename?: 'PrescriptionBundle', id: number, name: string, timeRequire: number, description?: string | null, price: number, activate: boolean, prescriptionOptions: Array<{ __typename?: 'PrescriptionOption', id: number, name: string, timeRequire: number, description?: string | null, price: number, activate: boolean, prescription: { __typename?: 'PrescriptionAtom', name: string } }> }> | null } };
+export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, optionResults?: Array<{ __typename?: 'PrescriptionOption', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate: boolean, prescription: { __typename?: 'PrescriptionAtom', name: string } }> | null, bundleResults?: Array<{ __typename?: 'PrescriptionBundle', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate: boolean, prescriptionOptions: Array<{ __typename?: 'PrescriptionOption', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate: boolean, prescription: { __typename?: 'PrescriptionAtom', name: string } }> }> | null } };
 
 export type FindReservationByIdQueryVariables = Exact<{
   input: FindReservationByIdInput;
@@ -1319,7 +1319,7 @@ export const FindPrescriptionsDocument = gql`
     optionResults {
       id
       name
-      timeRequire
+      requiredTime
       description
       price
       prescription {
@@ -1330,13 +1330,13 @@ export const FindPrescriptionsDocument = gql`
     bundleResults {
       id
       name
-      timeRequire
+      requiredTime
       description
       price
       prescriptionOptions {
         id
         name
-        timeRequire
+        requiredTime
         description
         price
         prescription {

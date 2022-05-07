@@ -57,7 +57,7 @@ import { Reserve } from "./reserve";
 import { Switch } from "./switch";
 import { TimeIndicatorBar } from "./time-indicator-bar";
 import { ButtonCheck } from "./button-check";
-import { PrescriptionType } from "../pages/time-table";
+import { PrescriptionsSelectType } from "../pages/time-table";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -72,7 +72,7 @@ interface ITimetableProps {
     setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
   };
   loginUser: MeQuery;
-  prescriptions: PrescriptionType;
+  prescriptions: PrescriptionsSelectType;
 }
 export interface ModifiedReservation
   extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {

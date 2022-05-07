@@ -55,7 +55,7 @@ type CheckboxType =
           __typename?: "PrescriptionBundle";
           id: number;
           name: string;
-          timeRequire: number;
+          requiredTime: number;
           description?: string | null;
           price: number;
           activate: boolean;
@@ -63,7 +63,7 @@ type CheckboxType =
             __typename?: "PrescriptionOption";
             id: number;
             name: string;
-            timeRequire: number;
+            requiredTime: number;
             description?: string | null;
             price: number;
             activate: boolean;
@@ -74,7 +74,7 @@ type CheckboxType =
           __typename?: "PrescriptionOption" | undefined;
           id: number;
           name: string;
-          timeRequire: number;
+          requiredTime: number;
           description?: string | null | undefined;
           price: number;
           activate: boolean;

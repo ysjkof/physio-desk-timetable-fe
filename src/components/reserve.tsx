@@ -21,7 +21,12 @@ import {
   selectedPatientVar,
 } from "../store";
 import { CreatePatient } from "../pages/create-patient";
-import { PrescriptionType } from "../pages/time-table";
+import {
+  PrescriptionOptionWithSelect,
+  PrescriptionsSelectType,
+  PrscriptionBundleWithSelect,
+} from "../pages/time-table";
+import { cls } from "../libs/utils";
 
 export interface ReserveForm {
   inputYear: number;
@@ -29,22 +34,15 @@ export interface ReserveForm {
   inputDate: number;
   inputHours: number;
   inputMinutes: number;
-  program: string;
   memo: string;
   therapistId: number;
   groupId: number;
 }
 
-interface SelectPrescriptionType {
-  type: "PrescriptionBundle" | "PrescriptionOption" | undefined;
-  id: number;
-  timeRequire: number;
-}
-
 interface IReserve {
   startDate: Date;
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
-  prescriptions: PrescriptionType;
+  prescriptions: PrescriptionsSelectType;
 }
 
 export const Reserve: React.FC<IReserve> = ({
@@ -53,14 +51,23 @@ export const Reserve: React.FC<IReserve> = ({
   prescriptions,
 }) => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
-  const [selectPrescriptions, setSelectPrescriptions] = useState<
-    SelectPrescriptionType[]
-  >([]);
+  const [selectPrescriptionOptions, setSelectPrescriptionOptions] = useState(
+    prescriptions.option
+  );
+  const [selectPrescriptionBundles, setSelectPrescriptionBundles] = useState(
+    prescriptions.bundle
+  );
+  const [totalPrescription, setTotalPrescription] = useState({
+    price: 0,
+    minute: 0,
+    options: [0],
+    bundles: [0],
+  });
   const location = useLocation();
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const navigate = useNavigate();
   // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
-  //   const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
+  // const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
   const focusGroup = useReactiveVar(focusGroupVar);
 
   const {
@@ -87,17 +94,6 @@ export const Reserve: React.FC<IReserve> = ({
     { loading, data: createReservationResult },
   ] = useCreateReservationMutation({ onCompleted });
 
-  const programs = {
-    manual: [
-      { id: 1, name: "도수치료 10분", time: 10, price: null },
-      { id: 2, name: "도수치료 20분", time: 20, price: 70000 },
-      { id: 3, name: "도수치료 30분", time: 30, price: 100000 },
-      { id: 4, name: "도수치료 40분", time: 40, price: 140000 },
-      { id: 5, name: "도수치료 50분", time: 50, price: 170000 },
-      { id: 6, name: "도수치료 60분", time: 60, price: 210000 },
-    ],
-  };
-
   const onSubmit = () => {
     if (!loading && selectedPatient?.id) {
       const {
@@ -106,17 +102,10 @@ export const Reserve: React.FC<IReserve> = ({
         inputDate,
         inputHours,
         inputMinutes,
-        program,
         memo,
         therapistId,
         groupId,
       } = getValues();
-      const index = programs.manual.findIndex(
-        (id) => id.id === parseInt(program)
-      );
-      console.log(groupId, typeof groupId);
-      const findProgram = programs.manual[index];
-      if (!findProgram) return console.log("치료 프로그램을 찾을 수 없습니다.");
       const startDate = new Date(
         `${inputYear}-${String(inputMonth).padStart(2, "0")}-${String(
           inputDate
@@ -125,9 +114,8 @@ export const Reserve: React.FC<IReserve> = ({
         ).padStart(2, "0")}:00.000${UTC_OPTION_KST}`
       );
       const endDate = new Date(startDate);
-      const minutes = findProgram.time;
       // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-      endDate.setMinutes(endDate.getMinutes() + minutes);
+      endDate.setMinutes(endDate.getMinutes() + totalPrescription.minute);
       createReservationMutation({
         variables: {
           input: {
@@ -137,6 +125,8 @@ export const Reserve: React.FC<IReserve> = ({
             patientId: selectedPatient.id,
             therapistId,
             groupId: +groupId,
+            prescriptionOptionIds: totalPrescription.options,
+            prescriptionBundleIds: totalPrescription.bundles,
           },
         },
       });
@@ -144,31 +134,24 @@ export const Reserve: React.FC<IReserve> = ({
   };
   const groupLists = useReactiveVar(groupListsVar);
 
-  // const onClickPrescription = ({
-  //   id,
-  //   timeRequire,
-  //   type,
-  // }: SelectPrescriptionType) => {
-  //   const exist = selectPrescriptions.find(
-  //     (current) => current.id === id && current.type === type
-  //   );
-  //   if (!exist) {
-  //     setSelectPrescriptions((currents) => [
-  //       ...currents,
-  //       { id, timeRequire, type },
-  //     ]);
-  //   } else {
-  // id나 type이 겹치면 겹치는 걸 다 지워버린다. 두 가지 옵션을 체크하지 않고 한 개만 체크한다. 여러가지 해봤는데 해결안돼, 아예 구조 바꾸기로 함.
-  //     const initailValue: SelectPrescriptionType[] = [];
-  //     const newResult = selectPrescriptions.reduce((prev, curr) => {
-  //       if (curr.id !== id && curr.type !== type) {
-  //         prev.push(curr);
-  //       }
-  //       return prev;
-  //     }, initailValue);
-  //     setSelectPrescriptions(newResult);
-  //   }
-  // };
+  const onClickPrescription = (id: number, type: "bundle" | "option") => {
+    let setFunction:
+      | typeof setSelectPrescriptionBundles
+      | typeof setSelectPrescriptionOptions = setSelectPrescriptionOptions;
+    if (type === "bundle") {
+      setFunction = setSelectPrescriptionBundles;
+    }
+    // @ts-ignore
+    setFunction((prevState) =>
+      // @ts-ignore
+      prevState.map((prev) => {
+        if (prev.id === id) {
+          return { ...prev, isSelect: !prev.isSelect };
+        }
+        return prev;
+      })
+    );
+  };
 
   useEffect(() => {
     if (!startDate) navigate(-1);
@@ -176,6 +159,42 @@ export const Reserve: React.FC<IReserve> = ({
       selectedPatientVar(null);
     };
   }, []);
+
+  function getTotal(
+    getThis: "price" | "requiredTime",
+    firstPrescription: typeof selectPrescriptionOptions,
+    secondPrescription: typeof selectPrescriptionBundles
+  ) {
+    return (
+      firstPrescription
+        .filter((pre) => pre.isSelect)
+        .reduce((prev, curr) => prev + curr[getThis], 0) +
+      secondPrescription
+        .filter((pre) => pre.isSelect)
+        .reduce((prev, curr) => prev + curr[getThis], 0)
+    );
+  }
+
+  useEffect(() => {
+    setTotalPrescription({
+      minute: getTotal(
+        "requiredTime",
+        selectPrescriptionOptions,
+        selectPrescriptionBundles
+      ),
+      price: getTotal(
+        "price",
+        selectPrescriptionOptions,
+        selectPrescriptionBundles
+      ),
+      bundles: selectPrescriptionBundles
+        .filter((pre) => pre.isSelect)
+        .map((pre) => pre.id),
+      options: selectPrescriptionOptions
+        .filter((pre) => pre.isSelect)
+        .map((pre) => pre.id),
+    });
+  }, [selectPrescriptionBundles, selectPrescriptionOptions]);
 
   return (
     <>
@@ -193,25 +212,19 @@ export const Reserve: React.FC<IReserve> = ({
           <CreatePatient closeModal={setOpenCreatePatient} />
         ) : (
           <>
-            <h4 className=" mb-5 w-full text-left text-3xl font-medium">
+            <h4 className="mb-5 w-full text-3xl font-medium">
               예약하기
+              {focusGroup === null || focusGroup.id === null ? (
+                ""
+              ) : (
+                <span className="ml-2 text-base font-normal">
+                  {
+                    groupLists?.find((group) => group.id === focusGroup?.id)
+                      ?.name
+                  }
+                </span>
+              )}
             </h4>
-            <select
-              {...register("groupId")}
-              defaultValue={
-                focusGroup === null || focusGroup.id === null
-                  ? "no-select"
-                  : groupLists?.find((group) => group.id === focusGroup?.id)?.id
-              }
-            >
-              {groupLists?.map((group, i) => (
-                <option key={group.id} value={group.id}>
-                  {group.name}
-                  {group.id}
-                </option>
-              ))}
-              <option value={"no-select"}>-선택안함-</option>
-            </select>
             <button
               className="absolute top-14 right-10 rounded-md border px-2 text-gray-500 hover:text-gray-700"
               onClick={() => setOpenCreatePatient((current) => !current)}
@@ -344,26 +357,75 @@ export const Reserve: React.FC<IReserve> = ({
                   />
                 </label>
               </div>
-              <label>프로그램</label>
-              <ul className="grid grid-cols-5">
-                {prescriptions?.map((prescription, index) => (
-                  <li
-                    key={index}
-                    value={prescription.id}
-                    onClick={() =>
-                      onClickPrescription({
-                        id: prescription.id,
-                        timeRequire: prescription.timeRequire,
-                        type: prescription.__typename,
-                      })
-                    }
-                  >
-                    <div className="btn-sm btn-border text-blue-500">
-                      {prescription.name}
+              <label>처방</label>
+              <div>
+                {selectPrescriptionBundles.length === 0 &&
+                selectPrescriptionOptions.length === 0 ? (
+                  <div className="flex flex-col items-center px-2 text-gray-600">
+                    <span>등록된 처방이 없습니다.</span>
+                    <span>
+                      처방을
+                      <button
+                        type="button"
+                        className="btn-sm btn-border mx-2 w-fit shadow-cst"
+                      >
+                        등록
+                      </button>
+                      하세요
+                    </span>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <ul className="grid grid-cols-3">
+                      {selectPrescriptionBundles.map((prescription, index) => (
+                        <li
+                          key={index}
+                          value={prescription.id}
+                          onClick={() =>
+                            onClickPrescription(prescription.id, "bundle")
+                          }
+                        >
+                          <div
+                            className={cls(
+                              "btn-sm btn-border",
+                              prescription.isSelect
+                                ? "text-red-600"
+                                : "text-blue-400"
+                            )}
+                          >
+                            {prescription.name}
+                          </div>
+                        </li>
+                      ))}
+                      {selectPrescriptionOptions.map((prescription, index) => (
+                        <li
+                          key={index}
+                          value={prescription.id}
+                          className="cursor-point"
+                          onClick={() =>
+                            onClickPrescription(prescription.id, "option")
+                          }
+                        >
+                          <div
+                            className={cls(
+                              "btn-sm btn-border",
+                              prescription.isSelect
+                                ? "text-red-600"
+                                : "text-blue-400"
+                            )}
+                          >
+                            {prescription.name}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex justify-around">
+                      <span>총가격 : {totalPrescription.price}원</span>
+                      <span>치료시간 : {totalPrescription.minute}분</span>
                     </div>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                )}
+              </div>
               <Button
                 canClick={selectedPatient && isValid}
                 loading={loading}
