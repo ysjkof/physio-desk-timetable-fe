@@ -15,8 +15,7 @@ import { CreateAccount } from "./pages/create-account";
 import { Login } from "./pages/login";
 import { Search } from "./pages/search";
 import { PateintDetail } from "./pages/patient-detail";
-import { Dashboard } from "./pages/dash-board";
-import { Group } from "./pages/group";
+import { Dashboard } from "./pages/dashboard";
 import { useMe } from "./hooks/useMe";
 import {
   FindMyGroupsQuery,
@@ -202,8 +201,6 @@ function App() {
             <Route path="search" element={<Search />} />
             <Route path="patient" element={<PateintDetail />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="group" element={<Group />} />
-
             <Route path="test" element={<Test />} />
           </>
         ) : (

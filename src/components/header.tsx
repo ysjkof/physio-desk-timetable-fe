@@ -106,10 +106,10 @@ export const Header: React.FC = () => {
                       </Link>
                       <div className="seperate-bar"></div>
                       <Link
-                        to="/group"
+                        to="/dashboard"
                         className="w-full text-center hover:bg-blue-200"
                       >
-                        병의원
+                        대시보드
                       </Link>
                       <div className="seperate-bar"></div>
                       <button

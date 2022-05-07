@@ -30,7 +30,7 @@ interface ModifiedGroup extends Pick<GroupTypes, "id" | "name" | "activate"> {
   members?: ModifiedGroupMemberWithUser[];
 }
 
-export const Group = () => {
+export const Dashboard = () => {
   const [selectedGroup, setSelectedGroup] = useState<ModifiedGroup>({
     id: 0,
     name: "나",
@@ -60,7 +60,7 @@ export const Group = () => {
   return (
     <>
       <Helmet>
-        <title>그룹| Muool</title>
+        <title>대시보드| Muool</title>
       </Helmet>
       <div className="container mx-auto flex h-full">
         <nav className="w-[250px] space-y-4">
