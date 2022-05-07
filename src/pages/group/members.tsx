@@ -6,7 +6,7 @@ import { cls } from "../../libs/utils";
 interface MembersProps {
   groupId: number;
   groupName: string;
-  members: ModifiedGroupMemberWithUser[];
+  members?: ModifiedGroupMemberWithUser[];
   loggedInUser: ModifiedLoggedInUser;
 }
 
@@ -29,7 +29,7 @@ export const Members: React.FC<MembersProps> = ({
         <span className="text-sm text-gray-500">의 구성원</span>
       </div>
       <ul>
-        {members.map((member) => (
+        {members?.map((member) => (
           <div
             key={member.id}
             className="flex w-full items-center justify-between"

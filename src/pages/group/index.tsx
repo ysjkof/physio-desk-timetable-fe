@@ -12,20 +12,32 @@ import { Members } from "./members";
 import { InviteGroup } from "./invite";
 import { InactivateGroup } from "./inactivate";
 import { CreateGroup } from "./create";
+import { Prescription } from "./prescription";
 
-type SelectedMenuType = "main" | "member" | "invite" | "create" | "inactivate";
+type SelectedMenuType =
+  | "main"
+  | "member"
+  | "invite"
+  | "create"
+  | "inactivate"
+  | "prescription";
 
 export interface ModifiedGroupMemberWithUser
   extends Pick<GroupMember, "id" | "staying" | "manager" | "accepted"> {
   user: Pick<User, "id" | "name">;
 }
 interface ModifiedGroup extends Pick<GroupTypes, "id" | "name" | "activate"> {
-  members: ModifiedGroupMemberWithUser[];
+  members?: ModifiedGroupMemberWithUser[];
 }
 
 export const Group = () => {
-  const [selectedGroup, setSelectedGroup] = useState<ModifiedGroup>();
-  const [selectedMenu, setSelectedMenu] = useState<SelectedMenuType>("member");
+  const [selectedGroup, setSelectedGroup] = useState<ModifiedGroup>({
+    id: 0,
+    name: "나",
+    activate: true,
+  });
+  const [selectedMenu, setSelectedMenu] =
+    useState<SelectedMenuType>("prescription");
   const { data: meData } = useMe();
   const { data: findMyGroupsData, loading: findGroupLoading } =
     useFindMyGroupsQuery({
@@ -33,11 +45,11 @@ export const Group = () => {
     });
 
   useEffect(() => {
-    setSelectedGroup(
-      findMyGroupsData?.findMyGroups?.groups
-        ? findMyGroupsData?.findMyGroups?.groups[0]
-        : undefined
-    );
+    // setSelectedGroup(
+    //   findMyGroupsData?.findMyGroups?.groups
+    //     ? findMyGroupsData?.findMyGroups?.groups[0]
+    //     : undefined
+    // );
   }, [findMyGroupsData]);
 
   const findMyGroupsResults = findMyGroupsData?.findMyGroups.groups;
@@ -51,13 +63,16 @@ export const Group = () => {
         <title>그룹| Muool</title>
       </Helmet>
       <div className="container mx-auto flex h-full">
-        <nav className="w-[250px] max-w-xs space-y-4">
+        <nav className="w-[250px] space-y-4">
           <h1 className="border-b text-lg font-semibold">메뉴</h1>
           <ul>
             <li
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
-                selectedMenu === "member" ? "bg-blue-100" : ""
+                selectedMenu === "member" ? "bg-blue-100" : "",
+                selectedGroup.id === 0
+                  ? "pointer-events-none font-normal text-gray-400"
+                  : ""
               )}
               onClick={() => setSelectedMenu("member")}
             >
@@ -66,7 +81,10 @@ export const Group = () => {
             <li
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
-                selectedMenu === "invite" ? "bg-blue-100" : ""
+                selectedMenu === "invite" ? "bg-blue-100" : "",
+                selectedGroup.id === 0
+                  ? "pointer-events-none font-normal text-gray-400"
+                  : ""
               )}
               onClick={() => setSelectedMenu("invite")}
             >
@@ -75,7 +93,19 @@ export const Group = () => {
             <li
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
-                selectedMenu === "inactivate" ? "bg-blue-100" : ""
+                selectedMenu === "prescription" ? "bg-blue-100" : ""
+              )}
+              onClick={() => setSelectedMenu("prescription")}
+            >
+              처방관리
+            </li>
+            <li
+              className={cls(
+                "cursor-pointer font-medium hover:bg-blue-200",
+                selectedMenu === "inactivate" ? "bg-blue-100" : "",
+                selectedGroup.id === 0
+                  ? "pointer-events-none font-normal text-gray-400"
+                  : ""
               )}
               onClick={() => setSelectedMenu("inactivate")}
             >
@@ -104,28 +134,41 @@ export const Group = () => {
           </aside>
 
           <section className="col-start-1 row-start-1 space-y-4 px-4">
-            {selectedGroup ? (
-              <div className="space-y-2">
-                <div>
-                  <ul className="tap-list mb-4 flex rounded-md bg-blue-400/90 p-1">
-                    {findMyGroupsResults?.map((group) => (
-                      <li
-                        key={group.id}
-                        className={cls(
-                          selectedGroup?.id === group.id
-                            ? "rounded-md bg-white font-semibold text-blue-800"
-                            : "text-white",
-                          "cursor-pointer py-1.5 px-6"
-                        )}
-                        onClick={() => {
-                          setSelectedGroup(group);
-                        }}
-                      >
-                        {group.name}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="tap-contents">
+            <div>
+              <ul className="tap-list mb-4 flex rounded-md bg-blue-400/90 p-1">
+                <li
+                  className={cls(
+                    selectedGroup?.id === 0
+                      ? "rounded-md bg-white font-semibold text-blue-800"
+                      : "text-white",
+                    "cursor-pointer py-1.5 px-6"
+                  )}
+                  onClick={() => {
+                    setSelectedGroup({ id: 0, name: "나", activate: true });
+                  }}
+                >
+                  나
+                </li>
+                {findMyGroupsResults?.map((group) => (
+                  <li
+                    key={group.id}
+                    className={cls(
+                      selectedGroup?.id === group.id
+                        ? "rounded-md bg-white font-semibold text-blue-800"
+                        : "text-white",
+                      "cursor-pointer py-1.5 px-6"
+                    )}
+                    onClick={() => {
+                      setSelectedGroup(group);
+                    }}
+                  >
+                    {group.name}
+                  </li>
+                ))}
+              </ul>
+              <div className="tap-contents">
+                {selectedGroup && (
+                  <>
                     {selectedMenu === "main" && "메뉴를 선택하세요"}
                     {selectedMenu === "member" && (
                       <Members
@@ -148,14 +191,17 @@ export const Group = () => {
                         groupName={selectedGroup.name}
                       />
                     )}
-                  </div>
-                </div>
+                    {selectedMenu === "prescription" && (
+                      <Prescription
+                        groupId={selectedGroup.id}
+                        groupName={selectedGroup.name}
+                      />
+                    )}
+                  </>
+                )}
               </div>
-            ) : (
-              <p>
-                소속된 그룹이 없습니다. 그룹을 만들거나 그룹에 초대받으세요.
-              </p>
-            )}
+            </div>
+
             {selectedMenu === "create" && <CreateGroup />}
           </section>
         </main>
