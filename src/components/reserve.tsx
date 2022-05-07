@@ -2,7 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { SearchPatient } from "../components/search-patient";
@@ -21,11 +21,7 @@ import {
   selectedPatientVar,
 } from "../store";
 import { CreatePatient } from "../pages/create-patient";
-import {
-  PrescriptionOptionWithSelect,
-  PrescriptionsSelectType,
-  PrscriptionBundleWithSelect,
-} from "../pages/time-table";
+import { PrescriptionsSelectType } from "../pages/time-table";
 import { cls } from "../libs/utils";
 
 export interface ReserveForm {
@@ -63,7 +59,6 @@ export const Reserve: React.FC<IReserve> = ({
     options: [0],
     bundles: [0],
   });
-  const location = useLocation();
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const navigate = useNavigate();
   // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
@@ -365,13 +360,22 @@ export const Reserve: React.FC<IReserve> = ({
                     <span>등록된 처방이 없습니다.</span>
                     <span>
                       처방을
-                      <button
-                        type="button"
-                        className="btn-sm btn-border mx-2 w-fit shadow-cst"
+                      <Link
+                        to={"/dashboard"}
+                        state={{
+                          selectedGroupId: focusGroup?.id,
+                          selectedGroupName: focusGroup?.name,
+                          selectedMenu: "prescription",
+                        }}
                       >
-                        등록
-                      </button>
-                      하세요
+                        <button
+                          type="button"
+                          className="btn-sm btn-border mx-2 w-fit shadow-cst"
+                        >
+                          등록
+                        </button>
+                        하세요
+                      </Link>
                     </span>
                   </div>
                 ) : (

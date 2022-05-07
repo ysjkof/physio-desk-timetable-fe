@@ -13,6 +13,7 @@ import { InviteGroup } from "./invite";
 import { InactivateGroup } from "./inactivate";
 import { CreateGroup } from "./create";
 import { Prescription } from "./prescription";
+import { useLocation } from "react-router-dom";
 
 type SelectedMenuType =
   | "main"
@@ -36,6 +37,14 @@ export const Dashboard = () => {
     name: "나",
     activate: true,
   });
+
+  const location = useLocation();
+  const state = location.state as {
+    selectedGroupId: number;
+    selectedGroupName: string;
+    selectedMenu: Date;
+  };
+
   const [selectedMenu, setSelectedMenu] =
     useState<SelectedMenuType>("prescription");
   const { data: meData } = useMe();
@@ -45,12 +54,15 @@ export const Dashboard = () => {
     });
 
   useEffect(() => {
-    // setSelectedGroup(
-    //   findMyGroupsData?.findMyGroups?.groups
-    //     ? findMyGroupsData?.findMyGroups?.groups[0]
-    //     : undefined
-    // );
-  }, [findMyGroupsData]);
+    if (state) {
+      setSelectedGroup({
+        id:
+          typeof state.selectedGroupId !== "number" ? 0 : state.selectedGroupId,
+        name: !state.selectedGroupName ? "나" : state.selectedGroupName,
+        activate: true,
+      });
+    }
+  }, [state]);
 
   const findMyGroupsResults = findMyGroupsData?.findMyGroups.groups;
 
