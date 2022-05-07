@@ -32,8 +32,11 @@
   @apply my-4 w-full border-b;
 }
 
-.bubble-arrow-t {
+.bubble-arrow-t-center {
   @apply after:absolute after:bottom-full after:left-1/2 after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
+}
+.bubble-arrow-t-left {
+  @apply after:absolute after:bottom-full after:left-[10%] after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
 }
 
 @tailwind utilities;

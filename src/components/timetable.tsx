@@ -301,7 +301,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
                           <span className="rounded-full border border-gray-400 px-1">
                             ?
                           </span>
-                          <p className="bubble-arrow-t absolute top-6 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
+                          <p className="bubble-arrow-t-center absolute top-7 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
                             시간표에 표시할 병원이나 사용자를 선택합니다.
                           </p>
                         </div>
@@ -310,7 +310,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
                           <span className="rounded-full border border-gray-400 px-1">
                             ?
                           </span>
-                          <p className="bubble-arrow-t absolute top-6 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
+                          <p className="bubble-arrow-t-center absolute top-7 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
                             기본 병원을 선택합니다. 예약할 때 기본 병원이
                             자동으로 선택됩니다.
                           </p>
