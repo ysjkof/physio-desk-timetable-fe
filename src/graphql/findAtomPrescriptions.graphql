@@ -1,0 +1,10 @@
+query findAtomPrescriptions {
+  findAtomPrescriptions {
+    ok
+    error
+    results {
+      id
+      name
+    }
+  }
+}

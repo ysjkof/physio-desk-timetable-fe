@@ -37,6 +37,8 @@ export const Dashboard = () => {
     name: "나",
     activate: true,
   });
+  const [selectedMenu, setSelectedMenu] =
+    useState<SelectedMenuType>("prescription");
 
   const location = useLocation();
   const state = location.state as {
@@ -45,8 +47,6 @@ export const Dashboard = () => {
     selectedMenu: Date;
   };
 
-  const [selectedMenu, setSelectedMenu] =
-    useState<SelectedMenuType>("prescription");
   const { data: meData } = useMe();
   const { data: findMyGroupsData, loading: findGroupLoading } =
     useFindMyGroupsQuery({

@@ -74,32 +74,18 @@ export type CreatePatientOutput = {
   patient: Patient;
 };
 
-export type CreatePrescriptionBundleInput = {
+export type CreatePrescriptionInput = {
   description?: InputMaybe<Scalars['String']>;
   groupId?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
-  prescriptionOptionIds: Array<Scalars['Int']>;
+  prescriptionId?: InputMaybe<Scalars['Int']>;
+  prescriptionOptionIds?: InputMaybe<Array<Scalars['Int']>>;
   price: Scalars['Int'];
   requiredTime: Scalars['Int'];
 };
 
-export type CreatePrescriptionBundleOutput = {
-  __typename?: 'CreatePrescriptionBundleOutput';
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-};
-
-export type CreatePrescriptionOptionInput = {
-  description?: InputMaybe<Scalars['String']>;
-  groupId?: InputMaybe<Scalars['Int']>;
-  name: Scalars['String'];
-  prescriptionId: Scalars['Int'];
-  price: Scalars['Int'];
-  requiredTime: Scalars['Int'];
-};
-
-export type CreatePrescriptionOptionOutput = {
-  __typename?: 'CreatePrescriptionOptionOutput';
+export type CreatePrescriptionOutput = {
+  __typename?: 'CreatePrescriptionOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
 };
@@ -366,8 +352,7 @@ export type Mutation = {
   createAtomPrescription: CreateAtomPrescriptionOutput;
   createGroup: CreateGroupOutput;
   createPatient: CreatePatientOutput;
-  createPrescriptionBundle: CreatePrescriptionBundleOutput;
-  createPrescriptionOption: CreatePrescriptionOptionOutput;
+  createPrescription: CreatePrescriptionOutput;
   createReservation: CreateReservationOutput;
   deletePatient: DeletePatientOutput;
   deleteReservation: DeleteReservationOutput;
@@ -407,13 +392,8 @@ export type MutationCreatePatientArgs = {
 };
 
 
-export type MutationCreatePrescriptionBundleArgs = {
-  input: CreatePrescriptionBundleInput;
-};
-
-
-export type MutationCreatePrescriptionOptionArgs = {
-  input: CreatePrescriptionOptionInput;
+export type MutationCreatePrescriptionArgs = {
+  input: CreatePrescriptionInput;
 };
 
 
@@ -721,6 +701,13 @@ export type CreatePatientMutationVariables = Exact<{
 
 export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } } };
 
+export type CreatePrescriptionMutationVariables = Exact<{
+  input: CreatePrescriptionInput;
+}>;
+
+
+export type CreatePrescriptionMutation = { __typename?: 'Mutation', createPrescription: { __typename?: 'CreatePrescriptionOutput', ok: boolean, error?: string | null } };
+
 export type CreateReservationMutationVariables = Exact<{
   input: CreateReservationInput;
 }>;
@@ -755,6 +742,11 @@ export type FindAllPatientsQueryVariables = Exact<{
 
 
 export type FindAllPatientsQuery = { __typename?: 'Query', findAllPatients: { __typename?: 'FindAllPatientsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }> | null } };
+
+export type FindAtomPrescriptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAtomPrescriptionsQuery = { __typename?: 'Query', findAtomPrescriptions: { __typename?: 'FindAtomPrescriptionsOutput', ok: boolean, error?: string | null, results?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null } };
 
 export type FindGroupByIdQueryVariables = Exact<{
   input: FindGroupByIdInput;
@@ -1024,6 +1016,40 @@ export function useCreatePatientMutation(baseOptions?: Apollo.MutationHookOption
 export type CreatePatientMutationHookResult = ReturnType<typeof useCreatePatientMutation>;
 export type CreatePatientMutationResult = Apollo.MutationResult<CreatePatientMutation>;
 export type CreatePatientMutationOptions = Apollo.BaseMutationOptions<CreatePatientMutation, CreatePatientMutationVariables>;
+export const CreatePrescriptionDocument = gql`
+    mutation createPrescription($input: CreatePrescriptionInput!) {
+  createPrescription(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type CreatePrescriptionMutationFn = Apollo.MutationFunction<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>;
+
+/**
+ * __useCreatePrescriptionMutation__
+ *
+ * To run a mutation, you first call `useCreatePrescriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePrescriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPrescriptionMutation, { data, loading, error }] = useCreatePrescriptionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePrescriptionMutation(baseOptions?: Apollo.MutationHookOptions<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>(CreatePrescriptionDocument, options);
+      }
+export type CreatePrescriptionMutationHookResult = ReturnType<typeof useCreatePrescriptionMutation>;
+export type CreatePrescriptionMutationResult = Apollo.MutationResult<CreatePrescriptionMutation>;
+export type CreatePrescriptionMutationOptions = Apollo.BaseMutationOptions<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>;
 export const CreateReservationDocument = gql`
     mutation createReservation($input: CreateReservationInput!) {
   createReservation(input: $input) {
@@ -1205,6 +1231,45 @@ export function useFindAllPatientsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type FindAllPatientsQueryHookResult = ReturnType<typeof useFindAllPatientsQuery>;
 export type FindAllPatientsLazyQueryHookResult = ReturnType<typeof useFindAllPatientsLazyQuery>;
 export type FindAllPatientsQueryResult = Apollo.QueryResult<FindAllPatientsQuery, FindAllPatientsQueryVariables>;
+export const FindAtomPrescriptionsDocument = gql`
+    query findAtomPrescriptions {
+  findAtomPrescriptions {
+    ok
+    error
+    results {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindAtomPrescriptionsQuery__
+ *
+ * To run a query within a React component, call `useFindAtomPrescriptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAtomPrescriptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAtomPrescriptionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindAtomPrescriptionsQuery(baseOptions?: Apollo.QueryHookOptions<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>(FindAtomPrescriptionsDocument, options);
+      }
+export function useFindAtomPrescriptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>(FindAtomPrescriptionsDocument, options);
+        }
+export type FindAtomPrescriptionsQueryHookResult = ReturnType<typeof useFindAtomPrescriptionsQuery>;
+export type FindAtomPrescriptionsLazyQueryHookResult = ReturnType<typeof useFindAtomPrescriptionsLazyQuery>;
+export type FindAtomPrescriptionsQueryResult = Apollo.QueryResult<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>;
 export const FindGroupByIdDocument = gql`
     query findGroupById($input: FindGroupByIdInput!) {
   findGroupById(input: $input) {

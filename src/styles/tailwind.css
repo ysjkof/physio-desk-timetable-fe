@@ -17,6 +17,10 @@
   @apply w-full rounded-md border border-gray-300 pr-6 text-right text-lg font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
 }
 
+.btn {
+  @apply cursor-pointer;
+}
+
 .btn-sm {
   @apply px-1 text-sm text-gray-700 hover:font-bold;
 }
@@ -38,5 +42,12 @@
 .bubble-arrow-t-left {
   @apply after:absolute after:bottom-full after:left-[10%] after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
 }
+.bubble-arrow-t-2-5 {
+  @apply cursor-pointer after:absolute after:bottom-full after:left-[19.5%] after:border-8  after:border-b-black after:border-t-transparent after:border-l-transparent after:border-r-transparent;
+}
 
 @tailwind utilities;
+
+input:checked + label {
+  @apply rounded-md bg-white font-semibold text-blue-800;
+}
