@@ -45,7 +45,7 @@ export const Login = () => {
       const { email, password } = getValues();
       loginMutation({
         variables: {
-          loginInput: {
+          input: {
             email,
             password,
           },

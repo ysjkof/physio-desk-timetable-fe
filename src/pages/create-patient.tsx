@@ -39,7 +39,7 @@ export const CreatePatient = ({ closeModal }: any) => {
       const { name, gender, registrationNumber, birthday, memo } = getValues();
       createPatientMutation({
         variables: {
-          createPatientInput: {
+          input: {
             name,
             gender,
             registrationNumber,

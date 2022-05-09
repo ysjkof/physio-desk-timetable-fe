@@ -39,7 +39,7 @@ export const CreateAccount = () => {
       const { name, email, password } = getValues();
       createAccountMutation({
         variables: {
-          createAccountInput: { name, email, password },
+          input: { name, email, password },
         },
       });
     }
