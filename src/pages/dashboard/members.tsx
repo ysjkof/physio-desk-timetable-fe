@@ -31,8 +31,9 @@ export const Members: React.FC<MembersProps> = ({
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="구성원"
+            width="md"
             children={
-              <div className="mx-auto w-full max-w-md">
+              <>
                 <div className="grid grid-cols-[2.4rem_1fr_4rem_4rem] gap-3 border-b text-sm">
                   <span className="">권한</span>
                   <span className="">이름</span>
@@ -87,7 +88,7 @@ export const Members: React.FC<MembersProps> = ({
                     </div>
                   ))}
                 </ul>
-              </div>
+              </>
             }
           />
         </section>

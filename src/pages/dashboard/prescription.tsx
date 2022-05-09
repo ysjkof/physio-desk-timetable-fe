@@ -160,7 +160,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
             title="단일처방"
             children={
               <>
-                <div className="relative grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b text-sm">
+                <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b text-sm">
                   <span className="">이름</span>
                   <span className=" text-right">가격</span>
                   <span className=" text-right">소요시간</span>
@@ -203,7 +203,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
             tooltip="단일 처방을 여러개 묶은 것"
             children={
               <>
-                <div className="relative grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b text-sm">
+                <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b text-sm">
                   <span>이름</span>
                   <span className="text-right">가격</span>
                   <span className="text-right">소요시간</span>
@@ -245,6 +245,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
         <section>
           <DashboardSectionLayout
             title="처방 만들기"
+            width="md"
             children={
               <>
                 <div className="form-header">

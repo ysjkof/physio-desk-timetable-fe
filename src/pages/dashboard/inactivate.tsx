@@ -23,14 +23,12 @@ export const InactivateGroup: React.FC<InactivateGroupProps> = ({
 
   return (
     <div className="h-full">
-      <DashboardTitle
-        name={groupName}
-        subText="모임을 비활성합니다"
-      ></DashboardTitle>
+      <DashboardTitle name={groupName} subText="모임을 비활성합니다" />
       <div className="space-y-16">
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="병원 비활성"
+            width="md"
             children={
               <>
                 <p>
