@@ -83,12 +83,10 @@ export const Prescription: React.FC<PrescriptionProps> = ({
     formState: { isValid, errors },
   } = useForm<CreatePrescriptionOptionFormType>({ mode: "onChange" });
 
-  console.log(errors, isValid);
   const onSubmitCreatePresciption = () => {
     if (!loadingCreatePrescriptionOption) {
       const { name, requiredTime, price, prescriptionId, description } =
         getValues();
-      // console.log(name, requiredTime, price, prescriptionId, description);
       let prescriptionOptionIds: number[] = [];
       selectOption.forEach((option) => {
         if (option.onSelect === true) {
