@@ -14,6 +14,7 @@ import { InactivateGroup } from "./inactivate";
 import { CreateGroup } from "./create";
 import { Prescription } from "./prescription";
 import { useLocation } from "react-router-dom";
+import { InactivatedGroup } from "./inactivated";
 
 type SelectedMenuType =
   | "main"
@@ -21,6 +22,7 @@ type SelectedMenuType =
   | "invite"
   | "create"
   | "inactivate"
+  | "inactivated"
   | "prescription";
 
 export interface ModifiedGroupMemberWithUser
@@ -105,15 +107,6 @@ export const Dashboard = () => {
             <li
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
-                selectedMenu === "prescription" ? "bg-blue-100" : ""
-              )}
-              onClick={() => setSelectedMenu("prescription")}
-            >
-              처방관리
-            </li>
-            <li
-              className={cls(
-                "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "inactivate" ? "bg-blue-100" : "",
                 selectedGroup.id === 0
                   ? "pointer-events-none font-normal text-gray-400"
@@ -127,11 +120,30 @@ export const Dashboard = () => {
             <li
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
+                selectedMenu === "prescription" ? "bg-blue-100" : ""
+              )}
+              onClick={() => setSelectedMenu("prescription")}
+            >
+              처방관리
+            </li>
+            <div className="seperate-bar" />
+            <li
+              className={cls(
+                "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "create" ? "bg-blue-100" : ""
               )}
               onClick={() => setSelectedMenu("create")}
             >
               그룹 만들기
+            </li>
+            <li
+              className={cls(
+                "cursor-pointer font-medium hover:bg-blue-200",
+                selectedMenu === "inactivated" ? "bg-blue-100" : ""
+              )}
+              onClick={() => setSelectedMenu("inactivated")}
+            >
+              비활성 보기
             </li>
           </ul>
         </nav>
@@ -145,76 +157,74 @@ export const Dashboard = () => {
             </button>
           </aside>
 
-          <section className="col-start-1 row-start-1 space-y-4 px-4">
-            <div>
-              <ul className="tap-list mb-4 flex rounded-md bg-blue-400/90 p-1">
+          <section className="col-start-1 row-start-1 space-y-4 bg-gray-50">
+            <ul className="tap-list mb-4 flex rounded-md bg-blue-400/90 p-1">
+              <li
+                className={cls(
+                  selectedGroup.id === 0
+                    ? "rounded-md bg-white font-semibold text-blue-800"
+                    : "text-white",
+                  "cursor-pointer py-1.5 px-6"
+                )}
+                onClick={() => {
+                  setSelectedGroup({ id: 0, name: "나", activate: true });
+                }}
+              >
+                나
+              </li>
+              {findMyGroupsResults?.map((group) => (
                 <li
+                  key={group.id}
                   className={cls(
-                    selectedGroup.id === 0
+                    selectedGroup.id === group.id
                       ? "rounded-md bg-white font-semibold text-blue-800"
                       : "text-white",
                     "cursor-pointer py-1.5 px-6"
                   )}
                   onClick={() => {
-                    setSelectedGroup({ id: 0, name: "나", activate: true });
+                    setSelectedGroup(group);
                   }}
                 >
-                  나
+                  {group.name}
                 </li>
-                {findMyGroupsResults?.map((group) => (
-                  <li
-                    key={group.id}
-                    className={cls(
-                      selectedGroup.id === group.id
-                        ? "rounded-md bg-white font-semibold text-blue-800"
-                        : "text-white",
-                      "cursor-pointer py-1.5 px-6"
-                    )}
-                    onClick={() => {
-                      setSelectedGroup(group);
-                    }}
-                  >
-                    {group.name}
-                  </li>
-                ))}
-              </ul>
-              <div className="tap-contents">
-                {selectedGroup && (
-                  <>
-                    {selectedMenu === "main" && "메뉴를 선택하세요"}
-                    {selectedMenu === "member" && (
-                      <Members
-                        groupId={selectedGroup.id}
-                        groupName={selectedGroup.name}
-                        members={selectedGroup.members}
-                        loggedInUser={meData.me}
-                      />
-                    )}
+              ))}
+            </ul>
+            <div className="tap-contents px-4">
+              {selectedGroup && (
+                <>
+                  {selectedMenu === "main" && "메뉴를 선택하세요"}
+                  {selectedMenu === "member" && (
+                    <Members
+                      groupId={selectedGroup.id}
+                      groupName={selectedGroup.name}
+                      members={selectedGroup.members}
+                      loggedInUser={meData.me}
+                    />
+                  )}
 
-                    {selectedMenu === "invite" && (
-                      <InviteGroup
-                        groupId={selectedGroup.id}
-                        groupName={selectedGroup.name}
-                      />
-                    )}
-                    {selectedMenu === "inactivate" && (
-                      <InactivateGroup
-                        groupId={selectedGroup.id}
-                        groupName={selectedGroup.name}
-                      />
-                    )}
-                    {selectedMenu === "prescription" && (
-                      <Prescription
-                        groupId={selectedGroup.id}
-                        groupName={selectedGroup.name}
-                      />
-                    )}
-                  </>
-                )}
-              </div>
+                  {selectedMenu === "invite" && (
+                    <InviteGroup
+                      groupId={selectedGroup.id}
+                      groupName={selectedGroup.name}
+                    />
+                  )}
+                  {selectedMenu === "inactivate" && (
+                    <InactivateGroup
+                      groupId={selectedGroup.id}
+                      groupName={selectedGroup.name}
+                    />
+                  )}
+                  {selectedMenu === "prescription" && (
+                    <Prescription
+                      groupId={selectedGroup.id}
+                      groupName={selectedGroup.name}
+                    />
+                  )}
+                </>
+              )}
+              {selectedMenu === "create" && <CreateGroup />}
+              {selectedMenu === "inactivated" && <InactivatedGroup />}
             </div>
-
-            {selectedMenu === "create" && <CreateGroup />}
           </section>
         </main>
       </div>

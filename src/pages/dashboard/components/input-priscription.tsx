@@ -18,7 +18,7 @@ export const InputPriscription = ({
   step,
 }: InputPriscriptionProps) => {
   return (
-    <div className="space-y-2">
+    <div className="w-full space-y-2">
       <div className="flex">
         <label className="whitespace-nowrap py-0.5 text-sm">{label}</label>
         <div className="flex w-full">{children}</div>
