@@ -65,7 +65,7 @@ export const Dashboard = () => {
   }, [state]);
 
   const findMyGroupsResults = findMyGroupsData?.findMyGroups.groups;
-
+  console.log("click Selected group", selectedGroup);
   if (findGroupLoading || !meData) {
     return <></>;
   }
@@ -150,7 +150,7 @@ export const Dashboard = () => {
               <ul className="tap-list mb-4 flex rounded-md bg-blue-400/90 p-1">
                 <li
                   className={cls(
-                    selectedGroup?.id === 0
+                    selectedGroup.id === 0
                       ? "rounded-md bg-white font-semibold text-blue-800"
                       : "text-white",
                     "cursor-pointer py-1.5 px-6"
@@ -165,7 +165,7 @@ export const Dashboard = () => {
                   <li
                     key={group.id}
                     className={cls(
-                      selectedGroup?.id === group.id
+                      selectedGroup.id === group.id
                         ? "rounded-md bg-white font-semibold text-blue-800"
                         : "text-white",
                       "cursor-pointer py-1.5 px-6"

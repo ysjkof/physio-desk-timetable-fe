@@ -65,26 +65,27 @@ export const Prescription: React.FC<PrescriptionProps> = ({
       },
     });
   const [createPrescription, { loading: loadingCreatePrescriptionOption }] =
-    useCreatePrescriptionMutation();
+    useCreatePrescriptionMutation({
+      onCompleted: (data) => {
+        if (!data.createPrescription.ok) {
+          alert(data.createPrescription.error);
+        }
+      },
+    });
 
   const {
     register,
     handleSubmit,
     getValues,
     reset,
-    formState: { isValid },
+    formState: { isValid, errors },
   } = useForm<CreatePrescriptionOptionFormType>({ mode: "onChange" });
 
+  console.log(errors, isValid);
   const onSubmitCreatePresciption = () => {
     if (!loadingCreatePrescriptionOption) {
-      const {
-        name,
-        requiredTime,
-        price,
-        prescriptionId,
-        description,
-        groupId,
-      } = getValues();
+      const { name, requiredTime, price, prescriptionId, description } =
+        getValues();
       // console.log(name, requiredTime, price, prescriptionId, description);
       let prescriptionOptionIds: number[] = [];
       selectOption.forEach((option) => {
@@ -106,7 +107,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
             ...(prescriptionId && {
               prescriptionId: parseInt(prescriptionId),
             }),
-            ...(groupId && { groupId: parseInt(groupId) }),
+            ...(groupId && { groupId }),
           },
         },
       });
@@ -247,38 +248,42 @@ export const Prescription: React.FC<PrescriptionProps> = ({
               <div className="flex w-full justify-around">
                 <div
                   className={cls(
-                    selectBundle ? "" : "bg-blue-400/90 text-white",
-                    "flex items-center gap-2 rounded-t-md px-4 py-1"
+                    "flex rounded-t-md px-2 pt-2 pb-1",
+                    selectBundle ? "" : "bg-blue-400/90 text-blue-800"
                   )}
                 >
-                  <button onClick={() => setSelectBundle(false)}>
+                  <button
+                    onClick={() => setSelectBundle(false)}
+                    className="rounded-md bg-white px-3 py-1"
+                  >
                     단일 처방
                   </button>
                 </div>
                 <div
                   className={cls(
-                    selectBundle ? "bg-blue-400/90 text-white" : "",
-                    "flex items-center gap-2 rounded-t-md px-4 py-1"
+                    selectBundle ? "bg-blue-400/90 text-blue-800" : "",
+                    "flex rounded-t-md px-2 pt-2 pb-1"
                   )}
                 >
                   <button
                     className={cls(
+                      "flex gap-2",
                       findPrescriptionsData.findPrescriptions.optionResults
                         ?.length! <= 1
                         ? "pointer-events-none text-gray-400"
-                        : ""
+                        : "rounded-md bg-white px-3 py-1"
                     )}
                     onClick={() => setSelectBundle(true)}
                   >
                     묶음 처방
+                    <div className="group relative">
+                      <FontAwesomeIcon icon={faCircleQuestion} />
+                      <p className="bubble-arrow-t-left absolute top-9 hidden w-60 rounded-md bg-black px-3 py-2 text-white group-hover:block">
+                        단일처방을 모아 놓은 묶음처방입니다. 단일처방이 2개 이상
+                        있어야 활성화됩니다.
+                      </p>
+                    </div>
                   </button>
-                  <div className="group relative">
-                    <FontAwesomeIcon icon={faCircleQuestion} />
-                    <p className="bubble-arrow-t-left absolute top-9 hidden w-60 rounded-md bg-black px-3 py-2 text-white group-hover:block">
-                      단일처방을 모아 놓은 묶음처방입니다. 단일처방이 2개 이상
-                      있어야 활성화됩니다.
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
@@ -347,10 +352,9 @@ export const Prescription: React.FC<PrescriptionProps> = ({
             label={"처방이름*"}
             placeholder={"예) 도수20, 방사형충격파1, MT20, r-eswt1 ..."}
             register={register("name", {
-              required: "Name is required",
+              required: "처방이름을 입력해주세요",
             })}
             type={"text"}
-            required={true}
           >
             <div className="group relative ml-2 flex items-center">
               <FontAwesomeIcon icon={faCircleQuestion} fontSize="14" />
@@ -358,34 +362,65 @@ export const Prescription: React.FC<PrescriptionProps> = ({
                 사용하기 원하는 처방의 이름을 입력합니다.
               </p>
             </div>
+            {errors.name?.message && (
+              <span className="mx-auto font-semibold text-red-400">
+                {errors.name.message}
+              </span>
+            )}
           </InputPriscription>
           <InputPriscription
-            label={"소요시간"}
+            label={"소요시간(분)"}
             placeholder={"0 이상의 숫자를 10분 단위로 입력합니다"}
             type="number"
-            required={true}
             step={10}
             register={register("requiredTime", {
-              required: "RequiredTime is required",
+              required: "소요시간을 입력해주세요",
               min: 10,
-              max: 120,
+              max: 180,
             })}
-          />
+          >
+            {errors.requiredTime?.message && (
+              <span className="mx-auto font-semibold text-red-400">
+                {errors.requiredTime.message}
+              </span>
+            )}
+            {errors.requiredTime?.type === "max" && (
+              <span className="mx-auto font-semibold text-red-400">
+                최대 소요시간은 180분 입니다.
+              </span>
+            )}
+            {errors.requiredTime?.type === "min" && (
+              <span className="mx-auto font-semibold text-red-400">
+                최소 소요시간은 10분 입니다.
+              </span>
+            )}
+          </InputPriscription>
+
           <InputPriscription
-            label={"가격"}
+            label={"가격(원)"}
             placeholder={"0 이상의 숫자를 입력합니다"}
             register={register("price", {
-              required: "Price is required",
+              required: "가격을 입력해주세요",
+              min: 0,
             })}
             type={"number"}
-            required={true}
-          />
+          >
+            {errors.price?.message && (
+              <span className="mx-auto font-semibold text-red-400">
+                {errors.price.message}
+              </span>
+            )}
+            {errors.price?.type === "min" && (
+              <span className="mx-auto font-semibold text-red-400">
+                최소 가격은 0입니다.
+              </span>
+            )}
+          </InputPriscription>
           <InputPriscription
             label={"설명"}
             placeholder={"처방에 대한 설명을 입력합니다"}
             register={register("description")}
             type={"text"}
-            required={false}
           />
           <Button
             canClick={isValid}

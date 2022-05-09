@@ -5,7 +5,6 @@ interface InputPriscriptionProps {
   placeholder: string;
   type: string;
   register: UseFormRegisterReturn;
-  required: boolean;
   children?: React.ReactNode;
   step?: number;
 }
@@ -15,15 +14,14 @@ export const InputPriscription = ({
   placeholder,
   register,
   type,
-  required,
   children,
   step,
 }: InputPriscriptionProps) => {
   return (
     <div className="space-y-2">
       <div className="flex">
-        <label className="text-sm">{label}</label>
-        {children}
+        <label className="whitespace-nowrap py-0.5 text-sm">{label}</label>
+        <div className="flex w-full">{children}</div>
       </div>
       <input
         className="input placeholder:text-sm"
@@ -32,7 +30,6 @@ export const InputPriscription = ({
         type={type}
         step={step}
         min={0}
-        required={required}
         autoComplete="off"
       />
     </div>
