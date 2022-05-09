@@ -86,10 +86,21 @@ export const Dashboard = () => {
     }
   }, [state]);
   useEffect(() => {
-    if (!selectedGroup.isManager && selectedGroup.id === 0) {
+    if (
+      (!selectedGroup.isManager &&
+        selectedGroup.id === 0 &&
+        selectedMenu === "member") ||
+      selectedMenu === "invite" ||
+      selectedMenu === "inactivate"
+    ) {
       setSelectedMenu("prescription");
     }
-    if (!selectedGroup.isManager && selectedGroup.id !== 0) {
+    if (
+      (!selectedGroup.isManager &&
+        selectedGroup.id !== 0 &&
+        selectedMenu === "invite") ||
+      selectedMenu === "inactivate"
+    ) {
       setSelectedMenu("member");
     }
   }, [selectedGroup]);
