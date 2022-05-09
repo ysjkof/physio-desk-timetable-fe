@@ -31,17 +31,21 @@ export interface ModifiedGroupMemberWithUser
 }
 interface ModifiedGroup extends Pick<GroupTypes, "id" | "name" | "activate"> {
   members?: ModifiedGroupMemberWithUser[];
+  isManager: boolean;
+  onSelect?: boolean;
 }
 
 export const Dashboard = () => {
-  const [selectedGroup, setSelectedGroup] = useState<ModifiedGroup>({
+  const selectedMe = {
     id: 0,
     name: "나",
+    isManager: false,
     activate: true,
-  });
+    onSelect: true,
+  };
+  const [selectedGroup, setSelectedGroup] = useState<ModifiedGroup>(selectedMe);
   const [selectedMenu, setSelectedMenu] =
     useState<SelectedMenuType>("prescription");
-
   const location = useLocation();
   const state = location.state as {
     selectedGroupId: number;
@@ -49,26 +53,48 @@ export const Dashboard = () => {
     selectedMenu: Date;
   };
 
-  const { data: meData } = useMe();
+  const { data: meData, loading: meLoading } = useMe();
   const { data: findMyGroupsData, loading: findGroupLoading } =
     useFindMyGroupsQuery({
       variables: { input: { includeField: "activate" } },
     });
+  let managerGroupIds: number[] = [];
+
+  meData?.me.groups?.forEach((member) => {
+    if (member.manager) {
+      managerGroupIds.push(member.group.id);
+    }
+  });
 
   useEffect(() => {
     if (state) {
-      setSelectedGroup({
-        id:
-          typeof state.selectedGroupId !== "number" ? 0 : state.selectedGroupId,
-        name: !state.selectedGroupName ? "나" : state.selectedGroupName,
-        activate: true,
-      });
+      if (
+        state.selectedGroupId === undefined &&
+        state.selectedGroupName === undefined
+      ) {
+        setSelectedGroup(selectedMe);
+      } else {
+        setSelectedGroup({
+          id: state.selectedGroupId,
+          name: state.selectedGroupName,
+          activate: true,
+          isManager: Boolean(
+            managerGroupIds.find((groupId) => groupId === state.selectedGroupId)
+          ),
+        });
+      }
     }
   }, [state]);
-
+  useEffect(() => {
+    if (!selectedGroup.isManager && selectedGroup.id === 0) {
+      setSelectedMenu("prescription");
+    }
+    if (!selectedGroup.isManager && selectedGroup.id !== 0) {
+      setSelectedMenu("member");
+    }
+  }, [selectedGroup]);
   const findMyGroupsResults = findMyGroupsData?.findMyGroups.groups;
-  console.log("click Selected group", selectedGroup);
-  if (findGroupLoading || !meData) {
+  if (meLoading || findGroupLoading || !meData || !findMyGroupsData) {
     return <></>;
   }
   return (
@@ -96,7 +122,7 @@ export const Dashboard = () => {
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "invite" ? "bg-blue-100" : "",
-                selectedGroup.id === 0
+                selectedGroup.isManager === false
                   ? "pointer-events-none font-normal text-gray-400"
                   : ""
               )}
@@ -108,7 +134,7 @@ export const Dashboard = () => {
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "inactivate" ? "bg-blue-100" : "",
-                selectedGroup.id === 0
+                selectedGroup.isManager === false
                   ? "pointer-events-none font-normal text-gray-400"
                   : ""
               )}
@@ -167,7 +193,7 @@ export const Dashboard = () => {
                   "cursor-pointer py-1.5 px-6"
                 )}
                 onClick={() => {
-                  setSelectedGroup({ id: 0, name: "나", activate: true });
+                  setSelectedGroup(selectedMe);
                 }}
               >
                 나
@@ -182,7 +208,13 @@ export const Dashboard = () => {
                     "cursor-pointer py-1.5 px-6"
                   )}
                   onClick={() => {
-                    setSelectedGroup(group);
+                    console.log(managerGroupIds, group.id, group, "😡");
+                    setSelectedGroup({
+                      ...group,
+                      isManager: Boolean(
+                        managerGroupIds.find((groupId) => groupId === group.id)
+                      ),
+                    });
                   }}
                 >
                   {group.name}
