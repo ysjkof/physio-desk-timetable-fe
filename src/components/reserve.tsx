@@ -2,7 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { SearchPatient } from "../components/search-patient";
@@ -12,7 +12,7 @@ import {
   useCreateReservationMutation,
 } from "../graphql/generated/graphql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Datepicker } from "../components/datepicker";
 import {
   focusGroupVar,
@@ -352,7 +352,19 @@ export const Reserve: React.FC<IReserve> = ({
                   />
                 </label>
               </div>
-              <label>처방</label>
+              <label className="flex items-center gap-2">
+                처방
+                <Link
+                  to={"/dashboard"}
+                  state={{
+                    selectedGroupId: focusGroup?.id,
+                    selectedGroupName: focusGroup?.name,
+                    selectedMenu: "prescription",
+                  }}
+                >
+                  <FontAwesomeIcon icon={faLink} />
+                </Link>
+              </label>
               <div>
                 {selectPrescriptionBundles.length === 0 &&
                 selectPrescriptionOptions.length === 0 ? (
@@ -372,6 +384,7 @@ export const Reserve: React.FC<IReserve> = ({
                           type="button"
                           className="btn-sm btn-border mx-2 w-fit shadow-cst"
                         >
+                          <FontAwesomeIcon icon={faLink} />
                           등록
                         </button>
                         하세요
