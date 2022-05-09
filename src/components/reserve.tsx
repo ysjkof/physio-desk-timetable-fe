@@ -32,7 +32,6 @@ export interface ReserveForm {
   inputMinutes: number;
   memo: string;
   therapistId: number;
-  groupId: number;
 }
 
 interface IReserve {
@@ -99,7 +98,6 @@ export const Reserve: React.FC<IReserve> = ({
         inputMinutes,
         memo,
         therapistId,
-        groupId,
       } = getValues();
       const startDate = new Date(
         `${inputYear}-${String(inputMonth).padStart(2, "0")}-${String(
@@ -119,7 +117,7 @@ export const Reserve: React.FC<IReserve> = ({
             memo,
             patientId: selectedPatient.id,
             therapistId,
-            groupId: +groupId,
+            groupId: focusGroup?.id,
             prescriptionOptionIds: totalPrescription.options,
             prescriptionBundleIds: totalPrescription.bundles,
           },
