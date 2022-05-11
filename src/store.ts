@@ -17,7 +17,7 @@ export const listReservationRefetchVar = makeVar<any>(undefined);
 
 export const selectedPatientVar = makeVar<null | INameTag>(null);
 
-export const todayVar = makeVar<Date>(new Date());
+export const todayNowVar = makeVar<Date>(new Date());
 
 export const colorsArr = [
   { name: "Orange Yellow Crayola", hex: "F4D06F", rgb: "244, 208, 111" },

@@ -6,7 +6,7 @@ import {
   useListReservationsQuery,
 } from "../graphql/generated/graphql";
 import { useReactiveVar } from "@apollo/client";
-import { focusGroupVar, todayVar } from "../store";
+import { focusGroupVar, todayNowVar } from "../store";
 import { useMe } from "../hooks/useMe";
 
 interface PrscriptionBundle {
@@ -53,16 +53,29 @@ export interface PrescriptionsSelectType {
 }
 
 export const TimeTable = () => {
-  const today = useReactiveVar(todayVar);
+  const today = useReactiveVar(todayNowVar);
   const focusGroup = useReactiveVar(focusGroupVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const { data: meData } = useMe();
 
+  function getStartSunday(date: Date) {
+    const returnDate = new Date(date);
+    returnDate.setHours(0, 0, 0, 0);
+    returnDate.setDate(date.getDate() - date.getDay());
+    return returnDate;
+  }
+  function getEnddate(startDate: Date, afterDay: number) {
+    const returnDate = new Date(startDate);
+    returnDate.setHours(0, 0, 0, 0);
+    returnDate.setDate(startDate.getDate() + afterDay);
+    return returnDate;
+  }
+
   const { data } = useListReservationsQuery({
     variables: {
       input: {
-        date: selectedDate,
-        viewOption: 7,
+        startDate: getStartSunday(selectedDate),
+        endDate: getEnddate(getStartSunday(selectedDate), 7),
         groupIds:
           meData?.me.groups && meData.me.groups.length >= 1
             ? meData.me.groups.map((group) => group.group.id)

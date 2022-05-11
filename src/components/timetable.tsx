@@ -46,7 +46,7 @@ import {
   FocusGroup,
   focusGroupVar,
   groupListsVar,
-  todayVar,
+  todayNowVar,
   viewOptionsVar,
 } from "../store";
 import { BtnArrow } from "./button-arrow";
@@ -92,7 +92,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
   loginUser,
   prescriptions,
 }) => {
-  const today = useReactiveVar(todayVar);
+  const today = useReactiveVar(todayNowVar);
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[]>([]);
   const [aDay, setADay] = useState<Date>(today);
   const [weeks, setWeeks] = useState<{ date: Date }[]>(

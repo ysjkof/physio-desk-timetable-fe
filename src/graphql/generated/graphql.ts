@@ -320,9 +320,9 @@ export type LeaveGroupOutput = {
 };
 
 export type ListReservationsInput = {
-  date: Scalars['DateTime'];
+  endDate: Scalars['DateTime'];
   groupIds?: InputMaybe<Array<Scalars['Int']>>;
-  viewOption: Scalars['Int'];
+  startDate: Scalars['DateTime'];
 };
 
 export type ListReservationsOutput = {
