@@ -13,7 +13,7 @@ import {
 } from "../graphql/generated/graphql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Datepicker } from "../components/datepicker";
+import { DatepickerForm } from "../components/datepicker";
 import {
   focusGroupVar,
   groupListsVar,
@@ -23,15 +23,11 @@ import {
 import { CreatePatient } from "../pages/create-patient";
 import { PrescriptionsSelectType } from "../pages/time-table";
 import { cls } from "../libs/utils";
+import { DatepickerWithInput } from "./datepicker-with-input";
 
-export interface ReserveForm {
-  inputYear: number;
-  inputMonth: number;
-  inputDate: number;
-  inputHours: number;
-  inputMinutes: number;
-  memo: string;
-  therapistId: number;
+interface ReserveForm extends DatepickerForm {
+  memo?: string;
+  therapistId?: number;
 }
 
 interface IReserve {
@@ -91,19 +87,19 @@ export const Reserve: React.FC<IReserve> = ({
   const onSubmit = () => {
     if (!loading && selectedPatient?.id) {
       const {
-        inputYear,
-        inputMonth,
-        inputDate,
-        inputHours,
-        inputMinutes,
+        startDateYear,
+        startDateMonth,
+        startDateDate,
+        startDateHours,
+        startDateMinutes,
         memo,
         therapistId,
       } = getValues();
       const startDate = new Date(
-        `${inputYear}-${String(inputMonth).padStart(2, "0")}-${String(
-          inputDate
-        ).padStart(2, "0")}T${String(inputHours).padStart(2, "0")}:${String(
-          inputMinutes
+        `${startDateYear}-${String(startDateMonth).padStart(2, "0")}-${String(
+          startDateDate
+        ).padStart(2, "0")}T${String(startDateHours).padStart(2, "0")}:${String(
+          startDateMinutes
         ).padStart(2, "0")}:00.000${UTC_OPTION_KST}`
       );
       const endDate = new Date(startDate);
@@ -235,121 +231,29 @@ export const Reserve: React.FC<IReserve> = ({
               onSubmit={handleSubmit(onSubmit)}
               className="mt-5 mb-5 grid w-full gap-3"
             >
-              {errors.inputYear?.message && (
-                <FormError errorMessage={errors.inputYear?.message} />
+              {errors.startDateYear?.message && (
+                <FormError errorMessage={errors.startDateYear?.message} />
               )}
-              {errors.inputMonth?.message && (
-                <FormError errorMessage={errors.inputMonth?.message} />
+              {errors.startDateMonth?.message && (
+                <FormError errorMessage={errors.startDateMonth?.message} />
               )}
-              {errors.inputDate?.message && (
-                <FormError errorMessage={errors.inputDate?.message} />
+              {errors.startDateDate?.message && (
+                <FormError errorMessage={errors.startDateDate?.message} />
               )}
-              {errors.inputHours?.message && (
-                <FormError errorMessage={errors.inputHours?.message} />
+              {errors.startDateHours?.message && (
+                <FormError errorMessage={errors.startDateHours?.message} />
               )}
-              {errors.inputMinutes?.message && (
-                <FormError errorMessage={errors.inputMinutes?.message} />
+              {errors.startDateMinutes?.message && (
+                <FormError errorMessage={errors.startDateMinutes?.message} />
               )}
               <label>예약 시간</label>
-              <div className="relative flex items-center justify-between">
-                <Datepicker setValue={setValue} defaultDate={startDate} />
-                <label className="relative flex flex-col">
-                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-                    년
-                  </span>
-                  <input
-                    {...register("inputYear", {
-                      required: "연도를 입력해주세요.",
-                      minLength: 4,
-                      maxLength: 4,
-                    })}
-                    type="number"
-                    className="remove-number-arrow input-number w-20"
-                    placeholder="YYYY"
-                    minLength={4}
-                    maxLength={4}
-                    max={2200}
-                    min={1970}
-                  />
-                </label>
-                <label className="relative flex flex-col">
-                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-                    월
-                  </span>
-                  <input
-                    {...register("inputMonth", {
-                      required: "월을 입력해주세요.",
-                      minLength: 1,
-                      maxLength: 2,
-                    })}
-                    type="number"
-                    className="remove-number-arrow input-number w-14 "
-                    placeholder="MM"
-                    minLength={1}
-                    maxLength={2}
-                    max={12}
-                    min={1}
-                  />
-                </label>
-                <label className="relative flex flex-col">
-                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-                    일
-                  </span>
-                  <input
-                    {...register("inputDate", {
-                      required: "날짜를 입력해주세요.",
-                      minLength: 1,
-                      maxLength: 2,
-                    })}
-                    type="number"
-                    className="remove-number-arrow input-number w-14"
-                    placeholder="DD"
-                    minLength={1}
-                    maxLength={2}
-                    max={31}
-                    min={1}
-                  />
-                </label>
-                <label className="relative flex flex-col">
-                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-                    시
-                  </span>
-                  <input
-                    {...register("inputHours", {
-                      required: "시간을 입력해주세요.",
-                      minLength: 1,
-                      maxLength: 2,
-                    })}
-                    type="number"
-                    className="remove-number-arrow input-number w-14"
-                    placeholder="HH"
-                    minLength={1}
-                    maxLength={2}
-                    max={23}
-                    min={1}
-                  />
-                </label>
-                <label className="relative flex flex-col">
-                  <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-                    분
-                  </span>
-                  <input
-                    {...register("inputMinutes", {
-                      required: "분을 입력해주세요.",
-                      minLength: 1,
-                      maxLength: 2,
-                    })}
-                    type="number"
-                    className="remove-number-arrow input-number w-14"
-                    placeholder="mm"
-                    minLength={1}
-                    maxLength={2}
-                    max={59}
-                    min={0}
-                    step={10}
-                  />
-                </label>
-              </div>
+              <DatepickerWithInput
+                setValue={setValue}
+                defaultDate={startDate}
+                register={register}
+                see="ymd-hm"
+                dateType="startDate"
+              />
               <label className="flex items-center gap-2">
                 처방
                 <Link

@@ -1,20 +1,35 @@
-import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { cls } from "../libs/utils";
-import { ReserveForm } from "../pages/reserve";
 
-interface IDatePicker {
-  setValue: UseFormSetValue<ReserveForm>;
-  defaultDate: Date;
+export interface DatepickerForm {
+  startDateYear: number;
+  startDateMonth: number;
+  startDateDate: number;
+  startDateHours: number;
+  startDateMinutes: number;
+  endDateYear: number;
+  endDateMonth: number;
+  endDateDate: number;
+  endDateHours: number;
+  endDateMinutes: number;
 }
 
-export const Datepicker: React.FC<IDatePicker> = ({
+interface IDatePicker {
+  setValue: UseFormSetValue<DatepickerForm>;
+  defaultDate: Date;
+  see: "ymd-hm" | "ymd";
+  prefix: "startDate" | "endDate";
+}
+
+export const Datepicker = ({
   setValue,
   defaultDate,
-}) => {
+  see,
+  prefix,
+}: IDatePicker) => {
   const [open, setOpen] = useState(false);
   const [prevDate, setPrevDate] = useState(defaultDate);
   const [nextDate, setNextDate] = useState(defaultDate);
@@ -87,23 +102,23 @@ export const Datepicker: React.FC<IDatePicker> = ({
       setPrevDate(nextDate);
       setDateOfMonth(getWeeksOfMonth(nextDate));
     }
-    setValue("inputYear", nextDate.getFullYear());
-    setValue("inputMonth", nextDate.getMonth() + 1);
-    setValue("inputDate", nextDate.getDate());
+    setValue(`${prefix}Year`, nextDate.getFullYear());
+    setValue(`${prefix}Month`, nextDate.getMonth() + 1);
+    setValue(`${prefix}Date`, nextDate.getDate());
   }, [nextDate]);
 
   useEffect(() => {
     nextDate.setHours(selectedHour);
-    setValue("inputHours", selectedHour);
+    setValue(`${prefix}Hours`, selectedHour);
   }, [selectedHour]);
   useEffect(() => {
     nextDate.setMinutes(selectedMinutes);
-    setValue("inputMinutes", selectedMinutes);
+    setValue(`${prefix}Minutes`, selectedMinutes);
   }, [selectedMinutes]);
 
   return (
-    <>
-      <span
+    <div className="relative">
+      <div
         onClick={() => setOpen((current) => !current)}
         className={cls(
           "cursor-pointer",
@@ -126,9 +141,9 @@ export const Datepicker: React.FC<IDatePicker> = ({
             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
           />
         </svg>
-      </span>
+      </div>
       {open && (
-        <div className="absolute bottom-0 w-full text-xs text-gray-600">
+        <div className="absolute bottom-0 z-50 w-[440px] text-xs text-gray-600 shadow-cst">
           <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
             <div className="navigation mb-1 flex justify-between border-b pb-2">
               <div>{`${dateOfMonth[15].getFullYear()}년 ${
@@ -170,8 +185,8 @@ export const Datepicker: React.FC<IDatePicker> = ({
             </div>
             <div className="datepicker flex divide-x">
               <div className="datepicker-col left grid w-full grid-cols-7 pr-1.5 text-center">
-                {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
-                  <div>{day}</div>
+                {["일", "월", "화", "수", "목", "금", "토"].map((day, i) => (
+                  <div key={i}>{day}</div>
                 ))}
                 {dateOfMonth.map((day) => (
                   <span
@@ -193,61 +208,66 @@ export const Datepicker: React.FC<IDatePicker> = ({
                         : ""
                     )}
                     data-date={day}
-                    onClick={(e) =>
+                    onClick={(e) => {
                       // @ts-ignore
-                      setNextDate(new Date(e.currentTarget.dataset.date))
-                    }
+                      setNextDate(new Date(e.currentTarget.dataset.date));
+                      if (see === "ymd") setOpen(false);
+                    }}
                   >
                     {day.getDate()}
                   </span>
                 ))}
               </div>
-              <div className="datepicker-col right pl-2">
-                <div className="timepicker flex h-32 space-x-2 text-center">
-                  <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
-                    <span>시</span>
-                    {listOfHours.map((hours) => (
-                      <span
-                        className={cls(
-                          "cursor-pointer px-1.5 text-base",
-                          selectedHour === hours
-                            ? "rounded-md bg-blue-500 text-white"
-                            : ""
-                        )}
-                        onClick={() => setSelectedHour(hours)}
-                      >
-                        {String(hours).padStart(2, "0")}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
-                    <span>분</span>
-                    {listOfMinutes.map((minutes) => (
-                      <span
-                        className={cls(
-                          "cursor-pointer px-1.5 text-base",
-                          +selectedMinutes === minutes
-                            ? "rounded-md bg-blue-500 text-white"
-                            : ""
-                        )}
-                        onClick={() => {
-                          setSelectedMinutes(minutes);
-                        }}
-                      >
-                        {String(minutes).padStart(2, "0")}
-                      </span>
-                    ))}
-                  </div>
-                  {/* <div className="flex flex-col whitespace-nowrap">
+              {see === "ymd-hm" && (
+                <div className="datepicker-col right pl-2">
+                  <div className="timepicker flex h-32 space-x-2 text-center">
+                    <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                      <span>시</span>
+                      {listOfHours.map((hours, i) => (
+                        <span
+                          key={i}
+                          className={cls(
+                            "cursor-pointer px-1.5 text-base",
+                            selectedHour === hours
+                              ? "rounded-md bg-blue-500 text-white"
+                              : ""
+                          )}
+                          onClick={() => setSelectedHour(hours)}
+                        >
+                          {String(hours).padStart(2, "0")}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                      <span>분</span>
+                      {listOfMinutes.map((minutes, i) => (
+                        <span
+                          key={i}
+                          className={cls(
+                            "cursor-pointer px-1.5 text-base",
+                            +selectedMinutes === minutes
+                              ? "rounded-md bg-blue-500 text-white"
+                              : ""
+                          )}
+                          onClick={() => {
+                            setSelectedMinutes(minutes);
+                          }}
+                        >
+                          {String(minutes).padStart(2, "0")}
+                        </span>
+                      ))}
+                    </div>
+                    {/* <div className="flex flex-col whitespace-nowrap">
                     <span className="text-sm">오전</span>
                     <span className="text-sm">오후</span>
                   </div> */}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
