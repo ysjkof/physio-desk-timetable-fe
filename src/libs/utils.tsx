@@ -4,7 +4,6 @@ import {
   ReservationState,
   User,
 } from "../graphql/generated/graphql";
-import { ONE_WEEK } from "../variables";
 
 // interface ModefiedPatient extends Pick<Patient, "name" | "gender"> {}
 // interface ModefiedPatient
@@ -67,3 +66,23 @@ export function cls(...classnames: string[]) {
 //   }
 //   return result;
 // }
+
+export function getDateFromYMDHM(
+  startDateYear: number,
+  startDateMonth: number,
+  startDateDate: number,
+  startDateHours?: number,
+  startDateMinutes?: number
+) {
+  const ymd = `${startDateYear}-${String(startDateMonth).padStart(
+    2,
+    "0"
+  )}-${String(startDateDate).padStart(2, "0")}`;
+  let hms = `T00:00:00.000`;
+  if (startDateHours && startDateMinutes) {
+    hms = `T${String(startDateHours).padStart(2, "0")}:${String(
+      startDateMinutes
+    ).padStart(2, "0")}:00.000`;
+  }
+  return new Date(ymd + hms);
+}
