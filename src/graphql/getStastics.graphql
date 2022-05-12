@@ -1,0 +1,23 @@
+query getStastics($input: GetStasticsInput!) {
+  getStastics(input: $input) {
+    error
+    ok
+    dayCounts {
+      prescriptions {
+        id
+        name
+        count
+      }
+    }
+    totalBundleList {
+      id
+      name
+      count
+    }
+    totalOptionList {
+      id
+      name
+      count
+    }
+  }
+}

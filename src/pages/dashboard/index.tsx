@@ -15,6 +15,7 @@ import { CreateGroup } from "./create";
 import { Prescription } from "./prescription";
 import { useLocation } from "react-router-dom";
 import { InactivatedGroup } from "./inactivated";
+import { Statistics } from "./statistics";
 
 type SelectedMenuType =
   | "main"
@@ -23,7 +24,8 @@ type SelectedMenuType =
   | "create"
   | "inactivate"
   | "inactivated"
-  | "prescription";
+  | "prescription"
+  | "statistics";
 
 export interface ModifiedGroupMemberWithUser
   extends Pick<GroupMember, "id" | "staying" | "manager" | "accepted"> {
@@ -105,6 +107,7 @@ export const Dashboard = () => {
     }
   }, [selectedGroup]);
   const findMyGroupsResults = findMyGroupsData?.findMyGroups.groups;
+
   if (meLoading || findGroupLoading || !meData || !findMyGroupsData) {
     return <></>;
   }
@@ -163,6 +166,15 @@ export const Dashboard = () => {
             >
               처방관리
             </li>
+            <li
+              className={cls(
+                "cursor-pointer font-medium hover:bg-blue-200",
+                selectedMenu === "statistics" ? "bg-blue-100" : ""
+              )}
+              onClick={() => setSelectedMenu("statistics")}
+            >
+              통계
+            </li>
             <div className="seperate-bar" />
             <li
               className={cls(
@@ -213,13 +225,21 @@ export const Dashboard = () => {
                 <li
                   key={group.id}
                   className={cls(
+                    "relative cursor-pointer py-1.5 px-6",
                     selectedGroup.id === group.id
-                      ? "rounded-md bg-white font-semibold text-blue-800"
+                      ? "rounded-md bg-white font-bold text-blue-800"
                       : "text-white",
-                    "cursor-pointer py-1.5 px-6"
+                    group.members.find(
+                      (member) =>
+                        member.user.id === meData.me.id &&
+                        !member.accepted &&
+                        !member.staying &&
+                        true
+                    )
+                      ? "opacity-90 after:ml-0.5 after:rounded-full after:bg-white after:px-2 after:text-gray-800 after:content-['!']"
+                      : ""
                   )}
                   onClick={() => {
-                    console.log(managerGroupIds, group.id, group, "😡");
                     setSelectedGroup({
                       ...group,
                       isManager: Boolean(
@@ -259,6 +279,12 @@ export const Dashboard = () => {
                   )}
                   {selectedMenu === "prescription" && (
                     <Prescription
+                      groupId={selectedGroup.id}
+                      groupName={selectedGroup.name}
+                    />
+                  )}
+                  {selectedMenu === "statistics" && (
+                    <Statistics
                       groupId={selectedGroup.id}
                       groupName={selectedGroup.name}
                     />
