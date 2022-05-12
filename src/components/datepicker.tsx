@@ -213,9 +213,9 @@ export const Datepicker = ({
                         : ""
                     )}
                     data-date={day}
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       // @ts-ignore
-                      setNextDate(new Date(e.currentTarget.dataset.date));
+                      await setNextDate(new Date(e.currentTarget.dataset.date));
                       if (see === "ymd") setOpen(false);
                     }}
                   >

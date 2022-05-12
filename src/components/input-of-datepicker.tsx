@@ -26,7 +26,6 @@ export const InputOfDatepicker = ({
         see === "ymd" ? "grid-cols-[1fr_repeat(2,_0.7fr)]" : ""
       )}
       onFocus={() => setOpen(true)}
-      onBlur={() => setOpen(false)}
     >
       <label className="relative flex flex-col">
         <span className="absolute right-2 bottom-1 text-xs text-gray-500">
