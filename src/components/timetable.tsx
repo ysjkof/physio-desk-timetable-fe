@@ -11,6 +11,8 @@ import {
   ListReservationsQuery,
   MeQuery,
   Patient,
+  PrescriptionBundle,
+  PrescriptionOption,
   Reservation,
   ReservationState,
   User,
@@ -83,6 +85,8 @@ export interface ModifiedReservation
     "id" | "name" | "gender" | "registrationNumber" | "birthday"
   >;
   group?: Pick<Group, "id" | "name"> | null;
+  prescriptionOptions?: Pick<PrescriptionOption, "name">[] | null;
+  prescriptionBundles?: Pick<PrescriptionBundle, "name">[] | null;
 }
 
 export const Timetable: React.FC<ITimetableProps> = ({
@@ -729,7 +733,12 @@ export const Timetable: React.FC<ITimetableProps> = ({
                                             : "",
                                       }}
                                     >
-                                      {event.patient.name}
+                                      <div>{event.patient.name}</div>
+                                      <div>
+                                        {event.prescriptionOptions?.map(
+                                          (op) => op.name
+                                        )}
+                                      </div>
                                     </div>
                                   ))}
                                 </div>
