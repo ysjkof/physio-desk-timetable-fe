@@ -8,6 +8,7 @@ import {
 import { useReactiveVar } from "@apollo/client";
 import { focusGroupVar, todayNowVar } from "../store";
 import { useMe } from "../hooks/useMe";
+import { getEnddate, getStartSunday } from "../libs/timetable-utils";
 
 interface PrscriptionBundle {
   __typename?: "PrescriptionBundle";
@@ -57,19 +58,6 @@ export const TimeTable = () => {
   const focusGroup = useReactiveVar(focusGroupVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const { data: meData } = useMe();
-
-  function getStartSunday(date: Date) {
-    const returnDate = new Date(date);
-    returnDate.setHours(0, 0, 0, 0);
-    returnDate.setDate(date.getDate() - date.getDay());
-    return returnDate;
-  }
-  function getEnddate(startDate: Date, afterDay: number) {
-    const returnDate = new Date(startDate);
-    returnDate.setHours(0, 0, 0, 0);
-    returnDate.setDate(startDate.getDate() + afterDay);
-    return returnDate;
-  }
 
   const { data } = useListReservationsQuery({
     variables: {

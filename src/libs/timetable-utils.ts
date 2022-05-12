@@ -33,6 +33,19 @@ export interface IViewOption {
   navigationExpand: boolean;
 }
 
+export function getStartSunday(date: Date) {
+  const returnDate = new Date(date);
+  returnDate.setHours(0, 0, 0, 0);
+  returnDate.setDate(date.getDate() - date.getDay());
+  return returnDate;
+}
+export function getEnddate(startDate: Date, afterDay: number) {
+  const returnDate = new Date(startDate);
+  returnDate.setHours(0, 0, 0, 0);
+  returnDate.setDate(startDate.getDate() + afterDay);
+  return returnDate;
+}
+
 export const spreadGroupMembers = (groups: GroupWithOptions[] | null) => {
   const result: GroupMemberWithOptions[] = [];
   groups?.forEach((group) => {
