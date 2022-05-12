@@ -22,6 +22,10 @@ interface IDatePicker {
   defaultDate: Date;
   see: "ymd-hm" | "ymd";
   prefix: "startDate" | "endDate";
+  openState: {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  };
 }
 
 export const Datepicker = ({
@@ -29,8 +33,9 @@ export const Datepicker = ({
   defaultDate,
   see,
   prefix,
+  openState: { open, setOpen },
 }: IDatePicker) => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [prevDate, setPrevDate] = useState(defaultDate);
   const [nextDate, setNextDate] = useState(defaultDate);
   const [dateOfMonth, setDateOfMonth] = useState(getWeeksOfMonth(defaultDate));

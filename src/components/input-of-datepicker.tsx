@@ -6,12 +6,17 @@ interface InputInDatepickerProps {
   register: UseFormRegister<DatepickerForm>;
   see: "ymd-hm" | "ymd";
   prefix: "startDate" | "endDate";
+  openState: {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  };
 }
 
 export const InputOfDatepicker = ({
   register,
   see,
   prefix,
+  openState: { open, setOpen },
 }: InputInDatepickerProps) => {
   return (
     <div
@@ -20,6 +25,8 @@ export const InputOfDatepicker = ({
         see === "ymd-hm" ? "grid-cols-[1fr_repeat(4,_0.7fr)]" : "",
         see === "ymd" ? "grid-cols-[1fr_repeat(2,_0.7fr)]" : ""
       )}
+      onFocus={() => setOpen(true)}
+      onBlur={() => setOpen(false)}
     >
       <label className="relative flex flex-col">
         <span className="absolute right-2 bottom-1 text-xs text-gray-500">
