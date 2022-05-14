@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { SearchPatient } from "../components/search-patient";
-import { UTC_OPTION_KST } from "../variables";
 import {
   CreateReservationMutation,
   useCreateReservationMutation,
@@ -85,42 +84,92 @@ export const Reserve: React.FC<IReserve> = ({
   ] = useCreateReservationMutation({ onCompleted });
 
   const onSubmit = () => {
-    if (!loading && selectedPatient?.id) {
-      const {
-        startDateYear,
-        startDateMonth,
-        startDateDate,
-        startDateHours,
-        startDateMinutes,
-        memo,
-        therapistId,
-      } = getValues();
-      const startDate = new Date(
-        `${startDateYear}-${String(startDateMonth).padStart(2, "0")}-${String(
-          startDateDate
-        ).padStart(2, "0")}T${String(startDateHours).padStart(2, "0")}:${String(
-          startDateMinutes
-        ).padStart(2, "0")}:00.000${UTC_OPTION_KST}`
-      );
-      const endDate = new Date(startDate);
-      // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-      endDate.setMinutes(endDate.getMinutes() + totalPrescription.minute);
+    // test용
+    const dateArr: Date[] = [];
+    const firstDate = new Date("2022-5-1");
+    for (let i = 0; i < 30; i++) {
+      firstDate.setDate(i + 1);
+      const today = new Date(firstDate);
+      const loop = Math.floor(Math.random() * 8);
+      let hours: Date[] = [];
+      hours.length = loop;
+      hours.fill(today);
+      const newHours = hours.map((h) => {
+        const loopdate = new Date(today);
+        let th = Math.ceil(Math.random() * (19 - 9) + 9);
+        let tm = Math.floor(Math.random() * 6) * 10;
+        tm === 6 ? (tm = 0) : "";
+        while (hours.find((a) => a.getHours() === th)) {
+          th = Math.ceil(Math.random() * (19 - 9) + 9);
+        }
+        loopdate.setHours(th, tm, 0, 0);
+        console.log(3, loopdate);
+        return loopdate;
+      });
+      newHours.forEach((e) => dateArr.push(e));
+    }
+    function geteddt(date: Date) {
+      const dt = new Date(date);
+      const dtm = dt.getMinutes();
+      dt.setMinutes(dtm + 40);
+      return dt;
+    }
+    const opArr = [5, 6];
+    // const opArr = [3, 4, 11, 25];
+    dateArr.forEach((date) =>
       createReservationMutation({
         variables: {
           input: {
-            startDate: startDate,
-            endDate,
-            memo,
-            patientId: selectedPatient.id,
-            therapistId,
+            startDate: date,
+            endDate: geteddt(date),
+            patientId: selectedPatient!.id,
             groupId: focusGroup?.id,
-            prescriptionOptionIds: totalPrescription.options,
+            prescriptionOptionIds: [
+              opArr[Math.floor(Math.random() * opArr.length)],
+            ],
             prescriptionBundleIds: totalPrescription.bundles,
           },
         },
-      });
-    }
+      })
+    );
   };
+  // const onSubmit = () => {
+  //   if (!loading && selectedPatient?.id) {
+  //     const {
+  //       startDateYear,
+  //       startDateMonth,
+  //       startDateDate,
+  //       startDateHours,
+  //       startDateMinutes,
+  //       memo,
+  //       therapistId,
+  //     } = getValues();
+  //     const startDate = new Date(
+  //       `${startDateYear}-${String(startDateMonth).padStart(2, "0")}-${String(
+  //         startDateDate
+  //       ).padStart(2, "0")}T${String(startDateHours).padStart(2, "0")}:${String(
+  //         startDateMinutes
+  //       ).padStart(2, "0")}:00.000${UTC_OPTION_KST}`
+  //     );
+  //     const endDate = new Date(startDate);
+  //     // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
+  //     endDate.setMinutes(endDate.getMinutes() + totalPrescription.minute);
+  //     createReservationMutation({
+  //       variables: {
+  //         input: {
+  //           startDate: startDate,
+  //           endDate,
+  //           memo,
+  //           patientId: selectedPatient.id,
+  //           therapistId,
+  //           groupId: focusGroup?.id,
+  //           prescriptionOptionIds: totalPrescription.options,
+  //           prescriptionBundleIds: totalPrescription.bundles,
+  //         },
+  //       },
+  //     });
+  //   }
+  // };
   const groupLists = useReactiveVar(groupListsVar);
 
   const onClickPrescription = (id: number, type: "bundle" | "option") => {
@@ -346,7 +395,12 @@ export const Reserve: React.FC<IReserve> = ({
                 )}
               </div>
               <Button
-                canClick={selectedPatient && isValid}
+                canClick={
+                  selectedPatient &&
+                  isValid &&
+                  (totalPrescription.options[0] > 0 ||
+                    totalPrescription.bundles[0] > 0)
+                }
                 loading={loading}
                 actionText={"예약 등록"}
               />
