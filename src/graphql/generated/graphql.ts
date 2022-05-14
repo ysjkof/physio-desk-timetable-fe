@@ -262,7 +262,7 @@ export type FindReservationByPatientOutput = {
   totalPages?: Maybe<Scalars['Int']>;
 };
 
-export type GetStasticsInput = {
+export type GetStatisticsInput = {
   bundleIds?: InputMaybe<Array<Scalars['Int']>>;
   endDate: Scalars['DateTime'];
   groupIds?: InputMaybe<Array<Scalars['Int']>>;
@@ -270,13 +270,13 @@ export type GetStasticsInput = {
   startDate: Scalars['DateTime'];
 };
 
-export type GetStasticsOutput = {
-  __typename?: 'GetStasticsOutput';
+export type GetStatisticsOutput = {
+  __typename?: 'GetStatisticsOutput';
   dayCounts?: Maybe<Array<DayCount>>;
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-  totalBundleList?: Maybe<Array<StasticsPrescription>>;
-  totalOptionList?: Maybe<Array<StasticsPrescription>>;
+  totalBundleList?: Maybe<Array<PrescriptionStatisticsInToTal>>;
+  totalOptionList?: Maybe<Array<PrescriptionStatisticsInToTal>>;
 };
 
 export type Group = {
@@ -524,6 +524,19 @@ export type PrescriptionOption = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type PrescriptionStatistics = {
+  __typename?: 'PrescriptionStatistics';
+  count: Scalars['Int'];
+  name: Scalars['String'];
+};
+
+export type PrescriptionStatisticsInToTal = {
+  __typename?: 'PrescriptionStatisticsInToTal';
+  count: Scalars['Int'];
+  id: Scalars['Int'];
+  name: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   findAllPatients: FindAllPatientsOutput;
@@ -534,7 +547,7 @@ export type Query = {
   findPrescriptions: FindPrescriptionsOutput;
   findReservationById: FindReservationByIdOutput;
   findReservationByPatient: FindReservationByPatientOutput;
-  getStastics: GetStasticsOutput;
+  getStatistics: GetStatisticsOutput;
   listReservations: ListReservationsOutput;
   me: User;
   searchPatientByName: SearchPatientOutput;
@@ -578,8 +591,8 @@ export type QueryFindReservationByPatientArgs = {
 };
 
 
-export type QueryGetStasticsArgs = {
-  input: GetStasticsInput;
+export type QueryGetStatisticsArgs = {
+  input: GetStatisticsInput;
 };
 
 
@@ -651,13 +664,6 @@ export type SearchUsersByNameOutput = {
   totalCount?: Maybe<Scalars['Int']>;
 };
 
-export type StasticsPrescription = {
-  __typename?: 'StasticsPrescription';
-  count: Scalars['Int'];
-  id: Scalars['Int'];
-  name: Scalars['String'];
-};
-
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -699,7 +705,7 @@ export type VerifyEmailOutput = {
 export type DayCount = {
   __typename?: 'dayCount';
   date: Scalars['DateTime'];
-  prescriptions: Array<StasticsPrescription>;
+  prescriptions: Array<PrescriptionStatistics>;
 };
 
 export type AcceptInvitationMutationVariables = Exact<{
@@ -812,12 +818,12 @@ export type FindReservationByIdQueryVariables = Exact<{
 
 export type FindReservationByIdQuery = { __typename?: 'Query', findReservationById: { __typename?: 'FindReservationByIdOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, name: string, email: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, group?: { __typename?: 'Group', id: number, name: string } | null, lastModifier: { __typename?: 'User', id: number, name: string, email: string } } | null } };
 
-export type GetStasticsQueryVariables = Exact<{
-  input: GetStasticsInput;
+export type GetStatisticsQueryVariables = Exact<{
+  input: GetStatisticsInput;
 }>;
 
 
-export type GetStasticsQuery = { __typename?: 'Query', getStastics: { __typename?: 'GetStasticsOutput', error?: string | null, ok: boolean, dayCounts?: Array<{ __typename?: 'dayCount', prescriptions: Array<{ __typename?: 'StasticsPrescription', id: number, name: string, count: number }> }> | null, totalBundleList?: Array<{ __typename?: 'StasticsPrescription', id: number, name: string, count: number }> | null, totalOptionList?: Array<{ __typename?: 'StasticsPrescription', id: number, name: string, count: number }> | null } };
+export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, dayCounts?: Array<{ __typename?: 'dayCount', date: any, prescriptions: Array<{ __typename?: 'PrescriptionStatistics', name: string, count: number }> }> | null, totalBundleList?: Array<{ __typename?: 'PrescriptionStatisticsInToTal', id: number, name: string, count: number }> | null, totalOptionList?: Array<{ __typename?: 'PrescriptionStatisticsInToTal', id: number, name: string, count: number }> | null } };
 
 export type InviteGroupMutationVariables = Exact<{
   input: InviteGroupInput;
@@ -1549,14 +1555,14 @@ export function useFindReservationByIdLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type FindReservationByIdQueryHookResult = ReturnType<typeof useFindReservationByIdQuery>;
 export type FindReservationByIdLazyQueryHookResult = ReturnType<typeof useFindReservationByIdLazyQuery>;
 export type FindReservationByIdQueryResult = Apollo.QueryResult<FindReservationByIdQuery, FindReservationByIdQueryVariables>;
-export const GetStasticsDocument = gql`
-    query getStastics($input: GetStasticsInput!) {
-  getStastics(input: $input) {
+export const GetStatisticsDocument = gql`
+    query getStatistics($input: GetStatisticsInput!) {
+  getStatistics(input: $input) {
     error
     ok
     dayCounts {
+      date
       prescriptions {
-        id
         name
         count
       }
@@ -1576,32 +1582,32 @@ export const GetStasticsDocument = gql`
     `;
 
 /**
- * __useGetStasticsQuery__
+ * __useGetStatisticsQuery__
  *
- * To run a query within a React component, call `useGetStasticsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetStasticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetStasticsQuery({
+ * const { data, loading, error } = useGetStatisticsQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetStasticsQuery(baseOptions: Apollo.QueryHookOptions<GetStasticsQuery, GetStasticsQueryVariables>) {
+export function useGetStatisticsQuery(baseOptions: Apollo.QueryHookOptions<GetStatisticsQuery, GetStatisticsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetStasticsQuery, GetStasticsQueryVariables>(GetStasticsDocument, options);
+        return Apollo.useQuery<GetStatisticsQuery, GetStatisticsQueryVariables>(GetStatisticsDocument, options);
       }
-export function useGetStasticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStasticsQuery, GetStasticsQueryVariables>) {
+export function useGetStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStatisticsQuery, GetStatisticsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetStasticsQuery, GetStasticsQueryVariables>(GetStasticsDocument, options);
+          return Apollo.useLazyQuery<GetStatisticsQuery, GetStatisticsQueryVariables>(GetStatisticsDocument, options);
         }
-export type GetStasticsQueryHookResult = ReturnType<typeof useGetStasticsQuery>;
-export type GetStasticsLazyQueryHookResult = ReturnType<typeof useGetStasticsLazyQuery>;
-export type GetStasticsQueryResult = Apollo.QueryResult<GetStasticsQuery, GetStasticsQueryVariables>;
+export type GetStatisticsQueryHookResult = ReturnType<typeof useGetStatisticsQuery>;
+export type GetStatisticsLazyQueryHookResult = ReturnType<typeof useGetStatisticsLazyQuery>;
+export type GetStatisticsQueryResult = Apollo.QueryResult<GetStatisticsQuery, GetStatisticsQueryVariables>;
 export const InviteGroupDocument = gql`
     mutation inviteGroup($input: InviteGroupInput!) {
   inviteGroup(input: $input) {

@@ -1,10 +1,10 @@
-query getStastics($input: GetStasticsInput!) {
-  getStastics(input: $input) {
+query getStatistics($input: GetStatisticsInput!) {
+  getStatistics(input: $input) {
     error
     ok
     dayCounts {
+      date
       prescriptions {
-        id
         name
         count
       }
