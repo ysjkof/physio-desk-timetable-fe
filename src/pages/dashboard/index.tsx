@@ -233,8 +233,7 @@ export const Dashboard = () => {
                       (member) =>
                         member.user.id === meData.me.id &&
                         !member.accepted &&
-                        !member.staying &&
-                        true
+                        !member.staying
                     )
                       ? "opacity-90 after:ml-0.5 after:rounded-full after:bg-white after:px-2 after:text-gray-800 after:content-['!']"
                       : ""
