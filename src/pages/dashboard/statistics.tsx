@@ -1,10 +1,11 @@
 import { DashboardTitle } from "./components/title";
 import { DashboardSectionLayout } from "./components/section-layout";
 import {
-  GetStasticsQuery,
+  GetStatisticsQuery,
   useFindAtomPrescriptionsQuery,
   useFindPrescriptionsQuery,
-  useGetStasticsLazyQuery,
+  useGetStatisticsLazyQuery,
+  useGetStatisticsQuery,
 } from "../../graphql/generated/graphql";
 import { getDateFromYMDHM } from "../../libs/utils";
 import { DatepickerForm } from "../../components/datepicker";
@@ -12,6 +13,16 @@ import { useForm } from "react-hook-form";
 import { DatepickerWithInput } from "../../components/datepicker-with-input";
 import { useMe } from "../../hooks/useMe";
 import { useEffect, useState } from "react";
+import { DashboardLi } from "./components/li";
+import {
+  VictoryAxis,
+  VictoryBar,
+  VictoryChart,
+  VictoryLabel,
+  VictoryLine,
+  VictoryTheme,
+  VictoryVoronoiContainer,
+} from "victory";
 
 interface StatisticsProps {
   groupId: number;
@@ -31,6 +42,22 @@ export const Statistics = ({ groupId, groupName }: StatisticsProps) => {
   } = useForm<DatepickerForm>({
     mode: "onChange",
   });
+
+  const {
+    startDateYear,
+    startDateMonth,
+    startDateDate,
+    endDateYear,
+    endDateMonth,
+    endDateDate,
+  } = getValues();
+  const startDate = getDateFromYMDHM(
+    startDateYear,
+    startDateMonth,
+    startDateDate
+  );
+  const endDate = getDateFromYMDHM(endDateYear, endDateMonth, endDateDate);
+
   const { data: atomPrescriptionsData, loading: loadingAtomPrescriptions } =
     useFindAtomPrescriptionsQuery();
   const { data: prescriptionsData, loading: loadingPrescriptionsData } =
@@ -43,32 +70,27 @@ export const Statistics = ({ groupId, groupName }: StatisticsProps) => {
         },
       },
     });
-  const [stasticData, setStasticData] = useState<GetStasticsQuery>();
-  const [getStasticsLzq, { data, loading: loadingGetStastics }] =
-    useGetStasticsLazyQuery();
-  stasticData;
-  const {
-    startDateYear,
-    startDateMonth,
-    startDateDate,
-    endDateYear,
-    endDateMonth,
-    endDateDate,
-  } = getValues();
-
-  const startDate = getDateFromYMDHM(
-    startDateYear,
-    startDateMonth,
-    startDateDate
-  );
-
-  const endDate = getDateFromYMDHM(endDateYear, endDateMonth, endDateDate);
+  const [stasticData, setStasticData] = useState<GetStatisticsQuery>();
+  const { data: dataStatistics, loading: loadingDataStatistics } =
+    useGetStatisticsQuery({
+      variables: {
+        input: {
+          startDate,
+          endDate,
+          groupIds: [groupId],
+        },
+      },
+    });
+  const [
+    getStasticsLzq,
+    { data: dataGetStatistics, loading: loadingGetStatistics },
+  ] = useGetStatisticsLazyQuery();
 
   const onSubmit = () => {
     if (
       !loadingAtomPrescriptions &&
       !loadingPrescriptionsData &&
-      !loadingGetStastics
+      !loadingGetStatistics
     ) {
       endDate.setDate(endDate.getDate() + 1); // 입력 날짜의 오전 00시를 구하기 때문에 날짜 +1해줘야 바르게 검색된다.
       getStasticsLzq({
@@ -84,22 +106,22 @@ export const Statistics = ({ groupId, groupName }: StatisticsProps) => {
   };
 
   useEffect(() => {
-    if (!loadingGetStastics) {
-      setStasticData(data);
-    }
-  }, [, data]);
+    console.log(loadingDataStatistics);
+    setStasticData(dataStatistics);
+  }, [dataStatistics]);
 
   useEffect(() => {
-    setStasticData(undefined);
-  }, [groupId]);
+    if (!loadingGetStatistics) {
+      setStasticData(dataGetStatistics);
+    }
+  }, [dataGetStatistics]);
 
   if (!prescriptionsData) return <></>;
   return (
     <div className="h-full">
       <DashboardTitle name={groupName} subText="의 처방" />
-
       <div className="space-y-16">
-        <section>
+        <section className="date-picker">
           <form onSubmit={handleSubmit(onSubmit)}>
             <DashboardSectionLayout
               children={
@@ -130,7 +152,7 @@ export const Statistics = ({ groupId, groupName }: StatisticsProps) => {
             />
           </form>
         </section>
-        <section className="flex h-[15.7rem] gap-4">
+        <section className="flex h-[rem] gap-4">
           <DashboardSectionLayout
             children={
               <>
@@ -154,49 +176,104 @@ export const Statistics = ({ groupId, groupName }: StatisticsProps) => {
                 </div>
 
                 <ul className="space-y-2 divide-y overflow-y-scroll px-4">
-                  {stasticData?.getStastics.totalOptionList?.map((presc) => (
-                    <li
+                  {stasticData?.getStatistics.totalOptionList?.length! +
+                    stasticData?.getStatistics.totalBundleList?.length! ===
+                    0 && "자료가 없습니다."}
+                  {stasticData?.getStatistics.totalOptionList?.map((presc) => (
+                    <DashboardLi
                       key={presc.id}
-                      className="group relative grid grid-cols-[1fr_7.5rem_3.3rem] items-center gap-3"
-                    >
-                      <span className="">{presc.name}</span>
-                      <span className="text-right">
-                        {typeof prescriptionsData.findPrescriptions.optionResults?.find(
+                      name={presc.name}
+                      price={
+                        prescriptionsData.findPrescriptions.optionResults?.find(
                           (prescription) => prescription.id === presc.id
-                        )?.price === "number"
-                          ? Number(
-                              prescriptionsData.findPrescriptions.optionResults?.find(
-                                (op) => op.id === presc.id
-                              )?.price
-                            ) * presc.count
-                          : 0}
-                        원
-                      </span>
-                      <span className="text-right">{presc.count}번</span>
-                    </li>
+                        )?.price
+                      }
+                      count={presc.count}
+                    />
                   ))}
-                  {stasticData?.getStastics.totalBundleList?.map((presc) => (
-                    <li
+                  {stasticData?.getStatistics.totalBundleList?.map((presc) => (
+                    <DashboardLi
                       key={presc.id}
-                      className="group relative grid grid-cols-[1fr_7.5rem_3.3rem] items-center gap-3"
-                    >
-                      <span className="">{presc.name}</span>
-                      <span className="text-right">
-                        {typeof prescriptionsData.findPrescriptions.bundleResults?.find(
+                      name={presc.name}
+                      price={
+                        prescriptionsData.findPrescriptions.bundleResults?.find(
                           (prescription) => prescription.id === presc.id
-                        )?.price === "number"
-                          ? Number(
-                              prescriptionsData.findPrescriptions.bundleResults?.find(
-                                (op) => op.id === presc.id
-                              )?.price
-                            ) * presc.count
-                          : 0}
-                        원
-                      </span>
-                      <span className="text-right">{presc.count}번</span>
-                    </li>
+                        )?.price
+                      }
+                      count={presc.count}
+                    />
                   ))}
                 </ul>
+              </>
+            }
+          />
+        </section>
+        <section>
+          <DashboardSectionLayout
+            children={
+              <>
+                <div className="relative">
+                  {loadingGetStatistics ? (
+                    ""
+                  ) : (
+                    <>
+                      {stasticData?.getStatistics.error && (
+                        <div className="absolute z-50 h-full w-full bg-gray-800/80 text-red-500">
+                          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 text-2xl">
+                            활성화된 사용자가 아닙니다
+                          </span>
+                        </div>
+                      )}
+                      <VictoryChart
+                        height={500}
+                        width={window.innerWidth}
+                        domainPadding={50}
+                        theme={VictoryTheme.material}
+                        minDomain={{ y: 0 }}
+                      >
+                        <VictoryLine
+                          data={stasticData?.getStatistics.dayCounts?.map(
+                            (data) => ({
+                              x: data.date,
+                              y: data.prescriptions.reduce(
+                                (prev, curr) => prev + curr.count,
+                                0
+                              ),
+                            })
+                          )}
+                          style={{
+                            data: {
+                              strokeWidth: 5,
+                            },
+                          }}
+                          labels={({ datum }) => datum.y}
+                        />
+
+                        <VictoryAxis
+                          dependentAxis
+                          style={{
+                            tickLabels: {
+                              fontSize: 20,
+                            } as any,
+                          }}
+                          tickFormat={(tick) => `${tick}명`}
+                        />
+                        <VictoryAxis
+                          style={{
+                            tickLabels: {
+                              fontSize: 20,
+                            } as any,
+                          }}
+                          tickFormat={(tick) =>
+                            new Date(tick).toLocaleDateString("ko", {
+                              day: "2-digit",
+                            })
+                          }
+                        />
+                      </VictoryChart>
+                    </>
+                  )}
+                </div>
               </>
             }
           />
