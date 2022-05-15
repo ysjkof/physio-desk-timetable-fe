@@ -138,31 +138,31 @@ export const Statistics = ({
                   {dataStatistics?.getStatistics.totalOptionList?.length! +
                     dataStatistics?.getStatistics.totalBundleList?.length! ===
                     0 && "자료가 없습니다."}
-                  {dataStatistics?.getStatistics.totalOptionList?.map(
+                  {findPrescriptionsData?.findPrescriptions.bundleResults?.map(
                     (presc) => (
                       <DashboardLi
                         key={presc.id}
                         name={presc.name}
-                        price={
-                          findPrescriptionsData?.findPrescriptions.optionResults?.find(
+                        price={presc.price}
+                        count={
+                          dataStatistics?.getStatistics.totalBundleList?.find(
                             (prescription) => prescription.id === presc.id
-                          )?.price
+                          )?.count
                         }
-                        count={presc.count}
                       />
                     )
                   )}
-                  {dataStatistics?.getStatistics.totalBundleList?.map(
+                  {findPrescriptionsData?.findPrescriptions.optionResults?.map(
                     (presc) => (
                       <DashboardLi
                         key={presc.id}
                         name={presc.name}
-                        price={
-                          findPrescriptionsData?.findPrescriptions.bundleResults?.find(
+                        price={presc.price}
+                        count={
+                          dataStatistics?.getStatistics.totalOptionList?.find(
                             (prescription) => prescription.id === presc.id
-                          )?.price
+                          )?.count
                         }
-                        count={presc.count}
                       />
                     )
                   )}
@@ -171,7 +171,7 @@ export const Statistics = ({
             }
           />
         </section>
-        <section>
+        <section className="chart">
           <DashboardSectionLayout
             children={
               <>
