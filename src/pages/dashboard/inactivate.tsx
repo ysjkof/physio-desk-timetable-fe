@@ -1,34 +1,38 @@
+import { InDashboardPageProps } from ".";
 import { useInactivateGroupMutation } from "../../graphql/generated/graphql";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-interface InactivateGroupProps {
-  groupId: number;
-  groupName: string;
-}
-
-export const InactivateGroup: React.FC<InactivateGroupProps> = ({
-  groupId,
-  groupName,
-}) => {
+export const InactivateGroup = ({
+  id,
+  name,
+  isStayed,
+  isManager,
+  members,
+  loggedInUser,
+}: InDashboardPageProps) => {
+  if (!isStayed || !isManager) {
+    return <h3 className="mt-10 text-center text-xl">권한이 없습니다</h3>;
+  }
   const [mutationInactivateGroup, { loading }] = useInactivateGroupMutation();
 
   const onClick = () => {
-    if (!loading && confirm(`${groupName}을(를) 비활성화 합니까?`)) {
+    if (!loading && confirm(`${name}을(를) 비활성화 합니까?`)) {
       mutationInactivateGroup({
-        variables: { input: { groupId } },
+        variables: { input: { groupId: id } },
       });
     }
   };
 
   return (
     <div className="h-full">
-      <DashboardTitle name={groupName} subText="모임을 비활성합니다" />
+      <DashboardTitle name={name} subText="모임을 비활성합니다" />
       <div className="space-y-16">
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="병원 비활성"
             width="md"
+            isPadding={true}
             children={
               <>
                 <p>

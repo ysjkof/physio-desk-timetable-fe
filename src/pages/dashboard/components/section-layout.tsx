@@ -7,6 +7,7 @@ interface DashboardSectionLayoutProps {
   title?: string;
   width?: "md";
   tooltip?: string;
+  isPadding?: boolean;
 }
 
 export const DashboardSectionLayout = ({
@@ -14,9 +15,15 @@ export const DashboardSectionLayout = ({
   title,
   width,
   tooltip,
+  isPadding,
 }: DashboardSectionLayoutProps) => {
   return (
-    <div className="h-full w-full bg-white p-2 shadow-cst">
+    <div
+      className={cls(
+        "h-full w-full bg-white shadow-cst",
+        isPadding ? "p-2" : ""
+      )}
+    >
       <div
         className={cls(
           "w-full space-y-2",

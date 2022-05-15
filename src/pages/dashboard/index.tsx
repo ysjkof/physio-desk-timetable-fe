@@ -6,7 +6,7 @@ import {
   useFindMyGroupsQuery,
   User,
 } from "../../graphql/generated/graphql";
-import { useMe } from "../../hooks/useMe";
+import { ModifiedLoggedInUser, useMe } from "../../hooks/useMe";
 import { cls } from "../../libs/utils";
 import { Members } from "./members";
 import { InviteGroup } from "./invite";
@@ -34,16 +34,24 @@ export interface ModifiedGroupMemberWithUser
 interface ModifiedGroup extends Pick<GroupTypes, "id" | "name" | "activate"> {
   members?: ModifiedGroupMemberWithUser[];
   isManager: boolean;
-  onSelect?: boolean;
+  isStayed: boolean;
+}
+
+export interface InDashboardPageProps
+  extends Pick<
+    ModifiedGroup,
+    "id" | "name" | "members" | "isManager" | "isStayed"
+  > {
+  loggedInUser: ModifiedLoggedInUser;
 }
 
 export const Dashboard = () => {
   const selectedMe = {
     id: 0,
     name: "나",
-    isManager: false,
+    isManager: true,
     activate: true,
-    onSelect: true,
+    isStayed: true,
   };
   const [selectedGroup, setSelectedGroup] = useState<ModifiedGroup>(selectedMe);
   const [selectedMenu, setSelectedMenu] =
@@ -52,7 +60,7 @@ export const Dashboard = () => {
   const state = location.state as {
     selectedGroupId: number;
     selectedGroupName: string;
-    selectedMenu: Date;
+    selectedMenu: SelectedMenuType;
   };
 
   const { data: meData, loading: meLoading } = useMe();
@@ -60,13 +68,22 @@ export const Dashboard = () => {
     useFindMyGroupsQuery({
       variables: { input: { includeField: "activate" } },
     });
-  let managerGroupIds: number[] = [];
 
-  meData?.me.groups?.forEach((member) => {
-    if (member.manager) {
-      managerGroupIds.push(member.group.id);
-    }
-  });
+  function checkIsManager(groupId: number) {
+    return Boolean(
+      meData?.me.groups?.find(
+        (member) => member.group.id === groupId && member.manager
+      )
+    );
+  }
+  function getIsStayed(groupId: number) {
+    return Boolean(
+      meData?.me.groups?.find(
+        (member) =>
+          member.group.id === groupId && member.accepted && member.staying
+      )
+    );
+  }
 
   useEffect(() => {
     if (state) {
@@ -80,32 +97,30 @@ export const Dashboard = () => {
           id: state.selectedGroupId,
           name: state.selectedGroupName,
           activate: true,
-          isManager: Boolean(
-            managerGroupIds.find((groupId) => groupId === state.selectedGroupId)
-          ),
+          isManager: checkIsManager(state.selectedGroupId),
+          isStayed: getIsStayed(state.selectedGroupId),
         });
       }
     }
-  }, [state]);
+  }, [state, meData]);
   useEffect(() => {
     if (
-      (!selectedGroup.isManager &&
-        selectedGroup.id === 0 &&
-        selectedMenu === "member") ||
-      selectedMenu === "invite" ||
-      selectedMenu === "inactivate"
+      selectedGroup.id === 0 &&
+      (selectedMenu === "member" ||
+        selectedMenu === "invite" ||
+        selectedMenu === "inactivate")
     ) {
       setSelectedMenu("prescription");
-    }
-    if (
-      (!selectedGroup.isManager &&
-        selectedGroup.id !== 0 &&
-        selectedMenu === "invite") ||
-      selectedMenu === "inactivate"
-    ) {
-      setSelectedMenu("member");
+    } else {
+      if (
+        !selectedGroup.isManager &&
+        (selectedMenu === "invite" || selectedMenu === "inactivate")
+      ) {
+        setSelectedMenu("member");
+      }
     }
   }, [selectedGroup]);
+
   const findMyGroupsResults = findMyGroupsData?.findMyGroups.groups;
 
   if (meLoading || findGroupLoading || !meData || !findMyGroupsData) {
@@ -136,7 +151,7 @@ export const Dashboard = () => {
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "invite" ? "bg-blue-100" : "",
-                selectedGroup.isManager === false
+                selectedGroup.isManager === false || selectedGroup.id === 0
                   ? "pointer-events-none font-normal text-gray-400"
                   : ""
               )}
@@ -148,7 +163,7 @@ export const Dashboard = () => {
               className={cls(
                 "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "inactivate" ? "bg-blue-100" : "",
-                selectedGroup.isManager === false
+                selectedGroup.isManager === false || selectedGroup.id === 0
                   ? "pointer-events-none font-normal text-gray-400"
                   : ""
               )}
@@ -241,9 +256,8 @@ export const Dashboard = () => {
                   onClick={() => {
                     setSelectedGroup({
                       ...group,
-                      isManager: Boolean(
-                        managerGroupIds.find((groupId) => groupId === group.id)
-                      ),
+                      isManager: checkIsManager(group.id),
+                      isStayed: getIsStayed(group.id),
                     });
                   }}
                 >
@@ -251,41 +265,59 @@ export const Dashboard = () => {
                 </li>
               ))}
             </ul>
-            <div className="tap-contents px-4">
+            <div className="tap-contents h-full px-4">
               {selectedGroup && (
                 <>
                   {selectedMenu === "main" && "메뉴를 선택하세요"}
                   {selectedMenu === "member" && (
                     <Members
-                      groupId={selectedGroup.id}
-                      groupName={selectedGroup.name}
+                      id={selectedGroup.id}
+                      name={selectedGroup.name}
                       members={selectedGroup.members}
                       loggedInUser={meData.me}
+                      isStayed={selectedGroup.isStayed}
+                      isManager={selectedGroup.isManager}
                     />
                   )}
 
                   {selectedMenu === "invite" && (
                     <InviteGroup
-                      groupId={selectedGroup.id}
-                      groupName={selectedGroup.name}
+                      id={selectedGroup.id}
+                      name={selectedGroup.name}
+                      members={selectedGroup.members}
+                      loggedInUser={meData.me}
+                      isStayed={selectedGroup.isStayed}
+                      isManager={selectedGroup.isManager}
                     />
                   )}
                   {selectedMenu === "inactivate" && (
                     <InactivateGroup
-                      groupId={selectedGroup.id}
-                      groupName={selectedGroup.name}
+                      id={selectedGroup.id}
+                      name={selectedGroup.name}
+                      members={selectedGroup.members}
+                      loggedInUser={meData.me}
+                      isStayed={selectedGroup.isStayed}
+                      isManager={selectedGroup.isManager}
                     />
                   )}
                   {selectedMenu === "prescription" && (
                     <Prescription
-                      groupId={selectedGroup.id}
-                      groupName={selectedGroup.name}
+                      id={selectedGroup.id}
+                      name={selectedGroup.name}
+                      members={selectedGroup.members}
+                      loggedInUser={meData.me}
+                      isStayed={selectedGroup.isStayed}
+                      isManager={selectedGroup.isManager}
                     />
                   )}
                   {selectedMenu === "statistics" && (
                     <Statistics
-                      groupId={selectedGroup.id}
-                      groupName={selectedGroup.name}
+                      id={selectedGroup.id}
+                      name={selectedGroup.name}
+                      members={selectedGroup.members}
+                      loggedInUser={meData.me}
+                      isStayed={selectedGroup.isStayed}
+                      isManager={selectedGroup.isManager}
                     />
                   )}
                 </>

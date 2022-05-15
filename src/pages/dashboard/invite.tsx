@@ -1,6 +1,7 @@
 import { faSearch, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
+import { InDashboardPageProps } from ".";
 import {
   SearchUsersByNameInput,
   useInviteGroupMutation,
@@ -10,15 +11,17 @@ import { cls } from "../../libs/utils";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-interface InviteGroupProps {
-  groupId: number;
-  groupName: string;
-}
-
-export const InviteGroup: React.FC<InviteGroupProps> = ({
-  groupId,
-  groupName,
-}) => {
+export const InviteGroup = ({
+  id,
+  name,
+  isStayed,
+  isManager,
+  members,
+  loggedInUser,
+}: InDashboardPageProps) => {
+  if (!isStayed || !isManager) {
+    return <h3 className="mt-10 text-center text-xl">권한이 없습니다</h3>;
+  }
   const { register, handleSubmit, getValues } = useForm<SearchUsersByNameInput>(
     { mode: "onChange" }
   );
@@ -26,7 +29,7 @@ export const InviteGroup: React.FC<InviteGroupProps> = ({
   const [inviteGroupMutation, { loading: inviteGroupLoading }] =
     useInviteGroupMutation();
 
-  const onClickInviteToGroup = (
+  function onClickInviteToGroup(
     user: {
       id: number;
       name: string;
@@ -34,13 +37,13 @@ export const InviteGroup: React.FC<InviteGroupProps> = ({
     },
     groupName: string,
     groupId: number
-  ) => {
+  ) {
     if (confirm(`${groupName}에 ${user.name}을(를) 그룹에 초대합니까?`)) {
       inviteGroupMutation({
         variables: { input: { groupId, userIds: [user.id] } },
       });
     }
-  };
+  }
 
   const [
     searchUsersByName,
@@ -61,11 +64,12 @@ export const InviteGroup: React.FC<InviteGroupProps> = ({
 
   return (
     <div className="p- h-full">
-      <DashboardTitle name={groupName} subText="에 구성원 초대" />
+      <DashboardTitle name={name} subText="에 구성원 초대" />
       <div className="space-y-16">
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             width="md"
+            isPadding={true}
             children={
               <>
                 <form onSubmit={handleSubmit(onSubmitSearchUsersByName)}>
@@ -112,9 +116,7 @@ export const InviteGroup: React.FC<InviteGroupProps> = ({
                         <li
                           key={user.id}
                           className="my-2 flex cursor-pointer items-center justify-between px-3 hover:bg-gray-100"
-                          onClick={() =>
-                            onClickInviteToGroup(user, groupName, groupId)
-                          }
+                          onClick={() => onClickInviteToGroup(user, name, id)}
                         >
                           <span>{user.name}</span>
                           <FontAwesomeIcon icon={faUserPlus} />

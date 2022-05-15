@@ -1,37 +1,39 @@
-import { ModifiedGroupMemberWithUser } from ".";
+import { InDashboardPageProps } from ".";
 import { useAcceptInvitationMutation } from "../../graphql/generated/graphql";
-import { ModifiedLoggedInUser } from "../../hooks/useMe";
 import { cls } from "../../libs/utils";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-interface MembersProps {
-  groupId: number;
-  groupName: string;
-  members?: ModifiedGroupMemberWithUser[];
-  loggedInUser: ModifiedLoggedInUser;
-}
-
-export const Members: React.FC<MembersProps> = ({
-  groupId,
-  groupName,
+export const Members = ({
+  id,
+  name,
+  isStayed,
   members,
   loggedInUser,
-}) => {
-  const [acceptInvitation] = useAcceptInvitationMutation({
-    onCompleted: (data) => {
-      console.log("초대수락완료", data);
-    },
-  });
+}: InDashboardPageProps) => {
+  const [acceptInvitation] = useAcceptInvitationMutation();
+
+  function onClick() {
+    if (confirm("초대를 수락합니다")) {
+      acceptInvitation({
+        variables: {
+          input: {
+            groupId: id,
+          },
+        },
+      });
+    }
+  }
 
   return (
     <div className="h-full">
-      <DashboardTitle name={groupName} subText="의 구성원" />
+      <DashboardTitle name={name} subText="의 구성원" />
       <div className="space-y-16">
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="구성원"
             width="md"
+            isPadding={true}
             children={
               <>
                 <div className="grid grid-cols-[2.4rem_1fr_4rem_4rem] gap-3 border-b text-sm">
@@ -64,15 +66,7 @@ export const Members: React.FC<MembersProps> = ({
                             <button
                               className="btn rounded-md bg-blue-500/90 py-1 px-2 text-white hover:bg-blue-800"
                               type="button"
-                              onClick={() =>
-                                acceptInvitation({
-                                  variables: {
-                                    input: {
-                                      groupId,
-                                    },
-                                  },
-                                })
-                              }
+                              onClick={onClick}
                             >
                               수락하기
                             </button>

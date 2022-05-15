@@ -8,9 +8,7 @@ import { InputPriscription } from "./components/input-priscription";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-interface CreateGroupProps {}
-
-export const CreateGroup: React.FC<CreateGroupProps> = () => {
+export const CreateGroup = () => {
   const {
     register,
     handleSubmit,
@@ -36,6 +34,7 @@ export const CreateGroup: React.FC<CreateGroupProps> = () => {
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             width="md"
+            isPadding={true}
             children={
               <form
                 onSubmit={handleSubmit(onSubmitCreateGroup)}

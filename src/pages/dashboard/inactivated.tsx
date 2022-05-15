@@ -2,9 +2,7 @@ import { useFindMyGroupsQuery } from "../../graphql/generated/graphql";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-interface InactivatedGroupProps {}
-
-export const InactivatedGroup: React.FC<InactivatedGroupProps> = () => {
+export const InactivatedGroup = () => {
   const { data: findMyGroupsData, loading } = useFindMyGroupsQuery({
     variables: { input: { includeField: "inactivate" } },
   });
@@ -20,6 +18,7 @@ export const InactivatedGroup: React.FC<InactivatedGroupProps> = () => {
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="조회"
+            isPadding={true}
             children={
               <>
                 <div className="border-b text-sm">

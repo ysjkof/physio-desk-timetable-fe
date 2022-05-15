@@ -17,6 +17,7 @@ import { cls } from "../../libs/utils";
 import { DashboardBtn } from "./components/button";
 import { DashboardTitle } from "./components/title";
 import { DashboardSectionLayout } from "./components/section-layout";
+import { InDashboardPageProps } from ".";
 
 type ValueToString<T> = { [K in keyof T]: string };
 interface PickCreatePrescriptionOption
@@ -30,10 +31,6 @@ interface CreatePrescriptionOptionFormType
   prescriptionOptionIds?: string[];
   description?: string;
 }
-interface PrescriptionProps {
-  groupId: number;
-  groupName: string;
-}
 
 interface ModefiedPrescriptionOption
   extends Pick<PrescriptionOption, "id" | "name" | "requiredTime" | "price"> {
@@ -46,10 +43,15 @@ interface ModefiedPrescriptionOptionWithActivate
   extends ModefiedPrescriptionOption {
   onSelect: boolean;
 }
-export const Prescription: React.FC<PrescriptionProps> = ({
-  groupId,
-  groupName,
-}) => {
+export const Prescription = ({
+  id,
+  name,
+  isStayed,
+  isManager,
+}: InDashboardPageProps) => {
+  if (!isStayed) {
+    return <h3 className="mt-10 text-center text-xl">권한이 없습니다</h3>;
+  }
   const [selectBundle, setSelectBundle] = useState(false);
   const [selectOption, setSelectOption] = useState<
     ModefiedPrescriptionOptionWithActivate[]
@@ -62,7 +64,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
         input: {
           includeInactivate: false,
           prescriptionType: "all",
-          groupId: groupId,
+          groupId: id,
         },
       },
     });
@@ -107,7 +109,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
             ...(prescriptionId && {
               prescriptionId: parseInt(prescriptionId),
             }),
-            ...(groupId && { groupId }),
+            ...(id && { groupId: id }),
           },
         },
       });
@@ -150,14 +152,14 @@ export const Prescription: React.FC<PrescriptionProps> = ({
     }
   }, [findPrescriptionsData]);
 
-  if (!findPrescriptionsData) return <></>;
   return (
     <div className="h-full">
-      <DashboardTitle name={groupName} subText="의 처방" />
+      <DashboardTitle name={name} subText="의 처방" />
       <div className="space-y-16">
         <section className="flex h-[15.7rem] gap-4">
           <DashboardSectionLayout
             title="단일처방"
+            isPadding={true}
             children={
               <>
                 <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b text-sm">
@@ -167,7 +169,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
                   <span className=" text-center">활성</span>
                 </div>
                 <ul className="space-y-2 overflow-y-scroll">
-                  {findPrescriptionsData.findPrescriptions.optionResults?.map(
+                  {findPrescriptionsData?.findPrescriptions.optionResults?.map(
                     (presc) => (
                       <li
                         key={presc.id}
@@ -201,6 +203,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
           <DashboardSectionLayout
             title="묶음처방"
             tooltip="단일 처방을 여러개 묶은 것"
+            isPadding={true}
             children={
               <>
                 <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b text-sm">
@@ -210,7 +213,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
                   <span className="text-center">활성</span>
                 </div>
                 <ul className="space-y-2 overflow-y-scroll">
-                  {findPrescriptionsData.findPrescriptions.bundleResults?.map(
+                  {findPrescriptionsData?.findPrescriptions.bundleResults?.map(
                     (presc) => (
                       <li
                         key={presc.id}
@@ -242,118 +245,124 @@ export const Prescription: React.FC<PrescriptionProps> = ({
             }
           />
         </section>
+
         <section>
           <DashboardSectionLayout
-            title="처방 만들기"
+            // title="처방 만들기"
             width="md"
+            isPadding={true}
             children={
-              <>
-                <div className="form-header">
-                  <div className="flex items-center">
-                    <h4 className="mr-4 w-9 text-sm">유형</h4>
-                    <div className="flex w-full justify-around">
-                      <div
-                        className={cls(
-                          "flex rounded-t-md px-2 pt-2 pb-1",
-                          selectBundle ? "" : "bg-blue-400/90 text-blue-800"
-                        )}
-                      >
-                        <button
-                          onClick={() => setSelectBundle(false)}
-                          className="rounded-md bg-white px-3 py-1"
-                        >
-                          단일 처방
-                        </button>
-                      </div>
-                      <div
-                        className={cls(
-                          selectBundle ? "bg-blue-400/90 text-blue-800" : "",
-                          "flex items-center gap-1 rounded-t-md px-2 pt-2 pb-1"
-                        )}
-                      >
-                        <button
-                          className={cls(
-                            findPrescriptionsData.findPrescriptions
-                              .optionResults?.length! <= 1
-                              ? "pointer-events-none text-gray-400"
-                              : "rounded-md bg-white px-3 py-1"
-                          )}
-                          onClick={() => setSelectBundle(true)}
-                        >
-                          묶음 처방
-                        </button>
-                        <div className="group relative">
-                          <FontAwesomeIcon icon={faCircleQuestion} />
-                          <p className="bubble-arrow-t-left absolute top-9 hidden w-60 rounded-md bg-black px-3 py-2 text-white group-hover:block">
-                            단일처방을 모아 놓은 묶음처방입니다. 단일처방이 2개
-                            이상 있어야 활성화됩니다.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <h4 className="mr-4 w-9 text-sm">처방</h4>
-                    <div className="w-full rounded-md bg-blue-400/90 text-white">
-                      <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
-                        {selectBundle
-                          ? selectOption.map((option) => (
-                              <div
-                                key={option.id}
-                                className={cls(
-                                  "btn py-1 px-3",
-                                  option.onSelect
-                                    ? "rounded-md bg-white px-3 font-semibold text-blue-800"
-                                    : ""
-                                )}
-                                onClick={() =>
-                                  setSelectOption((prevState) => {
-                                    return prevState.map((prev) => {
-                                      if (prev.id === option.id) {
-                                        return {
-                                          ...prev,
-                                          onSelect: !prev.onSelect,
-                                        };
-                                      } else {
-                                        return prev;
-                                      }
-                                    });
-                                  })
-                                }
-                              >
-                                {option.name}
-                              </div>
-                            ))
-                          : findAtomPrescriptions?.findAtomPrescriptions.results?.map(
-                              (atom) => (
-                                <Fragment key={atom.id}>
-                                  <input
-                                    id={atom.id + atom.name}
-                                    className="hidden select-none"
-                                    {...register("prescriptionId", {
-                                      required: "처방을 선택하세요",
-                                    })}
-                                    type="radio"
-                                    value={atom.id}
-                                  />
-                                  <label
-                                    className="btn py-1 px-3 "
-                                    htmlFor={atom.id + atom.name}
-                                  >
-                                    {atom.name}
-                                  </label>
-                                </Fragment>
-                              )
-                            )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+              <details open={isManager && true}>
+                <summary>처방 만들기</summary>
                 <form
                   onSubmit={handleSubmit(onSubmitCreatePresciption)}
                   className="space-y-3"
                 >
+                  <div className="prescription-selector">
+                    <div className="flex items-center">
+                      <h4 className="mr-4 w-9 text-sm">유형</h4>
+                      <div className="flex w-full justify-around">
+                        <div
+                          className={cls(
+                            "flex rounded-t-md px-2 pt-2 pb-1",
+                            selectBundle ? "" : "bg-blue-400/90 text-blue-800"
+                          )}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => setSelectBundle(false)}
+                            className="rounded-md bg-white px-3 py-1"
+                          >
+                            단일 처방
+                          </button>
+                        </div>
+                        <div
+                          className={cls(
+                            "flex items-center gap-1 rounded-t-md px-2 pt-2 pb-1",
+                            selectBundle ? "bg-blue-400/90 text-blue-800" : ""
+                          )}
+                        >
+                          <button
+                            type="button"
+                            className={cls(
+                              "px-3 py-1",
+                              findPrescriptionsData?.findPrescriptions
+                                .optionResults?.length! <= 1
+                                ? "pointer-events-none text-gray-400"
+                                : "rounded-md bg-white"
+                            )}
+                            onClick={() => setSelectBundle(true)}
+                          >
+                            묶음 처방
+                          </button>
+                          <div className="group relative">
+                            <FontAwesomeIcon icon={faCircleQuestion} />
+                            <p className="bubble-arrow-t-left absolute top-9 hidden w-60 rounded-md bg-black px-3 py-2 text-white group-hover:block">
+                              단일처방을 모아 놓은 묶음처방입니다. 단일처방이
+                              2개 이상 있어야 활성화됩니다.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <h4 className="mr-4 w-9 text-sm">처방</h4>
+                      <div className="w-full rounded-md bg-blue-400/90 text-white">
+                        <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
+                          {selectBundle
+                            ? selectOption.map((option) => (
+                                <button
+                                  type="button"
+                                  key={option.id}
+                                  className={cls(
+                                    "btn py-1 px-3",
+                                    option.onSelect
+                                      ? "rounded-md bg-white px-3 font-semibold text-blue-800"
+                                      : ""
+                                  )}
+                                  onClick={() =>
+                                    setSelectOption((prevState) => {
+                                      return prevState.map((prev) => {
+                                        if (prev.id === option.id) {
+                                          return {
+                                            ...prev,
+                                            onSelect: !prev.onSelect,
+                                          };
+                                        } else {
+                                          return prev;
+                                        }
+                                      });
+                                    })
+                                  }
+                                >
+                                  {option.name}
+                                </button>
+                              ))
+                            : findAtomPrescriptions?.findAtomPrescriptions.results?.map(
+                                (atom) => (
+                                  <Fragment key={atom.id}>
+                                    <input
+                                      id={atom.id + atom.name}
+                                      className="hidden select-none"
+                                      {...register("prescriptionId", {
+                                        required: "처방을 선택하세요",
+                                      })}
+                                      type="radio"
+                                      value={atom.id}
+                                    />
+                                    <label
+                                      className="btn py-1 px-3 "
+                                      htmlFor={atom.id + atom.name}
+                                    >
+                                      {atom.name}
+                                    </label>
+                                  </Fragment>
+                                )
+                              )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <InputPriscription
                     label={"처방이름*"}
                     placeholder={"도수30, 집중형충격파1, MT20"}
@@ -436,7 +445,7 @@ export const Prescription: React.FC<PrescriptionProps> = ({
                     loading={loadingCreatePrescriptionOption}
                   />
                 </form>
-              </>
+              </details>
             }
           />
         </section>
