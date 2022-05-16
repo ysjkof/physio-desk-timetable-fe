@@ -10,6 +10,14 @@ query searchPatientByName($input: SearchPatientInput!) {
       gender
       registrationNumber
       birthday
+      group {
+        id
+        name
+      }
+      therapists {
+        id
+        name
+      }
     }
   }
 }

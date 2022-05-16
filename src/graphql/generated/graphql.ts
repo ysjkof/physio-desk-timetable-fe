@@ -62,6 +62,7 @@ export type CreateGroupOutput = {
 export type CreatePatientInput = {
   birthday?: InputMaybe<Scalars['DateTime']>;
   gender?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['Int']>;
   memo?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   registrationNumber?: InputMaybe<Scalars['String']>;
@@ -71,7 +72,7 @@ export type CreatePatientOutput = {
   __typename?: 'CreatePatientOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-  patient: Patient;
+  patient?: Maybe<Patient>;
 };
 
 export type CreatePrescriptionInput = {
@@ -131,6 +132,7 @@ export type DeleteReservationOutput = {
 export type EditPatientInput = {
   birthday?: InputMaybe<Scalars['DateTime']>;
   gender?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['Int']>;
   memo?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   registrationNumber?: InputMaybe<Scalars['String']>;
@@ -482,6 +484,8 @@ export type Patient = {
   birthday?: Maybe<Scalars['DateTime']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   gender: Scalars['String'];
+  group?: Maybe<Group>;
+  groupId: Scalars['Int'];
   id: Scalars['Float'];
   memo?: Maybe<Scalars['String']>;
   name: Scalars['String'];
@@ -621,7 +625,7 @@ export type Reservation = {
   endDate: Scalars['DateTime'];
   group?: Maybe<Group>;
   id: Scalars['Float'];
-  lastModifier: User;
+  lastModifier?: Maybe<User>;
   memo?: Maybe<Scalars['String']>;
   patient: Patient;
   prescriptionBundles?: Maybe<Array<PrescriptionBundle>>;
@@ -639,6 +643,7 @@ export enum ReservationState {
 }
 
 export type SearchPatientInput = {
+  groupId?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
   query: Scalars['String'];
 };
@@ -741,7 +746,7 @@ export type CreatePatientMutationVariables = Exact<{
 }>;
 
 
-export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } } };
+export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
 
 export type CreatePrescriptionMutationVariables = Exact<{
   input: CreatePrescriptionInput;
@@ -783,7 +788,7 @@ export type FindAllPatientsQueryVariables = Exact<{
 }>;
 
 
-export type FindAllPatientsQuery = { __typename?: 'Query', findAllPatients: { __typename?: 'FindAllPatientsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }> | null } };
+export type FindAllPatientsQuery = { __typename?: 'Query', findAllPatients: { __typename?: 'FindAllPatientsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, group?: { __typename?: 'Group', name: string } | null }> | null } };
 
 export type FindAtomPrescriptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -816,7 +821,7 @@ export type FindReservationByIdQueryVariables = Exact<{
 }>;
 
 
-export type FindReservationByIdQuery = { __typename?: 'Query', findReservationById: { __typename?: 'FindReservationByIdOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, name: string, email: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, group?: { __typename?: 'Group', id: number, name: string } | null, lastModifier: { __typename?: 'User', id: number, name: string, email: string } } | null } };
+export type FindReservationByIdQuery = { __typename?: 'Query', findReservationById: { __typename?: 'FindReservationByIdOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, name: string, email: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, group?: { __typename?: 'Group', id: number, name: string } | null, lastModifier?: { __typename?: 'User', id: number, name: string, email: string } | null } | null } };
 
 export type GetStatisticsQueryVariables = Exact<{
   input: GetStatisticsInput;
@@ -844,7 +849,7 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, lastModifier: { __typename?: 'User', id: number, email: string, name: string }, group?: { __typename?: 'Group', id: number, name: string } | null, prescriptionOptions?: Array<{ __typename?: 'PrescriptionOption', name: string }> | null, prescriptionBundles?: Array<{ __typename?: 'PrescriptionBundle', name: string }> | null }> | null } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, therapist: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, group?: { __typename?: 'Group', id: number, name: string } | null, prescriptionOptions?: Array<{ __typename?: 'PrescriptionOption', name: string }> | null, prescriptionBundles?: Array<{ __typename?: 'PrescriptionBundle', name: string }> | null }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -863,7 +868,7 @@ export type SearchPatientByNameQueryVariables = Exact<{
 }>;
 
 
-export type SearchPatientByNameQuery = { __typename?: 'Query', searchPatientByName: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }> | null } };
+export type SearchPatientByNameQuery = { __typename?: 'Query', searchPatientByName: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, group?: { __typename?: 'Group', id: number, name: string } | null, therapists: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
 
 export type FindPatientByIdQueryVariables = Exact<{
   input: FindPatientByIdInput;
@@ -1248,6 +1253,9 @@ export const FindAllPatientsDocument = gql`
       gender
       registrationNumber
       birthday
+      group {
+        name
+      }
     }
   }
 }
@@ -1846,6 +1854,14 @@ export const SearchPatientByNameDocument = gql`
       gender
       registrationNumber
       birthday
+      group {
+        id
+        name
+      }
+      therapists {
+        id
+        name
+      }
     }
   }
 }
