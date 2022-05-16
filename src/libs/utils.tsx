@@ -4,6 +4,7 @@ import {
   ReservationState,
   User,
 } from "../graphql/generated/graphql";
+import { UTC_OPTION_KST } from "../variables";
 
 // interface ModefiedPatient extends Pick<Patient, "name" | "gender"> {}
 // interface ModefiedPatient
@@ -79,7 +80,10 @@ export function getDateFromYMDHM(
     "0"
   )}-${String(startDateDate).padStart(2, "0")}`;
   let hms = `T00:00:00.000`;
-  if (startDateHours && startDateMinutes) {
+  if (
+    typeof startDateHours === "number" &&
+    typeof startDateMinutes === "number"
+  ) {
     hms = `T${String(startDateHours).padStart(2, "0")}:${String(
       startDateMinutes
     ).padStart(2, "0")}:00.000`;
