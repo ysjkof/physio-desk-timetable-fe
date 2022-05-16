@@ -14,14 +14,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { DatepickerForm } from "../components/datepicker";
 import {
-  focusGroupVar,
+  selectedGroupVar,
   groupListsVar,
   listReservationRefetchVar,
   selectedPatientVar,
 } from "../store";
 import { CreatePatient } from "../pages/create-patient";
 import { PrescriptionsSelectType } from "../pages/time-table";
-import { cls } from "../libs/utils";
+import { cls, getDateFromYMDHM } from "../libs/utils";
 import { DatepickerWithInput } from "./datepicker-with-input";
 
 interface ReserveForm extends DatepickerForm {
@@ -29,17 +29,17 @@ interface ReserveForm extends DatepickerForm {
   therapistId?: number;
 }
 
-interface IReserve {
+interface ReserveProps {
   startDate: Date;
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
   prescriptions: PrescriptionsSelectType;
 }
 
-export const Reserve: React.FC<IReserve> = ({
+export const Reserve = ({
   startDate,
   closeAction,
   prescriptions,
-}) => {
+}: ReserveProps) => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
   const [selectPrescriptionOptions, setSelectPrescriptionOptions] = useState(
     prescriptions.option
@@ -57,7 +57,7 @@ export const Reserve: React.FC<IReserve> = ({
   const navigate = useNavigate();
   // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
   // const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
-  const focusGroup = useReactiveVar(focusGroupVar);
+  const selectedGroup = useReactiveVar(selectedGroupVar);
 
   const {
     register,
@@ -65,6 +65,7 @@ export const Reserve: React.FC<IReserve> = ({
     formState: { errors, isValid },
     handleSubmit,
     setValue,
+    watch,
   } = useForm<ReserveForm>({ mode: "onChange" });
 
   const onCompleted = (data: CreateReservationMutation) => {
@@ -83,7 +84,7 @@ export const Reserve: React.FC<IReserve> = ({
     { loading, data: createReservationResult },
   ] = useCreateReservationMutation({ onCompleted });
 
-  const onSubmit = () => {
+  const onSubmitText = () => {
     // test용
     const dateArr: Date[] = [];
     const firstDate = new Date("2022-5-1");
@@ -96,14 +97,13 @@ export const Reserve: React.FC<IReserve> = ({
       hours.fill(today);
       const newHours = hours.map((h) => {
         const loopdate = new Date(today);
-        let th = Math.ceil(Math.random() * (19 - 9) + 9);
+        let th = Math.floor(Math.random() * (19 - 9) + 9);
         let tm = Math.floor(Math.random() * 6) * 10;
         tm === 6 ? (tm = 0) : "";
         while (hours.find((a) => a.getHours() === th)) {
-          th = Math.ceil(Math.random() * (19 - 9) + 9);
+          th = Math.floor(Math.random() * (19 - 9) + 9);
         }
         loopdate.setHours(th, tm, 0, 0);
-        console.log(3, loopdate);
         return loopdate;
       });
       newHours.forEach((e) => dateArr.push(e));
@@ -114,62 +114,75 @@ export const Reserve: React.FC<IReserve> = ({
       dt.setMinutes(dtm + 40);
       return dt;
     }
-    const opArr = [5, 6];
-    // const opArr = [3, 4, 11, 25];
-    dateArr.forEach((date) =>
+    dateArr.forEach((date) => {
+      const prescriptionOptionIds = [
+        prescriptions.option[
+          Math.floor(Math.random() * prescriptions.option.length)
+        ].id,
+      ];
+      const prescriptionBundleIds = [
+        prescriptions.bundle[
+          Math.floor(Math.random() * prescriptions.bundle.length)
+        ].id,
+      ];
       createReservationMutation({
         variables: {
           input: {
             startDate: date,
             endDate: geteddt(date),
             patientId: selectedPatient!.id,
-            groupId: focusGroup?.id,
-            prescriptionOptionIds: [
-              opArr[Math.floor(Math.random() * opArr.length)],
-            ],
+            groupId: selectedGroup?.id,
+            prescriptionOptionIds,
+            // prescriptionBundleIds
+          },
+        },
+      });
+    });
+  };
+  const onSubmit = () => {
+    if (!loading && selectedPatient?.id) {
+      const {
+        startDateYear,
+        startDateMonth,
+        startDateDate,
+        startDateHours,
+        startDateMinutes,
+        memo,
+        therapistId,
+      } = getValues();
+      // const startDate = new Date(
+      //   `${startDateYear}-${String(startDateMonth).padStart(2, "0")}-${String(
+      //     startDateDate
+      //   ).padStart(2, "0")}T${String(startDateHours).padStart(2, "0")}:${String(
+      //     startDateMinutes
+      //   ).padStart(2, "0")}:00.000${UTC_OPTION_KST}`
+      // );
+      const startDate = getDateFromYMDHM(
+        startDateYear,
+        startDateMonth,
+        startDateDate,
+        startDateHours,
+        startDateMinutes
+      );
+      const endDate = new Date(startDate);
+      // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
+      endDate.setMinutes(endDate.getMinutes() + totalPrescription.minute);
+      createReservationMutation({
+        variables: {
+          input: {
+            startDate: startDate,
+            endDate,
+            memo,
+            patientId: selectedPatient.id,
+            therapistId: +therapistId!,
+            groupId: selectedGroup?.id,
+            prescriptionOptionIds: totalPrescription.options,
             prescriptionBundleIds: totalPrescription.bundles,
           },
         },
-      })
-    );
+      });
+    }
   };
-  // const onSubmit = () => {
-  //   if (!loading && selectedPatient?.id) {
-  //     const {
-  //       startDateYear,
-  //       startDateMonth,
-  //       startDateDate,
-  //       startDateHours,
-  //       startDateMinutes,
-  //       memo,
-  //       therapistId,
-  //     } = getValues();
-  //     const startDate = new Date(
-  //       `${startDateYear}-${String(startDateMonth).padStart(2, "0")}-${String(
-  //         startDateDate
-  //       ).padStart(2, "0")}T${String(startDateHours).padStart(2, "0")}:${String(
-  //         startDateMinutes
-  //       ).padStart(2, "0")}:00.000${UTC_OPTION_KST}`
-  //     );
-  //     const endDate = new Date(startDate);
-  //     // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-  //     endDate.setMinutes(endDate.getMinutes() + totalPrescription.minute);
-  //     createReservationMutation({
-  //       variables: {
-  //         input: {
-  //           startDate: startDate,
-  //           endDate,
-  //           memo,
-  //           patientId: selectedPatient.id,
-  //           therapistId,
-  //           groupId: focusGroup?.id,
-  //           prescriptionOptionIds: totalPrescription.options,
-  //           prescriptionBundleIds: totalPrescription.bundles,
-  //         },
-  //       },
-  //     });
-  //   }
-  // };
   const groupLists = useReactiveVar(groupListsVar);
 
   const onClickPrescription = (id: number, type: "bundle" | "option") => {
@@ -234,6 +247,14 @@ export const Reserve: React.FC<IReserve> = ({
     });
   }, [selectPrescriptionBundles, selectPrescriptionOptions]);
 
+  useEffect(() => {
+    if (!selectedPatient) {
+      setValue("therapistId", 0);
+    } else {
+      setValue("therapistId", selectedPatient?.therapist?.id);
+    }
+  }, [selectedPatient]);
+
   return (
     <>
       <Helmet>
@@ -247,17 +268,21 @@ export const Reserve: React.FC<IReserve> = ({
           <FontAwesomeIcon icon={faXmark} />
         </button>
         {openCreatePatient ? (
-          <CreatePatient closeModal={setOpenCreatePatient} />
+          <CreatePatient
+            groupId={selectedGroup?.id ?? undefined}
+            groupName={selectedGroup?.name ?? undefined}
+            closeModal={setOpenCreatePatient}
+          />
         ) : (
           <>
             <h4 className="mb-5 w-full text-3xl font-medium">
               예약하기
-              {focusGroup === null || focusGroup.id === null ? (
+              {selectedGroup === null || selectedGroup.id === null ? (
                 ""
               ) : (
                 <span className="ml-2 text-base font-normal">
                   {
-                    groupLists?.find((group) => group.id === focusGroup?.id)
+                    groupLists?.find((group) => group.id === selectedGroup?.id)
                       ?.name
                   }
                 </span>
@@ -269,13 +294,7 @@ export const Reserve: React.FC<IReserve> = ({
             >
               환자등록
             </button>
-            <button
-              className="absolute top-14 right-10 rounded-md border px-2 text-gray-500 hover:text-gray-700"
-              onClick={() => setOpenCreatePatient((current) => !current)}
-            >
-              환자등록
-            </button>
-            <SearchPatient />
+            <SearchPatient selectedGroup={selectedGroup} />
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="mt-5 mb-5 grid w-full gap-3"
@@ -295,6 +314,22 @@ export const Reserve: React.FC<IReserve> = ({
               {errors.startDateMinutes?.message && (
                 <FormError errorMessage={errors.startDateMinutes?.message} />
               )}
+              <label>담당 치료사</label>
+              <div className="flex justify-between">
+                <select
+                  {...register("therapistId")}
+                  className="w-full text-center"
+                >
+                  <option value="0">- 담당 치료사를 선택하세요 -</option>
+                  {groupLists
+                    ?.find((g) => g.id === selectedGroup?.id)
+                    ?.members.map((m) => (
+                      <option key={m.id} value={m.user.id}>
+                        {m.user.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
               <label>예약 시간</label>
               <DatepickerWithInput
                 setValue={setValue}
@@ -308,8 +343,8 @@ export const Reserve: React.FC<IReserve> = ({
                 <Link
                   to={"/dashboard"}
                   state={{
-                    selectedGroupId: focusGroup?.id,
-                    selectedGroupName: focusGroup?.name,
+                    selectedGroupId: selectedGroup?.id,
+                    selectedGroupName: selectedGroup?.name,
                     selectedMenu: "prescription",
                   }}
                 >
@@ -326,8 +361,8 @@ export const Reserve: React.FC<IReserve> = ({
                       <Link
                         to={"/dashboard"}
                         state={{
-                          selectedGroupId: focusGroup?.id,
-                          selectedGroupName: focusGroup?.name,
+                          selectedGroupId: selectedGroup?.id,
+                          selectedGroupName: selectedGroup?.name,
                           selectedMenu: "prescription",
                         }}
                       >

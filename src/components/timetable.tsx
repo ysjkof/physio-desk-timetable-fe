@@ -5,7 +5,7 @@ import {
   faList,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Group,
   ListReservationsQuery,
@@ -36,7 +36,7 @@ import {
 } from "../libs/timetable-utils";
 import { cls } from "../libs/utils";
 import {
-  LOCALSTORAGE_FOCUS_GROUP,
+  LOCALSTORAGE_SELECTED_GROUP,
   LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_GROUPS,
   ONE_DAY,
@@ -45,8 +45,8 @@ import {
 import { ReservationDetail } from "./reservation-detail";
 import {
   colorsObj,
-  FocusGroup,
-  focusGroupVar,
+  selectedGroup,
+  selectedGroupVar,
   groupListsVar,
   todayNowVar,
   viewOptionsVar,
@@ -79,7 +79,7 @@ interface ITimetableProps {
 export interface ModifiedReservation
   extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
   therapist: Pick<User, "id" | "name">;
-  lastModifier: Pick<User, "id" | "name" | "email">;
+  lastModifier?: Pick<User, "id" | "name" | "email"> | null;
   patient: Pick<
     Patient,
     "id" | "name" | "gender" | "registrationNumber" | "birthday"
@@ -116,7 +116,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
   );
   const groupLists = useReactiveVar(groupListsVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
-  const focusGroup = useReactiveVar(focusGroupVar);
+  const selectedGroup = useReactiveVar(selectedGroupVar);
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
@@ -200,15 +200,13 @@ export const Timetable: React.FC<ITimetableProps> = ({
 
   const onClickToggleGroup = (
     groupLists: GroupWithOptions[],
-    group: GroupWithOptions
+    groupId: number
   ) => {
-    const index = groupLists.findIndex(
-      (prevGroup) => prevGroup.id === group.id
-    );
-    if (index === -1) return;
-    const newState = [...groupLists];
-    newState[index].activation =
-      newState[index].activation === true ? false : true;
+    const group = groupLists.find((prevGroup) => prevGroup.id === groupId);
+    const newState = groupLists.map((g) => ({
+      ...g,
+      activation: g.id === group?.id ? !g.activation : false,
+    }));
     localStorage.setItem(
       LOCALSTORAGE_VIEW_OPTION_GROUPS + loginUser.me.id,
       JSON.stringify(newState)
@@ -238,21 +236,31 @@ export const Timetable: React.FC<ITimetableProps> = ({
     );
     groupListsVar(newState);
   };
-  const onClickChangeFocusGroup = ({ id, name }: FocusGroup) => {
-    let newFocusGroup: FocusGroup | null;
-    if (focusGroup && focusGroup.id !== null && focusGroup.id === id) {
-      newFocusGroup = { id: null, name: null };
-    } else {
-      newFocusGroup = {
+  const onClickChangeSelectGroup = (id: number, name: string) => {
+    let newSelectedGroup: selectedGroup | null = null;
+    if (selectedGroup && selectedGroup.id === id) {
+      newSelectedGroup = { id: 0, name: "", isExist: false };
+    }
+    if (selectedGroup && selectedGroup.id !== id) {
+      newSelectedGroup = {
         id,
         name,
+        isExist: true,
       };
     }
+    if (!selectedGroup) {
+      newSelectedGroup = {
+        id,
+        name,
+        isExist: true,
+      };
+    }
+    onClickToggleGroup(groupLists, id);
     localStorage.setItem(
-      LOCALSTORAGE_FOCUS_GROUP + loginUser.me.id,
-      JSON.stringify(newFocusGroup)
+      LOCALSTORAGE_SELECTED_GROUP + loginUser.me.id,
+      JSON.stringify(newSelectedGroup)
     );
-    focusGroupVar(newFocusGroup);
+    selectedGroupVar(newSelectedGroup);
   };
 
   if (!viewOptions) {
@@ -299,7 +307,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
                   <div className="absolute top-6 z-50 h-96 w-60 rounded-md bg-white p-4 shadow-cst">
                     <div className="mb-2 flex justify-between border-b pb-2">
                       <div className="w-full"></div>
-                      <div className="flex w-full">
+                      <div className="flex w-14 whitespace-nowrap">
                         <div className="group relative w-full space-x-1 text-center">
                           <span>보기</span>
                           <span className="rounded-full border border-gray-400 px-1">
@@ -307,16 +315,6 @@ export const Timetable: React.FC<ITimetableProps> = ({
                           </span>
                           <p className="bubble-arrow-t-center absolute top-7 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
                             시간표에 표시할 병원이나 사용자를 선택합니다.
-                          </p>
-                        </div>
-                        <div className="group relative w-full space-x-1 text-center">
-                          <span>기본</span>
-                          <span className="rounded-full border border-gray-400 px-1">
-                            ?
-                          </span>
-                          <p className="bubble-arrow-t-center absolute top-7 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
-                            기본 병원을 선택합니다. 예약할 때 기본 병원이
-                            자동으로 선택됩니다.
                           </p>
                         </div>
                       </div>
@@ -328,28 +326,25 @@ export const Timetable: React.FC<ITimetableProps> = ({
                         </div>
                       ) : (
                         groupLists.map((group) => (
-                          <li key={group.id} className="">
+                          <Fragment key={group.id}>
                             <ButtonCheck
-                              groupName={group.name}
-                              groupActivation={group.activation}
+                              name={group.name}
+                              isActivated={group.activation}
                               onClickFx={() =>
-                                onClickToggleGroup(groupLists, group)
-                              }
-                              focusGroup={focusGroup}
-                              onClickFocusGroup={() =>
-                                onClickChangeFocusGroup({
-                                  id: group.id,
-                                  name: group.name,
-                                })
+                                onClickChangeSelectGroup(group.id, group.name)
                               }
                             />
-                            <ul>
+                            <ul
+                              className={cls(
+                                group.activation ? "" : "pointer-events-none"
+                              )}
+                            >
                               {group.members.map((member) => (
                                 <ButtonCheck
                                   key={member.id}
-                                  groupActivation={group.activation}
-                                  memberActivation={member.activation}
-                                  memberName={member.user.name}
+                                  isActivated={group.activation}
+                                  isMemberActivated={member.activation}
+                                  name={member.user.name}
                                   onClickFx={() =>
                                     onClickToggleUser(groupLists, group, member)
                                   }
@@ -357,7 +352,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
                               ))}
                             </ul>
                             <div className="seperate-bar"></div>
-                          </li>
+                          </Fragment>
                         ))
                       )}
                     </ul>
@@ -736,6 +731,9 @@ export const Timetable: React.FC<ITimetableProps> = ({
                                       <div>{event.patient.name}</div>
                                       <div>
                                         {event.prescriptionOptions?.map(
+                                          (op) => op.name
+                                        )}
+                                        {event.prescriptionBundles?.map(
                                           (op) => op.name
                                         )}
                                       </div>

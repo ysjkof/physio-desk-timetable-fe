@@ -11,7 +11,17 @@ import {
 import { Input } from "../components/input";
 import { selectedPatientVar } from "../store";
 
-export const CreatePatient = ({ closeModal }: any) => {
+interface CreatePatientProps {
+  groupId?: number;
+  groupName?: string;
+  closeModal: any;
+}
+
+export const CreatePatient = ({
+  groupId,
+  groupName,
+  closeModal,
+}: CreatePatientProps) => {
   const {
     register,
     getValues,
@@ -27,7 +37,14 @@ export const CreatePatient = ({ closeModal }: any) => {
     } = data;
     if (ok) {
       closeModal();
-      selectedPatientVar(patient);
+      selectedPatientVar({
+        name: patient?.name,
+        gender: patient?.gender,
+        registrationNumber: patient?.registrationNumber,
+        birthday: patient?.birthday,
+        id: patient?.id!,
+        groupName: groupName ?? "",
+      });
     }
   };
   const [
@@ -45,6 +62,7 @@ export const CreatePatient = ({ closeModal }: any) => {
             registrationNumber,
             birthday,
             memo,
+            groupId,
           },
         },
       });

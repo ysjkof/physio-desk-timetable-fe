@@ -1,10 +1,6 @@
 import { makeVar } from "@apollo/client";
-import { INameTag } from "./components/name-tag";
-import {
-  ListReservationsQuery,
-  PrescriptionBundle,
-  PrescriptionOption,
-} from "./graphql/generated/graphql";
+import { INameTagProps } from "./components/name-tag";
+import { ListReservationsQuery } from "./graphql/generated/graphql";
 import { GroupWithOptions, IViewOption } from "./libs/timetable-utils";
 
 // 이곳에서 전역 변수 관리
@@ -15,7 +11,7 @@ export const queryResultVar = makeVar<ListReservationsQuery | undefined>(
 
 export const listReservationRefetchVar = makeVar<any>(undefined);
 
-export const selectedPatientVar = makeVar<null | INameTag>(null);
+export const selectedPatientVar = makeVar<null | INameTagProps>(null);
 
 export const todayNowVar = makeVar<Date>(new Date());
 
@@ -38,13 +34,14 @@ export const colorsObj = {
   },
 };
 
-export const groupListsVar = makeVar<GroupWithOptions[] | null>(null);
+export const groupListsVar = makeVar<GroupWithOptions[]>([]);
 
 export const viewOptionsVar = makeVar<IViewOption | null>(null);
 
-export interface FocusGroup {
-  id: number | null;
-  name: string | null;
+export interface selectedGroup {
+  id: number;
+  name: string;
+  isExist: boolean; // 로컬스토리지에 값이 있는지 확인하는 필드
 }
 
-export const focusGroupVar = makeVar<FocusGroup | null>(null);
+export const selectedGroupVar = makeVar<selectedGroup | null>(null);

@@ -26,4 +26,4 @@ export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0])$/;
 
 export const LOCALSTORAGE_VIEW_OPTION_GROUPS = "muool-view-option-groups-";
 export const LOCALSTORAGE_VIEW_OPTION = "muool-view-option-";
-export const LOCALSTORAGE_FOCUS_GROUP = "muool-focus-group-";
+export const LOCALSTORAGE_SELECTED_GROUP = "muool-selected-group-";

@@ -1,7 +1,7 @@
 import { getYMD } from "../libs/timetable-utils";
 import { cls } from "../libs/utils";
 
-interface IName {
+interface SearchNameProps {
   id: number;
   gender: string;
   name: string;
@@ -11,7 +11,7 @@ interface IName {
   columnCount?: 2 | 3 | 4;
 }
 
-export const Name: React.FC<IName> = ({
+export const SearchName = ({
   id,
   gender,
   name,
@@ -19,7 +19,7 @@ export const Name: React.FC<IName> = ({
   birthday,
   onClick,
   columnCount = 4,
-}) => {
+}: SearchNameProps) => {
   return (
     <div
       className={cls(

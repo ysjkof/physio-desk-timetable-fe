@@ -10,7 +10,7 @@ export const DashboardLi = ({ name, price, count }: DashboardLiProps) => {
       <span className="text-right">
         {typeof count === "number" ? (price * count).toLocaleString() : 0}원
       </span>
-      <span className="text-right">{count}번</span>
+      <span className="text-right">{count ?? 0}번</span>
     </li>
   );
 };

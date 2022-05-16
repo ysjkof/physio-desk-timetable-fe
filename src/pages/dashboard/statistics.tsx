@@ -135,9 +135,6 @@ export const Statistics = ({
                 </div>
 
                 <ul className="h-96 space-y-4 overflow-y-scroll px-4">
-                  {dataStatistics?.getStatistics.totalOptionList?.length! +
-                    dataStatistics?.getStatistics.totalBundleList?.length! ===
-                    0 && "자료가 없습니다."}
                   {findPrescriptionsData?.findPrescriptions.bundleResults?.map(
                     (presc) => (
                       <DashboardLi

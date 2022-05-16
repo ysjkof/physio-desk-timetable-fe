@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
-import { Name } from "./name";
+import { SearchName } from "./search-name";
 import { Patient } from "./patient";
 import {
   DeleteReservationMutation,
@@ -204,7 +204,7 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
         {reservation && (
           <div className="flex max-w-sm flex-col space-y-4">
             <div className="relative flex items-center justify-between gap-3 pr-5">
-              <Name
+              <SearchName
                 id={reservation.id}
                 birthday={reservation.patient.birthday}
                 gender={reservation.patient.gender}
@@ -265,7 +265,7 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
 
                 <div>
                   <h4 className="text-sm text-gray-500">마지막 수정</h4>
-                  <span>{reservation.lastModifier.email}</span>
+                  <span>{reservation.lastModifier?.email}</span>
                 </div>
                 <div>
                   <h4 className="text-sm text-gray-500">치료사</h4>

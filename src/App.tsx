@@ -4,7 +4,6 @@ import { isLoggedInVar } from "./apollo";
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "./components/layout";
 import { Home } from "./pages/home";
-import { CreatePatient } from "./pages/create-patient";
 import { Test } from "./pages/test";
 import { NotFound } from "./pages/404";
 import { Account } from "./pages/account";
@@ -22,13 +21,13 @@ import {
   useFindMyGroupsQuery,
 } from "./graphql/generated/graphql";
 import {
-  FocusGroup,
-  focusGroupVar,
+  selectedGroup,
+  selectedGroupVar,
   groupListsVar,
   viewOptionsVar,
 } from "./store";
 import {
-  LOCALSTORAGE_FOCUS_GROUP,
+  LOCALSTORAGE_SELECTED_GROUP,
   LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_GROUPS,
   ONE_WEEK,
@@ -64,21 +63,18 @@ function App() {
         );
         if (isAccepted) {
           const members = group.members
-            .filter(
-              (member) =>
-                // member.user.id === loggedInUserId &&
-                member.accepted && member.staying
-            )
+            .filter((member) => member.accepted && member.staying)
             .map((member) => ({
               ...member,
               activation: true,
               loginUser: member.user.id === loggedInUserId && true,
             }));
           if (Array.isArray(members) && members[0]) {
-            result.push({ ...group, members, activation: true });
+            result.push({ ...group, members, activation: false });
           }
         }
       });
+      result[result.length - 1].activation = true;
     }
     return result;
   }
@@ -149,41 +145,45 @@ function App() {
     );
     groupListsVar(updatedMyGroups);
 
-    const localFocusGroup: FocusGroup = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_FOCUS_GROUP + meData.me.id)!
+    const localSelectGroup: selectedGroup = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_SELECTED_GROUP + meData.me.id)!
     );
 
-    let newFocusGroup: FocusGroup | null = null;
-    if (localFocusGroup && updatedMyGroups.length >= 1) {
-      if (localFocusGroup.id === null) return;
+    let newSelectGroup: selectedGroup | null = null;
+    if (localSelectGroup?.isExist && updatedMyGroups.length >= 1) {
+      if (!localSelectGroup.isExist) return;
       const index = updatedMyGroups.findIndex(
         (group) =>
-          group.id === localFocusGroup.id && group.name === localFocusGroup.name
+          group.id === localSelectGroup.id &&
+          group.name === localSelectGroup.name
       );
       index !== -1
-        ? (newFocusGroup = {
+        ? (newSelectGroup = {
             id: updatedMyGroups[index].id,
             name: updatedMyGroups[index].name,
+            isExist: true,
           })
-        : (newFocusGroup = {
+        : (newSelectGroup = {
             id: updatedMyGroups[updatedMyGroups.length - 1].id,
             name: updatedMyGroups[updatedMyGroups.length - 1].name,
+            isExist: true,
           });
-    } else if (!localFocusGroup && updatedMyGroups.length >= 1) {
-      newFocusGroup = {
+    } else if (!localSelectGroup && updatedMyGroups.length >= 1) {
+      newSelectGroup = {
         id: updatedMyGroups[updatedMyGroups.length - 1].id,
         name: updatedMyGroups[updatedMyGroups.length - 1].name,
+        isExist: true,
       };
     }
-    if (newFocusGroup) {
+    if (newSelectGroup) {
       localStorage.setItem(
-        LOCALSTORAGE_FOCUS_GROUP + meData.me.id,
-        JSON.stringify(newFocusGroup)
+        LOCALSTORAGE_SELECTED_GROUP + meData.me.id,
+        JSON.stringify(newSelectGroup)
       );
-      focusGroupVar(newFocusGroup);
+      selectedGroupVar(newSelectGroup);
     } else {
-      localStorage.removeItem(LOCALSTORAGE_FOCUS_GROUP + meData.me.id);
-      focusGroupVar(null);
+      localStorage.removeItem(LOCALSTORAGE_SELECTED_GROUP + meData.me.id);
+      selectedGroupVar(null);
     }
   }, [findMyGroupsData]);
 
@@ -196,7 +196,6 @@ function App() {
             <Route path="confirm" element={<ConfirmEmail />} />
             <Route path="edit-profile" element={<EditProfile />} />
             <Route path="tt" element={<TimeTable />} />
-            <Route path="create-patient" element={<CreatePatient />} />
             <Route path="list-patient" element={<ListPatient />} />
             <Route path="search" element={<Search />} />
             <Route path="patient" element={<PateintDetail />} />

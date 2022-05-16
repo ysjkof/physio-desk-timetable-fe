@@ -1,24 +1,23 @@
 import { useReactiveVar } from "@apollo/client";
 import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchPatientByNameLazyQuery } from "../graphql/generated/graphql";
 import { cls } from "../libs/utils";
-import { selectedPatientVar } from "../store";
-import { INameTag, NameTag } from "./name-tag";
+import { selectedGroup, selectedPatientVar } from "../store";
+import { NameTag } from "./name-tag";
 
-interface ISearchPatient {}
+interface SearchPatientProps {
+  selectedGroup: selectedGroup | null;
+}
 
-export const SearchPatient: React.FC<ISearchPatient> = () => {
+export const SearchPatient = ({ selectedGroup }: SearchPatientProps) => {
   const { register, getValues, handleSubmit } = useForm({
     mode: "onChange",
   });
   const [queryPageNumber, setQueryPageNumber] = useState(1);
   const selectedPatient = useReactiveVar(selectedPatientVar);
-  const [totalCount, setTotalCount] = useState<number | null | undefined>();
-  const [totalPages, setTotalPages] = useState<number | null | undefined>();
-  const [patients, setPatients] = useState<INameTag[] | null>();
 
   const [callQuery, { loading, data: searchPatientResult }] =
     useSearchPatientByNameLazyQuery();
@@ -31,6 +30,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
           input: {
             page: queryPageNumber,
             query: patientNameTrim,
+            groupId: selectedGroup?.id,
           },
         },
       });
@@ -44,14 +44,6 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
     }
     return arr;
   };
-
-  useEffect(() => {
-    if (!loading && searchPatientResult) {
-      setPatients(searchPatientResult.searchPatientByName.patients);
-      setTotalCount(searchPatientResult.searchPatientByName.totalCount);
-      setTotalPages(searchPatientResult.searchPatientByName.totalPages);
-    }
-  }, [loading, searchPatientResult]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-lg  pt-4">
@@ -89,27 +81,30 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
         )}
       >
         {!selectedPatient &&
-          patients &&
-          patients.map((patient, index) => (
-            <div key={index} className="hover:ring-2 hover:ring-blue-500">
-              <NameTag
-                id={patient.id}
-                gender={patient.gender}
-                name={patient.name}
-                registrationNumber={patient.registrationNumber}
-                birthday={patient.birthday}
-                canClick
-              />
-            </div>
-          ))}
-        {!selectedPatient && !patients ? (
+          searchPatientResult?.searchPatientByName.patients?.map(
+            (patient, index) => (
+              <div key={index} className="hover:ring-2 hover:ring-blue-500">
+                <NameTag
+                  id={patient.id}
+                  gender={patient.gender}
+                  name={patient.name}
+                  registrationNumber={patient.registrationNumber}
+                  birthday={patient.birthday}
+                  canClick
+                  groupName={patient.group?.name ?? ""}
+                  therapist={patient.therapists[patient.therapists.length - 1]}
+                />
+              </div>
+            )
+          )}
+        {!selectedPatient && !searchPatientResult ? (
           <p className="text-center text-sm text-gray-500">
             환자 목록
             <br />
             검색하면 나타납니다
           </p>
         ) : (
-          patients?.length === 0 && (
+          searchPatientResult?.searchPatientByName.patients?.length === 0 && (
             <p className="text-center text-sm text-gray-500">
               검색결과가 없습니다.
             </p>
@@ -124,6 +119,7 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
                 name={selectedPatient.name}
                 registrationNumber={selectedPatient.registrationNumber}
                 birthday={selectedPatient.birthday}
+                groupName={selectedPatient.groupName}
               />
               <button
                 className="rounded-lg border bg-white py-1 px-3 shadow-sm hover:bg-gray-600 hover:text-white"
@@ -136,8 +132,10 @@ export const SearchPatient: React.FC<ISearchPatient> = () => {
         )}
       </div>
       <div className="mt-1 h-1 space-x-4 text-center text-xs text-gray-600">
-        {totalPages
-          ? pageNumbers(totalPages).map((pageNumber) => (
+        {searchPatientResult
+          ? pageNumbers(
+              searchPatientResult.searchPatientByName.totalPages ?? 0
+            ).map((pageNumber) => (
               <button
                 key={pageNumber}
                 className={cls(

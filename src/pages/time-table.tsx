@@ -6,7 +6,7 @@ import {
   useListReservationsQuery,
 } from "../graphql/generated/graphql";
 import { useReactiveVar } from "@apollo/client";
-import { focusGroupVar, todayNowVar } from "../store";
+import { selectedGroupVar, todayNowVar } from "../store";
 import { useMe } from "../hooks/useMe";
 import { getEnddate, getStartSunday } from "../libs/timetable-utils";
 
@@ -55,7 +55,7 @@ export interface PrescriptionsSelectType {
 
 export const TimeTable = () => {
   const today = useReactiveVar(todayNowVar);
-  const focusGroup = useReactiveVar(focusGroupVar);
+  const selectedGroup = useReactiveVar(selectedGroupVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const { data: meData } = useMe();
 
@@ -76,10 +76,11 @@ export const TimeTable = () => {
       input: {
         includeInactivate: false,
         prescriptionType: "all",
-        groupId: focusGroup?.id,
+        groupId: selectedGroup?.id,
       },
     },
   });
+
   let prescriptions: PrescriptionsSelectType = { bundle: [], option: [] };
   if (prescriptionsData) {
     Array.isArray(prescriptionsData.findPrescriptions.bundleResults) &&
@@ -94,9 +95,6 @@ export const TimeTable = () => {
       });
   }
 
-  if (!meData) {
-    return <></>;
-  }
   return (
     <>
       <Helmet>
@@ -111,7 +109,7 @@ export const TimeTable = () => {
             }}
             eventsData={data}
             selectedDateState={{ selectedDate, setSelectedDate }}
-            loginUser={meData}
+            loginUser={meData!}
             prescriptions={prescriptions}
           />
         </div>
