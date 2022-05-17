@@ -285,7 +285,7 @@ export const Prescription = ({
                           <button
                             type="button"
                             className={cls(
-                              "px-3 py-1",
+                              "flex gap-1 py-1 pl-3 pr-2",
                               findPrescriptionsData?.findPrescriptions
                                 .optionResults?.length! <= 1
                                 ? "pointer-events-none text-gray-400"
@@ -294,14 +294,14 @@ export const Prescription = ({
                             onClick={() => setSelectBundle(true)}
                           >
                             묶음 처방
+                            <div className="group relative">
+                              <FontAwesomeIcon icon={faCircleQuestion} />
+                              <p className="bubble-arrow-t-left absolute top-8 -left-6 hidden w-60 rounded-md bg-black py-2 px-2 text-white group-hover:block">
+                                단일처방을 모아 놓은 묶음처방입니다. 단일처방이
+                                2개 이상 있어야 활성화됩니다.
+                              </p>
+                            </div>
                           </button>
-                          <div className="group relative">
-                            <FontAwesomeIcon icon={faCircleQuestion} />
-                            <p className="bubble-arrow-t-left absolute top-9 hidden w-60 rounded-md bg-black px-3 py-2 text-white group-hover:block">
-                              단일처방을 모아 놓은 묶음처방입니다. 단일처방이
-                              2개 이상 있어야 활성화됩니다.
-                            </p>
-                          </div>
                         </div>
                       </div>
                     </div>

@@ -2,15 +2,26 @@ import { DashboardTitle } from "./components/title";
 import { DashboardSectionLayout } from "./components/section-layout";
 import {
   useFindPrescriptionsQuery,
-  useGetStatisticsQuery,
+  useGetStatisticsLazyQuery,
 } from "../../graphql/generated/graphql";
-import { getDateFromYMDHM } from "../../libs/utils";
+import { cls, getDateFromYMDHM } from "../../libs/utils";
 import { DatepickerForm } from "../../components/datepicker";
 import { useForm } from "react-hook-form";
 import { DatepickerWithInput } from "../../components/datepicker-with-input";
 import { DashboardLi } from "./components/li";
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
 import { InDashboardPageProps } from ".";
+import { useEffect, useState } from "react";
+import { DashboardBtn } from "./components/button";
+
+export interface MemberState {
+  id: number;
+  name: string;
+  isSelected: boolean;
+}
+interface ModifiedDatepickerForm extends DatepickerForm {
+  userIds?: number[];
+}
 
 export const Statistics = ({
   id,
@@ -26,13 +37,15 @@ export const Statistics = ({
   defaultDate[0].setDate(1);
   defaultDate[1].setMonth(defaultDate[0].getMonth() + 1, 0);
 
+  const [memberState, setMemberState] = useState<MemberState[]>([]);
+
   const {
     register,
     getValues,
     formState: { errors, isValid },
     handleSubmit,
     setValue,
-  } = useForm<DatepickerForm>({
+  } = useForm<ModifiedDatepickerForm>({
     mode: "onChange",
   });
 
@@ -44,6 +57,7 @@ export const Statistics = ({
     endDateMonth,
     endDateDate,
   } = getValues();
+
   const startDate = getDateFromYMDHM(
     startDateYear,
     startDateMonth,
@@ -63,22 +77,49 @@ export const Statistics = ({
         },
       },
     });
+  let userIds: number[] = [];
+  memberState.forEach((member) => {
+    if (member.isSelected === true) {
+      userIds.push(member.id);
+    }
+  });
 
-  const { data: dataStatistics, loading: loadingDataStatistics } =
-    useGetStatisticsQuery({
-      variables: {
-        input: {
-          startDate,
-          endDate,
-          groupIds: [id],
-        },
-      },
-    });
+  const [
+    getStatisticsLzq,
+    { data: dataStatistics, loading: loadingStatisticsData },
+  ] = useGetStatisticsLazyQuery();
 
   const onSubmit = () => {
-    if (!loadingPrescriptionsData) {
+    if (!loadingStatisticsData) {
+      getStatisticsLzq({
+        variables: {
+          input: {
+            startDate,
+            endDate,
+            ...(typeof id === "number" &&
+              id !== 0 && {
+                groupId: id,
+                userIds,
+              }),
+          },
+        },
+      });
     }
   };
+
+  useEffect(() => {
+    if (members) {
+      setMemberState(
+        members.map((m) => ({
+          id: m.user.id,
+          name: m.user.name,
+          isSelected: true,
+        }))
+      );
+    } else {
+      setMemberState([]);
+    }
+  }, [members]);
 
   return (
     <div className="">
@@ -89,28 +130,64 @@ export const Statistics = ({
             <DashboardSectionLayout
               isPadding={true}
               children={
-                <div className="flex gap-6">
-                  <div>
-                    <h3>시작 날짜</h3>
-                    <DatepickerWithInput
-                      setValue={setValue}
-                      defaultDate={defaultDate[0]}
-                      register={register}
-                      see="ymd"
-                      dateType={"startDate"}
-                    />
+                <div className="space-y-4">
+                  <div className="flex gap-6">
+                    <div>
+                      <h3>시작 날짜</h3>
+                      <DatepickerWithInput
+                        setValue={setValue}
+                        defaultDate={defaultDate[0]}
+                        register={register}
+                        see="ymd"
+                        dateType={"startDate"}
+                      />
+                    </div>
+                    <div>
+                      <h3>마지막 날짜</h3>
+                      <DatepickerWithInput
+                        setValue={setValue}
+                        defaultDate={defaultDate[1]}
+                        register={register}
+                        see="ymd"
+                        dateType={"endDate"}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <h3>마지막 날짜</h3>
-                    <DatepickerWithInput
-                      setValue={setValue}
-                      defaultDate={defaultDate[1]}
-                      register={register}
-                      see="ymd"
-                      dateType={"endDate"}
-                    />
-                  </div>
-                  <button>검색</button>
+                  {memberState.length >= 1 && (
+                    <div className="w-full rounded-md bg-blue-400/90 text-white">
+                      <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
+                        {memberState.map((m, i) => (
+                          <button
+                            key={m.id}
+                            className={cls(
+                              "btn py-1 px-3 ",
+                              m.isSelected
+                                ? "rounded-md bg-white px-3 font-semibold text-blue-800"
+                                : ""
+                            )}
+                            type="button"
+                            onClick={() => {
+                              memberState[i].isSelected =
+                                !memberState[i].isSelected;
+                              setMemberState([...memberState]);
+                            }}
+                          >
+                            {m.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <DashboardBtn
+                    actionText="검색"
+                    isValid={
+                      isValid &&
+                      !loadingPrescriptionsData &&
+                      !loadingStatisticsData &&
+                      (id === 0 ? true : userIds.length > 0)
+                    }
+                    loading={loadingStatisticsData}
+                  />
                 </div>
               }
             />
@@ -142,7 +219,7 @@ export const Statistics = ({
                         price={presc.price}
                         count={
                           dataStatistics?.getStatistics.totalBundleList?.find(
-                            (prescription) => prescription.id === presc.id
+                            (prescription) => prescription.name === presc.name
                           )?.count
                         }
                       />
@@ -156,7 +233,7 @@ export const Statistics = ({
                         price={presc.price}
                         count={
                           dataStatistics?.getStatistics.totalOptionList?.find(
-                            (prescription) => prescription.id === presc.id
+                            (prescription) => prescription.name === presc.name
                           )?.count
                         }
                       />

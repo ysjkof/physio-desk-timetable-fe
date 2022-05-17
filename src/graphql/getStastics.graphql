@@ -10,12 +10,10 @@ query getStatistics($input: GetStatisticsInput!) {
       }
     }
     totalBundleList {
-      id
       name
       count
     }
     totalOptionList {
-      id
       name
       count
     }

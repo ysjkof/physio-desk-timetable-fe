@@ -64,7 +64,8 @@ export const TimeTable = () => {
       input: {
         startDate: getStartSunday(selectedDate),
         endDate: getEnddate(getStartSunday(selectedDate), 7),
-        groupIds: [selectedGroup?.id ?? 0],
+        groupId: selectedGroup.id,
+        ...(selectedGroup.id === 0 && { userIds: [meData?.me.id!] }),
       },
     },
   });
@@ -73,7 +74,7 @@ export const TimeTable = () => {
       input: {
         includeInactivate: false,
         prescriptionType: "all",
-        groupId: selectedGroup?.id,
+        groupId: selectedGroup.id,
       },
     },
   });
