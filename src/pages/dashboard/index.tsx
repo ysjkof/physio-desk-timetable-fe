@@ -265,7 +265,7 @@ export const Dashboard = () => {
                 </li>
               ))}
             </ul>
-            <div className="tap-contents h-full px-4">
+            <div className="contents px-4">
               {selectedGroup && (
                 <>
                   {selectedMenu === "main" && "메뉴를 선택하세요"}

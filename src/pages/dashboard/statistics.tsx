@@ -81,7 +81,7 @@ export const Statistics = ({
   };
 
   return (
-    <div className="h-full">
+    <div className="">
       <DashboardTitle name={name} subText="의 처방" />
       <div className="space-y-16">
         <section className="date-picker">
@@ -116,7 +116,7 @@ export const Statistics = ({
             />
           </form>
         </section>
-        <section className="flex h-[rem] gap-4">
+        <section className="flex gap-4">
           <DashboardSectionLayout
             isPadding={true}
             children={
@@ -133,8 +133,7 @@ export const Statistics = ({
                   <span className="text-center">금액</span>
                   <span className="text-center">횟수</span>
                 </div>
-
-                <ul className="h-96 space-y-4 overflow-y-scroll px-4">
+                <ul className="min-h-[16rem] space-y-4 px-4">
                   {findPrescriptionsData?.findPrescriptions.bundleResults?.map(
                     (presc) => (
                       <DashboardLi
@@ -170,6 +169,7 @@ export const Statistics = ({
         </section>
         <section className="chart">
           <DashboardSectionLayout
+            isPadding={true}
             children={
               <>
                 <div className="relative">

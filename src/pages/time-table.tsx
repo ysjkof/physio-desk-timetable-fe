@@ -58,7 +58,7 @@ export const TimeTable = () => {
   const selectedGroup = useReactiveVar(selectedGroupVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const { data: meData } = useMe();
-  console.log(selectedGroup);
+
   const { data } = useListReservationsQuery({
     variables: {
       input: {
