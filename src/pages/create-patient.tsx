@@ -1,4 +1,3 @@
-import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { FormError } from "../components/form-error";
@@ -38,8 +37,8 @@ export const CreatePatient = ({
     if (ok) {
       closeModal();
       selectedPatientVar({
-        name: patient?.name,
-        gender: patient?.gender,
+        name: patient?.name!,
+        gender: patient?.gender!,
         registrationNumber: patient?.registrationNumber,
         birthday: patient?.birthday,
         id: patient?.id!,
@@ -62,7 +61,7 @@ export const CreatePatient = ({
             registrationNumber,
             birthday,
             memo,
-            groupId,
+            ...(groupId && { groupId }),
           },
         },
       });

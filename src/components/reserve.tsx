@@ -23,6 +23,7 @@ import { CreatePatient } from "../pages/create-patient";
 import { PrescriptionsSelectType } from "../pages/time-table";
 import { cls, getDateFromYMDHM } from "../libs/utils";
 import { DatepickerWithInput } from "./datepicker-with-input";
+import { useMe } from "../hooks/useMe";
 
 interface ReserveForm extends DatepickerForm {
   memo?: string;
@@ -59,6 +60,7 @@ export const Reserve = ({
   // const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
   const selectedGroup = useReactiveVar(selectedGroupVar);
 
+  const { data: meData } = useMe();
   const {
     register,
     getValues,
@@ -249,7 +251,7 @@ export const Reserve = ({
 
   useEffect(() => {
     if (!selectedPatient) {
-      setValue("therapistId", 0);
+      setValue("therapistId", meData?.me.id);
     } else {
       setValue("therapistId", selectedPatient?.therapist?.id);
     }
@@ -320,14 +322,17 @@ export const Reserve = ({
                   {...register("therapistId")}
                   className="w-full text-center"
                 >
-                  <option value="0">- 담당 치료사를 선택하세요 -</option>
-                  {groupLists
-                    ?.find((g) => g.id === selectedGroup?.id)
-                    ?.members.map((m) => (
-                      <option key={m.id} value={m.user.id}>
-                        {m.user.name}
-                      </option>
-                    ))}
+                  {selectedGroup.id === 0 ? (
+                    <option value={meData?.me.id}>{meData?.me.name}</option>
+                  ) : (
+                    groupLists
+                      ?.find((g) => g.id === selectedGroup?.id)
+                      ?.members.map((m) => (
+                        <option key={m.id} value={m.user.id}>
+                          {m.user.name}
+                        </option>
+                      ))
+                  )}
                 </select>
               </div>
               <label>예약 시간</label>

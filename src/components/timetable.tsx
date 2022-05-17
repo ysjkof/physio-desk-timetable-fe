@@ -45,7 +45,6 @@ import {
 import { ReservationDetail } from "./reservation-detail";
 import {
   colorsObj,
-  selectedGroup,
   selectedGroupVar,
   groupListsVar,
   todayNowVar,
@@ -176,7 +175,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
     if (eventsData?.listReservations.ok) {
       const distributeEvents = distributor(
         eventsData.listReservations.results,
-        spreadGroupMembers(groupLists)
+        spreadGroupMembers(groupLists, selectedGroup.id)
       );
       setWeekEvents(distributeEvents);
     }
@@ -198,64 +197,41 @@ export const Timetable: React.FC<ITimetableProps> = ({
     setADay(selectedDate);
   }, [selectedDate]);
 
-  const onClickToggleGroup = (
-    groupLists: GroupWithOptions[],
-    groupId: number
-  ) => {
-    const group = groupLists.find((prevGroup) => prevGroup.id === groupId);
-    const newState = groupLists.map((g) => ({
-      ...g,
-      activation: g.id === group?.id ? !g.activation : false,
-    }));
-    localStorage.setItem(
-      LOCALSTORAGE_VIEW_OPTION_GROUPS + loginUser.me.id,
-      JSON.stringify(newState)
-    );
-    groupListsVar(newState);
-  };
   const onClickToggleUser = (
     groupLists: GroupWithOptions[],
-    parentGroup: GroupWithOptions,
-    memberInGroup: GroupMemberWithOptions
+    groupId: number,
+    memberId: number
   ) => {
     const gIndex = groupLists.findIndex(
-      (prevGroup) => prevGroup.id === parentGroup.id
+      (prevGroup) => prevGroup.id === groupId
     );
     if (gIndex === -1) return;
-    const mIndex = parentGroup.members.findIndex(
-      (prevMember) => prevMember.id === memberInGroup.id
+    const mIndex = groupLists[gIndex].members.findIndex(
+      (prevMember) => prevMember.id === memberId
     );
     if (mIndex === -1) return;
-
-    const newState = [...groupLists];
-    newState[gIndex].members[mIndex].activation =
-      newState[gIndex].members[mIndex].activation === true ? false : true;
+    groupLists[gIndex].members[mIndex].activation =
+      groupLists[gIndex].members[mIndex].activation === true ? false : true;
     localStorage.setItem(
       LOCALSTORAGE_VIEW_OPTION_GROUPS + loginUser.me.id,
-      JSON.stringify(newState)
+      JSON.stringify(groupLists)
     );
-    groupListsVar(newState);
+    groupListsVar([...groupLists]);
   };
+
   const onClickChangeSelectGroup = (id: number, name: string) => {
-    let newSelectedGroup: selectedGroup | null = null;
-    if (selectedGroup && selectedGroup.id === id) {
-      newSelectedGroup = { id: 0, name: "", isExist: false };
-    }
-    if (selectedGroup && selectedGroup.id !== id) {
+    let newSelectedGroup = selectedGroup;
+    if (selectedGroup.id === id) {
+      newSelectedGroup = {
+        id: 0,
+        name: "",
+      };
+    } else {
       newSelectedGroup = {
         id,
         name,
-        isExist: true,
       };
     }
-    if (!selectedGroup) {
-      newSelectedGroup = {
-        id,
-        name,
-        isExist: true,
-      };
-    }
-    onClickToggleGroup(groupLists, id);
     localStorage.setItem(
       LOCALSTORAGE_SELECTED_GROUP + loginUser.me.id,
       JSON.stringify(newSelectedGroup)
@@ -329,24 +305,30 @@ export const Timetable: React.FC<ITimetableProps> = ({
                           <Fragment key={group.id}>
                             <ButtonCheck
                               name={group.name}
-                              isActivated={group.activation}
+                              isActivated={group.id === selectedGroup.id}
                               onClickFx={() =>
                                 onClickChangeSelectGroup(group.id, group.name)
                               }
                             />
                             <ul
                               className={cls(
-                                group.activation ? "" : "pointer-events-none"
+                                group.id === selectedGroup.id
+                                  ? ""
+                                  : "pointer-events-none"
                               )}
                             >
                               {group.members.map((member) => (
                                 <ButtonCheck
                                   key={member.id}
-                                  isActivated={group.activation}
+                                  isActivated={group.id === selectedGroup.id}
                                   isMemberActivated={member.activation}
                                   name={member.user.name}
                                   onClickFx={() =>
-                                    onClickToggleUser(groupLists, group, member)
+                                    onClickToggleUser(
+                                      groupLists,
+                                      group.id,
+                                      member.id
+                                    )
                                   }
                                 />
                               ))}

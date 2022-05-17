@@ -9,7 +9,7 @@ import { selectedGroup, selectedPatientVar } from "../store";
 import { NameTag } from "./name-tag";
 
 interface SearchPatientProps {
-  selectedGroup: selectedGroup | null;
+  selectedGroup: typeof selectedGroup;
 }
 
 export const SearchPatient = ({ selectedGroup }: SearchPatientProps) => {

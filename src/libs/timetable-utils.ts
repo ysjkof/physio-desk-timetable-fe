@@ -20,9 +20,7 @@ export interface GroupMemberWithOptions
 interface ModifiedGroup extends Pick<Group, "id" | "name"> {
   members: GroupMemberWithOptions[];
 }
-export interface GroupWithOptions extends ModifiedGroup {
-  activation: boolean;
-}
+export interface GroupWithOptions extends ModifiedGroup {}
 
 export interface IViewOption {
   periodToView: typeof ONE_DAY | typeof ONE_WEEK;
@@ -46,10 +44,13 @@ export function getEnddate(startDate: Date, afterDay: number) {
   return returnDate;
 }
 
-export const spreadGroupMembers = (groups: GroupWithOptions[] | null) => {
+export const spreadGroupMembers = (
+  groups: GroupWithOptions[] | null,
+  selectedGroupId: number
+) => {
   const result: GroupMemberWithOptions[] = [];
   groups?.forEach((group) => {
-    if (group.activation) {
+    if (group.id === selectedGroupId) {
       const newMembers = group.members.filter((member) => member.activation);
       result.push(...newMembers);
     }

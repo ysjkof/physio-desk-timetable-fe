@@ -70,11 +70,10 @@ function App() {
               loginUser: member.user.id === loggedInUserId && true,
             }));
           if (Array.isArray(members) && members[0]) {
-            result.push({ ...group, members, activation: false });
+            result.push({ ...group, members });
           }
         }
       });
-      result[result.length - 1].activation = true;
     }
     return result;
   }
@@ -105,35 +104,26 @@ function App() {
     const localGroups: GroupWithOptions[] = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_VIEW_OPTION_GROUPS + meData.me.id)!
     );
-
-    if (Array.isArray(localGroups) && localGroups.length >= 1) {
-      updatedMyGroups = myGroups.map((myGroup) => {
-        const index = localGroups.findIndex(
-          (localGroup) => localGroup.id === myGroup.id
-        );
-        if (index === -1) {
-          return myGroup;
-        } else {
-          const members = myGroup.members.map((myMember) => {
-            const localMemberIndex = localGroups[index].members.findIndex(
-              (localMember) => localMember.id === myMember.id
-            );
-            if (localMemberIndex === -1) {
-              return myMember;
-            } else {
-              return {
-                ...myMember,
-                activation:
-                  localGroups[index].members[localMemberIndex].activation,
-              };
-            }
-          });
+    if (localGroups) {
+      updatedMyGroups = myGroups.map((g) => {
+        const existLocalGroup = localGroups.find((lg) => lg.id === g.id);
+        if (existLocalGroup) {
           return {
-            activation: localGroups[index].activation,
-            id: myGroup.id,
-            name: myGroup.name,
-            members,
+            id: g.id,
+            name: g.name,
+            members: g.members.map((gm) => {
+              const sameMember = existLocalGroup.members.find(
+                (lgm) => lgm.id === gm.id
+              );
+              if (sameMember) {
+                return sameMember;
+              } else {
+                return gm;
+              }
+            }),
           };
+        } else {
+          return g;
         }
       });
     } else {
@@ -145,45 +135,20 @@ function App() {
     );
     groupListsVar(updatedMyGroups);
 
-    const localSelectGroup: selectedGroup = JSON.parse(
+    const localSelectGroup: typeof selectedGroup = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_SELECTED_GROUP + meData.me.id)!
     );
-
-    let newSelectGroup: selectedGroup | null = null;
-    if (localSelectGroup?.isExist && updatedMyGroups.length >= 1) {
-      if (!localSelectGroup.isExist) return;
-      const index = updatedMyGroups.findIndex(
-        (group) =>
-          group.id === localSelectGroup.id &&
-          group.name === localSelectGroup.name
-      );
-      index !== -1
-        ? (newSelectGroup = {
-            id: updatedMyGroups[index].id,
-            name: updatedMyGroups[index].name,
-            isExist: true,
-          })
-        : (newSelectGroup = {
-            id: updatedMyGroups[updatedMyGroups.length - 1].id,
-            name: updatedMyGroups[updatedMyGroups.length - 1].name,
-            isExist: true,
-          });
-    } else if (!localSelectGroup && updatedMyGroups.length >= 1) {
-      newSelectGroup = {
-        id: updatedMyGroups[updatedMyGroups.length - 1].id,
-        name: updatedMyGroups[updatedMyGroups.length - 1].name,
-        isExist: true,
-      };
-    }
-    if (newSelectGroup) {
+    if (
+      localSelectGroup &&
+      myGroups.find((g) => g.id === localSelectGroup.id)
+    ) {
+      selectedGroupVar(localSelectGroup);
+    } else {
       localStorage.setItem(
         LOCALSTORAGE_SELECTED_GROUP + meData.me.id,
-        JSON.stringify(newSelectGroup)
+        JSON.stringify(selectedGroup)
       );
-      selectedGroupVar(newSelectGroup);
-    } else {
-      localStorage.removeItem(LOCALSTORAGE_SELECTED_GROUP + meData.me.id);
-      selectedGroupVar(null);
+      selectedGroupVar(selectedGroup);
     }
   }, [findMyGroupsData]);
 

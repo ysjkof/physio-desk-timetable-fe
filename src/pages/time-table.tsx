@@ -58,16 +58,13 @@ export const TimeTable = () => {
   const selectedGroup = useReactiveVar(selectedGroupVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const { data: meData } = useMe();
-
+  console.log(selectedGroup);
   const { data } = useListReservationsQuery({
     variables: {
       input: {
         startDate: getStartSunday(selectedDate),
         endDate: getEnddate(getStartSunday(selectedDate), 7),
-        groupIds:
-          meData?.me.groups && meData.me.groups.length >= 1
-            ? meData.me.groups.map((group) => group.group.id)
-            : null,
+        groupIds: [selectedGroup?.id ?? 0],
       },
     },
   });
