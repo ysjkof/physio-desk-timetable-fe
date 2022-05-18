@@ -217,25 +217,44 @@ export const Statistics = ({
                         key={presc.id}
                         name={presc.name}
                         price={presc.price}
-                        count={
-                          dataStatistics?.getStatistics.totalBundleList?.find(
-                            (prescription) => prescription.name === presc.name
-                          )?.count
-                        }
+                        count={dataStatistics?.getStatistics.results?.reduce(
+                          (acc, cur) =>
+                            acc +
+                            cur.statistics.reduce((acc, cur) => {
+                              const exist = cur.prescriptions.find(
+                                (p) => p.name === presc.name
+                              );
+                              if (exist) {
+                                return acc + exist.count;
+                              }
+                              return acc;
+                            }, 0),
+                          0
+                        )}
                       />
                     )
                   )}
+
                   {findPrescriptionsData?.findPrescriptions.optionResults?.map(
                     (presc) => (
                       <DashboardLi
                         key={presc.id}
                         name={presc.name}
                         price={presc.price}
-                        count={
-                          dataStatistics?.getStatistics.totalOptionList?.find(
-                            (prescription) => prescription.name === presc.name
-                          )?.count
-                        }
+                        count={dataStatistics?.getStatistics.results?.reduce(
+                          (acc, cur) =>
+                            acc +
+                            cur.statistics.reduce((acc, cur) => {
+                              const exist = cur.prescriptions.find(
+                                (p) => p.name === presc.name
+                              );
+                              if (exist) {
+                                return acc + exist.count;
+                              }
+                              return acc;
+                            }, 0),
+                          0
+                        )}
                       />
                     )
                   )}
@@ -266,15 +285,29 @@ export const Statistics = ({
                     <VictoryLine
                       data={
                         dataStatistics
-                          ? dataStatistics.getStatistics.dayCounts?.map(
-                              (data) => ({
-                                x: data.date,
-                                y: data.prescriptions.reduce(
-                                  (prev, curr) => prev + curr.count,
-                                  0
-                                ),
+                          ? dataStatistics.getStatistics.results
+                              ?.map((result) =>
+                                result.statistics?.map((data) => ({
+                                  x: data.date,
+                                  y: data.prescriptions.reduce(
+                                    (prev, curr) => prev + curr.count,
+                                    0
+                                  ),
+                                }))
+                              )
+                              .reduce((prev, curr) => {
+                                curr?.forEach((c) => {
+                                  const idx = prev?.findIndex(
+                                    (p) => p.x === c.x
+                                  );
+                                  if (idx === -1) {
+                                    prev?.push(c);
+                                  } else {
+                                    prev[idx].y = c.y + prev[idx].y;
+                                  }
+                                });
+                                return prev;
                               })
-                            )
                           : []
                       }
                       style={{

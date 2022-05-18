@@ -109,6 +109,12 @@ export type CreateReservationOutput = {
   reservation?: Maybe<Reservation>;
 };
 
+export type DayCount = {
+  __typename?: 'DayCount';
+  date: Scalars['DateTime'];
+  prescriptions: Array<PrescriptionStatistics>;
+};
+
 export type DeletePatientInput = {
   patientId: Scalars['Float'];
 };
@@ -275,11 +281,9 @@ export type GetStatisticsInput = {
 
 export type GetStatisticsOutput = {
   __typename?: 'GetStatisticsOutput';
-  dayCounts?: Maybe<Array<DayCount>>;
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-  totalBundleList?: Maybe<Array<PrescriptionStatisticsInTotal>>;
-  totalOptionList?: Maybe<Array<PrescriptionStatisticsInTotal>>;
+  results?: Maybe<Array<StatisticsRsult>>;
 };
 
 export type Group = {
@@ -536,12 +540,6 @@ export type PrescriptionStatistics = {
   name: Scalars['String'];
 };
 
-export type PrescriptionStatisticsInTotal = {
-  __typename?: 'PrescriptionStatisticsInTotal';
-  count: Scalars['Int'];
-  name: Scalars['String'];
-};
-
 export type Query = {
   __typename?: 'Query';
   findAllPatients: FindAllPatientsOutput;
@@ -670,6 +668,12 @@ export type SearchUsersByNameOutput = {
   totalCount?: Maybe<Scalars['Int']>;
 };
 
+export type StatisticsRsult = {
+  __typename?: 'StatisticsRsult';
+  statistics?: Maybe<Array<DayCount>>;
+  userName: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -706,12 +710,6 @@ export type VerifyEmailOutput = {
   __typename?: 'VerifyEmailOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-};
-
-export type DayCount = {
-  __typename?: 'dayCount';
-  date: Scalars['DateTime'];
-  prescriptions: Array<PrescriptionStatistics>;
 };
 
 export type AcceptInvitationMutationVariables = Exact<{
@@ -829,7 +827,7 @@ export type GetStatisticsQueryVariables = Exact<{
 }>;
 
 
-export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, dayCounts?: Array<{ __typename?: 'dayCount', date: any, prescriptions: Array<{ __typename?: 'PrescriptionStatistics', name: string, count: number }> }> | null, totalBundleList?: Array<{ __typename?: 'PrescriptionStatisticsInTotal', name: string, count: number }> | null, totalOptionList?: Array<{ __typename?: 'PrescriptionStatisticsInTotal', name: string, count: number }> | null } };
+export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, results?: Array<{ __typename?: 'StatisticsRsult', userName: string, statistics?: Array<{ __typename?: 'DayCount', date: any, prescriptions: Array<{ __typename?: 'PrescriptionStatistics', name: string, count: number }> }> | null }> | null } };
 
 export type InviteGroupMutationVariables = Exact<{
   input: InviteGroupInput;
@@ -1569,20 +1567,15 @@ export const GetStatisticsDocument = gql`
   getStatistics(input: $input) {
     error
     ok
-    dayCounts {
-      date
-      prescriptions {
-        name
-        count
+    results {
+      userName
+      statistics {
+        date
+        prescriptions {
+          name
+          count
+        }
       }
-    }
-    totalBundleList {
-      name
-      count
-    }
-    totalOptionList {
-      name
-      count
     }
   }
 }

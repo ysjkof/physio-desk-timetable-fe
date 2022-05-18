@@ -2,20 +2,15 @@ query getStatistics($input: GetStatisticsInput!) {
   getStatistics(input: $input) {
     error
     ok
-    dayCounts {
-      date
-      prescriptions {
-        name
-        count
+    results {
+      userName
+      statistics {
+        date
+        prescriptions {
+          name
+          count
+        }
       }
-    }
-    totalBundleList {
-      name
-      count
-    }
-    totalOptionList {
-      name
-      count
     }
   }
 }
