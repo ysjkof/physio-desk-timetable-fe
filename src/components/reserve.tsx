@@ -25,6 +25,40 @@ import { cls, getDateFromYMDHM } from "../libs/utils";
 import { DatepickerWithInput } from "./datepicker-with-input";
 import { useMe } from "../hooks/useMe";
 
+function getOneDayReservationInputDateForTest(
+  inputStartDate: Date,
+  inputPpresc: { id: number; requiredTime: number; name: string }
+) {
+  const numberOfReservationsPerDay = Math.floor(Math.random() * 8);
+  const startDate = new Date(inputStartDate);
+  const endDate = new Date(startDate);
+  const dates: Date[] = [];
+  dates.length = numberOfReservationsPerDay;
+  dates.fill(startDate);
+
+  return dates.map((date) => {
+    let th = Math.floor(Math.random() * (19 - 9) + 9);
+    let tm = Math.floor(Math.random() * 6) * 10;
+    while (dates.find((dateInWhile) => dateInWhile.getHours() === th)) {
+      th = Math.floor(Math.random() * (19 - 9) + 9);
+    }
+    tm === 6 ? (tm = 0) : "";
+    date.setHours(th, tm, 0, 0);
+    endDate.setHours(th, tm + inputPpresc.requiredTime, 0, 0);
+    return [date, endDate];
+  });
+}
+function selectPrescriptionForTest(inputPpresc: any[]) {
+  // presscriptions.option이나 presscriptions.bundle을 인자로 받는다.
+  const selected = inputPpresc[Math.floor(Math.random() * inputPpresc.length)];
+  return {
+    id: selected.id,
+    name: selected.name,
+    requiredTime: selected.requiredTime,
+    type: selected.__typename,
+  };
+}
+
 interface ReserveForm extends DatepickerForm {
   memo?: string;
   therapistId?: number;
@@ -86,104 +120,75 @@ export const Reserve = ({
     { loading, data: createReservationResult },
   ] = useCreateReservationMutation({ onCompleted });
 
-  const onSubmitText = () => {
-    // test용
-    const dateArr: Date[] = [];
-    const firstDate = new Date("2022-5-1");
-    for (let i = 0; i < 30; i++) {
-      firstDate.setDate(i + 1);
-      const today = new Date(firstDate);
-      const loop = Math.floor(Math.random() * 8);
-      let hours: Date[] = [];
-      hours.length = loop;
-      hours.fill(today);
-      const newHours = hours.map((h) => {
-        const loopdate = new Date(today);
-        let th = Math.floor(Math.random() * (19 - 9) + 9);
-        let tm = Math.floor(Math.random() * 6) * 10;
-        tm === 6 ? (tm = 0) : "";
-        while (hours.find((a) => a.getHours() === th)) {
-          th = Math.floor(Math.random() * (19 - 9) + 9);
-        }
-        loopdate.setHours(th, tm, 0, 0);
-        return loopdate;
-      });
-      newHours.forEach((e) => dateArr.push(e));
-    }
-    function geteddt(date: Date) {
-      const dt = new Date(date);
-      const dtm = dt.getMinutes();
-      dt.setMinutes(dtm + 40);
-      return dt;
-    }
-    dateArr.forEach((date) => {
-      const prescriptionOptionIds = [
-        prescriptions.option[
-          Math.floor(Math.random() * prescriptions.option.length)
-        ].id,
-      ];
-      const prescriptionBundleIds = [
-        prescriptions.bundle[
-          Math.floor(Math.random() * prescriptions.bundle.length)
-        ].id,
-      ];
-      createReservationMutation({
-        variables: {
-          input: {
-            startDate: date,
-            endDate: geteddt(date),
-            patientId: selectedPatient!.id,
-            groupId: selectedGroup?.id,
-            prescriptionOptionIds,
-            // prescriptionBundleIds
-          },
-        },
-      });
-    });
-  };
   const onSubmit = () => {
-    if (!loading && selectedPatient?.id) {
-      const {
-        startDateYear,
-        startDateMonth,
-        startDateDate,
-        startDateHours,
-        startDateMinutes,
-        memo,
-        therapistId,
-      } = getValues();
-      // const startDate = new Date(
-      //   `${startDateYear}-${String(startDateMonth).padStart(2, "0")}-${String(
-      //     startDateDate
-      //   ).padStart(2, "0")}T${String(startDateHours).padStart(2, "0")}:${String(
-      //     startDateMinutes
-      //   ).padStart(2, "0")}:00.000${UTC_OPTION_KST}`
-      // );
-      const startDate = getDateFromYMDHM(
-        startDateYear,
-        startDateMonth,
-        startDateDate,
-        startDateHours,
-        startDateMinutes
+    const { therapistId } = getValues();
+    const firstDate = new Date("2022-5-1");
+    let countSum = 0;
+    for (let i = 0; i < 31; i++) {
+      console.log("aa", i);
+      firstDate.setDate(i + 1);
+      const prescTypes = [selectPrescriptionOptions, selectPrescriptionBundles];
+      const presc = selectPrescriptionForTest(
+        prescTypes[Math.floor(Math.random() * prescTypes.length)]
       );
-      const endDate = new Date(startDate);
-      // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-      endDate.setMinutes(endDate.getMinutes() + totalPrescription.minute);
-      createReservationMutation({
-        variables: {
-          input: {
-            startDate: startDate,
-            endDate,
-            memo,
-            patientId: selectedPatient.id,
-            therapistId: +therapistId!,
-            groupId: selectedGroup?.id,
-            prescriptionOptionIds: totalPrescription.options,
-            prescriptionBundleIds: totalPrescription.bundles,
+      const times = getOneDayReservationInputDateForTest(firstDate, presc);
+      countSum = countSum + times.length;
+      times.forEach((t) => {
+        createReservationMutation({
+          variables: {
+            input: {
+              startDate: t[0],
+              endDate: t[1],
+              patientId: selectedPatient?.id!,
+              therapistId: +therapistId!,
+              groupId: selectedGroup?.id,
+              ...(presc.type === "PrescriptionOption" && {
+                prescriptionOptionIds: presc.id,
+              }),
+              ...(presc.type !== "PrescriptionOption" && {
+                prescriptionBundleIds: presc.id,
+              }),
+            },
           },
-        },
+        });
       });
     }
+    console.log("총 생성된 예약 : ", countSum);
+    // if (!loading && selectedPatient?.id) {
+    //   const {
+    //     startDateYear,
+    //     startDateMonth,
+    //     startDateDate,
+    //     startDateHours,
+    //     startDateMinutes,
+    //     memo,
+    //     therapistId,
+    //   } = getValues();
+    //   const startDate = getDateFromYMDHM(
+    //     startDateYear,
+    //     startDateMonth,
+    //     startDateDate,
+    //     startDateHours,
+    //     startDateMinutes
+    //   );
+    //   const endDate = new Date(startDate);
+    //   // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
+    //   endDate.setMinutes(endDate.getMinutes() + totalPrescription.minute);
+    //   createReservationMutation({
+    //     variables: {
+    //       input: {
+    //         startDate: startDate,
+    //         endDate,
+    //         memo,
+    // patientId: selectedPatient.id,
+    //         therapistId: +therapistId!,
+    //         groupId: selectedGroup?.id,
+    //         prescriptionOptionIds: totalPrescription.options,
+    //         prescriptionBundleIds: totalPrescription.bundles,
+    //       },
+    //     },
+    //   });
+    // }
   };
   const groupLists = useReactiveVar(groupListsVar);
 
