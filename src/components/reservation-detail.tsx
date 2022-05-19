@@ -93,14 +93,14 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
                 reservation: {
                   __typename: reservation?.__typename,
                   endDate: reservation?.endDate,
-                  group: reservation?.group,
+                  clinic: reservation?.clinic,
                   id: reservation?.id,
                   lastModifier: reservation?.lastModifier,
                   memo: reservation?.memo,
                   patient: reservation?.patient,
                   startDate: reservation?.startDate,
                   state,
-                  therapist: reservation?.therapist,
+                  user: reservation?.user,
                 },
               },
             },
@@ -131,14 +131,14 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
                 reservation: {
                   __typename: reservation?.__typename,
                   endDate: reservation?.endDate,
-                  group: reservation?.group,
+                  clinic: reservation?.clinic,
                   id: reservation?.id,
                   lastModifier: reservation?.lastModifier,
                   memo: reservation?.memo,
                   patient: reservation?.patient,
                   startDate: reservation?.startDate,
                   state,
-                  therapist: reservation?.therapist,
+                  user: reservation?.user,
                 },
               },
             },
@@ -269,11 +269,11 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
                 </div>
                 <div>
                   <h4 className="text-sm text-gray-500">치료사</h4>
-                  <span>{reservation.therapist.email}</span>
+                  <span>{reservation.user.email}</span>
                 </div>
                 <div>
                   <h4 className="text-sm text-gray-500">그룹</h4>
-                  <span>{reservation.group?.name}</span>
+                  <span>{reservation.clinic?.name}</span>
                 </div>
                 <div>
                   <h4 className="text-sm text-gray-500">메모</h4>

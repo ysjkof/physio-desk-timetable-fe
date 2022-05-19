@@ -7,7 +7,7 @@ import {
   useListReservationsQuery,
 } from "../graphql/generated/graphql";
 import { useReactiveVar } from "@apollo/client";
-import { groupListsVar, selectedGroupVar, todayNowVar } from "../store";
+import { clinicListsVar, selectedClinicVar, todayNowVar } from "../store";
 import { useMe } from "../hooks/useMe";
 import { getEnddate, getStartSunday } from "../libs/timetable-utils";
 
@@ -17,9 +17,9 @@ export interface PrescriptionWithSelect extends Prescription {
 
 export const TimeTable = () => {
   const today = useReactiveVar(todayNowVar);
-  const selectedGroup = useReactiveVar(selectedGroupVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const groupLists = useReactiveVar(groupListsVar);
+  const clinicLists = useReactiveVar(clinicListsVar);
   const { data: meData, loading } = useMe();
 
   const { data, loading: loadingListReserv } = useListReservationsQuery({
@@ -27,12 +27,12 @@ export const TimeTable = () => {
       input: {
         startDate: getStartSunday(selectedDate),
         endDate: getEnddate(getStartSunday(selectedDate), 7),
-        ...(selectedGroup.id !== 0 && {
-          userIds: groupLists
-            .find((g) => g.id === selectedGroup.id)
+        ...(selectedClinic.id !== 0 && {
+          userIds: clinicLists
+            .find((g) => g.id === selectedClinic.id)
             ?.members.filter((m) => m.activation)
             .map((m) => m.id),
-          groupId: selectedGroup.id,
+          clinicId: selectedClinic.id,
         }),
       },
     },
@@ -41,7 +41,7 @@ export const TimeTable = () => {
     variables: {
       input: {
         includeInactivate: false,
-        groupId: selectedGroup.id,
+        clinicId: selectedClinic.id,
       },
     },
   });

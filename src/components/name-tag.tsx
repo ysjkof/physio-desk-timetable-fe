@@ -1,20 +1,12 @@
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CreatePatientInput } from "../graphql/generated/graphql";
 import { getYMD } from "../libs/timetable-utils";
 import { cls } from "../libs/utils";
-import { selectedPatientVar } from "../store";
+import { SelectedPatient, selectedPatientVar } from "../store";
 
-export interface INameTagProps
-  extends Pick<
-    CreatePatientInput,
-    "name" | "gender" | "registrationNumber" | "birthday"
-  > {
-  id: number;
-  groupName: string;
+export interface INameTagProps extends SelectedPatient {
   canClick?: boolean;
   shrink?: boolean;
-  therapist?: { id: number; name: string };
 }
 
 export const NameTag = ({
@@ -23,10 +15,10 @@ export const NameTag = ({
   name,
   registrationNumber,
   birthday,
-  groupName,
+  clinicName,
   canClick = false,
   shrink = false,
-  therapist,
+  user,
 }: INameTagProps) => {
   const onClick = () =>
     selectedPatientVar({
@@ -35,8 +27,8 @@ export const NameTag = ({
       name,
       registrationNumber,
       birthday,
-      groupName,
-      therapist,
+      clinicName,
+      user,
     });
   return (
     <div onClick={canClick ? onClick : undefined}>
@@ -83,10 +75,10 @@ export const NameTag = ({
           </>
         )}
       </div>
-      {groupName && <span className="px-6 text-sm">{groupName}</span>}
+      {clinicName && <span className="px-6 text-sm">{clinicName}</span>}
       {/* 마지막 치료한 치료사 */}
 
-      <span>{therapist?.name}</span>
+      <span>{user?.name}</span>
     </div>
   );
 };

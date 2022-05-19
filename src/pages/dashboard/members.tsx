@@ -18,7 +18,7 @@ export const Members = ({
       acceptInvitation({
         variables: {
           input: {
-            groupId: id,
+            clinicId: id,
           },
         },
       });

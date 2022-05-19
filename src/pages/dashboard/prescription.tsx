@@ -3,7 +3,7 @@ import {
   faCircleQuestion,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { InputPriscription } from "./components/input-priscription";
 import {
@@ -38,7 +38,7 @@ export const PrescriptionPage = ({
       variables: {
         input: {
           includeInactivate: false,
-          groupId: id,
+          clinicId: id,
         },
       },
     });
@@ -78,7 +78,7 @@ export const PrescriptionPage = ({
             price: +price,
             description,
             prescriptionAtomIds,
-            ...(id && { groupId: id }),
+            ...(id && { clinicId: id }),
           },
         },
       });
@@ -113,7 +113,6 @@ export const PrescriptionPage = ({
       <div className="space-y-16">
         <section className="flex h-[15.7rem] gap-4">
           <DashboardSectionLayout
-            title="단일처방"
             isPadding={true}
             children={
               <>

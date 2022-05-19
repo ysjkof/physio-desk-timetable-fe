@@ -10,7 +10,7 @@ query findAllPatients($input: FindAllPatientsInput!) {
       gender
       registrationNumber
       birthday
-      group {
+      clinic {
         name
       }
     }

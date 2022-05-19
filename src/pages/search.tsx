@@ -48,7 +48,7 @@ export const Search = () => {
                 birthday={patient.birthday}
                 onClick={() => onClick(patient.id)}
               />
-              {patient.group ? patient.group.name : "---"}
+              {patient.clinic ? patient.clinic.name : "---"}
             </Fragment>
           ))}
         </div>

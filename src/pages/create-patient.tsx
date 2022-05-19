@@ -11,14 +11,14 @@ import { Input } from "../components/input";
 import { selectedPatientVar } from "../store";
 
 interface CreatePatientProps {
-  groupId?: number;
-  groupName?: string;
+  clinicId?: number;
+  clinicName?: string;
   closeModal: any;
 }
 
 export const CreatePatient = ({
-  groupId,
-  groupName,
+  clinicId,
+  clinicName,
   closeModal,
 }: CreatePatientProps) => {
   const {
@@ -42,7 +42,7 @@ export const CreatePatient = ({
         registrationNumber: patient?.registrationNumber,
         birthday: patient?.birthday,
         id: patient?.id!,
-        groupName: groupName ?? "",
+        clinicName: clinicName ?? "",
       });
     }
   };
@@ -61,7 +61,7 @@ export const CreatePatient = ({
             registrationNumber,
             birthday,
             memo,
-            ...(groupId && { groupId }),
+            ...(clinicId && { clinicId }),
           },
         },
       });

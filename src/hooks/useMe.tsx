@@ -1,6 +1,6 @@
 import {
-  Group,
-  GroupMember,
+  Clinic,
+  Member,
   Notice,
   useMeQuery,
   User,
@@ -11,13 +11,13 @@ export const useMe = () => {
   return useMeQuery();
 };
 
-interface ModifiedGroupMemberWithGroup
-  extends Pick<GroupMember, "id" | "staying" | "manager" | "accepted"> {
-  group: Pick<Group, "id" | "name">;
+interface ModifiedClinicMemberWithClinic
+  extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
+  clinic: Pick<Clinic, "id" | "name">;
 }
 interface ModifiedNotice extends Pick<Notice, "message" | "read"> {}
 export interface ModifiedLoggedInUser
   extends Pick<User, "id" | "name" | "email" | "role" | "verified"> {
-  groups?: ModifiedGroupMemberWithGroup[] | null;
+  clinics?: ModifiedClinicMemberWithClinic[] | null;
   notice?: ModifiedNotice[] | null;
 }

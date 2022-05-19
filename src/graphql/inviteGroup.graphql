@@ -1,5 +1,5 @@
-mutation inviteGroup($input: InviteGroupInput!) {
-  inviteGroup(input: $input) {
+mutation inviteClinic($input: InviteClinicInput!) {
+  inviteClinic(input: $input) {
     ok
     error
   }

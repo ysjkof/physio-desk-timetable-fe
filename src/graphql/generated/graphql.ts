@@ -1,16 +1,10 @@
-import { gql } from "@apollo/client";
-import * as Apollo from "@apollo/client";
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -24,359 +18,358 @@ export type Scalars = {
 };
 
 export type AcceptInvitationInput = {
-  groupId: Scalars["Int"];
+  clinicId: Scalars['Int'];
 };
 
 export type AcceptInvitationOutput = {
-  __typename?: "AcceptInvitationOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'AcceptInvitationOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
+export type Clinic = {
+  __typename?: 'Clinic';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Float'];
+  isActivated: Scalars['Boolean'];
+  members: Array<Member>;
+  name: Scalars['String'];
+  patient?: Maybe<Array<Patient>>;
+  prescriptions: Array<Prescription>;
+  reservations?: Maybe<Array<Reservation>>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type CreateAccountInput = {
-  email: Scalars["String"];
-  name: Scalars["String"];
-  password: Scalars["String"];
+  email: Scalars['String'];
+  name: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type CreateAccountOutput = {
-  __typename?: "CreateAccountOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'CreateAccountOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type CreateAtomPrescriptionInput = {
-  name: Scalars["String"];
+  name: Scalars['String'];
 };
 
 export type CreateAtomPrescriptionOutput = {
-  __typename?: "CreateAtomPrescriptionOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'CreateAtomPrescriptionOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
-export type CreateGroupInput = {
-  name: Scalars["String"];
+export type CreateClinicInput = {
+  name: Scalars['String'];
 };
 
-export type CreateGroupOutput = {
-  __typename?: "CreateGroupOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+export type CreateClinicOutput = {
+  __typename?: 'CreateClinicOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type CreatePatientInput = {
-  birthday?: InputMaybe<Scalars["DateTime"]>;
-  gender?: InputMaybe<Scalars["String"]>;
-  groupId?: InputMaybe<Scalars["Int"]>;
-  memo?: InputMaybe<Scalars["String"]>;
-  name?: InputMaybe<Scalars["String"]>;
-  registrationNumber?: InputMaybe<Scalars["String"]>;
+  birthday?: InputMaybe<Scalars['DateTime']>;
+  clinicId?: InputMaybe<Scalars['Int']>;
+  gender?: InputMaybe<Scalars['String']>;
+  memo?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  registrationNumber?: InputMaybe<Scalars['String']>;
 };
 
 export type CreatePatientOutput = {
-  __typename?: "CreatePatientOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'CreatePatientOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   patient?: Maybe<Patient>;
 };
 
 export type CreatePrescriptionInput = {
-  description?: InputMaybe<Scalars["String"]>;
-  groupId?: InputMaybe<Scalars["Int"]>;
-  name: Scalars["String"];
-  prescriptionAtomIds?: InputMaybe<Array<Scalars["Int"]>>;
-  price: Scalars["Int"];
-  requiredTime: Scalars["Int"];
+  clinicId?: InputMaybe<Scalars['Int']>;
+  description?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  prescriptionAtomIds?: InputMaybe<Array<Scalars['Int']>>;
+  price: Scalars['Int'];
+  requiredTime: Scalars['Int'];
 };
 
 export type CreatePrescriptionOutput = {
-  __typename?: "CreatePrescriptionOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'CreatePrescriptionOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type CreateReservationInput = {
-  endDate: Scalars["DateTime"];
-  groupId?: InputMaybe<Scalars["Float"]>;
-  memo?: InputMaybe<Scalars["String"]>;
-  patientId: Scalars["Float"];
-  prescriptionIds?: InputMaybe<Array<Scalars["Float"]>>;
-  startDate: Scalars["DateTime"];
-  therapistId?: InputMaybe<Scalars["Float"]>;
+  clinicId?: InputMaybe<Scalars['Float']>;
+  endDate: Scalars['DateTime'];
+  memo?: InputMaybe<Scalars['String']>;
+  patientId: Scalars['Float'];
+  prescriptionIds?: InputMaybe<Array<Scalars['Float']>>;
+  startDate: Scalars['DateTime'];
+  userId?: InputMaybe<Scalars['Float']>;
 };
 
 export type CreateReservationOutput = {
-  __typename?: "CreateReservationOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'CreateReservationOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   reservation?: Maybe<Reservation>;
 };
 
 export type DayCount = {
-  __typename?: "DayCount";
-  date: Scalars["DateTime"];
+  __typename?: 'DayCount';
+  date: Scalars['DateTime'];
   prescriptions: Array<PrescriptionStatistics>;
 };
 
 export type DeletePatientInput = {
-  patientId: Scalars["Float"];
+  patientId: Scalars['Float'];
 };
 
 export type DeletePatientOutput = {
-  __typename?: "DeletePatientOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'DeletePatientOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type DeleteReservationInput = {
-  reservationId: Scalars["Int"];
+  reservationId: Scalars['Int'];
 };
 
 export type DeleteReservationOutput = {
-  __typename?: "DeleteReservationOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'DeleteReservationOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type EditPatientInput = {
-  birthday?: InputMaybe<Scalars["DateTime"]>;
-  gender?: InputMaybe<Scalars["String"]>;
-  groupId?: InputMaybe<Scalars["Int"]>;
-  memo?: InputMaybe<Scalars["String"]>;
-  name?: InputMaybe<Scalars["String"]>;
-  registrationNumber?: InputMaybe<Scalars["String"]>;
+  birthday?: InputMaybe<Scalars['DateTime']>;
+  clinicId?: InputMaybe<Scalars['Int']>;
+  gender?: InputMaybe<Scalars['String']>;
+  memo?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  registrationNumber?: InputMaybe<Scalars['String']>;
 };
 
 export type EditPatientOutput = {
-  __typename?: "EditPatientOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'EditPatientOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type EditProfileInput = {
-  email?: InputMaybe<Scalars["String"]>;
-  name?: InputMaybe<Scalars["String"]>;
-  password?: InputMaybe<Scalars["String"]>;
+  email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 export type EditProfileOutput = {
-  __typename?: "EditProfileOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'EditProfileOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type EditReservationInput = {
-  endDate?: InputMaybe<Scalars["DateTime"]>;
-  groupId?: InputMaybe<Scalars["Int"]>;
-  memo?: InputMaybe<Scalars["String"]>;
-  reservationId: Scalars["Int"];
-  startDate?: InputMaybe<Scalars["DateTime"]>;
+  clinicId?: InputMaybe<Scalars['Int']>;
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  memo?: InputMaybe<Scalars['String']>;
+  reservationId: Scalars['Int'];
+  startDate?: InputMaybe<Scalars['DateTime']>;
   state?: InputMaybe<ReservationState>;
 };
 
 export type EditReservationOutput = {
-  __typename?: "EditReservationOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'EditReservationOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type FindAllPatientsInput = {
-  page?: InputMaybe<Scalars["Int"]>;
+  page?: InputMaybe<Scalars['Int']>;
 };
 
 export type FindAllPatientsOutput = {
-  __typename?: "FindAllPatientsOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'FindAllPatientsOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   results?: Maybe<Array<Patient>>;
-  totalCount?: Maybe<Scalars["Int"]>;
-  totalPages?: Maybe<Scalars["Int"]>;
+  totalCount?: Maybe<Scalars['Int']>;
+  totalPages?: Maybe<Scalars['Int']>;
 };
 
 export type FindAtomPrescriptionsOutput = {
-  __typename?: "FindAtomPrescriptionsOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'FindAtomPrescriptionsOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   results?: Maybe<Array<PrescriptionAtom>>;
 };
 
-export type FindGroupByIdInput = {
-  groupId: Scalars["Int"];
+export type FindClinicByIdInput = {
+  clinicId: Scalars['Int'];
 };
 
-export type FindGroupByIdOutput = {
-  __typename?: "FindGroupByIdOutput";
-  error?: Maybe<Scalars["String"]>;
-  group?: Maybe<Group>;
-  ok: Scalars["Boolean"];
+export type FindClinicByIdOutput = {
+  __typename?: 'FindClinicByIdOutput';
+  clinic?: Maybe<Clinic>;
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
-export type FindMyGroupsInput = {
-  includeField: Scalars["String"];
+export type FindMyClinicsInput = {
+  includeField: Scalars['String'];
 };
 
-export type FindMyGroupsOutput = {
-  __typename?: "FindMyGroupsOutput";
-  error?: Maybe<Scalars["String"]>;
-  groups?: Maybe<Array<Group>>;
-  ok: Scalars["Boolean"];
+export type FindMyClinicsOutput = {
+  __typename?: 'FindMyClinicsOutput';
+  clinics?: Maybe<Array<Clinic>>;
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type FindPatientByIdInput = {
-  patientId: Scalars["Int"];
+  patientId: Scalars['Int'];
 };
 
 export type FindPatientByIdOutput = {
-  __typename?: "FindPatientByIdOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'FindPatientByIdOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   patient?: Maybe<Patient>;
 };
 
 export type FindPrescriptionsInput = {
-  groupId?: InputMaybe<Scalars["Int"]>;
-  includeInactivate: Scalars["Boolean"];
+  clinicId?: InputMaybe<Scalars['Int']>;
+  includeInactivate: Scalars['Boolean'];
 };
 
 export type FindPrescriptionsOutput = {
-  __typename?: "FindPrescriptionsOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'FindPrescriptionsOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   prescriptions?: Maybe<Array<Prescription>>;
 };
 
 export type FindReservationByIdInput = {
-  reservationId: Scalars["Int"];
+  reservationId: Scalars['Int'];
 };
 
 export type FindReservationByIdOutput = {
-  __typename?: "FindReservationByIdOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'FindReservationByIdOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   reservation?: Maybe<Reservation>;
 };
 
 export type FindReservationByPatientInput = {
-  groupId?: InputMaybe<Scalars["Int"]>;
-  page?: InputMaybe<Scalars["Int"]>;
-  patientId?: InputMaybe<Scalars["Int"]>;
+  clinicId?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  patientId?: InputMaybe<Scalars['Int']>;
 };
 
 export type FindReservationByPatientOutput = {
-  __typename?: "FindReservationByPatientOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'FindReservationByPatientOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   results?: Maybe<Array<Reservation>>;
-  totalCount?: Maybe<Scalars["Int"]>;
-  totalPages?: Maybe<Scalars["Int"]>;
+  totalCount?: Maybe<Scalars['Int']>;
+  totalPages?: Maybe<Scalars['Int']>;
 };
 
 export type GetStatisticsInput = {
-  endDate: Scalars["DateTime"];
-  groupId?: InputMaybe<Scalars["Int"]>;
-  prescIds?: InputMaybe<Array<Scalars["Int"]>>;
-  startDate: Scalars["DateTime"];
-  userIds?: InputMaybe<Array<Scalars["Int"]>>;
+  clinicId?: InputMaybe<Scalars['Int']>;
+  endDate: Scalars['DateTime'];
+  prescIds?: InputMaybe<Array<Scalars['Int']>>;
+  startDate: Scalars['DateTime'];
+  userIds?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type GetStatisticsOutput = {
-  __typename?: "GetStatisticsOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'GetStatisticsOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   results?: Maybe<Array<StatisticsRsult>>;
 };
 
-export type Group = {
-  __typename?: "Group";
-  activate: Scalars["Boolean"];
-  createdAt?: Maybe<Scalars["DateTime"]>;
-  id: Scalars["Float"];
-  members: Array<GroupMember>;
-  name: Scalars["String"];
-  patient?: Maybe<Array<Patient>>;
-  prescriptions: Array<Prescription>;
-  reservations?: Maybe<Array<Reservation>>;
-  updatedAt?: Maybe<Scalars["DateTime"]>;
+export type InactivateClinicInput = {
+  clinicId: Scalars['Int'];
 };
 
-export type GroupMember = {
-  __typename?: "GroupMember";
-  accepted: Scalars["Boolean"];
-  createdAt?: Maybe<Scalars["DateTime"]>;
-  group: Group;
-  groupId: Scalars["Int"];
-  id: Scalars["Float"];
-  manager: Scalars["Boolean"];
-  staying: Scalars["Boolean"];
-  updatedAt?: Maybe<Scalars["DateTime"]>;
-  user: User;
+export type InactivateClinicOutput = {
+  __typename?: 'InactivateClinicOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
-export type InactivateGroupInput = {
-  groupId: Scalars["Int"];
+export type InviteClinicInput = {
+  clinicId: Scalars['Int'];
+  userIds: Array<Scalars['Int']>;
 };
 
-export type InactivateGroupOutput = {
-  __typename?: "InactivateGroupOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+export type InviteClinicOutput = {
+  __typename?: 'InviteClinicOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
-export type InviteGroupInput = {
-  groupId: Scalars["Int"];
-  userIds: Array<Scalars["Int"]>;
+export type LeaveClinicInput = {
+  clinicId: Scalars['Int'];
 };
 
-export type InviteGroupOutput = {
-  __typename?: "InviteGroupOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
-};
-
-export type LeaveGroupInput = {
-  groupId: Scalars["Int"];
-};
-
-export type LeaveGroupOutput = {
-  __typename?: "LeaveGroupOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+export type LeaveClinicOutput = {
+  __typename?: 'LeaveClinicOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type ListReservationsInput = {
-  endDate: Scalars["DateTime"];
-  groupId?: InputMaybe<Scalars["Int"]>;
-  startDate: Scalars["DateTime"];
-  userIds?: InputMaybe<Array<Scalars["Int"]>>;
+  clinicId?: InputMaybe<Scalars['Int']>;
+  endDate: Scalars['DateTime'];
+  startDate: Scalars['DateTime'];
+  userIds?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export type ListReservationsOutput = {
-  __typename?: "ListReservationsOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'ListReservationsOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   results?: Maybe<Array<Reservation>>;
-  totalCount?: Maybe<Scalars["Int"]>;
+  totalCount?: Maybe<Scalars['Int']>;
 };
 
 export type LoginInput = {
-  email: Scalars["String"];
-  password: Scalars["String"];
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type LoginOutput = {
-  __typename?: "LoginOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
-  token?: Maybe<Scalars["String"]>;
+  __typename?: 'LoginOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  token?: Maybe<Scalars['String']>;
+};
+
+export type Member = {
+  __typename?: 'Member';
+  accepted: Scalars['Boolean'];
+  clinic: Clinic;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Float'];
+  manager: Scalars['Boolean'];
+  staying: Scalars['Boolean'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user: User;
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   acceptInvitation: AcceptInvitationOutput;
   createAccount: CreateAccountOutput;
   createAtomPrescription: CreateAtomPrescriptionOutput;
-  createGroup: CreateGroupOutput;
+  createClinic: CreateClinicOutput;
   createPatient: CreatePatientOutput;
   createPrescription: CreatePrescriptionOutput;
   createReservation: CreateReservationOutput;
@@ -385,138 +378,154 @@ export type Mutation = {
   editPatient: EditPatientOutput;
   editProfile: EditProfileOutput;
   editReservation: EditReservationOutput;
-  inactivateGroup: InactivateGroupOutput;
-  inviteGroup: InviteGroupOutput;
-  leaveGroup: LeaveGroupOutput;
+  inactivateClinic: InactivateClinicOutput;
+  inviteClinic: InviteClinicOutput;
+  leaveClinic: LeaveClinicOutput;
   login: LoginOutput;
   verifyEmail: VerifyEmailOutput;
 };
+
 
 export type MutationAcceptInvitationArgs = {
   input: AcceptInvitationInput;
 };
 
+
 export type MutationCreateAccountArgs = {
   input: CreateAccountInput;
 };
+
 
 export type MutationCreateAtomPrescriptionArgs = {
   input: CreateAtomPrescriptionInput;
 };
 
-export type MutationCreateGroupArgs = {
-  input: CreateGroupInput;
+
+export type MutationCreateClinicArgs = {
+  input: CreateClinicInput;
 };
+
 
 export type MutationCreatePatientArgs = {
   input: CreatePatientInput;
 };
 
+
 export type MutationCreatePrescriptionArgs = {
   input: CreatePrescriptionInput;
 };
+
 
 export type MutationCreateReservationArgs = {
   input: CreateReservationInput;
 };
 
+
 export type MutationDeletePatientArgs = {
   input: DeletePatientInput;
 };
+
 
 export type MutationDeleteReservationArgs = {
   input: DeleteReservationInput;
 };
 
+
 export type MutationEditPatientArgs = {
   input: EditPatientInput;
 };
+
 
 export type MutationEditProfileArgs = {
   input: EditProfileInput;
 };
 
+
 export type MutationEditReservationArgs = {
   input: EditReservationInput;
 };
 
-export type MutationInactivateGroupArgs = {
-  input: InactivateGroupInput;
+
+export type MutationInactivateClinicArgs = {
+  input: InactivateClinicInput;
 };
 
-export type MutationInviteGroupArgs = {
-  input: InviteGroupInput;
+
+export type MutationInviteClinicArgs = {
+  input: InviteClinicInput;
 };
 
-export type MutationLeaveGroupArgs = {
-  input: LeaveGroupInput;
+
+export type MutationLeaveClinicArgs = {
+  input: LeaveClinicInput;
 };
+
 
 export type MutationLoginArgs = {
   input: LoginInput;
 };
+
 
 export type MutationVerifyEmailArgs = {
   input: VerifyEmailInput;
 };
 
 export type Notice = {
-  __typename?: "Notice";
-  createdAt?: Maybe<Scalars["DateTime"]>;
-  id: Scalars["Float"];
-  message: Scalars["String"];
-  read: Scalars["Boolean"];
-  updatedAt?: Maybe<Scalars["DateTime"]>;
+  __typename?: 'Notice';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Float'];
+  message: Scalars['String'];
+  read: Scalars['Boolean'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type Patient = {
-  __typename?: "Patient";
-  birthday?: Maybe<Scalars["DateTime"]>;
-  createdAt?: Maybe<Scalars["DateTime"]>;
-  gender: Scalars["String"];
-  group?: Maybe<Group>;
-  groupId: Scalars["Int"];
-  id: Scalars["Float"];
-  memo?: Maybe<Scalars["String"]>;
-  name: Scalars["String"];
-  registrationNumber?: Maybe<Scalars["String"]>;
-  therapists: Array<User>;
-  updatedAt?: Maybe<Scalars["DateTime"]>;
+  __typename?: 'Patient';
+  birthday?: Maybe<Scalars['DateTime']>;
+  clinic?: Maybe<Clinic>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  gender: Scalars['String'];
+  id: Scalars['Float'];
+  memo?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  registrationNumber?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  users: Array<User>;
 };
 
 export type Prescription = {
-  __typename?: "Prescription";
-  activate: Scalars["Boolean"];
-  createdAt?: Maybe<Scalars["DateTime"]>;
-  description?: Maybe<Scalars["String"]>;
-  id: Scalars["Float"];
-  name: Scalars["String"];
+  __typename?: 'Prescription';
+  activate: Scalars['Boolean'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  name: Scalars['String'];
   prescriptionAtoms?: Maybe<Array<PrescriptionAtom>>;
-  price: Scalars["Int"];
-  requiredTime: Scalars["Int"];
-  updatedAt?: Maybe<Scalars["DateTime"]>;
+  price: Scalars['Int'];
+  requiredTime: Scalars['Int'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type PrescriptionAtom = {
-  __typename?: "PrescriptionAtom";
-  createdAt?: Maybe<Scalars["DateTime"]>;
-  id: Scalars["Float"];
-  name: Scalars["String"];
-  updatedAt?: Maybe<Scalars["DateTime"]>;
+  __typename?: 'PrescriptionAtom';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type PrescriptionStatistics = {
-  __typename?: "PrescriptionStatistics";
-  count: Scalars["Int"];
-  name: Scalars["String"];
+  __typename?: 'PrescriptionStatistics';
+  count: Scalars['Int'];
+  name: Scalars['String'];
 };
 
 export type Query = {
-  __typename?: "Query";
+  __typename?: 'Query';
   findAllPatients: FindAllPatientsOutput;
   findAtomPrescriptions: FindAtomPrescriptionsOutput;
-  findGroupById: FindGroupByIdOutput;
-  findMyGroups: FindMyGroupsOutput;
+  findClinicById: FindClinicByIdOutput;
+  findMyClinics: FindMyClinicsOutput;
   findPatientById: FindPatientByIdOutput;
   findPrescriptions: FindPrescriptionsOutput;
   findReservationById: FindReservationByIdOutput;
@@ -529,686 +538,348 @@ export type Query = {
   userProfile: UserProfileOutput;
 };
 
+
 export type QueryFindAllPatientsArgs = {
   input: FindAllPatientsInput;
 };
 
-export type QueryFindGroupByIdArgs = {
-  input: FindGroupByIdInput;
+
+export type QueryFindClinicByIdArgs = {
+  input: FindClinicByIdInput;
 };
 
-export type QueryFindMyGroupsArgs = {
-  input: FindMyGroupsInput;
+
+export type QueryFindMyClinicsArgs = {
+  input: FindMyClinicsInput;
 };
+
 
 export type QueryFindPatientByIdArgs = {
   input: FindPatientByIdInput;
 };
 
+
 export type QueryFindPrescriptionsArgs = {
   input: FindPrescriptionsInput;
 };
+
 
 export type QueryFindReservationByIdArgs = {
   input: FindReservationByIdInput;
 };
 
+
 export type QueryFindReservationByPatientArgs = {
   input: FindReservationByPatientInput;
 };
+
 
 export type QueryGetStatisticsArgs = {
   input: GetStatisticsInput;
 };
 
+
 export type QueryListReservationsArgs = {
   input: ListReservationsInput;
 };
+
 
 export type QuerySearchPatientByNameArgs = {
   input: SearchPatientInput;
 };
 
+
 export type QuerySearchUsersByNameArgs = {
   input: SearchUsersByNameInput;
 };
 
+
 export type QueryUserProfileArgs = {
-  userId: Scalars["Float"];
+  userId: Scalars['Float'];
 };
 
 export type Reservation = {
-  __typename?: "Reservation";
-  createdAt?: Maybe<Scalars["DateTime"]>;
-  endDate: Scalars["DateTime"];
-  group?: Maybe<Group>;
-  id: Scalars["Float"];
+  __typename?: 'Reservation';
+  clinic?: Maybe<Clinic>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  endDate: Scalars['DateTime'];
+  id: Scalars['Float'];
   lastModifier?: Maybe<User>;
-  memo?: Maybe<Scalars["String"]>;
+  memo?: Maybe<Scalars['String']>;
   patient: Patient;
   prescriptions?: Maybe<Array<Prescription>>;
-  startDate: Scalars["DateTime"];
+  startDate: Scalars['DateTime'];
   state: ReservationState;
-  therapist: User;
-  updatedAt?: Maybe<Scalars["DateTime"]>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user: User;
 };
 
 export enum ReservationState {
-  Canceled = "Canceled",
-  NoShow = "NoShow",
-  Reserved = "Reserved",
+  Canceled = 'Canceled',
+  NoShow = 'NoShow',
+  Reserved = 'Reserved'
 }
 
 export type SearchPatientInput = {
-  groupId?: InputMaybe<Scalars["Int"]>;
-  page?: InputMaybe<Scalars["Int"]>;
-  query: Scalars["String"];
+  clinicId?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  query: Scalars['String'];
 };
 
 export type SearchPatientOutput = {
-  __typename?: "SearchPatientOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'SearchPatientOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   patients?: Maybe<Array<Patient>>;
-  totalCount?: Maybe<Scalars["Int"]>;
-  totalPages?: Maybe<Scalars["Int"]>;
+  totalCount?: Maybe<Scalars['Int']>;
+  totalPages?: Maybe<Scalars['Int']>;
 };
 
 export type SearchUsersByNameInput = {
-  name: Scalars["String"];
+  name: Scalars['String'];
 };
 
 export type SearchUsersByNameOutput = {
-  __typename?: "SearchUsersByNameOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'SearchUsersByNameOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   results?: Maybe<Array<User>>;
-  totalCount?: Maybe<Scalars["Int"]>;
+  totalCount?: Maybe<Scalars['Int']>;
 };
 
 export type StatisticsRsult = {
-  __typename?: "StatisticsRsult";
+  __typename?: 'StatisticsRsult';
   statistics: Array<DayCount>;
-  userName: Scalars["String"];
+  userName: Scalars['String'];
 };
 
 export type User = {
-  __typename?: "User";
-  createdAt?: Maybe<Scalars["DateTime"]>;
-  email: Scalars["String"];
-  groups?: Maybe<Array<GroupMember>>;
-  id: Scalars["Float"];
-  name: Scalars["String"];
+  __typename?: 'User';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  email: Scalars['String'];
+  id: Scalars['Float'];
+  members?: Maybe<Array<Member>>;
+  name: Scalars['String'];
   notice?: Maybe<Array<Notice>>;
-  password: Scalars["String"];
+  password: Scalars['String'];
   prescriptions: Array<Prescription>;
   role: UserRole;
-  updatedAt?: Maybe<Scalars["DateTime"]>;
-  verified: Scalars["Boolean"];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  verified: Scalars['Boolean'];
 };
 
 export type UserProfileOutput = {
-  __typename?: "UserProfileOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'UserProfileOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
   user?: Maybe<User>;
 };
 
 export enum UserRole {
-  Client = "Client",
-  Customer = "Customer",
-  TopAdmin = "TopAdmin",
+  Client = 'Client',
+  Customer = 'Customer',
+  Therapist = 'Therapist',
+  TopAdmin = 'TopAdmin'
 }
 
 export type VerifyEmailInput = {
-  code: Scalars["String"];
+  code: Scalars['String'];
 };
 
 export type VerifyEmailOutput = {
-  __typename?: "VerifyEmailOutput";
-  error?: Maybe<Scalars["String"]>;
-  ok: Scalars["Boolean"];
+  __typename?: 'VerifyEmailOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type AcceptInvitationMutationVariables = Exact<{
   input: AcceptInvitationInput;
 }>;
 
-export type AcceptInvitationMutation = {
-  __typename?: "Mutation";
-  acceptInvitation: {
-    __typename?: "AcceptInvitationOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
 
-export type InactivateGroupMutationVariables = Exact<{
-  input: InactivateGroupInput;
+export type AcceptInvitationMutation = { __typename?: 'Mutation', acceptInvitation: { __typename?: 'AcceptInvitationOutput', ok: boolean, error?: string | null } };
+
+export type InactivateClinicMutationVariables = Exact<{
+  input: InactivateClinicInput;
 }>;
 
-export type InactivateGroupMutation = {
-  __typename?: "Mutation";
-  inactivateGroup: {
-    __typename?: "InactivateGroupOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
+
+export type InactivateClinicMutation = { __typename?: 'Mutation', inactivateClinic: { __typename?: 'InactivateClinicOutput', ok: boolean, error?: string | null } };
 
 export type CreateAccountMutationVariables = Exact<{
   input: CreateAccountInput;
 }>;
 
-export type CreateAccountMutation = {
-  __typename?: "Mutation";
-  createAccount: {
-    __typename?: "CreateAccountOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
 
-export type CreateGroupMutationVariables = Exact<{
-  input: CreateGroupInput;
+export type CreateAccountMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'CreateAccountOutput', ok: boolean, error?: string | null } };
+
+export type CreateClinicMutationVariables = Exact<{
+  input: CreateClinicInput;
 }>;
 
-export type CreateGroupMutation = {
-  __typename?: "Mutation";
-  createGroup: {
-    __typename?: "CreateGroupOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
+
+export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null } };
 
 export type CreatePatientMutationVariables = Exact<{
   input: CreatePatientInput;
 }>;
 
-export type CreatePatientMutation = {
-  __typename?: "Mutation";
-  createPatient: {
-    __typename?: "CreatePatientOutput";
-    ok: boolean;
-    error?: string | null;
-    patient?: {
-      __typename?: "Patient";
-      id: number;
-      name: string;
-      gender: string;
-      registrationNumber?: string | null;
-      birthday?: any | null;
-      memo?: string | null;
-    } | null;
-  };
-};
+
+export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
 
 export type CreatePrescriptionMutationVariables = Exact<{
   input: CreatePrescriptionInput;
 }>;
 
-export type CreatePrescriptionMutation = {
-  __typename?: "Mutation";
-  createPrescription: {
-    __typename?: "CreatePrescriptionOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
+
+export type CreatePrescriptionMutation = { __typename?: 'Mutation', createPrescription: { __typename?: 'CreatePrescriptionOutput', ok: boolean, error?: string | null } };
 
 export type CreateReservationMutationVariables = Exact<{
   input: CreateReservationInput;
 }>;
 
-export type CreateReservationMutation = {
-  __typename?: "Mutation";
-  createReservation: {
-    __typename?: "CreateReservationOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
+
+export type CreateReservationMutation = { __typename?: 'Mutation', createReservation: { __typename?: 'CreateReservationOutput', ok: boolean, error?: string | null } };
 
 export type DeleteReservationMutationVariables = Exact<{
   input: DeleteReservationInput;
 }>;
 
-export type DeleteReservationMutation = {
-  __typename?: "Mutation";
-  deleteReservation: {
-    __typename?: "DeleteReservationOutput";
-    error?: string | null;
-    ok: boolean;
-  };
-};
+
+export type DeleteReservationMutation = { __typename?: 'Mutation', deleteReservation: { __typename?: 'DeleteReservationOutput', error?: string | null, ok: boolean } };
 
 export type EditProfileMutationVariables = Exact<{
   input: EditProfileInput;
 }>;
 
-export type EditProfileMutation = {
-  __typename?: "Mutation";
-  editProfile: {
-    __typename?: "EditProfileOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
+
+export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __typename?: 'EditProfileOutput', ok: boolean, error?: string | null } };
 
 export type EditReservationMutationVariables = Exact<{
   input: EditReservationInput;
 }>;
 
-export type EditReservationMutation = {
-  __typename?: "Mutation";
-  editReservation: {
-    __typename?: "EditReservationOutput";
-    error?: string | null;
-    ok: boolean;
-  };
-};
+
+export type EditReservationMutation = { __typename?: 'Mutation', editReservation: { __typename?: 'EditReservationOutput', error?: string | null, ok: boolean } };
 
 export type FindAllPatientsQueryVariables = Exact<{
   input: FindAllPatientsInput;
 }>;
 
-export type FindAllPatientsQuery = {
-  __typename?: "Query";
-  findAllPatients: {
-    __typename?: "FindAllPatientsOutput";
-    ok: boolean;
-    error?: string | null;
-    totalPages?: number | null;
-    totalCount?: number | null;
-    results?: Array<{
-      __typename?: "Patient";
-      id: number;
-      name: string;
-      gender: string;
-      registrationNumber?: string | null;
-      birthday?: any | null;
-      group?: { __typename?: "Group"; name: string } | null;
-    }> | null;
-  };
-};
 
-export type FindAtomPrescriptionsQueryVariables = Exact<{
-  [key: string]: never;
+export type FindAllPatientsQuery = { __typename?: 'Query', findAllPatients: { __typename?: 'FindAllPatientsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, clinic?: { __typename?: 'Clinic', name: string } | null }> | null } };
+
+export type FindAtomPrescriptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAtomPrescriptionsQuery = { __typename?: 'Query', findAtomPrescriptions: { __typename?: 'FindAtomPrescriptionsOutput', ok: boolean, error?: string | null, results?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null } };
+
+export type FindClinicByIdQueryVariables = Exact<{
+  input: FindClinicByIdInput;
 }>;
 
-export type FindAtomPrescriptionsQuery = {
-  __typename?: "Query";
-  findAtomPrescriptions: {
-    __typename?: "FindAtomPrescriptionsOutput";
-    ok: boolean;
-    error?: string | null;
-    results?: Array<{
-      __typename?: "PrescriptionAtom";
-      id: number;
-      name: string;
-    }> | null;
-  };
-};
 
-export type FindGroupByIdQueryVariables = Exact<{
-  input: FindGroupByIdInput;
+export type FindClinicByIdQuery = { __typename?: 'Query', findClinicById: { __typename?: 'FindClinicByIdOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, members: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+
+export type FindMyClinicsQueryVariables = Exact<{
+  input: FindMyClinicsInput;
 }>;
 
-export type FindGroupByIdQuery = {
-  __typename?: "Query";
-  findGroupById: {
-    __typename?: "FindGroupByIdOutput";
-    ok: boolean;
-    error?: string | null;
-    group?: {
-      __typename?: "Group";
-      id: number;
-      name: string;
-      members: Array<{
-        __typename?: "GroupMember";
-        id: number;
-        staying: boolean;
-        manager: boolean;
-        accepted: boolean;
-        user: { __typename?: "User"; id: number; name: string; email: string };
-      }>;
-    } | null;
-  };
-};
 
-export type FindMyGroupsQueryVariables = Exact<{
-  input: FindMyGroupsInput;
-}>;
-
-export type FindMyGroupsQuery = {
-  __typename?: "Query";
-  findMyGroups: {
-    __typename?: "FindMyGroupsOutput";
-    ok: boolean;
-    error?: string | null;
-    groups?: Array<{
-      __typename?: "Group";
-      id: number;
-      name: string;
-      activate: boolean;
-      members: Array<{
-        __typename?: "GroupMember";
-        id: number;
-        staying: boolean;
-        manager: boolean;
-        accepted: boolean;
-        user: { __typename?: "User"; id: number; name: string };
-        group: { __typename?: "Group"; id: number; name: string };
-      }>;
-    }> | null;
-  };
-};
+export type FindMyClinicsQuery = { __typename?: 'Query', findMyClinics: { __typename?: 'FindMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string }, clinic: { __typename?: 'Clinic', id: number, name: string } }> }> | null } };
 
 export type FindPrescriptionsQueryVariables = Exact<{
   input: FindPrescriptionsInput;
 }>;
 
-export type FindPrescriptionsQuery = {
-  __typename?: "Query";
-  findPrescriptions: {
-    __typename?: "FindPrescriptionsOutput";
-    ok: boolean;
-    error?: string | null;
-    prescriptions?: Array<{
-      __typename?: "Prescription";
-      id: number;
-      name: string;
-      requiredTime: number;
-      description?: string | null;
-      price: number;
-      activate: boolean;
-      prescriptionAtoms?: Array<{
-        __typename?: "PrescriptionAtom";
-        id: number;
-        name: string;
-      }> | null;
-    }> | null;
-  };
-};
+
+export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate: boolean, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
 
 export type FindReservationByIdQueryVariables = Exact<{
   input: FindReservationByIdInput;
 }>;
 
-export type FindReservationByIdQuery = {
-  __typename?: "Query";
-  findReservationById: {
-    __typename?: "FindReservationByIdOutput";
-    error?: string | null;
-    ok: boolean;
-    reservation?: {
-      __typename?: "Reservation";
-      id: number;
-      startDate: any;
-      endDate: any;
-      state: ReservationState;
-      memo?: string | null;
-      therapist: {
-        __typename?: "User";
-        id: number;
-        name: string;
-        email: string;
-      };
-      patient: {
-        __typename?: "Patient";
-        id: number;
-        name: string;
-        gender: string;
-        registrationNumber?: string | null;
-        birthday?: any | null;
-      };
-      group?: { __typename?: "Group"; id: number; name: string } | null;
-      lastModifier?: {
-        __typename?: "User";
-        id: number;
-        name: string;
-        email: string;
-      } | null;
-    } | null;
-  };
-};
+
+export type FindReservationByIdQuery = { __typename?: 'Query', findReservationById: { __typename?: 'FindReservationByIdOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string, email: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, lastModifier?: { __typename?: 'User', id: number, name: string, email: string } | null } | null } };
 
 export type GetStatisticsQueryVariables = Exact<{
   input: GetStatisticsInput;
 }>;
 
-export type GetStatisticsQuery = {
-  __typename?: "Query";
-  getStatistics: {
-    __typename?: "GetStatisticsOutput";
-    error?: string | null;
-    ok: boolean;
-    results?: Array<{
-      __typename?: "StatisticsRsult";
-      userName: string;
-      statistics: Array<{
-        __typename?: "DayCount";
-        date: any;
-        prescriptions: Array<{
-          __typename?: "PrescriptionStatistics";
-          name: string;
-          count: number;
-        }>;
-      }>;
-    }> | null;
-  };
-};
 
-export type InviteGroupMutationVariables = Exact<{
-  input: InviteGroupInput;
+export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, results?: Array<{ __typename?: 'StatisticsRsult', userName: string, statistics: Array<{ __typename?: 'DayCount', date: any, prescriptions: Array<{ __typename?: 'PrescriptionStatistics', name: string, count: number }> }> }> | null } };
+
+export type InviteClinicMutationVariables = Exact<{
+  input: InviteClinicInput;
 }>;
 
-export type InviteGroupMutation = {
-  __typename?: "Mutation";
-  inviteGroup: {
-    __typename?: "InviteGroupOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
 
-export type LeaveGroupMutationVariables = Exact<{
-  input: LeaveGroupInput;
+export type InviteClinicMutation = { __typename?: 'Mutation', inviteClinic: { __typename?: 'InviteClinicOutput', ok: boolean, error?: string | null } };
+
+export type LeaveClinicMutationVariables = Exact<{
+  input: LeaveClinicInput;
 }>;
 
-export type LeaveGroupMutation = {
-  __typename?: "Mutation";
-  leaveGroup: {
-    __typename?: "LeaveGroupOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
+
+export type LeaveClinicMutation = { __typename?: 'Mutation', leaveClinic: { __typename?: 'LeaveClinicOutput', ok: boolean, error?: string | null } };
 
 export type ListReservationsQueryVariables = Exact<{
   input: ListReservationsInput;
 }>;
 
-export type ListReservationsQuery = {
-  __typename?: "Query";
-  listReservations: {
-    __typename?: "ListReservationsOutput";
-    ok: boolean;
-    totalCount?: number | null;
-    results?: Array<{
-      __typename?: "Reservation";
-      id: number;
-      startDate: any;
-      endDate: any;
-      state: ReservationState;
-      memo?: string | null;
-      therapist: { __typename?: "User"; id: number; name: string };
-      patient: {
-        __typename?: "Patient";
-        id: number;
-        name: string;
-        gender: string;
-        registrationNumber?: string | null;
-        birthday?: any | null;
-      };
-      lastModifier?: {
-        __typename?: "User";
-        id: number;
-        email: string;
-        name: string;
-      } | null;
-      group?: { __typename?: "Group"; id: number; name: string } | null;
-      prescriptions?: Array<{
-        __typename?: "Prescription";
-        name: string;
-        requiredTime: number;
-        description?: string | null;
-        price: number;
-        activate: boolean;
-      }> | null;
-    }> | null;
-  };
-};
+
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, prescriptions?: Array<{ __typename?: 'Prescription', name: string, requiredTime: number, description?: string | null, price: number, activate: boolean }> | null }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
 
-export type LoginMutation = {
-  __typename?: "Mutation";
-  login: {
-    __typename?: "LoginOutput";
-    ok: boolean;
-    token?: string | null;
-    error?: string | null;
-  };
-};
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>;
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', ok: boolean, token?: string | null, error?: string | null } };
 
-export type MeQuery = {
-  __typename?: "Query";
-  me: {
-    __typename?: "User";
-    id: number;
-    name: string;
-    email: string;
-    role: UserRole;
-    verified: boolean;
-    groups?: Array<{
-      __typename?: "GroupMember";
-      id: number;
-      staying: boolean;
-      manager: boolean;
-      accepted: boolean;
-      group: {
-        __typename?: "Group";
-        id: number;
-        name: string;
-        activate: boolean;
-      };
-    }> | null;
-    notice?: Array<{
-      __typename?: "Notice";
-      message: string;
-      read: boolean;
-    }> | null;
-  };
-};
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, members?: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, clinic: { __typename?: 'Clinic', id: number, name: string, isActivated: boolean } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
 
 export type SearchPatientByNameQueryVariables = Exact<{
   input: SearchPatientInput;
 }>;
 
-export type SearchPatientByNameQuery = {
-  __typename?: "Query";
-  searchPatientByName: {
-    __typename?: "SearchPatientOutput";
-    error?: string | null;
-    ok: boolean;
-    totalPages?: number | null;
-    totalCount?: number | null;
-    patients?: Array<{
-      __typename?: "Patient";
-      id: number;
-      name: string;
-      gender: string;
-      registrationNumber?: string | null;
-      birthday?: any | null;
-      group?: { __typename?: "Group"; id: number; name: string } | null;
-      therapists: Array<{ __typename?: "User"; id: number; name: string }>;
-    }> | null;
-  };
-};
+
+export type SearchPatientByNameQuery = { __typename?: 'Query', searchPatientByName: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, users: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
 
 export type FindPatientByIdQueryVariables = Exact<{
   input: FindPatientByIdInput;
 }>;
 
-export type FindPatientByIdQuery = {
-  __typename?: "Query";
-  findPatientById: {
-    __typename?: "FindPatientByIdOutput";
-    ok: boolean;
-    error?: string | null;
-    patient?: {
-      __typename?: "Patient";
-      id: number;
-      name: string;
-      gender: string;
-      registrationNumber?: string | null;
-      birthday?: any | null;
-      memo?: string | null;
-    } | null;
-  };
-};
+
+export type FindPatientByIdQuery = { __typename?: 'Query', findPatientById: { __typename?: 'FindPatientByIdOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
 
 export type SearchUsersByNameQueryVariables = Exact<{
   input: SearchUsersByNameInput;
 }>;
 
-export type SearchUsersByNameQuery = {
-  __typename?: "Query";
-  searchUsersByName: {
-    __typename?: "SearchUsersByNameOutput";
-    ok: boolean;
-    error?: string | null;
-    totalCount?: number | null;
-    results?: Array<{
-      __typename?: "User";
-      id: number;
-      name: string;
-      email: string;
-    }> | null;
-  };
-};
+
+export type SearchUsersByNameQuery = { __typename?: 'Query', searchUsersByName: { __typename?: 'SearchUsersByNameOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'User', id: number, name: string, email: string }> | null } };
 
 export type VerifyEmailMutationVariables = Exact<{
   input: VerifyEmailInput;
 }>;
 
-export type VerifyEmailMutation = {
-  __typename?: "Mutation";
-  verifyEmail: {
-    __typename?: "VerifyEmailOutput";
-    ok: boolean;
-    error?: string | null;
-  };
-};
+
+export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: { __typename?: 'VerifyEmailOutput', ok: boolean, error?: string | null } };
+
 
 export const AcceptInvitationDocument = gql`
-  mutation acceptInvitation($input: AcceptInvitationInput!) {
-    acceptInvitation(input: $input) {
-      ok
-      error
-    }
+    mutation acceptInvitation($input: AcceptInvitationInput!) {
+  acceptInvitation(input: $input) {
+    ok
+    error
   }
-`;
-export type AcceptInvitationMutationFn = Apollo.MutationFunction<
-  AcceptInvitationMutation,
-  AcceptInvitationMutationVariables
->;
+}
+    `;
+export type AcceptInvitationMutationFn = Apollo.MutationFunction<AcceptInvitationMutation, AcceptInvitationMutationVariables>;
 
 /**
  * __useAcceptInvitationMutation__
@@ -1227,90 +898,56 @@ export type AcceptInvitationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAcceptInvitationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AcceptInvitationMutation,
-    AcceptInvitationMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    AcceptInvitationMutation,
-    AcceptInvitationMutationVariables
-  >(AcceptInvitationDocument, options);
-}
-export type AcceptInvitationMutationHookResult = ReturnType<
-  typeof useAcceptInvitationMutation
->;
-export type AcceptInvitationMutationResult =
-  Apollo.MutationResult<AcceptInvitationMutation>;
-export type AcceptInvitationMutationOptions = Apollo.BaseMutationOptions<
-  AcceptInvitationMutation,
-  AcceptInvitationMutationVariables
->;
-export const InactivateGroupDocument = gql`
-  mutation inactivateGroup($input: InactivateGroupInput!) {
-    inactivateGroup(input: $input) {
-      ok
-      error
-    }
+export function useAcceptInvitationMutation(baseOptions?: Apollo.MutationHookOptions<AcceptInvitationMutation, AcceptInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptInvitationMutation, AcceptInvitationMutationVariables>(AcceptInvitationDocument, options);
+      }
+export type AcceptInvitationMutationHookResult = ReturnType<typeof useAcceptInvitationMutation>;
+export type AcceptInvitationMutationResult = Apollo.MutationResult<AcceptInvitationMutation>;
+export type AcceptInvitationMutationOptions = Apollo.BaseMutationOptions<AcceptInvitationMutation, AcceptInvitationMutationVariables>;
+export const InactivateClinicDocument = gql`
+    mutation inactivateClinic($input: InactivateClinicInput!) {
+  inactivateClinic(input: $input) {
+    ok
+    error
   }
-`;
-export type InactivateGroupMutationFn = Apollo.MutationFunction<
-  InactivateGroupMutation,
-  InactivateGroupMutationVariables
->;
+}
+    `;
+export type InactivateClinicMutationFn = Apollo.MutationFunction<InactivateClinicMutation, InactivateClinicMutationVariables>;
 
 /**
- * __useInactivateGroupMutation__
+ * __useInactivateClinicMutation__
  *
- * To run a mutation, you first call `useInactivateGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInactivateGroupMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useInactivateClinicMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInactivateClinicMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [inactivateGroupMutation, { data, loading, error }] = useInactivateGroupMutation({
+ * const [inactivateClinicMutation, { data, loading, error }] = useInactivateClinicMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useInactivateGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    InactivateGroupMutation,
-    InactivateGroupMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    InactivateGroupMutation,
-    InactivateGroupMutationVariables
-  >(InactivateGroupDocument, options);
-}
-export type InactivateGroupMutationHookResult = ReturnType<
-  typeof useInactivateGroupMutation
->;
-export type InactivateGroupMutationResult =
-  Apollo.MutationResult<InactivateGroupMutation>;
-export type InactivateGroupMutationOptions = Apollo.BaseMutationOptions<
-  InactivateGroupMutation,
-  InactivateGroupMutationVariables
->;
+export function useInactivateClinicMutation(baseOptions?: Apollo.MutationHookOptions<InactivateClinicMutation, InactivateClinicMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InactivateClinicMutation, InactivateClinicMutationVariables>(InactivateClinicDocument, options);
+      }
+export type InactivateClinicMutationHookResult = ReturnType<typeof useInactivateClinicMutation>;
+export type InactivateClinicMutationResult = Apollo.MutationResult<InactivateClinicMutation>;
+export type InactivateClinicMutationOptions = Apollo.BaseMutationOptions<InactivateClinicMutation, InactivateClinicMutationVariables>;
 export const CreateAccountDocument = gql`
-  mutation createAccount($input: CreateAccountInput!) {
-    createAccount(input: $input) {
-      ok
-      error
-    }
+    mutation createAccount($input: CreateAccountInput!) {
+  createAccount(input: $input) {
+    ok
+    error
   }
-`;
-export type CreateAccountMutationFn = Apollo.MutationFunction<
-  CreateAccountMutation,
-  CreateAccountMutationVariables
->;
+}
+    `;
+export type CreateAccountMutationFn = Apollo.MutationFunction<CreateAccountMutation, CreateAccountMutationVariables>;
 
 /**
  * __useCreateAccountMutation__
@@ -1329,98 +966,64 @@ export type CreateAccountMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateAccountMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateAccountMutation,
-    CreateAccountMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateAccountMutation,
-    CreateAccountMutationVariables
-  >(CreateAccountDocument, options);
-}
-export type CreateAccountMutationHookResult = ReturnType<
-  typeof useCreateAccountMutation
->;
-export type CreateAccountMutationResult =
-  Apollo.MutationResult<CreateAccountMutation>;
-export type CreateAccountMutationOptions = Apollo.BaseMutationOptions<
-  CreateAccountMutation,
-  CreateAccountMutationVariables
->;
-export const CreateGroupDocument = gql`
-  mutation createGroup($input: CreateGroupInput!) {
-    createGroup(input: $input) {
-      ok
-      error
-    }
+export function useCreateAccountMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccountMutation, CreateAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAccountMutation, CreateAccountMutationVariables>(CreateAccountDocument, options);
+      }
+export type CreateAccountMutationHookResult = ReturnType<typeof useCreateAccountMutation>;
+export type CreateAccountMutationResult = Apollo.MutationResult<CreateAccountMutation>;
+export type CreateAccountMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutation, CreateAccountMutationVariables>;
+export const CreateClinicDocument = gql`
+    mutation createClinic($input: CreateClinicInput!) {
+  createClinic(input: $input) {
+    ok
+    error
   }
-`;
-export type CreateGroupMutationFn = Apollo.MutationFunction<
-  CreateGroupMutation,
-  CreateGroupMutationVariables
->;
+}
+    `;
+export type CreateClinicMutationFn = Apollo.MutationFunction<CreateClinicMutation, CreateClinicMutationVariables>;
 
 /**
- * __useCreateGroupMutation__
+ * __useCreateClinicMutation__
  *
- * To run a mutation, you first call `useCreateGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateGroupMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateClinicMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateClinicMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createGroupMutation, { data, loading, error }] = useCreateGroupMutation({
+ * const [createClinicMutation, { data, loading, error }] = useCreateClinicMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateGroupMutation,
-    CreateGroupMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateGroupMutation, CreateGroupMutationVariables>(
-    CreateGroupDocument,
-    options
-  );
-}
-export type CreateGroupMutationHookResult = ReturnType<
-  typeof useCreateGroupMutation
->;
-export type CreateGroupMutationResult =
-  Apollo.MutationResult<CreateGroupMutation>;
-export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<
-  CreateGroupMutation,
-  CreateGroupMutationVariables
->;
-export const CreatePatientDocument = gql`
-  mutation createPatient($input: CreatePatientInput!) {
-    createPatient(input: $input) {
-      ok
-      error
-      patient {
-        id
-        name
-        gender
-        registrationNumber
-        birthday
-        memo
+export function useCreateClinicMutation(baseOptions?: Apollo.MutationHookOptions<CreateClinicMutation, CreateClinicMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateClinicMutation, CreateClinicMutationVariables>(CreateClinicDocument, options);
       }
+export type CreateClinicMutationHookResult = ReturnType<typeof useCreateClinicMutation>;
+export type CreateClinicMutationResult = Apollo.MutationResult<CreateClinicMutation>;
+export type CreateClinicMutationOptions = Apollo.BaseMutationOptions<CreateClinicMutation, CreateClinicMutationVariables>;
+export const CreatePatientDocument = gql`
+    mutation createPatient($input: CreatePatientInput!) {
+  createPatient(input: $input) {
+    ok
+    error
+    patient {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+      memo
     }
   }
-`;
-export type CreatePatientMutationFn = Apollo.MutationFunction<
-  CreatePatientMutation,
-  CreatePatientMutationVariables
->;
+}
+    `;
+export type CreatePatientMutationFn = Apollo.MutationFunction<CreatePatientMutation, CreatePatientMutationVariables>;
 
 /**
  * __useCreatePatientMutation__
@@ -1439,39 +1042,22 @@ export type CreatePatientMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreatePatientMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreatePatientMutation,
-    CreatePatientMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreatePatientMutation,
-    CreatePatientMutationVariables
-  >(CreatePatientDocument, options);
-}
-export type CreatePatientMutationHookResult = ReturnType<
-  typeof useCreatePatientMutation
->;
-export type CreatePatientMutationResult =
-  Apollo.MutationResult<CreatePatientMutation>;
-export type CreatePatientMutationOptions = Apollo.BaseMutationOptions<
-  CreatePatientMutation,
-  CreatePatientMutationVariables
->;
+export function useCreatePatientMutation(baseOptions?: Apollo.MutationHookOptions<CreatePatientMutation, CreatePatientMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePatientMutation, CreatePatientMutationVariables>(CreatePatientDocument, options);
+      }
+export type CreatePatientMutationHookResult = ReturnType<typeof useCreatePatientMutation>;
+export type CreatePatientMutationResult = Apollo.MutationResult<CreatePatientMutation>;
+export type CreatePatientMutationOptions = Apollo.BaseMutationOptions<CreatePatientMutation, CreatePatientMutationVariables>;
 export const CreatePrescriptionDocument = gql`
-  mutation createPrescription($input: CreatePrescriptionInput!) {
-    createPrescription(input: $input) {
-      ok
-      error
-    }
+    mutation createPrescription($input: CreatePrescriptionInput!) {
+  createPrescription(input: $input) {
+    ok
+    error
   }
-`;
-export type CreatePrescriptionMutationFn = Apollo.MutationFunction<
-  CreatePrescriptionMutation,
-  CreatePrescriptionMutationVariables
->;
+}
+    `;
+export type CreatePrescriptionMutationFn = Apollo.MutationFunction<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>;
 
 /**
  * __useCreatePrescriptionMutation__
@@ -1490,39 +1076,22 @@ export type CreatePrescriptionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreatePrescriptionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreatePrescriptionMutation,
-    CreatePrescriptionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreatePrescriptionMutation,
-    CreatePrescriptionMutationVariables
-  >(CreatePrescriptionDocument, options);
-}
-export type CreatePrescriptionMutationHookResult = ReturnType<
-  typeof useCreatePrescriptionMutation
->;
-export type CreatePrescriptionMutationResult =
-  Apollo.MutationResult<CreatePrescriptionMutation>;
-export type CreatePrescriptionMutationOptions = Apollo.BaseMutationOptions<
-  CreatePrescriptionMutation,
-  CreatePrescriptionMutationVariables
->;
+export function useCreatePrescriptionMutation(baseOptions?: Apollo.MutationHookOptions<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>(CreatePrescriptionDocument, options);
+      }
+export type CreatePrescriptionMutationHookResult = ReturnType<typeof useCreatePrescriptionMutation>;
+export type CreatePrescriptionMutationResult = Apollo.MutationResult<CreatePrescriptionMutation>;
+export type CreatePrescriptionMutationOptions = Apollo.BaseMutationOptions<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>;
 export const CreateReservationDocument = gql`
-  mutation createReservation($input: CreateReservationInput!) {
-    createReservation(input: $input) {
-      ok
-      error
-    }
+    mutation createReservation($input: CreateReservationInput!) {
+  createReservation(input: $input) {
+    ok
+    error
   }
-`;
-export type CreateReservationMutationFn = Apollo.MutationFunction<
-  CreateReservationMutation,
-  CreateReservationMutationVariables
->;
+}
+    `;
+export type CreateReservationMutationFn = Apollo.MutationFunction<CreateReservationMutation, CreateReservationMutationVariables>;
 
 /**
  * __useCreateReservationMutation__
@@ -1541,39 +1110,22 @@ export type CreateReservationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateReservationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateReservationMutation,
-    CreateReservationMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateReservationMutation,
-    CreateReservationMutationVariables
-  >(CreateReservationDocument, options);
-}
-export type CreateReservationMutationHookResult = ReturnType<
-  typeof useCreateReservationMutation
->;
-export type CreateReservationMutationResult =
-  Apollo.MutationResult<CreateReservationMutation>;
-export type CreateReservationMutationOptions = Apollo.BaseMutationOptions<
-  CreateReservationMutation,
-  CreateReservationMutationVariables
->;
+export function useCreateReservationMutation(baseOptions?: Apollo.MutationHookOptions<CreateReservationMutation, CreateReservationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReservationMutation, CreateReservationMutationVariables>(CreateReservationDocument, options);
+      }
+export type CreateReservationMutationHookResult = ReturnType<typeof useCreateReservationMutation>;
+export type CreateReservationMutationResult = Apollo.MutationResult<CreateReservationMutation>;
+export type CreateReservationMutationOptions = Apollo.BaseMutationOptions<CreateReservationMutation, CreateReservationMutationVariables>;
 export const DeleteReservationDocument = gql`
-  mutation deleteReservation($input: DeleteReservationInput!) {
-    deleteReservation(input: $input) {
-      error
-      ok
-    }
+    mutation deleteReservation($input: DeleteReservationInput!) {
+  deleteReservation(input: $input) {
+    error
+    ok
   }
-`;
-export type DeleteReservationMutationFn = Apollo.MutationFunction<
-  DeleteReservationMutation,
-  DeleteReservationMutationVariables
->;
+}
+    `;
+export type DeleteReservationMutationFn = Apollo.MutationFunction<DeleteReservationMutation, DeleteReservationMutationVariables>;
 
 /**
  * __useDeleteReservationMutation__
@@ -1592,39 +1144,22 @@ export type DeleteReservationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteReservationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteReservationMutation,
-    DeleteReservationMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteReservationMutation,
-    DeleteReservationMutationVariables
-  >(DeleteReservationDocument, options);
-}
-export type DeleteReservationMutationHookResult = ReturnType<
-  typeof useDeleteReservationMutation
->;
-export type DeleteReservationMutationResult =
-  Apollo.MutationResult<DeleteReservationMutation>;
-export type DeleteReservationMutationOptions = Apollo.BaseMutationOptions<
-  DeleteReservationMutation,
-  DeleteReservationMutationVariables
->;
+export function useDeleteReservationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteReservationMutation, DeleteReservationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteReservationMutation, DeleteReservationMutationVariables>(DeleteReservationDocument, options);
+      }
+export type DeleteReservationMutationHookResult = ReturnType<typeof useDeleteReservationMutation>;
+export type DeleteReservationMutationResult = Apollo.MutationResult<DeleteReservationMutation>;
+export type DeleteReservationMutationOptions = Apollo.BaseMutationOptions<DeleteReservationMutation, DeleteReservationMutationVariables>;
 export const EditProfileDocument = gql`
-  mutation editProfile($input: EditProfileInput!) {
-    editProfile(input: $input) {
-      ok
-      error
-    }
+    mutation editProfile($input: EditProfileInput!) {
+  editProfile(input: $input) {
+    ok
+    error
   }
-`;
-export type EditProfileMutationFn = Apollo.MutationFunction<
-  EditProfileMutation,
-  EditProfileMutationVariables
->;
+}
+    `;
+export type EditProfileMutationFn = Apollo.MutationFunction<EditProfileMutation, EditProfileMutationVariables>;
 
 /**
  * __useEditProfileMutation__
@@ -1643,39 +1178,22 @@ export type EditProfileMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useEditProfileMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    EditProfileMutation,
-    EditProfileMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<EditProfileMutation, EditProfileMutationVariables>(
-    EditProfileDocument,
-    options
-  );
-}
-export type EditProfileMutationHookResult = ReturnType<
-  typeof useEditProfileMutation
->;
-export type EditProfileMutationResult =
-  Apollo.MutationResult<EditProfileMutation>;
-export type EditProfileMutationOptions = Apollo.BaseMutationOptions<
-  EditProfileMutation,
-  EditProfileMutationVariables
->;
+export function useEditProfileMutation(baseOptions?: Apollo.MutationHookOptions<EditProfileMutation, EditProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditProfileMutation, EditProfileMutationVariables>(EditProfileDocument, options);
+      }
+export type EditProfileMutationHookResult = ReturnType<typeof useEditProfileMutation>;
+export type EditProfileMutationResult = Apollo.MutationResult<EditProfileMutation>;
+export type EditProfileMutationOptions = Apollo.BaseMutationOptions<EditProfileMutation, EditProfileMutationVariables>;
 export const EditReservationDocument = gql`
-  mutation editReservation($input: EditReservationInput!) {
-    editReservation(input: $input) {
-      error
-      ok
-    }
+    mutation editReservation($input: EditReservationInput!) {
+  editReservation(input: $input) {
+    error
+    ok
   }
-`;
-export type EditReservationMutationFn = Apollo.MutationFunction<
-  EditReservationMutation,
-  EditReservationMutationVariables
->;
+}
+    `;
+export type EditReservationMutationFn = Apollo.MutationFunction<EditReservationMutation, EditReservationMutationVariables>;
 
 /**
  * __useEditReservationMutation__
@@ -1694,47 +1212,33 @@ export type EditReservationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useEditReservationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    EditReservationMutation,
-    EditReservationMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    EditReservationMutation,
-    EditReservationMutationVariables
-  >(EditReservationDocument, options);
-}
-export type EditReservationMutationHookResult = ReturnType<
-  typeof useEditReservationMutation
->;
-export type EditReservationMutationResult =
-  Apollo.MutationResult<EditReservationMutation>;
-export type EditReservationMutationOptions = Apollo.BaseMutationOptions<
-  EditReservationMutation,
-  EditReservationMutationVariables
->;
+export function useEditReservationMutation(baseOptions?: Apollo.MutationHookOptions<EditReservationMutation, EditReservationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditReservationMutation, EditReservationMutationVariables>(EditReservationDocument, options);
+      }
+export type EditReservationMutationHookResult = ReturnType<typeof useEditReservationMutation>;
+export type EditReservationMutationResult = Apollo.MutationResult<EditReservationMutation>;
+export type EditReservationMutationOptions = Apollo.BaseMutationOptions<EditReservationMutation, EditReservationMutationVariables>;
 export const FindAllPatientsDocument = gql`
-  query findAllPatients($input: FindAllPatientsInput!) {
-    findAllPatients(input: $input) {
-      ok
-      error
-      totalPages
-      totalCount
-      results {
-        id
+    query findAllPatients($input: FindAllPatientsInput!) {
+  findAllPatients(input: $input) {
+    ok
+    error
+    totalPages
+    totalCount
+    results {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+      clinic {
         name
-        gender
-        registrationNumber
-        birthday
-        group {
-          name
-        }
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFindAllPatientsQuery__
@@ -1752,52 +1256,29 @@ export const FindAllPatientsDocument = gql`
  *   },
  * });
  */
-export function useFindAllPatientsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FindAllPatientsQuery,
-    FindAllPatientsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FindAllPatientsQuery, FindAllPatientsQueryVariables>(
-    FindAllPatientsDocument,
-    options
-  );
-}
-export function useFindAllPatientsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FindAllPatientsQuery,
-    FindAllPatientsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FindAllPatientsQuery,
-    FindAllPatientsQueryVariables
-  >(FindAllPatientsDocument, options);
-}
-export type FindAllPatientsQueryHookResult = ReturnType<
-  typeof useFindAllPatientsQuery
->;
-export type FindAllPatientsLazyQueryHookResult = ReturnType<
-  typeof useFindAllPatientsLazyQuery
->;
-export type FindAllPatientsQueryResult = Apollo.QueryResult<
-  FindAllPatientsQuery,
-  FindAllPatientsQueryVariables
->;
-export const FindAtomPrescriptionsDocument = gql`
-  query findAtomPrescriptions {
-    findAtomPrescriptions {
-      ok
-      error
-      results {
-        id
-        name
+export function useFindAllPatientsQuery(baseOptions: Apollo.QueryHookOptions<FindAllPatientsQuery, FindAllPatientsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAllPatientsQuery, FindAllPatientsQueryVariables>(FindAllPatientsDocument, options);
       }
+export function useFindAllPatientsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAllPatientsQuery, FindAllPatientsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAllPatientsQuery, FindAllPatientsQueryVariables>(FindAllPatientsDocument, options);
+        }
+export type FindAllPatientsQueryHookResult = ReturnType<typeof useFindAllPatientsQuery>;
+export type FindAllPatientsLazyQueryHookResult = ReturnType<typeof useFindAllPatientsLazyQuery>;
+export type FindAllPatientsQueryResult = Apollo.QueryResult<FindAllPatientsQuery, FindAllPatientsQueryVariables>;
+export const FindAtomPrescriptionsDocument = gql`
+    query findAtomPrescriptions {
+  findAtomPrescriptions {
+    ok
+    error
+    results {
+      id
+      name
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFindAtomPrescriptionsQuery__
@@ -1814,212 +1295,143 @@ export const FindAtomPrescriptionsDocument = gql`
  *   },
  * });
  */
-export function useFindAtomPrescriptionsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FindAtomPrescriptionsQuery,
-    FindAtomPrescriptionsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    FindAtomPrescriptionsQuery,
-    FindAtomPrescriptionsQueryVariables
-  >(FindAtomPrescriptionsDocument, options);
-}
-export function useFindAtomPrescriptionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FindAtomPrescriptionsQuery,
-    FindAtomPrescriptionsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FindAtomPrescriptionsQuery,
-    FindAtomPrescriptionsQueryVariables
-  >(FindAtomPrescriptionsDocument, options);
-}
-export type FindAtomPrescriptionsQueryHookResult = ReturnType<
-  typeof useFindAtomPrescriptionsQuery
->;
-export type FindAtomPrescriptionsLazyQueryHookResult = ReturnType<
-  typeof useFindAtomPrescriptionsLazyQuery
->;
-export type FindAtomPrescriptionsQueryResult = Apollo.QueryResult<
-  FindAtomPrescriptionsQuery,
-  FindAtomPrescriptionsQueryVariables
->;
-export const FindGroupByIdDocument = gql`
-  query findGroupById($input: FindGroupByIdInput!) {
-    findGroupById(input: $input) {
-      ok
-      error
-      group {
+export function useFindAtomPrescriptionsQuery(baseOptions?: Apollo.QueryHookOptions<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>(FindAtomPrescriptionsDocument, options);
+      }
+export function useFindAtomPrescriptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>(FindAtomPrescriptionsDocument, options);
+        }
+export type FindAtomPrescriptionsQueryHookResult = ReturnType<typeof useFindAtomPrescriptionsQuery>;
+export type FindAtomPrescriptionsLazyQueryHookResult = ReturnType<typeof useFindAtomPrescriptionsLazyQuery>;
+export type FindAtomPrescriptionsQueryResult = Apollo.QueryResult<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>;
+export const FindClinicByIdDocument = gql`
+    query findClinicById($input: FindClinicByIdInput!) {
+  findClinicById(input: $input) {
+    ok
+    error
+    clinic {
+      id
+      name
+      members {
         id
-        name
-        members {
+        staying
+        manager
+        accepted
+        user {
           id
-          staying
-          manager
-          accepted
-          user {
-            id
-            name
-            email
-          }
+          name
+          email
         }
       }
     }
   }
-`;
+}
+    `;
 
 /**
- * __useFindGroupByIdQuery__
+ * __useFindClinicByIdQuery__
  *
- * To run a query within a React component, call `useFindGroupByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindGroupByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindClinicByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindClinicByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindGroupByIdQuery({
+ * const { data, loading, error } = useFindClinicByIdQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useFindGroupByIdQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FindGroupByIdQuery,
-    FindGroupByIdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FindGroupByIdQuery, FindGroupByIdQueryVariables>(
-    FindGroupByIdDocument,
-    options
-  );
-}
-export function useFindGroupByIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FindGroupByIdQuery,
-    FindGroupByIdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FindGroupByIdQuery, FindGroupByIdQueryVariables>(
-    FindGroupByIdDocument,
-    options
-  );
-}
-export type FindGroupByIdQueryHookResult = ReturnType<
-  typeof useFindGroupByIdQuery
->;
-export type FindGroupByIdLazyQueryHookResult = ReturnType<
-  typeof useFindGroupByIdLazyQuery
->;
-export type FindGroupByIdQueryResult = Apollo.QueryResult<
-  FindGroupByIdQuery,
-  FindGroupByIdQueryVariables
->;
-export const FindMyGroupsDocument = gql`
-  query findMyGroups($input: FindMyGroupsInput!) {
-    findMyGroups(input: $input) {
-      ok
-      error
-      groups {
-        id
-        name
-        activate
-        members {
-          id
-          staying
-          manager
-          accepted
-          user {
-            id
-            name
-          }
-          group {
-            id
-            name
-          }
-        }
+export function useFindClinicByIdQuery(baseOptions: Apollo.QueryHookOptions<FindClinicByIdQuery, FindClinicByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindClinicByIdQuery, FindClinicByIdQueryVariables>(FindClinicByIdDocument, options);
       }
-    }
-  }
-`;
-
-/**
- * __useFindMyGroupsQuery__
- *
- * To run a query within a React component, call `useFindMyGroupsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindMyGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindMyGroupsQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFindMyGroupsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FindMyGroupsQuery,
-    FindMyGroupsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FindMyGroupsQuery, FindMyGroupsQueryVariables>(
-    FindMyGroupsDocument,
-    options
-  );
-}
-export function useFindMyGroupsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FindMyGroupsQuery,
-    FindMyGroupsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FindMyGroupsQuery, FindMyGroupsQueryVariables>(
-    FindMyGroupsDocument,
-    options
-  );
-}
-export type FindMyGroupsQueryHookResult = ReturnType<
-  typeof useFindMyGroupsQuery
->;
-export type FindMyGroupsLazyQueryHookResult = ReturnType<
-  typeof useFindMyGroupsLazyQuery
->;
-export type FindMyGroupsQueryResult = Apollo.QueryResult<
-  FindMyGroupsQuery,
-  FindMyGroupsQueryVariables
->;
-export const FindPrescriptionsDocument = gql`
-  query findPrescriptions($input: FindPrescriptionsInput!) {
-    findPrescriptions(input: $input) {
-      ok
-      error
-      prescriptions {
+export function useFindClinicByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindClinicByIdQuery, FindClinicByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindClinicByIdQuery, FindClinicByIdQueryVariables>(FindClinicByIdDocument, options);
+        }
+export type FindClinicByIdQueryHookResult = ReturnType<typeof useFindClinicByIdQuery>;
+export type FindClinicByIdLazyQueryHookResult = ReturnType<typeof useFindClinicByIdLazyQuery>;
+export type FindClinicByIdQueryResult = Apollo.QueryResult<FindClinicByIdQuery, FindClinicByIdQueryVariables>;
+export const FindMyClinicsDocument = gql`
+    query findMyClinics($input: FindMyClinicsInput!) {
+  findMyClinics(input: $input) {
+    ok
+    error
+    clinics {
+      id
+      name
+      isActivated
+      members {
         id
-        name
-        requiredTime
-        description
-        price
-        activate
-        prescriptionAtoms {
+        staying
+        manager
+        accepted
+        user {
+          id
+          name
+        }
+        clinic {
           id
           name
         }
       }
     }
   }
-`;
+}
+    `;
+
+/**
+ * __useFindMyClinicsQuery__
+ *
+ * To run a query within a React component, call `useFindMyClinicsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindMyClinicsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindMyClinicsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFindMyClinicsQuery(baseOptions: Apollo.QueryHookOptions<FindMyClinicsQuery, FindMyClinicsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindMyClinicsQuery, FindMyClinicsQueryVariables>(FindMyClinicsDocument, options);
+      }
+export function useFindMyClinicsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindMyClinicsQuery, FindMyClinicsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindMyClinicsQuery, FindMyClinicsQueryVariables>(FindMyClinicsDocument, options);
+        }
+export type FindMyClinicsQueryHookResult = ReturnType<typeof useFindMyClinicsQuery>;
+export type FindMyClinicsLazyQueryHookResult = ReturnType<typeof useFindMyClinicsLazyQuery>;
+export type FindMyClinicsQueryResult = Apollo.QueryResult<FindMyClinicsQuery, FindMyClinicsQueryVariables>;
+export const FindPrescriptionsDocument = gql`
+    query findPrescriptions($input: FindPrescriptionsInput!) {
+  findPrescriptions(input: $input) {
+    ok
+    error
+    prescriptions {
+      id
+      name
+      requiredTime
+      description
+      price
+      activate
+      prescriptionAtoms {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
 
 /**
  * __useFindPrescriptionsQuery__
@@ -2037,76 +1449,53 @@ export const FindPrescriptionsDocument = gql`
  *   },
  * });
  */
-export function useFindPrescriptionsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FindPrescriptionsQuery,
-    FindPrescriptionsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    FindPrescriptionsQuery,
-    FindPrescriptionsQueryVariables
-  >(FindPrescriptionsDocument, options);
-}
-export function useFindPrescriptionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FindPrescriptionsQuery,
-    FindPrescriptionsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FindPrescriptionsQuery,
-    FindPrescriptionsQueryVariables
-  >(FindPrescriptionsDocument, options);
-}
-export type FindPrescriptionsQueryHookResult = ReturnType<
-  typeof useFindPrescriptionsQuery
->;
-export type FindPrescriptionsLazyQueryHookResult = ReturnType<
-  typeof useFindPrescriptionsLazyQuery
->;
-export type FindPrescriptionsQueryResult = Apollo.QueryResult<
-  FindPrescriptionsQuery,
-  FindPrescriptionsQueryVariables
->;
+export function useFindPrescriptionsQuery(baseOptions: Apollo.QueryHookOptions<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>(FindPrescriptionsDocument, options);
+      }
+export function useFindPrescriptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>(FindPrescriptionsDocument, options);
+        }
+export type FindPrescriptionsQueryHookResult = ReturnType<typeof useFindPrescriptionsQuery>;
+export type FindPrescriptionsLazyQueryHookResult = ReturnType<typeof useFindPrescriptionsLazyQuery>;
+export type FindPrescriptionsQueryResult = Apollo.QueryResult<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>;
 export const FindReservationByIdDocument = gql`
-  query findReservationById($input: FindReservationByIdInput!) {
-    findReservationById(input: $input) {
-      error
-      ok
-      reservation {
+    query findReservationById($input: FindReservationByIdInput!) {
+  findReservationById(input: $input) {
+    error
+    ok
+    reservation {
+      id
+      startDate
+      endDate
+      state
+      memo
+      user {
         id
-        startDate
-        endDate
-        state
-        memo
-        therapist {
-          id
-          name
-          email
-        }
-        patient {
-          id
-          name
-          gender
-          registrationNumber
-          birthday
-        }
-        group {
-          id
-          name
-        }
-        lastModifier {
-          id
-          name
-          email
-        }
+        name
+        email
+      }
+      patient {
+        id
+        name
+        gender
+        registrationNumber
+        birthday
+      }
+      clinic {
+        id
+        name
+      }
+      lastModifier {
+        id
+        name
+        email
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFindReservationByIdQuery__
@@ -2124,58 +1513,35 @@ export const FindReservationByIdDocument = gql`
  *   },
  * });
  */
-export function useFindReservationByIdQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FindReservationByIdQuery,
-    FindReservationByIdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    FindReservationByIdQuery,
-    FindReservationByIdQueryVariables
-  >(FindReservationByIdDocument, options);
-}
-export function useFindReservationByIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FindReservationByIdQuery,
-    FindReservationByIdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FindReservationByIdQuery,
-    FindReservationByIdQueryVariables
-  >(FindReservationByIdDocument, options);
-}
-export type FindReservationByIdQueryHookResult = ReturnType<
-  typeof useFindReservationByIdQuery
->;
-export type FindReservationByIdLazyQueryHookResult = ReturnType<
-  typeof useFindReservationByIdLazyQuery
->;
-export type FindReservationByIdQueryResult = Apollo.QueryResult<
-  FindReservationByIdQuery,
-  FindReservationByIdQueryVariables
->;
+export function useFindReservationByIdQuery(baseOptions: Apollo.QueryHookOptions<FindReservationByIdQuery, FindReservationByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindReservationByIdQuery, FindReservationByIdQueryVariables>(FindReservationByIdDocument, options);
+      }
+export function useFindReservationByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindReservationByIdQuery, FindReservationByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindReservationByIdQuery, FindReservationByIdQueryVariables>(FindReservationByIdDocument, options);
+        }
+export type FindReservationByIdQueryHookResult = ReturnType<typeof useFindReservationByIdQuery>;
+export type FindReservationByIdLazyQueryHookResult = ReturnType<typeof useFindReservationByIdLazyQuery>;
+export type FindReservationByIdQueryResult = Apollo.QueryResult<FindReservationByIdQuery, FindReservationByIdQueryVariables>;
 export const GetStatisticsDocument = gql`
-  query getStatistics($input: GetStatisticsInput!) {
-    getStatistics(input: $input) {
-      error
-      ok
-      results {
-        userName
-        statistics {
-          date
-          prescriptions {
-            name
-            count
-          }
+    query getStatistics($input: GetStatisticsInput!) {
+  getStatistics(input: $input) {
+    error
+    ok
+    results {
+      userName
+      statistics {
+        date
+        prescriptions {
+          name
+          count
         }
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useGetStatisticsQuery__
@@ -2193,184 +1559,127 @@ export const GetStatisticsDocument = gql`
  *   },
  * });
  */
-export function useGetStatisticsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetStatisticsQuery,
-    GetStatisticsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetStatisticsQuery, GetStatisticsQueryVariables>(
-    GetStatisticsDocument,
-    options
-  );
-}
-export function useGetStatisticsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetStatisticsQuery,
-    GetStatisticsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetStatisticsQuery, GetStatisticsQueryVariables>(
-    GetStatisticsDocument,
-    options
-  );
-}
-export type GetStatisticsQueryHookResult = ReturnType<
-  typeof useGetStatisticsQuery
->;
-export type GetStatisticsLazyQueryHookResult = ReturnType<
-  typeof useGetStatisticsLazyQuery
->;
-export type GetStatisticsQueryResult = Apollo.QueryResult<
-  GetStatisticsQuery,
-  GetStatisticsQueryVariables
->;
-export const InviteGroupDocument = gql`
-  mutation inviteGroup($input: InviteGroupInput!) {
-    inviteGroup(input: $input) {
-      ok
-      error
-    }
+export function useGetStatisticsQuery(baseOptions: Apollo.QueryHookOptions<GetStatisticsQuery, GetStatisticsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStatisticsQuery, GetStatisticsQueryVariables>(GetStatisticsDocument, options);
+      }
+export function useGetStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStatisticsQuery, GetStatisticsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStatisticsQuery, GetStatisticsQueryVariables>(GetStatisticsDocument, options);
+        }
+export type GetStatisticsQueryHookResult = ReturnType<typeof useGetStatisticsQuery>;
+export type GetStatisticsLazyQueryHookResult = ReturnType<typeof useGetStatisticsLazyQuery>;
+export type GetStatisticsQueryResult = Apollo.QueryResult<GetStatisticsQuery, GetStatisticsQueryVariables>;
+export const InviteClinicDocument = gql`
+    mutation inviteClinic($input: InviteClinicInput!) {
+  inviteClinic(input: $input) {
+    ok
+    error
   }
-`;
-export type InviteGroupMutationFn = Apollo.MutationFunction<
-  InviteGroupMutation,
-  InviteGroupMutationVariables
->;
+}
+    `;
+export type InviteClinicMutationFn = Apollo.MutationFunction<InviteClinicMutation, InviteClinicMutationVariables>;
 
 /**
- * __useInviteGroupMutation__
+ * __useInviteClinicMutation__
  *
- * To run a mutation, you first call `useInviteGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInviteGroupMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useInviteClinicMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteClinicMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [inviteGroupMutation, { data, loading, error }] = useInviteGroupMutation({
+ * const [inviteClinicMutation, { data, loading, error }] = useInviteClinicMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useInviteGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    InviteGroupMutation,
-    InviteGroupMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<InviteGroupMutation, InviteGroupMutationVariables>(
-    InviteGroupDocument,
-    options
-  );
-}
-export type InviteGroupMutationHookResult = ReturnType<
-  typeof useInviteGroupMutation
->;
-export type InviteGroupMutationResult =
-  Apollo.MutationResult<InviteGroupMutation>;
-export type InviteGroupMutationOptions = Apollo.BaseMutationOptions<
-  InviteGroupMutation,
-  InviteGroupMutationVariables
->;
-export const LeaveGroupDocument = gql`
-  mutation leaveGroup($input: LeaveGroupInput!) {
-    leaveGroup(input: $input) {
-      ok
-      error
-    }
+export function useInviteClinicMutation(baseOptions?: Apollo.MutationHookOptions<InviteClinicMutation, InviteClinicMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InviteClinicMutation, InviteClinicMutationVariables>(InviteClinicDocument, options);
+      }
+export type InviteClinicMutationHookResult = ReturnType<typeof useInviteClinicMutation>;
+export type InviteClinicMutationResult = Apollo.MutationResult<InviteClinicMutation>;
+export type InviteClinicMutationOptions = Apollo.BaseMutationOptions<InviteClinicMutation, InviteClinicMutationVariables>;
+export const LeaveClinicDocument = gql`
+    mutation leaveClinic($input: LeaveClinicInput!) {
+  leaveClinic(input: $input) {
+    ok
+    error
   }
-`;
-export type LeaveGroupMutationFn = Apollo.MutationFunction<
-  LeaveGroupMutation,
-  LeaveGroupMutationVariables
->;
+}
+    `;
+export type LeaveClinicMutationFn = Apollo.MutationFunction<LeaveClinicMutation, LeaveClinicMutationVariables>;
 
 /**
- * __useLeaveGroupMutation__
+ * __useLeaveClinicMutation__
  *
- * To run a mutation, you first call `useLeaveGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLeaveGroupMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useLeaveClinicMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLeaveClinicMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [leaveGroupMutation, { data, loading, error }] = useLeaveGroupMutation({
+ * const [leaveClinicMutation, { data, loading, error }] = useLeaveClinicMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useLeaveGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LeaveGroupMutation,
-    LeaveGroupMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<LeaveGroupMutation, LeaveGroupMutationVariables>(
-    LeaveGroupDocument,
-    options
-  );
-}
-export type LeaveGroupMutationHookResult = ReturnType<
-  typeof useLeaveGroupMutation
->;
-export type LeaveGroupMutationResult =
-  Apollo.MutationResult<LeaveGroupMutation>;
-export type LeaveGroupMutationOptions = Apollo.BaseMutationOptions<
-  LeaveGroupMutation,
-  LeaveGroupMutationVariables
->;
+export function useLeaveClinicMutation(baseOptions?: Apollo.MutationHookOptions<LeaveClinicMutation, LeaveClinicMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LeaveClinicMutation, LeaveClinicMutationVariables>(LeaveClinicDocument, options);
+      }
+export type LeaveClinicMutationHookResult = ReturnType<typeof useLeaveClinicMutation>;
+export type LeaveClinicMutationResult = Apollo.MutationResult<LeaveClinicMutation>;
+export type LeaveClinicMutationOptions = Apollo.BaseMutationOptions<LeaveClinicMutation, LeaveClinicMutationVariables>;
 export const ListReservationsDocument = gql`
-  query listReservations($input: ListReservationsInput!) {
-    listReservations(input: $input) {
-      ok
-      totalCount
-      results {
+    query listReservations($input: ListReservationsInput!) {
+  listReservations(input: $input) {
+    ok
+    totalCount
+    results {
+      id
+      startDate
+      endDate
+      state
+      memo
+      user {
         id
-        startDate
-        endDate
-        state
-        memo
-        therapist {
-          id
-          name
-        }
-        patient {
-          id
-          name
-          gender
-          registrationNumber
-          birthday
-        }
-        lastModifier {
-          id
-          email
-          name
-        }
-        group {
-          id
-          name
-        }
-        prescriptions {
-          name
-          requiredTime
-          description
-          price
-          activate
-        }
+        name
+      }
+      patient {
+        id
+        name
+        gender
+        registrationNumber
+        birthday
+      }
+      lastModifier {
+        id
+        email
+        name
+      }
+      clinic {
+        id
+        name
+      }
+      prescriptions {
+        name
+        requiredTime
+        description
+        price
+        activate
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useListReservationsQuery__
@@ -2388,53 +1697,27 @@ export const ListReservationsDocument = gql`
  *   },
  * });
  */
-export function useListReservationsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ListReservationsQuery,
-    ListReservationsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ListReservationsQuery, ListReservationsQueryVariables>(
-    ListReservationsDocument,
-    options
-  );
-}
-export function useListReservationsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ListReservationsQuery,
-    ListReservationsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ListReservationsQuery,
-    ListReservationsQueryVariables
-  >(ListReservationsDocument, options);
-}
-export type ListReservationsQueryHookResult = ReturnType<
-  typeof useListReservationsQuery
->;
-export type ListReservationsLazyQueryHookResult = ReturnType<
-  typeof useListReservationsLazyQuery
->;
-export type ListReservationsQueryResult = Apollo.QueryResult<
-  ListReservationsQuery,
-  ListReservationsQueryVariables
->;
+export function useListReservationsQuery(baseOptions: Apollo.QueryHookOptions<ListReservationsQuery, ListReservationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListReservationsQuery, ListReservationsQueryVariables>(ListReservationsDocument, options);
+      }
+export function useListReservationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListReservationsQuery, ListReservationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListReservationsQuery, ListReservationsQueryVariables>(ListReservationsDocument, options);
+        }
+export type ListReservationsQueryHookResult = ReturnType<typeof useListReservationsQuery>;
+export type ListReservationsLazyQueryHookResult = ReturnType<typeof useListReservationsLazyQuery>;
+export type ListReservationsQueryResult = Apollo.QueryResult<ListReservationsQuery, ListReservationsQueryVariables>;
 export const LoginDocument = gql`
-  mutation login($input: LoginInput!) {
-    login(input: $input) {
-      ok
-      token
-      error
-    }
+    mutation login($input: LoginInput!) {
+  login(input: $input) {
+    ok
+    token
+    error
   }
-`;
-export type LoginMutationFn = Apollo.MutationFunction<
-  LoginMutation,
-  LoginMutationVariables
->;
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
  * __useLoginMutation__
@@ -2453,50 +1736,39 @@ export type LoginMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useLoginMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LoginMutation,
-    LoginMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(
-    LoginDocument,
-    options
-  );
-}
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<
-  LoginMutation,
-  LoginMutationVariables
->;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const MeDocument = gql`
-  query me {
-    me {
+    query me {
+  me {
+    id
+    name
+    email
+    role
+    verified
+    members {
       id
-      name
-      email
-      role
-      verified
-      groups {
+      staying
+      manager
+      accepted
+      clinic {
         id
-        staying
-        manager
-        accepted
-        group {
-          id
-          name
-          activate
-        }
-      }
-      notice {
-        message
-        read
+        name
+        isActivated
       }
     }
+    notice {
+      message
+      read
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useMeQuery__
@@ -2513,46 +1785,42 @@ export const MeDocument = gql`
  *   },
  * });
  */
-export function useMeQuery(
-  baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-}
-export function useMeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-}
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const SearchPatientByNameDocument = gql`
-  query searchPatientByName($input: SearchPatientInput!) {
-    searchPatientByName(input: $input) {
-      error
-      ok
-      totalPages
-      totalCount
-      patients {
+    query searchPatientByName($input: SearchPatientInput!) {
+  searchPatientByName(input: $input) {
+    error
+    ok
+    totalPages
+    totalCount
+    patients {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+      clinic {
         id
         name
-        gender
-        registrationNumber
-        birthday
-        group {
-          id
-          name
-        }
-        therapists {
-          id
-          name
-        }
+      }
+      users {
+        id
+        name
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useSearchPatientByNameQuery__
@@ -2570,56 +1838,33 @@ export const SearchPatientByNameDocument = gql`
  *   },
  * });
  */
-export function useSearchPatientByNameQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    SearchPatientByNameQuery,
-    SearchPatientByNameQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    SearchPatientByNameQuery,
-    SearchPatientByNameQueryVariables
-  >(SearchPatientByNameDocument, options);
-}
-export function useSearchPatientByNameLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    SearchPatientByNameQuery,
-    SearchPatientByNameQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    SearchPatientByNameQuery,
-    SearchPatientByNameQueryVariables
-  >(SearchPatientByNameDocument, options);
-}
-export type SearchPatientByNameQueryHookResult = ReturnType<
-  typeof useSearchPatientByNameQuery
->;
-export type SearchPatientByNameLazyQueryHookResult = ReturnType<
-  typeof useSearchPatientByNameLazyQuery
->;
-export type SearchPatientByNameQueryResult = Apollo.QueryResult<
-  SearchPatientByNameQuery,
-  SearchPatientByNameQueryVariables
->;
-export const FindPatientByIdDocument = gql`
-  query findPatientById($input: FindPatientByIdInput!) {
-    findPatientById(input: $input) {
-      ok
-      error
-      patient {
-        id
-        name
-        gender
-        registrationNumber
-        birthday
-        memo
+export function useSearchPatientByNameQuery(baseOptions: Apollo.QueryHookOptions<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>(SearchPatientByNameDocument, options);
       }
+export function useSearchPatientByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>(SearchPatientByNameDocument, options);
+        }
+export type SearchPatientByNameQueryHookResult = ReturnType<typeof useSearchPatientByNameQuery>;
+export type SearchPatientByNameLazyQueryHookResult = ReturnType<typeof useSearchPatientByNameLazyQuery>;
+export type SearchPatientByNameQueryResult = Apollo.QueryResult<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>;
+export const FindPatientByIdDocument = gql`
+    query findPatientById($input: FindPatientByIdInput!) {
+  findPatientById(input: $input) {
+    ok
+    error
+    patient {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+      memo
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFindPatientByIdQuery__
@@ -2637,54 +1882,31 @@ export const FindPatientByIdDocument = gql`
  *   },
  * });
  */
-export function useFindPatientByIdQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FindPatientByIdQuery,
-    FindPatientByIdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FindPatientByIdQuery, FindPatientByIdQueryVariables>(
-    FindPatientByIdDocument,
-    options
-  );
-}
-export function useFindPatientByIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FindPatientByIdQuery,
-    FindPatientByIdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FindPatientByIdQuery,
-    FindPatientByIdQueryVariables
-  >(FindPatientByIdDocument, options);
-}
-export type FindPatientByIdQueryHookResult = ReturnType<
-  typeof useFindPatientByIdQuery
->;
-export type FindPatientByIdLazyQueryHookResult = ReturnType<
-  typeof useFindPatientByIdLazyQuery
->;
-export type FindPatientByIdQueryResult = Apollo.QueryResult<
-  FindPatientByIdQuery,
-  FindPatientByIdQueryVariables
->;
-export const SearchUsersByNameDocument = gql`
-  query searchUsersByName($input: SearchUsersByNameInput!) {
-    searchUsersByName(input: $input) {
-      ok
-      error
-      totalCount
-      results {
-        id
-        name
-        email
+export function useFindPatientByIdQuery(baseOptions: Apollo.QueryHookOptions<FindPatientByIdQuery, FindPatientByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindPatientByIdQuery, FindPatientByIdQueryVariables>(FindPatientByIdDocument, options);
       }
+export function useFindPatientByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindPatientByIdQuery, FindPatientByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindPatientByIdQuery, FindPatientByIdQueryVariables>(FindPatientByIdDocument, options);
+        }
+export type FindPatientByIdQueryHookResult = ReturnType<typeof useFindPatientByIdQuery>;
+export type FindPatientByIdLazyQueryHookResult = ReturnType<typeof useFindPatientByIdLazyQuery>;
+export type FindPatientByIdQueryResult = Apollo.QueryResult<FindPatientByIdQuery, FindPatientByIdQueryVariables>;
+export const SearchUsersByNameDocument = gql`
+    query searchUsersByName($input: SearchUsersByNameInput!) {
+  searchUsersByName(input: $input) {
+    ok
+    error
+    totalCount
+    results {
+      id
+      name
+      email
     }
   }
-`;
+}
+    `;
 
 /**
  * __useSearchUsersByNameQuery__
@@ -2702,52 +1924,26 @@ export const SearchUsersByNameDocument = gql`
  *   },
  * });
  */
-export function useSearchUsersByNameQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    SearchUsersByNameQuery,
-    SearchUsersByNameQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    SearchUsersByNameQuery,
-    SearchUsersByNameQueryVariables
-  >(SearchUsersByNameDocument, options);
-}
-export function useSearchUsersByNameLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    SearchUsersByNameQuery,
-    SearchUsersByNameQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    SearchUsersByNameQuery,
-    SearchUsersByNameQueryVariables
-  >(SearchUsersByNameDocument, options);
-}
-export type SearchUsersByNameQueryHookResult = ReturnType<
-  typeof useSearchUsersByNameQuery
->;
-export type SearchUsersByNameLazyQueryHookResult = ReturnType<
-  typeof useSearchUsersByNameLazyQuery
->;
-export type SearchUsersByNameQueryResult = Apollo.QueryResult<
-  SearchUsersByNameQuery,
-  SearchUsersByNameQueryVariables
->;
+export function useSearchUsersByNameQuery(baseOptions: Apollo.QueryHookOptions<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>(SearchUsersByNameDocument, options);
+      }
+export function useSearchUsersByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>(SearchUsersByNameDocument, options);
+        }
+export type SearchUsersByNameQueryHookResult = ReturnType<typeof useSearchUsersByNameQuery>;
+export type SearchUsersByNameLazyQueryHookResult = ReturnType<typeof useSearchUsersByNameLazyQuery>;
+export type SearchUsersByNameQueryResult = Apollo.QueryResult<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>;
 export const VerifyEmailDocument = gql`
-  mutation verifyEmail($input: VerifyEmailInput!) {
-    verifyEmail(input: $input) {
-      ok
-      error
-    }
+    mutation verifyEmail($input: VerifyEmailInput!) {
+  verifyEmail(input: $input) {
+    ok
+    error
   }
-`;
-export type VerifyEmailMutationFn = Apollo.MutationFunction<
-  VerifyEmailMutation,
-  VerifyEmailMutationVariables
->;
+}
+    `;
+export type VerifyEmailMutationFn = Apollo.MutationFunction<VerifyEmailMutation, VerifyEmailMutationVariables>;
 
 /**
  * __useVerifyEmailMutation__
@@ -2766,24 +1962,10 @@ export type VerifyEmailMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useVerifyEmailMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    VerifyEmailMutation,
-    VerifyEmailMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(
-    VerifyEmailDocument,
-    options
-  );
-}
-export type VerifyEmailMutationHookResult = ReturnType<
-  typeof useVerifyEmailMutation
->;
-export type VerifyEmailMutationResult =
-  Apollo.MutationResult<VerifyEmailMutation>;
-export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<
-  VerifyEmailMutation,
-  VerifyEmailMutationVariables
->;
+export function useVerifyEmailMutation(baseOptions?: Apollo.MutationHookOptions<VerifyEmailMutation, VerifyEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(VerifyEmailDocument, options);
+      }
+export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
+export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutation>;
+export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;

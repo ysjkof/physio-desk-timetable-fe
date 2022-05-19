@@ -4,14 +4,14 @@ import { useForm } from "react-hook-form";
 import { InDashboardPageProps } from ".";
 import {
   SearchUsersByNameInput,
-  useInviteGroupMutation,
+  useInviteClinicMutation,
   useSearchUsersByNameLazyQuery,
 } from "../../graphql/generated/graphql";
 import { cls } from "../../libs/utils";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-export const InviteGroup = ({
+export const InviteClinic = ({
   id,
   name,
   isStayed,
@@ -26,21 +26,21 @@ export const InviteGroup = ({
     { mode: "onChange" }
   );
 
-  const [inviteGroupMutation, { loading: inviteGroupLoading }] =
-    useInviteGroupMutation();
+  const [inviteClinicMutation, { loading: inviteClinicLoading }] =
+    useInviteClinicMutation();
 
-  function onClickInviteToGroup(
+  function onClickInviteToClinic(
     user: {
       id: number;
       name: string;
       email: string;
     },
-    groupName: string,
-    groupId: number
+    clinicName: string,
+    clinicId: number
   ) {
-    if (confirm(`${groupName}에 ${user.name}을(를) 그룹에 초대합니까?`)) {
-      inviteGroupMutation({
-        variables: { input: { groupId, userIds: [user.id] } },
+    if (confirm(`${clinicName}에 ${user.name}을(를) 그룹에 초대합니까?`)) {
+      inviteClinicMutation({
+        variables: { input: { clinicId, userIds: [user.id] } },
       });
     }
   }
@@ -107,7 +107,7 @@ export const InviteGroup = ({
                   </div>
                   <ul
                     className={cls(
-                      inviteGroupLoading ? "pointer-events-none" : ""
+                      inviteClinicLoading ? "pointer-events-none" : ""
                     )}
                   >
                     {searchUserResults &&
@@ -116,7 +116,7 @@ export const InviteGroup = ({
                         <li
                           key={user.id}
                           className="my-2 flex cursor-pointer items-center justify-between px-3 hover:bg-gray-100"
-                          onClick={() => onClickInviteToGroup(user, name, id)}
+                          onClick={() => onClickInviteToClinic(user, name, id)}
                         >
                           <span>{user.name}</span>
                           <FontAwesomeIcon icon={faUserPlus} />

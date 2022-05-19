@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Fragment, useEffect, useState } from "react";
 import {
-  Group,
+  Clinic,
   ListReservationsQuery,
   MeQuery,
   Patient,
@@ -26,26 +26,26 @@ import {
   getWeeksOfMonth,
   DayWithUsers,
   injectUsers,
-  spreadGroupMembers,
-  GroupMemberWithOptions,
-  GroupWithOptions,
+  spreadClinicMembers,
+  ClinicMemberWithOptions,
+  ClinicWithOptions,
   IViewOption,
   getHHMM,
   getTimeLength,
 } from "../libs/timetable-utils";
 import { cls } from "../libs/utils";
 import {
-  LOCALSTORAGE_SELECTED_GROUP,
+  LOCALSTORAGE_SELECTED_CLINIC,
   LOCALSTORAGE_VIEW_OPTION,
-  LOCALSTORAGE_VIEW_OPTION_GROUPS,
+  LOCALSTORAGE_VIEW_OPTION_CLINICS,
   ONE_DAY,
   ONE_WEEK,
 } from "../variables";
 import { ReservationDetail } from "./reservation-detail";
 import {
   colorsObj,
-  selectedGroupVar,
-  groupListsVar,
+  selectedClinicVar,
+  clinicListsVar,
   todayNowVar,
   viewOptionsVar,
 } from "../store";
@@ -76,13 +76,13 @@ interface ITimetableProps {
 }
 export interface ModifiedReservation
   extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
-  therapist: Pick<User, "id" | "name">;
+  user: Pick<User, "id" | "name">;
   lastModifier?: Pick<User, "id" | "name" | "email"> | null;
   patient: Pick<
     Patient,
     "id" | "name" | "gender" | "registrationNumber" | "birthday"
   >;
-  group?: Pick<Group, "id" | "name"> | null;
+  clinic?: Pick<Clinic, "id" | "name"> | null;
   prescriptions?: Pick<Prescription, "name">[] | null;
 }
 
@@ -111,9 +111,9 @@ export const Timetable: React.FC<ITimetableProps> = ({
     tableTime.end.minutes,
     10
   );
-  const groupLists = useReactiveVar(groupListsVar);
+  const clinicLists = useReactiveVar(clinicListsVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
-  const selectedGroup = useReactiveVar(selectedGroupVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
@@ -146,7 +146,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
 
   function distributor(
     events: ModifiedReservation[] | undefined | null,
-    members: GroupMemberWithOptions[]
+    members: ClinicMemberWithOptions[]
   ) {
     let days = injectUsers(
       getWeeks(getSunday(selectedDate)),
@@ -159,7 +159,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
       );
       if (dateIndex !== -1) {
         const userIndex = days[dateIndex].users.findIndex(
-          (member) => member.user.id === event.therapist.id
+          (member) => member.user.id === event.user.id
         );
         if (userIndex !== -1) {
           days[dateIndex].users[userIndex].events.push(event);
@@ -173,11 +173,11 @@ export const Timetable: React.FC<ITimetableProps> = ({
     if (eventsData?.listReservations.ok) {
       const distributeEvents = distributor(
         eventsData.listReservations.results,
-        spreadGroupMembers(groupLists, selectedGroup.id)
+        spreadClinicMembers(clinicLists, selectedClinic.id)
       );
       setWeekEvents(distributeEvents);
     }
-  }, [eventsData, groupLists]);
+  }, [eventsData, clinicLists]);
 
   useEffect(() => {
     if (!compareDateMatch(selectedDate, prevSelectedDate, "ym")) {
@@ -196,45 +196,45 @@ export const Timetable: React.FC<ITimetableProps> = ({
   }, [selectedDate]);
 
   const onClickToggleUser = (
-    groupLists: GroupWithOptions[],
-    groupId: number,
+    clinicLists: ClinicWithOptions[],
+    clinicId: number,
     memberId: number
   ) => {
-    const gIndex = groupLists.findIndex(
-      (prevGroup) => prevGroup.id === groupId
+    const gIndex = clinicLists.findIndex(
+      (prevClinic) => prevClinic.id === clinicId
     );
     if (gIndex === -1) return;
-    const mIndex = groupLists[gIndex].members.findIndex(
+    const mIndex = clinicLists[gIndex].members.findIndex(
       (prevMember) => prevMember.id === memberId
     );
     if (mIndex === -1) return;
-    groupLists[gIndex].members[mIndex].activation =
-      groupLists[gIndex].members[mIndex].activation === true ? false : true;
+    clinicLists[gIndex].members[mIndex].activation =
+      clinicLists[gIndex].members[mIndex].activation === true ? false : true;
     localStorage.setItem(
-      LOCALSTORAGE_VIEW_OPTION_GROUPS + loginUser.me.id,
-      JSON.stringify(groupLists)
+      LOCALSTORAGE_VIEW_OPTION_CLINICS + loginUser.me.id,
+      JSON.stringify(clinicLists)
     );
-    groupListsVar([...groupLists]);
+    clinicListsVar([...clinicLists]);
   };
 
-  const onClickChangeSelectGroup = (id: number, name: string) => {
-    let newSelectedGroup = selectedGroup;
-    if (selectedGroup.id === id) {
-      newSelectedGroup = {
+  const onClickChangeSelectClinic = (id: number, name: string) => {
+    let newSelectedClinic = selectedClinic;
+    if (selectedClinic.id === id) {
+      newSelectedClinic = {
         id: 0,
         name: "",
       };
     } else {
-      newSelectedGroup = {
+      newSelectedClinic = {
         id,
         name,
       };
     }
     localStorage.setItem(
-      LOCALSTORAGE_SELECTED_GROUP + loginUser.me.id,
-      JSON.stringify(newSelectedGroup)
+      LOCALSTORAGE_SELECTED_CLINIC + loginUser.me.id,
+      JSON.stringify(newSelectedClinic)
     );
-    selectedGroupVar(newSelectedGroup);
+    selectedClinicVar(newSelectedClinic);
   };
 
   if (!viewOptions) {
@@ -294,37 +294,40 @@ export const Timetable: React.FC<ITimetableProps> = ({
                       </div>
                     </div>
                     <ul className="h-full  overflow-y-scroll">
-                      {groupLists === null || groupLists.length === 0 ? (
+                      {clinicLists === null || clinicLists.length === 0 ? (
                         <div className="flex h-full items-center justify-center">
                           소속된 병원이 없습니다.
                         </div>
                       ) : (
-                        groupLists.map((group) => (
-                          <Fragment key={group.id}>
+                        clinicLists.map((clinic) => (
+                          <Fragment key={clinic.id}>
                             <ButtonCheck
-                              name={group.name}
-                              isActivated={group.id === selectedGroup.id}
+                              name={clinic.name}
+                              isActivated={clinic.id === selectedClinic.id}
                               onClickFx={() =>
-                                onClickChangeSelectGroup(group.id, group.name)
+                                onClickChangeSelectClinic(
+                                  clinic.id,
+                                  clinic.name
+                                )
                               }
                             />
                             <ul
                               className={cls(
-                                group.id === selectedGroup.id
+                                clinic.id === selectedClinic.id
                                   ? ""
                                   : "pointer-events-none"
                               )}
                             >
-                              {group.members.map((member) => (
+                              {clinic.members.map((member) => (
                                 <ButtonCheck
                                   key={member.id}
-                                  isActivated={group.id === selectedGroup.id}
+                                  isActivated={clinic.id === selectedClinic.id}
                                   isMemberActivated={member.activation}
                                   name={member.user.name}
                                   onClickFx={() =>
                                     onClickToggleUser(
-                                      groupLists,
-                                      group.id,
+                                      clinicLists,
+                                      clinic.id,
                                       member.id
                                     )
                                   }

@@ -1,5 +1,5 @@
-mutation leaveGroup($input: LeaveGroupInput!) {
-  leaveGroup(input: $input) {
+mutation leaveClinic($input: LeaveClinicInput!) {
+  leaveClinic(input: $input) {
     ok
     error
   }

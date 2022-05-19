@@ -1,5 +1,5 @@
-mutation inactivateGroup($input: InactivateGroupInput!) {
-  inactivateGroup(input: $input) {
+mutation inactivateClinic($input: InactivateClinicInput!) {
+  inactivateClinic(input: $input) {
     ok
     error
   }

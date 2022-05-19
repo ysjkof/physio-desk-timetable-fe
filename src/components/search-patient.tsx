@@ -5,14 +5,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchPatientByNameLazyQuery } from "../graphql/generated/graphql";
 import { cls } from "../libs/utils";
-import { selectedGroup, selectedPatientVar } from "../store";
+import { selectedClinic, selectedPatientVar } from "../store";
 import { NameTag } from "./name-tag";
 
 interface SearchPatientProps {
-  selectedGroup: typeof selectedGroup;
+  selectedClinic: typeof selectedClinic;
 }
 
-export const SearchPatient = ({ selectedGroup }: SearchPatientProps) => {
+export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
   const { register, getValues, handleSubmit } = useForm({
     mode: "onChange",
   });
@@ -30,7 +30,7 @@ export const SearchPatient = ({ selectedGroup }: SearchPatientProps) => {
           input: {
             page: queryPageNumber,
             query: patientNameTrim,
-            groupId: selectedGroup?.id,
+            clinicId: selectedClinic?.id,
           },
         },
       });
@@ -91,8 +91,8 @@ export const SearchPatient = ({ selectedGroup }: SearchPatientProps) => {
                   registrationNumber={patient.registrationNumber}
                   birthday={patient.birthday}
                   canClick
-                  groupName={patient.group?.name ?? ""}
-                  therapist={patient.therapists[patient.therapists.length - 1]}
+                  clinicName={patient.clinic?.name ?? ""}
+                  user={patient.users[patient.users.length - 1]}
                 />
               </div>
             )
@@ -119,7 +119,7 @@ export const SearchPatient = ({ selectedGroup }: SearchPatientProps) => {
                 name={selectedPatient.name}
                 registrationNumber={selectedPatient.registrationNumber}
                 birthday={selectedPatient.birthday}
-                groupName={selectedPatient.groupName}
+                clinicName={selectedPatient.clinicName}
               />
               <button
                 className="rounded-lg border bg-white py-1 px-3 shadow-sm hover:bg-gray-600 hover:text-white"

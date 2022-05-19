@@ -8,7 +8,7 @@ query listReservations($input: ListReservationsInput!) {
       endDate
       state
       memo
-      therapist {
+      user {
         id
         name
       }
@@ -24,7 +24,7 @@ query listReservations($input: ListReservationsInput!) {
         email
         name
       }
-      group {
+      clinic {
         id
         name
       }

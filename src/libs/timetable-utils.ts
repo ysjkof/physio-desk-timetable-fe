@@ -1,26 +1,21 @@
 import { ModifiedReservation } from "../components/timetable";
-import {
-  Group,
-  GroupMember,
-  MeQuery,
-  User,
-} from "../graphql/generated/graphql";
+import { Clinic, Member, MeQuery, User } from "../graphql/generated/graphql";
 import { ONE_DAY, ONE_WEEK } from "../variables";
 
-interface ModifiedGroupMemberWithUserAndGroup
-  extends Pick<GroupMember, "id" | "staying" | "manager" | "accepted"> {
+interface ModifiedClinicMemberWithUserAndClinic
+  extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
   user: Pick<User, "id" | "name">;
-  group: Pick<Group, "id" | "name">;
+  clinic: Pick<Clinic, "id" | "name">;
 }
-export interface GroupMemberWithOptions
-  extends ModifiedGroupMemberWithUserAndGroup {
+export interface ClinicMemberWithOptions
+  extends ModifiedClinicMemberWithUserAndClinic {
   activation: boolean;
   loginUser: boolean;
 }
-interface ModifiedGroup extends Pick<Group, "id" | "name"> {
-  members: GroupMemberWithOptions[];
+interface ModifiedClinic extends Pick<Clinic, "id" | "name"> {
+  members: ClinicMemberWithOptions[];
 }
-export interface GroupWithOptions extends ModifiedGroup {}
+export interface ClinicWithOptions extends ModifiedClinic {}
 
 export interface IViewOption {
   periodToView: typeof ONE_DAY | typeof ONE_WEEK;
@@ -44,14 +39,14 @@ export function getEnddate(startDate: Date, afterDay: number) {
   return returnDate;
 }
 
-export const spreadGroupMembers = (
-  groups: GroupWithOptions[] | null,
-  selectedGroupId: number
+export const spreadClinicMembers = (
+  clinics: ClinicWithOptions[] | null,
+  selectedClinicId: number
 ) => {
-  const result: GroupMemberWithOptions[] = [];
-  groups?.forEach((group) => {
-    if (group.id === selectedGroupId) {
-      const newMembers = group.members.filter((member) => member.activation);
+  const result: ClinicMemberWithOptions[] = [];
+  clinics?.forEach((clinic) => {
+    if (clinic.id === selectedClinicId) {
+      const newMembers = clinic.members.filter((member) => member.activation);
       result.push(...newMembers);
     }
   });
@@ -75,7 +70,7 @@ export const getSunday = (date: Date) => {
 export interface OneDate {
   date: Date;
 }
-interface UserWithEvents extends GroupMemberWithOptions {
+interface UserWithEvents extends ClinicMemberWithOptions {
   events: ModifiedReservation[];
 }
 export interface DayWithUsers {
@@ -93,9 +88,9 @@ export const getWeeks = (dateOfSunday: Date) => {
 };
 export const mergeLoggedInUser = (
   loginUser: MeQuery,
-  members: GroupMemberWithOptions[]
+  members: ClinicMemberWithOptions[]
 ) => {
-  let result: GroupMemberWithOptions[] = [];
+  let result: ClinicMemberWithOptions[] = [];
   const loggedInUser = {
     id: 0,
     staying: true,
@@ -106,7 +101,7 @@ export const mergeLoggedInUser = (
       name: loginUser.me.name,
       email: loginUser.me.email,
     },
-    group: {
+    clinic: {
       id: 0,
       name: "",
     },
@@ -134,7 +129,7 @@ export const mergeLoggedInUser = (
 export const injectUsers = (
   weeks: OneDate[],
   loginUser: MeQuery,
-  members: GroupMemberWithOptions[]
+  members: ClinicMemberWithOptions[]
 ) => {
   const result: DayWithUsers[] = [];
   function makeNewUsers() {

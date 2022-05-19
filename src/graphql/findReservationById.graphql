@@ -8,7 +8,7 @@ query findReservationById($input: FindReservationByIdInput!) {
       endDate
       state
       memo
-      therapist {
+      user {
         id
         name
         email
@@ -20,7 +20,7 @@ query findReservationById($input: FindReservationByIdInput!) {
         registrationNumber
         birthday
       }
-      group {
+      clinic {
         id
         name
       }

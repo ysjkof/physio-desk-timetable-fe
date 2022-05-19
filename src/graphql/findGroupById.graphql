@@ -1,8 +1,8 @@
-query findGroupById($input: FindGroupByIdInput!) {
-  findGroupById(input: $input) {
+query findClinicById($input: FindClinicByIdInput!) {
+  findClinicById(input: $input) {
     ok
     error
-    group {
+    clinic {
       id
       name
       members {

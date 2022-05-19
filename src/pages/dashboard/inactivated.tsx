@@ -1,9 +1,9 @@
-import { useFindMyGroupsQuery } from "../../graphql/generated/graphql";
+import { useFindMyClinicsQuery } from "../../graphql/generated/graphql";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-export const InactivatedGroup = () => {
-  const { data: findMyGroupsData, loading } = useFindMyGroupsQuery({
+export const InactivatedClinic = () => {
+  const { data: findMyClinicsData, loading } = useFindMyClinicsQuery({
     variables: { input: { includeField: "inactivate" } },
   });
 
@@ -25,12 +25,12 @@ export const InactivatedGroup = () => {
                   <span className="">이름</span>
                 </div>
                 <ul className="space-y-2 overflow-y-scroll">
-                  {findMyGroupsData &&
-                  Array.isArray(findMyGroupsData.findMyGroups.groups) &&
-                  findMyGroupsData.findMyGroups.groups.length >= 1
-                    ? findMyGroupsData?.findMyGroups?.groups?.map((group) => (
-                        <li key={group.id} className="text-sm">
-                          {group.name}
+                  {findMyClinicsData &&
+                  Array.isArray(findMyClinicsData.findMyClinics.clinics) &&
+                  findMyClinicsData.findMyClinics.clinics.length >= 1
+                    ? findMyClinicsData.findMyClinics.clinics.map((clinic) => (
+                        <li key={clinic.id} className="text-sm">
+                          {clinic.name}
                         </li>
                       ))
                     : "검색된 결과가 없습니다."}

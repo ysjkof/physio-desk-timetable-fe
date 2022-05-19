@@ -1,6 +1,6 @@
 import { makeVar } from "@apollo/client";
 import { ListReservationsQuery, Patient } from "./graphql/generated/graphql";
-import { GroupWithOptions, IViewOption } from "./libs/timetable-utils";
+import { ClinicWithOptions, IViewOption } from "./libs/timetable-utils";
 
 // 이곳에서 전역 변수 관리
 
@@ -10,11 +10,11 @@ export const queryResultVar = makeVar<ListReservationsQuery | undefined>(
 
 export const listReservationRefetchVar = makeVar<any>(undefined);
 
-interface SelectedPatient
+export interface SelectedPatient
   extends Pick<Patient, "name" | "gender" | "registrationNumber" | "birthday"> {
   id: number;
-  groupName: string;
-  therapist?: { id: number; name: string };
+  clinicName: string;
+  user?: { id: number; name: string };
 }
 
 export const selectedPatientVar = makeVar<null | SelectedPatient>(null);
@@ -40,13 +40,13 @@ export const colorsObj = {
   },
 };
 
-export const groupListsVar = makeVar<GroupWithOptions[]>([]); // member의 activated key를 저장하기 위해서 필요함.
+export const clinicListsVar = makeVar<ClinicWithOptions[]>([]); // member의 activated key를 저장하기 위해서 필요함.
 
 export const viewOptionsVar = makeVar<IViewOption | null>(null);
 
-export const selectedGroup = {
+export const selectedClinic = {
   id: 0,
   name: "",
 };
 
-export const selectedGroupVar = makeVar(selectedGroup);
+export const selectedClinicVar = makeVar(selectedClinic);

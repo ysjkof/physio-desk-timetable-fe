@@ -17,23 +17,23 @@ import { PateintDetail } from "./pages/patient-detail";
 import { Dashboard } from "./pages/dashboard";
 import { useMe } from "./hooks/useMe";
 import {
-  FindMyGroupsQuery,
-  useFindMyGroupsQuery,
-} from "./graphql/generated/graphql";
-import {
-  selectedGroup,
-  selectedGroupVar,
-  groupListsVar,
+  selectedClinic,
+  selectedClinicVar,
+  clinicListsVar,
   viewOptionsVar,
 } from "./store";
 import {
-  LOCALSTORAGE_SELECTED_GROUP,
+  LOCALSTORAGE_SELECTED_CLINIC,
   LOCALSTORAGE_VIEW_OPTION,
-  LOCALSTORAGE_VIEW_OPTION_GROUPS,
+  LOCALSTORAGE_VIEW_OPTION_CLINICS,
   ONE_WEEK,
 } from "./variables";
-import { GroupWithOptions, IViewOption } from "./libs/timetable-utils";
+import { ClinicWithOptions, IViewOption } from "./libs/timetable-utils";
 import { ListPatient } from "./pages/list-patient";
+import {
+  FindMyClinicsQuery,
+  useFindMyClinicsQuery,
+} from "./graphql/generated/graphql";
 
 const defaultViewOptions: IViewOption = {
   periodToView: ONE_WEEK,
@@ -47,22 +47,22 @@ const defaultViewOptions: IViewOption = {
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const { data: meData } = useMe();
-  const { data: findMyGroupsData } = useFindMyGroupsQuery({
+  const { data: findMyClinicsData } = useFindMyClinicsQuery({
     variables: { input: { includeField: "all" } },
   });
 
-  function filterActivatedMemberInGroup(
-    data: FindMyGroupsQuery | undefined | null,
+  function filterActivatedMemberInClinic(
+    data: FindMyClinicsQuery | undefined | null,
     loggedInUserId: number
   ) {
-    const result: GroupWithOptions[] = [];
-    if (data && data.findMyGroups.groups) {
-      data.findMyGroups.groups.forEach((group) => {
-        const isAccepted = group.members.find(
+    const result: ClinicWithOptions[] = [];
+    if (data && data.findMyClinics.clinics) {
+      data.findMyClinics.clinics.forEach((clinic) => {
+        const isAccepted = clinic.members.find(
           (member) => member.user.id === loggedInUserId && member.accepted
         );
         if (isAccepted) {
-          const members = group.members
+          const members = clinic.members
             .filter((member) => member.accepted && member.staying)
             .map((member) => ({
               ...member,
@@ -70,7 +70,7 @@ function App() {
               loginUser: member.user.id === loggedInUserId && true,
             }));
           if (Array.isArray(members) && members[0]) {
-            result.push({ ...group, members });
+            result.push({ ...clinic, members });
           }
         }
       });
@@ -95,24 +95,24 @@ function App() {
 
   useEffect(() => {
     if (!meData) return;
-    let updatedMyGroups: GroupWithOptions[] = [];
-    const myGroups = filterActivatedMemberInGroup(
-      findMyGroupsData,
+    let updatedMyClinics: ClinicWithOptions[] = [];
+    const myClinics = filterActivatedMemberInClinic(
+      findMyClinicsData,
       meData.me.id
     );
 
-    const localGroups: GroupWithOptions[] = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_VIEW_OPTION_GROUPS + meData.me.id)!
+    const localClinics: ClinicWithOptions[] = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_VIEW_OPTION_CLINICS + meData.me.id)!
     );
-    if (localGroups) {
-      updatedMyGroups = myGroups.map((g) => {
-        const existLocalGroup = localGroups.find((lg) => lg.id === g.id);
-        if (existLocalGroup) {
+    if (localClinics) {
+      updatedMyClinics = myClinics.map((g) => {
+        const existLocalClinic = localClinics.find((lg) => lg.id === g.id);
+        if (existLocalClinic) {
           return {
             id: g.id,
             name: g.name,
             members: g.members.map((gm) => {
-              const sameMember = existLocalGroup.members.find(
+              const sameMember = existLocalClinic.members.find(
                 (lgm) => lgm.id === gm.id
               );
               if (sameMember) {
@@ -127,30 +127,30 @@ function App() {
         }
       });
     } else {
-      updatedMyGroups = myGroups;
+      updatedMyClinics = myClinics;
     }
     localStorage.setItem(
-      LOCALSTORAGE_VIEW_OPTION_GROUPS + meData.me.id,
-      JSON.stringify(updatedMyGroups)
+      LOCALSTORAGE_VIEW_OPTION_CLINICS + meData.me.id,
+      JSON.stringify(updatedMyClinics)
     );
-    groupListsVar(updatedMyGroups);
+    clinicListsVar(updatedMyClinics);
 
-    const localSelectGroup: typeof selectedGroup = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_SELECTED_GROUP + meData.me.id)!
+    const localSelectClinic: typeof selectedClinic = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_SELECTED_CLINIC + meData.me.id)!
     );
     if (
-      localSelectGroup &&
-      myGroups.find((g) => g.id === localSelectGroup.id)
+      localSelectClinic &&
+      myClinics.find((g) => g.id === localSelectClinic.id)
     ) {
-      selectedGroupVar(localSelectGroup);
+      selectedClinicVar(localSelectClinic);
     } else {
       localStorage.setItem(
-        LOCALSTORAGE_SELECTED_GROUP + meData.me.id,
-        JSON.stringify(selectedGroup)
+        LOCALSTORAGE_SELECTED_CLINIC + meData.me.id,
+        JSON.stringify(selectedClinic)
       );
-      selectedGroupVar(selectedGroup);
+      selectedClinicVar(selectedClinic);
     }
-  }, [findMyGroupsData]);
+  }, [findMyClinicsData]);
 
   return (
     <Routes>

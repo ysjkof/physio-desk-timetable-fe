@@ -5,15 +5,15 @@ query me {
     email
     role
     verified
-    groups {
+    members {
       id
       staying
       manager
       accepted
-      group {
+      clinic {
         id
         name
-        activate
+        isActivated
       }
     }
     notice {

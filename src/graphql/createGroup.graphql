@@ -1,5 +1,5 @@
-mutation createGroup($input: CreateGroupInput!) {
-  createGroup(input: $input) {
+mutation createClinic($input: CreateClinicInput!) {
+  createClinic(input: $input) {
     ok
     error
   }

@@ -11,7 +11,7 @@ import { DatepickerWithInput } from "../../components/datepicker-with-input";
 import { DashboardLi } from "./components/li";
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
 import { InDashboardPageProps } from ".";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DashboardBtn } from "./components/button";
 
 interface UserStatis {
@@ -92,7 +92,7 @@ export const Statistics = ({
       variables: {
         input: {
           includeInactivate: false,
-          groupId: id,
+          clinicId: id,
         },
       },
     });
@@ -117,7 +117,7 @@ export const Statistics = ({
             endDate,
             ...(typeof id === "number" &&
               id !== 0 && {
-                groupId: id,
+                clinicId: id,
                 userIds,
               }),
           },
@@ -281,7 +281,6 @@ export const Statistics = ({
                     <span>{endDate.toLocaleDateString()}</span>
                   </div>
                 </h3>
-                {/* <div className="border-t "></div> */}
 
                 <div className="grid min-h-[16rem] grid-flow-col gap-10 px-4 pt-6">
                   {userStatis.map((user, idx) => (

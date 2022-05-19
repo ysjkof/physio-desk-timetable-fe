@@ -1,27 +1,27 @@
 import { useForm } from "react-hook-form";
 import {
-  CreateGroupInput,
-  useCreateGroupMutation,
+  CreateClinicInput,
+  useCreateClinicMutation,
 } from "../../graphql/generated/graphql";
 import { DashboardBtn } from "./components/button";
 import { InputPriscription } from "./components/input-priscription";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-export const CreateGroup = () => {
+export const CreateClinic = () => {
   const {
     register,
     handleSubmit,
     getValues,
     formState: { isValid },
-  } = useForm<CreateGroupInput>({ mode: "onChange" });
+  } = useForm<CreateClinicInput>({ mode: "onChange" });
 
-  const [createGroupMutation, { loading }] = useCreateGroupMutation();
+  const [createClinicMutation, { loading }] = useCreateClinicMutation();
 
-  const onSubmitCreateGroup = () => {
+  const onSubmitCreateClinic = () => {
     if (!loading) {
       const { name } = getValues();
-      createGroupMutation({
+      createClinicMutation({
         variables: { input: { name } },
       });
     }
@@ -37,7 +37,7 @@ export const CreateGroup = () => {
             isPadding={true}
             children={
               <form
-                onSubmit={handleSubmit(onSubmitCreateGroup)}
+                onSubmit={handleSubmit(onSubmitCreateClinic)}
                 className="mt-8 space-y-3"
               >
                 <InputPriscription

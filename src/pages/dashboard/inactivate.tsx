@@ -1,9 +1,9 @@
 import { InDashboardPageProps } from ".";
-import { useInactivateGroupMutation } from "../../graphql/generated/graphql";
+import { useInactivateClinicMutation } from "../../graphql/generated/graphql";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
-export const InactivateGroup = ({
+export const InactivateClinic = ({
   id,
   name,
   isStayed,
@@ -14,12 +14,12 @@ export const InactivateGroup = ({
   if (!isStayed || !isManager) {
     return <h3 className="mt-10 text-center text-xl">권한이 없습니다</h3>;
   }
-  const [mutationInactivateGroup, { loading }] = useInactivateGroupMutation();
+  const [mutationInactivateClinic, { loading }] = useInactivateClinicMutation();
 
   const onClick = () => {
     if (!loading && confirm(`${name}을(를) 비활성화 합니까?`)) {
-      mutationInactivateGroup({
-        variables: { input: { groupId: id } },
+      mutationInactivateClinic({
+        variables: { input: { clinicId: id } },
       });
     }
   };

@@ -1,11 +1,11 @@
-query findMyGroups($input: FindMyGroupsInput!) {
-  findMyGroups(input: $input) {
+query findMyClinics($input: FindMyClinicsInput!) {
+  findMyClinics(input: $input) {
     ok
     error
-    groups {
+    clinics {
       id
       name
-      activate
+      isActivated
       members {
         id
         staying
@@ -15,7 +15,7 @@ query findMyGroups($input: FindMyGroupsInput!) {
           id
           name
         }
-        group {
+        clinic {
           id
           name
         }

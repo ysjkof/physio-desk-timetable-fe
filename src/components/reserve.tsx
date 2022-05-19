@@ -1,5 +1,5 @@
 import { useReactiveVar } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,8 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { DatepickerForm } from "../components/datepicker";
 import {
-  selectedGroupVar,
-  groupListsVar,
+  selectedClinicVar,
+  clinicListsVar,
   listReservationRefetchVar,
   selectedPatientVar,
 } from "../store";
@@ -61,7 +61,7 @@ function selectPrescriptionForTest(inputPpresc: PrescriptionWithSelect[]) {
 
 interface ReserveForm extends DatepickerForm {
   memo?: string;
-  therapistId?: number;
+  userId?: number;
 }
 
 interface ReserveProps {
@@ -76,7 +76,7 @@ export const Reserve = ({
   prescriptions,
 }: ReserveProps) => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
-  const [totalPrescription, setTotalPrescription] = useState({
+  const [selectedPresc, setSelectedPresc] = useState({
     price: 0,
     minute: 0,
     prescriptions: [0],
@@ -86,7 +86,7 @@ export const Reserve = ({
   const navigate = useNavigate();
   // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
   // const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
-  const selectedGroup = useReactiveVar(selectedGroupVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const { data: meData } = useMe();
   const {
@@ -113,9 +113,8 @@ export const Reserve = ({
     createReservationMutation,
     { loading, data: createReservationResult },
   ] = useCreateReservationMutation({ onCompleted });
-
-  const onSubmit = () => {
-    const { therapistId } = getValues();
+  function createDummyReserve() {
+    const { userId } = getValues();
     const firstDate = new Date("2022-5-1");
     let countSum = 0;
     for (let i = 0; i < 31; i++) {
@@ -131,8 +130,8 @@ export const Reserve = ({
               startDate: t[0],
               endDate: t[1],
               patientId: selectedPatient?.id!,
-              therapistId: +therapistId!,
-              groupId: selectedGroup?.id,
+              userId: +userId!,
+              clinicId: selectedClinic?.id,
               prescriptionIds: [presc.id],
             },
           },
@@ -140,43 +139,44 @@ export const Reserve = ({
       });
     }
     console.log("총 생성된 예약 : ", countSum);
-    // if (!loading && selectedPatient?.id) {
-    //   const {
-    //     startDateYear,
-    //     startDateMonth,
-    //     startDateDate,
-    //     startDateHours,
-    //     startDateMinutes,
-    //     memo,
-    //     therapistId,
-    //   } = getValues();
-    //   const startDate = getDateFromYMDHM(
-    //     startDateYear,
-    //     startDateMonth,
-    //     startDateDate,
-    //     startDateHours,
-    //     startDateMinutes
-    //   );
-    //   const endDate = new Date(startDate);
-    //   // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-    //   endDate.setMinutes(endDate.getMinutes() + totalPrescription.minute);
-    //   createReservationMutation({
-    //     variables: {
-    //       input: {
-    //         startDate: startDate,
-    //         endDate,
-    //         memo,
-    // patientId: selectedPatient.id,
-    //         therapistId: +therapistId!,
-    //         groupId: selectedGroup?.id,
-    //         prescriptionOptionIds: totalPrescription.options,
-    //         prescriptionBundleIds: totalPrescription.bundles,
-    //       },
-    //     },
-    //   });
-    // }
+  }
+  const onSubmit = () => {
+    if (!loading && selectedPatient?.id) {
+      const {
+        startDateYear,
+        startDateMonth,
+        startDateDate,
+        startDateHours,
+        startDateMinutes,
+        memo,
+        userId,
+      } = getValues();
+      const startDate = getDateFromYMDHM(
+        startDateYear,
+        startDateMonth,
+        startDateDate,
+        startDateHours,
+        startDateMinutes
+      );
+      const endDate = new Date(startDate);
+      // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
+      endDate.setMinutes(endDate.getMinutes() + selectedPresc.minute);
+      createReservationMutation({
+        variables: {
+          input: {
+            startDate: startDate,
+            endDate,
+            memo,
+            patientId: selectedPatient.id,
+            userId: +userId!,
+            clinicId: selectedClinic?.id,
+            prescriptionIds: selectedPresc.prescriptions,
+          },
+        },
+      });
+    }
   };
-  const groupLists = useReactiveVar(groupListsVar);
+  const clinicLists = useReactiveVar(clinicListsVar);
 
   const onClickPrescription = (id: number) => {
     setSelectPrescriptions((prevState) =>
@@ -207,7 +207,7 @@ export const Reserve = ({
   }
 
   useEffect(() => {
-    setTotalPrescription({
+    setSelectedPresc({
       minute: getTotal("requiredTime", selectPrescriptions),
       price: getTotal("price", selectPrescriptions),
       prescriptions: selectPrescriptions
@@ -218,9 +218,9 @@ export const Reserve = ({
 
   useEffect(() => {
     if (!selectedPatient) {
-      setValue("therapistId", meData?.me.id);
+      setValue("userId", meData?.me.id);
     } else {
-      setValue("therapistId", selectedPatient?.therapist?.id);
+      setValue("userId", selectedPatient?.user?.id);
     }
   }, [selectedPatient]);
 
@@ -238,21 +238,22 @@ export const Reserve = ({
         </button>
         {openCreatePatient ? (
           <CreatePatient
-            groupId={selectedGroup?.id ?? undefined}
-            groupName={selectedGroup?.name ?? undefined}
+            clinicId={selectedClinic?.id ?? undefined}
+            clinicName={selectedClinic?.name ?? undefined}
             closeModal={setOpenCreatePatient}
           />
         ) : (
           <>
             <h4 className="mb-5 w-full text-3xl font-medium">
               예약하기
-              {selectedGroup === null || selectedGroup.id === null ? (
+              {selectedClinic === null || selectedClinic.id === null ? (
                 ""
               ) : (
                 <span className="ml-2 text-base font-normal">
                   {
-                    groupLists?.find((group) => group.id === selectedGroup?.id)
-                      ?.name
+                    clinicLists?.find(
+                      (clinic) => clinic.id === selectedClinic?.id
+                    )?.name
                   }
                 </span>
               )}
@@ -263,7 +264,7 @@ export const Reserve = ({
             >
               환자등록
             </button>
-            <SearchPatient selectedGroup={selectedGroup} />
+            <SearchPatient selectedClinic={selectedClinic} />
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="mt-5 mb-5 grid w-full gap-3"
@@ -285,15 +286,12 @@ export const Reserve = ({
               )}
               <label>담당 치료사</label>
               <div className="flex justify-between">
-                <select
-                  {...register("therapistId")}
-                  className="w-full text-center"
-                >
-                  {selectedGroup.id === 0 ? (
+                <select {...register("userId")} className="w-full text-center">
+                  {selectedClinic.id === 0 ? (
                     <option value={meData?.me.id}>{meData?.me.name}</option>
                   ) : (
-                    groupLists
-                      ?.find((g) => g.id === selectedGroup?.id)
+                    clinicLists
+                      ?.find((g) => g.id === selectedClinic?.id)
                       ?.members.map((m) => (
                         <option key={m.id} value={m.user.id}>
                           {m.user.name}
@@ -315,8 +313,8 @@ export const Reserve = ({
                 <Link
                   to={"/dashboard"}
                   state={{
-                    selectedGroupId: selectedGroup?.id,
-                    selectedGroupName: selectedGroup?.name,
+                    selectedClinicId: selectedClinic?.id,
+                    selectedClinicName: selectedClinic?.name,
                     selectedMenu: "prescription",
                   }}
                 >
@@ -332,8 +330,8 @@ export const Reserve = ({
                       <Link
                         to={"/dashboard"}
                         state={{
-                          selectedGroupId: selectedGroup?.id,
-                          selectedGroupName: selectedGroup?.name,
+                          selectedClinicId: selectedClinic?.id,
+                          selectedClinicName: selectedClinic?.name,
                           selectedMenu: "prescription",
                         }}
                       >
@@ -371,8 +369,8 @@ export const Reserve = ({
                       ))}
                     </ul>
                     <div className="flex justify-around">
-                      <span>총가격 : {totalPrescription.price}원</span>
-                      <span>치료시간 : {totalPrescription.minute}분</span>
+                      <span>총가격 : {selectedPresc.price}원</span>
+                      <span>치료시간 : {selectedPresc.minute}분</span>
                     </div>
                   </div>
                 )}
@@ -381,7 +379,7 @@ export const Reserve = ({
                 canClick={
                   selectedPatient &&
                   isValid &&
-                  totalPrescription.prescriptions[0] > 0
+                  selectedPresc.prescriptions[0] > 0
                 }
                 loading={loading}
                 actionText={"예약 등록"}
