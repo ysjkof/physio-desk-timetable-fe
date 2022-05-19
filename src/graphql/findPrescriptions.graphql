@@ -2,35 +2,17 @@ query findPrescriptions($input: FindPrescriptionsInput!) {
   findPrescriptions(input: $input) {
     ok
     error
-    optionResults {
+    prescriptions {
       id
       name
       requiredTime
       description
       price
-      prescription {
-        name
-      }
       activate
-    }
-    bundleResults {
-      id
-      name
-      requiredTime
-      description
-      price
-      prescriptionOptions {
+      prescriptionAtoms {
         id
         name
-        requiredTime
-        description
-        price
-        prescription {
-          name
-        }
-        activate
       }
-      activate
     }
   }
 }

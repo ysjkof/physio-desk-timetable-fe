@@ -20,7 +20,7 @@ import {
   selectedPatientVar,
 } from "../store";
 import { CreatePatient } from "../pages/create-patient";
-import { PrescriptionsSelectType } from "../pages/time-table";
+import { PrescriptionWithSelect } from "../pages/time-table";
 import { cls, getDateFromYMDHM } from "../libs/utils";
 import { DatepickerWithInput } from "./datepicker-with-input";
 import { useMe } from "../hooks/useMe";
@@ -48,7 +48,7 @@ function getOneDayReservationInputDateForTest(
     return [date, endDate];
   });
 }
-function selectPrescriptionForTest(inputPpresc: any[]) {
+function selectPrescriptionForTest(inputPpresc: PrescriptionWithSelect[]) {
   // presscriptions.option이나 presscriptions.bundle을 인자로 받는다.
   const selected = inputPpresc[Math.floor(Math.random() * inputPpresc.length)];
   return {
@@ -67,7 +67,7 @@ interface ReserveForm extends DatepickerForm {
 interface ReserveProps {
   startDate: Date;
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
-  prescriptions: PrescriptionsSelectType;
+  prescriptions: PrescriptionWithSelect[];
 }
 
 export const Reserve = ({
@@ -76,18 +76,12 @@ export const Reserve = ({
   prescriptions,
 }: ReserveProps) => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
-  const [selectPrescriptionOptions, setSelectPrescriptionOptions] = useState(
-    prescriptions.option
-  );
-  const [selectPrescriptionBundles, setSelectPrescriptionBundles] = useState(
-    prescriptions.bundle
-  );
   const [totalPrescription, setTotalPrescription] = useState({
     price: 0,
     minute: 0,
-    options: [0],
-    bundles: [0],
+    prescriptions: [0],
   });
+  const [selectPrescriptions, setSelectPrescriptions] = useState(prescriptions);
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const navigate = useNavigate();
   // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
@@ -127,10 +121,7 @@ export const Reserve = ({
     for (let i = 0; i < 31; i++) {
       console.log("aa", i);
       firstDate.setDate(i + 1);
-      const prescTypes = [selectPrescriptionOptions, selectPrescriptionBundles];
-      const presc = selectPrescriptionForTest(
-        prescTypes[Math.floor(Math.random() * prescTypes.length)]
-      );
+      const presc = selectPrescriptionForTest(prescriptions);
       const times = getOneDayReservationInputDateForTest(firstDate, presc);
       countSum = countSum + times.length;
       times.forEach((t) => {
@@ -142,12 +133,7 @@ export const Reserve = ({
               patientId: selectedPatient?.id!,
               therapistId: +therapistId!,
               groupId: selectedGroup?.id,
-              ...(presc.type === "PrescriptionOption" && {
-                prescriptionOptionIds: presc.id,
-              }),
-              ...(presc.type !== "PrescriptionOption" && {
-                prescriptionBundleIds: presc.id,
-              }),
+              prescriptionIds: [presc.id],
             },
           },
         });
@@ -192,15 +178,8 @@ export const Reserve = ({
   };
   const groupLists = useReactiveVar(groupListsVar);
 
-  const onClickPrescription = (id: number, type: "bundle" | "option") => {
-    let setFunction:
-      | typeof setSelectPrescriptionBundles
-      | typeof setSelectPrescriptionOptions = setSelectPrescriptionOptions;
-    if (type === "bundle") {
-      setFunction = setSelectPrescriptionBundles;
-    }
-    // @ts-ignore
-    setFunction((prevState) =>
+  const onClickPrescription = (id: number) => {
+    setSelectPrescriptions((prevState) =>
       // @ts-ignore
       prevState.map((prev) => {
         if (prev.id === id) {
@@ -220,39 +199,22 @@ export const Reserve = ({
 
   function getTotal(
     getThis: "price" | "requiredTime",
-    firstPrescription: typeof selectPrescriptionOptions,
-    secondPrescription: typeof selectPrescriptionBundles
+    prescriptions: typeof selectPrescriptions
   ) {
-    return (
-      firstPrescription
-        .filter((pre) => pre.isSelect)
-        .reduce((prev, curr) => prev + curr[getThis], 0) +
-      secondPrescription
-        .filter((pre) => pre.isSelect)
-        .reduce((prev, curr) => prev + curr[getThis], 0)
-    );
+    return prescriptions
+      .filter((pre) => pre.isSelect)
+      .reduce((prev, curr) => prev + curr[getThis], 0);
   }
 
   useEffect(() => {
     setTotalPrescription({
-      minute: getTotal(
-        "requiredTime",
-        selectPrescriptionOptions,
-        selectPrescriptionBundles
-      ),
-      price: getTotal(
-        "price",
-        selectPrescriptionOptions,
-        selectPrescriptionBundles
-      ),
-      bundles: selectPrescriptionBundles
-        .filter((pre) => pre.isSelect)
-        .map((pre) => pre.id),
-      options: selectPrescriptionOptions
+      minute: getTotal("requiredTime", selectPrescriptions),
+      price: getTotal("price", selectPrescriptions),
+      prescriptions: selectPrescriptions
         .filter((pre) => pre.isSelect)
         .map((pre) => pre.id),
     });
-  }, [selectPrescriptionBundles, selectPrescriptionOptions]);
+  }, [selectPrescriptions]);
 
   useEffect(() => {
     if (!selectedPatient) {
@@ -362,8 +324,7 @@ export const Reserve = ({
                 </Link>
               </label>
               <div>
-                {selectPrescriptionBundles.length === 0 &&
-                selectPrescriptionOptions.length === 0 ? (
+                {selectPrescriptions.length === 0 ? (
                   <div className="flex flex-col items-center px-2 text-gray-600">
                     <span>등록된 처방이 없습니다.</span>
                     <span>
@@ -390,34 +351,11 @@ export const Reserve = ({
                 ) : (
                   <div className="space-y-2">
                     <ul className="grid grid-cols-3">
-                      {selectPrescriptionBundles.map((prescription, index) => (
+                      {selectPrescriptions.map((prescription, index) => (
                         <li
                           key={index}
                           value={prescription.id}
-                          onClick={() =>
-                            onClickPrescription(prescription.id, "bundle")
-                          }
-                        >
-                          <div
-                            className={cls(
-                              "btn-sm btn-border",
-                              prescription.isSelect
-                                ? "text-red-600"
-                                : "text-blue-400"
-                            )}
-                          >
-                            {prescription.name}
-                          </div>
-                        </li>
-                      ))}
-                      {selectPrescriptionOptions.map((prescription, index) => (
-                        <li
-                          key={index}
-                          value={prescription.id}
-                          className="cursor-point"
-                          onClick={() =>
-                            onClickPrescription(prescription.id, "option")
-                          }
+                          onClick={() => onClickPrescription(prescription.id)}
                         >
                           <div
                             className={cls(
@@ -443,8 +381,7 @@ export const Reserve = ({
                 canClick={
                   selectedPatient &&
                   isValid &&
-                  (totalPrescription.options[0] > 0 ||
-                    totalPrescription.bundles[0] > 0)
+                  totalPrescription.prescriptions[0] > 0
                 }
                 loading={loading}
                 actionText={"예약 등록"}

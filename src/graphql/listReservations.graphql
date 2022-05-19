@@ -28,11 +28,12 @@ query listReservations($input: ListReservationsInput!) {
         id
         name
       }
-      prescriptionOptions {
+      prescriptions {
         name
-      }
-      prescriptionBundles {
-        name
+        requiredTime
+        description
+        price
+        activate
       }
     }
   }

@@ -12,7 +12,7 @@ import { Members } from "./members";
 import { InviteGroup } from "./invite";
 import { InactivateGroup } from "./inactivate";
 import { CreateGroup } from "./create";
-import { Prescription } from "./prescription";
+import { PrescriptionPage } from "./prescription";
 import { useLocation } from "react-router-dom";
 import { InactivatedGroup } from "./inactivated";
 import { Statistics } from "./statistics";
@@ -301,7 +301,7 @@ export const Dashboard = () => {
                     />
                   )}
                   {selectedMenu === "prescription" && (
-                    <Prescription
+                    <PrescriptionPage
                       id={selectedGroup.id}
                       name={selectedGroup.name}
                       members={selectedGroup.members}

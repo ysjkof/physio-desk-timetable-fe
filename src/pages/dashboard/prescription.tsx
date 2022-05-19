@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { InputPriscription } from "./components/input-priscription";
 import {
   CreatePrescriptionInput,
-  PrescriptionOption,
   useCreatePrescriptionMutation,
   useFindAtomPrescriptionsQuery,
   useFindPrescriptionsQuery,
@@ -19,31 +18,7 @@ import { DashboardTitle } from "./components/title";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { InDashboardPageProps } from ".";
 
-type ValueToString<T> = { [K in keyof T]: string };
-interface PickCreatePrescriptionOption
-  extends Pick<
-    CreatePrescriptionInput,
-    "name" | "requiredTime" | "price" | "groupId"
-  > {}
-interface CreatePrescriptionOptionFormType
-  extends ValueToString<PickCreatePrescriptionOption> {
-  prescriptionId?: string;
-  prescriptionOptionIds?: string[];
-  description?: string;
-}
-
-interface ModefiedPrescriptionOption
-  extends Pick<PrescriptionOption, "id" | "name" | "requiredTime" | "price"> {
-  description?: string | null | undefined;
-  prescription: {
-    name: string;
-  };
-}
-interface ModefiedPrescriptionOptionWithActivate
-  extends ModefiedPrescriptionOption {
-  onSelect: boolean;
-}
-export const Prescription = ({
+export const PrescriptionPage = ({
   id,
   name,
   isStayed,
@@ -52,10 +27,10 @@ export const Prescription = ({
   if (!isStayed) {
     return <h3 className="mt-10 text-center text-xl">권한이 없습니다</h3>;
   }
-  const [selectBundle, setSelectBundle] = useState(false);
-  const [selectOption, setSelectOption] = useState<
-    ModefiedPrescriptionOptionWithActivate[]
+  const [atomList, setAtomList] = useState<
+    { id: number; name: string; onSelect: boolean }[]
   >([]);
+
   const { data: findAtomPrescriptions, loading: loadingAtomPrescriptions } =
     useFindAtomPrescriptionsQuery();
   const { data: findPrescriptionsData, loading: loadingPrescriptionsData } =
@@ -63,7 +38,6 @@ export const Prescription = ({
       variables: {
         input: {
           includeInactivate: false,
-          prescriptionType: "all",
           groupId: id,
         },
       },
@@ -81,16 +55,16 @@ export const Prescription = ({
     register,
     handleSubmit,
     getValues,
-    reset,
+    setValue,
     formState: { isValid, errors },
-  } = useForm<CreatePrescriptionOptionFormType>({ mode: "onChange" });
+  } = useForm<CreatePrescriptionInput>({ mode: "onChange" });
 
   const onSubmitCreatePresciption = () => {
     if (!loadingCreatePrescriptionOption) {
-      const { name, requiredTime, price, prescriptionId, description } =
+      const { name, requiredTime, price, prescriptionAtomIds, description } =
         getValues();
       let prescriptionOptionIds: number[] = [];
-      selectOption.forEach((option) => {
+      atomList.forEach((option) => {
         if (option.onSelect === true) {
           prescriptionOptionIds.push(option.id);
         }
@@ -100,57 +74,38 @@ export const Prescription = ({
         variables: {
           input: {
             name,
-            requiredTime: parseInt(requiredTime),
-            price: parseInt(price),
+            requiredTime: +requiredTime,
+            price: +price,
             description,
-            ...(prescriptionOptionIds.length >= 2 && {
-              prescriptionOptionIds: prescriptionOptionIds,
-            }),
-            ...(prescriptionId && {
-              prescriptionId: parseInt(prescriptionId),
-            }),
+            prescriptionAtomIds,
             ...(id && { groupId: id }),
           },
         },
       });
     }
   };
-  function getTotalPrice(
-    target: "price" | "requiredTime",
-    array: ModefiedPrescriptionOptionWithActivate[]
-  ) {
-    return array.reduce((prev, curr) => {
-      if (curr.onSelect) {
-        return prev + curr[target];
-      }
-      return prev;
-    }, 0);
-  }
 
   useEffect(() => {
-    if (selectBundle) {
-      reset({
-        description: "",
-        name: "",
-        price: getTotalPrice("price", selectOption) + "",
-        requiredTime: getTotalPrice("requiredTime", selectOption) + "",
-      });
-    } else {
-      reset({ description: "", name: "", price: "", requiredTime: "" });
-    }
-  }, [selectOption, selectBundle]);
-
+    setValue(
+      "prescriptionAtomIds",
+      atomList
+        .filter((atom) => {
+          atom.onSelect;
+        })
+        .map((atom) => atom.id)
+    );
+  }, [atomList]);
   useEffect(() => {
-    if (findPrescriptionsData) {
-      setSelectOption(
-        findPrescriptionsData.findPrescriptions.optionResults!.map((prev) => ({
-          ...prev,
+    if (!loadingAtomPrescriptions) {
+      setAtomList(
+        findAtomPrescriptions?.findAtomPrescriptions.results?.map((atom) => ({
+          id: atom.id,
+          name: atom.name,
           onSelect: false,
-        }))
+        })) ?? []
       );
-      setSelectBundle(false);
     }
-  }, [findPrescriptionsData]);
+  }, [findAtomPrescriptions]);
 
   return (
     <div className="h-full">
@@ -169,7 +124,7 @@ export const Prescription = ({
                   <span className=" text-center">활성</span>
                 </div>
                 <ul className="space-y-2 overflow-y-scroll">
-                  {findPrescriptionsData?.findPrescriptions.optionResults?.map(
+                  {findPrescriptionsData?.findPrescriptions.prescriptions?.map(
                     (presc) => (
                       <li
                         key={presc.id}
@@ -200,7 +155,7 @@ export const Prescription = ({
               </>
             }
           />
-          <DashboardSectionLayout
+          {/* <DashboardSectionLayout
             title="묶음처방"
             tooltip="단일 처방을 여러개 묶은 것"
             isPadding={true}
@@ -243,7 +198,7 @@ export const Prescription = ({
                 </ul>
               </>
             }
-          />
+          /> */}
         </section>
 
         <section>
@@ -260,105 +215,37 @@ export const Prescription = ({
                 >
                   <div className="prescription-selector">
                     <div className="flex items-center">
-                      <h4 className="mr-4 w-9 text-sm">유형</h4>
-                      <div className="flex w-full justify-around">
-                        <div
-                          className={cls(
-                            "flex rounded-t-md px-2 pt-2 pb-1",
-                            selectBundle ? "" : "bg-blue-400/90 text-blue-800"
-                          )}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => setSelectBundle(false)}
-                            className="rounded-md bg-white px-3 py-1"
-                          >
-                            단일 처방
-                          </button>
-                        </div>
-                        <div
-                          className={cls(
-                            "flex items-center gap-1 rounded-t-md px-2 pt-2 pb-1",
-                            selectBundle ? "bg-blue-400/90 text-blue-800" : ""
-                          )}
-                        >
-                          <button
-                            type="button"
-                            className={cls(
-                              "flex gap-1 py-1 pl-3 pr-2",
-                              findPrescriptionsData?.findPrescriptions
-                                .optionResults?.length! <= 1
-                                ? "pointer-events-none text-gray-400"
-                                : "rounded-md bg-white"
-                            )}
-                            onClick={() => setSelectBundle(true)}
-                          >
-                            묶음 처방
-                            <div className="group relative">
-                              <FontAwesomeIcon icon={faCircleQuestion} />
-                              <p className="bubble-arrow-t-left absolute top-8 -left-6 hidden w-60 rounded-md bg-black py-2 px-2 text-white group-hover:block">
-                                단일처방을 모아 놓은 묶음처방입니다. 단일처방이
-                                2개 이상 있어야 활성화됩니다.
-                              </p>
-                            </div>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
                       <h4 className="mr-4 w-9 text-sm">처방</h4>
                       <div className="w-full rounded-md bg-blue-400/90 text-white">
                         <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
-                          {selectBundle
-                            ? selectOption.map((option) => (
-                                <button
-                                  type="button"
-                                  key={option.id}
-                                  className={cls(
-                                    "btn py-1 px-3",
-                                    option.onSelect
-                                      ? "rounded-md bg-white px-3 font-semibold text-blue-800"
-                                      : ""
-                                  )}
-                                  onClick={() =>
-                                    setSelectOption((prevState) => {
-                                      return prevState.map((prev) => {
-                                        if (prev.id === option.id) {
-                                          return {
-                                            ...prev,
-                                            onSelect: !prev.onSelect,
-                                          };
-                                        } else {
-                                          return prev;
-                                        }
-                                      });
-                                    })
-                                  }
-                                >
-                                  {option.name}
-                                </button>
-                              ))
-                            : findAtomPrescriptions?.findAtomPrescriptions.results?.map(
-                                (atom) => (
-                                  <Fragment key={atom.id}>
-                                    <input
-                                      id={atom.id + atom.name}
-                                      className="hidden select-none"
-                                      {...register("prescriptionId", {
-                                        required: "처방을 선택하세요",
-                                      })}
-                                      type="radio"
-                                      value={atom.id}
-                                    />
-                                    <label
-                                      className="btn py-1 px-3 "
-                                      htmlFor={atom.id + atom.name}
-                                    >
-                                      {atom.name}
-                                    </label>
-                                  </Fragment>
-                                )
+                          {atomList.map((option) => (
+                            <button
+                              type="button"
+                              key={option.id}
+                              className={cls(
+                                "btn py-1 px-3",
+                                option.onSelect
+                                  ? "rounded-md bg-white px-3 font-semibold text-blue-800"
+                                  : ""
                               )}
+                              onClick={() =>
+                                setAtomList((prevState) => {
+                                  return prevState.map((prev) => {
+                                    if (prev.id === option.id) {
+                                      return {
+                                        ...prev,
+                                        onSelect: !prev.onSelect,
+                                      };
+                                    } else {
+                                      return prev;
+                                    }
+                                  });
+                                })
+                              }
+                            >
+                              {option.name}
+                            </button>
+                          ))}
                         </div>
                       </div>
                     </div>

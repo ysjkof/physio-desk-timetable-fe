@@ -11,8 +11,7 @@ import {
   ListReservationsQuery,
   MeQuery,
   Patient,
-  PrescriptionBundle,
-  PrescriptionOption,
+  Prescription,
   Reservation,
   ReservationState,
   User,
@@ -58,7 +57,7 @@ import { Reserve } from "./reserve";
 import { Switch } from "./switch";
 import { TimeIndicatorBar } from "./time-indicator-bar";
 import { ButtonCheck } from "./button-check";
-import { PrescriptionsSelectType } from "../pages/time-table";
+import { PrescriptionWithSelect } from "../pages/time-table";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -73,7 +72,7 @@ interface ITimetableProps {
     setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
   };
   loginUser: MeQuery;
-  prescriptions: PrescriptionsSelectType;
+  prescriptions: PrescriptionWithSelect[];
 }
 export interface ModifiedReservation
   extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
@@ -84,8 +83,7 @@ export interface ModifiedReservation
     "id" | "name" | "gender" | "registrationNumber" | "birthday"
   >;
   group?: Pick<Group, "id" | "name"> | null;
-  prescriptionOptions?: Pick<PrescriptionOption, "name">[] | null;
-  prescriptionBundles?: Pick<PrescriptionBundle, "name">[] | null;
+  prescriptions?: Pick<Prescription, "name">[] | null;
 }
 
 export const Timetable: React.FC<ITimetableProps> = ({
@@ -712,10 +710,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
                                     >
                                       <div>{event.patient.name}</div>
                                       <div>
-                                        {event.prescriptionOptions?.map(
-                                          (op) => op.name
-                                        )}
-                                        {event.prescriptionBundles?.map(
+                                        {event.prescriptions?.map(
                                           (op) => op.name
                                         )}
                                       </div>

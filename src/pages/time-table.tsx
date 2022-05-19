@@ -2,70 +2,38 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Timetable } from "../components/timetable";
 import {
+  Prescription,
   useFindPrescriptionsQuery,
   useListReservationsQuery,
 } from "../graphql/generated/graphql";
 import { useReactiveVar } from "@apollo/client";
-import { selectedGroupVar, todayNowVar } from "../store";
+import { groupListsVar, selectedGroupVar, todayNowVar } from "../store";
 import { useMe } from "../hooks/useMe";
 import { getEnddate, getStartSunday } from "../libs/timetable-utils";
 
-interface PrscriptionBundle {
-  __typename?: "PrescriptionBundle";
-  id: number;
-  name: string;
-  requiredTime: number;
-  description?: string | null;
-  price: number;
-  activate: boolean;
-  prescriptionOptions: {
-    __typename?: "PrescriptionOption";
-    id: number;
-    name: string;
-    requiredTime: number;
-    description?: string | null;
-    price: number;
-    activate: boolean;
-    prescription: { __typename?: "PrescriptionAtom"; name: string };
-  }[];
-}
-interface PrescriptionOption {
-  __typename?: "PrescriptionOption" | undefined;
-  id: number;
-  name: string;
-  requiredTime: number;
-  description?: string | null | undefined;
-  price: number;
-  activate: boolean;
-  prescription: {
-    __typename?: "PrescriptionAtom" | undefined;
-    name: string;
-  };
-}
-export interface PrscriptionBundleWithSelect extends PrscriptionBundle {
+export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
-}
-export interface PrescriptionOptionWithSelect extends PrescriptionOption {
-  isSelect: boolean;
-}
-export interface PrescriptionsSelectType {
-  bundle: PrscriptionBundleWithSelect[];
-  option: PrescriptionOptionWithSelect[];
 }
 
 export const TimeTable = () => {
   const today = useReactiveVar(todayNowVar);
   const selectedGroup = useReactiveVar(selectedGroupVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
-  const { data: meData } = useMe();
+  const groupLists = useReactiveVar(groupListsVar);
+  const { data: meData, loading } = useMe();
 
-  const { data } = useListReservationsQuery({
+  const { data, loading: loadingListReserv } = useListReservationsQuery({
     variables: {
       input: {
         startDate: getStartSunday(selectedDate),
         endDate: getEnddate(getStartSunday(selectedDate), 7),
-        groupId: selectedGroup.id,
-        ...(selectedGroup.id === 0 && { userIds: [meData?.me.id!] }),
+        ...(selectedGroup.id !== 0 && {
+          userIds: groupLists
+            .find((g) => g.id === selectedGroup.id)
+            ?.members.filter((m) => m.activation)
+            .map((m) => m.id),
+          groupId: selectedGroup.id,
+        }),
       },
     },
   });
@@ -73,26 +41,21 @@ export const TimeTable = () => {
     variables: {
       input: {
         includeInactivate: false,
-        prescriptionType: "all",
         groupId: selectedGroup.id,
       },
     },
   });
 
-  let prescriptions: PrescriptionsSelectType = { bundle: [], option: [] };
+  let prescriptions: PrescriptionWithSelect[] = [];
+
   if (prescriptionsData) {
-    Array.isArray(prescriptionsData.findPrescriptions.bundleResults) &&
-      Array.isArray(prescriptionsData.findPrescriptions.optionResults) &&
-      (prescriptions = {
-        bundle: prescriptionsData.findPrescriptions.bundleResults.map(
-          (bundle) => ({ ...bundle, isSelect: false })
-        ),
-        option: prescriptionsData.findPrescriptions.optionResults.map(
-          (bundle) => ({ ...bundle, isSelect: false })
-        ),
-      });
+    Array.isArray(prescriptionsData.findPrescriptions.prescriptions) &&
+      (prescriptions = prescriptionsData.findPrescriptions.prescriptions.map(
+        (presc) => ({ ...presc, isSelect: false })
+      ));
   }
 
+  // if (loadingListReserv) return <></>;
   return (
     <>
       <Helmet>

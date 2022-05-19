@@ -11,8 +11,27 @@ import { DatepickerWithInput } from "../../components/datepicker-with-input";
 import { DashboardLi } from "./components/li";
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
 import { InDashboardPageProps } from ".";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { DashboardBtn } from "./components/button";
+
+interface UserStatis {
+  name: string;
+  prescriptions: { [key: string]: number };
+}
+
+type StastisticsData = {
+  __typename?: "StatisticsRsult";
+  userName: string;
+  statistics: Array<{
+    __typename?: "DayCount";
+    date: any;
+    prescriptions: Array<{
+      __typename?: "PrescriptionStatistics";
+      name: string;
+      count: number;
+    }>;
+  }>;
+};
 
 export interface MemberState {
   id: number;
@@ -38,6 +57,7 @@ export const Statistics = ({
   defaultDate[1].setMonth(defaultDate[0].getMonth() + 1, 0);
 
   const [memberState, setMemberState] = useState<MemberState[]>([]);
+  const [userStatis, setUserStatis] = useState<UserStatis[]>([]);
 
   const {
     register,
@@ -72,7 +92,6 @@ export const Statistics = ({
       variables: {
         input: {
           includeInactivate: false,
-          prescriptionType: "all",
           groupId: id,
         },
       },
@@ -107,6 +126,38 @@ export const Statistics = ({
     }
   };
 
+  function calcTotalUsers(
+    prescName: string,
+    data: StastisticsData[] | undefined | null
+  ) {
+    if (!data) return 0;
+    return data.reduce(
+      (acc, cur) =>
+        acc +
+        cur.statistics.reduce((acc, cur) => {
+          const exist = cur.prescriptions.find((p) => p.name === prescName);
+          if (exist) {
+            return acc + exist.count;
+          }
+          return acc;
+        }, 0),
+      0
+    );
+  }
+  function calcPrescNumOfTime(
+    prescName: string,
+    data: StastisticsData | undefined | null
+  ) {
+    if (!data) return 0;
+    return data.statistics.reduce((acc, cur) => {
+      const prescription = cur.prescriptions.find((p) => p.name === prescName);
+      if (prescription) {
+        return acc + prescription.count;
+      }
+      return acc;
+    }, 0);
+  }
+
   useEffect(() => {
     if (members) {
       setMemberState(
@@ -119,7 +170,32 @@ export const Statistics = ({
     } else {
       setMemberState([]);
     }
+    setUserStatis([]);
   }, [members]);
+
+  useEffect(() => {
+    if (!loadingStatisticsData && dataStatistics) {
+      let users: UserStatis[] = dataStatistics?.getStatistics.results!.map(
+        (v) => ({
+          name: v.userName,
+          prescriptions: {},
+        })
+      );
+      if (id === 0) {
+      }
+      findPrescriptionsData?.findPrescriptions.prescriptions?.forEach(
+        (presc) => {
+          users.forEach((user, idx) => {
+            user.prescriptions[presc.name] = calcPrescNumOfTime(
+              presc.name,
+              dataStatistics?.getStatistics.results![idx]
+            );
+          });
+        }
+      );
+      setUserStatis(users);
+    }
+  }, [dataStatistics]);
 
   return (
     <div className="">
@@ -205,60 +281,76 @@ export const Statistics = ({
                     <span>{endDate.toLocaleDateString()}</span>
                   </div>
                 </h3>
-                <div className="grid grid-cols-[1fr_7.5rem_3.3rem] justify-between gap-3 border-b border-black text-sm">
-                  <span className="">이름</span>
-                  <span className="text-center">금액</span>
-                  <span className="text-center">횟수</span>
-                </div>
-                <ul className="min-h-[16rem] space-y-4 px-4">
-                  {findPrescriptionsData?.findPrescriptions.bundleResults?.map(
-                    (presc) => (
-                      <DashboardLi
-                        key={presc.id}
-                        name={presc.name}
-                        price={presc.price}
-                        count={dataStatistics?.getStatistics.results?.reduce(
-                          (acc, cur) =>
-                            acc +
-                            cur.statistics.reduce((acc, cur) => {
-                              const exist = cur.prescriptions.find(
-                                (p) => p.name === presc.name
-                              );
-                              if (exist) {
-                                return acc + exist.count;
-                              }
-                              return acc;
-                            }, 0),
-                          0
-                        )}
-                      />
-                    )
-                  )}
+                {/* <div className="border-t "></div> */}
 
-                  {findPrescriptionsData?.findPrescriptions.optionResults?.map(
-                    (presc) => (
+                <div className="grid min-h-[16rem] grid-flow-col gap-10 px-4 pt-6">
+                  {userStatis.map((user, idx) => (
+                    <div key={idx} className="flex flex-col">
+                      <h4 className="mb-4 text-center">{user.name}</h4>
+                      {Object.entries(user.prescriptions).map((presc, i) => (
+                        <DashboardLi
+                          key={i}
+                          name={presc[0]}
+                          price={
+                            findPrescriptionsData?.findPrescriptions.prescriptions?.find(
+                              (v) => v.name === presc[0]
+                            )?.price! * presc[1] ?? 0
+                          }
+                          count={presc[1]}
+                        />
+                      ))}
+                      <div className="mt-6 border-t" />
                       <DashboardLi
-                        key={presc.id}
-                        name={presc.name}
-                        price={presc.price}
-                        count={dataStatistics?.getStatistics.results?.reduce(
+                        price={Object.entries(user.prescriptions).reduce(
                           (acc, cur) =>
                             acc +
-                            cur.statistics.reduce((acc, cur) => {
-                              const exist = cur.prescriptions.find(
-                                (p) => p.name === presc.name
-                              );
-                              if (exist) {
-                                return acc + exist.count;
-                              }
-                              return acc;
-                            }, 0),
+                            findPrescriptionsData?.findPrescriptions.prescriptions?.find(
+                              (presc) => presc.name === cur[0]
+                            )?.price! *
+                              cur[1],
+                          0
+                        )}
+                        count={Object.values(user.prescriptions).reduce(
+                          (acc, cur) => acc + cur,
                           0
                         )}
                       />
-                    )
-                  )}
-                </ul>
+                      <div></div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-[1fr_7.5rem_3.3rem] justify-between gap-3 border-t border-black text-sm">
+                  <span className="">총합</span>
+                  <span className="text-center">
+                    {userStatis
+                      .map((user) =>
+                        Object.entries(user.prescriptions).reduce(
+                          (acc, cur) =>
+                            acc +
+                            findPrescriptionsData?.findPrescriptions.prescriptions?.find(
+                              (presc) => presc.name === cur[0]
+                            )?.price! *
+                              cur[1],
+                          0
+                        )
+                      )
+                      .reduce((acc, cur) => acc + cur, 0)
+                      .toLocaleString()}
+                    원
+                  </span>
+                  <span className="text-center">
+                    {userStatis
+                      .map((user) =>
+                        Object.values(user.prescriptions).reduce(
+                          (acc, cur) => acc + cur,
+                          0
+                        )
+                      )
+                      .reduce((acc, cur) => acc + cur, 0)}
+                    번
+                  </span>
+                </div>
               </>
             }
           />
@@ -284,8 +376,8 @@ export const Statistics = ({
                   >
                     <VictoryLine
                       data={
-                        dataStatistics
-                          ? dataStatistics.getStatistics.results
+                        dataStatistics?.getStatistics.results?.length !== 0
+                          ? dataStatistics?.getStatistics.results
                               ?.map((result) =>
                                 result.statistics?.map((data) => ({
                                   x: data.date,
@@ -297,13 +389,13 @@ export const Statistics = ({
                               )
                               .reduce((prev, curr) => {
                                 curr?.forEach((c) => {
-                                  const idx = prev?.findIndex(
+                                  const idx = prev!.findIndex(
                                     (p) => p.x === c.x
                                   );
                                   if (idx === -1) {
                                     prev?.push(c);
                                   } else {
-                                    prev[idx].y = c.y + prev[idx].y;
+                                    prev![idx].y = c.y + prev![idx].y;
                                   }
                                 });
                                 return prev;
