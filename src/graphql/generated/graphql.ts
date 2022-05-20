@@ -220,7 +220,7 @@ export type FindClinicByIdOutput = {
 };
 
 export type FindMyClinicsInput = {
-  includeField: Scalars['String'];
+  includeInactivate?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type FindMyClinicsOutput = {

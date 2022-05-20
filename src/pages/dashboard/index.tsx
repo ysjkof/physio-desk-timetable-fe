@@ -67,7 +67,7 @@ export const Dashboard = () => {
   const { data: meData, loading: meLoading } = useMe();
   const { data: findMyClinics, loading: findClinicLoading } =
     useFindMyClinicsQuery({
-      variables: { input: { includeField: "activate" } },
+      variables: { input: { includeInactivate: true } },
     });
 
   function checkIsManager(clinicId: number) {
@@ -111,17 +111,25 @@ export const Dashboard = () => {
         selectedMenu === "invite" ||
         selectedMenu === "inactivate")
     ) {
+      // 나를 선택했을때
       setSelectedMenu("prescription");
     } else {
-      if (
-        !selectedClinic.isManager &&
-        (selectedMenu === "invite" || selectedMenu === "inactivate")
-      ) {
+      // 병원을 선택했을때
+      if (!selectedClinic.isStayed) {
+        // 초대를 받아 isActivate는 true지만 아직 수락을 누르지 않아 isStayed는 false
         setSelectedMenu("member");
+      } else {
+        // 초대 받고 수락을 눌러 isActivate와 isStayed가 true
+        if (
+          !selectedClinic.isManager &&
+          (selectedMenu === "invite" || selectedMenu === "inactivate")
+        ) {
+          setSelectedMenu("member");
+        }
       }
     }
   }, [selectedClinic]);
-  console.log(findMyClinics);
+
   if (!meData) return <></>;
   return (
     <>

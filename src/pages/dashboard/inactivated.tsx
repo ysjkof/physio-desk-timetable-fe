@@ -4,7 +4,7 @@ import { DashboardTitle } from "./components/title";
 
 export const InactivatedClinic = () => {
   const { data: findMyClinicsData, loading } = useFindMyClinicsQuery({
-    variables: { input: { includeField: "inactivate" } },
+    variables: { input: { includeInactivate: true } },
   });
 
   if (loading) return <></>;

@@ -48,7 +48,7 @@ function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const { data: meData } = useMe();
   const { data: findMyClinicsData } = useFindMyClinicsQuery({
-    variables: { input: { includeField: "all" } },
+    variables: { input: { includeInactivate: true } },
   });
 
   function filterActivatedMemberInClinic(
@@ -151,7 +151,6 @@ function App() {
       selectedClinicVar(selectedClinic);
     }
   }, [findMyClinicsData]);
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
