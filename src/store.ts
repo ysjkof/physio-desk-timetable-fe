@@ -8,8 +8,6 @@ export const queryResultVar = makeVar<ListReservationsQuery | undefined>(
   undefined
 );
 
-export const listReservationRefetchVar = makeVar<any>(undefined);
-
 export interface SelectedPatient
   extends Pick<Patient, "name" | "gender" | "registrationNumber" | "birthday"> {
   id: number;

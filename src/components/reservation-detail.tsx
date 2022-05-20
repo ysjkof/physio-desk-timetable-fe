@@ -1,4 +1,3 @@
-import { useReactiveVar } from "@apollo/client";
 import {
   faQuestion,
   faRotateBack,
@@ -7,13 +6,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
 import { SearchName } from "./search-name";
 import { Patient } from "./patient";
 import {
-  DeleteReservationMutation,
-  EditReservationMutation,
   FindReservationByIdDocument,
+  FindReservationByIdQuery,
   ReservationState,
   useDeleteReservationMutation,
   useEditReservationMutation,
@@ -21,90 +18,78 @@ import {
 } from "../graphql/generated/graphql";
 import { getHHMM, getTimeLength, getYMD } from "../libs/timetable-utils";
 import { cls } from "../libs/utils";
-import { listReservationRefetchVar } from "../store";
+import { client } from "../apollo";
+
+function changeState(state: ReservationState, reservationId: number) {
+  const thisReservation: FindReservationByIdQuery | null =
+    client.cache.readQuery({
+      query: FindReservationByIdDocument,
+      variables: {
+        input: {
+          reservationId,
+        },
+      },
+    });
+  if (thisReservation === null) {
+    console.error("❌ thisReservation is FALSE");
+  } else {
+    client.cache.writeQuery({
+      query: FindReservationByIdDocument,
+      data: {
+        findReservationById: {
+          __typename: "FindReservationByIdOutput",
+          error: null,
+          ok: true,
+          reservation: {
+            ...thisReservation.findReservationById.reservation,
+            state,
+          },
+        },
+      },
+    });
+  }
+}
 
 interface IReservationDetail {
   reservationId: number;
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => void;
 }
 
 export const ReservationDetail: React.FC<IReservationDetail> = ({
   reservationId,
   closeAction,
+  refetch,
 }) => {
-  const navigate = useNavigate();
   const [openPatientDetail, setOpenPatientDetail] = useState<boolean>(false);
-  const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
-
-  const onCompleted = (data: DeleteReservationMutation) => {
-    const {
-      deleteReservation: { ok },
-    } = data;
-    if (ok) {
-      // 캐시 수정해서 변경사항 바로 렌더링하기
-      listReservationRefetch();
-      closeAction(false);
-    }
-  };
-
-  const onCompletedEdit = (data: EditReservationMutation) => {
-    const {
-      editReservation: { ok },
-    } = data;
-    if (ok) {
-      return;
-    }
-  };
-
-  const [editReservationMutation] = useEditReservationMutation({
-    onCompleted: onCompletedEdit,
-  });
-
-  const [deleteReservationMutation] = useDeleteReservationMutation({
-    onCompleted,
-  });
+  const [editReservationMutation] = useEditReservationMutation({});
+  const [deleteReservationMutation] = useDeleteReservationMutation({});
+  let nextState: ReservationState;
 
   const { data: findReservationData } = useFindReservationByIdQuery({
-    variables: {
-      input: {
-        reservationId,
-      },
-    },
+    variables: { input: { reservationId } },
   });
+
   const onClickEditNoshow = () => {
     const confirmDelete = window.confirm("예약을 부도처리합니다.");
     if (confirmDelete) {
-      let state: ReservationState;
-      reservation?.state === ReservationState.NoShow
-        ? (state = ReservationState.Reserved)
-        : (state = ReservationState.NoShow);
+      nextState =
+        findReservationData?.findReservationById.reservation?.state ===
+        ReservationState.NoShow
+          ? ReservationState.Reserved
+          : ReservationState.NoShow;
       editReservationMutation({
         variables: {
-          input: { reservationId, state },
+          input: { reservationId, state: nextState },
         },
-        update: (cache) => {
-          cache.writeQuery({
-            query: FindReservationByIdDocument,
-            data: {
-              findReservationById: {
-                __typename: "FindReservationByIdOutput",
-                error: null,
-                ok: true,
-                reservation: {
-                  __typename: reservation?.__typename,
-                  endDate: reservation?.endDate,
-                  clinic: reservation?.clinic,
-                  id: reservation?.id,
-                  lastModifier: reservation?.lastModifier,
-                  memo: reservation?.memo,
-                  patient: reservation?.patient,
-                  startDate: reservation?.startDate,
-                  state,
-                  user: reservation?.user,
-                },
-              },
-            },
-          });
+        onCompleted(data) {
+          const {
+            editReservation: { ok },
+          } = data;
+          if (ok) {
+            changeState(nextState, reservationId);
+            return;
+          }
         },
       });
     }
@@ -112,37 +97,23 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
   const onClickEditCancel = () => {
     const confirmDelete = window.confirm("예약을 취소 합니다.");
     if (confirmDelete) {
-      let state: ReservationState;
-      reservation?.state === ReservationState.Canceled
-        ? (state = ReservationState.Reserved)
-        : (state = ReservationState.Canceled);
+      nextState =
+        findReservationData?.findReservationById.reservation?.state ===
+        ReservationState.Canceled
+          ? ReservationState.Reserved
+          : ReservationState.Canceled;
       editReservationMutation({
         variables: {
-          input: { reservationId, state },
+          input: { reservationId, state: nextState },
         },
-        update: (cache) => {
-          cache.writeQuery({
-            query: FindReservationByIdDocument,
-            data: {
-              findReservationById: {
-                __typename: "FindReservationByIdOutput",
-                error: null,
-                ok: true,
-                reservation: {
-                  __typename: reservation?.__typename,
-                  endDate: reservation?.endDate,
-                  clinic: reservation?.clinic,
-                  id: reservation?.id,
-                  lastModifier: reservation?.lastModifier,
-                  memo: reservation?.memo,
-                  patient: reservation?.patient,
-                  startDate: reservation?.startDate,
-                  state,
-                  user: reservation?.user,
-                },
-              },
-            },
-          });
+        onCompleted(data) {
+          const {
+            editReservation: { ok },
+          } = data;
+          if (ok) {
+            changeState(nextState, reservationId);
+            return;
+          }
         },
       });
     }
@@ -150,7 +121,18 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
   const onClickDelete = () => {
     const confirmDelete = window.confirm("예약을 지웁니다.");
     if (confirmDelete) {
-      deleteReservationMutation({ variables: { input: { reservationId } } });
+      deleteReservationMutation({
+        variables: { input: { reservationId } },
+        onCompleted(data) {
+          const {
+            deleteReservation: { ok },
+          } = data;
+          if (ok) {
+            refetch();
+            closeAction(false);
+          }
+        },
+      });
     }
   };
 
