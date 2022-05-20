@@ -16,7 +16,6 @@ import { DatepickerForm } from "../components/datepicker";
 import {
   selectedClinicVar,
   clinicListsVar,
-  listReservationRefetchVar,
   selectedPatientVar,
 } from "../store";
 import { CreatePatient } from "../pages/create-patient";
@@ -27,30 +26,30 @@ import { useMe } from "../hooks/useMe";
 
 function getOneDayReservationInputDateForTest(
   inputStartDate: Date,
-  inputPpresc: { id: number; requiredTime: number; name: string }
+  inputPresc: { id: number; requiredTime: number; name: string }
 ) {
   const numberOfReservationsPerDay = Math.floor(Math.random() * 8);
   const startDate = new Date(inputStartDate);
-  const endDate = new Date(startDate);
   const dates: Date[] = [];
   dates.length = numberOfReservationsPerDay;
   dates.fill(startDate);
 
-  return dates.map((date) => {
+  return dates.map((d) => {
+    const sd = new Date(d);
+    const ed = new Date(d);
     let th = Math.floor(Math.random() * (19 - 9) + 9);
     let tm = Math.floor(Math.random() * 6) * 10;
     while (dates.find((dateInWhile) => dateInWhile.getHours() === th)) {
       th = Math.floor(Math.random() * (19 - 9) + 9);
     }
     tm === 6 ? (tm = 0) : "";
-    date.setHours(th, tm, 0, 0);
-    endDate.setHours(th, tm + inputPpresc.requiredTime, 0, 0);
-    return [date, endDate];
+    sd.setHours(th, tm, 0, 0);
+    ed.setHours(th, tm + inputPresc.requiredTime, 0, 0);
+    return [sd, ed];
   });
 }
-function selectPrescriptionForTest(inputPpresc: PrescriptionWithSelect[]) {
-  // presscriptions.option이나 presscriptions.bundle을 인자로 받는다.
-  const selected = inputPpresc[Math.floor(Math.random() * inputPpresc.length)];
+function selectPrescriptionForTest(inputPresc: PrescriptionWithSelect[]) {
+  const selected = inputPresc[Math.floor(Math.random() * inputPresc.length)];
   return {
     id: selected.id,
     name: selected.name,
@@ -68,12 +67,14 @@ interface ReserveProps {
   startDate: Date;
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
   prescriptions: PrescriptionWithSelect[];
+  refetch: () => void;
 }
 
 export const Reserve = ({
   startDate,
   closeAction,
   prescriptions,
+  refetch,
 }: ReserveProps) => {
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
   const [selectedPresc, setSelectedPresc] = useState({
@@ -84,8 +85,6 @@ export const Reserve = ({
   const [selectPrescriptions, setSelectPrescriptions] = useState(prescriptions);
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const navigate = useNavigate();
-  // 할일 : 예약하기에서 새로고침할 경우 아래 항목 때문에 디버거 활성화됨. 쿼리 시 인풋 변수가 비어있어서 에러남.
-  // const listReservationRefetch = useReactiveVar(listReservationRefetchVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const { data: meData } = useMe();
@@ -105,7 +104,7 @@ export const Reserve = ({
     if (error) {
       alert(`오류가 발생했습니다; ${error}`);
     }
-    // listReservationRefetch();
+    refetch();
     if (ok) closeAction(false);
   };
 
@@ -113,16 +112,17 @@ export const Reserve = ({
     createReservationMutation,
     { loading, data: createReservationResult },
   ] = useCreateReservationMutation({ onCompleted });
-  function createDummyReserve() {
-    const { userId } = getValues();
+
+  function createDummyReserve(userId: number | undefined) {
     const firstDate = new Date("2022-5-1");
     let countSum = 0;
-    for (let i = 0; i < 31; i++) {
-      console.log("aa", i);
+    for (let i = 0; i < 30; i++) {
+      console.log(`${i + 1}일`);
       firstDate.setDate(i + 1);
       const presc = selectPrescriptionForTest(prescriptions);
       const times = getOneDayReservationInputDateForTest(firstDate, presc);
       countSum = countSum + times.length;
+      console.log(times, times.length);
       times.forEach((t) => {
         createReservationMutation({
           variables: {
@@ -140,6 +140,7 @@ export const Reserve = ({
     }
     console.log("총 생성된 예약 : ", countSum);
   }
+
   const onSubmit = () => {
     if (!loading && selectedPatient?.id) {
       const {
@@ -161,19 +162,20 @@ export const Reserve = ({
       const endDate = new Date(startDate);
       // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
       endDate.setMinutes(endDate.getMinutes() + selectedPresc.minute);
-      createReservationMutation({
-        variables: {
-          input: {
-            startDate: startDate,
-            endDate,
-            memo,
-            patientId: selectedPatient.id,
-            userId: +userId!,
-            clinicId: selectedClinic?.id,
-            prescriptionIds: selectedPresc.prescriptions,
-          },
-        },
-      });
+      createDummyReserve(userId);
+      // createReservationMutation({
+      //   variables: {
+      //     input: {
+      //       startDate: startDate,
+      //       endDate,
+      //       memo,
+      //       patientId: selectedPatient.id,
+      //       userId: +userId!,
+      //       clinicId: selectedClinic?.id,
+      //       prescriptionIds: selectedPresc.prescriptions,
+      //     },
+      //   },
+      // });
     }
   };
   const clinicLists = useReactiveVar(clinicListsVar);
