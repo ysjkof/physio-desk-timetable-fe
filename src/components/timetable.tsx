@@ -73,6 +73,7 @@ interface ITimetableProps {
   };
   loginUser: MeQuery;
   prescriptions: PrescriptionWithSelect[];
+  refetch: () => void;
 }
 export interface ModifiedReservation
   extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
@@ -86,13 +87,14 @@ export interface ModifiedReservation
   prescriptions?: Pick<Prescription, "name">[] | null;
 }
 
-export const Timetable: React.FC<ITimetableProps> = ({
+export const Timetable = ({
   tableTime,
   eventsData,
   selectedDateState: { selectedDate, setSelectedDate },
   loginUser,
   prescriptions,
-}) => {
+  refetch,
+}: ITimetableProps) => {
   const today = useReactiveVar(todayNowVar);
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[]>([]);
   const [aDay, setADay] = useState<Date>(today);
@@ -148,6 +150,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
     events: ModifiedReservation[] | undefined | null,
     members: ClinicMemberWithOptions[]
   ) {
+    console.log("❎ inDistributor", loginUser);
     let days = injectUsers(
       getWeeks(getSunday(selectedDate)),
       loginUser,
@@ -168,7 +171,6 @@ export const Timetable: React.FC<ITimetableProps> = ({
     });
     return days;
   }
-
   useEffect(() => {
     if (eventsData?.listReservations.ok) {
       const distributeEvents = distributor(
@@ -181,14 +183,14 @@ export const Timetable: React.FC<ITimetableProps> = ({
 
   useEffect(() => {
     if (!compareDateMatch(selectedDate, prevSelectedDate, "ym")) {
-      console.log("년월이 다르다");
+      console.log("✅ 년월이 다르다");
       setWeeks(getWeeks(getSunday(selectedDate)));
       setDaysOfMonth(getWeeksOfMonth(selectedDate));
     } else if (
       !compareDateMatch(selectedDate, prevSelectedDate, "d") &&
       !compareSameWeek(selectedDate, prevSelectedDate)
     ) {
-      console.log("년월이 같고 일과 주가 다르다");
+      console.log("✅ 년월이 같고 일과 주가 다르다");
       setWeeks(getWeeks(getSunday(selectedDate)));
     }
     setPrevSelectedDate(selectedDate);
@@ -1057,6 +1059,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
             <ReservationDetail
               reservationId={eventIdForModal!}
               closeAction={setOpenEventModal}
+              refetch={refetch}
             />
           }
         />
@@ -1069,6 +1072,7 @@ export const Timetable: React.FC<ITimetableProps> = ({
               startDate={eventStartDate!}
               closeAction={setOpenReserveModal}
               prescriptions={prescriptions}
+              refetch={refetch}
             />
           }
         />

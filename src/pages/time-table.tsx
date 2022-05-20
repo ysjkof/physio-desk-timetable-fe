@@ -20,9 +20,13 @@ export const TimeTable = () => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const clinicLists = useReactiveVar(clinicListsVar);
-  const { data: meData, loading } = useMe();
+  const { data: meData } = useMe();
 
-  const { data, loading: loadingListReserv } = useListReservationsQuery({
+  const {
+    data,
+    loading: loadingListReserv,
+    refetch,
+  } = useListReservationsQuery({
     variables: {
       input: {
         startDate: getStartSunday(selectedDate),
@@ -55,7 +59,7 @@ export const TimeTable = () => {
       ));
   }
 
-  // if (loadingListReserv) return <></>;
+  if (!meData) return <></>;
   return (
     <>
       <Helmet>
@@ -70,8 +74,9 @@ export const TimeTable = () => {
             }}
             eventsData={data}
             selectedDateState={{ selectedDate, setSelectedDate }}
-            loginUser={meData!}
+            loginUser={meData}
             prescriptions={prescriptions}
+            refetch={refetch}
           />
         </div>
       </div>

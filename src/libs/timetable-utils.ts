@@ -131,6 +131,7 @@ export const injectUsers = (
   loginUser: MeQuery,
   members: ClinicMemberWithOptions[]
 ) => {
+  console.log("❎ inInjectUsers", loginUser);
   const result: DayWithUsers[] = [];
   function makeNewUsers() {
     return mergeLoggedInUser(loginUser, members).map((user) => ({
