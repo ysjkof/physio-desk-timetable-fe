@@ -3,26 +3,26 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "../components/button";
-import { FormError } from "../components/form-error";
-import { SearchPatient } from "../components/search-patient";
+import { Button } from "../../components/button";
+import { FormError } from "../../components/form-error";
+import { SearchPatient } from "./search-patient";
 import {
   CreateReservationMutation,
   useCreateReservationMutation,
-} from "../graphql/generated/graphql";
+} from "../../graphql/generated/graphql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { DatepickerForm } from "../components/datepicker";
+import { DatepickerForm } from "./components/datepicker";
 import {
   selectedClinicVar,
   clinicListsVar,
   selectedPatientVar,
-} from "../store";
-import { CreatePatient } from "../pages/create-patient";
-import { PrescriptionWithSelect } from "../pages/time-table";
-import { cls, getDateFromYMDHM } from "../libs/utils";
-import { DatepickerWithInput } from "./datepicker-with-input";
-import { useMe } from "../hooks/useMe";
+} from "../../store";
+import { CreatePatient } from "./create-patient";
+import { PrescriptionWithSelect } from ".";
+import { cls, getDateFromYMDHM } from "../../libs/utils";
+import { DatepickerWithInput } from "./components/datepicker-with-input";
+import { useMe } from "../../hooks/useMe";
 
 function getOneDayReservationInputDateForTest(
   inputStartDate: Date,
@@ -231,7 +231,7 @@ export const Reserve = ({
       <Helmet>
         <title>예약하기 | Muool</title>
       </Helmet>
-      <div className="my-auto h-[600px] w-[400px] bg-white p-5 sm:rounded-lg">
+      <div className="my-auto w-[24rem] bg-white p-5 sm:rounded-lg">
         <button
           className="absolute right-6 top-5 hover:text-gray-400"
           onClick={() => closeAction(false)}

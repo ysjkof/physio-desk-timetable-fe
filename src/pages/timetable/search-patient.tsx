@@ -3,10 +3,10 @@ import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSearchPatientByNameLazyQuery } from "../graphql/generated/graphql";
-import { cls } from "../libs/utils";
-import { selectedClinic, selectedPatientVar } from "../store";
-import { NameTag } from "./name-tag";
+import { useSearchPatientByNameLazyQuery } from "../../graphql/generated/graphql";
+import { cls } from "../../libs/utils";
+import { selectedClinic, selectedPatientVar } from "../../store";
+import { NameTag } from "../../components/name-tag";
 
 interface SearchPatientProps {
   selectedClinic: typeof selectedClinic;

@@ -15,7 +15,7 @@ import {
   Reservation,
   ReservationState,
   User,
-} from "../graphql/generated/graphql";
+} from "../../graphql/generated/graphql";
 import {
   compareDateMatch,
   compareNumAfterGetMinutes,
@@ -32,15 +32,15 @@ import {
   IViewOption,
   getHHMM,
   getTimeLength,
-} from "../libs/timetable-utils";
-import { cls } from "../libs/utils";
+} from "../../libs/timetable-utils";
+import { cls } from "../../libs/utils";
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
   LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_CLINICS,
   ONE_DAY,
   ONE_WEEK,
-} from "../variables";
+} from "../../variables";
 import { ReservationDetail } from "./reservation-detail";
 import {
   colorsObj,
@@ -48,16 +48,16 @@ import {
   clinicListsVar,
   todayNowVar,
   viewOptionsVar,
-} from "../store";
-import { BtnArrow } from "./button-arrow";
-import { BtnDatecheck } from "./button-datecheck";
-import { ModalPortal } from "./modal-portal";
-import { MoveXBtn } from "./move-x-btn";
+} from "../../store";
+import { BtnArrow } from "./components/button-arrow";
+import { BtnDatecheck } from "./components/button-datecheck";
+import { ModalPortal } from "../../components/modal-portal";
+import { MoveXBtn } from "./components/move-x-btn";
 import { Reserve } from "./reserve";
-import { Switch } from "./switch";
-import { TimeIndicatorBar } from "./time-indicator-bar";
-import { ButtonCheck } from "./button-check";
-import { PrescriptionWithSelect } from "../pages/time-table";
+import { Switch } from "../../components/switch";
+import { TimeIndicatorBar } from "./components/time-indicator-bar";
+import { ButtonCheck } from "./components/button-check";
+import { PrescriptionWithSelect } from ".";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };

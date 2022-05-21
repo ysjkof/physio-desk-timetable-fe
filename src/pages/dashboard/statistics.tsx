@@ -5,9 +5,9 @@ import {
   useGetStatisticsLazyQuery,
 } from "../../graphql/generated/graphql";
 import { cls, getDateFromYMDHM } from "../../libs/utils";
-import { DatepickerForm } from "../../components/datepicker";
+import { DatepickerForm } from "../timetable/components/datepicker";
 import { useForm } from "react-hook-form";
-import { DatepickerWithInput } from "../../components/datepicker-with-input";
+import { DatepickerWithInput } from "../timetable/components/datepicker-with-input";
 import { DashboardLi } from "./components/li";
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
 import { InDashboardPageProps } from ".";

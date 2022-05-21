@@ -1,7 +1,6 @@
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { cls } from "../libs/utils";
+import { cls } from "../../../libs/utils";
 
 interface ButtonCheckProps {
   name: string;

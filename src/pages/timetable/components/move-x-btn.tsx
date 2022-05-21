@@ -4,12 +4,12 @@ interface IMoveXBtn {
   setSelectedDate: any;
   dateNavExpand: boolean;
 }
-export const MoveXBtn: React.FC<IMoveXBtn> = ({
+export const MoveXBtn = ({
   direction,
   selectedDate,
   setSelectedDate,
   dateNavExpand,
-}) => {
+}: IMoveXBtn) => {
   const handleDateNavMove = () => {
     const date = new Date(selectedDate);
     const value = dateNavExpand ? 1 : 7;

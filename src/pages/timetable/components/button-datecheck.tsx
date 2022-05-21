@@ -1,5 +1,4 @@
-import React from "react";
-import { cls } from "../libs/utils";
+import { cls } from "../../../libs/utils";
 
 interface IBtnDatecheck {
   text: string;
@@ -10,13 +9,13 @@ interface IBtnDatecheck {
 }
 
 // FC = Functional Component
-export const BtnDatecheck: React.FC<IBtnDatecheck> = ({
+export const BtnDatecheck = ({
   text,
   day,
   thisMonth,
   selected,
   onClick,
-}) => (
+}: IBtnDatecheck) => (
   <button
     className={cls(
       "btn-sm btn-border",

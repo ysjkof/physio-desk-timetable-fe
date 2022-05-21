@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ITimeIndicatorBarProps {
   labels: Date[];
 }
 
-export const TimeIndicatorBar: React.FC<ITimeIndicatorBarProps> = ({
-  labels,
-}) => {
+export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
   const [top, setTop] = useState<number>();
   const startTime = labels[0].getTime() / 1000 / 60;
   const endTime = labels[labels.length - 1].getTime() / 1000 / 60;

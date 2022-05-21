@@ -1,4 +1,4 @@
-import { ModifiedReservation } from "../components/timetable";
+import { ModifiedReservation } from "../pages/timetable/timetable";
 import { Clinic, Member, MeQuery, User } from "../graphql/generated/graphql";
 import { ONE_DAY, ONE_WEEK } from "../variables";
 

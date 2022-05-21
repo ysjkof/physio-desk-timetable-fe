@@ -6,8 +6,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { SearchName } from "./search-name";
-import { Patient } from "./patient";
+import { SearchName } from "../../components/search-name";
+import { Patient } from "../../components/patient";
 import {
   FindReservationByIdDocument,
   FindReservationByIdQuery,
@@ -15,10 +15,10 @@ import {
   useDeleteReservationMutation,
   useEditReservationMutation,
   useFindReservationByIdQuery,
-} from "../graphql/generated/graphql";
-import { getHHMM, getTimeLength, getYMD } from "../libs/timetable-utils";
-import { cls } from "../libs/utils";
-import { client } from "../apollo";
+} from "../../graphql/generated/graphql";
+import { getHHMM, getTimeLength, getYMD } from "../../libs/timetable-utils";
+import { cls } from "../../libs/utils";
+import { client } from "../../apollo";
 
 function changeState(state: ReservationState, reservationId: number) {
   const thisReservation: FindReservationByIdQuery | null =

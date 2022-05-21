@@ -1,14 +1,14 @@
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { FormError } from "../components/form-error";
-import { Button } from "../components/button";
+import { FormError } from "../../components/form-error";
+import { Button } from "../../components/button";
 import {
   CreatePatientInput,
   CreatePatientMutation,
   useCreatePatientMutation,
-} from "../graphql/generated/graphql";
-import { Input } from "../components/input";
-import { selectedPatientVar } from "../store";
+} from "../../graphql/generated/graphql";
+import { Input } from "../../components/input";
+import { selectedPatientVar } from "../../store";
 
 interface CreatePatientProps {
   clinicId?: number;
@@ -73,7 +73,7 @@ export const CreatePatient = ({
       <Helmet>
         <title>환자등록 | Muool</title>
       </Helmet>
-      <h4 className="mb-5 w-full text-left text-3xl font-medium">환자등록</h4>
+      <h4 className="mb-5 text-left text-3xl font-medium">환자등록</h4>
       <button
         className="absolute top-14 right-10 rounded-md border px-2 text-gray-500 hover:text-gray-700"
         onClick={() => closeModal(false)}

@@ -9,7 +9,7 @@ import { NotFound } from "./pages/404";
 import { Account } from "./pages/account";
 import { ConfirmEmail } from "./pages/confirm-email";
 import { EditProfile } from "./pages/edit-profile";
-import { TimeTable } from "./pages/time-table";
+import { TimeTable } from "./pages/timetable";
 import { CreateAccount } from "./pages/create-account";
 import { Login } from "./pages/login";
 import { Search } from "./pages/search";

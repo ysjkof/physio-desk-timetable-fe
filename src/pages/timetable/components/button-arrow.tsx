@@ -1,7 +1,6 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { cls } from "../libs/utils";
+import { cls } from "../../../libs/utils";
 
 interface IBtnArrow {
   direction: "prev" | "after";

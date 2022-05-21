@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Timetable } from "../components/timetable";
+import { Timetable } from "./timetable";
 import {
   Prescription,
   useFindPrescriptionsQuery,
   useListReservationsQuery,
-} from "../graphql/generated/graphql";
+} from "../../graphql/generated/graphql";
 import { useReactiveVar } from "@apollo/client";
-import { clinicListsVar, selectedClinicVar, todayNowVar } from "../store";
-import { useMe } from "../hooks/useMe";
-import { getEnddate, getStartSunday } from "../libs/timetable-utils";
+import { clinicListsVar, selectedClinicVar, todayNowVar } from "../../store";
+import { useMe } from "../../hooks/useMe";
+import { getEnddate, getStartSunday } from "../../libs/timetable-utils";
 
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
