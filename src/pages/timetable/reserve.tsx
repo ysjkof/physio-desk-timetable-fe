@@ -162,20 +162,20 @@ export const Reserve = ({
       const endDate = new Date(startDate);
       // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
       endDate.setMinutes(endDate.getMinutes() + selectedPresc.minute);
-      createDummyReserve(userId);
-      // createReservationMutation({
-      //   variables: {
-      //     input: {
-      //       startDate: startDate,
-      //       endDate,
-      //       memo,
-      //       patientId: selectedPatient.id,
-      //       userId: +userId!,
-      //       clinicId: selectedClinic?.id,
-      //       prescriptionIds: selectedPresc.prescriptions,
-      //     },
-      //   },
-      // });
+      // createDummyReserve(userId);
+      createReservationMutation({
+        variables: {
+          input: {
+            startDate: startDate,
+            endDate,
+            memo,
+            patientId: selectedPatient.id,
+            userId: +userId!,
+            clinicId: selectedClinic?.id,
+            prescriptionIds: selectedPresc.prescriptions,
+          },
+        },
+      });
     }
   };
   const clinicLists = useReactiveVar(clinicListsVar);

@@ -1,11 +1,5 @@
 import { useReactiveVar } from "@apollo/client";
-import {
-  faCalendarAlt,
-  faGear,
-  faList,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Clinic,
   ListReservationsQuery,
@@ -29,21 +23,16 @@ import {
   spreadClinicMembers,
   ClinicMemberWithOptions,
   ClinicWithOptions,
-  IViewOption,
   getHHMM,
   getTimeLength,
 } from "../../libs/timetable-utils";
 import { cls } from "../../libs/utils";
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
-  LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_CLINICS,
-  ONE_DAY,
-  ONE_WEEK,
 } from "../../variables";
 import { ReservationDetail } from "./reservation-detail";
 import {
-  colorsObj,
   selectedClinicVar,
   clinicListsVar,
   todayNowVar,
@@ -52,12 +41,13 @@ import {
 import { BtnArrow } from "./components/button-arrow";
 import { BtnDatecheck } from "./components/button-datecheck";
 import { ModalPortal } from "../../components/modal-portal";
-import { MoveXBtn } from "./components/move-x-btn";
 import { Reserve } from "./reserve";
-import { Switch } from "../../components/switch";
 import { TimeIndicatorBar } from "./components/time-indicator-bar";
-import { ButtonCheck } from "./components/button-check";
 import { PrescriptionWithSelect } from ".";
+import { EventLi } from "./components/event-li";
+import { ReserveBtn } from "./components/reserve-btn";
+import { EventBox } from "./components/event-box";
+import { TableNav } from "./components/table-nav";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -197,294 +187,19 @@ export const Timetable = ({
     setADay(selectedDate);
   }, [selectedDate]);
 
-  const onClickToggleUser = (
-    clinicLists: ClinicWithOptions[],
-    clinicId: number,
-    memberId: number
-  ) => {
-    const gIndex = clinicLists.findIndex(
-      (prevClinic) => prevClinic.id === clinicId
-    );
-    if (gIndex === -1) return;
-    const mIndex = clinicLists[gIndex].members.findIndex(
-      (prevMember) => prevMember.id === memberId
-    );
-    if (mIndex === -1) return;
-    clinicLists[gIndex].members[mIndex].activation =
-      clinicLists[gIndex].members[mIndex].activation === true ? false : true;
-    localStorage.setItem(
-      LOCALSTORAGE_VIEW_OPTION_CLINICS + loginUser.me.id,
-      JSON.stringify(clinicLists)
-    );
-    clinicListsVar([...clinicLists]);
-  };
-
-  const onClickChangeSelectClinic = (id: number, name: string) => {
-    let newSelectedClinic = selectedClinic;
-    if (selectedClinic.id === id) {
-      newSelectedClinic = {
-        id: 0,
-        name: "",
-      };
-    } else {
-      newSelectedClinic = {
-        id,
-        name,
-      };
-    }
-    localStorage.setItem(
-      LOCALSTORAGE_SELECTED_CLINIC + loginUser.me.id,
-      JSON.stringify(newSelectedClinic)
-    );
-    selectedClinicVar(newSelectedClinic);
-  };
-
   if (!viewOptions) {
     return <></>;
   }
   return (
     <>
       <div className="timetable-container h-full w-full text-xs">
-        <nav className="container-header mb-3 px-2 pb-4 shadow-b">
-          <div className="flex justify-between">
-            <div className="flex">
-              <button
-                className="min-w-[120px] text-sm font-medium text-gray-700 hover:font-bold"
-                onClick={() => setSelectedDate(today)}
-              >
-                {selectedDate.toLocaleString("ko-KR", {
-                  year: "2-digit",
-                  month: "short",
-                  day: "numeric",
-                  weekday: "short",
-                })}
-              </button>
-            </div>
-            <div className="flex w-full items-center justify-end space-x-3">
-              <div className="group-view-controller relative">
-                <div
-                  className="flex cursor-pointer items-center gap-1"
-                  onClick={() => {
-                    const newViewOptions = {
-                      ...viewOptions,
-                      seeActiveOption: !viewOptions.seeActiveOption,
-                    };
-                    localStorage.setItem(
-                      LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
-                      JSON.stringify(newViewOptions)
-                    );
-                    viewOptionsVar(newViewOptions);
-                  }}
-                >
-                  <span>보기설정</span>
-                  <FontAwesomeIcon icon={faGear} fontSize="medium" />
-                </div>
-                {viewOptions.seeActiveOption && (
-                  <div className="absolute top-6 z-50 h-96 w-60 rounded-md bg-white p-4 shadow-cst">
-                    <div className="mb-2 flex justify-between border-b pb-2">
-                      <div className="w-full"></div>
-                      <div className="flex w-14 whitespace-nowrap">
-                        <div className="group relative w-full space-x-1 text-center">
-                          <span>보기</span>
-                          <span className="rounded-full border border-gray-400 px-1">
-                            ?
-                          </span>
-                          <p className="bubble-arrow-t-center absolute top-7 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
-                            시간표에 표시할 병원이나 사용자를 선택합니다.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <ul className="h-full  overflow-y-scroll">
-                      {clinicLists === null || clinicLists.length === 0 ? (
-                        <div className="flex h-full items-center justify-center">
-                          소속된 병원이 없습니다.
-                        </div>
-                      ) : (
-                        clinicLists.map((clinic) => (
-                          <Fragment key={clinic.id}>
-                            <ButtonCheck
-                              name={clinic.name}
-                              isActivated={clinic.id === selectedClinic.id}
-                              onClickFx={() =>
-                                onClickChangeSelectClinic(
-                                  clinic.id,
-                                  clinic.name
-                                )
-                              }
-                            />
-                            <ul
-                              className={cls(
-                                clinic.id === selectedClinic.id
-                                  ? ""
-                                  : "pointer-events-none"
-                              )}
-                            >
-                              {clinic.members.map((member) => (
-                                <ButtonCheck
-                                  key={member.id}
-                                  isActivated={clinic.id === selectedClinic.id}
-                                  isMemberActivated={member.activation}
-                                  name={member.user.name}
-                                  onClickFx={() =>
-                                    onClickToggleUser(
-                                      clinicLists,
-                                      clinic.id,
-                                      member.id
-                                    )
-                                  }
-                                />
-                              ))}
-                            </ul>
-                            <div className="seperate-bar"></div>
-                          </Fragment>
-                        ))
-                      )}
-                    </ul>
-                  </div>
-                )}
-              </div>
-              <Switch
-                enabled={viewOptions.seeCancel}
-                label={"취소"}
-                onClick={() => {
-                  const newViewOptions = {
-                    ...viewOptions,
-                    seeCancel: !viewOptions.seeCancel,
-                  };
-                  localStorage.setItem(
-                    LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
-                    JSON.stringify(newViewOptions)
-                  );
-                  viewOptionsVar(newViewOptions);
-                }}
-              />
-              <Switch
-                enabled={viewOptions.seeNoshow}
-                label={"부도"}
-                onClick={() => {
-                  const newViewOptions = {
-                    ...viewOptions,
-                    seeNoshow: !viewOptions.seeNoshow,
-                  };
-                  localStorage.setItem(
-                    LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
-                    JSON.stringify(newViewOptions)
-                  );
-                  viewOptionsVar(newViewOptions);
-                }}
-              />
-              <Switch
-                enabled={viewOptions.periodToView === ONE_DAY ? false : true}
-                label={"1주일"}
-                onClick={() => {
-                  const newViewOptions: IViewOption = {
-                    ...viewOptions,
-                    periodToView:
-                      viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
-                  };
-                  localStorage.setItem(
-                    LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
-                    JSON.stringify(newViewOptions)
-                  );
-                  viewOptionsVar(newViewOptions);
-                }}
-              />
-            </div>
-            <div className="flex w-full items-center justify-end space-x-5">
-              <FontAwesomeIcon
-                icon={faCalendarAlt}
-                fontSize={"large"}
-                onClick={() => {
-                  const newViewOptions = {
-                    ...viewOptions,
-                    navigationExpand: !viewOptions.navigationExpand,
-                  };
-                  localStorage.setItem(
-                    LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
-                    JSON.stringify(newViewOptions)
-                  );
-                  viewOptionsVar(newViewOptions);
-                }}
-                className={cls(
-                  viewOptions.navigationExpand
-                    ? "text-gray-700"
-                    : "text-gray-400",
-                  "w-4 cursor-pointer hover:text-gray-500"
-                )}
-              />
-              <FontAwesomeIcon
-                icon={faList}
-                fontSize={"large"}
-                onClick={() => {
-                  const newViewOptions = {
-                    ...viewOptions,
-                    seeList: !viewOptions.seeList,
-                  };
-                  localStorage.setItem(
-                    LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
-                    JSON.stringify(newViewOptions)
-                  );
-                  viewOptionsVar(newViewOptions);
-                }}
-                className={cls(
-                  viewOptions.seeList ? "text-gray-700" : "text-gray-400",
-                  "w-4 cursor-pointer hover:text-gray-500"
-                )}
-              />
-            </div>
-          </div>
-          {viewOptions.navigationExpand && (
-            <div className="mx-4 mt-4 flex items-center justify-between">
-              <MoveXBtn
-                direction={"prev"}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                dateNavExpand={viewOptions.navigationExpand}
-              />
-              <div className="grid w-full grid-cols-7">
-                {daysOfMonth.map((day, i) => (
-                  <div
-                    onClick={() => setSelectedDate(day.date)}
-                    key={i}
-                    className={cls(
-                      "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                      compareDateMatch(day.date, selectedDate, "ymd")
-                        ? "border-b-2 border-sky-400 font-bold"
-                        : "border-b-2 border-transparent"
-                    )}
-                  >
-                    <span
-                      className={cls(
-                        "rounded-full",
-                        day.date.getDay() === 0
-                          ? "text-red-600"
-                          : day.date.getDay() === 6
-                          ? "text-blue-600"
-                          : "text-gray-600",
-                        selectedDate.getDate() === day.date.getDate()
-                          ? "opacity-100"
-                          : "opacity-80",
-                        selectedDate.getMonth() !== day.date.getMonth()
-                          ? "opacity-30"
-                          : ""
-                      )}
-                    >
-                      {day.date.getDate()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <MoveXBtn
-                direction={"after"}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                dateNavExpand={viewOptions.navigationExpand}
-              />
-            </div>
-          )}
-        </nav>
-        {!viewOptions.seeList ? (
+        <TableNav
+          today={today}
+          selectedDateState={{ selectedDate, setSelectedDate }}
+          loginUser={loginUser}
+          daysOfMonth={daysOfMonth}
+        />
+        {viewOptions.seeList === false && (
           <>
             {viewOptions.periodToView === 7 && (
               <>
@@ -584,13 +299,13 @@ export const Timetable = ({
                 </div>
                 <div className="body-table relative h-full overflow-y-scroll pt-1.5">
                   <TimeIndicatorBar labels={labels} />
-                  <div className="row-table absolute h-full w-full">
+                  <div className="row-table absolute z-30 h-full w-full">
                     {labels.map((label) => (
                       <div
                         key={label.valueOf()}
                         className={cls(
                           compareNumAfterGetMinutes(label, [0, 30])
-                            ? "border-t"
+                            ? "border-t border-white"
                             : "",
                           "grid h-5 grid-cols-cal_week divide-x divide-black"
                         )}
@@ -607,22 +322,15 @@ export const Timetable = ({
                             ? getHHMM(label)
                             : ""}
                         </div>
-                        {weeks.map((day, i) => (
-                          <div key={i} className="relative z-30">
-                            <div
-                              className="group absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center px-0.5 hover:cursor-pointer hover:rounded-md hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-500 hover:shadow"
-                              onClick={() => onClickRserve(day.date, label)}
-                            >
-                              <div className="invisible mx-auto flex flex-col whitespace-nowrap text-sm font-medium text-white group-hover:visible sm:flex-row">
-                                <span>
-                                  {label.toLocaleString("ko-KR", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
-                                </span>
-                                <span>예약하기</span>
-                              </div>
-                            </div>
+                        {weekEvents.map((day, i) => (
+                          <div key={i} className="relative z-30 flex">
+                            {day.users.map((member, userIndex) => (
+                              <ReserveBtn
+                                label={label}
+                                userIndex={userIndex}
+                                onClick={() => onClickRserve(day.date, label)}
+                              />
+                            ))}
                           </div>
                         ))}
                       </div>
@@ -647,79 +355,32 @@ export const Timetable = ({
                               member.activation && (
                                 <div
                                   key={member.id}
-                                  className="user-col relative"
+                                  className={cls("user-col relative")}
                                 >
                                   {member.events?.map((event) => (
-                                    <div
-                                      key={event.id}
+                                    <EventBox
+                                      userIndex={userIndex}
+                                      viewOptions={viewOptions}
+                                      reservationState={event.state}
+                                      patientName={event.patient.name}
+                                      prescriptions={event.prescriptions ?? []}
+                                      inset={`${
+                                        labels.findIndex((label) =>
+                                          compareDateMatch(
+                                            label,
+                                            new Date(event.startDate),
+                                            "hm"
+                                          )
+                                        ) * 20
+                                      }px 0%`}
+                                      height={`${
+                                        getTimeLength(
+                                          event.startDate,
+                                          event.endDate
+                                        ) * 2
+                                      }px`}
                                       onClick={() => onClickEventBox(event.id)}
-                                      className={cls(
-                                        "absolute z-40 cursor-pointer rounded-md border",
-                                        userIndex === 0
-                                          ? "border-sky-300 bg-sky-100"
-                                          : userIndex === 1
-                                          ? "border-indigo-300 bg-indigo-100"
-                                          : userIndex === 2
-                                          ? "border-lime-300 bg-lime-100"
-                                          : userIndex === 3
-                                          ? "border-cyan-300 bg-cyan-100"
-                                          : "",
-                                        !viewOptions.seeCancel &&
-                                          event.state ===
-                                            ReservationState.Canceled
-                                          ? "hidden"
-                                          : !viewOptions.seeNoshow &&
-                                            event.state ===
-                                              ReservationState.NoShow
-                                          ? "hidden"
-                                          : event.state ===
-                                              ReservationState.NoShow ||
-                                            event.state ===
-                                              ReservationState.Canceled
-                                          ? "opacity-60"
-                                          : ""
-                                      )}
-                                      style={{
-                                        inset: `${
-                                          labels.findIndex((label) =>
-                                            compareDateMatch(
-                                              label,
-                                              new Date(event.startDate),
-                                              "hm"
-                                            )
-                                          ) * 20
-                                        }px 0%`,
-                                        height: `${
-                                          getTimeLength(
-                                            event.startDate,
-                                            event.endDate
-                                          ) * 2
-                                        }px`,
-                                        backgroundColor:
-                                          event.state ===
-                                          ReservationState.NoShow
-                                            ? colorsObj.yellow[50].rgb
-                                            : event.state ===
-                                              ReservationState.Canceled
-                                            ? colorsObj.red[50].rgb
-                                            : "",
-                                        borderColor:
-                                          event.state ===
-                                          ReservationState.NoShow
-                                            ? colorsObj.yellow[300].rgb
-                                            : event.state ===
-                                              ReservationState.Canceled
-                                            ? colorsObj.red[300].rgb
-                                            : "",
-                                      }}
-                                    >
-                                      <div>{event.patient.name}</div>
-                                      <div>
-                                        {event.prescriptions?.map(
-                                          (op) => op.name
-                                        )}
-                                      </div>
-                                    </div>
+                                    />
                                   ))}
                                 </div>
                               )
@@ -795,13 +456,13 @@ export const Timetable = ({
                       className={cls(
                         "",
                         selectedDate.getMonth() !==
-                          weekEvents[selectedDate.getDay()].date.getMonth()
+                          weekEvents[selectedDate.getDay()]?.date.getMonth()
                           ? "opacity-40"
                           : ""
                       )}
                     >
                       <div className="flex h-4 justify-around">
-                        {weekEvents[selectedDate.getDay()].users.map(
+                        {weekEvents[selectedDate.getDay()]?.users.map(
                           (user, i) =>
                             user.activation && (
                               <div
@@ -871,11 +532,11 @@ export const Timetable = ({
                         className="event-col relative grid border-x border-black"
                         style={{
                           gridTemplateColumns: `repeat(${
-                            weekEvents[selectedDate.getDay()].users.length
+                            weekEvents[selectedDate.getDay()]?.users.length
                           }, 1fr)`,
                         }}
                       >
-                        {weekEvents[selectedDate.getDay()].users?.map(
+                        {weekEvents[selectedDate.getDay()]?.users?.map(
                           (user) => (
                             <div key={user.id} className="user-col relative">
                               {user.events?.map((event) => (
@@ -895,6 +556,12 @@ export const Timetable = ({
                                         event.state ===
                                           ReservationState.Canceled
                                       ? "opacity-60"
+                                      : "",
+                                    event.state === ReservationState.NoShow
+                                      ? "noshow-color"
+                                      : event.state ===
+                                        ReservationState.Canceled
+                                      ? "cancel-color"
                                       : ""
                                   )}
                                   style={{
@@ -913,20 +580,6 @@ export const Timetable = ({
                                         event.endDate
                                       ) * 2
                                     }px`,
-                                    backgroundColor:
-                                      event.state === ReservationState.NoShow
-                                        ? colorsObj.yellow[50].rgb
-                                        : event.state ===
-                                          ReservationState.Canceled
-                                        ? colorsObj.red[50].rgb
-                                        : "",
-                                    borderColor:
-                                      event.state === ReservationState.NoShow
-                                        ? colorsObj.yellow[300].rgb
-                                        : event.state ===
-                                          ReservationState.Canceled
-                                        ? colorsObj.red[300].rgb
-                                        : "",
                                   }}
                                 >
                                   {event.patient.name}
@@ -942,7 +595,8 @@ export const Timetable = ({
               </>
             )}
           </>
-        ) : viewOptions.periodToView === 1 ? (
+        )}
+        {viewOptions.seeList === true && viewOptions.periodToView === 1 ? (
           <div className="event-col relative grid border-x border-black">
             <div>
               {selectedDate.toLocaleDateString("ko-KR", {
@@ -954,41 +608,15 @@ export const Timetable = ({
             {weekEvents[selectedDate.getDay()].users?.map((user) => (
               <div key={user.id}>
                 {user.events?.map((event) => (
-                  <div
+                  <EventLi
                     key={event.id}
+                    viewOptions={viewOptions}
+                    reservationState={event.state}
+                    startDate={getHHMM(event.startDate, ":")}
+                    patientName={event.patient.name}
+                    userName={user.user.name}
                     onClick={() => onClickEventBox(event.id)}
-                    className={cls(
-                      "cursor-pointer space-x-4 rounded-md border border-sky-300 bg-sky-100",
-                      !viewOptions.seeCancel &&
-                        event.state === ReservationState.Canceled
-                        ? "hidden"
-                        : !viewOptions.seeNoshow &&
-                          event.state === ReservationState.NoShow
-                        ? "hidden"
-                        : event.state === ReservationState.NoShow ||
-                          event.state === ReservationState.Canceled
-                        ? "opacity-60"
-                        : ""
-                    )}
-                    style={{
-                      backgroundColor:
-                        event.state === ReservationState.NoShow
-                          ? colorsObj.yellow[50].rgb
-                          : event.state === ReservationState.Canceled
-                          ? colorsObj.red[50].rgb
-                          : "",
-                      borderColor:
-                        event.state === ReservationState.NoShow
-                          ? colorsObj.yellow[300].rgb
-                          : event.state === ReservationState.Canceled
-                          ? colorsObj.red[300].rgb
-                          : "",
-                    }}
-                  >
-                    <span>{getHHMM(event.startDate, ":")}</span>
-                    <span>{event.patient.name}</span>
-                    <span>{user.user.name}</span>
-                  </div>
+                  />
                 ))}
               </div>
             ))}
@@ -1008,41 +636,15 @@ export const Timetable = ({
                   {week.users?.map((user) => (
                     <div key={user.id}>
                       {user.events?.map((event) => (
-                        <div
+                        <EventLi
                           key={event.id}
+                          viewOptions={viewOptions}
+                          reservationState={event.state}
+                          startDate={getHHMM(event.startDate, ":")}
+                          patientName={event.patient.name}
+                          userName={user.user.name}
                           onClick={() => onClickEventBox(event.id)}
-                          className={cls(
-                            "cursor-pointer space-x-4 rounded-md border border-sky-300 bg-sky-100",
-                            !viewOptions.seeCancel &&
-                              event.state === ReservationState.Canceled
-                              ? "hidden"
-                              : !viewOptions.seeNoshow &&
-                                event.state === ReservationState.NoShow
-                              ? "hidden"
-                              : event.state === ReservationState.NoShow ||
-                                event.state === ReservationState.Canceled
-                              ? "opacity-60"
-                              : ""
-                          )}
-                          style={{
-                            backgroundColor:
-                              event.state === ReservationState.NoShow
-                                ? colorsObj.yellow[50].rgb
-                                : event.state === ReservationState.Canceled
-                                ? colorsObj.red[50].rgb
-                                : "",
-                            borderColor:
-                              event.state === ReservationState.NoShow
-                                ? colorsObj.yellow[300].rgb
-                                : event.state === ReservationState.Canceled
-                                ? colorsObj.red[300].rgb
-                                : "",
-                          }}
-                        >
-                          <span>{getHHMM(event.startDate, ":")}</span>
-                          <span>{event.patient.name}</span>
-                          <span>{user.user.name}</span>
-                        </div>
+                        />
                       ))}
                     </div>
                   ))}
@@ -1060,6 +662,7 @@ export const Timetable = ({
               reservationId={eventIdForModal!}
               closeAction={setOpenEventModal}
               refetch={refetch}
+              selectedClinic={selectedClinic}
             />
           }
         />

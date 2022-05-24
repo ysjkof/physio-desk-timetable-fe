@@ -36,7 +36,7 @@ export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
       className="time-indicator-bar group absolute z-40 flex w-full border-t border-red-500 hover:z-50"
       style={{ top: `${top}px` }}
     >
-      <span className="mx-auto hidden text-red-500 group-hover:block">
+      <span className="mx-auto text-red-500 group-hover:hidden">
         {new Date().toLocaleString("ko-KR", {
           hour: "2-digit",
           minute: "2-digit",

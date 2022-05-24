@@ -19,14 +19,21 @@ import {
 import { getHHMM, getTimeLength, getYMD } from "../../libs/timetable-utils";
 import { cls } from "../../libs/utils";
 import { client } from "../../apollo";
+import { selectedClinic } from "../../store";
 
-function changeState(state: ReservationState, reservationId: number) {
+function changeState(
+  state: ReservationState,
+  reservationId: number,
+  clinicId: number | undefined
+) {
+  console.log(state, reservationId, clinicId);
   const thisReservation: FindReservationByIdQuery | null =
     client.cache.readQuery({
       query: FindReservationByIdDocument,
       variables: {
         input: {
           reservationId,
+          ...(clinicId && { clinicId }),
         },
       },
     });
@@ -50,24 +57,31 @@ function changeState(state: ReservationState, reservationId: number) {
   }
 }
 
-interface IReservationDetail {
+interface ReservationDetailProps {
   reservationId: number;
+  selectedClinic: typeof selectedClinic;
   closeAction: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: () => void;
 }
 
-export const ReservationDetail: React.FC<IReservationDetail> = ({
+export const ReservationDetail = ({
   reservationId,
+  selectedClinic,
   closeAction,
   refetch,
-}) => {
+}: ReservationDetailProps) => {
   const [openPatientDetail, setOpenPatientDetail] = useState<boolean>(false);
   const [editReservationMutation] = useEditReservationMutation({});
   const [deleteReservationMutation] = useDeleteReservationMutation({});
   let nextState: ReservationState;
-
+  selectedClinic;
   const { data: findReservationData } = useFindReservationByIdQuery({
-    variables: { input: { reservationId } },
+    variables: {
+      input: {
+        reservationId,
+        ...(selectedClinic.id && { clinicId: selectedClinic.id }),
+      },
+    },
   });
 
   const onClickEditNoshow = () => {
@@ -80,14 +94,22 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
           : ReservationState.NoShow;
       editReservationMutation({
         variables: {
-          input: { reservationId, state: nextState },
+          input: {
+            reservationId,
+            state: nextState,
+            ...(reservation?.clinic?.id && { clinicId: reservation.clinic.id }),
+          },
         },
         onCompleted(data) {
           const {
             editReservation: { ok },
           } = data;
           if (ok) {
-            changeState(nextState, reservationId);
+            changeState(
+              nextState,
+              reservationId,
+              reservation?.clinic?.id && reservation.clinic.id
+            );
             return;
           }
         },
@@ -104,14 +126,22 @@ export const ReservationDetail: React.FC<IReservationDetail> = ({
           : ReservationState.Canceled;
       editReservationMutation({
         variables: {
-          input: { reservationId, state: nextState },
+          input: {
+            reservationId,
+            state: nextState,
+            ...(reservation?.clinic?.id && { clinicId: reservation.clinic.id }),
+          },
         },
         onCompleted(data) {
           const {
             editReservation: { ok },
           } = data;
           if (ok) {
-            changeState(nextState, reservationId);
+            changeState(
+              nextState,
+              reservationId,
+              reservation?.clinic?.id && reservation.clinic.id
+            );
             return;
           }
         },

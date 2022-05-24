@@ -1,6 +1,5 @@
 import { ModifiedReservation } from "../pages/timetable/timetable";
 import { Clinic, Member, MeQuery, User } from "../graphql/generated/graphql";
-import { ONE_DAY, ONE_WEEK } from "../variables";
 
 interface ModifiedClinicMemberWithUserAndClinic
   extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
@@ -16,15 +15,6 @@ interface ModifiedClinic extends Pick<Clinic, "id" | "name"> {
   members: ClinicMemberWithOptions[];
 }
 export interface ClinicWithOptions extends ModifiedClinic {}
-
-export interface IViewOption {
-  periodToView: typeof ONE_DAY | typeof ONE_WEEK;
-  seeCancel: boolean;
-  seeNoshow: boolean;
-  seeList: boolean;
-  seeActiveOption: boolean;
-  navigationExpand: boolean;
-}
 
 export function getStartSunday(date: Date) {
   const returnDate = new Date(date);

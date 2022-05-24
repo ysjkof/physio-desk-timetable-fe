@@ -21,28 +21,46 @@ import {
   selectedClinicVar,
   clinicListsVar,
   viewOptionsVar,
+  defaultViewOptions,
 } from "./store";
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
   LOCALSTORAGE_VIEW_OPTION,
   LOCALSTORAGE_VIEW_OPTION_CLINICS,
-  ONE_WEEK,
 } from "./variables";
-import { ClinicWithOptions, IViewOption } from "./libs/timetable-utils";
+import { ClinicWithOptions } from "./libs/timetable-utils";
 import { ListPatient } from "./pages/list-patient";
 import {
   FindMyClinicsQuery,
   useFindMyClinicsQuery,
 } from "./graphql/generated/graphql";
 
-const defaultViewOptions: IViewOption = {
-  periodToView: ONE_WEEK,
-  seeCancel: true,
-  seeNoshow: true,
-  seeList: false,
-  seeActiveOption: false,
-  navigationExpand: false,
-};
+function filterActivatedMemberInClinic(
+  data: FindMyClinicsQuery | undefined | null,
+  loggedInUserId: number
+) {
+  const result: ClinicWithOptions[] = [];
+  if (data && data.findMyClinics.clinics) {
+    data.findMyClinics.clinics.forEach((clinic) => {
+      const isAccepted = clinic.members.find(
+        (member) => member.user.id === loggedInUserId && member.accepted
+      );
+      if (isAccepted) {
+        const members = clinic.members
+          .filter((member) => member.accepted && member.staying)
+          .map((member) => ({
+            ...member,
+            activation: true,
+            loginUser: member.user.id === loggedInUserId && true,
+          }));
+        if (Array.isArray(members) && members[0]) {
+          result.push({ ...clinic, members });
+        }
+      }
+    });
+  }
+  return result;
+}
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -50,35 +68,9 @@ function App() {
   const { data: findMyClinicsData } = useFindMyClinicsQuery({
     variables: { input: { includeInactivate: true } },
   });
-
-  function filterActivatedMemberInClinic(
-    data: FindMyClinicsQuery | undefined | null,
-    loggedInUserId: number
-  ) {
-    const result: ClinicWithOptions[] = [];
-    if (data && data.findMyClinics.clinics) {
-      data.findMyClinics.clinics.forEach((clinic) => {
-        const isAccepted = clinic.members.find(
-          (member) => member.user.id === loggedInUserId && member.accepted
-        );
-        if (isAccepted) {
-          const members = clinic.members
-            .filter((member) => member.accepted && member.staying)
-            .map((member) => ({
-              ...member,
-              activation: true,
-              loginUser: member.user.id === loggedInUserId && true,
-            }));
-          if (Array.isArray(members) && members[0]) {
-            result.push({ ...clinic, members });
-          }
-        }
-      });
-    }
-    return result;
-  }
-
+  console.log(0, "App");
   useEffect(() => {
+    console.log(1, "App : in useEffect");
     if (!meData) return;
     const localViewOptions = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_VIEW_OPTION + meData.me.id)!
@@ -94,6 +86,7 @@ function App() {
   }, [meData]);
 
   useEffect(() => {
+    console.log(2, "App : in useEffect");
     if (!meData) return;
     let updatedMyClinics: ClinicWithOptions[] = [];
     const myClinics = filterActivatedMemberInClinic(
@@ -151,6 +144,7 @@ function App() {
       selectedClinicVar(selectedClinic);
     }
   }, [findMyClinicsData]);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

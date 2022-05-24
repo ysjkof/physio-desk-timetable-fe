@@ -254,6 +254,7 @@ export type FindPrescriptionsOutput = {
 };
 
 export type FindReservationByIdInput = {
+  clinicId?: InputMaybe<Scalars['Int']>;
   reservationId: Scalars['Int'];
 };
 

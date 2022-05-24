@@ -21,6 +21,7 @@ export const TimeTable = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(today);
   const clinicLists = useReactiveVar(clinicListsVar);
   const { data: meData } = useMe();
+  console.log("시간표 시작", clinicLists);
 
   const {
     data,
@@ -35,7 +36,7 @@ export const TimeTable = () => {
           userIds: clinicLists
             .find((g) => g.id === selectedClinic.id)
             ?.members.filter((m) => m.activation)
-            .map((m) => m.id),
+            .map((m) => m.user.id),
           clinicId: selectedClinic.id,
         }),
       },
@@ -59,7 +60,7 @@ export const TimeTable = () => {
       ));
   }
 
-  if (!meData) return <></>;
+  if (!meData || loadingListReserv) return <></>;
   return (
     <>
       <Helmet>

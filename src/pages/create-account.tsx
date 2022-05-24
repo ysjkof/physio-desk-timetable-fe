@@ -68,8 +68,11 @@ export const CreateAccount = () => {
         <input
           {...register("email", {
             required: "Email is required",
-            pattern:
-              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            pattern: {
+              value:
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              message: "Email 형식으로 입력하세요.",
+            },
           })}
           type="email"
           placeholder="Email"
@@ -77,9 +80,6 @@ export const CreateAccount = () => {
         />
         {errors.email?.message && (
           <FormError errorMessage={errors.email?.message} />
-        )}
-        {errors.email?.type === "pattern" && (
-          <FormError errorMessage={"Please enter a valid email"} />
         )}
         <input
           {...register("password", { required: "Password is required" })}

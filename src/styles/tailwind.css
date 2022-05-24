@@ -45,6 +45,24 @@
 .bubble-arrow-t-2-5 {
   @apply cursor-pointer after:absolute after:bottom-full after:left-[19.5%] after:border-8  after:border-b-black after:border-t-transparent after:border-l-transparent after:border-r-transparent;
 }
+.user-color-1 {
+  @apply bg-[#CCD5AE] ring-[#b0ba90];
+}
+.user-color-2 {
+  @apply bg-[#E9EDC9] ring-[#cbd0a8];
+}
+.user-color-3 {
+  @apply bg-[#FEFAE0] ring-[#FEFAE0];
+}
+.user-color-4 {
+  @apply bg-[#FAEDCD] ring-[#FAEDCD];
+}
+.noshow-color {
+  @apply bg-[#edece9] ring-[#aaaaaa];
+}
+.cancel-color {
+  @apply bg-[#FEF2F2] ring-[#FCA5A5];
+}
 
 @tailwind utilities;
 
