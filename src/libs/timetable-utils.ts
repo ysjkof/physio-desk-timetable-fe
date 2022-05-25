@@ -122,7 +122,6 @@ export const injectUsers = (
   loginUser: ModifiedLoggedInUser,
   members: ClinicMemberWithOptions[]
 ) => {
-  console.log("❎ inInjectUsers. loginUser is : ", loginUser);
   const result: DayWithUsers[] = [];
   function makeNewUsers() {
     return mergeLoggedInUser(loginUser, members).map((user) => ({

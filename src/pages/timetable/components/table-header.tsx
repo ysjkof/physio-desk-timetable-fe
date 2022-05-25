@@ -47,7 +47,7 @@ export function TableHeader({ weeks }: TableHeaderProps) {
           >
             <BtnDatecheck
               text={
-                viewOptions.periodToView === 7
+                viewOptions?.periodToView === 7
                   ? day.date.toLocaleDateString("ko-KR", {
                       month: "short",
                       day: "numeric",
@@ -64,7 +64,7 @@ export function TableHeader({ weeks }: TableHeaderProps) {
         ))}
         <div
           className={cls(
-            viewOptions.navigationExpand ? "invisible" : "",
+            viewOptions?.navigationExpand ? "invisible" : "",
             "absolute left-0"
           )}
         >
@@ -72,7 +72,7 @@ export function TableHeader({ weeks }: TableHeaderProps) {
         </div>
         <div
           className={cls(
-            viewOptions.navigationExpand ? "invisible" : "",
+            viewOptions?.navigationExpand ? "invisible" : "",
             "absolute right-0"
           )}
         >

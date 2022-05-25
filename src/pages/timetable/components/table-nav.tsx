@@ -4,11 +4,7 @@ import { faGear, faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Fragment } from "react";
 import { Switch } from "../../../components/switch";
-import { MeQuery } from "../../../graphql/generated/graphql";
-import {
-  ClinicWithOptions,
-  compareDateMatch,
-} from "../../../libs/timetable-utils";
+import { compareDateMatch } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
 import {
   clinicListsVar,
@@ -40,22 +36,26 @@ export function TableNav({ today, daysOfMonth }: TableNavProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
-  const onClickToggleUser = (
-    clinicLists: ClinicWithOptions[],
-    clinicId: number,
-    memberId: number
-  ) => {
-    if (!loggedInUser) return console.log("❌ loggedInUser가 false입니다");
+  const onClickToggleUser = (clinicId: number, memberId: number) => {
+    if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
     const gIndex = clinicLists.findIndex(
       (prevClinic) => prevClinic.id === clinicId
     );
-    if (gIndex === -1) return;
+    if (gIndex === -1) return console.warn("❌ group index가 -1입니다");
     const mIndex = clinicLists[gIndex].members.findIndex(
       (prevMember) => prevMember.id === memberId
     );
-    if (mIndex === -1) return;
-    clinicLists[gIndex].members[mIndex].activation =
-      clinicLists[gIndex].members[mIndex].activation === true ? false : true;
+    if (mIndex === -1) return console.warn("❌ member index가 -1입니다");
+
+    const activateLength = clinicLists[gIndex].members.filter(
+      (member) => member.activation
+    ).length;
+    let isActivate = clinicLists[gIndex].members[mIndex].activation;
+
+    if (isActivate && activateLength === 1) {
+      return;
+    }
+    clinicLists[gIndex].members[mIndex].activation = !isActivate;
     localStorage.setItem(
       LOCALSTORAGE_VIEW_OPTION_CLINICS + loggedInUser.id,
       JSON.stringify(clinicLists)
@@ -64,7 +64,7 @@ export function TableNav({ today, daysOfMonth }: TableNavProps) {
   };
 
   const onClickChangeSelectClinic = (id: number, name: string) => {
-    if (!loggedInUser) return console.log("❌ loggedInUser가 false입니다");
+    if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
     let newSelectedClinic = selectedClinic;
     if (selectedClinic.id === id) {
       newSelectedClinic = {
@@ -83,7 +83,7 @@ export function TableNav({ today, daysOfMonth }: TableNavProps) {
     );
     selectedClinicVar(newSelectedClinic);
   };
-  if (!loggedInUser) return <></>;
+  if (!loggedInUser || !viewOptions) return <></>;
   return (
     <nav className="container-header mb-3 px-2 pb-4 shadow-b">
       <div className="flex justify-between">
@@ -141,8 +141,8 @@ export function TableNav({ today, daysOfMonth }: TableNavProps) {
                       소속된 병원이 없습니다.
                     </div>
                   ) : (
-                    clinicLists.map((clinic) => (
-                      <Fragment key={clinic.id}>
+                    clinicLists.map((clinic, i) => (
+                      <Fragment key={i}>
                         <ButtonCheck
                           name={clinic.name}
                           isActivated={clinic.id === selectedClinic.id}
@@ -157,18 +157,14 @@ export function TableNav({ today, daysOfMonth }: TableNavProps) {
                               : "pointer-events-none"
                           )}
                         >
-                          {clinic.members.map((member) => (
+                          {clinic.members.map((member, i) => (
                             <ButtonCheck
-                              key={member.id}
+                              key={i}
                               isActivated={clinic.id === selectedClinic.id}
                               isMemberActivated={member.activation}
                               name={member.user.name}
                               onClickFx={() =>
-                                onClickToggleUser(
-                                  clinicLists,
-                                  clinic.id,
-                                  member.id
-                                )
+                                onClickToggleUser(clinic.id, member.id)
                               }
                             />
                           ))}

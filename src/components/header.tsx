@@ -1,26 +1,65 @@
 import { useReactiveVar } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authTokenVar, isLoggedInVar } from "../apollo";
-import { LOCALSTORAGE_TOKEN } from "../variables";
-// import muoolLogo from "../images/logoMuoolJinBlue.svg";
+import { LOCALSTORAGE_TOKEN, ONE_WEEK } from "../variables";
 import { useForm } from "react-hook-form";
 import { useMe } from "../hooks/useMe";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faUser } from "@fortawesome/free-regular-svg-icons";
+import {
+  FindMyClinicsQuery,
+  useFindMyClinicsQuery,
+} from "../graphql/generated/graphql";
+import { ClinicWithOptions } from "../libs/timetable-utils";
+import {
+  clinicListsVar,
+  loggedInUserVar,
+  selectedClinic,
+  selectedClinicVar,
+  viewOptionsVar,
+} from "../store";
+import {
+  LOCALSTORAGE_SELECTED_CLINIC,
+  LOCALSTORAGE_VIEW_OPTION,
+  LOCALSTORAGE_VIEW_OPTION_CLINICS,
+} from "../variables";
 
+function filterActivatedMemberInClinic(
+  data: FindMyClinicsQuery | undefined | null,
+  loggedInUserId: number
+) {
+  const result: ClinicWithOptions[] = [];
+  if (data && data.findMyClinics.clinics) {
+    data.findMyClinics.clinics.forEach((clinic) => {
+      const isAccepted = clinic.members.find(
+        (member) => member.user.id === loggedInUserId && member.accepted
+      );
+      if (isAccepted) {
+        const members = clinic.members
+          .filter((member) => member.accepted && member.staying)
+          .map((member) => ({
+            ...member,
+            activation: true,
+            loginUser: member.user.id === loggedInUserId && true,
+          }));
+        if (Array.isArray(members) && members[0]) {
+          result.push({ ...clinic, members });
+        }
+      }
+    });
+  }
+  return result;
+}
 interface Notice {
   __typename?: "Notice" | undefined;
   message: string;
   read: boolean;
 }
 
-export const Header: React.FC = () => {
-  // 비로그인일 때 useMe 호출되면 디버거 상태됨. 추후 처리할 것. 따로 모달창을 만드는 것 고려.
+export const Header = () => {
   const { data: meData, error } = useMe();
   const [notices, setNotices] = useState<Notice[] | null>(null);
-  // const location = useLocation();
-  // const state = location.state as { startDate: Date };
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const navigate = useNavigate();
 
@@ -40,16 +79,105 @@ export const Header: React.FC = () => {
 
   useEffect(() => {
     if (error) {
+      console.error("Error : User Data,", error);
       logoutBtn();
     }
   }, [error]);
+
   useEffect(() => {
-    if (meData?.me.notice) {
+    console.log(1, "시작 Header : in useEffect");
+    if (!meData) return;
+    if (meData.me.notice) {
       setNotices(meData.me.notice);
     }
+    const localViewOptions = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_VIEW_OPTION + meData.me.id)!
+    );
+    let saveThis = localViewOptions;
+
+    if (localViewOptions === null) {
+      const defaultViewOptions = {
+        periodToView: ONE_WEEK,
+        seeCancel: true,
+        seeNoshow: true,
+        seeList: false,
+        seeActiveOption: false,
+        navigationExpand: false,
+      };
+      localStorage.setItem(
+        LOCALSTORAGE_VIEW_OPTION + meData.me.id,
+        JSON.stringify(defaultViewOptions)
+      );
+      saveThis = defaultViewOptions;
+    }
+    viewOptionsVar(saveThis);
+    loggedInUserVar(meData.me);
   }, [meData]);
 
-  // console.log("HEADER LOCATION", location);
+  const { data: findMyClinicsData } = useFindMyClinicsQuery({
+    variables: { input: { includeInactivate: true } },
+  });
+
+  useEffect(() => {
+    console.log(2, "시작 Header : in useEffect");
+    if (!meData) return;
+    let updatedMyClinics: ClinicWithOptions[] = [];
+    const myClinics = filterActivatedMemberInClinic(
+      findMyClinicsData,
+      meData.me.id
+    );
+
+    const localClinics: ClinicWithOptions[] = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_VIEW_OPTION_CLINICS + meData.me.id)!
+    );
+    if (localClinics) {
+      updatedMyClinics = myClinics.map((g) => {
+        const existLocalClinic = localClinics.find((lg) => lg.id === g.id);
+        if (existLocalClinic) {
+          return {
+            id: g.id,
+            name: g.name,
+            members: g.members.map((gm) => {
+              const sameMember = existLocalClinic.members.find(
+                (lgm) => lgm.id === gm.id
+              );
+              if (sameMember) {
+                return sameMember;
+              } else {
+                return gm;
+              }
+            }),
+          };
+        } else {
+          return g;
+        }
+      });
+    } else {
+      updatedMyClinics = myClinics;
+    }
+    localStorage.setItem(
+      LOCALSTORAGE_VIEW_OPTION_CLINICS + meData.me.id,
+      JSON.stringify(updatedMyClinics)
+    );
+    clinicListsVar(updatedMyClinics);
+
+    const localSelectClinic: typeof selectedClinic = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_SELECTED_CLINIC + meData.me.id)!
+    );
+    if (
+      localSelectClinic &&
+      myClinics.find((g) => g.id === localSelectClinic.id)
+    ) {
+      selectedClinicVar(localSelectClinic);
+    } else {
+      localStorage.setItem(
+        LOCALSTORAGE_SELECTED_CLINIC + meData.me.id,
+        JSON.stringify(selectedClinic)
+      );
+      selectedClinicVar(selectedClinic);
+    }
+  }, [findMyClinicsData]);
+
   return (
     <>
       {/* {data && !data?.me.verified && (

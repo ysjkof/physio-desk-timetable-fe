@@ -12,7 +12,6 @@ import {
   selectedDateVar,
 } from "../../store";
 import { getEnddate, getStartSunday } from "../../libs/timetable-utils";
-
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
 }
@@ -21,8 +20,6 @@ export const TimeTable = () => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const selectedDate = useReactiveVar(selectedDateVar);
   const clinicLists = useReactiveVar(clinicListsVar);
-
-  console.log("시간표 시작", clinicLists);
 
   const { data, refetch } = useListReservationsQuery({
     variables: {

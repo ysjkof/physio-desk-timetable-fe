@@ -5,11 +5,7 @@ import {
   getTimeLength,
 } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
-import {
-  loggedInUserVar,
-  selectedDateVar,
-  viewOptionsVar,
-} from "../../../store";
+import { viewOptionsVar } from "../../../store";
 import { EventBox } from "./event-box";
 
 interface TableColsProps {
@@ -24,8 +20,6 @@ export function TableCols({
   labels,
   onClick,
 }: TableColsProps) {
-  const viewOptions = useReactiveVar(viewOptionsVar);
-
   if (!weekEvents[0]) {
     console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
     return <h2>Loading...</h2>;
@@ -57,7 +51,6 @@ export function TableCols({
                       <EventBox
                         key={event.id}
                         userIndex={userIndex}
-                        viewOptions={viewOptions}
                         reservationState={event.state}
                         patientName={event.patient.name}
                         prescriptions={event.prescriptions ?? []}

@@ -20,9 +20,7 @@ import {
   spreadClinicMembers,
   ClinicMemberWithOptions,
   getHHMM,
-  getTimeLength,
 } from "../../libs/timetable-utils";
-import { cls } from "../../libs/utils";
 import { ReservationDetail } from "./reservation-detail";
 import {
   selectedClinicVar,
@@ -37,12 +35,13 @@ import { Reserve } from "./reserve";
 import { TimeIndicatorBar } from "./components/time-indicator-bar";
 import { PrescriptionWithSelect } from ".";
 import { EventLi } from "./components/event-li";
-import { EventBox } from "./components/event-box";
-import { TableNav } from "./components/table-nav";
+
 import { TableHeader } from "./components/table-header";
 import { TableSubHeader } from "./components/table-sub-header";
 import { TableRow } from "./components/table-row";
 import { TableCols } from "./components/table-cols";
+import { motion } from "framer-motion";
+import { TableNav } from "./components/table-nav";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -79,9 +78,6 @@ export const Timetable = ({
     getWeeks(getSunday(today))
   );
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
-  const [daysOfMonth, setDaysOfMonth] = useState<{ date: Date }[]>(
-    getWeeksOfMonth(today)
-  );
 
   const labels = getTimeGaps(
     tableTime.start.hours,
@@ -110,7 +106,6 @@ export const Timetable = ({
     members: ClinicMemberWithOptions[]
   ) {
     if (!loggedInUser) return;
-    console.log("❎ inDistributor. loggedInUser is : ", loggedInUser);
     let days = injectUsers(
       getWeeks(getSunday(selectedDate)),
       loggedInUser,
@@ -132,7 +127,7 @@ export const Timetable = ({
     return days;
   }
   useEffect(() => {
-    if (eventsData?.listReservations.ok) {
+    if (eventsData?.listReservations.ok && loggedInUser) {
       const distributeEvents = distributor(
         eventsData.listReservations.results,
         spreadClinicMembers(clinicLists, selectedClinic.id)
@@ -140,11 +135,13 @@ export const Timetable = ({
       if (distributeEvents) {
         setWeekEvents(distributeEvents);
       } else {
-        console.log(
+        console.error(
           "❌ distributeEvents를 알 수 없습니다 : ",
           distributeEvents
         );
       }
+    } else {
+      console.warn("✅ 시간표 > useEffect 실패");
     }
   }, [eventsData, clinicLists]);
 
@@ -152,7 +149,6 @@ export const Timetable = ({
     if (!compareDateMatch(selectedDate, prevSelectedDate, "ym")) {
       console.log("✅ 년월이 다르다");
       setWeeks(getWeeks(getSunday(selectedDate)));
-      setDaysOfMonth(getWeeksOfMonth(selectedDate));
     } else if (
       !compareDateMatch(selectedDate, prevSelectedDate, "d") &&
       !compareSameWeek(selectedDate, prevSelectedDate)
@@ -168,8 +164,13 @@ export const Timetable = ({
   }
   return (
     <>
-      <div className="timetable-container h-full w-full text-xs">
-        <TableNav today={today} daysOfMonth={daysOfMonth} />
+      <motion.div
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        transition={{ delay: 0.2 }}
+        className="timetable-container h-full w-full text-xs"
+      >
+        <TableNav today={today} daysOfMonth={getWeeksOfMonth(today)} />
         {viewOptions.seeList === false && (
           <>
             {viewOptions.periodToView === 7 && (
@@ -286,7 +287,7 @@ export const Timetable = ({
               </div>
             )
           ))}
-      </div>
+      </motion.div>
       {openEventModal && (
         <ModalPortal
           closeAction={setOpenEventModal}

@@ -1,10 +1,10 @@
+import { useReactiveVar } from "@apollo/client";
 import { ReservationState } from "../../../graphql/generated/graphql";
 import { cls } from "../../../libs/utils";
-import { IViewOption } from "../../../store";
+import { IViewOption, viewOptionsVar } from "../../../store";
 
 interface EventBoxProps {
   userIndex: number;
-  viewOptions: IViewOption;
   reservationState: ReservationState;
   patientName: string;
   inset: string;
@@ -14,7 +14,6 @@ interface EventBoxProps {
 }
 export function EventBox({
   userIndex,
-  viewOptions,
   reservationState,
   patientName,
   prescriptions,
@@ -22,6 +21,8 @@ export function EventBox({
   height,
   onClick,
 }: EventBoxProps) {
+  const viewOptions = useReactiveVar(viewOptionsVar);
+
   return (
     <div
       onClick={onClick}
@@ -36,9 +37,10 @@ export function EventBox({
           : userIndex === 3
           ? "user-color-4"
           : "",
-        !viewOptions.seeCancel && reservationState === ReservationState.Canceled
+        !viewOptions?.seeCancel &&
+          reservationState === ReservationState.Canceled
           ? "hidden"
-          : !viewOptions.seeNoshow &&
+          : !viewOptions?.seeNoshow &&
             reservationState === ReservationState.NoShow
           ? "hidden"
           : "",
