@@ -32,16 +32,14 @@ export function TableRow({
     <div
       className={cls(
         "grid h-5",
-        isWeek
-          ? "grid-cols-cal_week divide-x divide-black"
-          : "grid-cols-cal_day",
+        isWeek ? "grid-cols-week divide-x divide-black" : "grid-cols-day",
         compareNumAfterGetMinutes(label, [0, 30]) ? "border-t border-white" : ""
       )}
     >
       <div
         className={cls(
-          compareNumAfterGetMinutes(label, [0, 30]) ? "bg-white" : "",
-          "title-col relative -top-2.5"
+          "title-col relative -top-2.5",
+          compareNumAfterGetMinutes(label, [0, 30]) ? "bg-white" : ""
         )}
       >
         {compareNumAfterGetMinutes(label, [0, 30]) ? getHHMM(label) : ""}

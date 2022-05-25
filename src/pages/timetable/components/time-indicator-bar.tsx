@@ -12,25 +12,20 @@ export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
     const nowMinute = Date.now() / 1000 / 60;
     const nowTime = nowMinute - startTime;
     const maxTime = endTime - startTime;
-    if (nowTime < maxTime) {
+    if (nowTime > maxTime) {
       //   시간표의 1칸은 10분을 나타내고 높이 20px이다.
       //   1분은 2px기 때문에 *2 한다.
-      setTop(Math.floor(nowTime * 2));
+      setTop(0);
     } else {
-      setTop(Math.floor(endTime));
+      setTop(Math.floor(nowTime * 2));
     }
   };
-  //   const savedCalllback = useRef(setPosition);
   useEffect(() => {
     setPosition();
-    // function tick() {
-    //   savedCalllback.current();
-    // }
-    // let id = setInterval(tick, 30000);
     let id = setInterval(setPosition, 30000);
     return () => clearInterval(id);
   }, []);
-
+  if (top === 0) return <></>;
   return (
     <div
       className="time-indicator-bar group absolute z-40 flex w-full border-t border-red-500 hover:z-50"

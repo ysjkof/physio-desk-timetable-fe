@@ -13,12 +13,7 @@ export function TableSubHeader({ weekEvents, isWeek }: TableSubHeaderProps) {
 
   return (
     <div className="table-sub-header mt-1.5 w-full">
-      <div
-        className={cls(
-          "grid",
-          isWeek ? "grid-cols-cal_week" : "grid-cols-cal_day"
-        )}
-      >
+      <div className={cls("grid", isWeek ? "grid-cols-week" : "grid-cols-day")}>
         <div className="title-col" />
         {isWeek ? (
           weekEvents.map((day, i) => (

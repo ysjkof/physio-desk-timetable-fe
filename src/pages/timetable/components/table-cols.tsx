@@ -1,11 +1,9 @@
-import { useReactiveVar } from "@apollo/client";
 import {
   compareDateMatch,
   DayWithUsers,
   getTimeLength,
 } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
-import { viewOptionsVar } from "../../../store";
 import { EventBox } from "./event-box";
 
 interface TableColsProps {
@@ -29,7 +27,7 @@ export function TableCols({
       <div
         className={cls(
           "grid h-full",
-          isWeek ? "grid-cols-cal_week" : "grid-cols-cal_day"
+          isWeek ? "grid-cols-week" : "grid-cols-day"
         )}
       >
         <div className="title-col" />

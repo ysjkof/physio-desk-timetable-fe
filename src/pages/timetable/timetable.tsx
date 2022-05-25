@@ -168,7 +168,7 @@ export const Timetable = ({
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         transition={{ delay: 0.2 }}
-        className="timetable-container h-full w-full text-xs"
+        className="timetable-container h-full text-xs"
       >
         <TableNav today={today} daysOfMonth={getWeeksOfMonth(today)} />
         {viewOptions.seeList === false && (
@@ -176,27 +176,29 @@ export const Timetable = ({
             {viewOptions.periodToView === 7 && (
               <>
                 <TableHeader weeks={weeks} />
-                <TableSubHeader weekEvents={weekEvents} isWeek />
-                <div className="body-table relative h-full overflow-y-scroll pt-1.5">
-                  <TimeIndicatorBar labels={labels} />
-                  <div className="row-table absolute z-30 h-full w-full">
-                    {labels.map((label) => (
-                      <TableRow
-                        key={label.valueOf()}
-                        isWeek
-                        label={label}
-                        weekEvents={weekEvents}
-                        setOpenReserveModal={setOpenReserveModal}
-                        setEventStartDate={setEventStartDate}
-                      />
-                    ))}
+                <div className="h-full overflow-y-scroll">
+                  <TableSubHeader weekEvents={weekEvents} isWeek />
+                  <div className="body-table relative h-full pt-1.5">
+                    <TimeIndicatorBar labels={labels} />
+                    <div className="row-table absolute z-30 h-full w-full">
+                      {labels.map((label) => (
+                        <TableRow
+                          key={label.valueOf()}
+                          isWeek
+                          label={label}
+                          weekEvents={weekEvents}
+                          setOpenReserveModal={setOpenReserveModal}
+                          setEventStartDate={setEventStartDate}
+                        />
+                      ))}
+                    </div>
+                    <TableCols
+                      weekEvents={weekEvents}
+                      isWeek
+                      labels={labels}
+                      onClick={onClickEventBox}
+                    />
                   </div>
-                  <TableCols
-                    weekEvents={weekEvents}
-                    isWeek
-                    labels={labels}
-                    onClick={onClickEventBox}
-                  />
                 </div>
               </>
             )}
