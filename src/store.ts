@@ -1,5 +1,6 @@
 import { makeVar } from "@apollo/client";
 import { ListReservationsQuery, Patient } from "./graphql/generated/graphql";
+import { ModifiedLoggedInUser } from "./hooks/useMe";
 import { ClinicWithOptions } from "./libs/timetable-utils";
 import { ONE_DAY, ONE_WEEK } from "./variables";
 
@@ -15,13 +16,6 @@ export interface SelectedPatient
   clinicName: string;
   user?: { id: number; name: string };
 }
-
-export const selectedPatientVar = makeVar<null | SelectedPatient>(null);
-
-export const todayNowVar = makeVar<Date>(new Date());
-
-export const clinicListsVar = makeVar<ClinicWithOptions[]>([]); // member의 activated key를 저장하기 위해서 필요함.
-
 export interface IViewOption {
   periodToView: typeof ONE_DAY | typeof ONE_WEEK;
   seeCancel: boolean;
@@ -38,12 +32,17 @@ export const defaultViewOptions: IViewOption = {
   seeActiveOption: false,
   navigationExpand: false,
 };
-
-export const viewOptionsVar = makeVar(defaultViewOptions);
-
 export const selectedClinic = {
   id: 0,
   name: "",
 };
 
+export const todayNowVar = makeVar<Date>(new Date());
+export const loggedInUserVar = makeVar<ModifiedLoggedInUser | null>(null);
+
+export const viewOptionsVar = makeVar(defaultViewOptions);
+export const clinicListsVar = makeVar<ClinicWithOptions[]>([]); // member의 activated key를 저장하기 위해서 필요함.
+
+export const selectedDateVar = makeVar(new Date());
 export const selectedClinicVar = makeVar(selectedClinic);
+export const selectedPatientVar = makeVar<null | SelectedPatient>(null);

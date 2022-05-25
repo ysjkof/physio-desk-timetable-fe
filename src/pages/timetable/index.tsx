@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Timetable } from "./timetable";
 import {
@@ -7,8 +6,11 @@ import {
   useListReservationsQuery,
 } from "../../graphql/generated/graphql";
 import { useReactiveVar } from "@apollo/client";
-import { clinicListsVar, selectedClinicVar, todayNowVar } from "../../store";
-import { useMe } from "../../hooks/useMe";
+import {
+  clinicListsVar,
+  selectedClinicVar,
+  selectedDateVar,
+} from "../../store";
 import { getEnddate, getStartSunday } from "../../libs/timetable-utils";
 
 export interface PrescriptionWithSelect extends Prescription {
@@ -16,18 +18,13 @@ export interface PrescriptionWithSelect extends Prescription {
 }
 
 export const TimeTable = () => {
-  const today = useReactiveVar(todayNowVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
-  const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const selectedDate = useReactiveVar(selectedDateVar);
   const clinicLists = useReactiveVar(clinicListsVar);
-  const { data: meData } = useMe();
+
   console.log("시간표 시작", clinicLists);
 
-  const {
-    data,
-    loading: loadingListReserv,
-    refetch,
-  } = useListReservationsQuery({
+  const { data, refetch } = useListReservationsQuery({
     variables: {
       input: {
         startDate: getStartSunday(selectedDate),
@@ -60,7 +57,7 @@ export const TimeTable = () => {
       ));
   }
 
-  if (!meData || loadingListReserv) return <></>;
+  if (!data) return <></>;
   return (
     <>
       <Helmet>
@@ -74,8 +71,6 @@ export const TimeTable = () => {
               end: { hours: 19, minutes: 0 },
             }}
             eventsData={data}
-            selectedDateState={{ selectedDate, setSelectedDate }}
-            loginUser={meData}
             prescriptions={prescriptions}
             refetch={refetch}
           />

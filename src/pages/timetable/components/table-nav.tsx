@@ -13,7 +13,9 @@ import { cls } from "../../../libs/utils";
 import {
   clinicListsVar,
   IViewOption,
+  loggedInUserVar,
   selectedClinicVar,
+  selectedDateVar,
   viewOptionsVar,
 } from "../../../store";
 import {
@@ -28,29 +30,22 @@ import { MoveXBtn } from "./move-x-btn";
 
 interface TableNavProps {
   today: Date;
-  selectedDateState: {
-    selectedDate: Date;
-    setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
-  };
-  loginUser: MeQuery;
   daysOfMonth: { date: Date }[];
 }
 
-export function TableNav({
-  today,
-  selectedDateState: { selectedDate, setSelectedDate },
-  loginUser,
-  daysOfMonth,
-}: TableNavProps) {
+export function TableNav({ today, daysOfMonth }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
+  const selectedDate = useReactiveVar(selectedDateVar);
+  const loggedInUser = useReactiveVar(loggedInUserVar);
 
   const onClickToggleUser = (
     clinicLists: ClinicWithOptions[],
     clinicId: number,
     memberId: number
   ) => {
+    if (!loggedInUser) return console.log("❌ loggedInUser가 false입니다");
     const gIndex = clinicLists.findIndex(
       (prevClinic) => prevClinic.id === clinicId
     );
@@ -62,13 +57,14 @@ export function TableNav({
     clinicLists[gIndex].members[mIndex].activation =
       clinicLists[gIndex].members[mIndex].activation === true ? false : true;
     localStorage.setItem(
-      LOCALSTORAGE_VIEW_OPTION_CLINICS + loginUser.me.id,
+      LOCALSTORAGE_VIEW_OPTION_CLINICS + loggedInUser.id,
       JSON.stringify(clinicLists)
     );
     clinicListsVar([...clinicLists]);
   };
 
   const onClickChangeSelectClinic = (id: number, name: string) => {
+    if (!loggedInUser) return console.log("❌ loggedInUser가 false입니다");
     let newSelectedClinic = selectedClinic;
     if (selectedClinic.id === id) {
       newSelectedClinic = {
@@ -82,19 +78,19 @@ export function TableNav({
       };
     }
     localStorage.setItem(
-      LOCALSTORAGE_SELECTED_CLINIC + loginUser.me.id,
+      LOCALSTORAGE_SELECTED_CLINIC + loggedInUser.id,
       JSON.stringify(newSelectedClinic)
     );
     selectedClinicVar(newSelectedClinic);
   };
-
+  if (!loggedInUser) return <></>;
   return (
     <nav className="container-header mb-3 px-2 pb-4 shadow-b">
       <div className="flex justify-between">
         <div className="flex">
           <button
             className="min-w-[120px] text-sm font-medium text-gray-700 hover:font-bold"
-            onClick={() => setSelectedDate(today)}
+            onClick={() => selectedDateVar(today)}
           >
             {selectedDate.toLocaleString("ko-KR", {
               year: "2-digit",
@@ -114,7 +110,7 @@ export function TableNav({
                   seeActiveOption: !viewOptions.seeActiveOption,
                 };
                 localStorage.setItem(
-                  LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
+                  LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
                   JSON.stringify(newViewOptions)
                 );
                 viewOptionsVar(newViewOptions);
@@ -194,7 +190,7 @@ export function TableNav({
                 seeCancel: !viewOptions.seeCancel,
               };
               localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
+                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
                 JSON.stringify(newViewOptions)
               );
               viewOptionsVar(newViewOptions);
@@ -209,7 +205,7 @@ export function TableNav({
                 seeNoshow: !viewOptions.seeNoshow,
               };
               localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
+                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
                 JSON.stringify(newViewOptions)
               );
               viewOptionsVar(newViewOptions);
@@ -225,7 +221,7 @@ export function TableNav({
                   viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
               };
               localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
+                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
                 JSON.stringify(newViewOptions)
               );
               viewOptionsVar(newViewOptions);
@@ -242,7 +238,7 @@ export function TableNav({
                 navigationExpand: !viewOptions.navigationExpand,
               };
               localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
+                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
                 JSON.stringify(newViewOptions)
               );
               viewOptionsVar(newViewOptions);
@@ -261,7 +257,7 @@ export function TableNav({
                 seeList: !viewOptions.seeList,
               };
               localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loginUser.me.id,
+                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
                 JSON.stringify(newViewOptions)
               );
               viewOptionsVar(newViewOptions);
@@ -277,14 +273,12 @@ export function TableNav({
         <div className="mx-4 mt-4 flex items-center justify-between">
           <MoveXBtn
             direction={"prev"}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
             dateNavExpand={viewOptions.navigationExpand}
           />
           <div className="grid w-full grid-cols-7">
             {daysOfMonth.map((day, i) => (
               <div
-                onClick={() => setSelectedDate(day.date)}
+                onClick={() => selectedDateVar(day.date)}
                 key={i}
                 className={cls(
                   "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
@@ -316,8 +310,6 @@ export function TableNav({
           </div>
           <MoveXBtn
             direction={"after"}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
             dateNavExpand={viewOptions.navigationExpand}
           />
         </div>

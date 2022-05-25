@@ -1,5 +1,6 @@
 import { ModifiedReservation } from "../pages/timetable/timetable";
 import { Clinic, Member, MeQuery, User } from "../graphql/generated/graphql";
+import { ModifiedLoggedInUser } from "../hooks/useMe";
 
 interface ModifiedClinicMemberWithUserAndClinic
   extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
@@ -77,7 +78,7 @@ export const getWeeks = (dateOfSunday: Date) => {
   return result;
 };
 export const mergeLoggedInUser = (
-  loginUser: MeQuery,
+  loginUser: ModifiedLoggedInUser,
   members: ClinicMemberWithOptions[]
 ) => {
   let result: ClinicMemberWithOptions[] = [];
@@ -87,9 +88,9 @@ export const mergeLoggedInUser = (
     manager: true,
     accepted: true,
     user: {
-      id: loginUser.me.id,
-      name: loginUser.me.name,
-      email: loginUser.me.email,
+      id: loginUser.id,
+      name: loginUser.name,
+      email: loginUser.email,
     },
     clinic: {
       id: 0,
@@ -101,10 +102,10 @@ export const mergeLoggedInUser = (
   if (members.length >= 1) {
     const activatedMembers = members.filter((member) => member.activation);
     const removeLoggedInUser = activatedMembers.filter(
-      (member) => member.user.id !== loginUser.me.id
+      (member) => member.user.id !== loginUser.id
     );
     const isThereLoginUser = activatedMembers.find(
-      (member) => member.user.id === loginUser.me.id
+      (member) => member.user.id === loginUser.id
     );
     if (isThereLoginUser) {
       result.push(loggedInUser);
@@ -118,10 +119,10 @@ export const mergeLoggedInUser = (
 // 겟위크 결과값에 객체 필드 넣는 기능을 따로 빼자.
 export const injectUsers = (
   weeks: OneDate[],
-  loginUser: MeQuery,
+  loginUser: ModifiedLoggedInUser,
   members: ClinicMemberWithOptions[]
 ) => {
-  console.log("❎ inInjectUsers", loginUser);
+  console.log("❎ inInjectUsers. loginUser is : ", loginUser);
   const result: DayWithUsers[] = [];
   function makeNewUsers() {
     return mergeLoggedInUser(loginUser, members).map((user) => ({

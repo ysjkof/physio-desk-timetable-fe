@@ -22,6 +22,7 @@ import {
   clinicListsVar,
   viewOptionsVar,
   defaultViewOptions,
+  loggedInUserVar,
 } from "./store";
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
@@ -83,6 +84,7 @@ function App() {
       );
     }
     viewOptionsVar(localViewOptions);
+    loggedInUserVar(meData.me);
   }, [meData]);
 
   useEffect(() => {

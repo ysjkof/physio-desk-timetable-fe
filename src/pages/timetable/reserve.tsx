@@ -17,6 +17,7 @@ import {
   selectedClinicVar,
   clinicListsVar,
   selectedPatientVar,
+  loggedInUserVar,
 } from "../../store";
 import { CreatePatient } from "./create-patient";
 import { PrescriptionWithSelect } from ".";
@@ -83,11 +84,11 @@ export const Reserve = ({
     prescriptions: [0],
   });
   const [selectPrescriptions, setSelectPrescriptions] = useState(prescriptions);
-  const selectedPatient = useReactiveVar(selectedPatientVar);
   const navigate = useNavigate();
+  const selectedPatient = useReactiveVar(selectedPatientVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
+  const loggedInUser = useReactiveVar(loggedInUserVar);
 
-  const { data: meData } = useMe();
   const {
     register,
     getValues,
@@ -220,7 +221,7 @@ export const Reserve = ({
 
   useEffect(() => {
     if (!selectedPatient) {
-      setValue("userId", meData?.me.id);
+      setValue("userId", loggedInUser?.id);
     } else {
       setValue("userId", selectedPatient?.user?.id);
     }
@@ -290,7 +291,9 @@ export const Reserve = ({
               <div className="flex justify-between">
                 <select {...register("userId")} className="w-full text-center">
                   {selectedClinic.id === 0 ? (
-                    <option value={meData?.me.id}>{meData?.me.name}</option>
+                    <option value={loggedInUser?.id}>
+                      {loggedInUser?.name}
+                    </option>
                   ) : (
                     clinicLists
                       ?.find((g) => g.id === selectedClinic?.id)
