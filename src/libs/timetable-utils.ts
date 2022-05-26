@@ -35,12 +35,13 @@ export const spreadClinicMembers = (
   selectedClinicId: number
 ) => {
   const result: ClinicMemberWithOptions[] = [];
-  clinics?.forEach((clinic) => {
-    if (clinic.id === selectedClinicId) {
-      const newMembers = clinic.members.filter((member) => member.activation);
-      result.push(...newMembers);
-    }
-  });
+  const selectedClinic = clinics?.find(
+    (clinic) => clinic.id === selectedClinicId
+  );
+  if (selectedClinic) {
+    const newMember = selectedClinic.members.map((member) => member);
+    result.push(...newMember);
+  }
   return result;
 };
 

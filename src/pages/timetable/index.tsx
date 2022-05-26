@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet-async";
-import { Timetable } from "./timetable";
 import {
   Prescription,
   useFindPrescriptionsQuery,
@@ -7,6 +6,8 @@ import {
 import { useReactiveVar } from "@apollo/client";
 import { selectedClinicVar } from "../../store";
 import { useListReservations } from "../../hooks/useListReservations";
+import { TimetableLayout } from "./components/table-layout";
+import { TimetableMain } from "./components/table-main";
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
 }
@@ -42,15 +43,22 @@ export const TimeTable = () => {
       </Helmet>
       <div className="container mx-auto h-full">
         <div className="relative h-[1050px]">
-          <Timetable
+          <TimetableLayout
             tableTime={{
               start: { hours: 9, minutes: 0 },
               end: { hours: 19, minutes: 0 },
             }}
-            eventsData={data}
             prescriptions={prescriptions}
             refetch={refetch}
-          />
+          >
+            <TimetableMain
+              tableTime={{
+                start: { hours: 9, minutes: 0 },
+                end: { hours: 19, minutes: 0 },
+              }}
+              eventsData={data}
+            />
+          </TimetableLayout>
         </div>
       </div>
     </>

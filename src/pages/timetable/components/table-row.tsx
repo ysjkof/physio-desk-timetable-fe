@@ -40,14 +40,17 @@ export function TableRow({ label, weekEvents, isWeek }: TableRowProps) {
       </div>
       {weekEvents.map((day, i) => (
         <div key={i} className={cls("relative z-30 flex")}>
-          {day?.users.map((member, userIndex) => (
-            <ReserveBtn
-              key={member.id}
-              label={label}
-              userIndex={userIndex}
-              onClick={() => onClickRserve(day.date, label)}
-            />
-          ))}
+          {day?.users.map(
+            (member, userIndex) =>
+              member.activation && (
+                <ReserveBtn
+                  key={member.id}
+                  label={label}
+                  userIndex={userIndex}
+                  onClick={() => onClickRserve(day.date, label)}
+                />
+              )
+          )}
         </div>
       ))}
     </div>

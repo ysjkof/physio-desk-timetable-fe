@@ -16,8 +16,7 @@ export const useListReservations = () => {
         ...(selectedClinic.id !== 0 && {
           userIds: clinicLists
             .find((g) => g.id === selectedClinic.id)
-            ?.members.filter((m) => m.activation)
-            .map((m) => m.user.id),
+            ?.members.map((m) => m.user.id),
           clinicId: selectedClinic.id,
         }),
       },
