@@ -14,7 +14,6 @@ import {
   getSunday,
   getTimeGaps,
   getWeeks,
-  getWeeksOfMonth,
   DayWithUsers,
   injectUsers,
   spreadClinicMembers,
@@ -39,7 +38,7 @@ import { TableSubHeader } from "./components/table-sub-header";
 import { TableRow } from "./components/table-row";
 import { TableCols } from "./components/table-cols";
 import { AnimatePresence, motion } from "framer-motion";
-import { TableNav } from "./components/table-nav";
+import { TableHeader } from "./components/table-header";
 import { useMatch, useNavigate } from "react-router-dom";
 import { TIMETABLE } from "../../variables";
 
@@ -164,11 +163,7 @@ export const Timetable = ({
         transition={{ delay: 0.2, duration: 0.5 }}
         className="timetable-container h-full text-xs"
       >
-        <TableNav
-          today={today}
-          daysOfMonth={getWeeksOfMonth(today)}
-          weeks={weeks}
-        />
+        <TableHeader today={today} weeks={weeks} />
         {viewOptions.seeList === false && (
           <>
             {viewOptions.periodToView === 7 && (

@@ -20,32 +20,20 @@ export function TableSubHeader({ weekEvents, isWeek }: TableSubHeaderProps) {
   return (
     <div
       className={cls(
-        "table-sub-header mt-1.5 grid w-full divide-x divide-black",
-        isWeek ? "grid-cols-week" : "grid-cols-day"
+        "table-sub-header mt-1.5 grid w-full",
+        isWeek ? "grid-cols-week divide-x divide-black" : "grid-cols-day"
       )}
     >
       <div className="title-col" />
       {isWeek ? (
         weekEvents.map((day, i) => (
-          <div
-            key={i}
-            className={cls(
-              "relative flex justify-center border-black",
-              selectedDate.getMonth() !== day.date.getMonth()
-                ? "opacity-40"
-                : ""
-            )}
-          >
+          <div key={i} className="relative flex justify-center">
             <BtnDatecheck
-              text={
-                viewOptions?.periodToView === 7
-                  ? day.date.toLocaleDateString("ko-KR", {
-                      month: "short",
-                      day: "numeric",
-                      weekday: "short",
-                    })
-                  : day.date.getDate() + ""
-              }
+              text={day.date.toLocaleDateString("ko-KR", {
+                month: "short",
+                day: "numeric",
+                weekday: "short",
+              })}
               day={day.date.getDay()}
               thisMonth={selectedDate.getMonth() === day.date.getMonth()}
               selected={selectedDate.getDate() === day.date.getDate()}
@@ -81,26 +69,40 @@ export function TableSubHeader({ weekEvents, isWeek }: TableSubHeaderProps) {
           </div>
         ))
       ) : (
-        <div
-          className={cls(
-            "flex h-4 justify-around",
-            selectedDate.getMonth() !==
-              weekEvents[selectedDate.getDay()]?.date.getMonth()
-              ? "opacity-40"
-              : ""
-          )}
-        >
+        <div className="relative flex justify-center">
+          <BtnDatecheck
+            text={selectedDate.toLocaleDateString("ko-KR", {
+              month: "short",
+              day: "numeric",
+              weekday: "short",
+            })}
+            day={selectedDate.getDay()}
+            thisMonth={selectedDate.getMonth() === selectedDate.getMonth()}
+            isSubheader
+          />
           {weekEvents[selectedDate.getDay()]?.users.map(
-            (user, i) =>
-              user.activation && (
-                <div
-                  key={user.id}
+            (member, userIndex) =>
+              member.activation && (
+                <span
+                  key={member.id}
                   className={cls(
-                    user.user.name === loggedInUser?.name ? "font-semibold" : ""
+                    "mt-4 w-full py-1 text-center",
+                    member.user.name === loggedInUser?.name
+                      ? "font-semibold"
+                      : "",
+                    userIndex === 0
+                      ? "user-color-1"
+                      : userIndex === 1
+                      ? "user-color-2"
+                      : userIndex === 2
+                      ? "user-color-3"
+                      : userIndex === 3
+                      ? "user-color-4"
+                      : ""
                   )}
                 >
-                  {user.user.name}
-                </div>
+                  {member.user.name}
+                </span>
               )
           )}
         </div>

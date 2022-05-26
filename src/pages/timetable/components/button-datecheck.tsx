@@ -4,7 +4,7 @@ interface IBtnDatecheck {
   text: string;
   day: number;
   thisMonth: boolean;
-  selected: boolean;
+  selected?: boolean;
   onClick?: any;
   isSubheader?: boolean;
 }

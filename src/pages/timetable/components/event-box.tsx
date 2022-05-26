@@ -38,7 +38,6 @@ export function EventBox({
 
   return (
     <motion.div
-      layoutId={reservationId + ""}
       whileHover={{ scale: 1.2, zIndex: 100 }}
       onClick={() =>
         isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })

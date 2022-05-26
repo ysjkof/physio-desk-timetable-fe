@@ -1,26 +1,10 @@
-import { useReactiveVar } from "@apollo/client";
-import { selectedDateVar } from "../../../store";
-
 interface IMoveXBtn {
   direction: "prev" | "after";
-  dateNavExpand: boolean;
+  onClick: () => void;
 }
-export const MoveXBtn = ({ direction, dateNavExpand }: IMoveXBtn) => {
-  const selectedDate = useReactiveVar(selectedDateVar);
-  const handleDateNavMove = () => {
-    const date = new Date(selectedDate);
-    const value = dateNavExpand ? 1 : 7;
-    if (dateNavExpand === false) {
-      if (direction === "prev") date.setDate(date.getDate() - value);
-      if (direction === "after") date.setDate(date.getDate() + value);
-    } else if (dateNavExpand === true) {
-      if (direction === "prev") date.setMonth(date.getMonth() - value);
-      if (direction === "after") date.setMonth(date.getMonth() + value);
-    }
-    selectedDateVar(date);
-  };
+export const MoveXBtn = ({ direction, onClick }: IMoveXBtn) => {
   return (
-    <div className="cursor-pointer" onClick={() => handleDateNavMove()}>
+    <div className="cursor-pointer" onClick={onClick}>
       {direction === "prev" ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"

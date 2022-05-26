@@ -58,9 +58,6 @@ export const getSunday = (date: Date) => {
   return $date;
 };
 
-export interface OneDate {
-  date: Date;
-}
 interface UserWithEvents extends ClinicMemberWithOptions {
   events: ModifiedReservation[];
 }
@@ -69,7 +66,7 @@ export interface DayWithUsers {
   users: UserWithEvents[];
 }
 export const getWeeks = (dateOfSunday: Date) => {
-  let result: OneDate[] = [];
+  let result: { date: Date }[] = [];
   for (let i = 0; i < 7; i++) {
     const sunday = new Date(dateOfSunday);
     sunday.setDate(sunday.getDate() + i);
@@ -118,7 +115,7 @@ export const mergeLoggedInUser = (
 };
 // 겟위크 결과값에 객체 필드 넣는 기능을 따로 빼자.
 export const injectUsers = (
-  weeks: OneDate[],
+  weeks: { date: Date }[],
   loginUser: ModifiedLoggedInUser,
   members: ClinicMemberWithOptions[]
 ) => {
