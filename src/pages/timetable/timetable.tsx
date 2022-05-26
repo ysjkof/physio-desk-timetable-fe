@@ -35,8 +35,6 @@ import { Reserve } from "./reserve";
 import { TimeIndicatorBar } from "./components/time-indicator-bar";
 import { PrescriptionWithSelect } from ".";
 import { EventLi } from "./components/event-li";
-
-import { TableHeader } from "./components/table-header";
 import { TableSubHeader } from "./components/table-sub-header";
 import { TableRow } from "./components/table-row";
 import { TableCols } from "./components/table-cols";
@@ -166,8 +164,11 @@ export const Timetable = ({
         transition={{ delay: 0.2, duration: 0.5 }}
         className="timetable-container h-full text-xs"
       >
-        <TableNav today={today} daysOfMonth={getWeeksOfMonth(today)} />
-        <TableHeader weeks={weeks} />
+        <TableNav
+          today={today}
+          daysOfMonth={getWeeksOfMonth(today)}
+          weeks={weeks}
+        />
         {viewOptions.seeList === false && (
           <>
             {viewOptions.periodToView === 7 && (
@@ -283,7 +284,6 @@ export const Timetable = ({
               className="modal-background absolute h-full w-full"
               onClick={() => isEdit && navigate(TIMETABLE)}
             />
-
             <ReservationDetail
               refetch={refetch}
               selectedClinic={selectedClinic}

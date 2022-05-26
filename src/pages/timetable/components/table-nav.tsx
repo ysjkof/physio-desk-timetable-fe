@@ -2,6 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 import { faGear, faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AnimatePresence, motion } from "framer-motion";
 import { Fragment } from "react";
 import { Switch } from "../../../components/switch";
 import { compareDateMatch } from "../../../libs/timetable-utils";
@@ -23,13 +24,15 @@ import {
 } from "../../../variables";
 import { ButtonCheck } from "./button-check";
 import { MoveXBtn } from "./move-x-btn";
+import { TableHeader } from "./table-header";
 
 interface TableNavProps {
   today: Date;
   daysOfMonth: { date: Date }[];
+  weeks: { date: Date }[];
 }
 
-export function TableNav({ today, daysOfMonth }: TableNavProps) {
+export function TableNav({ today, daysOfMonth, weeks }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
@@ -85,7 +88,7 @@ export function TableNav({ today, daysOfMonth }: TableNavProps) {
   };
   if (!loggedInUser || !viewOptions) return <></>;
   return (
-    <nav className="container-header mb-4 px-2">
+    <nav className="container-header w-full">
       <div className="flex justify-between">
         <div className="flex">
           <button
@@ -265,51 +268,59 @@ export function TableNav({ today, daysOfMonth }: TableNavProps) {
           />
         </div>
       </div>
-      {viewOptions.navigationExpand && (
-        <div className="mx-4 mt-4 flex items-center justify-between">
-          <MoveXBtn
-            direction={"prev"}
-            dateNavExpand={viewOptions.navigationExpand}
-          />
-          <div className="grid w-full grid-cols-7">
-            {daysOfMonth.map((day, i) => (
-              <div
-                onClick={() => selectedDateVar(day.date)}
-                key={i}
-                className={cls(
-                  "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
-                  compareDateMatch(day.date, selectedDate, "ymd")
-                    ? "border-b-2 border-sky-400 font-bold"
-                    : "border-b-2 border-transparent"
-                )}
-              >
-                <span
+      <AnimatePresence>
+        {viewOptions.navigationExpand ? (
+          <motion.div
+            className="my-4 flex items-center justify-between pb-4 shadow-b"
+            initial={{ y: -20 }}
+            animate={{ y: 0, transition: { type: "tween" } }}
+          >
+            <MoveXBtn
+              direction={"prev"}
+              dateNavExpand={viewOptions.navigationExpand}
+            />
+            <div className="grid w-full grid-cols-7">
+              {daysOfMonth.map((day, i) => (
+                <div
+                  onClick={() => selectedDateVar(day.date)}
+                  key={i}
                   className={cls(
-                    "rounded-full",
-                    day.date.getDay() === 0
-                      ? "text-red-600"
-                      : day.date.getDay() === 6
-                      ? "text-blue-600"
-                      : "text-gray-600",
-                    selectedDate.getDate() === day.date.getDate()
-                      ? "opacity-100"
-                      : "opacity-80",
-                    selectedDate.getMonth() !== day.date.getMonth()
-                      ? "opacity-30"
-                      : ""
+                    "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
+                    compareDateMatch(day.date, selectedDate, "ymd")
+                      ? "border-b-2 border-sky-400 font-bold"
+                      : "border-b-2 border-transparent"
                   )}
                 >
-                  {day.date.getDate()}
-                </span>
-              </div>
-            ))}
-          </div>
-          <MoveXBtn
-            direction={"after"}
-            dateNavExpand={viewOptions.navigationExpand}
-          />
-        </div>
-      )}
+                  <span
+                    className={cls(
+                      "rounded-full",
+                      day.date.getDay() === 0
+                        ? "text-red-600"
+                        : day.date.getDay() === 6
+                        ? "text-blue-600"
+                        : "text-gray-600",
+                      selectedDate.getDate() === day.date.getDate()
+                        ? "opacity-100"
+                        : "opacity-80",
+                      selectedDate.getMonth() !== day.date.getMonth()
+                        ? "opacity-30"
+                        : ""
+                    )}
+                  >
+                    {day.date.getDate()}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <MoveXBtn
+              direction={"after"}
+              dateNavExpand={viewOptions.navigationExpand}
+            />
+          </motion.div>
+        ) : (
+          <TableHeader weeks={weeks} />
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

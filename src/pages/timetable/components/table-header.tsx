@@ -3,6 +3,7 @@ import { cls } from "../../../libs/utils";
 import { selectedDateVar, viewOptionsVar } from "../../../store";
 import { BtnArrow } from "./button-arrow";
 import { BtnDatecheck } from "./button-datecheck";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface TableHeaderProps {
   weeks: { date: Date }[];
@@ -27,7 +28,11 @@ export function TableHeader({ weeks }: TableHeaderProps) {
   };
 
   return (
-    <div className="table-header mb-4 w-full pb-4 shadow-b">
+    <motion.div
+      initial={{ y: 30 }}
+      animate={{ y: 0, transition: { type: "tween" } }}
+      className="my-4 w-full pb-4 shadow-b"
+    >
       <div className="grid grid-cols-header">
         <div className="title-col" />
         {weeks.map((day, i) => (
@@ -79,6 +84,6 @@ export function TableHeader({ weeks }: TableHeaderProps) {
           <BtnArrow direction="after" onClick={handleDateNavMoveNext} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
