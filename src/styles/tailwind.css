@@ -66,7 +66,9 @@
 .bubble-apear {
   @apply transition-opacity delay-200 duration-200 ease-in;
 }
-
+.dot {
+  @apply after:absolute after:-bottom-1.5 after:left-1/2 after:mx-auto after:block after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-green-500;
+}
 @tailwind utilities;
 
 input:checked + label {

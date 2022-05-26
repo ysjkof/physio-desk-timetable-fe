@@ -4,6 +4,7 @@ import { faGear, faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence, motion } from "framer-motion";
 import { Fragment, useState } from "react";
+import { BtnDot } from "../../../components/button-dot";
 import { Switch } from "../../../components/switch";
 import {
   compareDateMatch,
@@ -121,7 +122,6 @@ export function TableHeader({ today, weeks }: TableNavProps) {
             weekday: "short",
           })}
         </button>
-
         <div className="flex w-full items-center justify-end space-x-3">
           <div className="group-view-controller relative">
             <div
@@ -199,7 +199,7 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               </div>
             )}
           </div>
-          <Switch
+          <BtnDot
             enabled={viewOptions.seeCancel}
             label={"취소"}
             onClick={() => {
@@ -214,7 +214,7 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
           />
-          <Switch
+          <BtnDot
             enabled={viewOptions.seeNoshow}
             label={"부도"}
             onClick={() => {
@@ -229,7 +229,7 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
           />
-          <Switch
+          <BtnDot
             enabled={viewOptions.periodToView === ONE_DAY ? false : true}
             label={"1주일"}
             onClick={() => {
