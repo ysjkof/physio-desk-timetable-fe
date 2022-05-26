@@ -40,8 +40,10 @@ import { TableHeader } from "./components/table-header";
 import { TableSubHeader } from "./components/table-sub-header";
 import { TableRow } from "./components/table-row";
 import { TableCols } from "./components/table-cols";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { TableNav } from "./components/table-nav";
+import { useMatch, useNavigate } from "react-router-dom";
+import { TIMETABLE } from "../../variables";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -72,6 +74,9 @@ export const Timetable = ({
   prescriptions,
   refetch,
 }: ITimetableProps) => {
+  const isReserve = useMatch("tt/reserve");
+  const isEdit = useMatch("tt/edit");
+  const navigate = useNavigate();
   const today = useReactiveVar(todayNowVar);
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[]>([]);
   const [weeks, setWeeks] = useState<{ date: Date }[]>(
@@ -91,15 +96,6 @@ export const Timetable = ({
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
-
-  const [openEventModal, setOpenEventModal] = useState<boolean>(false);
-  const [eventIdForModal, setEventIdForModal] = useState<number | null>(null);
-  const onClickEventBox = (eventId: number) => {
-    setEventIdForModal(eventId);
-    setOpenEventModal(true);
-  };
-  const [openReserveModal, setOpenReserveModal] = useState<boolean>(false);
-  const [eventStartDate, setEventStartDate] = useState<Date>();
 
   function distributor(
     events: ModifiedReservation[] | undefined | null,
@@ -186,17 +182,10 @@ export const Timetable = ({
                         isWeek
                         label={label}
                         weekEvents={weekEvents}
-                        setOpenReserveModal={setOpenReserveModal}
-                        setEventStartDate={setEventStartDate}
                       />
                     ))}
                   </div>
-                  <TableCols
-                    weekEvents={weekEvents}
-                    isWeek
-                    labels={labels}
-                    onClick={onClickEventBox}
-                  />
+                  <TableCols weekEvents={weekEvents} isWeek labels={labels} />
                 </div>
               </div>
             )}
@@ -211,8 +200,6 @@ export const Timetable = ({
                       isWeek={false}
                       label={label}
                       weekEvents={[weekEvents[selectedDate.getDay()]]}
-                      setOpenReserveModal={setOpenReserveModal}
-                      setEventStartDate={setEventStartDate}
                     />
                   ))}
                 </div>
@@ -220,7 +207,6 @@ export const Timetable = ({
                   weekEvents={[weekEvents[selectedDate.getDay()]]}
                   isWeek={false}
                   labels={labels}
-                  onClick={onClickEventBox}
                 />
               </div>
             )}
@@ -246,7 +232,7 @@ export const Timetable = ({
                       startDate={getHHMM(event.startDate, ":")}
                       patientName={event.patient.name}
                       userName={user.user.name}
-                      onClick={() => onClickEventBox(event.id)}
+                      onClick={() => "나중에 고칠 것"}
                     />
                   ))}
                 </div>
@@ -274,7 +260,7 @@ export const Timetable = ({
                             startDate={getHHMM(event.startDate, ":")}
                             patientName={event.patient.name}
                             userName={user.user.name}
-                            onClick={() => onClickEventBox(event.id)}
+                            onClick={() => "나중에 고칠 것"}
                           />
                         ))}
                       </div>
@@ -285,28 +271,34 @@ export const Timetable = ({
             )
           ))}
       </motion.div>
-      {openEventModal && (
-        <ModalPortal
-          closeAction={setOpenEventModal}
-          children={
+      <AnimatePresence>
+        {isEdit && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.3 } }}
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+            className="fixed top-0 left-0 z-[100] h-screen w-screen bg-black/50 opacity-0"
+          >
+            <div
+              className="modal-background absolute h-full w-full"
+              onClick={() => isEdit && navigate(TIMETABLE)}
+            />
+
             <ReservationDetail
-              reservationId={eventIdForModal!}
-              closeAction={setOpenEventModal}
               refetch={refetch}
               selectedClinic={selectedClinic}
             />
-          }
-        />
-      )}
-      {openReserveModal && (
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {isReserve && (
         <ModalPortal
-          closeAction={setOpenReserveModal}
+          closeAction={() => isReserve && navigate(TIMETABLE)}
           children={
             <Reserve
-              startDate={eventStartDate!}
-              closeAction={setOpenReserveModal}
               prescriptions={prescriptions}
               refetch={refetch}
+              closeAction={() => isReserve && navigate(TIMETABLE)}
             />
           }
         />

@@ -1,31 +1,25 @@
+import { useNavigate } from "react-router-dom";
 import {
   compareNumAfterGetMinutes,
   DayWithUsers,
   getHHMM,
 } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
+import { RESERVE_DETAIL } from "../../../variables";
 import { ReserveBtn } from "./reserve-btn";
 
 interface TableRowProps {
   label: Date;
   weekEvents: DayWithUsers[];
   isWeek: boolean;
-  setOpenReserveModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setEventStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }
 
-export function TableRow({
-  label,
-  weekEvents,
-  isWeek,
-  setOpenReserveModal,
-  setEventStartDate,
-}: TableRowProps) {
+export function TableRow({ label, weekEvents, isWeek }: TableRowProps) {
+  const navigate = useNavigate();
   const onClickRserve = (date: Date, label: Date) => {
     const processedDate = new Date(date);
     processedDate.setHours(label.getHours(), label.getMinutes());
-    setEventStartDate(processedDate);
-    setOpenReserveModal(true);
+    navigate(RESERVE_DETAIL, { state: { startDate: processedDate } });
   };
 
   return (

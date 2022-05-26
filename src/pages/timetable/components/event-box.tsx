@@ -1,10 +1,13 @@
 import { useReactiveVar } from "@apollo/client";
+import { motion } from "framer-motion";
+import { useMatch, useNavigate } from "react-router-dom";
 import { ReservationState } from "../../../graphql/generated/graphql";
 import { getHHMM } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
 import { viewOptionsVar } from "../../../store";
-
+import { RESERVE_DETAIL, RESERVE_EDIT } from "../../../variables";
 interface EventBoxProps {
+  reservationId: number;
   userIndex: number;
   reservationState: ReservationState;
   patientName: string;
@@ -15,9 +18,9 @@ interface EventBoxProps {
   registrationNumber?: string | null;
   memo?: string | null;
   prescriptions?: any[];
-  onClick: () => void;
 }
 export function EventBox({
+  reservationId,
   userIndex,
   reservationState,
   patientName,
@@ -28,16 +31,24 @@ export function EventBox({
   registrationNumber,
   memo,
   prescriptions,
-  onClick,
 }: EventBoxProps) {
+  const isEdit = useMatch(RESERVE_DETAIL);
   const viewOptions = useReactiveVar(viewOptionsVar);
+  const navigate = useNavigate();
 
   return (
-    <div
-      onClick={onClick}
+    <motion.div
+      layoutId={reservationId + ""}
+      whileHover={{ scale: 1.2, zIndex: 100 }}
+      onClick={() =>
+        isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
+      }
+      // onClick={onClick}
       className={cls(
-        "group absolute z-40 mx-0.5 cursor-pointer border-gray-500 px-1 py-0.5 ring-2",
-        height === "20px" ? "grid grid-cols-2" : "flex flex-col",
+        "group absolute z-40 mx-0.5 cursor-pointer border-gray-500 px-1 ring-2",
+        height === "20px"
+          ? "grid grid-cols-2"
+          : "grid grid-rows-[20px,20px,1fr]",
         userIndex === 0
           ? "user-color-1"
           : userIndex === 1
@@ -65,26 +76,30 @@ export function EventBox({
         height,
       }}
     >
-      <div className="h-5 overflow-hidden whitespace-nowrap">
+      <div className="h-5 overflow-hidden whitespace-nowrap text-base">
         {patientName}
         {registrationNumber && height !== "20px" && (
-          <span className="ml-1 text-gray-500">{registrationNumber}</span>
+          <span className="ml-1 text-sm text-gray-500">
+            {registrationNumber}
+          </span>
         )}
       </div>
 
       {prescriptions && (
-        <div className="h-5 overflow-hidden">
+        <div className="h-5 overflow-hidden text-base ">
           {prescriptions.map((prescription) => prescription.name)}
         </div>
       )}
       {memo && height !== "20px" && (
-        <div className="mt-1 h-full overflow-hidden break-all border-t border-gray-600 pt-1">
+        <div className="h-full overflow-hidden break-all border-gray-600 pt-1">
           {memo}
         </div>
       )}
-      <p className="bubble-arrow-t-center bubble-apear invisible absolute -bottom-16 right-1/2 z-50 w-32 translate-x-1/2 rounded-md bg-black py-4 text-center text-white opacity-0 group-hover:visible group-hover:opacity-100">
-        {`${getHHMM(startDate, ":")} ~ ${getHHMM(endDate, ":")}`}
-      </p>
-    </div>
+      {height !== "20px" && height !== "40px" && (
+        <p className="bubble-arrow-t-center bubble-apear invisible absolute -bottom-16 right-1/2 z-50 w-32 translate-x-1/2 rounded-md bg-black py-4 text-center text-white opacity-0 group-hover:visible group-hover:opacity-100">
+          {`${getHHMM(startDate, ":")} ~ ${getHHMM(endDate, ":")}`}
+        </p>
+      )}
+    </motion.div>
   );
 }

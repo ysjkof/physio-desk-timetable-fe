@@ -27,7 +27,10 @@ function App() {
           <>
             <Route path="confirm" element={<ConfirmEmail />} />
             <Route path="edit-profile" element={<EditProfile />} />
-            <Route path="tt" element={<TimeTable />} />
+            <Route path="tt" element={<TimeTable />}>
+              <Route path="reserve" element={<TimeTable />} />
+              <Route path="edit" element={<TimeTable />} />
+            </Route>
             <Route path="list-patient" element={<ListPatient />} />
             <Route path="search" element={<Search />} />
             <Route path="patient" element={<PateintDetail />} />

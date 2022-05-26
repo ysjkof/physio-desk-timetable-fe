@@ -1,8 +1,7 @@
 import { useReactiveVar } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../components/button";
 import { FormError } from "../../components/form-error";
 import { SearchPatient } from "./search-patient";
@@ -23,7 +22,7 @@ import { CreatePatient } from "./create-patient";
 import { PrescriptionWithSelect } from ".";
 import { cls, getDateFromYMDHM } from "../../libs/utils";
 import { DatepickerWithInput } from "./components/datepicker-with-input";
-import { useMe } from "../../hooks/useMe";
+import { TIMETABLE } from "../../variables";
 
 function getOneDayReservationInputDateForTest(
   inputStartDate: Date,
@@ -65,18 +64,20 @@ interface ReserveForm extends DatepickerForm {
 }
 
 interface ReserveProps {
-  startDate: Date;
-  closeAction: React.Dispatch<React.SetStateAction<boolean>>;
+  closeAction: () => void;
   prescriptions: PrescriptionWithSelect[];
   refetch: () => void;
 }
 
 export const Reserve = ({
-  startDate,
   closeAction,
   prescriptions,
   refetch,
 }: ReserveProps) => {
+  const location = useLocation();
+  //@ts-ignore
+  let startDate = location.state.startDate;
+
   const [openCreatePatient, setOpenCreatePatient] = useState(false);
   const [selectedPresc, setSelectedPresc] = useState({
     price: 0,
@@ -106,7 +107,7 @@ export const Reserve = ({
       alert(`오류가 발생했습니다; ${error}`);
     }
     refetch();
-    if (ok) closeAction(false);
+    if (ok) closeAction();
   };
 
   const [
@@ -194,7 +195,7 @@ export const Reserve = ({
   };
 
   useEffect(() => {
-    if (!startDate) navigate(-1);
+    if (!startDate) navigate(TIMETABLE);
     return () => {
       selectedPatientVar(null);
     };
@@ -229,13 +230,10 @@ export const Reserve = ({
 
   return (
     <>
-      <Helmet>
-        <title>예약하기 | Muool</title>
-      </Helmet>
       <div className="my-auto w-[24rem] bg-white p-5 sm:rounded-lg">
         <button
           className="absolute right-6 top-5 hover:text-gray-400"
-          onClick={() => closeAction(false)}
+          onClick={() => closeAction()}
         >
           <FontAwesomeIcon icon={faXmark} />
         </button>
@@ -353,16 +351,17 @@ export const Reserve = ({
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <ul className="grid grid-cols-3">
+                    <ul className="grid grid-cols-4 gap-2">
                       {selectPrescriptions.map((prescription, index) => (
                         <li
                           key={index}
                           value={prescription.id}
                           onClick={() => onClickPrescription(prescription.id)}
+                          className="btn-border btn-sm mx-1"
                         >
                           <div
                             className={cls(
-                              "btn-sm btn-border",
+                              "overflow-hidden text-center",
                               prescription.isSelect
                                 ? "text-red-600"
                                 : "text-blue-400"

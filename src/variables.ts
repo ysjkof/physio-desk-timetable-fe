@@ -27,3 +27,8 @@ export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0])$/;
 export const LOCALSTORAGE_VIEW_OPTION_CLINICS = "muool-view-option-clinics-";
 export const LOCALSTORAGE_VIEW_OPTION = "muool-view-option-";
 export const LOCALSTORAGE_SELECTED_CLINIC = "muool-selected-clinic-";
+
+// routes
+export const TIMETABLE = "/tt";
+export const RESERVE_DETAIL = `${TIMETABLE}/reserve`;
+export const RESERVE_EDIT = `${TIMETABLE}/edit`;

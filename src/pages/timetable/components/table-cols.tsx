@@ -10,14 +10,8 @@ interface TableColsProps {
   weekEvents: DayWithUsers[];
   isWeek: boolean;
   labels: Date[];
-  onClick: (eventId: number) => void;
 }
-export function TableCols({
-  weekEvents,
-  isWeek,
-  labels,
-  onClick,
-}: TableColsProps) {
+export function TableCols({ weekEvents, isWeek, labels }: TableColsProps) {
   if (!weekEvents[0]) {
     // console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
     return <h2>Loading...</h2>;
@@ -47,6 +41,7 @@ export function TableCols({
                   {member.events?.map((event) => (
                     <EventBox
                       key={event.id}
+                      reservationId={event.id}
                       userIndex={userIndex}
                       reservationState={event.state}
                       memo={event.memo}
@@ -67,7 +62,6 @@ export function TableCols({
                       height={`${
                         getTimeLength(event.startDate, event.endDate) * 2
                       }px`}
-                      onClick={() => onClick(event.id)}
                     />
                   ))}
                 </div>

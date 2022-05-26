@@ -10,7 +10,6 @@ export const ModalPortal: React.FC<IModalPortal> = ({
   closeAction,
   children,
 }) => {
-  // const container = document.getElementById("modal-root") as HTMLElement;
   const container = document.getElementById("root") as HTMLElement;
 
   return createPortal(
