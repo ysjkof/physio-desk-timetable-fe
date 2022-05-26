@@ -23,7 +23,7 @@ export const ReserveBtn = ({ label, userIndex, onClick }: ReserveBtnProps) => {
       )}
       onClick={() => onClick()}
     >
-      <span className="invisible mx-auto flex flex-col whitespace-nowrap rounded-md bg-gradient-to-r from-sky-500 to-indigo-500 px-0.5 text-center  text-sm font-medium text-white shadow hover:cursor-pointer group-hover:visible">
+      <span className="invisible mx-auto flex flex-col whitespace-nowrap bg-gradient-to-r from-sky-500 to-indigo-500 px-0.5 text-center  text-sm font-medium text-white shadow hover:cursor-pointer group-hover:visible">
         +{" "}
         {label.toLocaleString("ko-KR", {
           hour: "2-digit",

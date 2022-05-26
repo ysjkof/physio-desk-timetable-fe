@@ -167,67 +167,62 @@ export const Timetable = ({
       <motion.div
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
         className="timetable-container h-full text-xs"
       >
         <TableNav today={today} daysOfMonth={getWeeksOfMonth(today)} />
+        <TableHeader weeks={weeks} />
         {viewOptions.seeList === false && (
           <>
             {viewOptions.periodToView === 7 && (
-              <>
-                <TableHeader weeks={weeks} />
-                <div className="h-full overflow-y-scroll">
-                  <TableSubHeader weekEvents={weekEvents} isWeek />
-                  <div className="body-table relative h-full pt-1.5">
-                    <TimeIndicatorBar labels={labels} />
-                    <div className="row-table absolute z-30 h-full w-full">
-                      {labels.map((label) => (
-                        <TableRow
-                          key={label.valueOf()}
-                          isWeek
-                          label={label}
-                          weekEvents={weekEvents}
-                          setOpenReserveModal={setOpenReserveModal}
-                          setEventStartDate={setEventStartDate}
-                        />
-                      ))}
-                    </div>
-                    <TableCols
-                      weekEvents={weekEvents}
-                      isWeek
-                      labels={labels}
-                      onClick={onClickEventBox}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-            {viewOptions.periodToView === 1 && (
-              <>
-                <TableHeader weeks={weeks} />
-                <TableSubHeader weekEvents={weekEvents} isWeek={false} />
-                <div className="body-table relative h-full overflow-x-scroll pt-1.5">
+              <div className="h-full overflow-y-scroll">
+                <TableSubHeader weekEvents={weekEvents} isWeek />
+                <div className="body-table relative h-full">
                   <TimeIndicatorBar labels={labels} />
-                  <div className="row-table absolute h-full w-full">
+                  <div className="row-table absolute z-30 h-full w-full">
                     {labels.map((label) => (
                       <TableRow
                         key={label.valueOf()}
-                        isWeek={false}
+                        isWeek
                         label={label}
-                        weekEvents={[weekEvents[selectedDate.getDay()]]}
+                        weekEvents={weekEvents}
                         setOpenReserveModal={setOpenReserveModal}
                         setEventStartDate={setEventStartDate}
                       />
                     ))}
                   </div>
                   <TableCols
-                    weekEvents={[weekEvents[selectedDate.getDay()]]}
-                    isWeek={false}
+                    weekEvents={weekEvents}
+                    isWeek
                     labels={labels}
                     onClick={onClickEventBox}
                   />
                 </div>
-              </>
+              </div>
+            )}
+            {viewOptions.periodToView === 1 && (
+              <div className="body-table relative h-full overflow-x-scroll pt-1.5">
+                <TableSubHeader weekEvents={weekEvents} isWeek={false} />
+                <TimeIndicatorBar labels={labels} />
+                <div className="row-table absolute h-full w-full">
+                  {labels.map((label) => (
+                    <TableRow
+                      key={label.valueOf()}
+                      isWeek={false}
+                      label={label}
+                      weekEvents={[weekEvents[selectedDate.getDay()]]}
+                      setOpenReserveModal={setOpenReserveModal}
+                      setEventStartDate={setEventStartDate}
+                    />
+                  ))}
+                </div>
+                <TableCols
+                  weekEvents={[weekEvents[selectedDate.getDay()]]}
+                  isWeek={false}
+                  labels={labels}
+                  onClick={onClickEventBox}
+                />
+              </div>
             )}
           </>
         )}

@@ -85,7 +85,7 @@ export function TableNav({ today, daysOfMonth }: TableNavProps) {
   };
   if (!loggedInUser || !viewOptions) return <></>;
   return (
-    <nav className="container-header mb-3 px-2 pb-4 shadow-b">
+    <nav className="container-header mb-4 px-2">
       <div className="flex justify-between">
         <div className="flex">
           <button

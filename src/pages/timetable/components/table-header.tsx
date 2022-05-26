@@ -27,7 +27,7 @@ export function TableHeader({ weeks }: TableHeaderProps) {
   };
 
   return (
-    <div className="table-header w-full">
+    <div className="table-header mb-4 w-full pb-4 shadow-b">
       <div className="grid grid-cols-header">
         <div className="title-col" />
         {weeks.map((day, i) => (

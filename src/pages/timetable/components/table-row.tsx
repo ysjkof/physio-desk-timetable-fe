@@ -45,7 +45,7 @@ export function TableRow({
         {compareNumAfterGetMinutes(label, [0, 30]) ? getHHMM(label) : ""}
       </div>
       {weekEvents.map((day, i) => (
-        <div key={i} className="relative z-30 flex">
+        <div key={i} className={cls("relative z-30 flex")}>
           {day?.users.map((member, userIndex) => (
             <ReserveBtn
               key={member.id}

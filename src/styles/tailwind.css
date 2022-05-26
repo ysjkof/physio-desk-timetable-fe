@@ -52,16 +52,19 @@
   @apply bg-[#E9EDC9] ring-[#cbd0a8];
 }
 .user-color-3 {
-  @apply bg-[#FEFAE0] ring-[#FEFAE0];
+  @apply bg-[#FEFAE0] ring-[#dcd6b6];
 }
 .user-color-4 {
-  @apply bg-[#FAEDCD] ring-[#FAEDCD];
+  @apply bg-[#FAEDCD] ring-[#d3c49f];
 }
 .noshow-color {
   @apply bg-[#edece9] ring-[#aaaaaa];
 }
 .cancel-color {
   @apply bg-[#FEF2F2] ring-[#FCA5A5];
+}
+.bubble-apear {
+  @apply transition-opacity delay-200 duration-200 ease-in;
 }
 
 @tailwind utilities;
