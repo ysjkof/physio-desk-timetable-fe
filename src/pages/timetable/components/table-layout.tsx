@@ -21,13 +21,7 @@ import { TIMETABLE } from "../../../variables";
 import { TimetableMain } from "./table-main";
 import { TableClinicSelector } from "./table-clinic-selector";
 
-interface ITimeOption {
-  start: { hours: number; minutes: number };
-  end: { hours: number; minutes: number };
-}
-
 interface ITimetableProps {
-  tableTime: ITimeOption;
   eventsData: ListReservationsQuery;
   prescriptions: PrescriptionWithSelect[];
   refetch: () => void;
@@ -75,13 +69,7 @@ export const TimetableLayout = ({
       >
         <TableHeader today={today} weeks={weeks} />
         <div className="flex h-full w-full">
-          <TimetableMain
-            eventsData={eventsData}
-            tableTime={{
-              start: { hours: 9, minutes: 0 },
-              end: { hours: 19, minutes: 0 },
-            }}
-          />
+          <TimetableMain eventsData={eventsData} />
           <AnimatePresence>
             {viewOptions.seeActiveOption && <TableClinicSelector />}
           </AnimatePresence>

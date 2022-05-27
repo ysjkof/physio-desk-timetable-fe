@@ -43,10 +43,6 @@ export const TimeTable = () => {
       <div className="container mx-auto h-full">
         <div className="relative h-[1050px]">
           <TimetableLayout
-            tableTime={{
-              start: { hours: 9, minutes: 0 },
-              end: { hours: 19, minutes: 0 },
-            }}
             prescriptions={prescriptions}
             refetch={refetch}
             eventsData={data}

@@ -16,14 +16,14 @@ export function TableNav({ weeks, varients }: TableNavProps) {
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
-    viewOptions?.navigationExpand
+    viewOptions.navigationExpand
       ? date.setMonth(date.getMonth() - 1)
       : date.setDate(date.getDate() - 7);
     selectedDateVar(date);
   };
   const handleDateNavMoveNext = () => {
     const date = new Date(selectedDate);
-    viewOptions?.navigationExpand
+    viewOptions.navigationExpand
       ? date.setMonth(date.getMonth() + 1)
       : date.setDate(date.getDate() + 7);
     selectedDateVar(date);
@@ -56,7 +56,7 @@ export function TableNav({ weeks, varients }: TableNavProps) {
           >
             <BtnDatecheck
               text={
-                viewOptions?.periodToView === 7
+                viewOptions.periodToView === 7
                   ? day.date.toLocaleDateString("ko-KR", {
                       month: "short",
                       day: "numeric",
@@ -73,7 +73,7 @@ export function TableNav({ weeks, varients }: TableNavProps) {
         ))}
         <div
           className={cls(
-            viewOptions?.navigationExpand ? "invisible" : "",
+            viewOptions.navigationExpand ? "invisible" : "",
             "absolute left-0"
           )}
         >
@@ -81,7 +81,7 @@ export function TableNav({ weeks, varients }: TableNavProps) {
         </div>
         <div
           className={cls(
-            viewOptions?.navigationExpand ? "invisible" : "",
+            viewOptions.navigationExpand ? "invisible" : "",
             "absolute right-0"
           )}
         >

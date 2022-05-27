@@ -61,6 +61,8 @@ export const Header = () => {
   const { data: meData, error } = useMe();
   const [notices, setNotices] = useState<Notice[] | null>(null);
   const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const viewOptions = useReactiveVar(viewOptionsVar);
+
   const navigate = useNavigate();
 
   const { register, handleSubmit, getValues, setValue } = useForm();
@@ -93,24 +95,15 @@ export const Header = () => {
     const localViewOptions = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_VIEW_OPTION + meData.me.id)!
     );
-    let saveThis = localViewOptions;
 
     if (localViewOptions === null) {
-      const defaultViewOptions = {
-        periodToView: ONE_WEEK,
-        seeCancel: true,
-        seeNoshow: true,
-        seeList: false,
-        seeActiveOption: false,
-        navigationExpand: false,
-      };
       localStorage.setItem(
         LOCALSTORAGE_VIEW_OPTION + meData.me.id,
-        JSON.stringify(defaultViewOptions)
+        JSON.stringify(viewOptions)
       );
-      saveThis = defaultViewOptions;
+    } else {
+      viewOptionsVar(localViewOptions);
     }
-    viewOptionsVar(saveThis);
     loggedInUserVar(meData.me);
   }, [meData]);
 

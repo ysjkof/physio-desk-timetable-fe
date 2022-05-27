@@ -33,13 +33,7 @@ import { TableRow } from "./table-row";
 import { TableCols } from "./table-cols";
 import { motion } from "framer-motion";
 
-interface ITimeOption {
-  start: { hours: number; minutes: number };
-  end: { hours: number; minutes: number };
-}
-
 interface ITimetableProps {
-  tableTime: ITimeOption;
   eventsData: ListReservationsQuery;
 }
 export interface ModifiedReservation
@@ -54,23 +48,24 @@ export interface ModifiedReservation
   prescriptions?: Pick<Prescription, "name">[] | null;
 }
 
-export const TimetableMain = ({ tableTime, eventsData }: ITimetableProps) => {
+export const TimetableMain = ({ eventsData }: ITimetableProps) => {
   const today = useReactiveVar(todayNowVar);
-  const [weekEvents, setWeekEvents] = useState<DayWithUsers[]>([]);
-  const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
-
-  const labels = getTimeGaps(
-    tableTime.start.hours,
-    tableTime.start.minutes,
-    tableTime.end.hours,
-    tableTime.end.minutes,
-    10
-  );
   const clinicLists = useReactiveVar(clinicListsVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
+
+  const [weekEvents, setWeekEvents] = useState<DayWithUsers[]>([]);
+  const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
+
+  const labels = getTimeGaps(
+    viewOptions.tableDuration.start.hours,
+    viewOptions.tableDuration.start.minutes,
+    viewOptions.tableDuration.end.hours,
+    viewOptions.tableDuration.end.minutes,
+    10
+  );
 
   function distributor(
     events: ModifiedReservation[] | undefined | null,

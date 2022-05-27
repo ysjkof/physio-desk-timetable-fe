@@ -57,10 +57,9 @@ export function EventBox({
           : userIndex === 3
           ? "user-color-4"
           : "",
-        !viewOptions?.seeCancel &&
-          reservationState === ReservationState.Canceled
+        !viewOptions.seeCancel && reservationState === ReservationState.Canceled
           ? "hidden"
-          : !viewOptions?.seeNoshow &&
+          : !viewOptions.seeNoshow &&
             reservationState === ReservationState.NoShow
           ? "hidden"
           : "",

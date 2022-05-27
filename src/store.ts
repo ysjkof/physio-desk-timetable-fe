@@ -24,7 +24,24 @@ export interface IViewOption {
   seeList: boolean;
   seeActiveOption: boolean;
   navigationExpand: boolean;
+  tableDuration: {
+    start: { hours: number; minutes: number };
+    end: { hours: number; minutes: number };
+  };
 }
+const defaultViewOptions: IViewOption = {
+  periodToView: ONE_WEEK,
+  seeCancel: true,
+  seeNoshow: true,
+  seeList: false,
+  seeActiveOption: false,
+  navigationExpand: false,
+  tableDuration: {
+    start: { hours: 9, minutes: 0 },
+    end: { hours: 19, minutes: 0 },
+  },
+};
+
 export const selectedClinic = {
   id: 0,
   name: "",
@@ -33,7 +50,7 @@ export const selectedClinic = {
 export const todayNowVar = makeVar<Date>(new Date());
 export const loggedInUserVar = makeVar<ModifiedLoggedInUser | null>(null);
 
-export const viewOptionsVar = makeVar<IViewOption | null>(null);
+export const viewOptionsVar = makeVar<IViewOption>(defaultViewOptions);
 export const clinicListsVar = makeVar<ClinicWithOptions[]>([]); // member의 activated key를 저장하기 위해서 필요함.
 
 export const selectedDateVar = makeVar(new Date());
