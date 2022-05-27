@@ -55,7 +55,7 @@ export function TableHeader({ today, weeks }: TableNavProps) {
             weekday: "short",
           })}
         </button>
-        <div className="flex w-full items-center justify-end space-x-3">
+        <motion.div className="flex w-full items-center justify-end space-x-3">
           <BtnDot
             enabled={viewOptions.seeCancel}
             label={"취소"}
@@ -87,7 +87,7 @@ export function TableHeader({ today, weeks }: TableNavProps) {
             }}
           />
           <BtnDot
-            enabled={viewOptions.periodToView === ONE_DAY ? false : true}
+            enabled={viewOptions.periodToView === ONE_WEEK}
             label={"1주일"}
             onClick={() => {
               const newViewOptions: IViewOption = {
@@ -102,7 +102,23 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
           />
-        </div>
+          <BtnDot
+            enabled={viewOptions.periodToView === ONE_DAY}
+            label={"하루"}
+            onClick={() => {
+              const newViewOptions: IViewOption = {
+                ...viewOptions,
+                periodToView:
+                  viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
+              };
+              localStorage.setItem(
+                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
+                JSON.stringify(newViewOptions)
+              );
+              viewOptionsVar(newViewOptions);
+            }}
+          />
+        </motion.div>
         <div className="flex w-full items-center justify-end space-x-5">
           <FontAwesomeIcon
             icon={faCalendarAlt}
