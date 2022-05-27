@@ -9,7 +9,11 @@ import { cls } from "../../../libs/utils";
 import { selectedDateVar } from "../../../store";
 import { MoveXBtn } from "./move-x-btn";
 
-export function TableNavExpand() {
+interface TableNavExpandProps {
+  varients: any;
+}
+
+export function TableNavExpand({ varients }: TableNavExpandProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const [daysOfMonths, setDaysOfMonths] = useState<
     [{ date: Date }[], { prevMonth: Date; nowMonth: Date; nextMonth: Date }]
@@ -28,11 +32,14 @@ export function TableNavExpand() {
     const threeDate = getThreeDate(daysOfMonths[1][option]);
     setDaysOfMonths([months, threeDate]);
   };
+  console.log(varients);
   return (
     <motion.div
       className="my-4 flex items-center justify-between pb-4 shadow-b"
-      initial={{ y: -20 }}
-      animate={{ y: 0, transition: { type: "tween" } }}
+      custom={true}
+      variants={varients}
+      initial="ini"
+      animate="start"
     >
       <MoveXBtn direction={"prev"} onClick={() => onClickMoveX("prevMonth")} />
       <div className="grid w-full grid-cols-7">

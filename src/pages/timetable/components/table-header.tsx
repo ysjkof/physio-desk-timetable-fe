@@ -1,8 +1,8 @@
 import { useReactiveVar } from "@apollo/client";
 import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
-import { faList } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { BtnDot } from "../../../components/button-dot";
 import { cls } from "../../../libs/utils";
 import {
@@ -16,10 +16,8 @@ import {
   ONE_DAY,
   ONE_WEEK,
 } from "../../../variables";
-import { TableClinicSelector } from "./table-clinic-selector";
 import { TableNav } from "./table-nav";
 import { TableNavExpand } from "./table-nav-expand";
-
 interface TableNavProps {
   today: Date;
   weeks: { date: Date }[];
@@ -30,9 +28,21 @@ export function TableHeader({ today, weeks }: TableNavProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
+  const tableNavVarients = {
+    ini: (isUp: boolean) => ({ y: isUp ? -5 : 5 }),
+    start: { y: 0, transition: { type: "tween", duration: 0.4 } },
+  };
+
   if (!loggedInUser || !viewOptions) return <></>;
   return (
-    <nav className="container-header w-full">
+    <motion.nav
+      initial={{ y: -20 }}
+      animate={{
+        y: 0,
+        transition: { type: "tween", duration: 0.4 },
+      }}
+      className="container-header w-full"
+    >
       <div className="flex justify-between">
         <button
           className="min-w-[120px] text-sm font-medium text-gray-700 hover:font-bold"
@@ -45,7 +55,6 @@ export function TableHeader({ today, weeks }: TableNavProps) {
             weekday: "short",
           })}
         </button>
-        <TableClinicSelector></TableClinicSelector>
         <div className="flex w-full items-center justify-end space-x-3">
           <BtnDot
             enabled={viewOptions.seeCancel}
@@ -110,8 +119,8 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
             className={cls(
-              viewOptions.navigationExpand ? "text-gray-700" : "text-gray-400",
-              "w-4 cursor-pointer hover:text-gray-500"
+              "w-4 cursor-pointer hover:animate-bounce hover:text-gray-500",
+              viewOptions.navigationExpand ? "text-gray-700" : "text-gray-400"
             )}
           />
           <FontAwesomeIcon
@@ -129,19 +138,32 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
             className={cls(
-              viewOptions.seeList ? "text-gray-700" : "text-gray-400",
-              "w-4 cursor-pointer hover:text-gray-500"
+              "w-4 cursor-pointer hover:animate-bounce hover:text-gray-500",
+              viewOptions.seeList ? "text-gray-700" : "text-gray-400"
             )}
           />
+          <FontAwesomeIcon
+            icon={faGear}
+            fontSize="medium"
+            className="cursor-pointer hover:animate-spin"
+            onClick={() => {
+              const newViewOptions = {
+                ...viewOptions,
+                seeActiveOption: !viewOptions.seeActiveOption,
+              };
+              viewOptionsVar(newViewOptions);
+            }}
+          />
+          {/* <TableClinicSelector /> */}
         </div>
       </div>
       <AnimatePresence>
         {viewOptions.navigationExpand ? (
-          <TableNavExpand />
+          <TableNavExpand varients={tableNavVarients} />
         ) : (
-          <TableNav weeks={weeks} />
+          <TableNav weeks={weeks} varients={tableNavVarients} />
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   );
 }

@@ -7,8 +7,10 @@ import { motion } from "framer-motion";
 
 interface TableNavProps {
   weeks: { date: Date }[];
+  varients: any;
 }
-export function TableNav({ weeks }: TableNavProps) {
+
+export function TableNav({ weeks, varients }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const selectedDate = useReactiveVar(selectedDateVar);
 
@@ -29,8 +31,10 @@ export function TableNav({ weeks }: TableNavProps) {
 
   return (
     <motion.div
-      initial={{ y: 20 }}
-      animate={{ y: 0, transition: { type: "tween" } }}
+      custom={false}
+      variants={varients}
+      initial="ini"
+      animate="start"
       className="my-4 w-full pb-4 shadow-b"
     >
       <div className="grid grid-cols-header">

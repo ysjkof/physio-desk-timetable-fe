@@ -42,6 +42,9 @@
 .bubble-arrow-t-left {
   @apply after:absolute after:bottom-full after:left-[10%] after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
 }
+.bubble-arrow-t-right {
+  @apply after:absolute after:bottom-full after:right-[10%] after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
+}
 .bubble-arrow-t-2-5 {
   @apply cursor-pointer after:absolute after:bottom-full after:left-[19.5%] after:border-8  after:border-b-black after:border-t-transparent after:border-l-transparent after:border-r-transparent;
 }

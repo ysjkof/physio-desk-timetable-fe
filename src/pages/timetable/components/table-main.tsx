@@ -31,6 +31,7 @@ import { TimeIndicatorBar } from "./time-indicator-bar";
 import { TableSubHeader } from "./table-sub-header";
 import { TableRow } from "./table-row";
 import { TableCols } from "./table-cols";
+import { motion } from "framer-motion";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -39,7 +40,7 @@ interface ITimeOption {
 
 interface ITimetableProps {
   tableTime: ITimeOption;
-  eventsData?: ListReservationsQuery;
+  eventsData: ListReservationsQuery;
 }
 export interface ModifiedReservation
   extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
@@ -135,7 +136,14 @@ export const TimetableMain = ({ tableTime, eventsData }: ITimetableProps) => {
       {viewOptions.seeList === false && (
         <>
           {viewOptions.periodToView === 7 && (
-            <div className="h-full overflow-y-scroll">
+            <motion.div
+              initial={{ y: 300 }}
+              animate={{
+                y: 0,
+                transition: { type: "tween", duration: 0.4 },
+              }}
+              className="h-full overflow-y-scroll"
+            >
               <TableSubHeader weekEvents={weekEvents} isWeek />
               <div className="body-table relative h-full">
                 <TimeIndicatorBar labels={labels} />
@@ -151,10 +159,18 @@ export const TimetableMain = ({ tableTime, eventsData }: ITimetableProps) => {
                 </div>
                 <TableCols weekEvents={weekEvents} isWeek labels={labels} />
               </div>
-            </div>
+            </motion.div>
           )}
+
           {viewOptions.periodToView === 1 && (
-            <div className="body-table relative h-full overflow-x-scroll pt-1.5">
+            <motion.div
+              initial={{ y: 300 }}
+              animate={{
+                y: 0,
+                transition: { type: "tween", duration: 0.4 },
+              }}
+              className="body-table relative h-full w-full overflow-x-scroll pt-1.5"
+            >
               <TableSubHeader weekEvents={weekEvents} isWeek={false} />
               <TimeIndicatorBar labels={labels} />
               <div className="row-table absolute h-full w-full">
@@ -172,7 +188,7 @@ export const TimetableMain = ({ tableTime, eventsData }: ITimetableProps) => {
                 isWeek={false}
                 labels={labels}
               />
-            </div>
+            </motion.div>
           )}
         </>
       )}

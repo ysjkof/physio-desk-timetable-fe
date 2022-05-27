@@ -1,9 +1,6 @@
 import { useReactiveVar } from "@apollo/client";
-import { faGear } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
 import { cls } from "../../../libs/utils";
 import {
   clinicListsVar,
@@ -15,6 +12,7 @@ import {
   LOCALSTORAGE_SELECTED_CLINIC,
   LOCALSTORAGE_VIEW_OPTION_CLINICS,
 } from "../../../variables";
+import { BtnArrow } from "./button-arrow";
 import { ButtonCheck } from "./button-check";
 
 interface TableClinicSelectorProps {}
@@ -83,94 +81,65 @@ export function TableClinicSelector({}: TableClinicSelectorProps) {
     }
   };
 
+  const variants: Variants = {
+    init: { x: 300 },
+    end: { x: 0, transition: { duration: 0.5 } },
+    exit: { x: 300, transition: { duration: 0.5 } },
+  };
+
   if (!loggedInUser || !viewOptions) return <></>;
   return (
-    <div className="flex w-full items-center justify-end space-x-3">
-      <div className="group-view-controller relative">
-        <div
-          className="flex cursor-pointer items-center gap-1"
-          onClick={() =>
-            !viewOptions.seeActiveOption && onClickChangeSeeActiveOption()
-          }
-        >
-          <span>보기설정</span>
-          <FontAwesomeIcon icon={faGear} fontSize="medium" />
-        </div>
-        <AnimatePresence>
-          {viewOptions.seeActiveOption && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { duration: 0.3 } }}
-              exit={{ opacity: 0, transition: { duration: 0.3 } }}
-              className="fixed top-0 left-0 z-[100] h-screen w-screen bg-black/50 opacity-0"
-            >
-              <div
-                className="modal-background absolute h-full w-full"
-                onClick={() =>
-                  viewOptions.seeActiveOption && onClickChangeSeeActiveOption()
+    <motion.div
+      variants={variants}
+      initial="init"
+      animate="end"
+      exit="exit"
+      className="group-view-controller absolute right-0 z-[100] h-full w-[240px] bg-white pl-4"
+    >
+      <div className="view-controller-header mb-2 flex justify-between border-b pb-2">
+        <BtnArrow direction="after" onClick={onClickChangeSeeActiveOption} />
+        <span className="group relative px-1 after:ml-1 after:rounded-full after:border after:border-gray-400 after:px-1 after:content-['?']">
+          보기
+          <p className="bubble-arrow-t-right absolute top-7 right-0 hidden w-48 rounded-md bg-black p-4 text-white group-hover:block">
+            시간표에 표시할 병원이나 사용자를 선택합니다.
+          </p>
+        </span>
+      </div>
+      <ul className="h-full overflow-y-scroll">
+        {clinicLists === null || clinicLists.length === 0 ? (
+          <div className="flex h-full items-center justify-center">
+            소속된 병원이 없습니다.
+          </div>
+        ) : (
+          clinicLists.map((clinic, i) => (
+            <Fragment key={i}>
+              <ButtonCheck
+                name={clinic.name}
+                isActivated={clinic.id === selectedClinic.id}
+                onClickFx={() =>
+                  onClickChangeSelectClinic(clinic.id, clinic.name)
                 }
               />
-              {viewOptions.seeActiveOption && (
-                <div className="absolute top-6 z-50 h-96 w-60 rounded-md bg-white p-4 shadow-cst">
-                  <div className="mb-2 flex justify-between border-b pb-2">
-                    <div className="w-full"></div>
-                    <div className="flex w-14 whitespace-nowrap">
-                      <div className="group relative w-full space-x-1 text-center">
-                        <span>보기</span>
-                        <span className="rounded-full border border-gray-400 px-1">
-                          ?
-                        </span>
-                        <p className="bubble-arrow-t-center absolute top-7 right-1/2 hidden w-48 translate-x-1/2 rounded-md bg-black p-4 text-white group-hover:block">
-                          시간표에 표시할 병원이나 사용자를 선택합니다.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <ul className="h-full  overflow-y-scroll">
-                    {clinicLists === null || clinicLists.length === 0 ? (
-                      <div className="flex h-full items-center justify-center">
-                        소속된 병원이 없습니다.
-                      </div>
-                    ) : (
-                      clinicLists.map((clinic, i) => (
-                        <Fragment key={i}>
-                          <ButtonCheck
-                            name={clinic.name}
-                            isActivated={clinic.id === selectedClinic.id}
-                            onClickFx={() =>
-                              onClickChangeSelectClinic(clinic.id, clinic.name)
-                            }
-                          />
-                          <ul
-                            className={cls(
-                              clinic.id === selectedClinic.id
-                                ? ""
-                                : "pointer-events-none"
-                            )}
-                          >
-                            {clinic.members.map((member, i) => (
-                              <ButtonCheck
-                                key={i}
-                                isActivated={clinic.id === selectedClinic.id}
-                                isMemberActivated={member.activation}
-                                name={member.user.name}
-                                onClickFx={() =>
-                                  onClickToggleUser(clinic.id, member.id)
-                                }
-                              />
-                            ))}
-                          </ul>
-                          <div className="seperate-bar"></div>
-                        </Fragment>
-                      ))
-                    )}
-                  </ul>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </div>
+              <ul
+                className={cls(
+                  clinic.id === selectedClinic.id ? "" : "pointer-events-none"
+                )}
+              >
+                {clinic.members.map((member, i) => (
+                  <ButtonCheck
+                    key={i}
+                    isActivated={clinic.id === selectedClinic.id}
+                    isMemberActivated={member.activation}
+                    name={member.user.name}
+                    onClickFx={() => onClickToggleUser(clinic.id, member.id)}
+                  />
+                ))}
+              </ul>
+              <div className="seperate-bar"></div>
+            </Fragment>
+          ))
+        )}
+      </ul>
+    </motion.div>
   );
 }

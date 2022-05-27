@@ -18,6 +18,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { TableHeader } from "./table-header";
 import { useMatch, useNavigate } from "react-router-dom";
 import { TIMETABLE } from "../../../variables";
+import { TimetableMain } from "./table-main";
+import { TableClinicSelector } from "./table-clinic-selector";
 
 interface ITimeOption {
   start: { hours: number; minutes: number };
@@ -26,10 +28,9 @@ interface ITimeOption {
 
 interface ITimetableProps {
   tableTime: ITimeOption;
-  eventsData?: ListReservationsQuery;
+  eventsData: ListReservationsQuery;
   prescriptions: PrescriptionWithSelect[];
   refetch: () => void;
-  children: React.ReactNode;
 }
 export interface ModifiedReservation
   extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
@@ -45,7 +46,7 @@ export interface ModifiedReservation
 
 export const TimetableLayout = ({
   prescriptions,
-  children,
+  eventsData,
   refetch,
 }: ITimetableProps) => {
   const isReserve = useMatch("tt/reserve");
@@ -66,11 +67,25 @@ export const TimetableLayout = ({
       <motion.div
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
+        transition={{
+          delay: 0.2,
+          duration: 0.4,
+        }}
         className="timetable-container h-full text-xs"
       >
         <TableHeader today={today} weeks={weeks} />
-        {children}
+        <div className="flex h-full w-full">
+          <TimetableMain
+            eventsData={eventsData}
+            tableTime={{
+              start: { hours: 9, minutes: 0 },
+              end: { hours: 19, minutes: 0 },
+            }}
+          />
+          <AnimatePresence>
+            {viewOptions.seeActiveOption && <TableClinicSelector />}
+          </AnimatePresence>
+        </div>
       </motion.div>
       <AnimatePresence>
         {isEdit && (
