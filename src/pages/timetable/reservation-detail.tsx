@@ -17,7 +17,6 @@ import {
 import { getHHMM, getTimeLength, getYMD } from "../../libs/timetable-utils";
 import { cls } from "../../libs/utils";
 import { client } from "../../apollo";
-import { selectedClinic } from "../../store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useListReservations } from "../../hooks/useListReservations";
 import { TIMETABLE } from "../../variables";
@@ -27,7 +26,6 @@ function changeState(
   reservationId: number,
   clinicId: number | undefined
 ) {
-  console.log(state, reservationId, clinicId);
   const thisReservation: FindReservationByIdQuery | null =
     client.cache.readQuery({
       query: FindReservationByIdDocument,
@@ -59,14 +57,10 @@ function changeState(
 }
 
 interface ReservationDetailProps {
-  selectedClinic: typeof selectedClinic;
   refetch: () => void;
 }
 
-export const ReservationDetail = ({
-  selectedClinic,
-  refetch,
-}: ReservationDetailProps) => {
+export const ReservationDetail = ({ refetch }: ReservationDetailProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   //@ts-ignore
@@ -166,9 +160,7 @@ export const ReservationDetail = ({
     <div className=" relative top-32 z-[300] mx-auto h-[600px] w-[400px] overflow-y-scroll bg-white py-6 px-16 sm:rounded-lg">
       <button
         className="absolute right-6 hover:text-gray-400"
-        onClick={() => {
-          navigate(TIMETABLE);
-        }}
+        onClick={() => navigate(TIMETABLE)}
       >
         <FontAwesomeIcon icon={faXmark} />
       </button>

@@ -19,11 +19,7 @@ interface TableRowProps {
 export function TableRow({ label, weekEvents, isWeek }: TableRowProps) {
   const navigate = useNavigate();
   const viewOptions = useReactiveVar(viewOptionsVar);
-  const onClickRserve = (date: Date, label: Date) => {
-    const processedDate = new Date(date);
-    processedDate.setHours(label.getHours(), label.getMinutes());
-    navigate(RESERVE_DETAIL, { state: { startDate: processedDate } });
-  };
+
   if (!weekEvents[0]) {
     // console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
     return <h2>Loading...</h2>;
@@ -32,7 +28,7 @@ export function TableRow({ label, weekEvents, isWeek }: TableRowProps) {
   return (
     <div
       className={cls(
-        "grid h-5 w-full",
+        "grid h-5 w-full divide-x-2 divide-black",
         compareNumAfterGetMinutes(label, [0, 30]) ? "border-t border-white" : ""
       )}
       style={
@@ -65,10 +61,9 @@ export function TableRow({ label, weekEvents, isWeek }: TableRowProps) {
             (member, userIndex) =>
               member.activation && (
                 <ReserveBtn
-                  key={member.id}
+                  key={userIndex}
                   label={label}
                   userIndex={userIndex}
-                  onClick={() => onClickRserve(day.date, label)}
                 />
               )
           )}

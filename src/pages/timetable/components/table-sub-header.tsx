@@ -42,7 +42,7 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
     >
       <div className="title-col" />
       {weekEvents.map((day, i) => (
-        <div key={i} className="">
+        <div key={i} className="divide-x-2 divide-black">
           <BtnDatecheck
             text={day.date.toLocaleDateString("ko-KR", {
               month: "short",

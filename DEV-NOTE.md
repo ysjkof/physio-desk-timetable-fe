@@ -426,3 +426,35 @@ interface PrescriptionOption {
 
 **결론**
 사용자는 기본으로 개인용으로 그룹 하나를 갖는다 or 지금처럼 clinic은 null이고 사용자에만 연결된 방식 중에 고민해볼 것.
+
+# 2022-5-27; toLocaleDateString()에 옵션을 주면 많이 느려진다
+
+**1680개 버튼**을 자바스크립트 기본 메소드 `date.toLocaleString()`으로 텍스트를 넣고 만들었다. 그리고 이 버튼을 클릭하면 모달 창이 나타난다. 근데 창이 뜨는데 **0.5초** 정도 걸리는 문제가 있었다.
+
+`toLocaleString()`에 두번째 속성인 option을 제거하니 빨라졌다.
+모든 게 빨라졌다!
+
+```js
+array.length = 1680;
+
+// 매우 느린 코드
+array.map((label) => (
+  <span>
+    {label.toLocaleString("ko-KR", { hour: "2-digit", minute: "2-digit" })}
+  </span>
+));
+
+// 안느림
+array.map((label) => <span>{label.toLocaleString("ko-KR")}</span>);
+
+// 안느림
+function getHHMM(inputDate: string | Date, seperator?: ":") {
+  const date = new Date(inputDate);
+  const hh = String(date.getHours()).padStart(2, "0");
+  const mm = String(date.getMinutes()).padStart(2, "0");
+  if (seperator === ":") return `${hh}:${mm}`;
+  return `${hh}${mm}`;
+}
+
+array.map((label) => <span>{getHHMM(label, ":")}</span>);
+```

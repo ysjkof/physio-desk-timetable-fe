@@ -40,6 +40,34 @@ export const TimetableLayout = ({
   }
   return (
     <>
+      <AnimatePresence>
+        {isEdit && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.3 } }}
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+            className="fixed top-0 left-0 z-[200] h-screen w-screen bg-black/50"
+          >
+            <div
+              className="modal-background absolute h-full w-full"
+              onClick={() => isEdit && navigate(TIMETABLE)}
+            />
+            <ReservationDetail refetch={refetch} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {isReserve && (
+        <ModalPortal
+          closeAction={() => isReserve && navigate(TIMETABLE)}
+          children={
+            <Reserve
+              prescriptions={prescriptions}
+              refetch={refetch}
+              closeAction={() => isReserve && navigate(TIMETABLE)}
+            />
+          }
+        />
+      )}
       <motion.div
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}
@@ -57,37 +85,6 @@ export const TimetableLayout = ({
           </AnimatePresence>
         </div>
       </motion.div>
-      <AnimatePresence>
-        {isEdit && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.3 } }}
-            exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            className="fixed top-0 left-0 z-[100] h-screen w-screen bg-black/50 opacity-0"
-          >
-            <div
-              className="modal-background absolute h-full w-full"
-              onClick={() => isEdit && navigate(TIMETABLE)}
-            />
-            <ReservationDetail
-              refetch={refetch}
-              selectedClinic={selectedClinic}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {isReserve && (
-        <ModalPortal
-          closeAction={() => isReserve && navigate(TIMETABLE)}
-          children={
-            <Reserve
-              prescriptions={prescriptions}
-              refetch={refetch}
-              closeAction={() => isReserve && navigate(TIMETABLE)}
-            />
-          }
-        />
-      )}
     </>
   );
 };
