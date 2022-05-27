@@ -19,6 +19,8 @@ export const ReserveBtn = ({ label, userIndex, onClick }: ReserveBtnProps) => {
           ? "user-color-3"
           : userIndex === 3
           ? "user-color-4"
+          : userIndex === 4
+          ? "user-color-5"
           : ""
       )}
       onClick={() => onClick()}

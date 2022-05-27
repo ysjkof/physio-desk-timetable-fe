@@ -44,7 +44,7 @@ export function EventBox({
       }
       // onClick={onClick}
       className={cls(
-        "group absolute z-40 mx-0.5 cursor-pointer border-gray-500 px-1 ring-2",
+        "group absolute z-40 mx-0.5 cursor-pointer border-gray-500 px-1 ring-1",
         height === "20px"
           ? "grid grid-cols-2"
           : "grid grid-rows-[20px,20px,1fr]",
@@ -56,6 +56,8 @@ export function EventBox({
           ? "user-color-3"
           : userIndex === 3
           ? "user-color-4"
+          : userIndex === 4
+          ? "user-color-5"
           : "",
         !viewOptions.seeCancel && reservationState === ReservationState.Canceled
           ? "hidden"

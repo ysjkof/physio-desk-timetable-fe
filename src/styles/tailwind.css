@@ -31,6 +31,9 @@
 .btn-selected {
   @apply font-extrabold ring-2 ring-violet-500;
 }
+.btn-ring-off {
+  @apply ring-0;
+}
 
 .seperate-bar {
   @apply my-4 w-full border-b;
@@ -49,16 +52,19 @@
   @apply cursor-pointer after:absolute after:bottom-full after:left-[19.5%] after:border-8  after:border-b-black after:border-t-transparent after:border-l-transparent after:border-r-transparent;
 }
 .user-color-1 {
-  @apply bg-[#CCD5AE] ring-[#b0ba90];
+  @apply bg-[#CCD5AE] ring-gray-600;
 }
 .user-color-2 {
-  @apply bg-[#E9EDC9] ring-[#cbd0a8];
+  @apply bg-[#E9EDC9] ring-gray-600;
 }
 .user-color-3 {
-  @apply bg-[#FEFAE0] ring-[#dcd6b6];
+  @apply bg-[#FEFAE0] ring-gray-600;
 }
 .user-color-4 {
-  @apply bg-[#FAEDCD] ring-[#d3c49f];
+  @apply bg-[#FAEDCD] ring-gray-600;
+}
+.user-color-5 {
+  @apply bg-[#e3d5ca] ring-gray-600;
 }
 .noshow-color {
   @apply bg-[#edece9] ring-[#aaaaaa];

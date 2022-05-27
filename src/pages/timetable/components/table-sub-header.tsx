@@ -11,9 +11,8 @@ import { BtnDatecheck } from "./button-datecheck";
 
 interface TableSubHeaderProps {
   weekEvents: DayWithUsers[];
-  isWeek: boolean;
 }
-export function TableSubHeader({ weekEvents, isWeek }: TableSubHeaderProps) {
+export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
@@ -42,69 +41,27 @@ export function TableSubHeader({ weekEvents, isWeek }: TableSubHeaderProps) {
       }
     >
       <div className="title-col" />
-      {isWeek ? (
-        weekEvents.map((day, i) => (
-          <div key={i} className="">
-            <BtnDatecheck
-              text={day.date.toLocaleDateString("ko-KR", {
-                month: "short",
-                day: "numeric",
-                weekday: "short",
-              })}
-              day={day.date.getDay()}
-              thisMonth={selectedDate.getMonth() === day.date.getMonth()}
-              selected={selectedDate.getDate() === day.date.getDate()}
-              isSubheader
-            />
-            <div className="mt-1.5 flex">
-              {day.users.map(
-                (member, userIndex) =>
-                  member.activation && (
-                    <span
-                      key={member.id}
-                      className={cls(
-                        "w-full py-1 text-center",
-                        member.user.name === loggedInUser?.name
-                          ? "font-semibold"
-                          : "",
-                        userIndex === 0
-                          ? "user-color-1"
-                          : userIndex === 1
-                          ? "user-color-2"
-                          : userIndex === 2
-                          ? "user-color-3"
-                          : userIndex === 3
-                          ? "user-color-4"
-                          : ""
-                      )}
-                    >
-                      {member.user.name}
-                    </span>
-                  )
-              )}
-            </div>
-          </div>
-        ))
-      ) : (
-        <div className="">
+      {weekEvents.map((day, i) => (
+        <div key={i} className="">
           <BtnDatecheck
-            text={selectedDate.toLocaleDateString("ko-KR", {
+            text={day.date.toLocaleDateString("ko-KR", {
               month: "short",
               day: "numeric",
               weekday: "short",
             })}
-            day={selectedDate.getDay()}
-            thisMonth={selectedDate.getMonth() === selectedDate.getMonth()}
+            day={day.date.getDay()}
+            thisMonth={selectedDate.getMonth() === day.date.getMonth()}
+            selected={selectedDate.getDate() === day.date.getDate()}
             isSubheader
           />
           <div className="mt-1.5 flex">
-            {weekEvents[selectedDate.getDay()]?.users.map(
+            {day.users.map(
               (member, userIndex) =>
                 member.activation && (
                   <span
                     key={member.id}
                     className={cls(
-                      "mt-4 w-full py-1 text-center",
+                      "w-full py-1 text-center",
                       member.user.name === loggedInUser?.name
                         ? "font-semibold"
                         : "",
@@ -116,6 +73,8 @@ export function TableSubHeader({ weekEvents, isWeek }: TableSubHeaderProps) {
                         ? "user-color-3"
                         : userIndex === 3
                         ? "user-color-4"
+                        : userIndex === 4
+                        ? "user-color-5"
                         : ""
                     )}
                   >
@@ -125,7 +84,7 @@ export function TableSubHeader({ weekEvents, isWeek }: TableSubHeaderProps) {
             )}
           </div>
         </div>
-      )}
+      ))}
     </div>
   );
 }

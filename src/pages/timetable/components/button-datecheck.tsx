@@ -24,7 +24,7 @@ export const BtnDatecheck = ({
       day === 0 ? "text-red-600" : "",
       day === 6 ? "text-blue-600" : "",
       thisMonth ? "" : "opacity-40",
-      isSubheader ? "w-full text-center" : "btn-border btn-sm"
+      isSubheader ? "btn-ring-off w-full text-center" : "btn-border btn-sm"
     )}
     onClick={onClick}
   >

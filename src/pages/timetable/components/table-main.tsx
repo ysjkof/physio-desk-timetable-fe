@@ -32,6 +32,7 @@ import { TableSubHeader } from "./table-sub-header";
 import { TableRow } from "./table-row";
 import { TableCols } from "./table-cols";
 import { motion } from "framer-motion";
+import { ONE_DAY, ONE_WEEK } from "../../../variables";
 
 interface ITimetableProps {
   eventsData: ListReservationsQuery;
@@ -126,69 +127,42 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
   if (!viewOptions) {
     return <></>;
   }
+  const optionalWeekEvents =
+    viewOptions.periodToView === ONE_DAY
+      ? [weekEvents[selectedDate.getDay()]]
+      : weekEvents;
   return (
     <>
       {viewOptions.seeList === false && (
-        <>
-          {viewOptions.periodToView === 7 && (
-            <motion.div
-              initial={{ y: 300 }}
-              animate={{
-                y: 0,
-                transition: { type: "tween", duration: 0.4 },
-              }}
-              className="h-full w-full overflow-y-scroll"
-            >
-              {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곡에서 동일하게 한다 */}
-              <TableSubHeader weekEvents={weekEvents} isWeek />
-              <div className="body-table relative h-full">
-                <TimeIndicatorBar labels={labels} />
-                <div className="row-table absolute z-30 h-full w-full">
-                  {labels.map((label) => (
-                    <TableRow
-                      key={label.valueOf()}
-                      isWeek
-                      label={label}
-                      weekEvents={weekEvents}
-                    />
-                  ))}
-                </div>
-                <TableCols weekEvents={weekEvents} isWeek labels={labels} />
-              </div>
-            </motion.div>
-          )}
-
-          {viewOptions.periodToView === 1 && (
-            <motion.div
-              initial={{ y: 300 }}
-              animate={{
-                y: 0,
-                transition: { type: "tween", duration: 0.4 },
-              }}
-              className="h-full w-full overflow-y-scroll"
-            >
-              <TableSubHeader weekEvents={weekEvents} isWeek={false} />
-              <div className="body-table relative h-full">
-                <TimeIndicatorBar labels={labels} />
-                <div className="row-table absolute z-30 h-full w-full">
-                  {labels.map((label) => (
-                    <TableRow
-                      key={label.valueOf()}
-                      isWeek={false}
-                      label={label}
-                      weekEvents={[weekEvents[selectedDate.getDay()]]}
-                    />
-                  ))}
-                </div>
-                <TableCols
-                  weekEvents={[weekEvents[selectedDate.getDay()]]}
-                  isWeek={false}
-                  labels={labels}
+        <motion.div
+          initial={{ y: 300 }}
+          animate={{
+            y: 0,
+            transition: { type: "tween", duration: 0.4 },
+          }}
+          className="h-full w-full overflow-y-scroll"
+        >
+          {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곡에서 동일하게 한다 */}
+          <TableSubHeader weekEvents={optionalWeekEvents} />
+          <div className="body-table relative h-full">
+            <TimeIndicatorBar labels={labels} />
+            <div className="row-table absolute z-30 h-full w-full">
+              {labels.map((label) => (
+                <TableRow
+                  key={label.valueOf()}
+                  isWeek={viewOptions.periodToView === ONE_WEEK ? true : false}
+                  label={label}
+                  weekEvents={optionalWeekEvents}
                 />
-              </div>
-            </motion.div>
-          )}
-        </>
+              ))}
+            </div>
+            <TableCols
+              weekEvents={optionalWeekEvents}
+              isWeek={viewOptions.periodToView === ONE_WEEK ? true : false}
+              labels={labels}
+            />
+          </div>
+        </motion.div>
       )}
       {viewOptions.seeList === true && "준비 중"}
       {/* {viewOptions.seeList === true &&
