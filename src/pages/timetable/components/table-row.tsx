@@ -1,5 +1,4 @@
 import { useReactiveVar } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
 import {
   compareNumAfterGetMinutes,
   DayWithUsers,
@@ -7,17 +6,15 @@ import {
 } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
 import { viewOptionsVar } from "../../../store";
-import { ONE_DAY, RESERVE_DETAIL } from "../../../variables";
+import { ONE_DAY } from "../../../variables";
 import { ReserveBtn } from "./reserve-btn";
 
 interface TableRowProps {
   label: Date;
   weekEvents: DayWithUsers[];
-  isWeek: boolean;
 }
 
-export function TableRow({ label, weekEvents, isWeek }: TableRowProps) {
-  const navigate = useNavigate();
+export function TableRow({ label, weekEvents }: TableRowProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
 
   if (!weekEvents[0]) {
@@ -64,6 +61,7 @@ export function TableRow({ label, weekEvents, isWeek }: TableRowProps) {
                   key={userIndex}
                   label={label}
                   userIndex={userIndex}
+                  member={{ id: member.user.id, name: member.user.name }}
                 />
               )
           )}

@@ -6,9 +6,10 @@ import { RESERVE_DETAIL } from "../../../variables";
 interface ReserveBtnProps {
   label: Date;
   userIndex: number;
+  member: { id: number; name: string };
 }
 
-export const ReserveBtn = ({ label, userIndex }: ReserveBtnProps) => {
+export const ReserveBtn = ({ label, userIndex, member }: ReserveBtnProps) => {
   const navigate = useNavigate();
   return (
     <div
@@ -26,7 +27,9 @@ export const ReserveBtn = ({ label, userIndex }: ReserveBtnProps) => {
           ? "user-color-5"
           : ""
       )}
-      onClick={() => navigate(RESERVE_DETAIL, { state: { startDate: label } })}
+      onClick={() =>
+        navigate(RESERVE_DETAIL, { state: { startDate: label, member } })
+      }
     >
       <span className="invisible mx-auto flex flex-col whitespace-nowrap bg-gradient-to-r from-sky-500 to-indigo-500 px-0.5 text-center  text-sm font-medium text-white shadow hover:cursor-pointer group-hover:visible">
         + {getHHMM(label, ":")}

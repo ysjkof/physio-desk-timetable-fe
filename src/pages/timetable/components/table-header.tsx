@@ -55,7 +55,8 @@ export function TableHeader({ today, weeks }: TableNavProps) {
             weekday: "short",
           })}
         </button>
-        <motion.div className="flex w-full items-center justify-end space-x-3">
+
+        <div className="flex w-full items-center justify-end space-x-5">
           <BtnDot
             enabled={viewOptions.seeCancel}
             label={"취소"}
@@ -118,8 +119,6 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
           />
-        </motion.div>
-        <div className="flex w-full items-center justify-end space-x-5">
           <FontAwesomeIcon
             icon={faCalendarAlt}
             fontSize={"large"}
@@ -135,6 +134,7 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
             className={cls(
+              "pl-10",
               "w-4 cursor-pointer hover:animate-bounce hover:text-gray-500",
               viewOptions.navigationExpand ? "text-gray-700" : "text-gray-400"
             )}

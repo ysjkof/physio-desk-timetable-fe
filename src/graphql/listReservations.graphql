@@ -18,6 +18,7 @@ query listReservations($input: ListReservationsInput!) {
         gender
         registrationNumber
         birthday
+        memo
       }
       lastModifier {
         id

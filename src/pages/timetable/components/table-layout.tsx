@@ -2,10 +2,10 @@ import { useReactiveVar } from "@apollo/client";
 import { useState } from "react";
 import { ListReservationsQuery } from "../../../graphql/generated/graphql";
 import { getSunday, getWeeks } from "../../../libs/timetable-utils";
-import { ReservationDetail } from "../reservation-detail";
-import { selectedClinicVar, todayNowVar, viewOptionsVar } from "../../../store";
+import { ReservationCard } from "../reservation-card";
+import { todayNowVar, viewOptionsVar } from "../../../store";
 import { ModalPortal } from "../../../components/modal-portal";
-import { Reserve } from "../reserve";
+import { ReserveCard } from "../reserve-card";
 import { PrescriptionWithSelect } from "..";
 import { AnimatePresence, motion } from "framer-motion";
 import { TableHeader } from "./table-header";
@@ -33,7 +33,6 @@ export const TimetableLayout = ({
     getWeeks(getSunday(today))
   );
   const viewOptions = useReactiveVar(viewOptionsVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   if (!viewOptions) {
     return <></>;
@@ -52,7 +51,7 @@ export const TimetableLayout = ({
               className="modal-background absolute h-full w-full"
               onClick={() => isEdit && navigate(TIMETABLE)}
             />
-            <ReservationDetail refetch={refetch} />
+            <ReservationCard refetch={refetch} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -60,7 +59,7 @@ export const TimetableLayout = ({
         <ModalPortal
           closeAction={() => isReserve && navigate(TIMETABLE)}
           children={
-            <Reserve
+            <ReserveCard
               prescriptions={prescriptions}
               refetch={refetch}
               closeAction={() => isReserve && navigate(TIMETABLE)}

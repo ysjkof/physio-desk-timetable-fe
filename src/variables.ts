@@ -1,3 +1,5 @@
+import { ReservationState } from "./graphql/generated/graphql";
+
 export const LOCALSTORAGE_TOKEN = "muool-token";
 // 한국 표준시(韓國標準時, KST, Korea Standard Time) = UTC+09:00
 export const UTC_OPTION_KST = "+0900";
@@ -32,3 +34,10 @@ export const LOCALSTORAGE_SELECTED_CLINIC = "muool-selected-clinic-";
 export const TIMETABLE = "/tt";
 export const RESERVE_DETAIL = `${TIMETABLE}/reserve`;
 export const RESERVE_EDIT = `${TIMETABLE}/edit`;
+
+// Reservation State 한글
+export const RESERVATION_STATE_KOR = {
+  [ReservationState.Canceled]: "취소",
+  [ReservationState.NoShow]: "부도",
+  [ReservationState.Reserved]: "예약",
+};

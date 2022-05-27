@@ -32,15 +32,18 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
     const threeDate = getThreeDate(daysOfMonths[1][option]);
     setDaysOfMonths([months, threeDate]);
   };
-  console.log(varients);
+
   return (
     <motion.div
-      className="my-4 flex items-center justify-between pb-4 shadow-b"
+      className="relative my-4 flex items-center justify-between pb-4 pt-8 shadow-b"
       custom={true}
       variants={varients}
       initial="ini"
       animate="start"
     >
+      <span className="pointer-events-none absolute -top-1 mx-auto w-full text-center text-base">
+        {daysOfMonths[0][7].date.getMonth() + 1}월
+      </span>
       <MoveXBtn direction={"prev"} onClick={() => onClickMoveX("prevMonth")} />
       <div className="grid w-full grid-cols-7">
         {daysOfMonths[0].map((day, i) => (

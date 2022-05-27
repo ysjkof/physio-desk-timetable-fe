@@ -829,7 +829,7 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, prescriptions?: Array<{ __typename?: 'Prescription', name: string, requiredTime: number, description?: string | null, price: number, activate: boolean }> | null }> | null } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, prescriptions?: Array<{ __typename?: 'Prescription', name: string, requiredTime: number, description?: string | null, price: number, activate: boolean }> | null }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -1660,6 +1660,7 @@ export const ListReservationsDocument = gql`
         gender
         registrationNumber
         birthday
+        memo
       }
       lastModifier {
         id
