@@ -20,14 +20,11 @@ export const BtnDatecheck = ({
 }: IBtnDatecheck) => (
   <button
     className={cls(
-      "",
       selected ? "btn-selected" : "",
       day === 0 ? "text-red-600" : "",
       day === 6 ? "text-blue-600" : "",
       thisMonth ? "" : "opacity-40",
-      isSubheader
-        ? "absolute w-full bg-gradient-to-r from-[#CCD5AE] via-[#E9EDC9] to-[#FAEDCD] text-center"
-        : "btn-border btn-sm"
+      isSubheader ? "w-full text-center" : "btn-border btn-sm"
     )}
     onClick={onClick}
   >

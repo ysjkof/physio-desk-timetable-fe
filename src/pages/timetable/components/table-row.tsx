@@ -1,3 +1,4 @@
+import { useReactiveVar } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import {
   compareNumAfterGetMinutes,
@@ -5,7 +6,8 @@ import {
   getHHMM,
 } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
-import { RESERVE_DETAIL } from "../../../variables";
+import { viewOptionsVar } from "../../../store";
+import { ONE_DAY, RESERVE_DETAIL } from "../../../variables";
 import { ReserveBtn } from "./reserve-btn";
 
 interface TableRowProps {
@@ -16,19 +18,38 @@ interface TableRowProps {
 
 export function TableRow({ label, weekEvents, isWeek }: TableRowProps) {
   const navigate = useNavigate();
+  const viewOptions = useReactiveVar(viewOptionsVar);
   const onClickRserve = (date: Date, label: Date) => {
     const processedDate = new Date(date);
     processedDate.setHours(label.getHours(), label.getMinutes());
     navigate(RESERVE_DETAIL, { state: { startDate: processedDate } });
   };
-
+  if (!weekEvents[0]) {
+    // console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
+    return <h2>Loading...</h2>;
+  }
+  const userLength = weekEvents[0].users.length;
   return (
     <div
       className={cls(
-        "grid h-5",
-        isWeek ? "grid-cols-week divide-x divide-black" : "grid-cols-day",
+        "grid h-5 w-full",
         compareNumAfterGetMinutes(label, [0, 30]) ? "border-t border-white" : ""
       )}
+      style={
+        viewOptions.periodToView === ONE_DAY
+          ? {
+              gridTemplateColumns:
+                userLength > 4
+                  ? `2.5rem repeat(1, minmax(${userLength * 6}rem,1fr))`
+                  : `2.5rem repeat(1, ${userLength}fr)`,
+            }
+          : {
+              gridTemplateColumns:
+                userLength > 2
+                  ? `2.5rem repeat(7, ${userLength * 6}rem)`
+                  : `2.5rem repeat(7, ${userLength}fr)`,
+            }
+      }
     >
       <div
         className={cls(

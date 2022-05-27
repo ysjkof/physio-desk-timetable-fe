@@ -137,8 +137,9 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
                 y: 0,
                 transition: { type: "tween", duration: 0.4 },
               }}
-              className="h-full overflow-y-scroll"
+              className="h-full w-full overflow-y-scroll"
             >
+              {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곡에서 동일하게 한다 */}
               <TableSubHeader weekEvents={weekEvents} isWeek />
               <div className="body-table relative h-full">
                 <TimeIndicatorBar labels={labels} />
@@ -164,25 +165,27 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
                 y: 0,
                 transition: { type: "tween", duration: 0.4 },
               }}
-              className="body-table relative h-full w-full overflow-x-scroll pt-1.5"
+              className="h-full w-full overflow-y-scroll"
             >
               <TableSubHeader weekEvents={weekEvents} isWeek={false} />
-              <TimeIndicatorBar labels={labels} />
-              <div className="row-table absolute h-full w-full">
-                {labels.map((label) => (
-                  <TableRow
-                    key={label.valueOf()}
-                    isWeek={false}
-                    label={label}
-                    weekEvents={[weekEvents[selectedDate.getDay()]]}
-                  />
-                ))}
+              <div className="body-table relative h-full">
+                <TimeIndicatorBar labels={labels} />
+                <div className="row-table absolute z-30 h-full w-full">
+                  {labels.map((label) => (
+                    <TableRow
+                      key={label.valueOf()}
+                      isWeek={false}
+                      label={label}
+                      weekEvents={[weekEvents[selectedDate.getDay()]]}
+                    />
+                  ))}
+                </div>
+                <TableCols
+                  weekEvents={[weekEvents[selectedDate.getDay()]]}
+                  isWeek={false}
+                  labels={labels}
+                />
               </div>
-              <TableCols
-                weekEvents={[weekEvents[selectedDate.getDay()]]}
-                isWeek={false}
-                labels={labels}
-              />
             </motion.div>
           )}
         </>

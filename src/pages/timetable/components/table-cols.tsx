@@ -1,9 +1,12 @@
+import { useReactiveVar } from "@apollo/client";
 import {
   compareDateMatch,
   DayWithUsers,
   getTimeLength,
 } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
+import { viewOptionsVar } from "../../../store";
+import { ONE_DAY } from "../../../variables";
 import { EventBox } from "./event-box";
 
 interface TableColsProps {
@@ -12,16 +15,30 @@ interface TableColsProps {
   labels: Date[];
 }
 export function TableCols({ weekEvents, isWeek, labels }: TableColsProps) {
+  const viewOptions = useReactiveVar(viewOptionsVar);
   if (!weekEvents[0]) {
     // console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
     return <h2>Loading...</h2>;
   }
+  const userLength = weekEvents[0].users.length;
   return (
     <div
-      className={cls(
-        "col-table absolute grid h-full w-full",
-        isWeek ? "grid-cols-week" : "grid-cols-day"
-      )}
+      className={cls("col-table absolute grid h-full w-full")}
+      style={
+        viewOptions.periodToView === ONE_DAY
+          ? {
+              gridTemplateColumns:
+                userLength > 4
+                  ? `2.5rem repeat(1, minmax(${userLength * 6}rem,1fr))`
+                  : `2.5rem repeat(1, ${userLength}fr)`,
+            }
+          : {
+              gridTemplateColumns:
+                userLength > 2
+                  ? `2.5rem repeat(7, ${userLength * 6}rem)`
+                  : `2.5rem repeat(7, ${userLength}fr)`,
+            }
+      }
     >
       <div className="title-col" />
       {weekEvents.map((day, i) => (

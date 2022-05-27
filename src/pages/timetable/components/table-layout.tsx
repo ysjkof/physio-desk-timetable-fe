@@ -1,13 +1,6 @@
 import { useReactiveVar } from "@apollo/client";
 import { useState } from "react";
-import {
-  Clinic,
-  ListReservationsQuery,
-  Patient,
-  Prescription,
-  Reservation,
-  User,
-} from "../../../graphql/generated/graphql";
+import { ListReservationsQuery } from "../../../graphql/generated/graphql";
 import { getSunday, getWeeks } from "../../../libs/timetable-utils";
 import { ReservationDetail } from "../reservation-detail";
 import { selectedClinicVar, todayNowVar, viewOptionsVar } from "../../../store";
@@ -25,17 +18,6 @@ interface ITimetableProps {
   eventsData: ListReservationsQuery;
   prescriptions: PrescriptionWithSelect[];
   refetch: () => void;
-}
-export interface ModifiedReservation
-  extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
-  user: Pick<User, "id" | "name">;
-  lastModifier?: Pick<User, "id" | "name" | "email"> | null;
-  patient: Pick<
-    Patient,
-    "id" | "name" | "gender" | "registrationNumber" | "birthday"
-  >;
-  clinic?: Pick<Clinic, "id" | "name"> | null;
-  prescriptions?: Pick<Prescription, "name">[] | null;
 }
 
 export const TimetableLayout = ({
@@ -68,7 +50,7 @@ export const TimetableLayout = ({
         className="timetable-container h-full text-xs"
       >
         <TableHeader today={today} weeks={weeks} />
-        <div className="flex h-full w-full">
+        <div className="table-body-container flex h-full w-full">
           <TimetableMain eventsData={eventsData} />
           <AnimatePresence>
             {viewOptions.seeActiveOption && <TableClinicSelector />}
