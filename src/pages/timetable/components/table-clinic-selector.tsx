@@ -94,7 +94,7 @@ export function TableClinicSelector({}: TableClinicSelectorProps) {
       initial="init"
       animate="end"
       exit="exit"
-      className="group-view-controller absolute right-0 z-[100] h-full w-[240px] bg-white pl-4"
+      className="group-view-controller absolute right-0 z-40 h-full w-[240px] bg-white pl-4"
     >
       <div className="view-controller-header mb-2 flex justify-between border-b px-3 pb-2">
         <span className="group relative px-1 after:ml-1 after:rounded-full after:border after:border-gray-400 after:px-1 after:content-['?']">

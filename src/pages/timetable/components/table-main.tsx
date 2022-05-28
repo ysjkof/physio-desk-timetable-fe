@@ -141,13 +141,14 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
             y: 0,
             transition: { type: "tween", duration: 0.4 },
           }}
-          className="h-full w-full overflow-scroll"
+          className="relative h-full w-full overflow-scroll"
         >
           {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곡에서 동일하게 한다 */}
           <TableSubHeader weekEvents={optionalWeekEvents} />
+          <div className="table-sub-header-shadow sticky top-[2.88rem] z-[32] w-full border-b-2 border-gray-500 shadow-cst" />
           <div className="body-table relative h-full">
             <TimeIndicatorBar labels={labels} />
-            <div className="row-table absolute z-30 h-full w-full">
+            <div className="row-table absolute h-full w-full">
               {labels.map((label) => (
                 <TableRow
                   key={label.valueOf()}

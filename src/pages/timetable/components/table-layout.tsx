@@ -45,7 +45,7 @@ export const TimetableLayout = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: 0.3 } }}
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            className="fixed top-0 left-0 z-[200] h-screen w-screen bg-black/50"
+            className="fixed top-0 left-0 z-40 h-screen w-screen bg-black/50"
           >
             <div
               className="modal-background absolute h-full w-full"

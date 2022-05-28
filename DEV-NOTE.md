@@ -458,3 +458,20 @@ function getHHMM(inputDate: string | Date, seperator?: ":") {
 
 array.map((label) => <span>{getHHMM(label, ":")}</span>);
 ```
+
+# 2022-5-28; 요소별 z-index
+
+**정리완료**
+reserve-btn : 10
+time-indicator-bar : 20
+event-box : 30 { hover: 31 }
+table-sub-header : 32
+table-sub-header-shadow : 32
+title-col in TableRow : 33
+modal-portal : 40
+table-clinic-selector : 40
+dropdown menu in Header : 50(table-clinic-selector과 겹침)
+
+**추후확인**
+section-layout(dashboard) 50
+datepicker 50

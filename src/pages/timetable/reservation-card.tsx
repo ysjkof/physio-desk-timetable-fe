@@ -87,7 +87,7 @@ export const ReservationCard = ({ refetch }: ReservationCardProps) => {
       drag
       dragMomentum={false}
       dragElastic={false}
-      className="relative top-32 z-[300] mx-auto h-[600px] w-[400px] space-y-4 overflow-y-scroll bg-white py-6 px-16 sm:rounded-lg"
+      className="relative top-32 mx-auto h-[600px] w-[400px] space-y-4 overflow-y-scroll bg-white py-6 px-16 sm:rounded-lg"
     >
       <button
         className="absolute right-6 hover:text-gray-400"

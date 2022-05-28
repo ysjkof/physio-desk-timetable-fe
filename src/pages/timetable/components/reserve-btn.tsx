@@ -14,7 +14,7 @@ export const ReserveBtn = ({ label, userIndex, member }: ReserveBtnProps) => {
   return (
     <div
       className={cls(
-        "group relative w-full",
+        "group relative z-10 w-full",
         userIndex === 0
           ? "user-color-1"
           : userIndex === 1

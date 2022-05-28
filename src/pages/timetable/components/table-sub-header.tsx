@@ -23,7 +23,7 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
   const userLength = weekEvents[0].users.length;
   return (
     <div
-      className={cls("table-sub-header grid w-full")}
+      className="table-sub-header sticky top-0 z-[32] grid w-full"
       style={
         viewOptions.periodToView === ONE_DAY
           ? {
@@ -40,7 +40,7 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
     >
       <div className="title-col" />
       {weekEvents.map((day, i) => (
-        <div key={i} className="divide-x-2 divide-black">
+        <div key={i} className="divide-x-2 divide-black bg-white">
           <BtnDatecheck
             text={day.date.toLocaleDateString("ko-KR", {
               month: "short",

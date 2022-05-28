@@ -26,7 +26,10 @@ export function TableRow({ label, weekEvents }: TableRowProps) {
     <div
       className={cls(
         "grid h-5 w-full divide-x-2 divide-black",
-        compareNumAfterGetMinutes(label, [0, 30]) ? "border-t border-white" : ""
+        compareNumAfterGetMinutes(label, [0, 30])
+          ? "border-t border-white"
+          : "",
+        "first:border-0"
       )}
       style={
         viewOptions.periodToView === ONE_DAY
@@ -42,17 +45,12 @@ export function TableRow({ label, weekEvents }: TableRowProps) {
             }
       }
     >
-      <div
-        className={cls(
-          "title-col relative -top-2.5",
-          compareNumAfterGetMinutes(label, [0, 30]) ? "bg-white" : ""
-        )}
-      >
+      <div className="title-col relative -top-2.5 z-[33] bg-white">
         {compareNumAfterGetMinutes(label, [0, 30]) ? getHHMM(label) : ""}
       </div>
       {weekEvents.map((day, i) => (
         // id={day.date + ""}로 table-nav에서 스크롤 조정함
-        <div key={i} className="relative z-30 flex" id={day.date + ""}>
+        <div key={i} className="relative flex" id={day.date + ""}>
           {day?.users.map(
             (member, userIndex) =>
               member.activation && (

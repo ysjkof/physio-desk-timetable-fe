@@ -28,7 +28,7 @@ export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
   if (top === 0) return <></>;
   return (
     <div
-      className="time-indicator-bar group absolute z-40 flex w-full border-t border-red-500 hover:z-50"
+      className="time-indicator-bar group absolute z-20 flex w-full border-t border-red-500"
       style={{ top: `${top}px` }}
     >
       <span className="mx-auto text-red-500 group-hover:hidden">
