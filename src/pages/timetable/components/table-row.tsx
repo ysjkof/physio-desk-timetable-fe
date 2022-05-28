@@ -31,16 +31,14 @@ export function TableRow({ label, weekEvents }: TableRowProps) {
       style={
         viewOptions.periodToView === ONE_DAY
           ? {
-              gridTemplateColumns:
-                userLength > 4
-                  ? `2.5rem repeat(1, minmax(${userLength * 6}rem,1fr))`
-                  : `2.5rem repeat(1, ${userLength}fr)`,
+              gridTemplateColumns: `2.5rem repeat(1, minmax(${
+                userLength * 6
+              }rem,1fr))`,
             }
           : {
-              gridTemplateColumns:
-                userLength > 2
-                  ? `2.5rem repeat(7, ${userLength * 6}rem)`
-                  : `2.5rem repeat(7, ${userLength}fr)`,
+              gridTemplateColumns: `2.5rem repeat(7, minmax(${
+                userLength * 6
+              }rem,1fr)`,
             }
       }
     >

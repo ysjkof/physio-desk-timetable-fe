@@ -127,6 +127,7 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
   if (!viewOptions) {
     return <></>;
   }
+
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
       ? [weekEvents[selectedDate.getDay()]]
@@ -140,7 +141,8 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
             y: 0,
             transition: { type: "tween", duration: 0.4 },
           }}
-          className="h-full w-full overflow-y-scroll"
+          className="h-full w-full overflow-scroll"
+          onScroll={(d) => console.log(d)}
         >
           {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곡에서 동일하게 한다 */}
           <TableSubHeader weekEvents={optionalWeekEvents} />
@@ -150,17 +152,12 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
               {labels.map((label) => (
                 <TableRow
                   key={label.valueOf()}
-                  isWeek={viewOptions.periodToView === ONE_WEEK ? true : false}
                   label={label}
                   weekEvents={optionalWeekEvents}
                 />
               ))}
             </div>
-            <TableCols
-              weekEvents={optionalWeekEvents}
-              isWeek={viewOptions.periodToView === ONE_WEEK ? true : false}
-              labels={labels}
-            />
+            <TableCols weekEvents={optionalWeekEvents} labels={labels} />
           </div>
         </motion.div>
       )}

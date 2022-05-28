@@ -39,10 +39,11 @@ export function EventBox({
   return (
     <motion.div
       whileHover={{ scale: 1.2, zIndex: 100 }}
+      initial={{ y: 10, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
       onClick={() =>
         isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
       }
-      // onClick={onClick}
       className={cls(
         "group absolute z-40 mx-0.5 cursor-pointer border-gray-500 px-1 ring-1",
         height === "20px"
@@ -84,22 +85,19 @@ export function EventBox({
           </span>
         )}
       </div>
-
       {prescriptions && (
-        <div className="h-5 overflow-hidden text-base ">
+        <div className="h-5 overflow-hidden text-base">
           {prescriptions.map((prescription) => prescription.name)}
         </div>
       )}
-      {memo && height !== "20px" && (
+      {memo && height !== "20px" && height !== "40px" && (
         <div className="h-full overflow-hidden break-all border-gray-600 pt-1">
           {memo}
         </div>
       )}
-      {height !== "20px" && height !== "40px" && (
-        <p className="bubble-arrow-t-center bubble-apear invisible absolute -bottom-16 right-1/2 z-50 w-32 translate-x-1/2 rounded-md bg-black py-4 text-center text-white opacity-0 group-hover:visible group-hover:opacity-100">
-          {`${getHHMM(startDate, ":")} ~ ${getHHMM(endDate, ":")}`}
-        </p>
-      )}
+      <p className="bubble-arrow-t-center bubble-apear invisible absolute -bottom-16 right-1/2 z-50 w-32 translate-x-1/2 rounded-md bg-black py-4 text-center text-white opacity-0 group-hover:visible group-hover:opacity-100">
+        {`${getHHMM(startDate, ":")} ~ ${getHHMM(endDate, ":")}`}
+      </p>
     </motion.div>
   );
 }

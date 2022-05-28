@@ -11,11 +11,11 @@ import { EventBox } from "./event-box";
 
 interface TableColsProps {
   weekEvents: DayWithUsers[];
-  isWeek: boolean;
   labels: Date[];
 }
-export function TableCols({ weekEvents, isWeek, labels }: TableColsProps) {
+export function TableCols({ weekEvents, labels }: TableColsProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
+
   if (!weekEvents[0]) {
     // console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
     return <h2>Loading...</h2>;
@@ -27,16 +27,14 @@ export function TableCols({ weekEvents, isWeek, labels }: TableColsProps) {
       style={
         viewOptions.periodToView === ONE_DAY
           ? {
-              gridTemplateColumns:
-                userLength > 4
-                  ? `2.5rem repeat(1, minmax(${userLength * 6}rem,1fr))`
-                  : `2.5rem repeat(1, ${userLength}fr)`,
+              gridTemplateColumns: `2.5rem repeat(1, minmax(${
+                userLength * 6
+              }rem,1fr))`,
             }
           : {
-              gridTemplateColumns:
-                userLength > 2
-                  ? `2.5rem repeat(7, ${userLength * 6}rem)`
-                  : `2.5rem repeat(7, ${userLength}fr)`,
+              gridTemplateColumns: `2.5rem repeat(7, minmax(${
+                userLength * 6
+              }rem,1fr)`,
             }
       }
     >
@@ -44,7 +42,7 @@ export function TableCols({ weekEvents, isWeek, labels }: TableColsProps) {
       {weekEvents.map((day, i) => (
         <div
           key={i}
-          className={cls("day-col relative grid")}
+          className="day-col relative grid"
           style={{
             gridTemplateColumns: `repeat(${
               day.users.filter((member) => member.activation).length
