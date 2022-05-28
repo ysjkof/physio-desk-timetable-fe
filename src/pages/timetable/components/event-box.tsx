@@ -38,7 +38,7 @@ export function EventBox({
 
   return (
     <motion.div
-      whileHover={{ scale: 1.2, zIndex: 31 }}
+      whileHover={{ scale: 1.2, zIndex: 32 }}
       initial={{ y: 10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       onClick={() =>

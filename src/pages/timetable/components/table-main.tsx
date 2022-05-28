@@ -132,6 +132,7 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
     viewOptions.periodToView === ONE_DAY
       ? [weekEvents[selectedDate.getDay()]]
       : weekEvents;
+
   return (
     <>
       {viewOptions.seeList === false && (
@@ -145,7 +146,6 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
         >
           {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곡에서 동일하게 한다 */}
           <TableSubHeader weekEvents={optionalWeekEvents} />
-          <div className="table-sub-header-shadow sticky top-[2.88rem] z-[32] w-full border-b-2 border-gray-500 shadow-cst" />
           <div className="body-table relative h-full">
             <TimeIndicatorBar labels={labels} />
             <div className="row-table absolute h-full w-full">
