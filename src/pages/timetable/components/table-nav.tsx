@@ -67,7 +67,16 @@ export function TableNav({ weeks, varients }: TableNavProps) {
               day={day.date.getDay()}
               thisMonth={selectedDate.getMonth() === day.date.getMonth()}
               selected={selectedDate.getDate() === day.date.getDate()}
-              onClick={() => selectedDateVar(day.date)}
+              onClick={() => {
+                // table-row의 요소를 불러와 스크롤 조절함
+                const el = document.getElementById(day.date + "");
+                el?.scrollIntoView({
+                  block: "center",
+                  inline: "center",
+                  behavior: "smooth",
+                });
+                selectedDateVar(day.date);
+              }}
             />
           </div>
         ))}

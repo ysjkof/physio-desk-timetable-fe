@@ -51,7 +51,8 @@ export function TableRow({ label, weekEvents }: TableRowProps) {
         {compareNumAfterGetMinutes(label, [0, 30]) ? getHHMM(label) : ""}
       </div>
       {weekEvents.map((day, i) => (
-        <div key={i} className={cls("relative z-30 flex")}>
+        // id={day.date + ""}로 table-nav에서 스크롤 조정함
+        <div key={i} className="relative z-30 flex" id={day.date + ""}>
           {day?.users.map(
             (member, userIndex) =>
               member.activation && (

@@ -142,7 +142,6 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
             transition: { type: "tween", duration: 0.4 },
           }}
           className="h-full w-full overflow-scroll"
-          onScroll={(d) => console.log(d)}
         >
           {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곡에서 동일하게 한다 */}
           <TableSubHeader weekEvents={optionalWeekEvents} />
