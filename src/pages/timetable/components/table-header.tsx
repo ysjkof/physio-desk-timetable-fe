@@ -1,9 +1,15 @@
 import { useReactiveVar } from "@apollo/client";
 import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
-import { faGear, faList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBan,
+  faCommentSlash,
+  faGear,
+  faList,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence, motion } from "framer-motion";
-import { BtnDot } from "../../../components/button-dot";
+import { BtnMenu } from "../../../components/button-menu";
+import { BtnMenuToggle } from "../../../components/button-menu-toggle";
 import { cls } from "../../../libs/utils";
 import {
   IViewOption,
@@ -57,7 +63,8 @@ export function TableHeader({ today, weeks }: TableNavProps) {
         </button>
 
         <div className="flex w-full items-center justify-end space-x-5">
-          <BtnDot
+          <BtnMenu
+            icon={<FontAwesomeIcon icon={faBan} />}
             enabled={viewOptions.seeCancel}
             label={"취소"}
             onClick={() => {
@@ -72,7 +79,8 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
           />
-          <BtnDot
+          <BtnMenu
+            icon={<FontAwesomeIcon icon={faCommentSlash} />}
             enabled={viewOptions.seeNoshow}
             label={"부도"}
             onClick={() => {
@@ -87,38 +95,23 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
           />
-          <BtnDot
+          <BtnMenuToggle
+            onClick={() => {
+              const newViewOptions: IViewOption = {
+                ...viewOptions,
+                periodToView:
+                  viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
+              };
+              localStorage.setItem(
+                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
+                JSON.stringify(newViewOptions)
+              );
+              viewOptionsVar(newViewOptions);
+            }}
             enabled={viewOptions.periodToView === ONE_WEEK}
-            label={"1주일"}
-            onClick={() => {
-              const newViewOptions: IViewOption = {
-                ...viewOptions,
-                periodToView:
-                  viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
-              };
-              localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-                JSON.stringify(newViewOptions)
-              );
-              viewOptionsVar(newViewOptions);
-            }}
+            label={["1주일", "하루"]}
           />
-          <BtnDot
-            enabled={viewOptions.periodToView === ONE_DAY}
-            label={"하루"}
-            onClick={() => {
-              const newViewOptions: IViewOption = {
-                ...viewOptions,
-                periodToView:
-                  viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
-              };
-              localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-                JSON.stringify(newViewOptions)
-              );
-              viewOptionsVar(newViewOptions);
-            }}
-          />
+          {/* ---------------------- 구분선 ---------------------- */}
           <FontAwesomeIcon
             icon={faCalendarAlt}
             fontSize={"large"}
@@ -170,7 +163,6 @@ export function TableHeader({ today, weeks }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
           />
-          {/* <TableClinicSelector /> */}
         </div>
       </div>
       <AnimatePresence>
