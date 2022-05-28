@@ -1,4 +1,4 @@
-import { Clinic, Member, MeQuery, User } from "../graphql/generated/graphql";
+import { Clinic, Member, User } from "../graphql/generated/graphql";
 import { ModifiedLoggedInUser } from "../hooks/useMe";
 import { ModifiedReservation } from "../pages/timetable/components/table-main";
 
@@ -157,6 +157,16 @@ export function getHHMM(inputDate: string | Date, seperator?: ":") {
   const mm = String(date.getMinutes()).padStart(2, "0");
   if (seperator === ":") return `${hh}:${mm}`;
   return `${hh}${mm}`;
+}
+
+export function combineYMDHM(YMDDate: Date, HMDate: Date) {
+  const year = YMDDate.getFullYear();
+  const month = YMDDate.getMonth();
+  const date = YMDDate.getDate();
+  const h = HMDate.getHours();
+  const m = HMDate.getMinutes();
+
+  return new Date(year, month, date, h, m);
 }
 
 export const getTimeLength = (startDate: Date, endDate: Date) => {

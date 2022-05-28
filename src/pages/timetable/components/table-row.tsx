@@ -1,5 +1,6 @@
 import { useReactiveVar } from "@apollo/client";
 import {
+  combineYMDHM,
   compareNumAfterGetMinutes,
   DayWithUsers,
   getHHMM,
@@ -16,7 +17,7 @@ interface TableRowProps {
 
 export function TableRow({ label, weekEvents }: TableRowProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
-
+  console.log(weekEvents);
   if (!weekEvents[0]) {
     // console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
     return <h2>Loading...</h2>;
@@ -56,7 +57,7 @@ export function TableRow({ label, weekEvents }: TableRowProps) {
               member.activation && (
                 <ReserveBtn
                   key={userIndex}
-                  label={label}
+                  label={combineYMDHM(day.date, label)}
                   userIndex={userIndex}
                   member={{ id: member.user.id, name: member.user.name }}
                 />
