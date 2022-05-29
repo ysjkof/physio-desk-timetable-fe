@@ -6,7 +6,7 @@ import {
 import { useReactiveVar } from "@apollo/client";
 import { selectedClinicVar } from "../../store";
 import { useListReservations } from "../../hooks/useListReservations";
-import { TimetableLayout } from "./components/table-layout";
+import { TimetableLayout } from "./table-layout";
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
 }

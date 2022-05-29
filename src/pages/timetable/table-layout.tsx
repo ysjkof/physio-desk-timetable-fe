@@ -1,16 +1,16 @@
 import { useReactiveVar } from "@apollo/client";
-import { ListReservationsQuery } from "../../../graphql/generated/graphql";
-import { ReservationCard } from "../reservation-card";
-import { todayNowVar, viewOptionsVar } from "../../../store";
-import { ModalPortal } from "../../../components/modal-portal";
-import { ReserveCard } from "../reserve-card";
-import { PrescriptionWithSelect } from "..";
+import { ListReservationsQuery } from "../../graphql/generated/graphql";
+import { ReservationCard } from "./reservation-card";
+import { todayNowVar, viewOptionsVar } from "../../store";
+import { ModalPortal } from "../../components/modal-portal";
+import { ReserveCard } from "./reserve-card";
+import { PrescriptionWithSelect } from ".";
 import { AnimatePresence, motion } from "framer-motion";
-import { TableHeader } from "./table-header";
+import { TableHeader } from "./components/table-header";
 import { useMatch, useNavigate } from "react-router-dom";
-import { TIMETABLE } from "../../../variables";
-import { TimetableMain } from "./table-main";
-import { TableClinicSelector } from "./table-clinic-selector";
+import { TIMETABLE } from "../../variables";
+import { TableMain } from "./components/table-main";
+import { TableClinicSelector } from "./components/table-clinic-selector";
 import { useEffect, useState } from "react";
 
 interface ITimetableProps {
@@ -29,27 +29,7 @@ export const TimetableLayout = ({
   const navigate = useNavigate();
   const today = useReactiveVar(todayNowVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
-  const [height, setHeight] = useState<number | null>(null);
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout | false = false;
-    function handleTableHeight() {
-      const headerElement = document.getElementById("header");
-      const tableHeaderElement = document.getElementById("table-header");
-      const height =
-        window.innerHeight -
-        headerElement?.offsetHeight! -
-        tableHeaderElement?.offsetHeight! -
-        40;
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        setHeight(height);
-      }, 200);
-    }
-    handleTableHeight();
-    window.addEventListener("resize", handleTableHeight);
-    return () => window.removeEventListener("resize", handleTableHeight);
-  }, []);
   if (!viewOptions) {
     return <></>;
   }
@@ -85,20 +65,12 @@ export const TimetableLayout = ({
       )}
       <motion.div
         animate={{ opacity: 1 }}
-        initial={{ opacity: 0 }}
-        transition={{
-          delay: 0.2,
-          duration: 0.4,
-        }}
-        className="timetable-layout-container text-xs"
+        className="timetable-layout-container text-xs opacity-0"
       >
         <TableHeader today={today} />
-        <div
-          className="table-main-container flex h-full"
-          style={{ height: height ? height : "80vh" }}
-        >
-          <TimetableMain eventsData={eventsData} />
+        <div className="flex">
           <AnimatePresence>
+            <TableMain eventsData={eventsData} />
             {viewOptions.seeActiveOption && <TableClinicSelector />}
           </AnimatePresence>
         </div>

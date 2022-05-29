@@ -29,10 +29,11 @@ import {
 } from "../../../store";
 import { TimeIndicatorBar } from "./time-indicator-bar";
 import { TableSubHeader } from "./table-sub-header";
-import { TableRow } from "./table-row";
 import { TableCols } from "./table-cols";
 import { motion } from "framer-motion";
 import { ONE_DAY, ONE_WEEK } from "../../../variables";
+import { TableRows } from "./table-rows";
+import { TableLabels } from "./table-labels";
 
 interface ITimetableProps {
   eventsData: ListReservationsQuery;
@@ -49,7 +50,7 @@ export interface ModifiedReservation
   prescriptions?: Pick<Prescription, "name">[] | null;
 }
 
-export const TimetableMain = ({ eventsData }: ITimetableProps) => {
+export const TableMain = ({ eventsData }: ITimetableProps) => {
   const today = useReactiveVar(todayNowVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
@@ -124,6 +125,28 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
     setPrevSelectedDate(selectedDate);
   }, [selectedDate]);
 
+  const [height, setHeight] = useState<number | null>(null);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | false = false;
+    function handleTableHeight() {
+      const headerElement = document.getElementById("header");
+      const tableHeaderElement = document.getElementById("table-header");
+      const height =
+        window.innerHeight -
+        headerElement?.offsetHeight! -
+        tableHeaderElement?.offsetHeight! -
+        40;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        setHeight(height);
+      }, 200);
+    }
+    handleTableHeight();
+    window.addEventListener("resize", handleTableHeight);
+    return () => window.removeEventListener("resize", handleTableHeight);
+  }, []);
+  console.log("메인");
   if (!weekEvents || !viewOptions) {
     return <h2>Loading...</h2>;
   }
@@ -136,27 +159,17 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
       {viewOptions.seeList === false && (
         <motion.div
           initial={{ y: 300 }}
-          animate={{
-            y: 0,
-            transition: { type: "tween", duration: 0.4 },
-          }}
+          animate={{ y: 0, transition: { duration: 0.4 } }}
           className="table-main relative h-full w-full overflow-scroll"
+          style={{ height: height ? height : "80vh" }}
+          layout
         >
           {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곳에서 동일하게 한다 */}
+          <TableLabels labels={labels} />
           <TableSubHeader weekEvents={optionalWeekEvents} />
-          <div className="body-table relative h-full">
-            <TimeIndicatorBar labels={labels} />
-            <div className="row-table absolute h-full w-full">
-              {labels.map((label) => (
-                <TableRow
-                  key={label.valueOf()}
-                  label={label}
-                  weekEvents={optionalWeekEvents}
-                />
-              ))}
-            </div>
-            <TableCols weekEvents={optionalWeekEvents} labels={labels} />
-          </div>
+          <TableRows labels={labels} weekEvents={optionalWeekEvents} />
+          <TableCols weekEvents={optionalWeekEvents} labels={labels} />
+          <TimeIndicatorBar labels={labels} />
         </motion.div>
       )}
       {viewOptions.seeList === true && "준비 중"}

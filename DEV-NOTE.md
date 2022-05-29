@@ -466,7 +466,7 @@ reserve-btn : 10
 time-indicator-bar : 20
 event-box : 30 { hover: 32 }
 table-sub-header : 31
-title-col in TableRow : 33
+table-labels : 33
 modal-portal : 40
 table-clinic-selector : 40
 dropdown menu in Header : 50(table-clinic-selector과 겹침)
