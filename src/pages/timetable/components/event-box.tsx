@@ -80,9 +80,7 @@ export function EventBox({
       <div className="h-5 overflow-hidden whitespace-nowrap text-base">
         {patientName}
         {registrationNumber && height !== "20px" && (
-          <span className="ml-1 text-sm text-gray-500">
-            {registrationNumber}
-          </span>
+          <span className="ml-1 text-sm opacity-50">{registrationNumber}</span>
         )}
       </div>
       {prescriptions && (

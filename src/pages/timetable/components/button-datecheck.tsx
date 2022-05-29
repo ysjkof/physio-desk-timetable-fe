@@ -3,8 +3,8 @@ import { cls } from "../../../libs/utils";
 interface IBtnDatecheck {
   text: string;
   day: number;
-  thisMonth: boolean;
-  selected?: boolean;
+  selectedMonth: boolean;
+  selectedDate?: boolean;
   onClick?: any;
   isSubheader?: boolean;
 }
@@ -13,17 +13,18 @@ interface IBtnDatecheck {
 export const BtnDatecheck = ({
   text,
   day,
-  thisMonth,
-  selected,
+  selectedMonth,
+  selectedDate,
   onClick,
   isSubheader,
 }: IBtnDatecheck) => (
   <button
     className={cls(
-      selected ? "btn-selected" : "",
-      day === 0 ? "text-red-600" : "",
-      day === 6 ? "text-blue-600" : "",
-      thisMonth ? "" : "opacity-40",
+      "mx-auto",
+      selectedDate ? "btn-selected" : "",
+      day === 0 ? "text-red-600 group-hover:text-red-400" : "",
+      day === 6 ? "text-blue-600 group-hover:text-blue-400" : "",
+      selectedMonth ? "" : "opacity-40",
       isSubheader ? "btn-ring-off w-full text-center" : "btn-border btn-sm"
     )}
     onClick={onClick}

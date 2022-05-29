@@ -20,6 +20,7 @@ export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
       setTop(Math.floor(nowTime * 2));
     }
   };
+
   useEffect(() => {
     setPosition();
     let id = setInterval(setPosition, 30000);
@@ -28,10 +29,10 @@ export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
   if (top === 0) return <></>;
   return (
     <div
-      className="time-indicator-bar group absolute z-20 flex w-full border-t border-red-500"
+      className="time-indicator-bar group pointer-events-none absolute z-20 flex w-full border-t border-red-500"
       style={{ top: `${top}px` }}
     >
-      <span className="mx-auto text-red-500 group-hover:hidden">
+      <span className="mx-auto text-red-500">
         {new Date().toLocaleString("ko-KR", {
           hour: "2-digit",
           minute: "2-digit",

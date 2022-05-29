@@ -4,15 +4,19 @@ import { selectedDateVar, viewOptionsVar } from "../../../store";
 import { BtnArrow } from "./button-arrow";
 import { BtnDatecheck } from "./button-datecheck";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { getSunday, getWeeks } from "../../../libs/timetable-utils";
 
 interface TableNavProps {
-  weeks: { date: Date }[];
   varients: any;
 }
 
-export function TableNav({ weeks, varients }: TableNavProps) {
+export function TableNav({ varients }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const selectedDate = useReactiveVar(selectedDateVar);
+  const [weeks, setWeeks] = useState<{ date: Date }[]>(
+    getWeeks(getSunday(selectedDate))
+  );
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
@@ -29,6 +33,8 @@ export function TableNav({ weeks, varients }: TableNavProps) {
     selectedDateVar(date);
   };
 
+  useEffect(() => setWeeks(getWeeks(getSunday(selectedDate))), [selectedDate]);
+
   return (
     <motion.div
       custom={false}
@@ -40,45 +46,31 @@ export function TableNav({ weeks, varients }: TableNavProps) {
       <div className="grid grid-cols-header">
         <div className="title-col" />
         {weeks.map((day, i) => (
-          <div
+          <BtnDatecheck
             key={i}
-            className={cls(
-              "mx-auto",
-              day.date.getDay() === 0
-                ? "text-red-600 group-hover:text-red-400"
-                : day.date.getDay() === 6
-                ? "text-blue-600 group-hover:text-blue-400"
-                : "text-gray-600 group-hover:text-gray-400",
-              selectedDate.getMonth() !== day.date.getMonth()
-                ? "opacity-40"
-                : ""
-            )}
-          >
-            <BtnDatecheck
-              text={
-                viewOptions.periodToView === 7
-                  ? day.date.toLocaleDateString("ko-KR", {
-                      month: "short",
-                      day: "numeric",
-                      weekday: "short",
-                    })
-                  : day.date.getDate() + ""
-              }
-              day={day.date.getDay()}
-              thisMonth={selectedDate.getMonth() === day.date.getMonth()}
-              selected={selectedDate.getDate() === day.date.getDate()}
-              onClick={() => {
-                // table-row의 요소를 불러와 스크롤 조절함
-                const el = document.getElementById(day.date + "");
-                el?.scrollIntoView({
-                  block: "center",
-                  inline: "center",
-                  behavior: "smooth",
-                });
-                selectedDateVar(day.date);
-              }}
-            />
-          </div>
+            text={
+              viewOptions.periodToView === 7
+                ? day.date.toLocaleDateString("ko-KR", {
+                    month: "short",
+                    day: "numeric",
+                    weekday: "short",
+                  })
+                : day.date.getDate() + ""
+            }
+            day={day.date.getDay()}
+            selectedMonth={selectedDate.getMonth() === day.date.getMonth()}
+            selectedDate={selectedDate.getDate() === day.date.getDate()}
+            onClick={() => {
+              // table-row의 요소를 불러와 스크롤 조절함
+              const el = document.getElementById(day.date + "");
+              el?.scrollIntoView({
+                block: "center",
+                inline: "center",
+                behavior: "smooth",
+              });
+              selectedDateVar(day.date);
+            }}
+          />
         ))}
         <div
           className={cls(

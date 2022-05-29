@@ -26,12 +26,10 @@ import { TableNav } from "./table-nav";
 import { TableNavExpand } from "./table-nav-expand";
 interface TableNavProps {
   today: Date;
-  weeks: { date: Date }[];
 }
 
-export function TableHeader({ today, weeks }: TableNavProps) {
+export function TableHeader({ today }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
-  const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
   const tableNavVarients = {
@@ -47,14 +45,15 @@ export function TableHeader({ today, weeks }: TableNavProps) {
         y: 0,
         transition: { type: "tween", duration: 0.4 },
       }}
-      className="container-header w-full"
+      id="table-header"
+      className="table-header w-full"
     >
       <div className="flex justify-between">
         <button
           className="min-w-[120px] text-sm font-medium text-gray-700 hover:font-bold"
           onClick={() => selectedDateVar(today)}
         >
-          {selectedDate.toLocaleString("ko-KR", {
+          {today.toLocaleString("ko-KR", {
             year: "2-digit",
             month: "short",
             day: "numeric",
@@ -169,7 +168,7 @@ export function TableHeader({ today, weeks }: TableNavProps) {
         {viewOptions.navigationExpand ? (
           <TableNavExpand varients={tableNavVarients} />
         ) : (
-          <TableNav weeks={weeks} varients={tableNavVarients} />
+          <TableNav varients={tableNavVarients} />
         )}
       </AnimatePresence>
     </motion.nav>

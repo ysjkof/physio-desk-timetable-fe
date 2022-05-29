@@ -40,15 +40,11 @@ export const TimeTable = () => {
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      <div className="container mx-auto h-full">
-        <div className="relative h-[1050px]">
-          <TimetableLayout
-            prescriptions={prescriptions}
-            refetch={refetch}
-            eventsData={data}
-          />
-        </div>
-      </div>
+      <TimetableLayout
+        prescriptions={prescriptions}
+        refetch={refetch}
+        eventsData={data}
+      />
     </>
   );
 };

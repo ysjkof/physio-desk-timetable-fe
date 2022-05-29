@@ -57,7 +57,7 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
   const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
-  const [weekEvents, setWeekEvents] = useState<DayWithUsers[]>([]);
+  const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
 
   const labels = getTimeGaps(
@@ -124,15 +124,13 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
     setPrevSelectedDate(selectedDate);
   }, [selectedDate]);
 
-  if (!viewOptions) {
-    return <></>;
+  if (!weekEvents || !viewOptions) {
+    return <h2>Loading...</h2>;
   }
-
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
       ? [weekEvents[selectedDate.getDay()]]
       : weekEvents;
-
   return (
     <>
       {viewOptions.seeList === false && (
@@ -142,9 +140,9 @@ export const TimetableMain = ({ eventsData }: ITimetableProps) => {
             y: 0,
             transition: { type: "tween", duration: 0.4 },
           }}
-          className="relative h-full w-full overflow-scroll"
+          className="table-main relative h-full w-full overflow-scroll"
         >
-          {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곡에서 동일하게 한다 */}
+          {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곳에서 동일하게 한다 */}
           <TableSubHeader weekEvents={optionalWeekEvents} />
           <div className="body-table relative h-full">
             <TimeIndicatorBar labels={labels} />

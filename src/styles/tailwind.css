@@ -67,10 +67,10 @@
   @apply bg-[#e3d5ca] ring-gray-600;
 }
 .noshow-color {
-  @apply bg-[#edece9] ring-[#aaaaaa];
+  @apply bg-[#edece9] text-gray-500/50 ring-[#aaaaaa];
 }
 .cancel-color {
-  @apply bg-[#FEF2F2] ring-[#FCA5A5];
+  @apply bg-[#FEF2F2] text-gray-500/50 ring-[#FCA5A5];
 }
 .bubble-apear {
   @apply transition-opacity delay-200 duration-200 ease-in;

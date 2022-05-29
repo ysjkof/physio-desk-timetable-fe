@@ -9,12 +9,12 @@ export const BtnMenuToggle = ({
   label,
   onClick,
 }: BtnMenuToggleProps) => (
-  <div className="btn-menu rounded-md border" onClick={onClick}>
+  <button className="btn-menu rounded-md border" onClick={onClick}>
     <span className={`${enabled ? "btn-menu-true" : "btn-menu-false"}`}>
       {label[0]}
     </span>
     <span className={`${!enabled ? "btn-menu-true" : "btn-menu-false"}`}>
       {label[1]}
     </span>
-  </div>
+  </button>
 );

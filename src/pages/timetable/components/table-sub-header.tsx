@@ -16,10 +16,7 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
-  if (!weekEvents[0]) {
-    // console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
-    return <h2>Loading...</h2>;
-  }
+
   const userLength = weekEvents[0].users.length;
   return (
     <div
@@ -48,8 +45,8 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
               weekday: "short",
             })}
             day={day.date.getDay()}
-            thisMonth={selectedDate.getMonth() === day.date.getMonth()}
-            selected={selectedDate.getDate() === day.date.getDate()}
+            selectedMonth={selectedDate.getMonth() === day.date.getMonth()}
+            selectedDate={selectedDate.getDate() === day.date.getDate()}
             isSubheader
           />
           <div className="mt-1.5 flex">

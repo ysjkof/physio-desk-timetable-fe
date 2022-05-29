@@ -15,12 +15,8 @@ interface TableColsProps {
 }
 export function TableCols({ weekEvents, labels }: TableColsProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
-
-  if (!weekEvents[0]) {
-    // console.log("❌ weekEvents[0]가 false입니다 : ", weekEvents);
-    return <h2>Loading...</h2>;
-  }
   const userLength = weekEvents[0].users.length;
+
   return (
     <div
       className={cls("col-table absolute grid h-full w-full")}

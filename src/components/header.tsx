@@ -177,7 +177,7 @@ export const Header = () => {
           <span>Please verify your email.</span>
         </div>
       )} */}
-      <header className="mb-2 border-b py-1">
+      <header className="mb-2 border-b py-1" id="header">
         <div className="container mx-auto flex w-full items-center justify-between space-x-4 px-5  xl:px-0">
           <div className="flex w-full items-center gap-10">
             <Link to="/">
