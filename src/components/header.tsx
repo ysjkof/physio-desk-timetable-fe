@@ -134,11 +134,10 @@ export const Header = () => {
               const sameMember = existLocalClinic.members.find(
                 (lgm) => lgm.id === gm.id
               );
-              if (sameMember) {
-                return sameMember;
-              } else {
-                return gm;
-              }
+              return {
+                ...gm,
+                ...(sameMember && { activation: sameMember.activation }),
+              };
             }),
           };
         } else {
