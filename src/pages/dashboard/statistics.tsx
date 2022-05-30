@@ -13,6 +13,7 @@ import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
 import { InDashboardPageProps } from ".";
 import { useEffect, useState } from "react";
 import { DashboardBtn } from "./components/button";
+import { DashboardMainLayout } from "./components/dashboard-main-layout";
 
 interface UserStatis {
   name: string;
@@ -198,9 +199,9 @@ export const Statistics = ({
   }, [dataStatistics]);
 
   return (
-    <div className="">
+    <>
       <DashboardTitle name={name} subText="의 처방" />
-      <div className="space-y-16">
+      <DashboardMainLayout>
         <section className="date-picker">
           <form onSubmit={handleSubmit(onSubmit)}>
             <DashboardSectionLayout
@@ -282,7 +283,7 @@ export const Statistics = ({
                   </div>
                 </h3>
 
-                <div className="grid min-h-[16rem] grid-flow-col gap-10 px-4 pt-6">
+                <div className="grid min-h-[16rem] grid-cols-2 gap-10 px-4 pt-6">
                   {userStatis.map((user, idx) => (
                     <div key={idx} className="flex flex-col">
                       <h4 className="mb-4 text-center">{user.name}</h4>
@@ -436,7 +437,7 @@ export const Statistics = ({
             }
           />
         </section>
-      </div>
-    </div>
+      </DashboardMainLayout>
+    </>
   );
 };

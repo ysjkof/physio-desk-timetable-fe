@@ -1,4 +1,5 @@
 import { useFindMyClinicsQuery } from "../../graphql/generated/graphql";
+import { DashboardMainLayout } from "./components/dashboard-main-layout";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
@@ -9,12 +10,12 @@ export const InactivatedClinic = () => {
 
   if (loading) return <></>;
   return (
-    <div className="h-full">
+    <>
       <DashboardTitle
         name="비활성 모임 조회"
         subText="비활성한 모임을 조회합니다."
       />
-      <div className="space-y-16">
+      <DashboardMainLayout>
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="조회"
@@ -39,7 +40,7 @@ export const InactivatedClinic = () => {
             }
           />
         </section>
-      </div>
-    </div>
+      </DashboardMainLayout>
+    </>
   );
 };

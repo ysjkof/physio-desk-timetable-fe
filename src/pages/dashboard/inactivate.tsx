@@ -1,5 +1,6 @@
 import { InDashboardPageProps } from ".";
 import { useInactivateClinicMutation } from "../../graphql/generated/graphql";
+import { DashboardMainLayout } from "./components/dashboard-main-layout";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
@@ -25,9 +26,9 @@ export const InactivateClinic = ({
   };
 
   return (
-    <div className="h-full">
+    <>
       <DashboardTitle name={name} subText="모임을 비활성합니다" />
-      <div className="space-y-16">
+      <DashboardMainLayout>
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="병원 비활성"
@@ -50,7 +51,7 @@ export const InactivateClinic = ({
             }
           />
         </section>
-      </div>
-    </div>
+      </DashboardMainLayout>
+    </>
   );
 };

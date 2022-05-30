@@ -1,6 +1,7 @@
 import { InDashboardPageProps } from ".";
 import { useAcceptInvitationMutation } from "../../graphql/generated/graphql";
 import { cls } from "../../libs/utils";
+import { DashboardMainLayout } from "./components/dashboard-main-layout";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
 
@@ -26,9 +27,9 @@ export const Members = ({
   }
 
   return (
-    <div className="h-full">
+    <>
       <DashboardTitle name={name} subText="의 구성원" />
-      <div className="space-y-16">
+      <DashboardMainLayout>
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="구성원"
@@ -86,7 +87,7 @@ export const Members = ({
             }
           />
         </section>
-      </div>
-    </div>
+      </DashboardMainLayout>
+    </>
   );
 };

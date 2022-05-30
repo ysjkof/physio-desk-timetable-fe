@@ -17,6 +17,7 @@ import { DashboardBtn } from "./components/button";
 import { DashboardTitle } from "./components/title";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { InDashboardPageProps } from ".";
+import { DashboardMainLayout } from "./components/dashboard-main-layout";
 
 export const PrescriptionPage = ({
   id,
@@ -108,9 +109,9 @@ export const PrescriptionPage = ({
   }, [findAtomPrescriptions]);
 
   return (
-    <div className="h-full">
+    <>
       <DashboardTitle name={name} subText="의 처방" />
-      <div className="space-y-16">
+      <DashboardMainLayout>
         <section className="flex h-[15.7rem] gap-4">
           <DashboardSectionLayout
             isPadding={true}
@@ -335,7 +336,7 @@ export const PrescriptionPage = ({
             }
           />
         </section>
-      </div>
-    </div>
+      </DashboardMainLayout>
+    </>
   );
 };

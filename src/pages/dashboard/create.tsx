@@ -4,6 +4,7 @@ import {
   useCreateClinicMutation,
 } from "../../graphql/generated/graphql";
 import { DashboardBtn } from "./components/button";
+import { DashboardMainLayout } from "./components/dashboard-main-layout";
 import { InputPriscription } from "./components/input-priscription";
 import { DashboardSectionLayout } from "./components/section-layout";
 import { DashboardTitle } from "./components/title";
@@ -28,9 +29,9 @@ export const CreateClinic = () => {
   };
 
   return (
-    <div className="h-full">
+    <>
       <DashboardTitle name="병원 만들기" subText="새롭게 모임을 만듭니다" />
-      <div>
+      <DashboardMainLayout>
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             width="md"
@@ -57,7 +58,7 @@ export const CreateClinic = () => {
             }
           />
         </section>
-      </div>
-    </div>
+      </DashboardMainLayout>
+    </>
   );
 };
