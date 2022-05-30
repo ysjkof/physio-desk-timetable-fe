@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 
 interface ITimeIndicatorBarProps {
   labels: Date[];
+  isActive: boolean;
 }
 
-export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
+export const TimeIndicatorBar = ({
+  labels,
+  isActive,
+}: ITimeIndicatorBarProps) => {
   const [top, setTop] = useState<number>();
   const startTime = labels[0].getTime() / 1000 / 60;
   const endTime = labels[labels.length - 1].getTime() / 1000 / 60;
@@ -29,15 +33,17 @@ export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
   if (top === 0 || typeof top !== "number") return <></>;
   return (
     <div
-      className="time-indicator-bar group pointer-events-none absolute left-10 z-20 flex w-full border-t border-red-500"
+      className="time-indicator-bar group pointer-events-none absolute z-20 flex w-full border-t border-red-500"
       style={{ top: `${top + 50}px` }}
     >
-      <span className="mx-auto text-red-500">
-        {new Date().toLocaleString("ko-KR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </span>
+      {isActive && (
+        <span className="mx-auto text-red-500">
+          {new Date().toLocaleString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+      )}
     </div>
   );
 };

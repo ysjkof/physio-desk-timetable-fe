@@ -27,7 +27,6 @@ import {
   selectedDateVar,
   loggedInUserVar,
 } from "../../../store";
-import { TimeIndicatorBar } from "./time-indicator-bar";
 import { TableSubHeader } from "./table-sub-header";
 import { TableCols } from "./table-cols";
 import { motion } from "framer-motion";
@@ -169,7 +168,6 @@ export const TableMain = ({ eventsData }: ITimetableProps) => {
           <TableSubHeader weekEvents={optionalWeekEvents} />
           <TableRows labels={labels} weekEvents={optionalWeekEvents} />
           <TableCols weekEvents={optionalWeekEvents} labels={labels} />
-          <TimeIndicatorBar labels={labels} />
         </motion.div>
       )}
       {viewOptions.seeList === true && "준비 중"}
