@@ -26,11 +26,11 @@ export const TimeIndicatorBar = ({ labels }: ITimeIndicatorBarProps) => {
     let id = setInterval(setPosition, 30000);
     return () => clearInterval(id);
   }, []);
-  if (top === 0) return <></>;
+  if (top === 0 || typeof top !== "number") return <></>;
   return (
     <div
-      className="time-indicator-bar group pointer-events-none absolute z-20 flex w-full border-t border-red-500"
-      style={{ top: `${top}px` }}
+      className="time-indicator-bar group pointer-events-none absolute left-10 z-20 flex w-full border-t border-red-500"
+      style={{ top: `${top + 50}px` }}
     >
       <span className="mx-auto text-red-500">
         {new Date().toLocaleString("ko-KR", {

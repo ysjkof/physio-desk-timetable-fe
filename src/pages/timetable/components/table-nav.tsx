@@ -44,7 +44,6 @@ export function TableNav({ varients }: TableNavProps) {
       className="my-4 w-full pb-4 shadow-b"
     >
       <div className="grid grid-cols-header">
-        <div className="title-col" />
         {weeks.map((day, i) => (
           <BtnDatecheck
             key={i}
