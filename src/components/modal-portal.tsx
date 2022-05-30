@@ -17,11 +17,9 @@ export const ModalPortal = ({
   const container = document.getElementById("root") as HTMLElement;
 
   return createPortal(
-    <div className="modal fixed top-0 left-0 z-40 h-full w-full">
+    <div className="modal-parents">
       <div
-        className={`modal-background absolute h-full w-full ${
-          top ?? "bg-black opacity-50"
-        }`}
+        className={`modal-background ${top && "bg-transparent opacity-100"}`}
         onClick={() => closeAction(false)}
       />
       <div

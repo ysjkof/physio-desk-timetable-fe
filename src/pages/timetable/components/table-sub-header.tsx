@@ -1,6 +1,7 @@
 import { useReactiveVar } from "@apollo/client";
-import { DayWithUsers } from "../../../libs/timetable-utils";
+import { compareDateMatch, DayWithUsers } from "../../../libs/timetable-utils";
 import { loggedInUserVar, selectedDateVar } from "../../../store";
+import { SCROLL_ADRESS } from "../../../variables";
 import { BtnDatecheck } from "./button-datecheck";
 import { TableLoopLayout } from "./table-loop-layout";
 import { TableMainComponentLayout } from "./table-main-component-layout";
@@ -20,7 +21,11 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
           userLength={userLength}
           children={weekEvents.map((day, i) => (
             // id={day.date + ""}로 table-nav에서 스크롤 조정함
-            <div key={i} className="relative flex bg-white" id={day.date + ""}>
+            <div
+              key={i}
+              className="relative flex bg-white"
+              id={`${SCROLL_ADRESS + day.date}`}
+            >
               <BtnDatecheck
                 text={day.date.toLocaleDateString("ko-KR", {
                   month: "short",
@@ -28,9 +33,19 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
                   weekday: "short",
                 })}
                 day={day.date.getDay()}
-                selectedMonth={selectedDate.getMonth() === day.date.getMonth()}
-                selectedDate={selectedDate.getDate() === day.date.getDate()}
+                selectedMonth={compareDateMatch(selectedDate, day.date, "ym")}
+                isToday={compareDateMatch(selectedDate, day.date, "ymd")}
                 isSubheader
+                onClick={() => {
+                  // table-row의 요소를 불러와 스크롤 조절함
+                  const el = document.getElementById(SCROLL_ADRESS + day.date);
+                  el?.scrollIntoView({
+                    block: "center",
+                    inline: "center",
+                    behavior: "smooth",
+                  });
+                  selectedDateVar(day.date);
+                }}
               />
             </div>
           ))}
@@ -38,14 +53,16 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
         <TableLoopLayout
           userLength={userLength}
           children={weekEvents.map((day, i) => (
-            // id={day.date + ""}로 table-nav에서 스크롤 조정함
-            <div key={i} className="relative flex shadow-b" id={day.date + ""}>
+            <div
+              key={i}
+              className="relative flex items-center bg-white shadow-b"
+            >
               {day?.users.map(
                 (member, userIndex) =>
                   member.activation && (
                     <span
                       key={member.id}
-                      className={`w-full py-1 text-center first:border-l-0 ${
+                      className={`flex h-full w-full items-center justify-center first:border-l-0 ${
                         member.user.name === loggedInUser?.name
                           ? "font-semibold"
                           : ""
@@ -61,8 +78,7 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
                           : userIndex === 4
                           ? "user-color-5"
                           : ""
-                      }
-        `}
+                      }`}
                     >
                       {member.user.name}
                     </span>

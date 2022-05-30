@@ -3,9 +3,12 @@ import { motion } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
 import { ReservationState } from "../../../graphql/generated/graphql";
 import { getHHMM } from "../../../libs/timetable-utils";
-import { cls } from "../../../libs/utils";
 import { viewOptionsVar } from "../../../store";
-import { RESERVE_DETAIL, RESERVE_EDIT } from "../../../variables";
+import {
+  RESERVE_DETAIL,
+  RESERVE_EDIT,
+  TABLE_CELL_HEIGHT,
+} from "../../../variables";
 interface EventBoxProps {
   reservationId: number;
   userIndex: number;
@@ -44,11 +47,12 @@ export function EventBox({
       onClick={() =>
         isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
       }
-      className={cls(
-        "group absolute z-30 mx-0.5 cursor-pointer px-1 ring-1",
-        height === "20px"
-          ? "grid grid-cols-2"
-          : "grid grid-rows-[20px,20px,1fr]",
+      className={`group absolute z-30 mx-0.5 grid cursor-pointer items-center justify-center px-1 ring-1 ${
+        height === TABLE_CELL_HEIGHT + "px"
+          ? "grid-cols-2"
+          : `grid-rows-[${TABLE_CELL_HEIGHT + "px"},
+              ${TABLE_CELL_HEIGHT + "px"},1fr]`
+      } ${
         userIndex === 0
           ? "user-color-1"
           : userIndex === 1
@@ -59,38 +63,42 @@ export function EventBox({
           ? "user-color-4"
           : userIndex === 4
           ? "user-color-5"
-          : "",
+          : ""
+      } ${
         !viewOptions.seeCancel && reservationState === ReservationState.Canceled
           ? "hidden"
           : !viewOptions.seeNoshow &&
             reservationState === ReservationState.NoShow
           ? "hidden"
-          : "",
-        reservationState === ReservationState.NoShow
-          ? "noshow-color"
-          : reservationState === ReservationState.Canceled
-          ? "cancel-color"
           : ""
-      )}
+      } ${
+        reservationState === ReservationState.NoShow
+          ? "noshow"
+          : reservationState === ReservationState.Canceled
+          ? "cancel"
+          : ""
+      }`}
       style={{
         inset,
         height,
       }}
     >
-      <div className="h-5 overflow-hidden whitespace-nowrap">
+      <div className="h-5 overflow-hidden whitespace-nowrap text-center">
         {patientName}
-        {registrationNumber && height !== "20px" && (
+        {registrationNumber && height !== TABLE_CELL_HEIGHT + "px" && (
           <span className="ml-1 opacity-50">{registrationNumber}</span>
         )}
       </div>
       {prescriptions && (
-        <div className="h-5 overflow-hidden">
+        <div className="h-5 overflow-hidden text-center">
           {prescriptions.map((prescription) => prescription.name)}
         </div>
       )}
-      {memo && height !== "20px" && height !== "40px" && (
-        <div className="h-full overflow-hidden break-all pt-1">{memo}</div>
-      )}
+      {memo &&
+        (height !== TABLE_CELL_HEIGHT + "px" ||
+          height !== TABLE_CELL_HEIGHT * 2 + "px") && (
+          <div className="h-full overflow-hidden break-all pt-1">{memo}</div>
+        )}
       <p className="bubble-arrow-t-center bubble-apear invisible absolute -bottom-16 right-1/2 w-32 translate-x-1/2 rounded-md bg-black py-4 text-center text-white opacity-0 group-hover:visible group-hover:opacity-100">
         {`${getHHMM(startDate, ":")} ~ ${getHHMM(endDate, ":")}`}
       </p>

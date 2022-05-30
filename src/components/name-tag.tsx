@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getYMD } from "../libs/timetable-utils";
 import { cls } from "../libs/utils";
 import { SelectedPatient, selectedPatientVar } from "../store";
+import { TABLE_CELL_HEIGHT } from "../variables";
 
 export interface INameTagProps extends SelectedPatient {
   canClick?: boolean;

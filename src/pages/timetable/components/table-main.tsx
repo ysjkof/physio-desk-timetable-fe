@@ -158,10 +158,9 @@ export const TableMain = ({ eventsData }: ITimetableProps) => {
       {viewOptions.seeList === false && (
         <motion.div
           initial={{ y: 300 }}
-          animate={{ y: 0, transition: { duration: 0.4 } }}
-          className="table-main relative h-full w-full overflow-scroll"
+          animate={{ y: 0, transition: { duration: 0.3 } }}
+          className="table-main"
           style={{ height: height ? height : "80vh" }}
-          // layout
         >
           {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곳에서 동일하게 한다 */}
           <TableLabels labels={labels} />

@@ -1,19 +1,18 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { cls } from "../../../libs/utils";
+import { NEXT, PREV } from "../../../variables";
 
-interface IBtnArrow {
-  direction: "prev" | "after";
-  onClick?: any;
+interface BtnArrowProps {
+  direction: typeof PREV | typeof NEXT;
+  onClick: any;
 }
 
-// FC = Functional Component
-export const BtnArrow: React.FC<IBtnArrow> = ({ direction, onClick }) => (
-  <button className={cls("btn-sm btn-border")} onClick={onClick}>
-    {direction === "prev" ? (
-      <FontAwesomeIcon icon={faArrowLeft} />
+export const BtnArrow = ({ direction, onClick }: BtnArrowProps) => (
+  <button className="btn-menu rounded-md border bg-white p-1" onClick={onClick}>
+    {direction === PREV ? (
+      <FontAwesomeIcon icon={faArrowLeft} fontSize={20} />
     ) : (
-      <FontAwesomeIcon icon={faArrowRight} />
+      <FontAwesomeIcon icon={faArrowRight} fontSize={20} />
     )}
   </button>
 );

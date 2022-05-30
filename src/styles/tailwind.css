@@ -1,12 +1,59 @@
 @tailwind base;
 @tailwind components;
+@tailwind utilities;
+
+@layer base {
+  input:checked + label {
+    @apply rounded-md bg-white font-semibold text-blue-800;
+  }
+}
+
+@layer components {
+  .header {
+    @apply flex items-center border-b text-sm;
+  }
+  .header-title {
+    @apply text-2xl font-black;
+  }
+  .header-search {
+    @apply w-full appearance-none rounded-md border border-gray-300 px-5 font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
+  }
+  .sunday {
+    @apply text-red-600;
+  }
+  .saturday {
+    @apply text-blue-600;
+  }
+  .table-header {
+    @apply flex h-10 w-full justify-between px-2;
+  }
+  .table-nav {
+    @apply relative flex py-2 px-2;
+  }
+  .table-main {
+    @apply relative h-full w-full overflow-scroll;
+  }
+
+  .btn-menu {
+    @apply relative space-x-4 rounded-md px-1.5 py-1 tracking-widest hover:bg-gray-200;
+  }
+  .font-semibold-ring {
+    @apply scale-110 font-semibold ring-2 ring-blue-500;
+  }
+
+  .reserve-btn {
+    @apply invisible mx-auto flex flex-col whitespace-nowrap bg-gradient-to-r from-sky-500 to-indigo-500 px-0.5 text-center  font-medium text-white shadow hover:cursor-pointer group-hover:visible;
+  }
+  .modal-parents {
+    @apply fixed top-0 left-0 z-40 h-screen w-screen;
+  }
+  .modal-background {
+    @apply absolute h-full w-full bg-black/50;
+  }
+}
 
 .input {
   @apply w-full appearance-none rounded-md border border-gray-300 py-2 px-5 font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
-}
-
-.input-search {
-  @apply w-full appearance-none rounded-md border border-gray-300 px-5 font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
 }
 
 .search-result {
@@ -15,24 +62,6 @@
 
 .input-number {
   @apply w-full rounded-md border border-gray-300 pr-6 text-right  font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
-}
-
-.btn {
-  @apply cursor-pointer;
-}
-
-.btn-sm {
-  @apply px-1  text-gray-700 hover:font-bold;
-}
-
-.btn-border {
-  @apply rounded-md ring-1 ring-gray-400;
-}
-.btn-selected {
-  @apply font-extrabold ring-2 ring-violet-500;
-}
-.btn-ring-off {
-  @apply ring-0;
 }
 
 .seperate-bar {
@@ -51,44 +80,38 @@
 .bubble-arrow-t-2-5 {
   @apply cursor-pointer after:absolute after:bottom-full after:left-[19.5%] after:border-8  after:border-b-black after:border-t-transparent after:border-l-transparent after:border-r-transparent;
 }
-.user-color-1 {
-  @apply bg-[#CCD5AE] ring-gray-600;
-}
-.user-color-2 {
-  @apply bg-[#E9EDC9] ring-gray-600;
-}
-.user-color-3 {
-  @apply bg-[#FEFAE0] ring-gray-600;
-}
-.user-color-4 {
-  @apply bg-[#FAEDCD] ring-gray-600;
-}
-.user-color-5 {
-  @apply bg-[#e3d5ca] ring-gray-600;
-}
-.noshow-color {
-  @apply bg-[#edece9] text-gray-500/50 ring-[#aaaaaa];
-}
-.cancel-color {
-  @apply bg-[#FEF2F2] text-gray-500/50 ring-[#FCA5A5];
-}
+
 .bubble-apear {
   @apply transition-opacity delay-200 duration-200 ease-in;
 }
 .dot {
   @apply after:absolute after:-bottom-1.5 after:left-1/2 after:mx-auto after:block after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-green-500;
 }
-.btn-menu {
-  @apply relative space-x-4 px-1  tracking-widest hover:rounded-md hover:bg-gray-200;
-}
-.btn-menu-true {
-  @apply font-semibold text-gray-700;
-}
-.btn-menu-false {
-  @apply scale-90 text-gray-400;
-}
-@tailwind utilities;
 
-input:checked + label {
-  @apply rounded-md bg-white font-semibold text-blue-800;
+@layer utilities {
+  .position-center {
+    @apply left-1/2 -translate-x-1/2;
+  }
+
+  .user-color-1 {
+    @apply bg-[#CCD5AE] ring-gray-600;
+  }
+  .user-color-2 {
+    @apply bg-[#E9EDC9] ring-gray-600;
+  }
+  .user-color-3 {
+    @apply bg-[#FEFAE0] ring-gray-600;
+  }
+  .user-color-4 {
+    @apply bg-[#FAEDCD] ring-gray-600;
+  }
+  .user-color-5 {
+    @apply bg-[#e3d5ca] ring-gray-600;
+  }
+  .noshow {
+    @apply bg-[#edece9] text-gray-500/50 ring-[#aaaaaa];
+  }
+  .cancel {
+    @apply bg-[#FEF2F2] text-gray-500/50 ring-[#FCA5A5];
+  }
 }

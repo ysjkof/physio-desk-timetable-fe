@@ -33,9 +33,9 @@ export function EventLi({
           ? "opacity-60"
           : "",
         reservationState === ReservationState.NoShow
-          ? "noshow-color"
+          ? "noshow"
           : reservationState === ReservationState.Canceled
-          ? "cancel-color"
+          ? "cancel"
           : ""
       )}
     >

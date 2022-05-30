@@ -5,9 +5,9 @@ import {
   compareDateMatch,
   getWeeksOfMonth,
 } from "../../../libs/timetable-utils";
-import { cls } from "../../../libs/utils";
 import { selectedDateVar } from "../../../store";
-import { MoveXBtn } from "./move-x-btn";
+import { NEXT, PREV } from "../../../variables";
+import { BtnArrow } from "./button-arrow";
 
 interface TableNavExpandProps {
   varients: any;
@@ -16,18 +16,19 @@ interface TableNavExpandProps {
 export function TableNavExpand({ varients }: TableNavExpandProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const [daysOfMonths, setDaysOfMonths] = useState<
-    [{ date: Date }[], { prevMonth: Date; nowMonth: Date; nextMonth: Date }]
+    [{ date: Date }[], { prev: Date; thisMonth: Date; next: Date }]
   >([getWeeksOfMonth(selectedDate), getThreeDate(selectedDate)]);
 
   function getThreeDate(date: Date) {
     const prevMonth = new Date(date);
-    const nowMonth = new Date(date);
+    const thisMonth = new Date(date);
     const nextMonth = new Date(date);
     prevMonth.setMonth(prevMonth.getMonth() - 1);
     nextMonth.setMonth(nextMonth.getMonth() + 1);
-    return { prevMonth, nowMonth, nextMonth };
+    return { prev: prevMonth, thisMonth, next: nextMonth };
   }
-  const onClickMoveX = (option: "prevMonth" | "nextMonth") => {
+
+  const onClickMoveX = (option: typeof PREV | typeof NEXT) => {
     const months = getWeeksOfMonth(daysOfMonths[1][option]);
     const threeDate = getThreeDate(daysOfMonths[1][option]);
     setDaysOfMonths([months, threeDate]);
@@ -35,50 +36,46 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
 
   return (
     <motion.div
-      className="relative my-4 flex items-center justify-between pb-4 pt-8 shadow-b"
+      className="table-nav pt-6"
       custom={true}
       variants={varients}
       initial="ini"
       animate="start"
     >
-      <span className="pointer-events-none absolute -top-1 mx-auto w-full text-center">
+      <span className="position-center pointer-events-none absolute -top-1 text-base font-semibold">
         {daysOfMonths[0][7].date.getMonth() + 1}월
       </span>
-      <MoveXBtn direction={"prev"} onClick={() => onClickMoveX("prevMonth")} />
-      <div className="grid w-full grid-cols-7">
+      <BtnArrow direction={PREV} onClick={() => onClickMoveX(PREV)} />
+      <div className="grid w-full grid-cols-7 gap-x-4">
         {daysOfMonths[0].map((day, i) => (
           <div
             key={i}
             onClick={() => selectedDateVar(day.date)}
-            className={cls(
-              "flex w-full cursor-pointer flex-col border-b-2 text-center hover:border-b-inherit hover:font-extrabold ",
+            className={`btn-menu cursor-pointer py-0.5 text-center ${
               compareDateMatch(day.date, selectedDate, "ymd")
-                ? "border-sky-400 font-bold"
-                : "border-transparent"
-            )}
+                ? "font-semibold-ring"
+                : ""
+            }`}
           >
             <span
-              className={cls(
-                "rounded-full",
+              className={`${
                 day.date.getDay() === 0
-                  ? "text-red-600"
+                  ? "sunday"
                   : day.date.getDay() === 6
-                  ? "text-blue-600"
-                  : "",
-                selectedDate.getDate() === day.date.getDate()
-                  ? "scale-110 opacity-100"
-                  : "opacity-80",
-                daysOfMonths[0][7].date.getMonth() !== day.date.getMonth()
-                  ? "opacity-30"
+                  ? "saturday"
                   : ""
-              )}
+              } ${
+                compareDateMatch(selectedDate, day.date, "ym")
+                  ? ""
+                  : "opacity-50"
+              }`}
             >
               {day.date.getDate()}
             </span>
           </div>
         ))}
       </div>
-      <MoveXBtn direction={"after"} onClick={() => onClickMoveX("nextMonth")} />
+      <BtnArrow direction={NEXT} onClick={() => onClickMoveX(NEXT)} />
     </motion.div>
   );
 }

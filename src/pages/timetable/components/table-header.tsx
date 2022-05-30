@@ -32,145 +32,126 @@ export function TableHeader({ today }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
-  const tableNavVarients = {
-    ini: (isUp: boolean) => ({ y: isUp ? -5 : 5 }),
-    start: { y: 0, transition: { type: "tween", duration: 0.4 } },
-  };
-
   if (!loggedInUser || !viewOptions) return <></>;
   return (
-    <motion.nav
-      initial={{ y: -20 }}
-      animate={{
-        y: 0,
-        transition: { type: "tween", duration: 0.4 },
-      }}
+    <motion.div
+      // initial={{ y: -20 }}
+      // animate={{
+      //   y: 0,
+      //   transition: { type: "tween", duration: 0.3 },
+      // }}
       id="table-header"
-      className="table-header w-full"
+      className="table-header"
     >
-      <div className="flex justify-between">
-        <button
-          className="min-w-[120px] font-medium  hover:font-bold"
-          onClick={() => selectedDateVar(today)}
-        >
-          {today.toLocaleString("ko-KR", {
-            year: "2-digit",
-            month: "short",
-            day: "numeric",
-            weekday: "short",
-          })}
-        </button>
+      <button
+        className="min-w-[120px] font-medium  hover:font-bold"
+        onClick={() => selectedDateVar(today)}
+      >
+        {today.toLocaleString("ko-KR", {
+          year: "2-digit",
+          month: "short",
+          day: "numeric",
+          weekday: "short",
+        })}
+      </button>
 
-        <div className="flex w-full items-center justify-end space-x-5">
-          <BtnMenu
-            icon={<FontAwesomeIcon icon={faBan} />}
-            enabled={viewOptions.seeCancel}
-            label={"취소"}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions,
-                seeCancel: !viewOptions.seeCancel,
-              };
-              localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-                JSON.stringify(newViewOptions)
-              );
-              viewOptionsVar(newViewOptions);
-            }}
-          />
-          <BtnMenu
-            icon={<FontAwesomeIcon icon={faCommentSlash} />}
-            enabled={viewOptions.seeNoshow}
-            label={"부도"}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions,
-                seeNoshow: !viewOptions.seeNoshow,
-              };
-              localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-                JSON.stringify(newViewOptions)
-              );
-              viewOptionsVar(newViewOptions);
-            }}
-          />
-          <BtnMenuToggle
-            onClick={() => {
-              const newViewOptions: IViewOption = {
-                ...viewOptions,
-                periodToView:
-                  viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
-              };
-              localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-                JSON.stringify(newViewOptions)
-              );
-              viewOptionsVar(newViewOptions);
-            }}
-            enabled={viewOptions.periodToView === ONE_WEEK}
-            label={["1주일", "하루"]}
-          />
-          {/* ---------------------- 구분선 ---------------------- */}
-          <FontAwesomeIcon
-            icon={faCalendarAlt}
-            fontSize={"large"}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions,
-                navigationExpand: !viewOptions.navigationExpand,
-              };
-              localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-                JSON.stringify(newViewOptions)
-              );
-              viewOptionsVar(newViewOptions);
-            }}
-            className={cls(
-              "pl-10",
-              "hover: w-4 cursor-pointer hover:animate-bounce",
-              viewOptions.navigationExpand ? "" : ""
-            )}
-          />
-          <FontAwesomeIcon
-            icon={faList}
-            fontSize={"large"}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions,
-                seeList: !viewOptions.seeList,
-              };
-              localStorage.setItem(
-                LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-                JSON.stringify(newViewOptions)
-              );
-              viewOptionsVar(newViewOptions);
-            }}
-            className={cls(
-              "hover: w-4 cursor-pointer hover:animate-bounce",
-              viewOptions.seeList ? "" : ""
-            )}
-          />
-          <FontAwesomeIcon
-            icon={faGear}
-            fontSize="medium"
-            className="cursor-pointer hover:animate-spin"
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions,
-                seeActiveOption: !viewOptions.seeActiveOption,
-              };
-              viewOptionsVar(newViewOptions);
-            }}
-          />
-        </div>
+      <div className="flex w-full items-center justify-end space-x-2">
+        <BtnMenu
+          icon={<FontAwesomeIcon icon={faBan} fontSize={20} />}
+          enabled={viewOptions.seeCancel}
+          label={"취소"}
+          onClick={() => {
+            const newViewOptions = {
+              ...viewOptions,
+              seeCancel: !viewOptions.seeCancel,
+            };
+            localStorage.setItem(
+              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
+              JSON.stringify(newViewOptions)
+            );
+            viewOptionsVar(newViewOptions);
+          }}
+        />
+        <BtnMenu
+          icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={20} />}
+          enabled={viewOptions.seeNoshow}
+          label={"부도"}
+          onClick={() => {
+            const newViewOptions = {
+              ...viewOptions,
+              seeNoshow: !viewOptions.seeNoshow,
+            };
+            localStorage.setItem(
+              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
+              JSON.stringify(newViewOptions)
+            );
+            viewOptionsVar(newViewOptions);
+          }}
+        />
+        <BtnMenuToggle
+          onClick={() => {
+            const newViewOptions: IViewOption = {
+              ...viewOptions,
+              periodToView:
+                viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
+            };
+            localStorage.setItem(
+              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
+              JSON.stringify(newViewOptions)
+            );
+            viewOptionsVar(newViewOptions);
+          }}
+          enabled={viewOptions.periodToView === ONE_WEEK}
+          label={["1주일", "하루"]}
+        />
+        {/* ---------------------- 구분선 ---------------------- */}
+
+        <BtnMenu
+          icon={<FontAwesomeIcon icon={faCalendarAlt} fontSize={20} />}
+          enabled={viewOptions.navigationExpand}
+          label={"달력"}
+          onClick={() => {
+            const newViewOptions = {
+              ...viewOptions,
+              navigationExpand: !viewOptions.navigationExpand,
+            };
+            localStorage.setItem(
+              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
+              JSON.stringify(newViewOptions)
+            );
+            viewOptionsVar(newViewOptions);
+          }}
+        />
+
+        <BtnMenu
+          icon={<FontAwesomeIcon icon={faList} fontSize={20} />}
+          enabled={viewOptions.seeList}
+          label={"목록"}
+          onClick={() => {
+            const newViewOptions = {
+              ...viewOptions,
+              seeList: !viewOptions.seeList,
+            };
+            localStorage.setItem(
+              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
+              JSON.stringify(newViewOptions)
+            );
+            viewOptionsVar(newViewOptions);
+          }}
+        />
+        <BtnMenu
+          icon={<FontAwesomeIcon icon={faGear} fontSize={20} />}
+          enabled={viewOptions.seeActiveOption}
+          label={"설정"}
+          onClick={() => {
+            const newViewOptions = {
+              ...viewOptions,
+              seeActiveOption: !viewOptions.seeActiveOption,
+            };
+            viewOptionsVar(newViewOptions);
+          }}
+        />
       </div>
-      <AnimatePresence>
-        {viewOptions.navigationExpand ? (
-          <TableNavExpand varients={tableNavVarients} />
-        ) : (
-          <TableNav varients={tableNavVarients} />
-        )}
-      </AnimatePresence>
-    </motion.nav>
+    </motion.div>
   );
 }

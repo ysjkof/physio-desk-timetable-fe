@@ -11,6 +11,7 @@ import {
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
   LOCALSTORAGE_VIEW_OPTION_CLINICS,
+  NEXT,
 } from "../../../variables";
 import { BtnArrow } from "./button-arrow";
 import { ButtonCheck } from "./button-check";
@@ -83,8 +84,8 @@ export function TableClinicSelector({}: TableClinicSelectorProps) {
 
   const variants: Variants = {
     init: { x: 300 },
-    end: { x: 0, transition: { duration: 0.5 } },
-    exit: { x: 300, transition: { duration: 0.5 } },
+    end: { x: 0, transition: { duration: 0.3 } },
+    exit: { x: 300, transition: { duration: 0.3 } },
   };
 
   if (!loggedInUser || !viewOptions) return <></>;
@@ -103,7 +104,7 @@ export function TableClinicSelector({}: TableClinicSelectorProps) {
             시간표에 표시할 병원이나 사용자를 선택합니다.
           </p>
         </span>
-        <BtnArrow direction="after" onClick={onClickChangeSeeActiveOption} />
+        <BtnArrow direction={NEXT} onClick={onClickChangeSeeActiveOption} />
       </div>
       <ul className="h-full overflow-y-scroll">
         {clinicLists === null || clinicLists.length === 0 ? (

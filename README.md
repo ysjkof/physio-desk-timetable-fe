@@ -19,3 +19,29 @@ App.tsx에서 localStorage에 저장된 설정을 불러오고 비교해서 전�
 
 - `clinicListVar` : 그룹멤버의 `activation` key를 저장하기 위해서 필요
 - `selectedClinicVar` : 선택된 그룹에 따라 모든 쿼리와 앱 전반적인 UI 상호작용이 결정된다.
+
+## 2. 스타일
+
+### 2.1. 기본 규칙
+
+- 기능 `custom class name`
+  tailwindcss 기본 속성 (css 속성)
+
+- 활성화
+  font-semibold (font-weight:600)
+- 비활성화
+  opacity-50 (opacity:0.5)
+- 글자 크기
+  text-xs (12px, 0.75rem), **index에 적용**
+- 큰 글자
+  text-base (16px, 1rem)
+- 글자색
+  text-gray-700, **index에 적용**
+- 아이콘 크기
+  20\*20
+
+#### 2.3 Header
+
+헤더 글자 크기 : text-sm
+헤더 로고 글자 : text-2xl font-black
+헤더 아이콘 크기 : 24 \* 24

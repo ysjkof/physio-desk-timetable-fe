@@ -23,8 +23,7 @@ export function TableRows({ weekEvents, labels }: TableRowProps) {
           userLength={userLength}
           isActiveBorderTop={compareNumAfterGetMinutes(label, [0, 30])}
           children={weekEvents.map((day, ii) => (
-            // id={day.date + ""}로 table-nav에서 스크롤 조정함
-            <div key={ii} className="relative flex" id={day.date + ""}>
+            <div key={ii} className="relative flex">
               {day?.users.map(
                 (member, userIndex) =>
                   member.activation && (

@@ -9,11 +9,14 @@ interface TableLabelsProps {
 
 export function TableLabels({ labels }: TableLabelsProps) {
   return (
-    <div className="sticky left-0 z-[33]">
+    <div className="table-labels sticky left-0 z-[33]">
       <TableMainComponentLayout componentName="table-labels" isLabel>
         {labels.map((label, i) => (
-          <div key={i} className="h-[20px]">
-            <div className="relative -top-2.5 h-full bg-white">
+          <div
+            key={i}
+            className={`h-[20px] w-full border-r border-black bg-white pr-2`}
+          >
+            <div className="relative -top-2.5 h-full">
               {compareNumAfterGetMinutes(label, [0, 30]) ? getHHMM(label) : ""}
             </div>
           </div>

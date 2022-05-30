@@ -5,6 +5,7 @@ import {
   getTimeLength,
 } from "../../../libs/timetable-utils";
 import { selectedDateVar } from "../../../store";
+import { TABLE_CELL_HEIGHT } from "../../../variables";
 import { EventBox } from "./event-box";
 import { TableLoopLayout } from "./table-loop-layout";
 import { TableMainComponentLayout } from "./table-main-component-layout";
@@ -59,7 +60,7 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
                               new Date(event.startDate),
                               "hm"
                             )
-                          ) * 20
+                          ) * TABLE_CELL_HEIGHT
                         }px 0%`}
                         height={`${
                           getTimeLength(event.startDate, event.endDate) * 2

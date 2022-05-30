@@ -19,9 +19,9 @@ export function TableLoopLayout({
 
   return (
     <div
-      className={`grid h-5 w-full ${isDivide && "divide-x divide-black"} ${
-        isActiveBorderTop && "border-t border-white"
-      }`}
+      className={`grid h-5 w-full 
+      ${isDivide ? "divide-x divide-black" : ""} 
+      ${isActiveBorderTop ? "border-t border-white" : ""}`}
       style={
         viewOptions.periodToView === ONE_DAY
           ? {
