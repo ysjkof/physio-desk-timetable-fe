@@ -114,7 +114,6 @@ export const PrescriptionPage = ({
       <DashboardMainLayout>
         <section className="flex h-[15.7rem] gap-4">
           <DashboardSectionLayout
-            isPadding={true}
             children={
               <>
                 <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b">
@@ -158,7 +157,7 @@ export const PrescriptionPage = ({
           {/* <DashboardSectionLayout
       title="묶음처방"
       tooltip="단일 처방을 여러개 묶은 것"
-      isPadding={true}
+      
       children={
        <>
         <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b">
@@ -205,7 +204,6 @@ export const PrescriptionPage = ({
           <DashboardSectionLayout
             // title="처방 만들기"
             width="md"
-            isPadding={true}
             children={
               <details open={isManager && true}>
                 <summary>처방 만들기</summary>

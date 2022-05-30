@@ -34,7 +34,6 @@ export const Members = ({
           <DashboardSectionLayout
             title="구성원"
             width="md"
-            isPadding={true}
             children={
               <>
                 <div className="grid grid-cols-[2.4rem_1fr_4rem_4rem] gap-3 border-b">

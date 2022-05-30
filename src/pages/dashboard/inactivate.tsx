@@ -33,7 +33,6 @@ export const InactivateClinic = ({
           <DashboardSectionLayout
             title="병원 비활성"
             width="md"
-            isPadding={true}
             children={
               <>
                 <p>

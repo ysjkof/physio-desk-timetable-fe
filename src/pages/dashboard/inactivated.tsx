@@ -19,7 +19,6 @@ export const InactivatedClinic = () => {
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             title="조회"
-            isPadding={true}
             children={
               <>
                 <div className="border-b">

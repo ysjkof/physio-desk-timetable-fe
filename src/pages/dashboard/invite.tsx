@@ -70,7 +70,6 @@ export const InviteClinic = ({
         <section className="h-[15.7rem]">
           <DashboardSectionLayout
             width="md"
-            isPadding={true}
             children={
               <>
                 <form onSubmit={handleSubmit(onSubmitSearchUsersByName)}>
