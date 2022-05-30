@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import {
   Clinic,
@@ -43,6 +43,7 @@ export interface InDashboardPageProps
     "id" | "name" | "members" | "isManager" | "isStayed"
   > {
   loggedInUser: ModifiedLoggedInUser;
+  height?: number;
 }
 
 export const Dashboard = () => {
@@ -130,14 +131,21 @@ export const Dashboard = () => {
     }
   }, [selectedClinic]);
 
+  const ref = useRef<HTMLUListElement>(null);
+  const headerElement = document.getElementById("header");
+  const containerHeight = window.innerHeight - headerElement?.offsetHeight!;
+  const dashboardContentsHeight = containerHeight - ref.current?.offsetHeight!;
   if (!meData) return <></>;
   return (
     <>
       <Helmet>
         <title>대시보드| Muool</title>
       </Helmet>
-      <div className="container mx-auto flex h-full">
-        <nav className="w-[250px] space-y-4">
+      <div
+        className="grid grid-cols-[150px,1fr] grid-rows-[3rem,1fr] px-3"
+        style={{ height: containerHeight }}
+      >
+        <nav className="dashboard-side-nav space-y-4">
           <h1 className="border-b text-lg font-semibold">메뉴</h1>
           <ul>
             <li
@@ -216,122 +224,116 @@ export const Dashboard = () => {
             </li>
           </ul>
         </nav>
-        <main className="grid w-full grid-cols-[1fr_150px]">
-          <aside className="col-start-2 flex flex-col gap-4">
-            <button type="button" className="btn-sm">
-              aside menu
-            </button>
-            <button type="button" className="btn-sm">
-              aside menu2
-            </button>
-          </aside>
-
-          <section className="col-start-1 row-start-1 space-y-4 bg-gray-50">
-            <ul className="tap-list mb-4 flex rounded-md bg-blue-400/90 p-1">
+        <nav className="dashboard-top-nav col-start-2">
+          <ul
+            className="flex h-full items-center bg-blue-400/90 px-2"
+            ref={ref}
+          >
+            <li
+              className={cls(
+                selectedClinic.id === 0
+                  ? "rounded-md bg-white font-semibold text-blue-800"
+                  : "text-white",
+                "cursor-pointer py-1.5 px-6"
+              )}
+              onClick={() => {
+                setSelectedClinic(selectedMe);
+              }}
+            >
+              나
+            </li>
+            {findMyClinics?.findMyClinics.clinics?.map((clinic) => (
               <li
+                key={clinic.id}
                 className={cls(
-                  selectedClinic.id === 0
-                    ? "rounded-md bg-white font-semibold text-blue-800"
+                  "relative cursor-pointer py-1.5 px-6",
+                  selectedClinic.id === clinic.id
+                    ? "rounded-md bg-white font-bold text-blue-800"
                     : "text-white",
-                  "cursor-pointer py-1.5 px-6"
+                  clinic.members.find(
+                    (member) =>
+                      member.user.id === meData.me.id &&
+                      !member.accepted &&
+                      !member.staying
+                  )
+                    ? "opacity-90 after:ml-0.5 after:rounded-full after:bg-white after:px-2 after:text-gray-800 after:content-['!']"
+                    : ""
                 )}
                 onClick={() => {
-                  setSelectedClinic(selectedMe);
+                  setSelectedClinic({
+                    ...clinic,
+                    isManager: checkIsManager(clinic.id),
+                    isStayed: getIsStayed(clinic.id),
+                  });
                 }}
               >
-                나
+                {clinic.name}
               </li>
-              {findMyClinics?.findMyClinics.clinics?.map((clinic) => (
-                <li
-                  key={clinic.id}
-                  className={cls(
-                    "relative cursor-pointer py-1.5 px-6",
-                    selectedClinic.id === clinic.id
-                      ? "rounded-md bg-white font-bold text-blue-800"
-                      : "text-white",
-                    clinic.members.find(
-                      (member) =>
-                        member.user.id === meData.me.id &&
-                        !member.accepted &&
-                        !member.staying
-                    )
-                      ? "opacity-90 after:ml-0.5 after:rounded-full after:bg-white after:px-2 after:text-gray-800 after:content-['!']"
-                      : ""
-                  )}
-                  onClick={() => {
-                    setSelectedClinic({
-                      ...clinic,
-                      isManager: checkIsManager(clinic.id),
-                      isStayed: getIsStayed(clinic.id),
-                    });
-                  }}
-                >
-                  {clinic.name}
-                </li>
-              ))}
-            </ul>
-            <div className="contents px-4">
-              {selectedClinic && (
-                <>
-                  {selectedMenu === "main" && "메뉴를 선택하세요"}
-                  {selectedMenu === "member" && (
-                    <Members
-                      id={selectedClinic.id}
-                      name={selectedClinic.name}
-                      members={selectedClinic.members}
-                      loggedInUser={meData.me}
-                      isStayed={selectedClinic.isStayed}
-                      isManager={selectedClinic.isManager}
-                    />
-                  )}
-
-                  {selectedMenu === "invite" && (
-                    <InviteClinic
-                      id={selectedClinic.id}
-                      name={selectedClinic.name}
-                      members={selectedClinic.members}
-                      loggedInUser={meData.me}
-                      isStayed={selectedClinic.isStayed}
-                      isManager={selectedClinic.isManager}
-                    />
-                  )}
-                  {selectedMenu === "inactivate" && (
-                    <InactivateClinic
-                      id={selectedClinic.id}
-                      name={selectedClinic.name}
-                      members={selectedClinic.members}
-                      loggedInUser={meData.me}
-                      isStayed={selectedClinic.isStayed}
-                      isManager={selectedClinic.isManager}
-                    />
-                  )}
-                  {selectedMenu === "prescription" && (
-                    <PrescriptionPage
-                      id={selectedClinic.id}
-                      name={selectedClinic.name}
-                      members={selectedClinic.members}
-                      loggedInUser={meData.me}
-                      isStayed={selectedClinic.isStayed}
-                      isManager={selectedClinic.isManager}
-                    />
-                  )}
-                  {selectedMenu === "statistics" && (
-                    <Statistics
-                      id={selectedClinic.id}
-                      name={selectedClinic.name}
-                      members={selectedClinic.members}
-                      loggedInUser={meData.me}
-                      isStayed={selectedClinic.isStayed}
-                      isManager={selectedClinic.isManager}
-                    />
-                  )}
-                </>
+            ))}
+          </ul>
+        </nav>
+        <div
+          className="dashboard-contents col-start-2 row-start-2 overflow-y-scroll"
+          style={{ height: dashboardContentsHeight }}
+        >
+          {selectedClinic && (
+            <>
+              {selectedMenu === "main" && "메뉴를 선택하세요"}
+              {selectedMenu === "member" && (
+                <Members
+                  id={selectedClinic.id}
+                  name={selectedClinic.name}
+                  members={selectedClinic.members}
+                  loggedInUser={meData.me}
+                  isStayed={selectedClinic.isStayed}
+                  isManager={selectedClinic.isManager}
+                />
               )}
-              {selectedMenu === "create" && <CreateClinic />}
-              {selectedMenu === "inactivated" && <InactivatedClinic />}
-            </div>
-          </section>
-        </main>
+              {selectedMenu === "invite" && (
+                <InviteClinic
+                  id={selectedClinic.id}
+                  name={selectedClinic.name}
+                  members={selectedClinic.members}
+                  loggedInUser={meData.me}
+                  isStayed={selectedClinic.isStayed}
+                  isManager={selectedClinic.isManager}
+                />
+              )}
+              {selectedMenu === "inactivate" && (
+                <InactivateClinic
+                  id={selectedClinic.id}
+                  name={selectedClinic.name}
+                  members={selectedClinic.members}
+                  loggedInUser={meData.me}
+                  isStayed={selectedClinic.isStayed}
+                  isManager={selectedClinic.isManager}
+                />
+              )}
+              {selectedMenu === "prescription" && (
+                <PrescriptionPage
+                  id={selectedClinic.id}
+                  name={selectedClinic.name}
+                  members={selectedClinic.members}
+                  loggedInUser={meData.me}
+                  isStayed={selectedClinic.isStayed}
+                  isManager={selectedClinic.isManager}
+                />
+              )}
+              {selectedMenu === "statistics" && (
+                <Statistics
+                  id={selectedClinic.id}
+                  name={selectedClinic.name}
+                  members={selectedClinic.members}
+                  loggedInUser={meData.me}
+                  isStayed={selectedClinic.isStayed}
+                  isManager={selectedClinic.isManager}
+                />
+              )}
+            </>
+          )}
+          {selectedMenu === "create" && <CreateClinic />}
+          {selectedMenu === "inactivated" && <InactivatedClinic />}
+        </div>
       </div>
     </>
   );

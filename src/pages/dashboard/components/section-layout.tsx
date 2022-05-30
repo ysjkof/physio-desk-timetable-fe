@@ -1,13 +1,11 @@
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { cls } from "../../../libs/utils";
 
 interface DashboardSectionLayoutProps {
   children: React.ReactNode;
   title?: string;
   width?: "md";
   tooltip?: string;
-  isPadding?: boolean;
 }
 
 export const DashboardSectionLayout = ({
@@ -15,17 +13,14 @@ export const DashboardSectionLayout = ({
   title,
   width,
   tooltip,
-  isPadding,
 }: DashboardSectionLayoutProps) => {
   return (
-    <div className={cls("h-full w-full", isPadding ? "px-1.5" : "")}>
+    <div className="h-full w-full">
       <div className="h-full bg-white p-2 shadow-cst">
         <div
-          className={cls(
-            "h-full w-full space-y-2",
-            width ? "mx-auto" : "",
+          className={`h-full w-full space-y-2 ${width ? "mx-auto" : ""} ${
             width === "md" ? "max-w-md" : ""
-          )}
+          }`}
         >
           {title && !tooltip && <h3>{title}</h3>}
           {tooltip && (

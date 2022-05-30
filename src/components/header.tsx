@@ -177,77 +177,75 @@ export const Header = () => {
           <span>Please verify your email.</span>
         </div>
       )} */}
-      <header className="mb-2 border-b py-1" id="header">
-        <div className="container mx-auto flex w-full items-center justify-between space-x-4 px-5  xl:px-0">
-          <div className="flex w-full items-center gap-10">
-            <Link to="/">
-              {/* <img src={muoolLogo} className="w-36" alt="Muool" /> */}
-              <span className="text-2xl font-black text-sky-500">Muool</span>
-            </Link>
-            <Link to="/community">
-              <span className="text-lg text-gray-600">커뮤니티</span>
-            </Link>
-          </div>
-          <div className="flex w-full items-baseline justify-end gap-4">
-            <form onSubmit={handleSubmit(onSubmitSearch)}>
-              <input
-                {...register("search", { required: true })}
-                type={"search"}
-                placeholder="Search..."
-                className="input-search w-28 rounded-md py-0"
-              />
-            </form>
-            <span className="flex items-baseline gap-4">
-              {isLoggedIn ? (
-                <>
-                  <Link to="/tt">
-                    <span className="whitespace-nowrap text-lg text-gray-600">
-                      시간표
-                    </span>
-                  </Link>
-                  <div className="group relative cursor-pointer">
-                    <FontAwesomeIcon fontSize={"large"} icon={faBell} />
-                    <div className="dropdown absolute top-6 right-0 z-50 hidden h-80 w-60 flex-col items-center overflow-y-scroll border bg-white py-2 px-4 shadow-cst group-hover:flex">
-                      {!notices || notices.length === 0
-                        ? "알림이 없습니다."
-                        : notices.map((notice) => (
-                            <span className="break-all">{notice.message}</span>
-                          ))}
-                    </div>
-                  </div>
-                  <div className="group relative cursor-pointer">
-                    <FontAwesomeIcon fontSize={"large"} icon={faUser} />
-                    <div className="dropdown absolute top-6 right-0 z-50 hidden w-40 flex-col items-center border bg-white py-2 px-4 shadow-cst group-hover:flex">
-                      <Link
-                        to="/edit-profile"
-                        className="w-full text-center hover:bg-blue-200"
-                      >
-                        프로필
-                      </Link>
-                      <div className="seperate-bar"></div>
-                      <Link
-                        to="/dashboard"
-                        className="w-full text-center hover:bg-blue-200"
-                      >
-                        대시보드
-                      </Link>
-                      <div className="seperate-bar"></div>
-                      <button
-                        className="w-full text-center hover:bg-blue-200"
-                        onClick={logoutBtn}
-                      >
-                        로그아웃
-                      </button>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <Link to="/account/login">
-                  <span className="whitespace-nowrap">로그인/회원가입</span>
+      <header className="flex items-center border-b" id="header">
+        <div className="flex w-full items-center gap-10">
+          <Link to="/">
+            {/* <img src={muoolLogo} className="w-36" alt="Muool" /> */}
+            <span className="text-2xl font-black text-sky-500">Muool</span>
+          </Link>
+          <Link to="/community">
+            <span className="text-lg text-gray-600">커뮤니티</span>
+          </Link>
+        </div>
+        <div className="flex w-full items-baseline justify-end gap-4">
+          <form onSubmit={handleSubmit(onSubmitSearch)}>
+            <input
+              {...register("search", { required: true })}
+              type={"search"}
+              placeholder="Search..."
+              className="input-search w-28 rounded-md"
+            />
+          </form>
+          <span className="flex items-baseline gap-4">
+            {isLoggedIn ? (
+              <>
+                <Link to="/tt">
+                  <span className="whitespace-nowrap text-lg text-gray-600">
+                    시간표
+                  </span>
                 </Link>
-              )}
-            </span>
-          </div>
+                <div className="group relative cursor-pointer">
+                  <FontAwesomeIcon fontSize={"large"} icon={faBell} />
+                  <div className="dropdown absolute top-6 right-0 z-50 hidden h-80 w-60 flex-col items-center overflow-y-scroll border bg-white py-2 px-4 shadow-cst group-hover:flex">
+                    {!notices || notices.length === 0
+                      ? "알림이 없습니다."
+                      : notices.map((notice) => (
+                          <span className="break-all">{notice.message}</span>
+                        ))}
+                  </div>
+                </div>
+                <div className="group relative cursor-pointer">
+                  <FontAwesomeIcon fontSize={"large"} icon={faUser} />
+                  <div className="dropdown absolute top-6 right-0 z-50 hidden w-40 flex-col items-center border bg-white py-2 px-4 shadow-cst group-hover:flex">
+                    <Link
+                      to="/edit-profile"
+                      className="w-full text-center hover:bg-blue-200"
+                    >
+                      프로필
+                    </Link>
+                    <div className="seperate-bar"></div>
+                    <Link
+                      to="/dashboard"
+                      className="w-full text-center hover:bg-blue-200"
+                    >
+                      대시보드
+                    </Link>
+                    <div className="seperate-bar"></div>
+                    <button
+                      className="w-full text-center hover:bg-blue-200"
+                      onClick={logoutBtn}
+                    >
+                      로그아웃
+                    </button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <Link to="/account/login">
+                <span className="whitespace-nowrap">로그인/회원가입</span>
+              </Link>
+            )}
+          </span>
         </div>
       </header>
     </>

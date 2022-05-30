@@ -168,8 +168,6 @@ export const Statistics = ({
           isSelected: true,
         }))
       );
-    } else {
-      setMemberState([]);
     }
     setUserStatis([]);
   }, [members]);
@@ -205,7 +203,6 @@ export const Statistics = ({
         <section className="date-picker">
           <form onSubmit={handleSubmit(onSubmit)}>
             <DashboardSectionLayout
-              isPadding={true}
               children={
                 <div className="space-y-4">
                   <div className="flex gap-6">
@@ -272,7 +269,6 @@ export const Statistics = ({
         </section>
         <section className="flex gap-4">
           <DashboardSectionLayout
-            isPadding={true}
             children={
               <>
                 <h3 className="first-:bg-red-500 text-center">
@@ -357,7 +353,6 @@ export const Statistics = ({
         </section>
         <section className="chart">
           <DashboardSectionLayout
-            isPadding={true}
             children={
               <>
                 <div className="relative">
