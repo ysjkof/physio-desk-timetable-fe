@@ -145,7 +145,7 @@ export const TableMain = ({ eventsData }: ITimetableProps) => {
     window.addEventListener("resize", handleTableHeight);
     return () => window.removeEventListener("resize", handleTableHeight);
   }, []);
-  console.log("메인");
+
   if (!weekEvents || !viewOptions) {
     return <h2>Loading...</h2>;
   }
