@@ -43,7 +43,6 @@ export interface InDashboardPageProps
     "id" | "name" | "members" | "isManager" | "isStayed"
   > {
   loggedInUser: ModifiedLoggedInUser;
-  height?: number;
 }
 
 export const Dashboard = () => {
@@ -135,7 +134,7 @@ export const Dashboard = () => {
   const headerElement = document.getElementById("header");
   const containerHeight = window.innerHeight - headerElement?.offsetHeight!;
   const dashboardContentsHeight = containerHeight - ref.current?.offsetHeight!;
-  if (!meData) return <></>;
+  if (!meData || typeof dashboardContentsHeight !== "number") return <></>;
   return (
     <>
       <Helmet>
@@ -143,7 +142,7 @@ export const Dashboard = () => {
       </Helmet>
       <div
         className="grid grid-cols-[150px,1fr] grid-rows-[3rem,1fr] px-3"
-        style={{ height: containerHeight }}
+        style={{ ...(containerHeight && { height: containerHeight }) }}
       >
         <nav className="dashboard-side-nav space-y-4">
           <h1 className="border-b text-lg font-semibold">메뉴</h1>
@@ -274,7 +273,9 @@ export const Dashboard = () => {
         </nav>
         <div
           className="dashboard-contents col-start-2 row-start-2 overflow-y-scroll"
-          style={{ height: dashboardContentsHeight }}
+          style={{
+            ...(dashboardContentsHeight && { height: dashboardContentsHeight }),
+          }}
         >
           {selectedClinic && (
             <>
