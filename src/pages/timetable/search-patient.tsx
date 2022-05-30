@@ -76,7 +76,7 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
       </div>
       <div
         className={cls(
-          "mt-4 h-32 overflow-y-scroll rounded-md border border-gray-300 px-1 py-0.5",
+          "mt-4 h-32 overflow-y-scroll rounded-md border px-1 py-0.5",
           selectedPatient ? "border-none" : ""
         )}
       >
@@ -98,14 +98,14 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
             )
           )}
         {!selectedPatient && !searchPatientResult ? (
-          <p className="text-center text-gray-500">
+          <p className="text-center ">
             환자 목록
             <br />
             검색하면 나타납니다
           </p>
         ) : (
           searchPatientResult?.searchPatientByName.patients?.length === 0 && (
-            <p className="text-center text-gray-500">검색결과가 없습니다.</p>
+            <p className="text-center ">검색결과가 없습니다.</p>
           )
         )}
         {selectedPatient && (
@@ -120,7 +120,7 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
                 clinicName={selectedPatient.clinicName}
               />
               <button
-                className="rounded-lg border bg-white py-1 px-3 shadow-sm hover:bg-gray-600 hover:text-white"
+                className="rounded-lg border bg-white py-1 px-3 shadow-sm hover:text-white"
                 onClick={() => selectedPatientVar(null)}
               >
                 <FontAwesomeIcon icon={faXmark} />
@@ -129,7 +129,7 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
           </div>
         )}
       </div>
-      <div className="mt-1 h-1 space-x-4 text-center text-gray-600">
+      <div className="mt-1 h-1 space-x-4 text-center">
         {searchPatientResult
           ? pageNumbers(
               searchPatientResult.searchPatientByName.totalPages ?? 0

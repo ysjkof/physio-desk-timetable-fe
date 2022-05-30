@@ -73,7 +73,7 @@ export const EditProfile = () => {
       <Helmet>
         <title>Edit Profile | Muool</title>
       </Helmet>
-      <div className="container mx-auto h-full bg-zinc-50">
+      <div className="container mx-auto h-full">
         <h4 className="mb-3 font-semibold">Edit Profile</h4>
         <form
           onSubmit={handleSubmit(onSubmit)}

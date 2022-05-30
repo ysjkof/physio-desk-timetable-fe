@@ -19,13 +19,9 @@ export const ListPatient = () => {
           <ul className="w-full  divide-y rounded-lg bg-white shadow-cst">
             <div className="flex justify-between rounded-md bg-gray-50 px-10">
               <span className="w-1/4">이름</span>
-              <span className="w-1/4  font-extralight text-gray-400">성별</span>
-              <span className="w-1/4  font-extralight text-gray-400">
-                생년월일
-              </span>
-              <span className="w-1/4  font-extralight text-gray-400">
-                등록번호
-              </span>
+              <span className="w-1/4  font-extralight ">성별</span>
+              <span className="w-1/4  font-extralight ">생년월일</span>
+              <span className="w-1/4  font-extralight ">등록번호</span>
               <span className="w-1/4 text-sky-500" />
             </div>
             {queryResult.findAllPatients.results.map((p) => (

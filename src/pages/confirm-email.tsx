@@ -71,7 +71,7 @@ export const ConfirmEmail = () => {
         <title>Verify Email | Muool</title>
       </Helmet>
       <h2 className="mb-1  font-medium">Confirming email...</h2>
-      <h4 className="text-gray-700">Please wait, don't close this page...</h4>
+      <h4 className="">Please wait, don't close this page...</h4>
       {invalidCode ? <h4 className="text-red-600">{invalidCode}</h4> : ""}
     </div>
   );

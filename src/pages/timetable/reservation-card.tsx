@@ -90,14 +90,14 @@ export const ReservationCard = ({ refetch }: ReservationCardProps) => {
       className="relative top-32 mx-auto h-[600px] w-[400px] space-y-4 overflow-y-scroll bg-white py-6 px-16 sm:rounded-lg"
     >
       <button
-        className="absolute right-6 hover:text-gray-400"
+        className="hover: absolute right-6"
         onClick={() => navigate(TIMETABLE)}
       >
         <FontAwesomeIcon icon={faXmark} />
       </button>
       <h4 className="mb-5 text-left font-medium">예약 자세히</h4>
       <div className="reservation-editor mb-5 flex justify-around">
-        {/* <button className="rounded-md px-2 font-medium text-gray-500 shadow-cst">
+        {/* <button className="rounded-md px-2 font-medium  shadow-cst">
      차트
     </button> */}
         <button
@@ -106,7 +106,7 @@ export const ReservationCard = ({ refetch }: ReservationCardProps) => {
             reservation?.state === ReservationState.NoShow
               ? "bg-yellow-100"
               : "",
-            "rounded-md px-2 font-medium text-gray-500 shadow-cst"
+            "rounded-md px-2 font-medium  shadow-cst"
           )}
         >
           부도
@@ -117,13 +117,13 @@ export const ReservationCard = ({ refetch }: ReservationCardProps) => {
             reservation?.state === ReservationState.Canceled
               ? "bg-red-100 text-white"
               : "",
-            "rounded-md px-2 font-medium text-gray-500 shadow-cst"
+            "rounded-md px-2 font-medium  shadow-cst"
           )}
         >
           취소
         </button>
         <button
-          className="rounded-md px-2 font-medium text-gray-500 shadow-cst"
+          className="rounded-md px-2 font-medium  shadow-cst"
           onClick={onClickDelete}
         >
           삭제

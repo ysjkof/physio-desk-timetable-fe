@@ -234,7 +234,7 @@ export const ReserveCard = ({
       className="my-auto w-[24rem] bg-white p-5 sm:rounded-lg"
     >
       <button
-        className="absolute right-6 top-5 hover:text-gray-400"
+        className="hover: absolute right-6 top-5"
         onClick={() => closeAction()}
       >
         <FontAwesomeIcon icon={faXmark} />
@@ -262,7 +262,7 @@ export const ReserveCard = ({
             )}
           </h4>
           <button
-            className="absolute top-14 right-10 rounded-md border px-2 text-gray-500 hover:text-gray-700"
+            className="hover: absolute top-14 right-10 rounded-md border  px-2"
             onClick={() => setOpenCreatePatient((current) => !current)}
           >
             환자등록
@@ -290,7 +290,7 @@ export const ReserveCard = ({
             <label>담당 치료사</label>
             <select
               {...register("userId")}
-              className="w-full rounded-md border border-gray-400 text-center"
+              className="w-full rounded-md border text-center"
             >
               {selectedClinic.id === 0 ? (
                 <option value={loggedInUser?.id}>{loggedInUser?.name}</option>
@@ -327,7 +327,7 @@ export const ReserveCard = ({
             </label>
             <div>
               {selectPrescriptions.length === 0 ? (
-                <div className="flex flex-col items-center px-2 text-gray-600">
+                <div className="flex flex-col items-center px-2 ">
                   <span>등록된 처방이 없습니다.</span>
                   <span>
                     처방을

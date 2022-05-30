@@ -24,11 +24,9 @@ export const Li: React.FC<ILiProps> = ({
     ) : (
       <>
         <span className="w-1/4">{name}</span>
-        <span className="w-1/4  font-extralight text-gray-400">{gender}</span>
-        <span className="w-1/4  font-extralight text-gray-400">{birthday}</span>
-        <span className="w-1/4  font-extralight text-gray-400">
-          {registrationNumber}
-        </span>
+        <span className="w-1/4  font-extralight ">{gender}</span>
+        <span className="w-1/4  font-extralight ">{birthday}</span>
+        <span className="w-1/4  font-extralight ">{registrationNumber}</span>
         <Link className="w-1/4 text-right text-sky-500" to={`/patoent/${id}`}>
           Edit
         </Link>

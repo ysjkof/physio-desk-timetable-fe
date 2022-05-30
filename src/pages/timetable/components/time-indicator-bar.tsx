@@ -33,7 +33,7 @@ export const TimeIndicatorBar = ({
   if (top === 0 || typeof top !== "number") return <></>;
   return (
     <div
-      className="time-indicator-bar group pointer-events-none absolute z-20 flex w-full border-t border-red-500"
+      className="time-indicator-bar group pointer-events-none absolute z-20 flex w-full border-t"
       style={{ top: `${top + 50}px` }}
     >
       {isActive && (

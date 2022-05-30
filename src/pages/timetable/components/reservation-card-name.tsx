@@ -22,12 +22,9 @@ export const ReservationCardName = ({
   birthday,
 }: ReservationCardNameProps) => {
   return (
-    <div className="relative grid w-full grid-cols-5 items-center text-center text-gray-600">
+    <div className="relative grid w-full grid-cols-5 items-center text-center ">
       <span
-        className={cls(
-          registrationNumber ? "text-right" : "text-center",
-          "text-gray-400"
-        )}
+        className={cls(registrationNumber ? "text-right" : "text-center", "")}
       >
         {registrationNumber ? registrationNumber : "-"}
       </span>
@@ -40,7 +37,7 @@ export const ReservationCardName = ({
         >
           {gender === "male" ? "남성" : "여성"}
         </span>
-        <span className="text-gray-400">{getYMD(birthday, "yymmdd", "-")}</span>
+        <span className="">{getYMD(birthday, "yymmdd", "-")}</span>
       </div>
     </div>
   );

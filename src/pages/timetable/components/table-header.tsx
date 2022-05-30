@@ -50,7 +50,7 @@ export function TableHeader({ today }: TableNavProps) {
     >
       <div className="flex justify-between">
         <button
-          className="min-w-[120px] font-medium text-gray-700 hover:font-bold"
+          className="min-w-[120px] font-medium  hover:font-bold"
           onClick={() => selectedDateVar(today)}
         >
           {today.toLocaleString("ko-KR", {
@@ -127,8 +127,8 @@ export function TableHeader({ today }: TableNavProps) {
             }}
             className={cls(
               "pl-10",
-              "w-4 cursor-pointer hover:animate-bounce hover:text-gray-500",
-              viewOptions.navigationExpand ? "text-gray-700" : "text-gray-400"
+              "hover: w-4 cursor-pointer hover:animate-bounce",
+              viewOptions.navigationExpand ? "" : ""
             )}
           />
           <FontAwesomeIcon
@@ -146,8 +146,8 @@ export function TableHeader({ today }: TableNavProps) {
               viewOptionsVar(newViewOptions);
             }}
             className={cls(
-              "w-4 cursor-pointer hover:animate-bounce hover:text-gray-500",
-              viewOptions.seeList ? "text-gray-700" : "text-gray-400"
+              "hover: w-4 cursor-pointer hover:animate-bounce",
+              viewOptions.seeList ? "" : ""
             )}
           />
           <FontAwesomeIcon

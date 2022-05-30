@@ -24,7 +24,7 @@ export const Input = ({
   return (
     <>
       {label ? (
-        <label className="mb-1 block  font-medium text-gray-700" htmlFor={name}>
+        <label className="mb-1 block  font-medium " htmlFor={name}>
           {label}
         </label>
       ) : null}

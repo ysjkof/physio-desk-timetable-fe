@@ -97,7 +97,7 @@ export function TableClinicSelector({}: TableClinicSelectorProps) {
       className="group-view-controller w-[240px] bg-white pl-4"
     >
       <div className="view-controller-header mb-2 flex justify-between border-b px-3 pb-2">
-        <span className="group relative px-1 after:ml-1 after:rounded-full after:border after:border-gray-400 after:px-1 after:content-['?']">
+        <span className="group relative px-1 after:ml-1 after:rounded-full after:border after:px-1 after:content-['?']">
           보기
           <p className="bubble-arrow-t-right absolute top-7 right-0 z-40 hidden w-48 rounded-md bg-black p-4 text-white group-hover:block">
             시간표에 표시할 병원이나 사용자를 선택합니다.

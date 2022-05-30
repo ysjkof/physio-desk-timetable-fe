@@ -17,7 +17,7 @@ export const ButtonCheck: React.FC<ButtonCheckProps> = ({
 }) => (
   <li
     className={cls(
-      isActivated ? "" : "text-gray-400",
+      isActivated ? "" : "",
       "mb-2 flex items-center justify-between"
     )}
   >
@@ -38,11 +38,7 @@ export const ButtonCheck: React.FC<ButtonCheckProps> = ({
           icon={faCheckCircle}
           fontSize="large"
           className={cls(
-            isActivated
-              ? isMemberActivated
-                ? "text-green-500"
-                : "text-gray-400"
-              : ""
+            isActivated ? (isMemberActivated ? "text-green-500" : "") : ""
           )}
           onClick={() => onClickFx()}
         />

@@ -75,7 +75,7 @@ export const CreatePatient = ({
       </Helmet>
       <h4 className="mb-5 text-left font-medium">환자등록</h4>
       <button
-        className="absolute top-14 right-10 rounded-md border px-2 text-gray-500 hover:text-gray-700"
+        className="hover: absolute top-14 right-10 rounded-md border  px-2"
         onClick={() => closeModal(false)}
       >
         돌아가기

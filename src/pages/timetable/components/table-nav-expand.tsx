@@ -51,10 +51,10 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
             key={i}
             onClick={() => selectedDateVar(day.date)}
             className={cls(
-              "flex w-full cursor-pointer flex-col text-center hover:border-b-gray-500 hover:font-extrabold",
+              "flex w-full cursor-pointer flex-col border-b-2 text-center hover:border-b-inherit hover:font-extrabold ",
               compareDateMatch(day.date, selectedDate, "ymd")
-                ? "border-b-2 border-sky-400 font-bold"
-                : "border-b-2 border-transparent"
+                ? "border-sky-400 font-bold"
+                : "border-transparent"
             )}
           >
             <span
@@ -64,7 +64,7 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
                   ? "text-red-600"
                   : day.date.getDay() === 6
                   ? "text-blue-600"
-                  : "text-gray-600",
+                  : "",
                 selectedDate.getDate() === day.date.getDate()
                   ? "scale-110 opacity-100"
                   : "opacity-80",

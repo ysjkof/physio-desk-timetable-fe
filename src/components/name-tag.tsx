@@ -47,7 +47,7 @@ export const NameTag = ({
               <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
             )}
           </span>
-          <span className="dark:text-light-blue-100 min-w-[56px] overflow-hidden whitespace-nowrap text-center font-medium text-gray-800">
+          <span className="dark:text-light-blue-100 min-w-[56px] overflow-hidden whitespace-nowrap text-center font-medium ">
             {name!.length > 8 ? `${name!.substring(0, 8)}...` : name}
           </span>
         </div>
@@ -56,20 +56,20 @@ export const NameTag = ({
           ""
         ) : shrink ? (
           registrationNumber ? (
-            <span className="dark:text-light-blue-100  text-gray-700">
+            <span className="dark:text-light-blue-100  ">
               r.no : {registrationNumber}
             </span>
           ) : (
-            <span className="dark:text-light-blue-100  text-gray-700">
+            <span className="dark:text-light-blue-100  ">
               b : {getYMD(birthday, "yymmdd")}
             </span>
           )
         ) : (
           <>
-            <span className="dark:text-light-blue-100  text-gray-700">
+            <span className="dark:text-light-blue-100  ">
               r.no : {registrationNumber ? registrationNumber : "미등록"}
             </span>
-            <span className="dark:text-light-blue-100  text-gray-700">
+            <span className="dark:text-light-blue-100  ">
               b : {birthday ? getYMD(birthday, "yymmdd") : "미등록"}
             </span>
           </>

@@ -10,12 +10,7 @@ interface ISwitch {
 // FC = Functional Component
 export const Switch: React.FC<ISwitch> = ({ enabled, label, onClick }) => (
   <div className="flex cursor-pointer items-center" onClick={onClick}>
-    <span
-      className={cls(
-        enabled ? "text-gray-700" : "text-gray-400",
-        "mr-0.5 hover:font-bold"
-      )}
-    >
+    <span className={cls(enabled ? "" : "", "mr-0.5 hover:font-bold")}>
       {label}
     </span>
     <div

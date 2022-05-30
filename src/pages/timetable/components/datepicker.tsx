@@ -132,12 +132,7 @@ export const Datepicker = ({
     <div className="relative">
       <div
         onClick={() => setOpen((current) => !current)}
-        className={cls(
-          "cursor-pointer",
-          open
-            ? "text-gray-700 hover:text-gray-500"
-            : "text-gray-500 hover:text-gray-700"
-        )}
+        className={cls("cursor-pointer", open ? "hover: " : " hover:")}
         ref={ref}
       >
         <svg
@@ -161,7 +156,7 @@ export const Datepicker = ({
           top={top}
           closeAction={setOpen}
           children={
-            <div className="absolute bottom-0 z-50 w-[440px] text-gray-600 shadow-cst">
+            <div className="absolute bottom-0 z-50 w-[440px]  shadow-cst">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
                 <div className="navigation mb-1 flex justify-between border-b pb-2">
                   <div>{`${dateOfMonth[15].getFullYear()}년 ${

@@ -23,18 +23,15 @@ export const SearchName = ({
   return (
     <div
       className={cls(
-        "grid w-full grid-cols-5 items-center text-center text-gray-600",
+        "grid w-full grid-cols-5 items-center text-center ",
         columnCount <= 3 ? "" : "py-2"
       )}
     >
       {columnCount === 2 && !registrationNumber ? (
-        <span className="text-gray-400">{getYMD(birthday, "yymmdd", "-")}</span>
+        <span className="">{getYMD(birthday, "yymmdd", "-")}</span>
       ) : (
         <span
-          className={cls(
-            registrationNumber ? "text-right" : "text-center",
-            "text-gray-400"
-          )}
+          className={cls(registrationNumber ? "text-right" : "text-center", "")}
         >
           {registrationNumber ? registrationNumber : "-"}
         </span>
@@ -67,9 +64,7 @@ export const SearchName = ({
         {columnCount === 2 ? (
           ""
         ) : (
-          <span className="text-gray-400">
-            {getYMD(birthday, "yymmdd", "-")}
-          </span>
+          <span className="">{getYMD(birthday, "yymmdd", "-")}</span>
         )}
       </div>
       {columnCount <= 3 ? (
@@ -77,7 +72,7 @@ export const SearchName = ({
       ) : (
         <>
           <div onClick={onClick}>
-            <button className="rounded-full bg-gray-50 px-3 font-medium text-gray-500">
+            <button className="rounded-full bg-gray-50 px-3 font-medium ">
               자세히
             </button>
           </div>

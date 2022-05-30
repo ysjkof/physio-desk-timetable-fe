@@ -152,7 +152,7 @@ export const Dashboard = () => {
                 "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "member" ? "bg-blue-100" : "",
                 selectedClinic.id === 0
-                  ? "pointer-events-none font-normal text-gray-400"
+                  ? "pointer-events-none font-normal "
                   : ""
               )}
               onClick={() => setSelectedMenu("member")}
@@ -164,7 +164,7 @@ export const Dashboard = () => {
                 "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "invite" ? "bg-blue-100" : "",
                 selectedClinic.isManager === false || selectedClinic.id === 0
-                  ? "pointer-events-none font-normal text-gray-400"
+                  ? "pointer-events-none font-normal "
                   : ""
               )}
               onClick={() => setSelectedMenu("invite")}
@@ -176,7 +176,7 @@ export const Dashboard = () => {
                 "cursor-pointer font-medium hover:bg-blue-200",
                 selectedMenu === "inactivate" ? "bg-blue-100" : "",
                 selectedClinic.isManager === false || selectedClinic.id === 0
-                  ? "pointer-events-none font-normal text-gray-400"
+                  ? "pointer-events-none font-normal "
                   : ""
               )}
               onClick={() => setSelectedMenu("inactivate")}
@@ -255,7 +255,7 @@ export const Dashboard = () => {
                       !member.accepted &&
                       !member.staying
                   )
-                    ? "opacity-90 after:ml-0.5 after:rounded-full after:bg-white after:px-2 after:text-gray-800 after:content-['!']"
+                    ? "after: opacity-90 after:ml-0.5 after:rounded-full after:bg-white after:px-2 after:content-['!']"
                     : ""
                 )}
                 onClick={() => {

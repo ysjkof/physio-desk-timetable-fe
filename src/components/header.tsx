@@ -184,7 +184,7 @@ export const Header = () => {
             <span className="font-black text-sky-500">Muool</span>
           </Link>
           <Link to="/community">
-            <span className="text-gray-600">커뮤니티</span>
+            <span className="">커뮤니티</span>
           </Link>
         </div>
         <div className="flex w-full items-baseline justify-end gap-4">
@@ -200,9 +200,7 @@ export const Header = () => {
             {isLoggedIn ? (
               <>
                 <Link to="/tt">
-                  <span className="whitespace-nowrap  text-gray-600">
-                    시간표
-                  </span>
+                  <span className="whitespace-nowrap  ">시간표</span>
                 </Link>
                 <div className="group relative cursor-pointer">
                   <FontAwesomeIcon fontSize={"large"} icon={faBell} />

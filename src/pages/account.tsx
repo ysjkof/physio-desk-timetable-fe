@@ -20,7 +20,7 @@ export const Account = () => {
               : "text-sky-500 opacity-50 hover:underline"
           }
         >
-          <span className="text-black">계정이 없습니까? </span>
+          <span className="">계정이 없습니까? </span>
           회원가입
         </NavLink>
 
@@ -32,7 +32,7 @@ export const Account = () => {
               : "text-sky-500 opacity-50 hover:underline"
           }
         >
-          <span className="text-black">이미 계정이 있습니까? </span>
+          <span className="">이미 계정이 있습니까? </span>
           로그인
         </NavLink>
       </div>

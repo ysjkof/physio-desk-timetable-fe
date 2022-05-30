@@ -45,7 +45,7 @@ export function EventBox({
         isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
       }
       className={cls(
-        "group absolute z-30 mx-0.5 cursor-pointer border-gray-500 px-1 ring-1",
+        "group absolute z-30 mx-0.5 cursor-pointer px-1 ring-1",
         height === "20px"
           ? "grid grid-cols-2"
           : "grid grid-rows-[20px,20px,1fr]",
@@ -89,9 +89,7 @@ export function EventBox({
         </div>
       )}
       {memo && height !== "20px" && height !== "40px" && (
-        <div className="h-full overflow-hidden break-all border-gray-600 pt-1">
-          {memo}
-        </div>
+        <div className="h-full overflow-hidden break-all pt-1">{memo}</div>
       )}
       <p className="bubble-arrow-t-center bubble-apear invisible absolute -bottom-16 right-1/2 w-32 translate-x-1/2 rounded-md bg-black py-4 text-center text-white opacity-0 group-hover:visible group-hover:opacity-100">
         {`${getHHMM(startDate, ":")} ~ ${getHHMM(endDate, ":")}`}
