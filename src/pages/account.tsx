@@ -8,8 +8,8 @@ export const Account = () => {
     <div className="mt-10 flex h-screen flex-col items-center lg:mt-28">
       <div className="flex w-full max-w-screen-sm flex-col items-center px-5">
         {/* <Link to="/">
-          <img alt="Muool" src={muoolLogo} className=" mb-5 w-80" />
-        </Link> */}
+     <img alt="Muool" src={muoolLogo} className="mb-5 w-80" />
+    </Link> */}
         <Outlet />
 
         <NavLink

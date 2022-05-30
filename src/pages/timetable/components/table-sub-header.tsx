@@ -62,7 +62,7 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
                           ? "user-color-5"
                           : ""
                       }
-               `}
+        `}
                     >
                       {member.user.name}
                     </span>

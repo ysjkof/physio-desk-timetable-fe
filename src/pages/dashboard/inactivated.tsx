@@ -22,7 +22,7 @@ export const InactivatedClinic = () => {
             isPadding={true}
             children={
               <>
-                <div className="border-b text-sm">
+                <div className="border-b">
                   <span className="">이름</span>
                 </div>
                 <ul className="space-y-2 overflow-y-scroll">
@@ -30,7 +30,7 @@ export const InactivatedClinic = () => {
                   Array.isArray(findMyClinicsData.findMyClinics.clinics) &&
                   findMyClinicsData.findMyClinics.clinics.length >= 1
                     ? findMyClinicsData.findMyClinics.clinics.map((clinic) => (
-                        <li key={clinic.id} className="text-sm">
+                        <li key={clinic.id} className="">
                           {clinic.name}
                         </li>
                       ))

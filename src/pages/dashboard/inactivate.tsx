@@ -13,7 +13,7 @@ export const InactivateClinic = ({
   loggedInUser,
 }: InDashboardPageProps) => {
   if (!isStayed || !isManager) {
-    return <h3 className="mt-10 text-center text-xl">권한이 없습니다</h3>;
+    return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
   }
   const [mutationInactivateClinic, { loading }] = useInactivateClinicMutation();
 

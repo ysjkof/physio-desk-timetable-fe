@@ -77,14 +77,14 @@ export function EventBox({
         height,
       }}
     >
-      <div className="h-5 overflow-hidden whitespace-nowrap text-base">
+      <div className="h-5 overflow-hidden whitespace-nowrap">
         {patientName}
         {registrationNumber && height !== "20px" && (
-          <span className="ml-1 text-sm opacity-50">{registrationNumber}</span>
+          <span className="ml-1 opacity-50">{registrationNumber}</span>
         )}
       </div>
       {prescriptions && (
-        <div className="h-5 overflow-hidden text-base">
+        <div className="h-5 overflow-hidden">
           {prescriptions.map((prescription) => prescription.name)}
         </div>
       )}

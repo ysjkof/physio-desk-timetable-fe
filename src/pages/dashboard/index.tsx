@@ -145,7 +145,7 @@ export const Dashboard = () => {
         style={{ ...(containerHeight && { height: containerHeight }) }}
       >
         <nav className="dashboard-side-nav space-y-4">
-          <h1 className="border-b text-lg font-semibold">메뉴</h1>
+          <h1 className="border-b font-semibold">메뉴</h1>
           <ul>
             <li
               className={cls(

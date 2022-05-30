@@ -46,7 +46,7 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-lg  pt-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="rounded-lg pt-4">
       <div className="relative flex items-center rounded-full shadow-sm">
         <input
           {...register("patientName", {
@@ -98,16 +98,14 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
             )
           )}
         {!selectedPatient && !searchPatientResult ? (
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-gray-500">
             환자 목록
             <br />
             검색하면 나타납니다
           </p>
         ) : (
           searchPatientResult?.searchPatientByName.patients?.length === 0 && (
-            <p className="text-center text-sm text-gray-500">
-              검색결과가 없습니다.
-            </p>
+            <p className="text-center text-gray-500">검색결과가 없습니다.</p>
           )
         )}
         {selectedPatient && (
@@ -131,7 +129,7 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
           </div>
         )}
       </div>
-      <div className="mt-1 h-1 space-x-4 text-center text-xs text-gray-600">
+      <div className="mt-1 h-1 space-x-4 text-center text-gray-600">
         {searchPatientResult
           ? pageNumbers(
               searchPatientResult.searchPatientByName.totalPages ?? 0

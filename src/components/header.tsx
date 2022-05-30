@@ -181,10 +181,10 @@ export const Header = () => {
         <div className="flex w-full items-center gap-10">
           <Link to="/">
             {/* <img src={muoolLogo} className="w-36" alt="Muool" /> */}
-            <span className="text-2xl font-black text-sky-500">Muool</span>
+            <span className="font-black text-sky-500">Muool</span>
           </Link>
           <Link to="/community">
-            <span className="text-lg text-gray-600">커뮤니티</span>
+            <span className="text-gray-600">커뮤니티</span>
           </Link>
         </div>
         <div className="flex w-full items-baseline justify-end gap-4">
@@ -200,7 +200,7 @@ export const Header = () => {
             {isLoggedIn ? (
               <>
                 <Link to="/tt">
-                  <span className="whitespace-nowrap text-lg text-gray-600">
+                  <span className="whitespace-nowrap  text-gray-600">
                     시간표
                   </span>
                 </Link>

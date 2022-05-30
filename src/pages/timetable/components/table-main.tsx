@@ -172,63 +172,63 @@ export const TableMain = ({ eventsData }: ITimetableProps) => {
       )}
       {viewOptions.seeList === true && "준비 중"}
       {/* {viewOptions.seeList === true &&
-        (viewOptions.periodToView === 1 ? (
-          <div className="event-col relative grid border-x border-black">
-            <div>
-              {selectedDate.toLocaleDateString("ko-KR", {
-                month: "short",
-                day: "numeric",
-                weekday: "short",
-              })}
-            </div>
-            {weekEvents[selectedDate.getDay()].users?.map((user) => (
-              <div key={user.id}>
-                {user.events?.map((event) => (
-                  <EventLi
-                    key={event.id}
-                    viewOptions={viewOptions}
-                    reservationState={event.state}
-                    startDate={getHHMM(event.startDate, ":")}
-                    patientName={event.patient.name}
-                    userName={user.user.name}
-                    onClick={() => "나중에 고칠 것"}
-                  />
-                ))}
-              </div>
-            ))}
+    (viewOptions.periodToView === 1 ? (
+     <div className="event-col relative grid border-x border-black">
+      <div>
+       {selectedDate.toLocaleDateString("ko-KR", {
+        month: "short",
+        day: "numeric",
+        weekday: "short",
+       })}
+      </div>
+      {weekEvents[selectedDate.getDay()].users?.map((user) => (
+       <div key={user.id}>
+        {user.events?.map((event) => (
+         <EventLi
+          key={event.id}
+          viewOptions={viewOptions}
+          reservationState={event.state}
+          startDate={getHHMM(event.startDate, ":")}
+          patientName={event.patient.name}
+          userName={user.user.name}
+          onClick={() => "나중에 고칠 것"}
+         />
+        ))}
+       </div>
+      ))}
+     </div>
+    ) : (
+     viewOptions.periodToView === 7 && (
+      <div className="event-col relative grid border-x border-black">
+       {weekEvents.map((week) => (
+        <>
+         <div>
+          {week.date.toLocaleDateString("ko-KR", {
+           month: "short",
+           day: "numeric",
+           weekday: "short",
+          })}
+         </div>
+         {week.users?.map((user) => (
+          <div key={user.id}>
+           {user.events?.map((event) => (
+            <EventLi
+             key={event.id}
+             viewOptions={viewOptions}
+             reservationState={event.state}
+             startDate={getHHMM(event.startDate, ":")}
+             patientName={event.patient.name}
+             userName={user.user.name}
+             onClick={() => "나중에 고칠 것"}
+            />
+           ))}
           </div>
-        ) : (
-          viewOptions.periodToView === 7 && (
-            <div className="event-col relative grid border-x border-black">
-              {weekEvents.map((week) => (
-                <>
-                  <div>
-                    {week.date.toLocaleDateString("ko-KR", {
-                      month: "short",
-                      day: "numeric",
-                      weekday: "short",
-                    })}
-                  </div>
-                  {week.users?.map((user) => (
-                    <div key={user.id}>
-                      {user.events?.map((event) => (
-                        <EventLi
-                          key={event.id}
-                          viewOptions={viewOptions}
-                          reservationState={event.state}
-                          startDate={getHHMM(event.startDate, ":")}
-                          patientName={event.patient.name}
-                          userName={user.user.name}
-                          onClick={() => "나중에 고칠 것"}
-                        />
-                      ))}
-                    </div>
-                  ))}
-                </>
-              ))}
-            </div>
-          )
-        ))} */}
+         ))}
+        </>
+       ))}
+      </div>
+     )
+    ))} */}
     </>
   );
 };

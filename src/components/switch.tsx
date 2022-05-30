@@ -13,7 +13,7 @@ export const Switch: React.FC<ISwitch> = ({ enabled, label, onClick }) => (
     <span
       className={cls(
         enabled ? "text-gray-700" : "text-gray-400",
-        "mr-0.5 text-sm hover:font-bold"
+        "mr-0.5 hover:font-bold"
       )}
     >
       {label}

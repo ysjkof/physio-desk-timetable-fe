@@ -26,7 +26,7 @@ export const PrescriptionPage = ({
   isManager,
 }: InDashboardPageProps) => {
   if (!isStayed) {
-    return <h3 className="mt-10 text-center text-xl">권한이 없습니다</h3>;
+    return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
   }
   const [atomList, setAtomList] = useState<
     { id: number; name: string; onSelect: boolean }[]
@@ -117,11 +117,11 @@ export const PrescriptionPage = ({
             isPadding={true}
             children={
               <>
-                <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b text-sm">
+                <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b">
                   <span className="">이름</span>
-                  <span className=" text-right">가격</span>
-                  <span className=" text-right">소요시간</span>
-                  <span className=" text-center">활성</span>
+                  <span className="text-right">가격</span>
+                  <span className="text-right">소요시간</span>
+                  <span className="text-center">활성</span>
                 </div>
                 <ul className="space-y-2 overflow-y-scroll">
                   {findPrescriptionsData?.findPrescriptions.prescriptions?.map(
@@ -156,49 +156,49 @@ export const PrescriptionPage = ({
             }
           />
           {/* <DashboardSectionLayout
-            title="묶음처방"
-            tooltip="단일 처방을 여러개 묶은 것"
-            isPadding={true}
-            children={
-              <>
-                <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b text-sm">
-                  <span>이름</span>
-                  <span className="text-right">가격</span>
-                  <span className="text-right">소요시간</span>
-                  <span className="text-center">활성</span>
-                </div>
-                <ul className="space-y-2 overflow-y-scroll">
-                  {findPrescriptionsData?.findPrescriptions.bundleResults?.map(
-                    (presc) => (
-                      <li
-                        key={presc.id}
-                        className="justify-bet group relative grid grid-cols-[1fr_5rem_3.3rem_1.75rem] items-center gap-3"
-                      >
-                        <span className="">{presc.name}</span>
-                        <span className="text-right">{presc.price}원</span>
-                        <span className="text-right">
-                          {presc.requiredTime}분
-                        </span>
-                        <FontAwesomeIcon
-                          icon={faCheckCircle}
-                          fontSize="large"
-                          className={cls(
-                            presc.activate ? "text-green-500" : "",
-                            "mx-auto cursor-pointer"
-                          )}
-                        />
-                        {presc.description && (
-                          <p className="bubble-arrow-t-left absolute top-7 hidden rounded-md bg-black px-3 py-2 text-white group-hover:block">
-                            {presc.description}
-                          </p>
-                        )}
-                      </li>
-                    )
-                  )}
-                </ul>
-              </>
-            }
-          /> */}
+      title="묶음처방"
+      tooltip="단일 처방을 여러개 묶은 것"
+      isPadding={true}
+      children={
+       <>
+        <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b">
+         <span>이름</span>
+         <span className="text-right">가격</span>
+         <span className="text-right">소요시간</span>
+         <span className="text-center">활성</span>
+        </div>
+        <ul className="space-y-2 overflow-y-scroll">
+         {findPrescriptionsData?.findPrescriptions.bundleResults?.map(
+          (presc) => (
+           <li
+            key={presc.id}
+            className="justify-bet group relative grid grid-cols-[1fr_5rem_3.3rem_1.75rem] items-center gap-3"
+           >
+            <span className="">{presc.name}</span>
+            <span className="text-right">{presc.price}원</span>
+            <span className="text-right">
+             {presc.requiredTime}분
+            </span>
+            <FontAwesomeIcon
+             icon={faCheckCircle}
+             fontSize="large"
+             className={cls(
+              presc.activate ? "text-green-500" : "",
+              "mx-auto cursor-pointer"
+             )}
+            />
+            {presc.description && (
+             <p className="bubble-arrow-t-left absolute top-7 hidden rounded-md bg-black px-3 py-2 text-white group-hover:block">
+              {presc.description}
+             </p>
+            )}
+           </li>
+          )
+         )}
+        </ul>
+       </>
+      }
+     /> */}
         </section>
 
         <section>
@@ -215,7 +215,7 @@ export const PrescriptionPage = ({
                 >
                   <div className="prescription-selector">
                     <div className="flex items-center">
-                      <h4 className="mr-4 w-9 text-sm">처방</h4>
+                      <h4 className="mr-4 w-9">처방</h4>
                       <div className="w-full rounded-md bg-blue-400/90 text-white">
                         <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
                           {atomList.map((option) => (

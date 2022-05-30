@@ -37,7 +37,7 @@ export const Search = () => {
         </div>
       ) : (
         <div className="container mx-auto divide-y">
-          <h1 className="text-lg font-bold">검색 결과</h1>
+          <h1 className="font-bold">검색 결과</h1>
           {data?.searchPatientByName.patients?.map((patient) => (
             <Fragment key={patient.id}>
               <SearchName

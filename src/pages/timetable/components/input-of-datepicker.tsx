@@ -28,9 +28,7 @@ export const InputOfDatepicker = ({
       onFocus={() => setOpen(true)}
     >
       <label className="relative flex flex-col">
-        <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-          년
-        </span>
+        <span className="absolute right-2 bottom-1 text-gray-500">년</span>
         <input
           {...register(`${prefix}Year`, {
             required: "연도를 입력해주세요.",
@@ -45,9 +43,7 @@ export const InputOfDatepicker = ({
         />
       </label>
       <label className="relative flex flex-col">
-        <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-          월
-        </span>
+        <span className="absolute right-2 bottom-1 text-gray-500">월</span>
         <input
           {...register(`${prefix}Month`, {
             required: "월을 입력해주세요.",
@@ -62,9 +58,7 @@ export const InputOfDatepicker = ({
         />
       </label>
       <label className="relative flex flex-col">
-        <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-          일
-        </span>
+        <span className="absolute right-2 bottom-1 text-gray-500">일</span>
         <input
           {...register(`${prefix}Date`, {
             required: "날짜를 입력해주세요.",
@@ -80,9 +74,7 @@ export const InputOfDatepicker = ({
       </label>
       {see === "ymd-hm" && (
         <label className="relative flex flex-col">
-          <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-            시
-          </span>
+          <span className="absolute right-2 bottom-1 text-gray-500">시</span>
           <input
             {...register(`${prefix}Hours`, {
               required: "시간을 입력해주세요.",
@@ -99,9 +91,7 @@ export const InputOfDatepicker = ({
       )}
       {see === "ymd-hm" && (
         <label className="relative flex flex-col">
-          <span className="absolute right-2 bottom-1 text-xs text-gray-500">
-            분
-          </span>
+          <span className="absolute right-2 bottom-1 text-gray-500">분</span>
           <input
             {...register(`${prefix}Minutes`, {
               required: "분을 입력해주세요.",

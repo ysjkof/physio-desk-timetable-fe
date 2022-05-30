@@ -28,14 +28,12 @@ export const SearchName = ({
       )}
     >
       {columnCount === 2 && !registrationNumber ? (
-        <span className="text-xs text-gray-400">
-          {getYMD(birthday, "yymmdd", "-")}
-        </span>
+        <span className="text-gray-400">{getYMD(birthday, "yymmdd", "-")}</span>
       ) : (
         <span
           className={cls(
             registrationNumber ? "text-right" : "text-center",
-            " text-sm text-gray-400"
+            "text-gray-400"
           )}
         >
           {registrationNumber ? registrationNumber : "-"}
@@ -69,7 +67,7 @@ export const SearchName = ({
         {columnCount === 2 ? (
           ""
         ) : (
-          <span className="text-xs text-gray-400">
+          <span className="text-gray-400">
             {getYMD(birthday, "yymmdd", "-")}
           </span>
         )}

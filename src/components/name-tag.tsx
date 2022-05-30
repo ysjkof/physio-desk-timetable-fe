@@ -56,26 +56,26 @@ export const NameTag = ({
           ""
         ) : shrink ? (
           registrationNumber ? (
-            <span className="dark:text-light-blue-100 text-xs text-gray-700">
+            <span className="dark:text-light-blue-100  text-gray-700">
               r.no : {registrationNumber}
             </span>
           ) : (
-            <span className="dark:text-light-blue-100 text-xs text-gray-700">
+            <span className="dark:text-light-blue-100  text-gray-700">
               b : {getYMD(birthday, "yymmdd")}
             </span>
           )
         ) : (
           <>
-            <span className="dark:text-light-blue-100 text-xs text-gray-700">
+            <span className="dark:text-light-blue-100  text-gray-700">
               r.no : {registrationNumber ? registrationNumber : "미등록"}
             </span>
-            <span className="dark:text-light-blue-100 text-xs text-gray-700">
+            <span className="dark:text-light-blue-100  text-gray-700">
               b : {birthday ? getYMD(birthday, "yymmdd") : "미등록"}
             </span>
           </>
         )}
       </div>
-      {clinicName && <span className="px-6 text-sm">{clinicName}</span>}
+      {clinicName && <span className="px-6">{clinicName}</span>}
       {/* 마지막 치료한 치료사 */}
 
       <span>{user?.name}</span>

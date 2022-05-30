@@ -26,7 +26,7 @@ export const ReservationCardName = ({
       <span
         className={cls(
           registrationNumber ? "text-right" : "text-center",
-          " text-sm text-gray-400"
+          "text-gray-400"
         )}
       >
         {registrationNumber ? registrationNumber : "-"}
@@ -40,9 +40,7 @@ export const ReservationCardName = ({
         >
           {gender === "male" ? "남성" : "여성"}
         </span>
-        <span className="text-xs text-gray-400">
-          {getYMD(birthday, "yymmdd", "-")}
-        </span>
+        <span className="text-gray-400">{getYMD(birthday, "yymmdd", "-")}</span>
       </div>
     </div>
   );

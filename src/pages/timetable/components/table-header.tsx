@@ -50,7 +50,7 @@ export function TableHeader({ today }: TableNavProps) {
     >
       <div className="flex justify-between">
         <button
-          className="min-w-[120px] text-sm font-medium text-gray-700 hover:font-bold"
+          className="min-w-[120px] font-medium text-gray-700 hover:font-bold"
           onClick={() => selectedDateVar(today)}
         >
           {today.toLocaleString("ko-KR", {

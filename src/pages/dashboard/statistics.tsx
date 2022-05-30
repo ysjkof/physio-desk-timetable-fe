@@ -51,7 +51,7 @@ export const Statistics = ({
   loggedInUser,
 }: InDashboardPageProps) => {
   if (!isStayed) {
-    return <h3 className="mt-10 text-center text-xl">권한이 없습니다</h3>;
+    return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
   }
   let defaultDate: Date[] = [new Date(), new Date()];
   defaultDate[0].setDate(1);
@@ -272,7 +272,7 @@ export const Statistics = ({
             children={
               <>
                 <h3 className="first-:bg-red-500 text-center">
-                  <div className="space-x-3 text-xl font-medium text-blue-700">
+                  <div className="space-x-3 font-medium text-blue-700">
                     <span>{startDate.toLocaleDateString()}</span>
                     <span>~</span>
                     <span>{endDate.toLocaleDateString()}</span>
@@ -316,7 +316,7 @@ export const Statistics = ({
                   ))}
                 </div>
 
-                <div className="grid grid-cols-[1fr_7.5rem_3.3rem] justify-between gap-3 border-t border-black text-sm">
+                <div className="grid grid-cols-[1fr_7.5rem_3.3rem] justify-between gap-3 border-t border-black">
                   <span className="">총합</span>
                   <span className="text-center">
                     {userStatis

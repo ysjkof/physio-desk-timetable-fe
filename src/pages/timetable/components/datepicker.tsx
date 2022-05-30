@@ -135,7 +135,7 @@ export const Datepicker = ({
         className={cls(
           "cursor-pointer",
           open
-            ? "text-gray-700  hover:text-gray-500"
+            ? "text-gray-700 hover:text-gray-500"
             : "text-gray-500 hover:text-gray-700"
         )}
         ref={ref}
@@ -161,7 +161,7 @@ export const Datepicker = ({
           top={top}
           closeAction={setOpen}
           children={
-            <div className="absolute bottom-0 z-50 w-[440px] text-xs text-gray-600 shadow-cst">
+            <div className="absolute bottom-0 z-50 w-[440px] text-gray-600 shadow-cst">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
                 <div className="navigation mb-1 flex justify-between border-b pb-2">
                   <div>{`${dateOfMonth[15].getFullYear()}년 ${
@@ -252,7 +252,7 @@ export const Datepicker = ({
                             <span
                               key={i}
                               className={cls(
-                                "cursor-pointer px-1.5 text-base",
+                                "cursor-pointer px-1.5 ",
                                 selectedHour === hours
                                   ? "rounded-md bg-blue-500 text-white"
                                   : ""
@@ -269,7 +269,7 @@ export const Datepicker = ({
                             <span
                               key={i}
                               className={cls(
-                                "cursor-pointer px-1.5 text-base",
+                                "cursor-pointer px-1.5 ",
                                 +selectedMinutes === minutes
                                   ? "rounded-md bg-blue-500 text-white"
                                   : ""
@@ -283,9 +283,9 @@ export const Datepicker = ({
                           ))}
                         </div>
                         {/* <div className="flex flex-col whitespace-nowrap">
-                <span className="text-sm">오전</span>
-                <span className="text-sm">오후</span>
-              </div> */}
+        <span className="">오전</span>
+        <span className="">오후</span>
+       </div> */}
                       </div>
                     </div>
                   )}

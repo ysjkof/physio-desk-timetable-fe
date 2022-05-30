@@ -59,7 +59,7 @@ export const Login = () => {
         <title>Login | Muool</title>
       </Helmet>
 
-      <h4 className="mb-5 w-full text-left text-3xl font-medium">
+      <h4 className="mb-5 w-full text-left  font-medium">
         물리치료사를 위한 하나의 앱
       </h4>
       <form

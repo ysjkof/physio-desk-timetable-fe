@@ -20,11 +20,11 @@ export const InputPriscription = ({
   return (
     <div className="w-full space-y-2">
       <div className="flex">
-        <label className="whitespace-nowrap py-0.5 text-sm">{label}</label>
+        <label className="whitespace-nowrap py-0.5">{label}</label>
         <div className="flex w-full">{children}</div>
       </div>
       <input
-        className="input placeholder:text-sm"
+        className="input placeholder:"
         {...register}
         placeholder={placeholder}
         type={type}

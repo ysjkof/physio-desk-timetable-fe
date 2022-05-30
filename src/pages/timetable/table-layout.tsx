@@ -65,7 +65,7 @@ export const TimetableLayout = ({
       )}
       <motion.div
         animate={{ opacity: 1 }}
-        className="timetable-layout-container text-xs opacity-0"
+        className="timetable-layout-container opacity-0"
       >
         <TableHeader today={today} />
         <div className="flex">

@@ -95,11 +95,11 @@ export const ReservationCard = ({ refetch }: ReservationCardProps) => {
       >
         <FontAwesomeIcon icon={faXmark} />
       </button>
-      <h4 className="mb-5 text-left text-3xl font-medium">예약 자세히</h4>
+      <h4 className="mb-5 text-left font-medium">예약 자세히</h4>
       <div className="reservation-editor mb-5 flex justify-around">
         {/* <button className="rounded-md px-2 font-medium text-gray-500 shadow-cst">
-          차트
-        </button> */}
+     차트
+    </button> */}
         <button
           onClick={() => onClickEditReserve(ReservationState.NoShow)}
           className={cls(

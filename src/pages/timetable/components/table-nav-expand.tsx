@@ -41,7 +41,7 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
       initial="ini"
       animate="start"
     >
-      <span className="pointer-events-none absolute -top-1 mx-auto w-full text-center text-base">
+      <span className="pointer-events-none absolute -top-1 mx-auto w-full text-center">
         {daysOfMonths[0][7].date.getMonth() + 1}월
       </span>
       <MoveXBtn direction={"prev"} onClick={() => onClickMoveX("prevMonth")} />

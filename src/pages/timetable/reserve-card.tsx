@@ -247,12 +247,12 @@ export const ReserveCard = ({
         />
       ) : (
         <>
-          <h4 className="mb-5 w-full text-3xl font-medium">
+          <h4 className="mb-5 w-full font-medium">
             예약하기
             {selectedClinic === null || selectedClinic.id === null ? (
               ""
             ) : (
-              <span className="ml-2 text-base font-normal">
+              <span className="ml-2 font-normal">
                 {
                   clinicLists?.find(
                     (clinic) => clinic.id === selectedClinic?.id

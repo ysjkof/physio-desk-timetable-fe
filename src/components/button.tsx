@@ -12,7 +12,7 @@ export const Button: React.FC<IButtonProps> = ({
   actionText,
 }) => (
   <button
-    className={`rounded-md py-4 text-lg font-medium text-white transition-colors focus:outline-none ${
+    className={`rounded-md py-4  font-medium text-white transition-colors focus:outline-none ${
       canClick
         ? "bg-sky-600 hover:bg-sky-700"
         : "pointer-events-none bg-gray-300 "

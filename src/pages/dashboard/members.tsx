@@ -37,7 +37,7 @@ export const Members = ({
             isPadding={true}
             children={
               <>
-                <div className="grid grid-cols-[2.4rem_1fr_4rem_4rem] gap-3 border-b text-sm">
+                <div className="grid grid-cols-[2.4rem_1fr_4rem_4rem] gap-3 border-b">
                   <span className="">권한</span>
                   <span className="">이름</span>
                   <span className=""></span>
@@ -47,9 +47,9 @@ export const Members = ({
                   {members?.map((member) => (
                     <div
                       key={member.id}
-                      className="grid grid-cols-[2.4rem_1fr_4.2rem_4rem] items-center gap-3 text-sm"
+                      className="grid grid-cols-[2.4rem_1fr_4.2rem_4rem] items-center gap-3 "
                     >
-                      <span className="inline-block w-10 text-xs text-gray-500">
+                      <span className="inline-block w-10 text-gray-500">
                         {member.manager ? "관리자" : "회원"}
                       </span>
                       <span

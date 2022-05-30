@@ -17,8 +17,8 @@ export const TimeIndicatorBar = ({
     const nowTime = nowMinute - startTime;
     const maxTime = endTime - startTime;
     if (nowTime > maxTime) {
-      //   시간표의 1칸은 10분을 나타내고 높이 20px이다.
-      //   1분은 2px기 때문에 *2 한다.
+      //  시간표의 1칸은 10분을 나타내고 높이 20px이다.
+      //  1분은 2px기 때문에 *2 한다.
       setTop(0);
     } else {
       setTop(Math.floor(nowTime * 2));
