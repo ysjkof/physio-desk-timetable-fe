@@ -1,7 +1,8 @@
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
+import { ModalPortal } from "../../../components/modal-portal";
 import { cls } from "../../../libs/utils";
 
 export interface DatepickerForm {
@@ -48,6 +49,12 @@ export const Datepicker = ({
     start: { hours: 9, minutes: 0 },
     end: { hours: 19, minutes: 0 },
   });
+
+  const modalGap = 10;
+  const ref = useRef<HTMLDivElement>(null);
+  const height = ref.current?.getBoundingClientRect().height;
+  const top = ref.current?.getBoundingClientRect().top! + height! + modalGap;
+  const left = ref.current?.getBoundingClientRect().left;
 
   function getHours(start: number, end: number) {
     const hours = [];
@@ -131,6 +138,7 @@ export const Datepicker = ({
             ? "text-gray-700  hover:text-gray-500"
             : "text-gray-500 hover:text-gray-700"
         )}
+        ref={ref}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -148,130 +156,144 @@ export const Datepicker = ({
         </svg>
       </div>
       {open && (
-        <div className="absolute bottom-0 z-50 w-[440px] text-xs text-gray-600 shadow-cst">
-          <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
-            <div className="navigation mb-1 flex justify-between border-b pb-2">
-              <div>{`${dateOfMonth[15].getFullYear()}년 ${
-                dateOfMonth[15].getMonth() + 1
-              }월`}</div>
-              <div className="space-x-6">
-                <span
-                  onClick={() => {
-                    const date = new Date(prevDate);
-                    date.setMonth(date.getMonth() - 1);
-                    setPrevDate(date);
-                    setDateOfMonth(getWeeksOfMonth(date));
-                  }}
-                  className="cursor-pointer"
-                >
-                  <FontAwesomeIcon icon={faArrowUp} />
-                </span>
-                <span
-                  onClick={() => {
-                    const date = new Date(prevDate);
-                    date.setMonth(date.getMonth() + 1);
-                    setPrevDate(date);
-                    setDateOfMonth(getWeeksOfMonth(date));
-                  }}
-                  className="cursor-pointer"
-                >
-                  <FontAwesomeIcon icon={faArrowDown} />
-                </span>
-                <span
-                  className="cursor-pointer"
-                  onClick={() => setNextDate(new Date())}
-                >
-                  오늘
-                </span>
-                <span className="cursor-pointer" onClick={() => setOpen(false)}>
-                  닫기
-                </span>
-              </div>
-            </div>
-            <div className="datepicker flex divide-x">
-              <div className="datepicker-col left grid w-full grid-cols-7 pr-1.5 text-center">
-                {["일", "월", "화", "수", "목", "금", "토"].map((day, i) => (
-                  <div key={i}>{day}</div>
-                ))}
-                {dateOfMonth.map((day) => (
-                  <span
-                    key={day.valueOf()}
-                    className={cls(
-                      "cursor-pointer px-1.5 py-1",
-                      day.getMonth() !== dateOfMonth[15].getMonth()
-                        ? "opacity-40"
-                        : "",
-                      day.getDay() === 0 ? "text-red-500" : "",
-                      day.getDay() === 6 ? "text-blue-500" : "",
-                      day.getDate() === nextDate.getDate() &&
-                        day.getMonth() === nextDate.getMonth()
-                        ? "rounded-md bg-red-400 text-white"
-                        : "",
-                      day.getDate() === defaultDate.getDate() &&
-                        day.getMonth() === defaultDate.getMonth()
-                        ? "rounded-md border border-transparent ring-2 ring-red-500"
-                        : ""
-                    )}
-                    data-date={day}
-                    onClick={async (e) => {
-                      // @ts-ignore
-                      await setNextDate(new Date(e.currentTarget.dataset.date));
-                      if (see === "ymd") setOpen(false);
-                    }}
-                  >
-                    {day.getDate()}
-                  </span>
-                ))}
-              </div>
-              {see === "ymd-hm" && (
-                <div className="datepicker-col right pl-2">
-                  <div className="timepicker flex h-32 space-x-2 text-center">
-                    <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
-                      <span>시</span>
-                      {listOfHours.map((hours, i) => (
-                        <span
-                          key={i}
-                          className={cls(
-                            "cursor-pointer px-1.5 text-base",
-                            selectedHour === hours
-                              ? "rounded-md bg-blue-500 text-white"
-                              : ""
-                          )}
-                          onClick={() => setSelectedHour(hours)}
-                        >
-                          {String(hours).padStart(2, "0")}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
-                      <span>분</span>
-                      {listOfMinutes.map((minutes, i) => (
-                        <span
-                          key={i}
-                          className={cls(
-                            "cursor-pointer px-1.5 text-base",
-                            +selectedMinutes === minutes
-                              ? "rounded-md bg-blue-500 text-white"
-                              : ""
-                          )}
-                          onClick={() => {
-                            setSelectedMinutes(minutes);
-                          }}
-                        >
-                          {String(minutes).padStart(2, "0")}
-                        </span>
-                      ))}
-                    </div>
-                    {/* <div className="flex flex-col whitespace-nowrap">
-                    <span className="text-sm">오전</span>
-                    <span className="text-sm">오후</span>
-                  </div> */}
+        <ModalPortal
+          left={left}
+          top={top}
+          closeAction={setOpen}
+          children={
+            <div className="absolute bottom-0 z-50 w-[440px] text-xs text-gray-600 shadow-cst">
+              <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
+                <div className="navigation mb-1 flex justify-between border-b pb-2">
+                  <div>{`${dateOfMonth[15].getFullYear()}년 ${
+                    dateOfMonth[15].getMonth() + 1
+                  }월`}</div>
+                  <div className="space-x-6">
+                    <span
+                      onClick={() => {
+                        const date = new Date(prevDate);
+                        date.setMonth(date.getMonth() - 1);
+                        setPrevDate(date);
+                        setDateOfMonth(getWeeksOfMonth(date));
+                      }}
+                      className="cursor-pointer"
+                    >
+                      <FontAwesomeIcon icon={faArrowUp} />
+                    </span>
+                    <span
+                      onClick={() => {
+                        const date = new Date(prevDate);
+                        date.setMonth(date.getMonth() + 1);
+                        setPrevDate(date);
+                        setDateOfMonth(getWeeksOfMonth(date));
+                      }}
+                      className="cursor-pointer"
+                    >
+                      <FontAwesomeIcon icon={faArrowDown} />
+                    </span>
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => setNextDate(new Date())}
+                    >
+                      오늘
+                    </span>
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => setOpen(false)}
+                    >
+                      닫기
+                    </span>
                   </div>
                 </div>
-              )}
+                <div className="datepicker flex divide-x">
+                  <div className="datepicker-col left grid w-full grid-cols-7 pr-1.5 text-center">
+                    {["일", "월", "화", "수", "목", "금", "토"].map(
+                      (day, i) => (
+                        <div key={i}>{day}</div>
+                      )
+                    )}
+                    {dateOfMonth.map((day) => (
+                      <span
+                        key={day.valueOf()}
+                        className={cls(
+                          "cursor-pointer px-1.5 py-1",
+                          day.getMonth() !== dateOfMonth[15].getMonth()
+                            ? "opacity-40"
+                            : "",
+                          day.getDay() === 0 ? "text-red-500" : "",
+                          day.getDay() === 6 ? "text-blue-500" : "",
+                          day.getDate() === nextDate.getDate() &&
+                            day.getMonth() === nextDate.getMonth()
+                            ? "rounded-md bg-red-400 text-white"
+                            : "",
+                          day.getDate() === defaultDate.getDate() &&
+                            day.getMonth() === defaultDate.getMonth()
+                            ? "rounded-md border border-transparent ring-2 ring-red-500"
+                            : ""
+                        )}
+                        data-date={day}
+                        onClick={async (e) => {
+                          await setNextDate(
+                            // @ts-ignore
+                            new Date(e.currentTarget.dataset.date)
+                          );
+                          if (see === "ymd") setOpen(false);
+                        }}
+                      >
+                        {day.getDate()}
+                      </span>
+                    ))}
+                  </div>
+                  {see === "ymd-hm" && (
+                    <div className="datepicker-col right pl-2">
+                      <div className="timepicker flex h-32 space-x-2 text-center">
+                        <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                          <span>시</span>
+                          {listOfHours.map((hours, i) => (
+                            <span
+                              key={i}
+                              className={cls(
+                                "cursor-pointer px-1.5 text-base",
+                                selectedHour === hours
+                                  ? "rounded-md bg-blue-500 text-white"
+                                  : ""
+                              )}
+                              onClick={() => setSelectedHour(hours)}
+                            >
+                              {String(hours).padStart(2, "0")}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                          <span>분</span>
+                          {listOfMinutes.map((minutes, i) => (
+                            <span
+                              key={i}
+                              className={cls(
+                                "cursor-pointer px-1.5 text-base",
+                                +selectedMinutes === minutes
+                                  ? "rounded-md bg-blue-500 text-white"
+                                  : ""
+                              )}
+                              onClick={() => {
+                                setSelectedMinutes(minutes);
+                              }}
+                            >
+                              {String(minutes).padStart(2, "0")}
+                            </span>
+                          ))}
+                        </div>
+                        {/* <div className="flex flex-col whitespace-nowrap">
+                <span className="text-sm">오전</span>
+                <span className="text-sm">오후</span>
+              </div> */}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          }
+        />
       )}
     </div>
   );
