@@ -30,6 +30,7 @@ function App() {
             <Route path="tt" element={<TimeTable />}>
               <Route path="reserve" element={<TimeTable />} />
               <Route path="edit" element={<TimeTable />} />
+              <Route path="create-patient" element={<TimeTable />} />
             </Route>
             <Route path="list-patient" element={<ListPatient />} />
             <Route path="search" element={<Search />} />

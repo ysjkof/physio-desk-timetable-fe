@@ -1,3 +1,4 @@
+import { HTMLInputTypeAttribute, ReactNode } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputProps {
@@ -5,10 +6,11 @@ interface InputProps {
   name: string;
   placeholder: string;
   register: UseFormRegisterReturn;
-  type: string;
+  type: HTMLInputTypeAttribute;
   required: boolean;
-  kind?: "text" | "search";
   value?: any;
+  autoFocus?: boolean;
+  children?: ReactNode;
 }
 
 export const Input = ({
@@ -18,29 +20,37 @@ export const Input = ({
   register,
   type,
   required,
-  kind = "text",
   value,
+  autoFocus = false,
+  children,
 }: InputProps) => {
   return (
-    <>
-      {label ? (
-        <label className="mb-1 block  font-medium " htmlFor={name}>
-          {label}
-        </label>
-      ) : null}
-      {kind === "text" ? (
-        <div className="relative flex items-center rounded-md shadow-sm">
-          <input
-            id={name}
-            required={required}
-            {...register}
-            type={type}
-            placeholder={placeholder}
-            className="input"
-            value={value}
-          />
-        </div>
-      ) : null}
-    </>
+    <label className="relative flex flex-col gap-2" htmlFor={name}>
+      {label}
+      {type !== "textarea" ? (
+        <input
+          id={name}
+          required={required}
+          {...register}
+          type={type}
+          placeholder={placeholder}
+          className="input"
+          value={value}
+          autoFocus={autoFocus}
+        />
+      ) : (
+        <textarea
+          id={name}
+          required={required}
+          {...register}
+          placeholder={placeholder}
+          className="input"
+          value={value}
+          autoFocus={autoFocus}
+          rows={8}
+        />
+      )}
+      {children}
+    </label>
   );
 };

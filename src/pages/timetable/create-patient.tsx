@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { FormError } from "../../components/form-error";
 import { Button } from "../../components/button";
@@ -8,19 +7,20 @@ import {
   useCreatePatientMutation,
 } from "../../graphql/generated/graphql";
 import { Input } from "../../components/input";
-import { selectedPatientVar } from "../../store";
+import { selectedClinicVar, selectedPatientVar } from "../../store";
+import { useReactiveVar } from "@apollo/client";
+import { ModalContentsLayout } from "./components/modal-contents-layout";
+import { TimetableModalProps } from "./table-layout";
+import { InputOfDatepicker } from "./components/input-of-datepicker";
 
-interface CreatePatientProps {
-  clinicId?: number;
-  clinicName?: string;
-  closeModal: any;
+export interface BirthdayInput {
+  birthdayYear?: number;
+  birthdayMonth?: number;
+  birthdayDate?: number;
 }
 
-export const CreatePatient = ({
-  clinicId,
-  clinicName,
-  closeModal,
-}: CreatePatientProps) => {
+export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
+  const selectedClinic = useReactiveVar(selectedClinicVar);
   const {
     register,
     getValues,
@@ -29,20 +29,27 @@ export const CreatePatient = ({
   } = useForm<CreatePatientInput>({
     mode: "onChange",
   });
+  const {
+    register: birthdayRegister,
+    getValues: birthdayGetValues,
+    formState: { errors: birthdayError, isValid: birthdayIsValid },
+  } = useForm<BirthdayInput>({
+    mode: "onChange",
+  });
 
   const onCompleted = (data: CreatePatientMutation) => {
     const {
       createPatient: { ok, patient },
     } = data;
     if (ok) {
-      closeModal();
+      closeAction();
       selectedPatientVar({
         name: patient?.name!,
         gender: patient?.gender!,
         registrationNumber: patient?.registrationNumber,
         birthday: patient?.birthday,
         id: patient?.id!,
-        clinicName: clinicName ?? "",
+        clinicName: selectedClinic.name ?? "",
       });
     }
   };
@@ -50,18 +57,24 @@ export const CreatePatient = ({
     createPatientMutation,
     { loading, data: createaPatientMutationResult },
   ] = useCreatePatientMutation({ onCompleted });
+
   const onSubmit = () => {
     if (!loading) {
-      const { name, gender, registrationNumber, birthday, memo } = getValues();
+      const { name, gender, registrationNumber, memo } = getValues();
+      const { birthdayYear, birthdayMonth, birthdayDate } = birthdayGetValues();
+      const birthday = new Date(
+        `${birthdayYear}-${birthdayMonth}-${birthdayDate}`
+      );
       createPatientMutation({
         variables: {
           input: {
             name,
             gender,
             registrationNumber,
-            birthday,
             memo,
-            ...(clinicId && { clinicId }),
+            ...(birthday && { birthday }),
+            ...(typeof selectedClinic.id === "number" &&
+              selectedClinic.id !== 0 && { clinicId: selectedClinic.id }),
           },
         },
       });
@@ -69,94 +82,116 @@ export const CreatePatient = ({
   };
 
   return (
-    <>
-      <Helmet>
-        <title>환자등록 | Muool</title>
-      </Helmet>
-      <h4 className="mb-5 text-left font-medium">환자등록</h4>
-      <button
-        className="hover: absolute top-14 right-10 rounded-md border  px-2"
-        onClick={() => closeModal(false)}
-      >
-        돌아가기
-      </button>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mt-5 mb-5 grid w-full gap-3"
-      >
-        {errors.name?.message && (
-          <FormError errorMessage={errors.name?.message} />
-        )}
-        <Input
-          label={"이름*"}
-          name={"name"}
-          placeholder={"이름을 입력하세요"}
-          register={register("name", {
-            required: "Name is required",
-          })}
-          type={"name"}
-          required={true}
-        />
-        {errors.gender?.message && (
-          <FormError errorMessage={errors.gender?.message} />
-        )}
-        <div className="flex justify-around">
-          <div>
-            <label htmlFor="gender-male" className="px-3">
-              남성
-            </label>
-            <input
-              {...register("gender", { required: "성별을 선택하세요" })}
-              type="radio"
-              value="male"
-              id="gender-male"
+    <ModalContentsLayout
+      title="환자등록"
+      closeAction={closeAction}
+      children={
+        <>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mt-5 mb-5 grid w-full gap-6"
+          >
+            <Input
+              autoFocus
+              label={"이름*"}
+              name={"name"}
+              type={"text"}
+              placeholder={"이름을 입력하세요"}
+              required={true}
+              register={register("name", {
+                required: "이름을 입력하세요",
+                maxLength: { value: 30, message: "최대 30자 입니다" },
+              })}
+              children={
+                errors.name?.message && (
+                  <FormError errorMessage={errors.name?.message} />
+                )
+              }
             />
-          </div>
-          <div>
-            <label htmlFor="gender-female" className="px-3">
-              여성
+            <div className="gender-radio flex justify-around">
+              <div className="flex items-center">
+                <label htmlFor="gender-male" className="px-3">
+                  남성
+                </label>
+                <input
+                  {...register("gender", { required: "성별을 선택하세요" })}
+                  type="radio"
+                  value="male"
+                  id="gender-male"
+                />
+              </div>
+              <div className="flex items-center">
+                <label htmlFor="gender-female" className="px-3">
+                  여성
+                </label>
+                <input
+                  {...register("gender", { required: "성별을 선택하세요" })}
+                  type="radio"
+                  value="female"
+                  id="gender-female"
+                  defaultChecked
+                />
+              </div>
+            </div>
+            <label className="flex flex-col gap-2">
+              생년월일
+              <InputOfDatepicker
+                register={birthdayRegister}
+                formError={birthdayError}
+                prefix="birthday"
+                see="ymd"
+              />
             </label>
-            <input
-              {...register("gender", { required: "성별을 선택하세요" })}
-              type="radio"
-              value="female"
-              id="gender-female"
-              defaultChecked
-            />
-          </div>
-        </div>
-        <Input
-          label={"생년월일*"}
-          name={"birthday"}
-          placeholder={"1970-01-15"}
-          register={register("birthday", { required: "생일을 입력하세요" })}
-          type={"datetime"}
-          required={true}
-        />
-        <Input
-          label={"등록번호"}
-          name={"registrationNumber"}
-          placeholder={"숫자를 입력하세요"}
-          register={register("registrationNumber")}
-          type={"number"}
-          required={false}
-        />
-        <Input
-          label={"메모"}
-          name={"memo"}
-          placeholder={"메모를 입력하세요"}
-          register={register("memo")}
-          type={"text"}
-          required={false}
-        />
 
-        <Button canClick={isValid} loading={loading} actionText={"환자 등록"} />
-        {createaPatientMutationResult?.createPatient.error && (
-          <FormError
-            errorMessage={createaPatientMutationResult.createPatient.error}
-          />
-        )}
-      </form>
-    </>
+            <Input
+              label={"등록번호"}
+              name={"registrationNumber"}
+              type={"number"}
+              placeholder={"숫자를 입력하세요"}
+              required={false}
+              register={register("registrationNumber", {
+                maxLength: {
+                  value: 10,
+                  message: "등록번호는 최대 10자리 수입니다",
+                },
+              })}
+              children={
+                errors.registrationNumber?.message && (
+                  <FormError
+                    errorMessage={errors.registrationNumber?.message}
+                  />
+                )
+              }
+            />
+            <Input
+              label={"메모"}
+              name={"memo"}
+              type={"textarea"}
+              placeholder={"메모를 입력하세요"}
+              required={false}
+              register={register("memo", {
+                maxLength: { value: 300, message: "메모는 최대 300자 입니다" },
+              })}
+              children={
+                errors.memo?.message && (
+                  <FormError errorMessage={errors.memo?.message} />
+                )
+              }
+            />
+
+            <Button
+              canClick={isValid && birthdayIsValid}
+              loading={loading}
+              textContents={"환자등록"}
+            />
+            {createaPatientMutationResult?.createPatient.error && (
+              <FormError
+                errorMessage={createaPatientMutationResult.createPatient.error}
+              />
+            )}
+          </form>
+        </>
+      }
+    />
   );
 };

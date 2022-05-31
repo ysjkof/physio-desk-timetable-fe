@@ -53,7 +53,7 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
             onClick={() => selectedDateVar(day.date)}
             className={`btn-menu cursor-pointer py-0.5 text-center ${
               compareDateMatch(day.date, selectedDate, "ymd")
-                ? "font-semibold-ring"
+                ? "emphasize-ring"
                 : ""
             }`}
           >

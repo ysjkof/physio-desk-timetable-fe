@@ -22,8 +22,7 @@ import {
   ONE_DAY,
   ONE_WEEK,
 } from "../../../variables";
-import { TableNav } from "./table-nav";
-import { TableNavExpand } from "./table-nav-expand";
+
 interface TableNavProps {
   today: Date;
 }
@@ -57,7 +56,7 @@ export function TableHeader({ today }: TableNavProps) {
 
       <div className="flex w-full items-center justify-end space-x-2">
         <BtnMenu
-          icon={<FontAwesomeIcon icon={faBan} fontSize={20} />}
+          icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
           enabled={viewOptions.seeCancel}
           label={"취소"}
           onClick={() => {
@@ -73,7 +72,7 @@ export function TableHeader({ today }: TableNavProps) {
           }}
         />
         <BtnMenu
-          icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={20} />}
+          icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
           enabled={viewOptions.seeNoshow}
           label={"부도"}
           onClick={() => {
@@ -107,7 +106,7 @@ export function TableHeader({ today }: TableNavProps) {
         {/* ---------------------- 구분선 ---------------------- */}
 
         <BtnMenu
-          icon={<FontAwesomeIcon icon={faCalendarAlt} fontSize={20} />}
+          icon={<FontAwesomeIcon icon={faCalendarAlt} fontSize={14} />}
           enabled={viewOptions.navigationExpand}
           label={"달력"}
           onClick={() => {
@@ -124,7 +123,7 @@ export function TableHeader({ today }: TableNavProps) {
         />
 
         <BtnMenu
-          icon={<FontAwesomeIcon icon={faList} fontSize={20} />}
+          icon={<FontAwesomeIcon icon={faList} fontSize={14} />}
           enabled={viewOptions.seeList}
           label={"목록"}
           onClick={() => {
@@ -140,7 +139,7 @@ export function TableHeader({ today }: TableNavProps) {
           }}
         />
         <BtnMenu
-          icon={<FontAwesomeIcon icon={faGear} fontSize={20} />}
+          icon={<FontAwesomeIcon icon={faGear} fontSize={14} />}
           enabled={viewOptions.seeActiveOption}
           label={"설정"}
           onClick={() => {

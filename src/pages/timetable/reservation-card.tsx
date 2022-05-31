@@ -1,33 +1,33 @@
-import { faCaretDown, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReservationCardPatientDetail } from "./components/reservation-card-patient-detail";
 import {
   ReservationState,
   useDeleteReservationMutation,
   useEditReservationMutation,
 } from "../../graphql/generated/graphql";
-import { cls } from "../../libs/utils";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useListReservations } from "../../hooks/useListReservations";
-import { TIMETABLE } from "../../variables";
-import { motion } from "framer-motion";
 import { ReservationCardName } from "./components/reservation-card-name";
 import { ReservationCardDetail } from "./components/reservation-card-detail";
+import { BtnMenuToggle } from "../../components/button-menu-toggle";
+import { BtnMenu } from "../../components/button-menu";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { TimetableModalProps } from "./table-layout";
+import { ModalContentsLayout } from "./components/modal-contents-layout";
 
-interface ReservationCardProps {
-  refetch: () => void;
-}
-
-export const ReservationCard = ({ refetch }: ReservationCardProps) => {
+export const ReservationCard = ({
+  closeAction,
+  refetch,
+}: TimetableModalProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   //@ts-ignore
   const reservationId = location.state?.reservationId;
   const [isReservation, setIsReservation] = useState<boolean>(true);
   const { data } = useListReservations();
-
-  const reservation = data?.listReservations.results?.find(
+  let reservation = data?.listReservations.results?.find(
     (r) => r.id === reservationId
   );
 
@@ -75,7 +75,7 @@ export const ReservationCard = ({ refetch }: ReservationCardProps) => {
           } = data;
           if (ok) {
             refetch();
-            navigate(TIMETABLE);
+            closeAction();
           }
         },
       });
@@ -83,93 +83,71 @@ export const ReservationCard = ({ refetch }: ReservationCardProps) => {
   };
 
   return (
-    <motion.div
-      drag
-      dragMomentum={false}
-      dragElastic={false}
-      className="relative top-32 mx-auto h-[600px] w-[400px] space-y-4 overflow-y-scroll bg-white py-6 px-16 sm:rounded-lg"
-    >
-      <button
-        className="hover: absolute right-6"
-        onClick={() => navigate(TIMETABLE)}
-      >
-        <FontAwesomeIcon icon={faXmark} />
-      </button>
-      <h4 className="mb-5 text-left font-medium">예약 자세히</h4>
-      <div className="reservation-editor mb-5 flex justify-around">
-        {/* <button className="rounded-md px-2 font-medium  shadow-cst">
-     차트
-    </button> */}
-        <button
-          onClick={() => onClickEditReserve(ReservationState.NoShow)}
-          className={cls(
-            reservation?.state === ReservationState.NoShow
-              ? "bg-yellow-100"
-              : "",
-            "rounded-md px-2 font-medium  shadow-cst"
-          )}
-        >
-          부도
-        </button>
-        <button
-          onClick={() => onClickEditReserve(ReservationState.Canceled)}
-          className={cls(
-            reservation?.state === ReservationState.Canceled
-              ? "bg-red-100 text-white"
-              : "",
-            "rounded-md px-2 font-medium  shadow-cst"
-          )}
-        >
-          취소
-        </button>
-        <button
-          className="rounded-md px-2 font-medium  shadow-cst"
-          onClick={onClickDelete}
-        >
-          삭제
-        </button>
-      </div>
-      {reservation && (
+    <ModalContentsLayout
+      title="예약 자세히"
+      closeAction={closeAction}
+      children={
         <>
-          <ReservationCardName
-            birthday={reservation.patient.birthday}
-            gender={reservation.patient.gender}
-            name={reservation.patient.name}
-            registrationNumber={reservation.patient.registrationNumber}
-          />
-          <div className="flex justify-around border-b-2 border-transparent">
-            <button
-              className={cls(
-                "relative w-full border-b-2 py-1 px-4",
-                isReservation ? "border-blue-500" : "border-transparent"
-              )}
-              onClick={() => setIsReservation(true)}
-            >
-              예약
-            </button>
-            <button
-              className={cls(
-                "relative w-full border-b-2 py-1 px-4",
-                isReservation ? "border-transparent" : "border-blue-500"
-              )}
-              onClick={() => setIsReservation(false)}
-            >
-              환자 정보
-            </button>
-          </div>
-          {isReservation ? (
-            <ReservationCardDetail reservation={reservation} />
+          {!reservation ? (
+            <p>
+              데이터가 없습니다. 돌아가서 다시 시도해주세요
+              <button
+                className="btn-menu mx-auto block font-semibold"
+                onClick={() => navigate(-1)}
+              >
+                누르세요
+              </button>
+            </p>
           ) : (
-            <ReservationCardPatientDetail
-              birthday={reservation.patient.birthday}
-              gender={reservation.patient.gender}
-              name={reservation.patient.name}
-              registrationNumber={reservation.patient.registrationNumber}
-              memo={reservation.patient.memo}
-            />
+            <>
+              <h4 className="mb-5 text-left font-medium"></h4>
+              <ReservationCardName
+                birthday={reservation.patient.birthday}
+                gender={reservation.patient.gender}
+                name={reservation.patient.name}
+                registrationNumber={reservation.patient.registrationNumber}
+              />
+              <div className="reservation-editor flex justify-around py-2">
+                <BtnMenu
+                  icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
+                  enabled={reservation?.state === ReservationState.Canceled}
+                  label={"취소"}
+                  onClick={() => onClickEditReserve(ReservationState.Canceled)}
+                />
+                <BtnMenu
+                  icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
+                  enabled={reservation?.state === ReservationState.NoShow}
+                  label={"부도"}
+                  onClick={() => onClickEditReserve(ReservationState.NoShow)}
+                />
+                <BtnMenu
+                  icon={<FontAwesomeIcon icon={faTrashCan} fontSize={14} />}
+                  enabled
+                  label={"삭제"}
+                  onClick={onClickDelete}
+                />
+              </div>
+              <BtnMenuToggle
+                enabled={isReservation}
+                label={["예약", "환자정보"]}
+                width={"full"}
+                onClick={() => setIsReservation((prev) => !prev)}
+              />
+              {isReservation ? (
+                <ReservationCardDetail reservation={reservation} />
+              ) : (
+                <ReservationCardPatientDetail
+                  birthday={reservation.patient.birthday}
+                  gender={reservation.patient.gender}
+                  name={reservation.patient.name}
+                  registrationNumber={reservation.patient.registrationNumber}
+                  memo={reservation.patient.memo}
+                />
+              )}
+            </>
           )}
         </>
-      )}
-    </motion.div>
+      }
+    />
   );
 };

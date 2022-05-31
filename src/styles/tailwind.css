@@ -35,14 +35,24 @@
   }
 
   .btn-menu {
-    @apply relative space-x-4 rounded-md px-1.5 py-1 tracking-widest hover:bg-gray-200;
-  }
-  .font-semibold-ring {
-    @apply scale-110 font-semibold ring-2 ring-blue-500;
+    @apply relative rounded-md px-1.5 py-1 tracking-widest hover:bg-gray-200;
   }
 
+  .emphasize-hover {
+    @apply hover:ring-2 hover:ring-green-500;
+  }
+  .emphasize-ring {
+    @apply ring-2 ring-green-500;
+  }
+  .time-indicator-bar {
+    @apply pointer-events-none absolute z-20 flex w-full border-t border-red-500 text-red-500;
+  }
+
+  .reserve-btn-box {
+    @apply relative z-10 w-full;
+  }
   .reserve-btn {
-    @apply invisible mx-auto flex flex-col whitespace-nowrap bg-gradient-to-r from-sky-500 to-indigo-500 px-0.5 text-center  font-medium text-white shadow hover:cursor-pointer group-hover:visible;
+    @apply invisible mx-auto flex flex-col whitespace-nowrap bg-gradient-to-r from-sky-500 to-indigo-500 px-0.5 text-center text-white shadow hover:cursor-pointer group-hover:visible;
   }
   .modal-parents {
     @apply fixed top-0 left-0 z-40 h-screen w-screen;
@@ -50,47 +60,50 @@
   .modal-background {
     @apply absolute h-full w-full bg-black/50;
   }
-}
+  .modal-content {
+    @apply relative top-10 mx-auto h-[600px] w-[400px] space-y-4 rounded-md bg-white px-14 py-1;
+  }
 
-.input {
-  @apply w-full appearance-none rounded-md border border-gray-300 py-2 px-5 font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
-}
+  .input {
+    @apply w-full appearance-none rounded-md border py-2 px-5 shadow-sm transition-colors focus:border-green-500 focus:outline-none focus:ring-green-500;
+  }
+  .input-datepicker {
+    @apply w-full rounded-md border py-1 pr-5 text-right shadow-sm transition-colors focus:border-green-500 focus:outline-none focus:ring-green-500;
+  }
 
-.search-result {
-  @apply w-full appearance-none rounded-b-md border border-gray-300 px-5 py-2  font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
-}
+  .bubble-arrow-t-center {
+    @apply after:absolute after:bottom-full after:left-1/2 after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
+  }
+  .bubble-arrow-t-left {
+    @apply after:absolute after:bottom-full after:left-[10%] after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
+  }
+  .bubble-arrow-t-right {
+    @apply after:absolute after:bottom-full after:right-[10%] after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
+  }
+  .bubble-arrow-t-2-5 {
+    @apply cursor-pointer after:absolute after:bottom-full after:left-[19.5%] after:border-8  after:border-b-black after:border-t-transparent after:border-l-transparent after:border-r-transparent;
+  }
+  .bubble-arrow-b-2-5 {
+    @apply cursor-pointer after:absolute after:top-full after:left-[19.5%] after:border-8  after:border-t-black after:border-b-transparent after:border-l-transparent after:border-r-transparent;
+  }
 
-.input-number {
-  @apply w-full rounded-md border border-gray-300 pr-6 text-right  font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
-}
-
-.seperate-bar {
-  @apply my-4 w-full border-b;
-}
-
-.bubble-arrow-t-center {
-  @apply after:absolute after:bottom-full after:left-1/2 after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
-}
-.bubble-arrow-t-left {
-  @apply after:absolute after:bottom-full after:left-[10%] after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
-}
-.bubble-arrow-t-right {
-  @apply after:absolute after:bottom-full after:right-[10%] after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;
-}
-.bubble-arrow-t-2-5 {
-  @apply cursor-pointer after:absolute after:bottom-full after:left-[19.5%] after:border-8  after:border-b-black after:border-t-transparent after:border-l-transparent after:border-r-transparent;
-}
-
-.bubble-apear {
-  @apply transition-opacity delay-200 duration-200 ease-in;
-}
-.dot {
-  @apply after:absolute after:-bottom-1.5 after:left-1/2 after:mx-auto after:block after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-green-500;
+  .form-error {
+    @apply absolute right-0 whitespace-nowrap rounded-md px-2 py-1 font-semibold text-red-400;
+  }
+  .seperate-bar {
+    @apply w-full border-b;
+  }
 }
 
 @layer utilities {
   .position-center {
+    @apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+  }
+  .position-center-x {
     @apply left-1/2 -translate-x-1/2;
+  }
+  .position-center-y {
+    @apply top-1/2 -translate-y-1/2;
   }
 
   .user-color-1 {
@@ -108,10 +121,21 @@
   .user-color-5 {
     @apply bg-[#e3d5ca] ring-gray-600;
   }
-  .noshow {
-    @apply bg-[#edece9] text-gray-500/50 ring-[#aaaaaa];
+  /* .noshow {
+    @apply border-yellow-800 bg-yellow-100 text-yellow-800 ring-yellow-800;
   }
   .cancel {
-    @apply bg-[#FEF2F2] text-gray-500/50 ring-[#FCA5A5];
-  }
+    @apply border-red-800 bg-red-100 text-red-800 ring-red-800;
+  } */
+}
+
+.search-result {
+  @apply w-full appearance-none rounded-b-md border border-gray-300 px-5 py-2  font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
+}
+
+.bubble-apear {
+  @apply transition-opacity delay-200 duration-200 ease-in;
+}
+.dot {
+  @apply after:absolute after:-bottom-1.5 after:left-1/2 after:mx-auto after:block after:h-1.5 after:w-1.5 after:-translate-x-1/2 after:rounded-full after:bg-green-500;
 }

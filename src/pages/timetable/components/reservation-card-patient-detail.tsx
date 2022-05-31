@@ -8,8 +8,8 @@ export const ReservationCardPatientDetail = ({
   memo,
 }: Partial<Patient>) => {
   return (
-    <div className="flex flex-col space-y-4">
-      <div className="grid grid-cols-[5rem,1fr] items-center">
+    <div className="flex flex-col gap-6">
+      {/* <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">이름</span>
         <span>{name}</span>
       </div>
@@ -30,7 +30,7 @@ export const ReservationCardPatientDetail = ({
       <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">등록번호</span>
         <span>{registrationNumber}</span>
-      </div>
+      </div> */}
       <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">치료횟수</span>
         <span>{2}</span>

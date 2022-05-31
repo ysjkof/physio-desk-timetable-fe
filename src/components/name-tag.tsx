@@ -1,13 +1,10 @@
 import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getYMD } from "../libs/timetable-utils";
-import { cls } from "../libs/utils";
 import { SelectedPatient, selectedPatientVar } from "../store";
-import { TABLE_CELL_HEIGHT } from "../variables";
 
 export interface INameTagProps extends SelectedPatient {
   canClick?: boolean;
-  shrink?: boolean;
 }
 
 export const NameTag = ({
@@ -18,7 +15,6 @@ export const NameTag = ({
   birthday,
   clinicName,
   canClick = false,
-  shrink = false,
   user,
 }: INameTagProps) => {
   const onClick = () =>
@@ -32,54 +28,26 @@ export const NameTag = ({
       user,
     });
   return (
-    <div onClick={canClick ? onClick : undefined}>
-      <div
-        className={cls(
-          "flex cursor-pointer items-baseline justify-between  px-1",
-          shrink ? "h-[20px] w-[140px]" : "",
-          canClick ? "" : "pointer-events-none"
-        )}
-      >
-        <div className="flex">
-          <span className="mx-1">
-            {gender === "male" ? (
-              <FontAwesomeIcon icon={faMale} className="text-blue-500" />
-            ) : (
-              <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
-            )}
-          </span>
-          <span className="dark:text-light-blue-100 min-w-[56px] overflow-hidden whitespace-nowrap text-center font-medium ">
-            {name!.length > 8 ? `${name!.substring(0, 8)}...` : name}
-          </span>
-        </div>
-        {/* 하루 보기와 1주 보기에서 조건이 좀 다양함. 수정할 것. */}
-        {name!.length > 8 ? (
-          ""
-        ) : shrink ? (
-          registrationNumber ? (
-            <span className="dark:text-light-blue-100  ">
-              r.no : {registrationNumber}
-            </span>
-          ) : (
-            <span className="dark:text-light-blue-100  ">
-              b : {getYMD(birthday, "yymmdd")}
-            </span>
-          )
+    <div
+      onClick={canClick ? onClick : undefined}
+      className={`grid w-full cursor-pointer grid-cols-3 ${
+        canClick ? "" : "pointer-events-none"
+      }`}
+    >
+      <div>
+        {gender === "male" ? (
+          <FontAwesomeIcon icon={faMale} className="text-blue-500" />
         ) : (
-          <>
-            <span className="dark:text-light-blue-100  ">
-              r.no : {registrationNumber ? registrationNumber : "미등록"}
-            </span>
-            <span className="dark:text-light-blue-100  ">
-              b : {birthday ? getYMD(birthday, "yymmdd") : "미등록"}
-            </span>
-          </>
+          <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
         )}
+        <span className="ml-1 min-w-[56px] overflow-hidden whitespace-nowrap">
+          {name!.length > 8 ? `${name!.substring(0, 8)}...` : name}
+        </span>
       </div>
-      {clinicName && <span className="px-6">{clinicName}</span>}
-      {/* 마지막 치료한 치료사 */}
-
-      <span>{user?.name}</span>
+      <span>R.No : {registrationNumber ? registrationNumber : "미등록"}</span>
+      <span>B : {birthday ? getYMD(birthday, "yymmdd") : "미등록"}</span>
+      <span className="pl-3">{user?.name}</span>
+      {clinicName && <span className="col-span-2">{clinicName}</span>}
     </div>
   );
 };

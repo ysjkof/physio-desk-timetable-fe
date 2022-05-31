@@ -12,7 +12,7 @@ export const ReserveBtn = ({ label, userIndex, member }: ReserveBtnProps) => {
   const navigate = useNavigate();
   return (
     <div
-      className={`reserve-btn-box group relative z-10 w-full ${
+      className={`reserve-btn-box group ${
         userIndex === 0
           ? "user-color-1"
           : userIndex === 1

@@ -17,10 +17,10 @@ export const BtnDatecheck = ({
 }: IBtnDatecheck) => (
   <button
     className={`btn-menu mx-auto px-1 transition-transform
-    ${isToday ? "font-semibold-ring" : ""} 
+    ${isToday ? "emphasize-ring font-semibold" : ""} 
     ${day === 0 ? "sunday" : day === 6 ? "saturday" : ""} 
-    ${selectedMonth ? "" : "opacity-40"} 
-    ${isSubheader ? "ring-0" : ""}
+    ${selectedMonth ? "" : "opacity-50"} 
+    ${isSubheader ? "ring-0" : "emphasize-hover"}
     `}
     onClick={onClick}
   >

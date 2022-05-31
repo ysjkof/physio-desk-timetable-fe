@@ -73,9 +73,9 @@ export function EventBox({
           : ""
       } ${
         reservationState === ReservationState.NoShow
-          ? "noshow"
+          ? "noshow opacity-50"
           : reservationState === ReservationState.Canceled
-          ? "cancel"
+          ? "cancel opacity-50"
           : ""
       }`}
       style={{

@@ -1,5 +1,5 @@
 interface BtnDotProps {
-  label: string;
+  label?: string;
   onClick: any;
   enabled?: boolean;
   icon?: React.ReactNode;

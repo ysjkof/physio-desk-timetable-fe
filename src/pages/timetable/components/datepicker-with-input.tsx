@@ -1,7 +1,8 @@
 import { useState } from "react";
 import type { UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { FormError } from "../../../components/form-error";
 import { Datepicker, DatepickerForm } from "./datepicker";
-import { InputOfDatepicker } from "./input-of-datepicker";
+import { IFormErrors, InputOfDatepicker } from "./input-of-datepicker";
 
 interface IDatepickerWithInputProps {
   setValue: UseFormSetValue<DatepickerForm>;
@@ -9,6 +10,7 @@ interface IDatepickerWithInputProps {
   defaultDate: Date;
   see: "ymd-hm" | "ymd";
   dateType: "startDate" | "endDate";
+  formError: IFormErrors;
 }
 
 export const DatepickerWithInput = ({
@@ -17,10 +19,11 @@ export const DatepickerWithInput = ({
   defaultDate,
   see,
   dateType,
+  formError,
 }: IDatepickerWithInputProps) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="relative flex w-full items-center justify-between gap-1">
+    <div className="datepicker-with-input flex w-full items-center gap-1">
       <Datepicker
         setValue={setValue}
         defaultDate={defaultDate}
@@ -32,7 +35,8 @@ export const DatepickerWithInput = ({
         register={register}
         see={see}
         prefix={dateType}
-        openState={{ open, setOpen }}
+        setOpen={setOpen}
+        formError={formError}
       />
     </div>
   );

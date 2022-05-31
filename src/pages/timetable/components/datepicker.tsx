@@ -1,21 +1,22 @@
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { ModalPortal } from "../../../components/modal-portal";
+import { compareDateMatch } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
 
 export interface DatepickerForm {
-  startDateYear: number;
-  startDateMonth: number;
-  startDateDate: number;
-  startDateHours: number;
-  startDateMinutes: number;
-  endDateYear: number;
-  endDateMonth: number;
-  endDateDate: number;
-  endDateHours: number;
-  endDateMinutes: number;
+  startDateYear?: number;
+  startDateMonth?: number;
+  startDateDate?: number;
+  startDateHours?: number;
+  startDateMinutes?: number;
+  endDateYear?: number;
+  endDateMonth?: number;
+  endDateDate?: number;
+  endDateHours?: number;
+  endDateMinutes?: number;
 }
 
 interface IDatePicker {
@@ -50,7 +51,7 @@ export const Datepicker = ({
     end: { hours: 19, minutes: 0 },
   });
 
-  const modalGap = 10;
+  const modalGap = 2;
   const ref = useRef<HTMLDivElement>(null);
   const height = ref.current?.getBoundingClientRect().height;
   const top = ref.current?.getBoundingClientRect().top! + height! + modalGap;
@@ -129,7 +130,7 @@ export const Datepicker = ({
   }, [selectedMinutes]);
 
   return (
-    <div className="relative">
+    <div className="datepicker-icon relative">
       <div
         onClick={() => setOpen((current) => !current)}
         className={cls("cursor-pointer", open ? "hover: " : " hover:")}
@@ -158,7 +159,7 @@ export const Datepicker = ({
           children={
             <div className="absolute bottom-0 z-50 w-[440px]  shadow-cst">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
-                <div className="navigation mb-1 flex justify-between border-b pb-2">
+                <div className="datepicker-navigation mb-1 flex justify-between border-b pb-2">
                   <div>{`${dateOfMonth[15].getFullYear()}년 ${
                     dateOfMonth[15].getMonth() + 1
                   }월`}</div>
@@ -199,8 +200,8 @@ export const Datepicker = ({
                     </span>
                   </div>
                 </div>
-                <div className="datepicker flex divide-x">
-                  <div className="datepicker-col left grid w-full grid-cols-7 pr-1.5 text-center">
+                <div className="datepicker-calendar flex divide-x">
+                  <div className="datepicker-calendar-col left grid w-full grid-cols-7 pr-1.5 text-center">
                     {["일", "월", "화", "수", "목", "금", "토"].map(
                       (day, i) => (
                         <div key={i}>{day}</div>
@@ -212,16 +213,17 @@ export const Datepicker = ({
                         className={cls(
                           "cursor-pointer px-1.5 py-1",
                           day.getMonth() !== dateOfMonth[15].getMonth()
-                            ? "opacity-40"
+                            ? "opacity-50"
                             : "",
-                          day.getDay() === 0 ? "text-red-500" : "",
-                          day.getDay() === 6 ? "text-blue-500" : "",
-                          day.getDate() === nextDate.getDate() &&
-                            day.getMonth() === nextDate.getMonth()
+                          day.getDay() === 0
+                            ? "sunday"
+                            : day.getDay() === 6
+                            ? "saturday"
+                            : "",
+                          compareDateMatch(day, nextDate, "ymd")
                             ? "rounded-md bg-red-400 text-white"
                             : "",
-                          day.getDate() === defaultDate.getDate() &&
-                            day.getMonth() === defaultDate.getMonth()
+                          compareDateMatch(day, defaultDate, "ymd")
                             ? "rounded-md border border-transparent ring-2 ring-red-500"
                             : ""
                         )}
@@ -239,49 +241,47 @@ export const Datepicker = ({
                     ))}
                   </div>
                   {see === "ymd-hm" && (
-                    <div className="datepicker-col right pl-2">
-                      <div className="timepicker flex h-32 space-x-2 text-center">
-                        <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
-                          <span>시</span>
-                          {listOfHours.map((hours, i) => (
-                            <span
-                              key={i}
-                              className={cls(
-                                "cursor-pointer px-1.5 ",
-                                selectedHour === hours
-                                  ? "rounded-md bg-blue-500 text-white"
-                                  : ""
-                              )}
-                              onClick={() => setSelectedHour(hours)}
-                            >
-                              {String(hours).padStart(2, "0")}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
-                          <span>분</span>
-                          {listOfMinutes.map((minutes, i) => (
-                            <span
-                              key={i}
-                              className={cls(
-                                "cursor-pointer px-1.5 ",
-                                +selectedMinutes === minutes
-                                  ? "rounded-md bg-blue-500 text-white"
-                                  : ""
-                              )}
-                              onClick={() => {
-                                setSelectedMinutes(minutes);
-                              }}
-                            >
-                              {String(minutes).padStart(2, "0")}
-                            </span>
-                          ))}
-                        </div>
-                        {/* <div className="flex flex-col whitespace-nowrap">
-        <span className="">오전</span>
-        <span className="">오후</span>
-       </div> */}
+                    <div className="datepicker-calendar-col-time-picker flex h-32 space-x-2 pl-2 text-center">
+                      <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                        <span>시</span>
+                        {listOfHours.map((hours, i) => (
+                          <span
+                            key={i}
+                            className={cls(
+                              "cursor-pointer px-1.5 ",
+                              selectedHour === hours
+                                ? "rounded-md bg-blue-500 text-white"
+                                : ""
+                            )}
+                            onClick={() => setSelectedHour(hours)}
+                          >
+                            {String(hours).padStart(2, "0")}
+                          </span>
+                        ))}
                       </div>
+                      <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                        <span>분</span>
+                        {listOfMinutes.map((minutes, i) => (
+                          <span
+                            key={i}
+                            className={cls(
+                              "cursor-pointer px-1.5 ",
+                              +selectedMinutes === minutes
+                                ? "rounded-md bg-blue-500 text-white"
+                                : ""
+                            )}
+                            onClick={() => {
+                              setSelectedMinutes(minutes);
+                            }}
+                          >
+                            {String(minutes).padStart(2, "0")}
+                          </span>
+                        ))}
+                      </div>
+                      {/* <div className="flex flex-col whitespace-nowrap">
+                        <span className="">오전</span>
+                        <span className="">오후</span>
+                      </div> */}
                     </div>
                   )}
                 </div>

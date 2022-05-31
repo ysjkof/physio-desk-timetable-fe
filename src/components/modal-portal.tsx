@@ -15,17 +15,17 @@ export const ModalPortal = ({
   top,
 }: IModalPortal) => {
   const container = document.getElementById("root") as HTMLElement;
-
+  console.log(top, left);
   return createPortal(
     <div className="modal-parents">
       <div
-        className={`modal-background ${top && "bg-transparent opacity-100"}`}
+        className={`modal-background ${
+          top ? "bg-transparent opacity-100" : ""
+        }`}
         onClick={() => closeAction(false)}
       />
       <div
-        className={`modal-content relative flex w-fit flex-col ${
-          top ?? "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        }`}
+        className={`${top ? "relative" : "modal-content position-center"}`}
         style={{ ...(top && { top, left }) }}
       >
         {children}

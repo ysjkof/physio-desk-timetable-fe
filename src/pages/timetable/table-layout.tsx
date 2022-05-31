@@ -2,7 +2,6 @@ import { useReactiveVar } from "@apollo/client";
 import { ListReservationsQuery } from "../../graphql/generated/graphql";
 import { ReservationCard } from "./reservation-card";
 import { todayNowVar, viewOptionsVar } from "../../store";
-import { ModalPortal } from "../../components/modal-portal";
 import { ReserveCard } from "./reserve-card";
 import { PrescriptionWithSelect } from ".";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,6 +12,12 @@ import { TableMain } from "./components/table-main";
 import { TableClinicSelector } from "./components/table-clinic-selector";
 import { TableNavExpand } from "./components/table-nav-expand";
 import { TableNav } from "./components/table-nav";
+import { CreatePatient } from "./create-patient";
+
+export interface TimetableModalProps {
+  closeAction: () => void;
+  refetch: () => void;
+}
 
 interface ITimetableProps {
   eventsData: ListReservationsQuery;
@@ -27,6 +32,7 @@ export const TimetableLayout = ({
 }: ITimetableProps) => {
   const isReserve = useMatch("tt/reserve");
   const isEdit = useMatch("tt/edit");
+  const isCreatePatient = useMatch("tt/create-patient");
   const navigate = useNavigate();
   const today = useReactiveVar(todayNowVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
@@ -53,22 +59,48 @@ export const TimetableLayout = ({
               className="modal-background"
               onClick={() => isEdit && navigate(TIMETABLE)}
             />
-            <ReservationCard refetch={refetch} />
+            <ReservationCard
+              refetch={refetch}
+              closeAction={() => isEdit && navigate(TIMETABLE)}
+            />
           </motion.div>
         )}
-      </AnimatePresence>
-      {isReserve && (
-        <ModalPortal
-          closeAction={() => isReserve && navigate(TIMETABLE)}
-          children={
+        {isReserve && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.3 } }}
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+            className="modal-parents"
+          >
+            <div
+              className="modal-background"
+              onClick={() => isReserve && navigate(TIMETABLE)}
+            />
             <ReserveCard
               prescriptions={prescriptions}
               refetch={refetch}
               closeAction={() => isReserve && navigate(TIMETABLE)}
             />
-          }
-        />
-      )}
+          </motion.div>
+        )}
+        {isCreatePatient && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.3 } }}
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+            className="modal-parents"
+          >
+            <div
+              className="modal-background"
+              onClick={() => isCreatePatient && navigate(TIMETABLE)}
+            />
+            <CreatePatient
+              refetch={refetch}
+              closeAction={() => isCreatePatient && navigate(TIMETABLE)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* ------------------- 모달 구분선 -------------------*/}
       <motion.div
         animate={{ opacity: 1 }}

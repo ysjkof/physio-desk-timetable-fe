@@ -1,4 +1,6 @@
+import { useReactiveVar } from "@apollo/client";
 import { useEffect, useState } from "react";
+import { selectedDateVar } from "../../../store";
 
 interface ITimeIndicatorBarProps {
   labels: Date[];
@@ -9,6 +11,7 @@ export const TimeIndicatorBar = ({
   labels,
   isActive,
 }: ITimeIndicatorBarProps) => {
+  const selectedDate = useReactiveVar(selectedDateVar);
   const [top, setTop] = useState<number>();
   const startTime = labels[0].getTime() / 1000 / 60;
   const endTime = labels[labels.length - 1].getTime() / 1000 / 60;
@@ -32,13 +35,10 @@ export const TimeIndicatorBar = ({
   }, []);
   if (top === 0 || typeof top !== "number") return <></>;
   return (
-    <div
-      className="time-indicator-bar group pointer-events-none absolute z-20 flex w-full border-t"
-      style={{ top: `${top + 50}px` }}
-    >
+    <div className="time-indicator-bar" style={{ top: `${top + 50}px` }}>
       {isActive && (
-        <span className="mx-auto text-red-500">
-          {new Date().toLocaleString("ko-KR", {
+        <span className="mx-auto">
+          {selectedDate.toLocaleString("ko-KR", {
             hour: "2-digit",
             minute: "2-digit",
           })}

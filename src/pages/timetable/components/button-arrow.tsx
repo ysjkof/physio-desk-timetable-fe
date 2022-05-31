@@ -10,9 +10,9 @@ interface BtnArrowProps {
 export const BtnArrow = ({ direction, onClick }: BtnArrowProps) => (
   <button className="btn-menu rounded-md border bg-white p-1" onClick={onClick}>
     {direction === PREV ? (
-      <FontAwesomeIcon icon={faArrowLeft} fontSize={20} />
+      <FontAwesomeIcon icon={faArrowLeft} fontSize={14} />
     ) : (
-      <FontAwesomeIcon icon={faArrowRight} fontSize={20} />
+      <FontAwesomeIcon icon={faArrowRight} fontSize={14} />
     )}
   </button>
 );

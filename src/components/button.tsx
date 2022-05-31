@@ -1,23 +1,15 @@
-import React from "react";
-
-interface IButtonProps {
+interface ButtonProps {
   canClick: boolean | null;
   loading: boolean;
-  actionText: string;
+  textContents: string;
 }
 
-export const Button: React.FC<IButtonProps> = ({
-  canClick,
-  loading,
-  actionText,
-}) => (
+export const Button = ({ canClick, loading, textContents }: ButtonProps) => (
   <button
-    className={`rounded-md py-4  font-medium text-white transition-colors focus:outline-none ${
-      canClick
-        ? "bg-sky-600 hover:bg-sky-700"
-        : "pointer-events-none bg-gray-300"
+    className={`rounded-md bg-green-600 py-1 text-base tracking-widest text-white transition-colors focus:outline-none ${
+      canClick ? "bg-green-600" : "pointer-events-none opacity-50"
     }`}
   >
-    {loading ? "Loading..." : actionText}
+    {loading ? "Loading..." : textContents}
   </button>
 );

@@ -32,13 +32,18 @@ App.tsx에서 localStorage에 저장된 설정을 불러오고 비교해서 전�
 - 비활성화
   opacity-50 (opacity:0.5)
 - 글자 크기
-  text-xs (12px, 0.75rem), **index에 적용**
+  text-xs (12px, 0.75rem), **index.html에 적용**
 - 큰 글자
   text-base (16px, 1rem)
+- 중요하지 않은 글자 색
+
 - 글자색
-  text-gray-700, **index에 적용**
-- 아이콘 크기
-  20\*20
+  text-gray-800, **index.html에 적용**
+  - 안중요한 글자 text-gray-500,
+- 아이콘 기본 크기
+  14\*14
+- 포인트 색상
+  green-500 ( rgb(34 197 94) )
 
 #### 2.3 Header
 

@@ -4,20 +4,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchPatientByNameLazyQuery } from "../../graphql/generated/graphql";
-import { cls } from "../../libs/utils";
-import { selectedClinic, selectedPatientVar } from "../../store";
+import { selectedClinicVar, selectedPatientVar } from "../../store";
 import { NameTag } from "../../components/name-tag";
+import { BtnMenu } from "../../components/button-menu";
 
-interface SearchPatientProps {
-  selectedClinic: typeof selectedClinic;
-}
+interface SearchPatientProps {}
 
-export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
+export const SearchPatient = ({}: SearchPatientProps) => {
   const { register, getValues, handleSubmit } = useForm({
     mode: "onChange",
   });
   const [queryPageNumber, setQueryPageNumber] = useState(1);
   const selectedPatient = useReactiveVar(selectedPatientVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const [callQuery, { loading, data: searchPatientResult }] =
     useSearchPatientByNameLazyQuery();
@@ -46,8 +45,8 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-lg pt-4">
-      <div className="relative flex items-center rounded-full shadow-sm">
+    <form onSubmit={handleSubmit(onSubmit)} className="">
+      <div className="search-input relative flex items-center">
         <input
           {...register("patientName", {
             required: "환자 이름을 입력하세요",
@@ -55,14 +54,15 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
           id="patientName"
           required
           type="text"
-          placeholder="환자 검색"
-          className="input rounded-full py-1"
+          placeholder="이름을 입력하세요"
+          className="input"
           autoComplete="off"
           onFocus={() => selectedPatientVar(null)}
+          autoFocus
         />
         <label
           htmlFor="icon-search"
-          className="absolute right-0 mr-4 cursor-pointer"
+          className="absolute right-0 mr-2 cursor-pointer"
         >
           <input
             id="icon-search"
@@ -71,19 +71,18 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
             tabIndex={-1}
             className="absolute"
           />
-          <FontAwesomeIcon icon={faSearch} />
+          <FontAwesomeIcon icon={faSearch} fontSize={14} />
         </label>
       </div>
       <div
-        className={cls(
-          "mt-4 h-32 overflow-y-scroll rounded-md border px-1 py-0.5",
+        className={`search-list mt-4 h-36 divide-y overflow-y-scroll border ${
           selectedPatient ? "border-none" : ""
-        )}
+        }`}
       >
         {!selectedPatient &&
           searchPatientResult?.searchPatientByName.patients?.map(
             (patient, index) => (
-              <div key={index} className="hover:ring-2 hover:ring-blue-500">
+              <div key={index} className="btn-menu rounded-none">
                 <NameTag
                   id={patient.id}
                   gender={patient.gender}
@@ -98,7 +97,7 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
             )
           )}
         {!selectedPatient && !searchPatientResult ? (
-          <p className="text-center ">
+          <p className="text-center">
             환자 목록
             <br />
             검색하면 나타납니다
@@ -109,39 +108,40 @@ export const SearchPatient = ({ selectedClinic }: SearchPatientProps) => {
           )
         )}
         {selectedPatient && (
-          <div className="flex h-full px-4">
-            <div className="my-auto flex h-4/6 w-full items-center justify-between rounded-md border border-blue-400 px-2 shadow-cst">
-              <NameTag
-                id={selectedPatient.id}
-                gender={selectedPatient.gender}
-                name={selectedPatient.name}
-                registrationNumber={selectedPatient.registrationNumber}
-                birthday={selectedPatient.birthday}
-                clinicName={selectedPatient.clinicName}
-              />
-              <button
-                className="rounded-lg border bg-white py-1 px-3 shadow-sm hover:text-white"
-                onClick={() => selectedPatientVar(null)}
-              >
-                <FontAwesomeIcon icon={faXmark} />
-              </button>
-            </div>
+          <div className="mx-auto flex h-5/6 items-center justify-between rounded-md border border-green-500 px-2 shadow-cst">
+            <NameTag
+              id={selectedPatient.id}
+              gender={selectedPatient.gender}
+              name={selectedPatient.name}
+              registrationNumber={selectedPatient.registrationNumber}
+              birthday={selectedPatient.birthday}
+              clinicName={selectedPatient.clinicName}
+              user={selectedPatient.user}
+            />
+            <BtnMenu
+              onClick={() => selectedPatientVar(null)}
+              enabled
+              icon={<FontAwesomeIcon icon={faXmark} fontSize={14} />}
+            />
           </div>
         )}
       </div>
-      <div className="mt-1 h-1 space-x-4 text-center">
+      <div className="page-list mt-1 h-1 space-x-4 text-center">
         {searchPatientResult
           ? pageNumbers(
               searchPatientResult.searchPatientByName.totalPages ?? 0
             ).map((pageNumber) => (
               <button
                 key={pageNumber}
-                className={cls(
+                className={`appearance-none px-1 focus:rounded-sm focus:outline-none focus:ring-1 focus:ring-green-500 ${
                   queryPageNumber === pageNumber + 1
                     ? "font-bold text-red-500"
                     : ""
-                )}
-                onClick={() => setQueryPageNumber(pageNumber + 1)}
+                }`}
+                onClick={() => {
+                  selectedPatientVar(null);
+                  setQueryPageNumber(pageNumber + 1);
+                }}
               >
                 {pageNumber + 1}
               </button>

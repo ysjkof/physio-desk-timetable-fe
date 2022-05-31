@@ -10,7 +10,7 @@ export const ReservationCardDetail = ({
   reservation,
 }: ReservationCardDetailProps) => {
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col gap-6">
       <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">예약시각</span>
         <span>{getYMD(reservation.startDate, "yyyymmdd", "-")}</span>

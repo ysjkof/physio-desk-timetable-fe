@@ -10,7 +10,7 @@ import {
   useCreateReservationMutation,
 } from "../../graphql/generated/graphql";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLink, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { DatepickerForm } from "./components/datepicker";
 import {
   selectedClinicVar,
@@ -18,12 +18,12 @@ import {
   selectedPatientVar,
   loggedInUserVar,
 } from "../../store";
-import { CreatePatient } from "./create-patient";
 import { PrescriptionWithSelect } from ".";
-import { cls, getDateFromYMDHM } from "../../libs/utils";
+import { getDateFromYMDHM } from "../../libs/utils";
 import { DatepickerWithInput } from "./components/datepicker-with-input";
 import { TIMETABLE } from "../../variables";
-import { motion } from "framer-motion";
+import { ModalContentsLayout } from "./components/modal-contents-layout";
+import { TimetableModalProps } from "./table-layout";
 
 function getOneDayReservationInputDateForTest(
   inputStartDate: Date,
@@ -64,25 +64,24 @@ interface ReserveForm extends DatepickerForm {
   userId?: number;
 }
 
-interface ReserveProps {
-  closeAction: () => void;
+interface ReserveProps extends TimetableModalProps {
   prescriptions: PrescriptionWithSelect[];
-  refetch: () => void;
 }
 
 export const ReserveCard = ({
   closeAction,
-  prescriptions,
   refetch,
+  prescriptions,
 }: ReserveProps) => {
   const location = useLocation();
   const state = location.state as {
     startDate: Date;
     member: { id: number; name: string };
   };
-  let { startDate, member } = state;
+  let startDate = state?.startDate;
+  let member = state?.member;
+  if (!startDate || !member) return <p>state가 없습니다</p>;
 
-  const [openCreatePatient, setOpenCreatePatient] = useState(false);
   const [selectedPresc, setSelectedPresc] = useState({
     price: 0,
     minute: 0,
@@ -157,6 +156,14 @@ export const ReserveCard = ({
         memo,
         userId,
       } = getValues();
+      if (
+        !startDateYear ||
+        !startDateMonth ||
+        !startDateDate ||
+        !startDateHours ||
+        !startDateMinutes
+      )
+        return console.error("input value undefined");
       const startDate = getDateFromYMDHM(
         startDateYear,
         startDateMonth,
@@ -227,105 +234,64 @@ export const ReserveCard = ({
   }, [member]);
 
   return (
-    <motion.div
-      drag
-      dragMomentum={false}
-      dragElastic={false}
-      className="my-auto w-[24rem] bg-white p-5 sm:rounded-lg"
-    >
-      <button
-        className="hover: absolute right-6 top-5"
-        onClick={() => closeAction()}
-      >
-        <FontAwesomeIcon icon={faXmark} />
-      </button>
-      {openCreatePatient ? (
-        <CreatePatient
-          clinicId={selectedClinic?.id ?? undefined}
-          clinicName={selectedClinic?.name ?? undefined}
-          closeModal={setOpenCreatePatient}
-        />
-      ) : (
+    <ModalContentsLayout
+      title="예약하기"
+      closeAction={closeAction}
+      children={
         <>
-          <h4 className="mb-5 w-full font-medium">
-            예약하기
-            {selectedClinic === null || selectedClinic.id === null ? (
-              ""
-            ) : (
-              <span className="ml-2 font-normal">
-                {
-                  clinicLists?.find(
-                    (clinic) => clinic.id === selectedClinic?.id
-                  )?.name
-                }
-              </span>
-            )}
-          </h4>
-          <button
-            className="hover: absolute top-14 right-10 rounded-md border  px-2"
-            onClick={() => setOpenCreatePatient((current) => !current)}
-          >
-            환자등록
-          </button>
-          <SearchPatient selectedClinic={selectedClinic} />
+          <SearchPatient />
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="mt-5 mb-5 grid w-full gap-3"
+            className="mt-5 mb-5 grid w-full gap-4"
           >
-            {errors.startDateYear?.message && (
-              <FormError errorMessage={errors.startDateYear?.message} />
-            )}
-            {errors.startDateMonth?.message && (
-              <FormError errorMessage={errors.startDateMonth?.message} />
-            )}
-            {errors.startDateDate?.message && (
-              <FormError errorMessage={errors.startDateDate?.message} />
-            )}
-            {errors.startDateHours?.message && (
-              <FormError errorMessage={errors.startDateHours?.message} />
-            )}
-            {errors.startDateMinutes?.message && (
-              <FormError errorMessage={errors.startDateMinutes?.message} />
-            )}
-            <label>담당 치료사</label>
-            <select
-              {...register("userId")}
-              className="w-full rounded-md border text-center"
-            >
-              {selectedClinic.id === 0 ? (
-                <option value={loggedInUser?.id}>{loggedInUser?.name}</option>
-              ) : (
-                clinicLists
-                  ?.find((g) => g.id === selectedClinic?.id)
-                  ?.members.map((m) => (
-                    <option key={m.id} value={m.user.id}>
-                      {m.user.name}
-                    </option>
-                  ))
-              )}
-            </select>
-            <label>예약 시간</label>
-            <DatepickerWithInput
-              setValue={setValue}
-              defaultDate={startDate}
-              register={register}
-              see="ymd-hm"
-              dateType="startDate"
-            />
-            <label className="flex items-center gap-2">
-              처방
-              <Link
-                to={"/dashboard"}
-                state={{
-                  selectedClinicId: selectedClinic?.id,
-                  selectedClinicName: selectedClinic?.name,
-                  selectedMenu: "prescription",
-                }}
+            <label className="flex flex-col gap-2">
+              담당 치료사
+              <select
+                {...register("userId")}
+                className="w-full rounded-md border text-center"
               >
-                <FontAwesomeIcon icon={faLink} />
-              </Link>
+                {selectedClinic.id === 0 ? (
+                  <option value={loggedInUser?.id}>{loggedInUser?.name}</option>
+                ) : (
+                  clinicLists
+                    ?.find((g) => g.id === selectedClinic?.id)
+                    ?.members.map((m) => (
+                      <option key={m.id} value={m.user.id}>
+                        {m.user.name}
+                      </option>
+                    ))
+                )}
+              </select>
             </label>
-            <div>
+            <label className="flex flex-col gap-2">
+              예약 시간
+              <DatepickerWithInput
+                setValue={setValue}
+                defaultDate={startDate}
+                register={register}
+                see="ymd-hm"
+                dateType="startDate"
+                formError={errors}
+              />
+            </label>
+            <label className="flex flex-col gap-2">
+              <span className="flex items-center gap-1">
+                처방
+                <Link
+                  to={"/dashboard"}
+                  state={{
+                    selectedClinicId: selectedClinic?.id,
+                    selectedClinicName: selectedClinic?.name,
+                    selectedMenu: "prescription",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faLink}
+                    fontSize={14}
+                    className="btn-menu"
+                  />
+                </Link>
+              </span>
               {selectPrescriptions.length === 0 ? (
                 <div className="flex flex-col items-center px-2 ">
                   <span>등록된 처방이 없습니다.</span>
@@ -352,24 +318,19 @@ export const ReserveCard = ({
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <ul className="grid grid-cols-4 gap-2">
+                  <ul className="grid grid-cols-4 gap-x-3 gap-y-1">
                     {selectPrescriptions.map((prescription, index) => (
                       <li
                         key={index}
                         value={prescription.id}
                         onClick={() => onClickPrescription(prescription.id)}
-                        className="btn-border btn-sm mx-1"
+                        className={`btn-menu overflow-hidden rounded-md border text-center ${
+                          prescription.isSelect
+                            ? "border-green-500 font-semibold"
+                            : "opacity-50"
+                        }`}
                       >
-                        <div
-                          className={cls(
-                            "overflow-hidden text-center",
-                            prescription.isSelect
-                              ? "text-red-600"
-                              : "text-blue-400"
-                          )}
-                        >
-                          {prescription.name}
-                        </div>
+                        {prescription.name}
                       </li>
                     ))}
                   </ul>
@@ -379,13 +340,13 @@ export const ReserveCard = ({
                   </div>
                 </div>
               )}
-            </div>
+            </label>
             <Button
               canClick={
                 selectedPatient && isValid && selectedPresc.prescriptions[0] > 0
               }
               loading={loading}
-              actionText={"예약 등록"}
+              textContents={"예약등록"}
             />
             {createReservationResult?.createReservation.error && (
               <FormError
@@ -394,7 +355,7 @@ export const ReserveCard = ({
             )}
           </form>
         </>
-      )}
-    </motion.div>
+      }
+    />
   );
 };

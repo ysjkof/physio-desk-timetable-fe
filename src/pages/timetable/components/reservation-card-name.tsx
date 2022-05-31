@@ -1,12 +1,4 @@
-import {
-  faCaretDown,
-  faCaretLeft,
-  faQuestion,
-  faRotateBack,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getYMD } from "../../../libs/timetable-utils";
-import { cls } from "../../../libs/utils";
 
 interface ReservationCardNameProps {
   gender: string;
@@ -22,18 +14,22 @@ export const ReservationCardName = ({
   birthday,
 }: ReservationCardNameProps) => {
   return (
-    <div className="relative grid w-full grid-cols-5 items-center text-center ">
+    <div className="relative grid w-full grid-cols-5 items-center border-b text-center shadow-md">
+      <span className="border-b py-1 text-center text-gray-500">등록번호</span>
+      <span className="col-span-2 border-b py-1 text-gray-500">이름</span>
+      <div className="col-span-2 flex flex-row items-center justify-between space-x-2 border-b py-1 pr-4 text-gray-500">
+        <span>성별</span>
+        <span>생년월일</span>
+      </div>
       <span
-        className={cls(registrationNumber ? "text-right" : "text-center", "")}
+        className={`py-2 ${registrationNumber ? "text-right" : "text-center"}`}
       >
         {registrationNumber ? registrationNumber : "-"}
       </span>
-
-      <span className="col-span-2 ml-5 flex">{name}</span>
-
-      <div className="col-span-2 flex flex-row items-center justify-end space-x-2 pr-4">
+      <span className="col-span-2 py-2 text-center">{name}</span>
+      <div className="col-span-2 flex flex-row items-center justify-between space-x-2 py-2 pr-4">
         <span
-          className={cls(gender === "male" ? "text-blue-500" : "text-red-400")}
+          className={`${gender === "male" ? "text-blue-500" : "text-red-400"}`}
         >
           {gender === "male" ? "남성" : "여성"}
         </span>
