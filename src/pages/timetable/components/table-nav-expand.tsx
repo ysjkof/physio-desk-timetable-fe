@@ -42,7 +42,7 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
       initial="ini"
       animate="start"
     >
-      <span className="position-center pointer-events-none absolute -top-1 text-base font-semibold">
+      <span className="position-center-x pointer-events-none absolute -top-1 text-base font-semibold">
         {daysOfMonths[0][7].date.getMonth() + 1}월
       </span>
       <BtnArrow direction={PREV} onClick={() => onClickMoveX(PREV)} />
