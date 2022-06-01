@@ -1,7 +1,9 @@
 import { useReactiveVar } from "@apollo/client";
+import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion, Variants } from "framer-motion";
 import { Fragment } from "react";
-import { cls } from "../../../libs/utils";
+import { BtnMenu } from "../../../components/button-menu";
 import {
   clinicListsVar,
   loggedInUserVar,
@@ -14,11 +16,8 @@ import {
   NEXT,
 } from "../../../variables";
 import { BtnArrow } from "./button-arrow";
-import { ButtonCheck } from "./button-check";
 
-interface TableClinicSelectorProps {}
-
-export function TableClinicSelector({}: TableClinicSelectorProps) {
+export function TableClinicSelector() {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
@@ -88,25 +87,24 @@ export function TableClinicSelector({}: TableClinicSelectorProps) {
     exit: { x: 300, transition: { duration: 0.3 } },
   };
 
-  if (!loggedInUser || !viewOptions) return <></>;
   return (
     <motion.div
       variants={variants}
       initial="init"
       animate="end"
       exit="exit"
-      className="group-view-controller w-[240px] bg-white pl-4"
+      className="group-view-controller w-[240px] border bg-white pt-2 shadow-inner"
     >
-      <div className="view-controller-header mb-2 flex justify-between border-b px-3 pb-2">
+      <div className="view-controller-header mb-2 flex items-center justify-between border-b px-3 pb-1">
         <span className="group relative px-1 after:ml-1 after:rounded-full after:border after:px-1 after:content-['?']">
-          보기
+          보기설정
           <p className="bubble-arrow-t-right absolute top-7 right-0 z-40 hidden w-48 rounded-md bg-black p-4 text-white group-hover:block">
             시간표에 표시할 병원이나 사용자를 선택합니다.
           </p>
         </span>
         <BtnArrow direction={NEXT} onClick={onClickChangeSeeActiveOption} />
       </div>
-      <ul className="h-full overflow-y-scroll">
+      <ul className="view-controller-body h-full space-y-1 overflow-y-scroll px-3">
         {clinicLists === null || clinicLists.length === 0 ? (
           <div className="flex h-full items-center justify-center">
             소속된 병원이 없습니다.
@@ -114,25 +112,48 @@ export function TableClinicSelector({}: TableClinicSelectorProps) {
         ) : (
           clinicLists.map((clinic, i) => (
             <Fragment key={i}>
-              <ButtonCheck
-                name={clinic.name}
-                isActivated={clinic.id === selectedClinic.id}
-                onClickFx={() =>
+              <BtnMenu
+                label={clinic.name}
+                enabled={clinic.id === selectedClinic.id}
+                isWidthFull
+                icon={
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    fontSize={16}
+                    className={`${
+                      clinic.id === selectedClinic.id ? "text-green-500" : ""
+                    }`}
+                  />
+                }
+                onClick={() =>
                   onClickChangeSelectClinic(clinic.id, clinic.name)
                 }
               />
               <ul
-                className={cls(
+                className={`pl-6 ${
                   clinic.id === selectedClinic.id ? "" : "pointer-events-none"
-                )}
+                }`}
               >
                 {clinic.members.map((member, i) => (
-                  <ButtonCheck
+                  <BtnMenu
                     key={i}
-                    isActivated={clinic.id === selectedClinic.id}
-                    isMemberActivated={member.activation}
-                    name={member.user.name}
-                    onClickFx={() => onClickToggleUser(clinic.id, member.id)}
+                    label={member.user.name}
+                    isWidthFull
+                    enabled={
+                      clinic.id === selectedClinic.id && member.activation
+                    }
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        fontSize={16}
+                        className={`${
+                          clinic.id === selectedClinic.id && member.activation
+                            ? "text-green-500"
+                            : ""
+                        }`}
+                      />
+                    }
+                    onClick={() => onClickToggleUser(clinic.id, member.id)}
                   />
                 ))}
               </ul>

@@ -7,10 +7,8 @@ import {
   faList,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AnimatePresence, motion } from "framer-motion";
 import { BtnMenu } from "../../../components/button-menu";
 import { BtnMenuToggle } from "../../../components/button-menu-toggle";
-import { cls } from "../../../libs/utils";
 import {
   IViewOption,
   loggedInUserVar,
@@ -33,15 +31,7 @@ export function TableHeader({ today }: TableNavProps) {
 
   if (!loggedInUser || !viewOptions) return <></>;
   return (
-    <motion.div
-      // initial={{ y: -20 }}
-      // animate={{
-      //   y: 0,
-      //   transition: { type: "tween", duration: 0.3 },
-      // }}
-      id="table-header"
-      className="table-header"
-    >
+    <div id="table-header" className="table-header">
       <button
         className="min-w-[120px] font-medium  hover:font-bold"
         onClick={() => selectedDateVar(today)}
@@ -151,6 +141,6 @@ export function TableHeader({ today }: TableNavProps) {
           }}
         />
       </div>
-    </motion.div>
+    </div>
   );
 }

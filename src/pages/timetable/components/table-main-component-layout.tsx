@@ -15,9 +15,9 @@ export function TableMainComponentLayout({
 }: TableMainComponentLayoutProps) {
   return (
     <div
-      className={`${componentName} absolute h-full 
-      ${isLabel ? "bg-white" : "w-full pl-9"} 
-      ${isTitle ? "" : "pt-[50px]"}`}
+      className={`${componentName} absolute h-full ${
+        isLabel ? "bg-white" : "w-full pl-9"
+      } ${isTitle ? "" : "pt-[50px]"}`}
     >
       {children}
     </div>

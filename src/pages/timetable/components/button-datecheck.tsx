@@ -16,11 +16,11 @@ export const BtnDatecheck = ({
   isSubheader,
 }: IBtnDatecheck) => (
   <button
-    className={`btn-menu mx-auto px-1 transition-transform
-    ${isToday ? "emphasize-ring font-semibold" : ""} 
-    ${day === 0 ? "sunday" : day === 6 ? "saturday" : ""} 
-    ${selectedMonth ? "" : "opacity-50"} 
-    ${isSubheader ? "ring-0" : "emphasize-hover"}
+    className={`btn-menu mx-auto px-1 transition-transform ${
+      isToday ? "emphasize-ring font-semibold" : ""
+    } ${day === 0 ? "sunday" : day === 6 ? "saturday" : ""} ${
+      selectedMonth ? "" : "opacity-70"
+    } ${isSubheader ? "ring-0" : "emphasize-hover"}
     `}
     onClick={onClick}
   >

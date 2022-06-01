@@ -327,7 +327,7 @@ export const ReserveCard = ({
                         className={`btn-menu overflow-hidden rounded-md border text-center ${
                           prescription.isSelect
                             ? "border-green-500 font-semibold"
-                            : "opacity-50"
+                            : "opacity-70"
                         }`}
                       >
                         {prescription.name}

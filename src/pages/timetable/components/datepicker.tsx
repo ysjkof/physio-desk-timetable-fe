@@ -213,7 +213,7 @@ export const Datepicker = ({
                         className={cls(
                           "cursor-pointer px-1.5 py-1",
                           day.getMonth() !== dateOfMonth[15].getMonth()
-                            ? "opacity-50"
+                            ? "opacity-70"
                             : "",
                           day.getDay() === 0
                             ? "sunday"

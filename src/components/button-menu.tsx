@@ -1,21 +1,23 @@
 interface BtnDotProps {
-  label?: string;
   onClick: any;
-  enabled?: boolean;
+  label?: string;
   icon?: React.ReactNode;
+  enabled?: boolean;
+  isWidthFull?: boolean;
 }
 
 export const BtnMenu = ({
-  enabled = true,
-  label,
   onClick,
+  label,
   icon,
+  enabled,
+  isWidthFull,
 }: BtnDotProps) => (
   <button
     type="button"
-    className={`btn-menu flex items-center gap-1 ${
-      enabled ? "font-semibold" : "opacity-50"
-    }`}
+    className={`btn-menu flex items-center gap-1 whitespace-nowrap ${
+      enabled ? "font-semibold" : "opacity-70"
+    } ${isWidthFull ? "w-full" : ""}`}
     onClick={onClick}
   >
     {icon} {label}

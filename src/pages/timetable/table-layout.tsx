@@ -42,85 +42,88 @@ export const TimetableLayout = ({
     start: { y: 0, transition: { type: "tween", duration: 0.3 } },
   };
 
-  if (!viewOptions) {
-    return <></>;
-  }
   return (
     <>
-      <AnimatePresence>
-        {isEdit && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.3 } }}
-            exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            className="modal-parents"
-          >
-            <div
-              className="modal-background"
-              onClick={() => isEdit && navigate(TIMETABLE)}
-            />
-            <ReservationCard
-              refetch={refetch}
-              closeAction={() => isEdit && navigate(TIMETABLE)}
-            />
-          </motion.div>
-        )}
-        {isReserve && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.3 } }}
-            exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            className="modal-parents"
-          >
-            <div
-              className="modal-background"
-              onClick={() => isReserve && navigate(TIMETABLE)}
-            />
-            <ReserveCard
-              prescriptions={prescriptions}
-              refetch={refetch}
-              closeAction={() => isReserve && navigate(TIMETABLE)}
-            />
-          </motion.div>
-        )}
-        {isCreatePatient && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.3 } }}
-            exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            className="modal-parents"
-          >
-            <div
-              className="modal-background"
-              onClick={() => isCreatePatient && navigate(TIMETABLE)}
-            />
-            <CreatePatient
-              refetch={refetch}
-              closeAction={() => isCreatePatient && navigate(TIMETABLE)}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {/* ------------------- 모달 구분선 -------------------*/}
-      <motion.div
-        animate={{ opacity: 1 }}
-        className="timetable-layout-container opacity-0"
-      >
-        <TableHeader today={today} />
-        <AnimatePresence>
-          {viewOptions.navigationExpand ? (
-            <TableNavExpand varients={tableNavVarients} />
-          ) : (
-            <TableNav varients={tableNavVarients} />
-          )}
-        </AnimatePresence>
-        <div className="flex">
+      {!viewOptions ? (
+        <p>불러오는 중입니다. 몇초 뒤에 변화가 없으면 새로고침하세요.</p>
+      ) : (
+        <>
           <AnimatePresence>
-            <TableMain eventsData={eventsData} />
-            {viewOptions.seeActiveOption && <TableClinicSelector />}
+            {isEdit && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.3 } }}
+                exit={{ opacity: 0, transition: { duration: 0.3 } }}
+                className="modal-parents"
+              >
+                <div
+                  className="modal-background"
+                  onClick={() => isEdit && navigate(TIMETABLE)}
+                />
+                <ReservationCard
+                  refetch={refetch}
+                  closeAction={() => isEdit && navigate(TIMETABLE)}
+                />
+              </motion.div>
+            )}
+            {isReserve && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.3 } }}
+                exit={{ opacity: 0, transition: { duration: 0.3 } }}
+                className="modal-parents"
+              >
+                <div
+                  className="modal-background"
+                  onClick={() => isReserve && navigate(TIMETABLE)}
+                />
+                <ReserveCard
+                  prescriptions={prescriptions}
+                  refetch={refetch}
+                  closeAction={() => isReserve && navigate(TIMETABLE)}
+                />
+              </motion.div>
+            )}
+            {isCreatePatient && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.3 } }}
+                exit={{ opacity: 0, transition: { duration: 0.3 } }}
+                className="modal-parents"
+              >
+                <div
+                  className="modal-background"
+                  onClick={() => isCreatePatient && navigate(TIMETABLE)}
+                />
+                <CreatePatient
+                  refetch={refetch}
+                  closeAction={() => isCreatePatient && navigate(TIMETABLE)}
+                />
+              </motion.div>
+            )}
           </AnimatePresence>
-        </div>
-      </motion.div>
+          {/* ------------------- 모달 구분선 -------------------*/}
+          <motion.div
+            animate={{ opacity: 1 }}
+            className="timetable-layout-container opacity-0"
+          >
+            <TableHeader today={today} />
+            <AnimatePresence>
+              {viewOptions.navigationExpand ? (
+                <TableNavExpand varients={tableNavVarients} />
+              ) : (
+                <TableNav varients={tableNavVarients} />
+              )}
+            </AnimatePresence>
+            <div className="flex">
+              <AnimatePresence>
+                <TableMain eventsData={eventsData} />
+                {viewOptions.seeActiveOption && <TableClinicSelector />}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        </>
+      )}
     </>
   );
 };

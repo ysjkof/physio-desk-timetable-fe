@@ -1,6 +1,6 @@
 import { useReactiveVar } from "@apollo/client";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   compareDateMatch,
   getWeeksOfMonth,
@@ -9,17 +9,23 @@ import { selectedDateVar } from "../../../store";
 import { NEXT, PREV } from "../../../variables";
 import { BtnArrow } from "./button-arrow";
 
+interface Calendar {
+  selectedMonth: { date: Date }[];
+  threeMonth: { prev: Date; thisMonth: Date; next: Date };
+}
+
 interface TableNavExpandProps {
   varients: any;
 }
 
 export function TableNavExpand({ varients }: TableNavExpandProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
-  const [daysOfMonths, setDaysOfMonths] = useState<
-    [{ date: Date }[], { prev: Date; thisMonth: Date; next: Date }]
-  >([getWeeksOfMonth(selectedDate), getThreeDate(selectedDate)]);
+  const [calendar, setCalendar] = useState<Calendar>({
+    selectedMonth: getWeeksOfMonth(selectedDate),
+    threeMonth: getThreeMonth(selectedDate),
+  });
 
-  function getThreeDate(date: Date) {
+  function getThreeMonth(date: Date) {
     const prevMonth = new Date(date);
     const thisMonth = new Date(date);
     const nextMonth = new Date(date);
@@ -28,12 +34,18 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
     return { prev: prevMonth, thisMonth, next: nextMonth };
   }
 
-  const onClickMoveX = (option: typeof PREV | typeof NEXT) => {
-    const months = getWeeksOfMonth(daysOfMonths[1][option]);
-    const threeDate = getThreeDate(daysOfMonths[1][option]);
-    setDaysOfMonths([months, threeDate]);
+  const onClickChangeMonth = (option: typeof PREV | typeof NEXT) => {
+    const months = getWeeksOfMonth(calendar.threeMonth[option]);
+    const threeMonth = getThreeMonth(calendar.threeMonth[option]);
+    setCalendar({ selectedMonth: months, threeMonth });
   };
 
+  useEffect(() => {
+    setCalendar({
+      selectedMonth: getWeeksOfMonth(selectedDate),
+      threeMonth: getThreeMonth(selectedDate),
+    });
+  }, [selectedDate]);
   return (
     <motion.div
       className="table-nav pt-6"
@@ -43,11 +55,11 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
       animate="start"
     >
       <span className="position-center-x pointer-events-none absolute -top-1 text-base font-semibold">
-        {daysOfMonths[0][7].date.getMonth() + 1}월
+        {calendar.selectedMonth[7].date.getMonth() + 1}월
       </span>
-      <BtnArrow direction={PREV} onClick={() => onClickMoveX(PREV)} />
+      <BtnArrow direction={PREV} onClick={() => onClickChangeMonth(PREV)} />
       <div className="grid w-full grid-cols-7 gap-x-4">
-        {daysOfMonths[0].map((day, i) => (
+        {calendar.selectedMonth.map((day, i) => (
           <div
             key={i}
             onClick={() => selectedDateVar(day.date)}
@@ -58,16 +70,16 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
             }`}
           >
             <span
-              className={`${
+              className={`font-medium ${
                 day.date.getDay() === 0
                   ? "sunday"
                   : day.date.getDay() === 6
                   ? "saturday"
                   : ""
               } ${
-                compareDateMatch(selectedDate, day.date, "ym")
+                compareDateMatch(calendar.selectedMonth[7].date, day.date, "ym")
                   ? ""
-                  : "opacity-50"
+                  : "opacity-70"
               }`}
             >
               {day.date.getDate()}
@@ -75,7 +87,7 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
           </div>
         ))}
       </div>
-      <BtnArrow direction={NEXT} onClick={() => onClickMoveX(NEXT)} />
+      <BtnArrow direction={NEXT} onClick={() => onClickChangeMonth(NEXT)} />
     </motion.div>
   );
 }
