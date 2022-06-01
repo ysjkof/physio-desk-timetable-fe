@@ -1,6 +1,7 @@
 import { useReactiveVar } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { selectedDateVar } from "../../../store";
+import { TABLE_CELL_HEIGHT, TABLE_TIME_GAP } from "../../../variables";
 
 interface ITimeIndicatorBarProps {
   labels: Date[];
@@ -16,7 +17,7 @@ export const TimeIndicatorBar = ({
   const startTime = labels[0].getTime() / 1000 / 60;
   const endTime = labels[labels.length - 1].getTime() / 1000 / 60;
   const setPosition = () => {
-    const nowMinute = Date.now() / 1000 / 60;
+    const nowMinute = Date.now() / 1000 / 60; // 현재 시각을 분으로 변환
     const nowTime = nowMinute - startTime;
     const maxTime = endTime - startTime;
     if (nowTime > maxTime) {
@@ -24,7 +25,7 @@ export const TimeIndicatorBar = ({
       //  1분은 2px기 때문에 *2 한다.
       setTop(0);
     } else {
-      setTop(Math.floor(nowTime * 2));
+      setTop(Math.floor((nowTime / TABLE_TIME_GAP) * TABLE_CELL_HEIGHT));
     }
   };
 
@@ -35,7 +36,7 @@ export const TimeIndicatorBar = ({
   }, []);
   if (top === 0 || typeof top !== "number") return <></>;
   return (
-    <div className="time-indicator-bar" style={{ top: `${top + 50}px` }}>
+    <div className="time-indicator-bar" style={{ top: `${top}px` }}>
       {isActive && (
         <span className="mx-auto">
           {selectedDate.toLocaleString("ko-KR", {

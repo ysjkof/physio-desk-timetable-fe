@@ -30,7 +30,7 @@ import {
 import { TableSubHeader } from "./table-sub-header";
 import { TableCols } from "./table-cols";
 import { motion } from "framer-motion";
-import { ONE_DAY, ONE_WEEK } from "../../../variables";
+import { ONE_DAY, ONE_WEEK, TABLE_TIME_GAP } from "../../../variables";
 import { TableRows } from "./table-rows";
 import { TableLabels } from "./table-labels";
 
@@ -65,7 +65,7 @@ export const TableMain = ({ eventsData }: ITimetableProps) => {
     viewOptions.tableDuration.start.minutes,
     viewOptions.tableDuration.end.hours,
     viewOptions.tableDuration.end.minutes,
-    10
+    TABLE_TIME_GAP
   );
 
   function distributor(
