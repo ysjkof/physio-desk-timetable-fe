@@ -30,7 +30,7 @@ export function EventLi({
           ? "hidden"
           : reservationState === ReservationState.NoShow ||
             reservationState === ReservationState.Canceled
-          ? "opacity-70"
+          ? "opacity-50"
           : "",
         reservationState === ReservationState.NoShow
           ? "noshow"

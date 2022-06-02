@@ -15,7 +15,7 @@ export const ModalPortal = ({
   top,
 }: IModalPortal) => {
   const container = document.getElementById("root") as HTMLElement;
-  console.log(top, left);
+
   return createPortal(
     <div className="modal-parents">
       <div

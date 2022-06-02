@@ -1,25 +1,52 @@
 import { useReactiveVar } from "@apollo/client";
-import { compareDateMatch, DayWithUsers } from "../../../libs/timetable-utils";
-import { loggedInUserVar, selectedDateVar } from "../../../store";
+import { useEffect, useState } from "react";
+import {
+  compareDateMatch,
+  DayWithUsers,
+  getSunday,
+  getWeeks,
+  makeDayWithUsers,
+  spreadClinicMembers,
+} from "../../../libs/timetable-utils";
+import {
+  clinicListsVar,
+  loggedInUserVar,
+  selectedClinicVar,
+  selectedDateVar,
+} from "../../../store";
 import { SCROLL_ADRESS } from "../../../variables";
 import { BtnDatecheck } from "../molecules/button-datecheck";
 import { TableLoopLayout } from "./templates/table-loop-layout";
 import { TableMainComponentLayout } from "./templates/table-main-component-layout";
 
-interface TableSubHeaderProps {
-  weekEvents: DayWithUsers[];
-}
-export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
+interface TableSubHeaderProps {}
+export function TableSubHeader({}: TableSubHeaderProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
-  const userLength = weekEvents[0].users.length;
+  const clinicLists = useReactiveVar(clinicListsVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const [userFrame, setUserFrame] = useState<DayWithUsers[] | null>(null);
+  const userLength = userFrame && userFrame[0].users.length;
+
+  useEffect(() => {
+    if (loggedInUser) {
+      const userFrame = makeDayWithUsers(
+        getWeeks(getSunday(selectedDate)),
+        loggedInUser,
+        spreadClinicMembers(clinicLists, selectedClinic.id)
+      );
+      setUserFrame(userFrame);
+    }
+  }, [clinicLists, selectedDate]);
+
+  if (!userLength) return <></>;
   return (
     <TableMainComponentLayout componentName="table-sub-header" isTitle>
       <div className="sticky top-0 z-[31]">
         <TableLoopLayout
           isDivide={false}
           userLength={userLength}
-          children={weekEvents.map((day, i) => (
+          children={userFrame?.map((day, i) => (
             // id={day.date + ""}로 table-nav에서 스크롤 조정함
             <div
               key={i}
@@ -52,7 +79,7 @@ export function TableSubHeader({ weekEvents }: TableSubHeaderProps) {
         />
         <TableLoopLayout
           userLength={userLength}
-          children={weekEvents.map((day, i) => (
+          children={userFrame?.map((day, i) => (
             <div
               key={i}
               className="relative flex items-center bg-white shadow-b"

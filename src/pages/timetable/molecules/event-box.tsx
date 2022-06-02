@@ -73,9 +73,9 @@ export function EventBox({
           : ""
       } ${
         reservationState === ReservationState.NoShow
-          ? "noshow opacity-70"
+          ? "noshow opacity-50"
           : reservationState === ReservationState.Canceled
-          ? "cancel opacity-70"
+          ? "cancel opacity-50"
           : ""
       }`}
       style={{
@@ -86,7 +86,7 @@ export function EventBox({
       <div className="h-5 overflow-hidden whitespace-nowrap text-center">
         {patientName}
         {registrationNumber && height !== TABLE_CELL_HEIGHT + "px" && (
-          <span className="ml-1 opacity-70">{registrationNumber}</span>
+          <span className="ml-1 opacity-50">{registrationNumber}</span>
         )}
       </div>
       {prescriptions && (

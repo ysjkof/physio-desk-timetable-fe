@@ -10,7 +10,7 @@ import { Input } from "../input";
 import { selectedClinicVar, selectedPatientVar } from "../../store";
 import { useReactiveVar } from "@apollo/client";
 import { ModalContentsLayout } from "../templates/modal-contents-layout";
-import { InputOfDatepicker } from "./input-of-datepicker";
+import { InputOfDatepicker } from "../molecules/input-of-datepicker";
 import { TimetableModalProps } from "../../pages/timetable";
 
 export interface BirthdayInput {

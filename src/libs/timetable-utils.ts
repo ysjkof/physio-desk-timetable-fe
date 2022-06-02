@@ -115,7 +115,7 @@ export const mergeLoggedInUser = (
   return result;
 };
 // 겟위크 결과값에 객체 필드 넣는 기능을 따로 빼자.
-export const injectUsers = (
+export const makeDayWithUsers = (
   weeks: { date: Date }[],
   loginUser: ModifiedLoggedInUser,
   members: ClinicMemberWithOptions[]

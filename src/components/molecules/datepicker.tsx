@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { compareDateMatch } from "../../libs/timetable-utils";
-import { ModalPortal } from "../modal-portal";
+import { ModalPortal } from "./modal-portal";
 
 export interface DatepickerForm {
   startDateYear?: number;
@@ -156,7 +156,7 @@ export const Datepicker = ({
           top={top}
           closeAction={setOpen}
           children={
-            <div className="absolute bottom-0 z-50 w-[440px]  shadow-cst">
+            <div className="absolute bottom-0 z-50 w-[440px]">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
                 <div className="datepicker-navigation mb-1 flex justify-between border-b pb-2">
                   <div>{`${dateOfMonth[15].getFullYear()}년 ${
@@ -211,7 +211,7 @@ export const Datepicker = ({
                         key={day.valueOf()}
                         className={`cursor-pointer px-1.5 py-1 ${
                           day.getMonth() !== dateOfMonth[15].getMonth()
-                            ? "opacity-70"
+                            ? "opacity-50"
                             : ""
                         } ${
                           day.getDay() === 0

@@ -334,7 +334,7 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
                         className={`btn-menu overflow-hidden rounded-md border text-center ${
                           prescription.isSelect
                             ? "border-green-500 font-semibold"
-                            : "opacity-70"
+                            : "opacity-50"
                         }`}
                       >
                         {prescription.name}

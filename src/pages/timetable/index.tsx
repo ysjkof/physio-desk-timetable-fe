@@ -19,14 +19,13 @@ import { useListReservations } from "../../hooks/useListReservations";
 import { TimetableTemplate } from "./table-template";
 import { useEffect, useState } from "react";
 import {
-  ClinicMemberWithOptions,
   compareDateMatch,
   compareSameWeek,
   DayWithUsers,
   getSunday,
   getTimeGaps,
   getWeeks,
-  injectUsers,
+  makeDayWithUsers,
   spreadClinicMembers,
 } from "../../libs/timetable-utils";
 import { ONE_DAY, TABLE_TIME_GAP } from "../../variables";
@@ -62,7 +61,6 @@ export interface TimetableModalProps {
   refetch: () => void;
 }
 
-// 아토믹 디자인에서 페이지
 export const TimeTable = () => {
   const today = useReactiveVar(todayNowVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
@@ -87,37 +85,32 @@ export const TimeTable = () => {
     TABLE_TIME_GAP
   );
 
-  function distributor(
-    events: ModifiedReservation[] | undefined | null,
-    members: ClinicMemberWithOptions[]
-  ) {
+  function distributor(events: ModifiedReservation[] | undefined | null) {
     if (!loggedInUser) return;
-    let days = injectUsers(
+    const userFrame = makeDayWithUsers(
       getWeeks(getSunday(selectedDate)),
       loggedInUser,
-      members
+      spreadClinicMembers(clinicLists, selectedClinic?.id)
     );
     events?.forEach((event) => {
-      const dateIndex = days.findIndex((day) =>
+      const dateIndex = userFrame.findIndex((day) =>
         compareDateMatch(day.date, new Date(event.startDate), "ymd")
       );
       if (dateIndex !== -1) {
-        const userIndex = days[dateIndex].users.findIndex(
+        const userIndex = userFrame[dateIndex].users.findIndex(
           (member) => member.user.id === event.user.id
         );
         if (userIndex !== -1) {
-          days[dateIndex].users[userIndex].events.push(event);
+          userFrame[dateIndex].users[userIndex].events.push(event);
         }
       }
     });
-    return days;
+    return userFrame;
   }
+
   useEffect(() => {
     if (data?.listReservations.ok && loggedInUser) {
-      const distributeEvents = distributor(
-        data.listReservations.results,
-        spreadClinicMembers(clinicLists, selectedClinic.id)
-      );
+      const distributeEvents = distributor(data.listReservations.results);
       if (distributeEvents) {
         setWeekEvents(distributeEvents);
       } else {
@@ -172,60 +165,54 @@ export const TimeTable = () => {
 
   return (
     <>
-      {!data ? (
-        "loading"
-      ) : (
-        <>
-          <Helmet>
-            <title>시간표 | Muool</title>
-          </Helmet>
-          <TimetableTemplate
-            children={
-              !viewOptions || !optionalWeekEvents || !viewOptions ? (
-                <p>
-                  불러오는 중입니다. 몇초 뒤에 변화가 없으면 새로고침하세요.
-                </p>
-              ) : (
-                <>
-                  <TableHeader today={today} />
-                  <AnimatePresence>
-                    {viewOptions.navigationExpand ? (
-                      <TableNavExpand varients={tableNavVarients} />
-                    ) : (
-                      <TableNav varients={tableNavVarients} />
-                    )}
-                  </AnimatePresence>
-                  <TableSubHeader weekEvents={optionalWeekEvents} />
-                  <AnimatePresence>
-                    {viewOptions.seeList === false && (
-                      <motion.div
-                        initial={{ y: 300 }}
-                        animate={{ y: 0, transition: { duration: 0.3 } }}
-                        className="table-main"
-                        style={{ height: height ? height : "80vh" }}
-                      >
-                        {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곳에서 동일하게 한다 */}
-                        <TableLabels labels={labels} />
-                        <TableRows
-                          labels={labels}
-                          weekEvents={optionalWeekEvents}
-                        />
-                        <TableCols
-                          weekEvents={optionalWeekEvents}
-                          labels={labels}
-                        />
-                      </motion.div>
-                    )}
-                    {viewOptions.seeList === true && "준비 중"}
+      <Helmet>
+        <title>시간표 | Muool</title>
+      </Helmet>
+      <TimetableTemplate
+        children={
+          !viewOptions || !optionalWeekEvents || !viewOptions ? (
+            <p>불러오는 중입니다. 몇초 뒤에 변화가 없으면 새로고침하세요.</p>
+          ) : (
+            <>
+              <TableHeader today={today} />
+              <AnimatePresence>
+                {viewOptions.navigationExpand ? (
+                  <TableNavExpand varients={tableNavVarients} />
+                ) : (
+                  <TableNav varients={tableNavVarients} />
+                )}
+              </AnimatePresence>
+              <AnimatePresence>
+                {viewOptions.seeList === false && (
+                  <div className="flex">
+                    <motion.div
+                      initial={{ y: 300 }}
+                      animate={{ y: 0, transition: { duration: 0.3 } }}
+                      className="table-main"
+                      style={{ height: height ? height : "80vh" }}
+                    >
+                      {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곳에서 동일하게 한다 */}
+                      <TableSubHeader />
+                      <TableLabels labels={labels} />
+                      <TableRows
+                        labels={labels}
+                        weekEvents={optionalWeekEvents}
+                      />
+                      <TableCols
+                        weekEvents={optionalWeekEvents}
+                        labels={labels}
+                      />
+                    </motion.div>
                     {viewOptions.seeActiveOption && <TableClinicSelector />}
-                  </AnimatePresence>
-                </>
-              )
-            }
-          />
-          <TableModals refetch={refetch} />
-        </>
-      )}
+                  </div>
+                )}
+              </AnimatePresence>
+              {viewOptions.seeList === true && "준비 중"}
+            </>
+          )
+        }
+      />
+      <TableModals refetch={refetch} />
     </>
   );
 };

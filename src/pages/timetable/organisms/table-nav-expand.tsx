@@ -79,7 +79,7 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
               } ${
                 compareDateMatch(calendar.selectedMonth[7].date, day.date, "ym")
                   ? ""
-                  : "opacity-70"
+                  : "opacity-50"
               }`}
             >
               {day.date.getDate()}

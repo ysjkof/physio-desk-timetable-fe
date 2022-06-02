@@ -17,7 +17,7 @@ export const Account = () => {
           className={
             location.pathname === "/create-account"
               ? "font-bold text-sky-500 hover:underline"
-              : "text-sky-500 opacity-70 hover:underline"
+              : "text-sky-500 opacity-50 hover:underline"
           }
         >
           <span className="">계정이 없습니까? </span>
@@ -29,7 +29,7 @@ export const Account = () => {
           className={
             location.pathname === "/"
               ? "font-bold text-sky-500 hover:underline"
-              : "text-sky-500 opacity-70 hover:underline"
+              : "text-sky-500 opacity-50 hover:underline"
           }
         >
           <span className="">이미 계정이 있습니까? </span>

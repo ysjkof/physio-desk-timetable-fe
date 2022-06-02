@@ -30,7 +30,7 @@ App.tsx에서 localStorage에 저장된 설정을 불러오고 비교해서 전�
 - 활성화
   font-semibold (font-weight:600)
 - 비활성화
-  opacity-70 (opacity:0.7)
+  opacity-50 (opacity:0.5)
 - 글자 크기
   text-xs (12px, 0.75rem), **index.html에 적용**
 - 큰 글자

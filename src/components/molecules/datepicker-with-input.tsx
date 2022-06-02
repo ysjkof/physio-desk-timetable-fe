@@ -1,10 +1,7 @@
 import { useState } from "react";
 import type { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { Datepicker, DatepickerForm } from "./datepicker";
-import {
-  IFormErrors,
-  InputOfDatepicker,
-} from "../organisms/input-of-datepicker";
+import { IFormErrors, InputOfDatepicker } from "./input-of-datepicker";
 
 interface IDatepickerWithInputProps {
   setValue: UseFormSetValue<DatepickerForm>;

@@ -17,10 +17,10 @@ export const BtnMenuToggle = ({
     }`}
     onClick={onClick}
   >
-    <span className={`${enabled ? "font-semibold" : "opacity-70"}`}>
+    <span className={`${enabled ? "font-semibold" : "opacity-50"}`}>
       {label[0]}
     </span>
-    <span className={`${!enabled ? "font-semibold" : "opacity-70"}`}>
+    <span className={`${!enabled ? "font-semibold" : "opacity-50"}`}>
       {label[1]}
     </span>
   </button>
