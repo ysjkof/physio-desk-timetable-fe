@@ -1,20 +1,20 @@
 import { useReactiveVar } from "@apollo/client";
 import { isLoggedInVar } from "./apollo";
 import { Route, Routes } from "react-router-dom";
-import { Layout } from "./components/layout";
-import { Home } from "./pages/home";
+import { Layout } from "./components/templates/layout";
+import { Home } from "./pages/todoArrange/home";
 import { Test } from "./pages/test";
-import { NotFound } from "./pages/404";
-import { Account } from "./pages/account";
-import { ConfirmEmail } from "./pages/confirm-email";
-import { EditProfile } from "./pages/edit-profile";
+import { NotFound } from "./pages/todoArrange/404";
+import { Account } from "./pages/todoArrange/account";
+import { ConfirmEmail } from "./pages/todoArrange/confirm-email";
+import { EditProfile } from "./pages/todoArrange/edit-profile";
 import { TimeTable } from "./pages/timetable";
-import { CreateAccount } from "./pages/create-account";
-import { Login } from "./pages/login";
-import { Search } from "./pages/search";
-import { PateintDetail } from "./pages/patient-detail";
+import { CreateAccount } from "./pages/todoArrange/create-account";
+import { Login } from "./pages/todoArrange/login";
+import { Search } from "./pages/todoArrange/search";
+import { PateintDetail } from "./pages/todoArrange/patient-detail";
 import { Dashboard } from "./pages/dashboard";
-import { ListPatient } from "./pages/list-patient";
+import { ListPatient } from "./pages/todoArrange/list-patient";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);

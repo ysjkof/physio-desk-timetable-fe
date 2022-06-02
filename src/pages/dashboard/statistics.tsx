@@ -5,15 +5,15 @@ import {
   useGetStatisticsLazyQuery,
 } from "../../graphql/generated/graphql";
 import { cls, getDateFromYMDHM } from "../../libs/utils";
-import { DatepickerForm } from "../timetable/components/datepicker";
 import { useForm } from "react-hook-form";
-import { DatepickerWithInput } from "../timetable/components/datepicker-with-input";
 import { DashboardLi } from "./components/li";
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
 import { InDashboardPageProps } from ".";
 import { useEffect, useState } from "react";
 import { DashboardBtn } from "./components/button";
 import { DashboardMainLayout } from "./components/dashboard-main-layout";
+import { DatepickerForm } from "../../components/molecules/datepicker";
+import { DatepickerWithInput } from "../../components/molecules/datepicker-with-input";
 
 interface UserStatis {
   name: string;

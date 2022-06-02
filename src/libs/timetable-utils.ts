@@ -1,6 +1,6 @@
 import { Clinic, Member, User } from "../graphql/generated/graphql";
 import { ModifiedLoggedInUser } from "../hooks/useMe";
-import { ModifiedReservation } from "../pages/timetable/components/table-main";
+import { ModifiedReservation } from "../pages/timetable";
 
 interface ModifiedClinicMemberWithUserAndClinic
   extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
