@@ -13,8 +13,8 @@ import { CreateAccount } from "./pages/todoArrange/create-account";
 import { Login } from "./pages/todoArrange/login";
 import { Search } from "./pages/todoArrange/search";
 import { PateintDetail } from "./pages/todoArrange/patient-detail";
-import { Dashboard } from "./pages/dashboard";
 import { ListPatient } from "./pages/todoArrange/list-patient";
+import { Dashboard } from "./pages/dashboard";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
