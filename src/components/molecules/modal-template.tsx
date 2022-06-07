@@ -18,7 +18,9 @@ export const ModalTemplate = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3 } }}
       exit={{ opacity: 0, transition: { duration: 0.3 } }}
-      className="modal-parents"
+      className={`modal-parents${
+        top ? "" : " flex items-center justify-center"
+      }`}
     >
       <div
         className={`modal-background ${
@@ -31,7 +33,7 @@ export const ModalTemplate = ({
         drag
         dragMomentum={false}
         dragElastic={false}
-        className={`${top ? "relative" : "modal-content position-center "}`}
+        className={`${top ? "relative" : "modal-content"}`}
         style={{ ...(top && { top, left }) }}
       >
         {children}

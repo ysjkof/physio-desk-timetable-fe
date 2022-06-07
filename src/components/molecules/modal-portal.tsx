@@ -25,7 +25,7 @@ export const ModalPortal = ({
         onClick={() => closeAction(false)}
       />
       <div
-        className={`${top ? "relative" : "modal-content position-center"}`}
+        className={`${top ? "relative" : "modal-content"}`}
         style={{ ...(top && { top, left }) }}
       >
         {children}

@@ -61,7 +61,7 @@
     @apply absolute h-full w-full bg-black/50;
   }
   .modal-content {
-    @apply absolute top-10 mx-auto h-[600px] w-[400px] space-y-4 rounded-md bg-white px-14 py-1;
+    @apply relative mx-auto h-[600px] w-[400px] space-y-4 rounded-md bg-white px-14 py-1;
   }
 
   .input {
