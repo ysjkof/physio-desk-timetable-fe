@@ -316,6 +316,7 @@ export const PrescriptionPage = ({
                   type={"text"}
                 />
                 <Button
+                  type="submit"
                   textContents="만들기"
                   canClick={isValid}
                   isWidthFull

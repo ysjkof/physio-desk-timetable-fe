@@ -91,6 +91,7 @@ export const CreateAccount = () => {
           <FormError errorMessage="Password must be more than 10 chars." />
         )}
         <Button
+          type="submit"
           canClick={formState.isValid}
           loading={loading}
           textContents={"Create Account"}

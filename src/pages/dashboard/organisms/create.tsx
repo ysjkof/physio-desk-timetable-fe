@@ -44,6 +44,7 @@ export const CreateClinic = () => {
               })}
             />
             <Button
+              type="submit"
               textContents={"만들기"}
               canClick={isValid}
               loading={loading}

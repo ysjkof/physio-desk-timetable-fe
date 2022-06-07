@@ -101,6 +101,7 @@ export const EditProfile = () => {
             />
           </label>
           <Button
+            type="submit"
             loading={loading}
             canClick={isValid}
             textContents="Save Profile"

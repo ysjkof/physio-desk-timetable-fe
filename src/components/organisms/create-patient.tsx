@@ -12,6 +12,7 @@ import { useReactiveVar } from "@apollo/client";
 import { ModalContentsLayout } from "../templates/modal-contents-layout";
 import { InputOfDatepicker } from "../molecules/input-of-datepicker";
 import { TimetableModalProps } from "../../pages/timetable";
+import { DatepickerWithInput } from "../molecules/datepicker-with-input";
 
 export interface BirthdayInput {
   birthdayYear?: number;
@@ -32,6 +33,7 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
   const {
     register: birthdayRegister,
     getValues: birthdayGetValues,
+    setValue: birthdaySetValue,
     formState: { errors: birthdayError, isValid: birthdayIsValid },
   } = useForm<BirthdayInput>({
     mode: "onChange",
@@ -135,12 +137,19 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
             </div>
             <label className="flex flex-col gap-2">
               생년월일
-              <InputOfDatepicker
+              <DatepickerWithInput
+                setValue={birthdaySetValue}
+                register={birthdayRegister}
+                formError={birthdayError}
+                dateType="birthday"
+                see="ymd"
+              />
+              {/* <InputOfDatepicker
                 register={birthdayRegister}
                 formError={birthdayError}
                 prefix="birthday"
                 see="ymd"
-              />
+              /> */}
             </label>
 
             <Input
@@ -180,6 +189,7 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
             />
 
             <Button
+              type="submit"
               canClick={isValid && birthdayIsValid}
               loading={loading}
               textContents={"환자등록"}
