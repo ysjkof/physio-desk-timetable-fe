@@ -62,16 +62,21 @@ export const Login = () => {
       <h4 className="mb-5 w-full text-left  font-medium">
         물리치료사를 위한 하나의 앱
       </h4>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mt-5 mb-5 grid w-full gap-3"
-      >
+      <div className="error-box relative w-full">
         {errors.email?.message && (
           <FormError errorMessage={errors.email?.message} />
         )}
         {errors.email?.type === "pattern" && (
           <FormError errorMessage={"Please enter a valid email"} />
         )}
+        {errors.password?.message && (
+          <FormError errorMessage={errors.password.message} />
+        )}
+      </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mt-5 mb-5 grid w-full gap-3"
+      >
         <input
           type="email"
           placeholder="Email"
@@ -82,22 +87,18 @@ export const Login = () => {
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
           })}
         />
-        {errors.password?.message && (
-          <FormError errorMessage={errors.password?.message} />
-        )}
-        {errors.password?.type === "minLength" && (
-          <FormError errorMessage="Password must be more than 10 chars." />
-        )}
         <input
           type="password"
           placeholder="Password"
           className="input"
           {...register("password", { required: "Password is required" })}
         />
-        <Button canClick={isValid} loading={loading} textContents={"Log in"} />
-        {loginMutationResult?.login.error && (
-          <FormError errorMessage={loginMutationResult.login.error} />
-        )}
+        <Button
+          type="submit"
+          canClick={isValid}
+          loading={loading}
+          textContents={"Log in"}
+        />
       </form>
     </>
   );
