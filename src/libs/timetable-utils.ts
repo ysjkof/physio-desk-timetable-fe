@@ -17,13 +17,14 @@ interface ModifiedClinic extends Pick<Clinic, "id" | "name"> {
 }
 export interface ClinicWithOptions extends ModifiedClinic {}
 
-export function getStartSunday(date: Date) {
+export const getSunday = (date: Date) => {
   const returnDate = new Date(date);
   returnDate.setHours(0, 0, 0, 0);
   returnDate.setDate(date.getDate() - date.getDay());
   return returnDate;
-}
-export function getEnddate(startDate: Date, afterDay: number) {
+};
+
+export function getAfterDate(startDate: Date, afterDay: number) {
   const returnDate = new Date(startDate);
   returnDate.setHours(0, 0, 0, 0);
   returnDate.setDate(startDate.getDate() + afterDay);
@@ -51,12 +52,6 @@ export const compareNumAfterGetMinutes = (
 ): boolean => {
   const minutes = date.getMinutes();
   return compareNumbers.includes(minutes);
-};
-
-export const getSunday = (date: Date) => {
-  const $date = new Date(date);
-  $date.setDate(date.getDate() - date.getDay());
-  return $date;
 };
 
 interface UserWithEvents extends ClinicMemberWithOptions {
