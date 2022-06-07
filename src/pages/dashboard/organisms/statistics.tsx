@@ -1,8 +1,5 @@
 import { DashboardSectionLayout } from "../components/section-layout";
-import {
-  GetStatisticsQuery,
-  useGetStatisticsLazyQuery,
-} from "../../../graphql/generated/graphql";
+import { useGetStatisticsQuery } from "../../../graphql/generated/graphql";
 import { getDateFromYMDHM } from "../../../libs/utils";
 import { useForm } from "react-hook-form";
 import { DashboardLi } from "../components/li";
@@ -52,9 +49,23 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   defaultDate[0].setDate(1);
   defaultDate[1].setMonth(defaultDate[0].getMonth() + 1, 0);
 
-  const [memberState, setMemberState] = useState<MemberState[]>([]);
-  const [userStatis, setUserStatis] = useState<UserStatis[]>([]);
-  const [statisticsData, setStatisticsData] = useState<GetStatisticsQuery>();
+  const [memberState, setMemberState] = useState<MemberState[]>();
+  const [userStatis, setUserStatis] = useState<UserStatis[]>();
+  const [statisticsData, setStatisticsData] = useState<
+    {
+      __typename?: "StatisticsRsult";
+      userName: string;
+      statistics: Array<{
+        __typename?: "DayCount";
+        date: any;
+        prescriptions: Array<{
+          __typename?: "PrescriptionStatistics";
+          name: string;
+          count: number;
+        }>;
+      }>;
+    }[]
+  >();
 
   const {
     register,
@@ -85,32 +96,29 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   endDate.setHours(23, 59, 59); // 입력 날짜의 오전 00시를 구하기 때문에 날짜 +1해줘야 바르게 검색된다.
 
   let userIds: number[] = [];
-  memberState.forEach((member) => {
+  memberState?.forEach((member) => {
     if (member.isSelected === true) {
       userIds.push(member.id);
     }
   });
 
-  const [getStatisticsLzq, { data, loading: loadingStatisticsData }] =
-    useGetStatisticsLazyQuery();
+  const { data, loading: loadingStatisticsData } = useGetStatisticsQuery({
+    variables: {
+      input: {
+        startDate,
+        endDate,
+        ...(typeof clinicId === "number" &&
+          clinicId !== 0 && {
+            clinicId,
+            userIds,
+          }),
+      },
+    },
+  });
 
   const onSubmit = () => {
     console.log("온서브밋", loadingStatisticsData);
     if (!loadingStatisticsData) {
-      console.log("온서브밋 인");
-      getStatisticsLzq({
-        variables: {
-          input: {
-            startDate,
-            endDate,
-            ...(typeof clinicId === "number" &&
-              clinicId !== 0 && {
-                clinicId,
-                userIds,
-              }),
-          },
-        },
-      });
     }
   };
 
@@ -147,7 +155,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   }
 
   function onCLickSetDate(
-    duration: "지난달" | "이번달" | "지난2주" | "지난주"
+    duration: "지난달" | "이번달" | "지난2주" | "지난주" | "그제" | "어제"
   ) {
     let startDate = new Date();
     let endDate = new Date();
@@ -170,6 +178,14 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       case "지난주":
         startDate = new Date(sunday.setDate(sunday.getDate() - 7));
         endDate = getAfterDate(sunday, 6);
+        break;
+      case "그제":
+        startDate.setDate(startDate.getDate() - 2);
+        endDate.setDate(endDate.getDate() - 2);
+        break;
+      case "어제":
+        startDate.setDate(startDate.getDate() - 1);
+        endDate.setDate(endDate.getDate() - 1);
         break;
     }
     let startDateYear = startDate.getFullYear();
@@ -203,8 +219,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   }, [clinicId]);
 
   useEffect(() => {
-    if (data) {
-      let users: UserStatis[] = data.getStatistics.results!.map((result) => ({
+    if (!loadingStatisticsData && data) {
+      const users: UserStatis[] = data.getStatistics.results!.map((result) => ({
         name: result.userName,
         prescriptions: {},
       }));
@@ -216,8 +232,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           );
         });
       });
+      setStatisticsData(data.getStatistics.results!);
       setUserStatis(users);
-      setStatisticsData(data);
     }
   }, [data]);
 
@@ -228,7 +244,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           <DashboardSectionLayout
             children={
               <div className="space-y-2">
-                {memberState.length >= 1 && (
+                {memberState && (
                   <div className="flex w-full flex-wrap gap-4 px-2">
                     {memberState.map((m, i) => (
                       <BtnMenu
@@ -239,8 +255,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                         thinFont
                         enabled={m.isSelected}
                         onClick={() => {
-                          memberState[i].isSelected =
-                            !memberState[i].isSelected;
+                          memberState[i].isSelected = memberState[i].isSelected;
                           setMemberState([...memberState]);
                         }}
                       />
@@ -273,6 +288,20 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     hasBorder
                     onClick={() => onCLickSetDate("지난주")}
                     label="지난주"
+                    enabled
+                    thinFont
+                  />
+                  <BtnMenu
+                    hasBorder
+                    onClick={() => onCLickSetDate("그제")}
+                    label="그제"
+                    enabled
+                    thinFont
+                  />
+                  <BtnMenu
+                    hasBorder
+                    onClick={() => onCLickSetDate("어제")}
+                    label="어제"
                     enabled
                     thinFont
                   />
@@ -309,7 +338,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           />
         </form>
       </section>
-      {statisticsData ? (
+
+      {statisticsData && userStatis ? (
         <>
           <section className="flex gap-4">
             <DashboardSectionLayout
@@ -416,9 +446,9 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     >
                       <VictoryLine
                         data={
-                          statisticsData.getStatistics.results?.length !== 0
-                            ? statisticsData.getStatistics.results
-                                ?.map((result) =>
+                          statisticsData.length !== 0
+                            ? statisticsData
+                                .map((result) =>
                                   result.statistics?.map((data) => ({
                                     x: data.date,
                                     y: data.prescriptions.reduce(
