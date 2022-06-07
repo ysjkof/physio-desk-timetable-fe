@@ -55,7 +55,6 @@ function selectPrescriptionForTest(inputPresc: PrescriptionWithSelect[]) {
     id: selected.id,
     name: selected.name,
     requiredTime: selected.requiredTime,
-    type: selected.__typename,
   };
 }
 
@@ -79,11 +78,15 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
-  const [selectedPresc, setSelectedPresc] = useState({
+  const [selectedPrescription, setSelectedPrescription] = useState({
     price: 0,
     minute: 0,
     prescriptions: [0],
   });
+  const [prescriptions, setPrescriptions] = useState<PrescriptionWithSelect[]>(
+    []
+  );
+
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
     variables: {
       input: {
@@ -92,14 +95,6 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
       },
     },
   });
-  let prescriptions: PrescriptionWithSelect[] = [];
-  if (prescriptionsData) {
-    Array.isArray(prescriptionsData.findPrescriptions.prescriptions) &&
-      (prescriptions = prescriptionsData.findPrescriptions.prescriptions.map(
-        (presc) => ({ ...presc, isSelect: false })
-      ));
-  }
-  const [selectPrescriptions, setSelectPrescriptions] = useState(prescriptions);
 
   const {
     register,
@@ -126,7 +121,7 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
   ] = useCreateReservationMutation({ onCompleted });
 
   function createDummyReserve(userId: number | undefined) {
-    const firstDate = new Date("2022-5-1");
+    const firstDate = new Date("2022-6-1");
     let countSum = 0;
     for (let i = 0; i < 30; i++) {
       console.log(`${i + 1}일`);
@@ -181,33 +176,43 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
       );
       const endDate = new Date(startDate);
       // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-      endDate.setMinutes(endDate.getMinutes() + selectedPresc.minute);
-      // createDummyReserve(userId);
-      createReservationMutation({
-        variables: {
-          input: {
-            startDate: startDate,
-            endDate,
-            memo,
-            patientId: selectedPatient.id,
-            userId: +userId!,
-            clinicId: selectedClinic?.id,
-            prescriptionIds: selectedPresc.prescriptions,
-          },
-        },
-      });
+      endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
+      createDummyReserve(userId);
+      // createReservationMutation({
+      //   variables: {
+      //     input: {
+      //       startDate: startDate,
+      //       endDate,
+      //       memo,
+      //       patientId: selectedPatient.id,
+      //       userId: +userId!,
+      //       clinicId: selectedClinic?.id,
+      //       prescriptionIds: selectedPrescription.prescriptions,
+      //     },
+      //   },
+      // });
     }
   };
 
+  function getTotal(
+    getThis: "price" | "requiredTime",
+    prescriptions: PrescriptionWithSelect[]
+  ) {
+    return prescriptions
+      .filter((pre) => pre.isSelect)
+      .reduce((prev, curr) => prev + curr[getThis], 0);
+  }
+
   const onClickPrescription = (id: number) => {
-    setSelectPrescriptions((prevState) =>
-      prevState.map((prev) => {
+    setPrescriptions((prevState) => {
+      const newPrescriptions = prevState.map((prev) => {
         if (prev.id === id) {
           return { ...prev, isSelect: !prev.isSelect };
         }
         return prev;
-      })
-    );
+      });
+      return newPrescriptions;
+    });
   };
 
   useEffect(() => {
@@ -217,24 +222,27 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
     };
   }, []);
 
-  function getTotal(
-    getThis: "price" | "requiredTime",
-    prescriptions: typeof selectPrescriptions
-  ) {
-    return prescriptions
-      .filter((pre) => pre.isSelect)
-      .reduce((prev, curr) => prev + curr[getThis], 0);
-  }
+  useEffect(() => {
+    if (prescriptionsData) {
+      const prescriptions =
+        prescriptionsData.findPrescriptions.prescriptions?.map((presc) => ({
+          ...presc,
+          isSelect: false,
+        })) ?? [];
+      setPrescriptions(prescriptions);
+    }
+  }, [prescriptionsData]);
 
   useEffect(() => {
-    setSelectedPresc({
-      minute: getTotal("requiredTime", selectPrescriptions),
-      price: getTotal("price", selectPrescriptions),
-      prescriptions: selectPrescriptions
-        .filter((pre) => pre.isSelect)
-        .map((pre) => pre.id),
-    });
-  }, [selectPrescriptions]);
+    const newState = {
+      minute: getTotal("requiredTime", prescriptions),
+      price: getTotal("price", prescriptions),
+      prescriptions: prescriptions
+        .filter((prescription) => prescription.isSelect)
+        .map((prescription) => prescription.id),
+    };
+    setSelectedPrescription(newState);
+  }, [prescriptions]);
 
   useEffect(() => {
     setValue("userId", member.id);
@@ -299,7 +307,7 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
                   />
                 </Link>
               </span>
-              {selectPrescriptions.length === 0 ? (
+              {prescriptions.length === 0 ? (
                 <div className="flex flex-col items-center px-2 ">
                   <span>등록된 처방이 없습니다.</span>
                   <span>
@@ -326,7 +334,7 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
               ) : (
                 <div className="space-y-2">
                   <ul className="grid grid-cols-4 gap-x-3 gap-y-1">
-                    {selectPrescriptions.map((prescription, index) => (
+                    {prescriptions.map((prescription, index) => (
                       <li
                         key={index}
                         value={prescription.id}
@@ -342,15 +350,16 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
                     ))}
                   </ul>
                   <div className="flex justify-around">
-                    <span>총가격 : {selectedPresc.price}원</span>
-                    <span>치료시간 : {selectedPresc.minute}분</span>
+                    <span>총가격 : {selectedPrescription.price}원</span>
+                    <span>치료시간 : {selectedPrescription.minute}분</span>
                   </div>
                 </div>
               )}
             </label>
             <Button
+              type="submit"
               canClick={
-                selectedPatient && isValid && selectedPresc.prescriptions[0] > 0
+                selectedPatient && isValid && prescriptions.length !== 0
               }
               loading={loading}
               textContents={"예약등록"}
