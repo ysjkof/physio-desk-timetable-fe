@@ -1,15 +1,15 @@
 import { useState } from "react";
 import type { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { Datepicker, DatepickerForm } from "./datepicker";
-import { IFormErrors, InputOfDatepicker } from "./input-of-datepicker";
+import { Datepicker, IForm, IFormErrors } from "./datepicker";
+import { InputOfDatepicker } from "./input-of-datepicker";
 
 interface IDatepickerWithInputProps {
-  setValue: UseFormSetValue<DatepickerForm>;
-  register: UseFormRegister<DatepickerForm>;
+  setValue: UseFormSetValue<IForm>;
+  register: UseFormRegister<IForm>;
   defaultDate: Date;
   see: "ymd-hm" | "ymd";
-  dateType: "startDate" | "endDate";
-  formError: IFormErrors;
+  dateType: "startDate" | "endDate" | "birthday";
+  formError?: IFormErrors;
 }
 
 export const DatepickerWithInput = ({

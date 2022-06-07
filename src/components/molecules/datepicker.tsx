@@ -1,8 +1,9 @@
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
-import { UseFormSetValue } from "react-hook-form";
+import { FieldError, UseFormSetValue } from "react-hook-form";
 import { compareDateMatch } from "../../libs/timetable-utils";
+import { BirthdayInput } from "../organisms/create-patient";
 import { ModalPortal } from "./modal-portal";
 
 export interface DatepickerForm {
@@ -18,11 +19,17 @@ export interface DatepickerForm {
   endDateMinutes?: number;
 }
 
+type AddFieldError<T> = {
+  [P in keyof T]?: FieldError;
+};
+export interface IForm extends DatepickerForm, BirthdayInput {}
+export interface IFormErrors extends AddFieldError<IForm> {}
+
 interface IDatePicker {
-  setValue: UseFormSetValue<DatepickerForm>;
+  setValue: UseFormSetValue<IForm>;
   defaultDate: Date;
   see: "ymd-hm" | "ymd";
-  prefix: "startDate" | "endDate";
+  prefix: "startDate" | "endDate" | "birthday";
   openState: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -120,12 +127,16 @@ export const Datepicker = ({
   }, [nextDate]);
 
   useEffect(() => {
-    nextDate.setHours(selectedHour);
-    setValue(`${prefix}Hours`, selectedHour);
+    if (prefix !== "birthday") {
+      nextDate.setHours(selectedHour);
+      setValue(`${prefix}Hours`, selectedHour);
+    }
   }, [selectedHour]);
   useEffect(() => {
-    nextDate.setMinutes(selectedMinutes);
-    setValue(`${prefix}Minutes`, selectedMinutes);
+    if (prefix !== "birthday") {
+      nextDate.setMinutes(selectedMinutes);
+      setValue(`${prefix}Minutes`, selectedMinutes);
+    }
   }, [selectedMinutes]);
 
   return (

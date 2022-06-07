@@ -250,7 +250,6 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     thinFont
                   />
                   <DatepickerWithInput
-                    formError={errors}
                     setValue={setValue}
                     defaultDate={defaultDate[0]}
                     register={register}

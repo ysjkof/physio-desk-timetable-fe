@@ -1,13 +1,6 @@
-import type { FieldError, UseFormRegister } from "react-hook-form";
-import { DatepickerForm } from "./datepicker";
-import { BirthdayInput } from "../organisms/create-patient";
-
-interface IForm extends DatepickerForm, BirthdayInput {}
-type AddFieldError<T> = {
-  [P in keyof T]?: T[P] | FieldError;
-};
-
-export interface IFormErrors extends AddFieldError<IForm> {}
+import type { UseFormRegister } from "react-hook-form";
+import { IForm, IFormErrors } from "./datepicker";
+import { FormError } from "../form-error";
 
 interface InputInDatepickerProps {
   register: UseFormRegister<IForm>;
