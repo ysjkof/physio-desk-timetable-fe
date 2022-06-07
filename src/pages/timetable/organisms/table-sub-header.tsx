@@ -37,7 +37,7 @@ export function TableSubHeader({}: TableSubHeaderProps) {
       );
       setUserFrame(userFrame);
     }
-  }, [clinicLists, selectedDate]);
+  }, [clinicLists, selectedDate, selectedClinic]);
 
   if (!userLength) return <></>;
   return (

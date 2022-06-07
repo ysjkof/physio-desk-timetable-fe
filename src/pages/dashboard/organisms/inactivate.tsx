@@ -1,15 +1,15 @@
+import { useReactiveVar } from "@apollo/client";
 import { InDashboardPageProps } from "..";
 import { useInactivateClinicMutation } from "../../../graphql/generated/graphql";
+import { selectedClinicVar } from "../../../store";
 import { DashboardSectionLayout } from "../components/section-layout";
 
-export const InactivateClinic = ({
-  clinicId,
-  clinicName,
-  isStayed,
-  isManager,
-  members,
-  loggedInUser,
-}: InDashboardPageProps) => {
+export const InactivateClinic = ({ loggedInUser }: InDashboardPageProps) => {
+  const {
+    id: clinicId,
+    isStayed,
+    isManager,
+  } = useReactiveVar(selectedClinicVar);
   if (!isStayed || !isManager) {
     return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
   }

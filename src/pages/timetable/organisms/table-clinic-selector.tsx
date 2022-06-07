@@ -8,6 +8,7 @@ import {
   clinicListsVar,
   loggedInUserVar,
   selectedClinicVar,
+  selecteMe,
   viewOptionsVar,
 } from "../../../store";
 import {
@@ -49,20 +50,24 @@ export function TableClinicSelector() {
     );
     clinicListsVar([...clinicLists]);
   };
-
   const onClickChangeSelectClinic = (id: number, name: string) => {
     if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
     let newSelectedClinic = selectedClinic;
     if (selectedClinic.id === id) {
-      newSelectedClinic = {
-        id: 0,
-        name: "",
-      };
+      newSelectedClinic = selecteMe;
     } else {
-      newSelectedClinic = {
-        id,
-        name,
-      };
+      const idx = loggedInUser.members?.findIndex(
+        (member) => member.clinic.id === id
+      );
+      if (idx !== -1 && typeof idx === "number") {
+        const member = loggedInUser.members![idx];
+        newSelectedClinic = {
+          id,
+          name: member.clinic.name,
+          isManager: member.manager,
+          isStayed: member.staying,
+        };
+      }
     }
     localStorage.setItem(
       LOCALSTORAGE_SELECTED_CLINIC + loggedInUser.id,

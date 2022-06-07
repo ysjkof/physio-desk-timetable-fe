@@ -1,26 +1,10 @@
 import { ModifiedClinic } from "..";
 import { MeQuery } from "../../../graphql/generated/graphql";
-
-interface Member {
-  __typename?: "Member";
-  id: number;
-  staying: boolean;
-  manager: boolean;
-  accepted: boolean;
-  user: { __typename?: "User"; id: number; name: string };
-  clinic: { __typename?: "Clinic"; id: number; name: string };
-}
-interface Clinic {
-  __typename?: "Clinic";
-  id: number;
-  name: string;
-  isActivated: boolean;
-  members: Member[];
-}
+import { ClinicWithOptions } from "../../../libs/timetable-utils";
 
 interface ClinicNameProps {
   selectedClinic: ModifiedClinic;
-  clinic: Clinic;
+  clinic: ClinicWithOptions;
   meData: MeQuery;
   onClick: () => void;
 }

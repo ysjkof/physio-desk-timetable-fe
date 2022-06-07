@@ -1,41 +1,30 @@
+import { useReactiveVar } from "@apollo/client";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
-import {
-  checkIsManager,
-  getIsStayed,
-  ModifiedClinic,
-  selectedMe,
-  SelectedMenuType,
-} from "..";
+import { checkIsManager, getIsStayed, SelectedMenuType } from "..";
 import { ModalTemplate } from "../../../components/molecules/modal-template";
-import {
-  MeQuery,
-  useFindMyClinicsQuery,
-} from "../../../graphql/generated/graphql";
+import { MeQuery } from "../../../graphql/generated/graphql";
 import { getPositionRef } from "../../../libs/utils";
+import { clinicListsVar, selectedClinicVar, selecteMe } from "../../../store";
 import { DashboardNavList } from "../components/dashboadr-nav-list";
 import { ClinicName } from "../molecules/clinicName";
 
 interface DashboardSideNavProps {
-  selectedClinic: ModifiedClinic;
   selectedMenu: SelectedMenuType;
   setSelectedMenu: React.Dispatch<React.SetStateAction<SelectedMenuType>>;
-  setSelectedClinic: React.Dispatch<React.SetStateAction<ModifiedClinic>>;
   meData: MeQuery;
 }
 
 export const DashboardSideNav = ({
-  selectedClinic,
   selectedMenu,
   setSelectedMenu,
-  setSelectedClinic,
   meData,
 }: DashboardSideNavProps) => {
+  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const clinicLists = useReactiveVar(clinicListsVar);
   const [openClinicSelect, setOpenClinicSelect] = useState(false);
-  const { data: findMyClinics, loading } = useFindMyClinicsQuery({
-    variables: { input: { includeInactivate: true } },
-  });
+
   const ref = useRef<HTMLDivElement>(null);
   const [top, left] = getPositionRef(ref, 0);
 
@@ -62,20 +51,22 @@ export const DashboardSideNav = ({
                     selectedClinic.id === 0 ? "font-semibold" : ""
                   }`}
                   onClick={() => {
-                    setSelectedClinic(selectedMe);
+                    selectedClinicVar(selecteMe);
                   }}
                 >
-                  {selectedMe.name}
+                  {selecteMe.name}
                 </li>
-                {findMyClinics?.findMyClinics.clinics?.map((clinic) => (
+                {clinicLists.map((clinic) => (
                   <ClinicName
                     key={clinic.id}
                     clinic={clinic}
                     selectedClinic={selectedClinic}
                     meData={meData}
                     onClick={() => {
-                      setSelectedClinic({
-                        ...clinic,
+                      selectedClinicVar({
+                        id: clinic.id,
+                        name: clinic.name,
+                        members: clinic.members,
                         isManager: checkIsManager(clinic.id, meData),
                         isStayed: getIsStayed(clinic.id, meData),
                       });

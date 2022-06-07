@@ -1,3 +1,4 @@
+import { useReactiveVar } from "@apollo/client";
 import { faSearch, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
@@ -8,16 +9,17 @@ import {
   useSearchUsersByNameLazyQuery,
 } from "../../../graphql/generated/graphql";
 import { cls } from "../../../libs/utils";
+import { selectedClinicVar } from "../../../store";
 import { DashboardSectionLayout } from "../components/section-layout";
 
-export const InviteClinic = ({
-  clinicId,
-  clinicName,
-  isStayed,
-  isManager,
-  members,
-  loggedInUser,
-}: InDashboardPageProps) => {
+export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
+  const {
+    id: clinicId,
+    name: clinicName,
+    isStayed,
+    isManager,
+  } = useReactiveVar(selectedClinicVar);
+
   if (!isStayed || !isManager) {
     return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
   }

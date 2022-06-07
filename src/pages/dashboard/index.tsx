@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Clinic, Member, MeQuery, User } from "../../graphql/generated/graphql";
 import { ModifiedLoggedInUser, useMe } from "../../hooks/useMe";
-import { cls } from "../../libs/utils";
 import { Members } from "./organisms/members";
 import { InviteClinic } from "./organisms/invite";
 import { InactivateClinic } from "./organisms/inactivate";
@@ -13,8 +12,9 @@ import { InactivatedClinic } from "./organisms/inactivated";
 import { Statistics } from "./organisms/statistics";
 import { DashboardTemplate } from "./dashboard-template";
 import { DashboardSideNav } from "./organisms/nav-side";
-import { DashboardTopNav } from "./organisms/nav-top";
 import { DashboardTitle } from "./components/title";
+import { selectedClinicVar, selecteMe } from "../../store";
+import { useReactiveVar } from "@apollo/client";
 
 export type SelectedMenuType =
   | "main"
@@ -30,17 +30,13 @@ export interface ModifiedClinicMemberWithUser
   extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
   user: Pick<User, "id" | "name">;
 }
-export interface ModifiedClinic
-  extends Pick<Clinic, "id" | "name" | "isActivated"> {
+export interface ModifiedClinic extends Pick<Clinic, "id" | "name"> {
   members?: ModifiedClinicMemberWithUser[];
   isManager: boolean;
   isStayed: boolean;
 }
 
-export interface InDashboardPageProps
-  extends Pick<ModifiedClinic, "members" | "isManager" | "isStayed"> {
-  clinicId: number;
-  clinicName: string;
+export interface InDashboardPageProps {
   loggedInUser: ModifiedLoggedInUser;
 }
 
@@ -59,17 +55,8 @@ export function getIsStayed(clinicId: number, meData: MeQuery) {
     )
   );
 }
-export const selectedMe = {
-  id: 0,
-  name: "개인",
-  isManager: true,
-  isActivated: true,
-  isStayed: true,
-};
 
 export const Dashboard = () => {
-  const [selectedClinic, setSelectedClinic] =
-    useState<ModifiedClinic>(selectedMe);
   const [selectedMenu, setSelectedMenu] =
     useState<SelectedMenuType>("prescription");
   const location = useLocation();
@@ -78,6 +65,7 @@ export const Dashboard = () => {
     selectedClinicName: string;
     selectedMenu: SelectedMenuType;
   };
+  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const { data: meData, loading: meLoading } = useMe();
 
@@ -87,12 +75,11 @@ export const Dashboard = () => {
         state.selectedClinicId === undefined &&
         state.selectedClinicName === undefined
       ) {
-        setSelectedClinic(selectedMe);
+        selectedClinicVar(selecteMe);
       } else {
-        setSelectedClinic({
+        selectedClinicVar({
           id: state.selectedClinicId,
           name: state.selectedClinicName,
-          isActivated: true,
           isManager: checkIsManager(state.selectedClinicId, meData),
           isStayed: getIsStayed(state.selectedClinicId, meData),
         });
@@ -135,10 +122,8 @@ export const Dashboard = () => {
       <DashboardTemplate
         nav={
           <DashboardSideNav
-            selectedClinic={selectedClinic}
             selectedMenu={selectedMenu}
             setSelectedMenu={setSelectedMenu}
-            setSelectedClinic={setSelectedClinic}
             meData={meData}
           />
         }
@@ -154,54 +139,19 @@ export const Dashboard = () => {
               <>
                 {selectedMenu === "main" && "메뉴를 선택하세요"}
                 {selectedMenu === "member" && (
-                  <Members
-                    clinicId={selectedClinic.id}
-                    clinicName={selectedClinic.name}
-                    members={selectedClinic.members}
-                    loggedInUser={meData.me}
-                    isStayed={selectedClinic.isStayed}
-                    isManager={selectedClinic.isManager}
-                  />
+                  <Members loggedInUser={meData.me} />
                 )}
                 {selectedMenu === "invite" && (
-                  <InviteClinic
-                    clinicId={selectedClinic.id}
-                    clinicName={selectedClinic.name}
-                    members={selectedClinic.members}
-                    loggedInUser={meData.me}
-                    isStayed={selectedClinic.isStayed}
-                    isManager={selectedClinic.isManager}
-                  />
+                  <InviteClinic loggedInUser={meData.me} />
                 )}
                 {selectedMenu === "inactivate" && (
-                  <InactivateClinic
-                    clinicId={selectedClinic.id}
-                    clinicName={selectedClinic.name}
-                    members={selectedClinic.members}
-                    loggedInUser={meData.me}
-                    isStayed={selectedClinic.isStayed}
-                    isManager={selectedClinic.isManager}
-                  />
+                  <InactivateClinic loggedInUser={meData.me} />
                 )}
                 {selectedMenu === "prescription" && (
-                  <PrescriptionPage
-                    clinicId={selectedClinic.id}
-                    clinicName={selectedClinic.name}
-                    members={selectedClinic.members}
-                    loggedInUser={meData.me}
-                    isStayed={selectedClinic.isStayed}
-                    isManager={selectedClinic.isManager}
-                  />
+                  <PrescriptionPage loggedInUser={meData.me} />
                 )}
                 {selectedMenu === "statistics" && (
-                  <Statistics
-                    clinicId={selectedClinic.id}
-                    clinicName={selectedClinic.name}
-                    members={selectedClinic.members}
-                    loggedInUser={meData.me}
-                    isStayed={selectedClinic.isStayed}
-                    isManager={selectedClinic.isManager}
-                  />
+                  <Statistics loggedInUser={meData.me} />
                 )}
               </>
             )}

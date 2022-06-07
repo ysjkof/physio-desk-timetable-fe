@@ -13,11 +13,11 @@ export const useMe = () => {
 
 interface ModifiedClinicMemberWithClinic
   extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
-  clinic: Pick<Clinic, "id" | "name">;
+  clinic: Pick<Clinic, "id" | "name" | "isActivated">;
 }
 interface ModifiedNotice extends Pick<Notice, "message" | "read"> {}
 export interface ModifiedLoggedInUser
   extends Pick<User, "id" | "name" | "email" | "role" | "verified"> {
-  clinics?: ModifiedClinicMemberWithClinic[] | null;
+  members?: ModifiedClinicMemberWithClinic[] | null;
   notice?: ModifiedNotice[] | null;
 }

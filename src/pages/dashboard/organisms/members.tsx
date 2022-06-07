@@ -1,15 +1,13 @@
+import { useReactiveVar } from "@apollo/client";
 import { InDashboardPageProps } from "..";
 import { useAcceptInvitationMutation } from "../../../graphql/generated/graphql";
 import { cls } from "../../../libs/utils";
+import { selectedClinicVar } from "../../../store";
 import { DashboardSectionLayout } from "../components/section-layout";
 
-export const Members = ({
-  clinicId,
-  clinicName,
-  isStayed,
-  members,
-  loggedInUser,
-}: InDashboardPageProps) => {
+export const Members = ({ loggedInUser }: InDashboardPageProps) => {
+  const { id: clinicId, members } = useReactiveVar(selectedClinicVar);
+
   const [acceptInvitation] = useAcceptInvitationMutation();
 
   function onClick() {

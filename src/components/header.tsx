@@ -15,7 +15,7 @@ import { ClinicWithOptions } from "../libs/timetable-utils";
 import {
   clinicListsVar,
   loggedInUserVar,
-  selectedClinic,
+  selecteMe,
   selectedClinicVar,
   viewOptionsVar,
 } from "../store";
@@ -153,7 +153,7 @@ export const Header = () => {
     );
     clinicListsVar(updatedMyClinics);
 
-    const localSelectClinic: typeof selectedClinic = JSON.parse(
+    const localSelectClinic: typeof selecteMe = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_SELECTED_CLINIC + meData.me.id)!
     );
     if (
@@ -164,9 +164,9 @@ export const Header = () => {
     } else {
       localStorage.setItem(
         LOCALSTORAGE_SELECTED_CLINIC + meData.me.id,
-        JSON.stringify(selectedClinic)
+        JSON.stringify(selecteMe)
       );
-      selectedClinicVar(selectedClinic);
+      selectedClinicVar(selecteMe);
     }
   }, [findMyClinicsData]);
 
