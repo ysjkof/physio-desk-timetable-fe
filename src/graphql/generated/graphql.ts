@@ -292,6 +292,7 @@ export type GetStatisticsOutput = {
   __typename?: 'GetStatisticsOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
+  prescriptionInfo?: Maybe<Array<PrescriptionInfo>>;
   results?: Maybe<Array<StatisticsRsult>>;
 };
 
@@ -513,6 +514,14 @@ export type PrescriptionAtom = {
   id: Scalars['Float'];
   name: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type PrescriptionInfo = {
+  __typename?: 'PrescriptionInfo';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  price: Scalars['Int'];
+  requiredTime: Scalars['Int'];
 };
 
 export type PrescriptionStatistics = {
@@ -808,7 +817,7 @@ export type GetStatisticsQueryVariables = Exact<{
 }>;
 
 
-export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, results?: Array<{ __typename?: 'StatisticsRsult', userName: string, statistics: Array<{ __typename?: 'DayCount', date: any, prescriptions: Array<{ __typename?: 'PrescriptionStatistics', name: string, count: number }> }> }> | null } };
+export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, results?: Array<{ __typename?: 'StatisticsRsult', userName: string, statistics: Array<{ __typename?: 'DayCount', date: any, prescriptions: Array<{ __typename?: 'PrescriptionStatistics', name: string, count: number }> }> }> | null, prescriptionInfo?: Array<{ __typename?: 'PrescriptionInfo', id: number, name: string, requiredTime: number, price: number }> | null } };
 
 export type InviteClinicMutationVariables = Exact<{
   input: InviteClinicInput;
@@ -1539,6 +1548,12 @@ export const GetStatisticsDocument = gql`
           count
         }
       }
+    }
+    prescriptionInfo {
+      id
+      name
+      requiredTime
+      price
     }
   }
 }

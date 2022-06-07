@@ -12,5 +12,11 @@ query getStatistics($input: GetStatisticsInput!) {
         }
       }
     }
+    prescriptionInfo {
+      id
+      name
+      requiredTime
+      price
+    }
   }
 }

@@ -1,7 +1,6 @@
 import { DashboardSectionLayout } from "../components/section-layout";
 import {
   GetStatisticsQuery,
-  useFindPrescriptionsQuery,
   useGetStatisticsLazyQuery,
 } from "../../../graphql/generated/graphql";
 import { getDateFromYMDHM } from "../../../libs/utils";
@@ -85,15 +84,6 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
   endDate.setHours(23, 59, 59); // 입력 날짜의 오전 00시를 구하기 때문에 날짜 +1해줘야 바르게 검색된다.
 
-  const { data: findPrescriptionsData, loading: loadingPrescriptionsData } =
-    useFindPrescriptionsQuery({
-      variables: {
-        input: {
-          includeInactivate: false,
-          clinicId,
-        },
-      },
-    });
   let userIds: number[] = [];
   memberState.forEach((member) => {
     if (member.isSelected === true) {
@@ -213,46 +203,19 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   }, [clinicId]);
 
   useEffect(() => {
-    if (data && findPrescriptionsData) {
+    if (data) {
       let users: UserStatis[] = data.getStatistics.results!.map((result) => ({
         name: result.userName,
         prescriptions: {},
       }));
-      if (clinicId === 0) {
-        const prescriptions = data.getStatistics.results
-          ?.map((result) =>
-            result.statistics
-              .map((statistic) =>
-                statistic.prescriptions
-                  .map((prescription) => prescription.name)
-                  .join()
-              )
-              .join()
-          )
-          .join();
-        //  할일: 처방 가격 모두 불러오는 쿼리 필요
-        const uniquePrescriptions = [...new Set(prescriptions?.split(","))];
-        uniquePrescriptions.forEach((prescription) => {
-          users.forEach((user, idx) => {
-            user.prescriptions[prescription] = calcPrescNumOfTime(
-              prescription,
-              data?.getStatistics.results![idx]
-            );
-          });
+      data.getStatistics.prescriptionInfo?.forEach((presc) => {
+        users.forEach((user, idx) => {
+          user.prescriptions[presc.name] = calcPrescNumOfTime(
+            presc.name,
+            data?.getStatistics.results![idx]
+          );
         });
-      } else {
-        findPrescriptionsData.findPrescriptions.prescriptions?.forEach(
-          (presc) => {
-            users.forEach((user, idx) => {
-              user.prescriptions[presc.name] = calcPrescNumOfTime(
-                presc.name,
-                data?.getStatistics.results![idx]
-              );
-            });
-          }
-        );
-      }
-
+      });
       setUserStatis(users);
       setStatisticsData(data);
     }
@@ -335,22 +298,11 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     textContents="검색"
                     canClick={
                       isValid &&
-                      !loadingPrescriptionsData &&
                       !loadingStatisticsData &&
                       (clinicId === 0 ? true : userIds.length > 0)
                     }
                     loading={loadingStatisticsData}
                   />
-                  {/* <DashboardBtn
-                    textContents="검색"
-                    isValid={
-                      isValid &&
-                      !loadingPrescriptionsData &&
-                      !loadingStatisticsData &&
-                      (clinicId === 0 ? true : userIds.length > 0)
-                    }
-                    loading={loadingStatisticsData}
-                  /> */}
                 </div>
               </div>
             }
@@ -380,7 +332,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                             key={i}
                             name={presc[0]}
                             price={
-                              findPrescriptionsData?.findPrescriptions.prescriptions?.find(
+                              data?.getStatistics.prescriptionInfo?.find(
                                 (v) => v.name === presc[0]
                               )?.price! * presc[1] ?? 0
                             }
@@ -392,7 +344,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                           price={Object.entries(user.prescriptions).reduce(
                             (acc, cur) =>
                               acc +
-                              findPrescriptionsData?.findPrescriptions.prescriptions?.find(
+                              data?.getStatistics.prescriptionInfo?.find(
                                 (presc) => presc.name === cur[0]
                               )?.price! *
                                 cur[1],
@@ -416,7 +368,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                           Object.entries(user.prescriptions).reduce(
                             (acc, cur) =>
                               acc +
-                              findPrescriptionsData?.findPrescriptions.prescriptions?.find(
+                              data?.getStatistics.prescriptionInfo?.find(
                                 (presc) => presc.name === cur[0]
                               )?.price! *
                                 cur[1],
