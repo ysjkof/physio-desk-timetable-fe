@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { checkIsManager, getIsStayed, SelectedMenuType } from "..";
 import { ModalTemplate } from "../../../components/molecules/modal-template";
 import { MeQuery } from "../../../graphql/generated/graphql";
-import { getPositionRef } from "../../../libs/utils";
+import { getPositionRef, saveSelectedClinic } from "../../../libs/utils";
 import { clinicListsVar, selectedClinicVar, selecteMe } from "../../../store";
 import { DashboardNavList } from "../components/dashboadr-nav-list";
 import { ClinicName } from "../molecules/clinicName";
@@ -51,7 +51,7 @@ export const DashboardSideNav = ({
                     selectedClinic.id === 0 ? "font-semibold" : ""
                   }`}
                   onClick={() => {
-                    selectedClinicVar(selecteMe);
+                    saveSelectedClinic(selecteMe, meData.me.id);
                   }}
                 >
                   {selecteMe.name}
@@ -63,13 +63,14 @@ export const DashboardSideNav = ({
                     selectedClinic={selectedClinic}
                     meData={meData}
                     onClick={() => {
-                      selectedClinicVar({
+                      const newSelectedClinic = {
                         id: clinic.id,
                         name: clinic.name,
                         members: clinic.members,
                         isManager: checkIsManager(clinic.id, meData),
                         isStayed: getIsStayed(clinic.id, meData),
-                      });
+                      };
+                      saveSelectedClinic(newSelectedClinic, meData.me.id);
                     }}
                   />
                 ))}

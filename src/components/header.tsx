@@ -13,7 +13,6 @@ import {
 } from "../graphql/generated/graphql";
 import { ClinicWithOptions } from "../libs/timetable-utils";
 import {
-  clinicListsVar,
   loggedInUserVar,
   selecteMe,
   selectedClinicVar,
@@ -22,8 +21,9 @@ import {
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
   LOCALSTORAGE_VIEW_OPTION,
-  LOCALSTORAGE_VIEW_OPTION_CLINICS,
+  LOCALSTORAGE_CLINIC_LISTS,
 } from "../variables";
+import { saveClinicLists, saveSelectedClinic } from "../libs/utils";
 
 function filterActivatedMemberInClinic(
   data: FindMyClinicsQuery | undefined | null,
@@ -121,7 +121,7 @@ export const Header = () => {
     );
 
     const localClinics: ClinicWithOptions[] = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_VIEW_OPTION_CLINICS + meData.me.id)!
+      localStorage.getItem(LOCALSTORAGE_CLINIC_LISTS + meData.me.id)!
     );
     if (localClinics) {
       updatedMyClinics = myClinics.map((g) => {
@@ -147,11 +147,7 @@ export const Header = () => {
     } else {
       updatedMyClinics = myClinics;
     }
-    localStorage.setItem(
-      LOCALSTORAGE_VIEW_OPTION_CLINICS + meData.me.id,
-      JSON.stringify(updatedMyClinics)
-    );
-    clinicListsVar(updatedMyClinics);
+    saveClinicLists(updatedMyClinics, meData.me.id);
 
     const localSelectClinic: typeof selecteMe = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_SELECTED_CLINIC + meData.me.id)!
@@ -162,11 +158,7 @@ export const Header = () => {
     ) {
       selectedClinicVar(localSelectClinic);
     } else {
-      localStorage.setItem(
-        LOCALSTORAGE_SELECTED_CLINIC + meData.me.id,
-        JSON.stringify(selecteMe)
-      );
-      selectedClinicVar(selecteMe);
+      saveSelectedClinic(selecteMe, meData.me.id);
     }
   }, [findMyClinicsData]);
 

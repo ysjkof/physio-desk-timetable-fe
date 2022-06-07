@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion, Variants } from "framer-motion";
 import { Fragment } from "react";
 import { BtnMenu } from "../../../components/button-menu";
+import { saveClinicLists, saveSelectedClinic } from "../../../libs/utils";
 import {
   clinicListsVar,
   loggedInUserVar,
@@ -13,9 +14,10 @@ import {
 } from "../../../store";
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
-  LOCALSTORAGE_VIEW_OPTION_CLINICS,
+  LOCALSTORAGE_CLINIC_LISTS,
   NEXT,
 } from "../../../variables";
+import { ModifiedClinic } from "../../dashboard";
 import { BtnArrow } from "../molecules/button-arrow";
 
 export function TableClinicSelector() {
@@ -44,36 +46,29 @@ export function TableClinicSelector() {
       return;
     }
     clinicLists[gIndex].members[mIndex].activation = !isActivate;
-    localStorage.setItem(
-      LOCALSTORAGE_VIEW_OPTION_CLINICS + loggedInUser.id,
-      JSON.stringify(clinicLists)
-    );
-    clinicListsVar([...clinicLists]);
+    saveClinicLists([...clinicLists], loggedInUser.id);
   };
+
   const onClickChangeSelectClinic = (id: number, name: string) => {
     if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
-    let newSelectedClinic = selectedClinic;
+    let newSelectedClinic: ModifiedClinic = selecteMe;
     if (selectedClinic.id === id) {
-      newSelectedClinic = selecteMe;
     } else {
-      const idx = loggedInUser.members?.findIndex(
+      const clinic = clinicLists.find((clinic) => clinic.id === id);
+      const me = loggedInUser.members?.find(
         (member) => member.clinic.id === id
       );
-      if (idx !== -1 && typeof idx === "number") {
-        const member = loggedInUser.members![idx];
+      if (clinic && me) {
         newSelectedClinic = {
           id,
-          name: member.clinic.name,
-          isManager: member.manager,
-          isStayed: member.staying,
+          name: clinic.name,
+          isManager: me.manager,
+          isStayed: me.staying,
+          members: clinic.members,
         };
       }
     }
-    localStorage.setItem(
-      LOCALSTORAGE_SELECTED_CLINIC + loggedInUser.id,
-      JSON.stringify(newSelectedClinic)
-    );
-    selectedClinicVar(newSelectedClinic);
+    saveSelectedClinic(newSelectedClinic, loggedInUser.id);
   };
 
   const onClickChangeSeeActiveOption = () => {

@@ -33,7 +33,7 @@ export const TABLE_TIME_GAP = 10; // 분 단위, 나중에 전역변수로 조�
 export const NEXT = "next";
 export const PREV = "prev";
 export const SCROLL_ADRESS = "scroll-adress-";
-export const LOCALSTORAGE_VIEW_OPTION_CLINICS = "muool-view-option-clinics-";
+export const LOCALSTORAGE_CLINIC_LISTS = "muool-clinic-lists-";
 export const LOCALSTORAGE_VIEW_OPTION = "muool-view-option-";
 export const LOCALSTORAGE_SELECTED_CLINIC = "muool-selected-clinic-";
 

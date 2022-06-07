@@ -9,17 +9,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { BtnMenu } from "../../../components/button-menu";
 import { BtnMenuToggle } from "../../../components/button-menu-toggle";
+import { saveViewOptions } from "../../../libs/utils";
 import {
   IViewOption,
   loggedInUserVar,
   selectedDateVar,
   viewOptionsVar,
 } from "../../../store";
-import {
-  LOCALSTORAGE_VIEW_OPTION,
-  ONE_DAY,
-  ONE_WEEK,
-} from "../../../variables";
+import { ONE_DAY, ONE_WEEK } from "../../../variables";
 
 interface TableNavProps {
   today: Date;
@@ -54,11 +51,7 @@ export function TableHeader({ today }: TableNavProps) {
               ...viewOptions,
               seeCancel: !viewOptions.seeCancel,
             };
-            localStorage.setItem(
-              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-              JSON.stringify(newViewOptions)
-            );
-            viewOptionsVar(newViewOptions);
+            saveViewOptions(newViewOptions, loggedInUser.id);
           }}
         />
         <BtnMenu
@@ -70,11 +63,7 @@ export function TableHeader({ today }: TableNavProps) {
               ...viewOptions,
               seeNoshow: !viewOptions.seeNoshow,
             };
-            localStorage.setItem(
-              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-              JSON.stringify(newViewOptions)
-            );
-            viewOptionsVar(newViewOptions);
+            saveViewOptions(newViewOptions, loggedInUser.id);
           }}
         />
         <BtnMenuToggle
@@ -84,11 +73,7 @@ export function TableHeader({ today }: TableNavProps) {
               periodToView:
                 viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
             };
-            localStorage.setItem(
-              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-              JSON.stringify(newViewOptions)
-            );
-            viewOptionsVar(newViewOptions);
+            saveViewOptions(newViewOptions, loggedInUser.id);
           }}
           enabled={viewOptions.periodToView === ONE_WEEK}
           label={["1주일", "하루"]}
@@ -104,11 +89,7 @@ export function TableHeader({ today }: TableNavProps) {
               ...viewOptions,
               navigationExpand: !viewOptions.navigationExpand,
             };
-            localStorage.setItem(
-              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-              JSON.stringify(newViewOptions)
-            );
-            viewOptionsVar(newViewOptions);
+            saveViewOptions(newViewOptions, loggedInUser.id);
           }}
         />
 
@@ -121,11 +102,7 @@ export function TableHeader({ today }: TableNavProps) {
               ...viewOptions,
               seeList: !viewOptions.seeList,
             };
-            localStorage.setItem(
-              LOCALSTORAGE_VIEW_OPTION + loggedInUser.id,
-              JSON.stringify(newViewOptions)
-            );
-            viewOptionsVar(newViewOptions);
+            saveViewOptions(newViewOptions, loggedInUser.id);
           }}
         />
         <BtnMenu

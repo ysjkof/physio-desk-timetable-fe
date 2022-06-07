@@ -13,6 +13,8 @@ import { DatepickerWithInput } from "../../../components/molecules/datepicker-wi
 import { InDashboardPageProps } from "..";
 import { BtnMenu } from "../../../components/button-menu";
 import { Button } from "../../../components/button";
+import { selectedClinicVar } from "../../../store";
+import { useReactiveVar } from "@apollo/client";
 
 interface UserStatis {
   name: string;
@@ -42,13 +44,9 @@ interface ModifiedDatepickerForm extends DatepickerForm {
   userIds?: number[];
 }
 
-export const Statistics = ({
-  clinicId,
-  clinicName,
-  isStayed,
-  members,
-  loggedInUser,
-}: InDashboardPageProps) => {
+export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
+  const { id: clinicId, members } = useReactiveVar(selectedClinicVar);
+
   let defaultDate: Date[] = [new Date(), new Date()];
   defaultDate[0].setDate(1);
   defaultDate[1].setMonth(defaultDate[0].getMonth() + 1, 0);
@@ -173,7 +171,6 @@ export const Statistics = ({
   }, [clinicId]);
 
   useEffect(() => {
-    console.log(1, loadingStatisticsData);
     if (!loadingStatisticsData && dataStatistics) {
       let users: UserStatis[] = dataStatistics?.getStatistics.results!.map(
         (v) => ({
