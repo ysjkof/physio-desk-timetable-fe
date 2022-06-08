@@ -80,3 +80,14 @@ export function saveViewOptions(
   );
   viewOptionsVar(newViewOptions);
 }
+
+export function checkMember(staying: boolean, accepted: boolean) {
+  if (!staying) {
+    return accepted ? "탈퇴" : "수락대기";
+  } else {
+    return accepted ? "직원" : null;
+  }
+  // if (staying && accepted) return "직원";
+  // if (!staying && !accepted) return "수락대기";
+  // if (!staying && accepted) return "탈퇴";
+}

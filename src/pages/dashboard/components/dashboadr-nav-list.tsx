@@ -37,7 +37,7 @@ export const DashboardNavList = ({
       textContents = "통계";
       break;
     case "create":
-      textContents = "그룹 만들기";
+      textContents = "병원 만들기";
       break;
     case "inactivated":
       textContents = "비활성 보기";

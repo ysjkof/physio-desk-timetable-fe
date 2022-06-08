@@ -25,27 +25,20 @@ import {
 } from "../variables";
 import { saveClinicLists, saveSelectedClinic } from "../libs/utils";
 
-function filterActivatedMemberInClinic(
+function injectKeyValue(
   data: FindMyClinicsQuery | undefined | null,
   loggedInUserId: number
 ) {
   const result: ClinicWithOptions[] = [];
   if (data && data.findMyClinics.clinics) {
     data.findMyClinics.clinics.forEach((clinic) => {
-      const isAccepted = clinic.members.find(
-        (member) => member.user.id === loggedInUserId && member.accepted
-      );
-      if (isAccepted) {
-        const members = clinic.members
-          .filter((member) => member.accepted && member.staying)
-          .map((member) => ({
-            ...member,
-            activation: true,
-            loginUser: member.user.id === loggedInUserId && true,
-          }));
-        if (Array.isArray(members) && members[0]) {
-          result.push({ ...clinic, members });
-        }
+      const members = clinic.members.map((member) => ({
+        ...member,
+        activation: true,
+        loginUser: member.user.id === loggedInUserId && true,
+      }));
+      if (Array.isArray(members) && members[0]) {
+        result.push({ ...clinic, members });
       }
     });
   }
@@ -115,33 +108,32 @@ export const Header = () => {
     console.log(2, "시작 Header : in useEffect");
     if (!meData) return;
     let updatedMyClinics: ClinicWithOptions[] = [];
-    const myClinics = filterActivatedMemberInClinic(
-      findMyClinicsData,
-      meData.me.id
-    );
+    const myClinics = injectKeyValue(findMyClinicsData, meData.me.id);
 
     const localClinics: ClinicWithOptions[] = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_CLINIC_LISTS + meData.me.id)!
     );
     if (localClinics) {
-      updatedMyClinics = myClinics.map((g) => {
-        const existLocalClinic = localClinics.find((lg) => lg.id === g.id);
-        if (existLocalClinic) {
+      updatedMyClinics = myClinics.map((clinic) => {
+        const localClinic = localClinics.find(
+          (localClinic) => localClinic.id === clinic.id
+        );
+        if (localClinic) {
           return {
-            id: g.id,
-            name: g.name,
-            members: g.members.map((gm) => {
-              const sameMember = existLocalClinic.members.find(
-                (lgm) => lgm.id === gm.id
+            id: clinic.id,
+            name: clinic.name,
+            members: clinic.members.map((member) => {
+              const sameMember = localClinic.members.find(
+                (lgm) => lgm.id === member.id
               );
               return {
-                ...gm,
+                ...member,
                 ...(sameMember && { activation: sameMember.activation }),
               };
             }),
           };
         } else {
-          return g;
+          return clinic;
         }
       });
     } else {

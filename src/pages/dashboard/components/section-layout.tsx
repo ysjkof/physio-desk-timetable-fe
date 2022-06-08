@@ -6,6 +6,11 @@ interface DashboardSectionLayoutProps {
   title?: string;
   width?: "md";
   tooltip?: string;
+  height?: string;
+  elementName?: string;
+  padding?: boolean;
+  moreYGap?: boolean;
+  heightFull?: boolean;
 }
 
 export const DashboardSectionLayout = ({
@@ -13,26 +18,38 @@ export const DashboardSectionLayout = ({
   title,
   width,
   tooltip,
+  height,
+  elementName,
+  padding,
+  moreYGap,
+  heightFull,
 }: DashboardSectionLayoutProps) => {
   return (
-    <div className="h-full w-full">
-      <div className="h-full bg-white p-2 shadow-cst">
-        <div
-          className={`h-full w-full space-y-2 ${width ? "mx-auto" : ""} ${
-            width === "md" ? "max-w-md" : ""
-          }`}
-        >
-          {title && !tooltip && <h3>{title}</h3>}
-          {tooltip && (
-            <h3 className="group relative">
-              {title} <FontAwesomeIcon icon={faCircleQuestion} />
-              <p className="bubble-arrow-t-left absolute top-8 z-50 hidden rounded-md bg-black px-3 py-2 text-white group-hover:block">
-                {tooltip}
-              </p>
-            </h3>
-          )}
-          {children}
-        </div>
+    <div
+      className={`${
+        elementName ?? ""
+      } dashboard-section-layout overflow-y-scroll bg-white p-2 shadow-cst${
+        padding ? " m-2" : ""
+      }${heightFull ? " h-full" : ""}`}
+      style={{ ...(height && { height }) }}
+    >
+      <div
+        className={`${width === "md" ? " mx-auto max-w-md" : " w-full"}${
+          moreYGap ? " space-y-6" : " space-y-2"
+        }`}
+      >
+        {title && !tooltip && (
+          <h3 className="mb-4 text-sm font-semibold">{title}</h3>
+        )}
+        {tooltip && (
+          <h3 className="group relative">
+            {title} <FontAwesomeIcon icon={faCircleQuestion} />
+            <p className="bubble-arrow-t-left absolute top-8 z-50 hidden rounded-md bg-black px-3 py-2 text-white group-hover:block">
+              {tooltip}
+            </p>
+          </h3>
+        )}
+        {children}
       </div>
     </div>
   );

@@ -240,274 +240,269 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
   return (
     <>
-      <section className="date-picker">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DashboardSectionLayout
-            children={
-              <div className="space-y-2">
-                {memberState && (
-                  <div className="flex w-full flex-wrap gap-4 px-2">
-                    {memberState.map((m, i) => (
-                      <BtnMenu
-                        key={m.id}
-                        label={m.name}
-                        hasBorder
-                        hasActiveRing
-                        thinFont
-                        enabled={m.isSelected}
-                        onClick={() => {
-                          memberState[i].isSelected = memberState[i].isSelected;
-                          setMemberState([...memberState]);
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
+      <DashboardSectionLayout
+        elementName="date-picker"
+        children={
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+            {memberState && (
+              <div className="flex w-full flex-wrap gap-4 px-2">
+                {memberState.map((m, i) => (
                   <BtnMenu
+                    key={m.id}
+                    label={m.name}
                     hasBorder
-                    onClick={() => onCLickSetDate("지난달")}
-                    label="지난달"
-                    enabled
+                    hasActiveRing
                     thinFont
+                    enabled={m.isSelected}
+                    onClick={() => {
+                      memberState[i].isSelected = memberState[i].isSelected;
+                      setMemberState([...memberState]);
+                    }}
                   />
-                  <BtnMenu
-                    hasBorder
-                    onClick={() => onCLickSetDate("이번달")}
-                    label="이번달"
-                    enabled
-                    thinFont
-                  />
-                  <BtnMenu
-                    hasBorder
-                    onClick={() => onCLickSetDate("지난2주")}
-                    label="지난2주"
-                    enabled
-                    thinFont
-                  />
-                  <BtnMenu
-                    hasBorder
-                    onClick={() => onCLickSetDate("지난주")}
-                    label="지난주"
-                    enabled
-                    thinFont
-                  />
-                  <BtnMenu
-                    hasBorder
-                    onClick={() => onCLickSetDate("그제")}
-                    label="그제"
-                    enabled
-                    thinFont
-                  />
-                  <BtnMenu
-                    hasBorder
-                    onClick={() => onCLickSetDate("어제")}
-                    label="어제"
-                    enabled
-                    thinFont
-                  />
-                  <DatepickerWithInput
-                    setValue={setValue}
-                    defaultDate={defaultDate[0]}
-                    register={register}
-                    see="ymd"
-                    dateType={"startDate"}
-                  />
-                  ~
-                  <DatepickerWithInput
-                    formError={errors}
-                    setValue={setValue}
-                    defaultDate={defaultDate[1]}
-                    register={register}
-                    see="ymd"
-                    dateType={"endDate"}
-                  />
-                  <Button
-                    type="submit"
-                    isSmall
-                    textContents="검색"
-                    canClick={
-                      isValid &&
-                      !loadingStatisticsData &&
-                      (clinicId === 0 ? true : userIds.length > 0)
-                    }
-                    loading={loadingStatisticsData}
-                  />
-                </div>
+                ))}
               </div>
-            }
-          />
-        </form>
-      </section>
+            )}
+            <div className="flex items-center gap-2">
+              <BtnMenu
+                hasBorder
+                onClick={() => onCLickSetDate("지난달")}
+                label="지난달"
+                enabled
+                thinFont
+              />
+              <BtnMenu
+                hasBorder
+                onClick={() => onCLickSetDate("이번달")}
+                label="이번달"
+                enabled
+                thinFont
+              />
+              <BtnMenu
+                hasBorder
+                onClick={() => onCLickSetDate("지난2주")}
+                label="지난2주"
+                enabled
+                thinFont
+              />
+              <BtnMenu
+                hasBorder
+                onClick={() => onCLickSetDate("지난주")}
+                label="지난주"
+                enabled
+                thinFont
+              />
+              <BtnMenu
+                hasBorder
+                onClick={() => onCLickSetDate("그제")}
+                label="그제"
+                enabled
+                thinFont
+              />
+              <BtnMenu
+                hasBorder
+                onClick={() => onCLickSetDate("어제")}
+                label="어제"
+                enabled
+                thinFont
+              />
+              <DatepickerWithInput
+                setValue={setValue}
+                defaultDate={defaultDate[0]}
+                register={register}
+                see="ymd"
+                dateType={"startDate"}
+              />
+              ~
+              <DatepickerWithInput
+                formError={errors}
+                setValue={setValue}
+                defaultDate={defaultDate[1]}
+                register={register}
+                see="ymd"
+                dateType={"endDate"}
+              />
+              <Button
+                type="submit"
+                isSmall
+                textContents="검색"
+                canClick={
+                  isValid &&
+                  !loadingStatisticsData &&
+                  (clinicId === 0 ? true : userIds.length > 0)
+                }
+                loading={loadingStatisticsData}
+              />
+            </div>
+          </form>
+        }
+      />
 
       {statisticsData && userStatis ? (
         <>
-          <section className="flex gap-4">
-            <DashboardSectionLayout
-              children={
-                <>
-                  <h3 className="first-:bg-red-500 text-center">
-                    <div className="space-x-3 font-medium text-blue-700">
-                      <span>{startDate.toLocaleDateString()}</span>
-                      <span>~</span>
-                      <span>{endDate.toLocaleDateString()}</span>
-                    </div>
-                  </h3>
+          <DashboardSectionLayout
+            padding
+            children={
+              <>
+                <h3 className="first-:bg-red-500 text-center">
+                  <div className="space-x-3 font-medium text-blue-700">
+                    <span>{startDate.toLocaleDateString()}</span>
+                    <span>~</span>
+                    <span>{endDate.toLocaleDateString()}</span>
+                  </div>
+                </h3>
 
-                  <div className="grid min-h-[16rem] grid-cols-2 gap-10 px-4 pt-6">
-                    {userStatis.map((user, idx) => (
-                      <div key={idx} className="flex flex-col">
-                        <h4 className="mb-4 text-center">{user.name}</h4>
-                        {Object.entries(user.prescriptions).map((presc, i) => (
-                          <DashboardLi
-                            key={i}
-                            name={presc[0]}
-                            price={
-                              data?.getStatistics.prescriptionInfo?.find(
-                                (v) => v.name === presc[0]
-                              )?.price! * presc[1] ?? 0
-                            }
-                            count={presc[1]}
-                          />
-                        ))}
-                        <div className="mt-6 border-t" />
+                <div className="grid min-h-[16rem] grid-cols-2 gap-10 px-4 pt-6">
+                  {userStatis.map((user, idx) => (
+                    <div key={idx} className="flex flex-col">
+                      <h4 className="mb-4 text-center">{user.name}</h4>
+                      {Object.entries(user.prescriptions).map((presc, i) => (
                         <DashboardLi
-                          price={Object.entries(user.prescriptions).reduce(
-                            (acc, cur) =>
-                              acc +
-                              data?.getStatistics.prescriptionInfo?.find(
-                                (presc) => presc.name === cur[0]
-                              )?.price! *
-                                cur[1],
-                            0
-                          )}
-                          count={Object.values(user.prescriptions).reduce(
-                            (acc, cur) => acc + cur,
-                            0
-                          )}
+                          key={i}
+                          name={presc[0]}
+                          price={
+                            data?.getStatistics.prescriptionInfo?.find(
+                              (v) => v.name === presc[0]
+                            )?.price! * presc[1] ?? 0
+                          }
+                          count={presc[1]}
                         />
-                        <div></div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                      <div className="mt-6 border-t" />
+                      <DashboardLi
+                        price={Object.entries(user.prescriptions).reduce(
+                          (acc, cur) =>
+                            acc +
+                            data?.getStatistics.prescriptionInfo?.find(
+                              (presc) => presc.name === cur[0]
+                            )?.price! *
+                              cur[1],
+                          0
+                        )}
+                        count={Object.values(user.prescriptions).reduce(
+                          (acc, cur) => acc + cur,
+                          0
+                        )}
+                      />
+                      <div></div>
+                    </div>
+                  ))}
+                </div>
 
-                  <div className="grid grid-cols-[1fr_7.5rem_3.3rem] justify-between gap-3 border-t border-black">
-                    <span className="">총합</span>
-                    <span className="text-center">
-                      {userStatis
-                        .map((user) =>
-                          Object.entries(user.prescriptions).reduce(
-                            (acc, cur) =>
-                              acc +
-                              data?.getStatistics.prescriptionInfo?.find(
-                                (presc) => presc.name === cur[0]
-                              )?.price! *
-                                cur[1],
-                            0
-                          )
+                <div className="grid grid-cols-[1fr_7.5rem_3.3rem] justify-between gap-3 border-t border-black">
+                  <span className="">총합</span>
+                  <span className="text-center">
+                    {userStatis
+                      .map((user) =>
+                        Object.entries(user.prescriptions).reduce(
+                          (acc, cur) =>
+                            acc +
+                            data?.getStatistics.prescriptionInfo?.find(
+                              (presc) => presc.name === cur[0]
+                            )?.price! *
+                              cur[1],
+                          0
                         )
-                        .reduce((acc, cur) => acc + cur, 0)
-                        .toLocaleString()}
-                      원
-                    </span>
-                    <span className="text-center">
-                      {userStatis
-                        .map((user) =>
-                          Object.values(user.prescriptions).reduce(
-                            (acc, cur) => acc + cur,
-                            0
-                          )
+                      )
+                      .reduce((acc, cur) => acc + cur, 0)
+                      .toLocaleString()}
+                    원
+                  </span>
+                  <span className="text-center">
+                    {userStatis
+                      .map((user) =>
+                        Object.values(user.prescriptions).reduce(
+                          (acc, cur) => acc + cur,
+                          0
                         )
-                        .reduce((acc, cur) => acc + cur, 0)}
-                      번
-                    </span>
-                  </div>
-                </>
-              }
-            />
-          </section>
+                      )
+                      .reduce((acc, cur) => acc + cur, 0)}
+                    번
+                  </span>
+                </div>
+              </>
+            }
+          />
 
-          <section className="chart">
-            <DashboardSectionLayout
-              children={
-                <>
-                  <div className="relative">
-                    <VictoryChart
-                      height={500}
-                      width={window.innerWidth}
-                      domainPadding={50}
-                      theme={VictoryTheme.material}
-                      minDomain={{ y: 0 }}
-                      padding={{
-                        top: 60,
-                        bottom: 60,
-                        left: 70,
-                        right: 70,
+          <DashboardSectionLayout
+            elementName="chart"
+            children={
+              <>
+                <div className="relative">
+                  <VictoryChart
+                    height={500}
+                    width={window.innerWidth}
+                    domainPadding={50}
+                    theme={VictoryTheme.material}
+                    minDomain={{ y: 0 }}
+                    padding={{
+                      top: 60,
+                      bottom: 60,
+                      left: 70,
+                      right: 70,
+                    }}
+                  >
+                    <VictoryLine
+                      data={
+                        statisticsData.length !== 0
+                          ? statisticsData
+                              .map((result) =>
+                                result.statistics?.map((data) => ({
+                                  x: data.date,
+                                  y: data.prescriptions.reduce(
+                                    (prev, curr) => prev + curr.count,
+                                    0
+                                  ),
+                                }))
+                              )
+                              .reduce((prev, curr) => {
+                                curr?.forEach((c) => {
+                                  const idx = prev!.findIndex(
+                                    (p) => p.x === c.x
+                                  );
+                                  if (idx === -1) {
+                                    prev?.push(c);
+                                  } else {
+                                    prev![idx].y = c.y + prev![idx].y;
+                                  }
+                                });
+                                return prev;
+                              })
+                          : undefined
+                      }
+                      style={{
+                        data: {
+                          strokeWidth: 5,
+                        },
                       }}
-                    >
-                      <VictoryLine
-                        data={
-                          statisticsData.length !== 0
-                            ? statisticsData
-                                .map((result) =>
-                                  result.statistics?.map((data) => ({
-                                    x: data.date,
-                                    y: data.prescriptions.reduce(
-                                      (prev, curr) => prev + curr.count,
-                                      0
-                                    ),
-                                  }))
-                                )
-                                .reduce((prev, curr) => {
-                                  curr?.forEach((c) => {
-                                    const idx = prev!.findIndex(
-                                      (p) => p.x === c.x
-                                    );
-                                    if (idx === -1) {
-                                      prev?.push(c);
-                                    } else {
-                                      prev![idx].y = c.y + prev![idx].y;
-                                    }
-                                  });
-                                  return prev;
-                                })
-                            : undefined
-                        }
-                        style={{
-                          data: {
-                            strokeWidth: 5,
-                          },
-                        }}
-                        labels={({ datum }) => datum.y}
-                      />
+                      labels={({ datum }) => datum.y}
+                    />
 
-                      <VictoryAxis
-                        dependentAxis
-                        style={{
-                          tickLabels: {
-                            fontSize: 14,
-                          } as any,
-                        }}
-                        tickFormat={(tick) => `${tick}명`}
-                      />
-                      <VictoryAxis
-                        style={{
-                          tickLabels: {
-                            fontSize: 14,
-                          } as any,
-                        }}
-                        tickFormat={(tick) =>
-                          new Date(tick).toLocaleDateString("ko", {
-                            day: "2-digit",
-                          })
-                        }
-                      />
-                    </VictoryChart>
-                  </div>
-                </>
-              }
-            />
-          </section>
+                    <VictoryAxis
+                      dependentAxis
+                      style={{
+                        tickLabels: {
+                          fontSize: 14,
+                        } as any,
+                      }}
+                      tickFormat={(tick) => `${tick}명`}
+                    />
+                    <VictoryAxis
+                      style={{
+                        tickLabels: {
+                          fontSize: 14,
+                        } as any,
+                      }}
+                      tickFormat={(tick) =>
+                        new Date(tick).toLocaleDateString("ko", {
+                          day: "2-digit",
+                        })
+                      }
+                    />
+                  </VictoryChart>
+                </div>
+              </>
+            }
+          />
         </>
       ) : (
         <p className="position-center absolute text-base">

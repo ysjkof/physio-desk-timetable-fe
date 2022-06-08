@@ -112,8 +112,7 @@ export const Dashboard = () => {
     }
   }, [selectedClinic]);
 
-  if (!meData) return <></>;
-  return (
+  return meData ? (
     <>
       <Helmet>
         <title>대시보드| Muool</title>
@@ -161,5 +160,7 @@ export const Dashboard = () => {
         }
       />
     </>
+  ) : (
+    <span>Loading...</span>
   );
 };

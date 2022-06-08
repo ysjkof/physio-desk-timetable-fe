@@ -45,8 +45,17 @@ App.tsx에서 localStorage에 저장된 설정을 불러오고 비교해서 전�
 - 포인트 색상
   green-500 ( rgb(34 197 94) )
 
-#### 2.3 Header
+### 2.2 Header
 
 헤더 글자 크기 : text-sm
 헤더 로고 글자 : text-2xl font-black
 헤더 아이콘 크기 : 24 \* 24
+
+### 2.3 기능
+
+#### 2.3.1 ClinicSelector of nav-side in Dashboard
+
+- 모든 병원을 불러온다
+  이 메뉴를 선택해야 통계 등을 조회할 수 있는데
+  비활성이나 탈퇴한 병원을 여기서 선택할 수 없다면 메뉴를 새로 만들어야 한다
+- 비활성화된 병원을 안보이게 설정할 수 있다

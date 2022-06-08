@@ -64,51 +64,53 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
   const searchUserResults = searchUsersByNameData?.searchUsersByName.results;
 
   return (
-    <section className="h-[15.7rem]">
-      <DashboardSectionLayout
-        width="md"
-        children={
-          <>
-            <form onSubmit={handleSubmit(onSubmitSearchUsersByName)}>
-              <div className="relative flex items-center shadow-sm">
-                <input
-                  {...register("name", {
-                    required: "Username is required",
-                  })}
-                  id="search-user"
-                  required
-                  type="text"
-                  placeholder="사용자 검색"
-                  className={cls("input py-1")}
-                  autoComplete="off"
-                />
-                <label
-                  htmlFor="icon-search"
-                  className="absolute right-0 mr-4 cursor-pointer"
-                >
-                  <input
-                    id="icon-search"
-                    type="submit"
-                    value={""}
-                    tabIndex={-1}
-                    className="absolute"
-                  />
-                  <FontAwesomeIcon icon={faSearch} />
-                </label>
-              </div>
-            </form>
-            <div className="mx-auto w-full space-y-2">
-              <div className="flex items-center justify-between border-b">
-                <span>이름</span>
-                <span>초대하기</span>
-              </div>
-              <ul
-                className={cls(
-                  inviteClinicLoading ? "pointer-events-none" : ""
-                )}
+    <DashboardSectionLayout
+      width="md"
+      heightFull
+      children={
+        <>
+          <form onSubmit={handleSubmit(onSubmitSearchUsersByName)}>
+            <div className="relative flex items-center shadow-sm">
+              <input
+                {...register("name", {
+                  required: "Username is required",
+                })}
+                id="search-user"
+                required
+                type="text"
+                placeholder="사용자 검색"
+                className={cls("input py-1")}
+                autoComplete="off"
+              />
+              <label
+                htmlFor="icon-search"
+                className="absolute right-0 mr-4 cursor-pointer"
               >
-                {searchUserResults &&
-                  searchUserResults.length !== 0 &&
+                <input
+                  id="icon-search"
+                  type="submit"
+                  value={""}
+                  tabIndex={-1}
+                  className="absolute"
+                />
+                <FontAwesomeIcon icon={faSearch} />
+              </label>
+            </div>
+          </form>
+          <div className="mx-auto w-full space-y-2">
+            <div className="flex items-center justify-between border-b">
+              <span>이름</span>
+              <span>초대하기</span>
+            </div>
+            <ul
+              className={cls(inviteClinicLoading ? "pointer-events-none" : "")}
+            >
+              {searchUserResults ? (
+                searchUserResults.length === 0 ? (
+                  <p className="py-10 text-center font-semibold">
+                    검색결과가 없습니다
+                  </p>
+                ) : (
                   searchUserResults.map((user) => (
                     <li
                       key={user.id}
@@ -120,12 +122,17 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
                       <span>{user.name}</span>
                       <FontAwesomeIcon icon={faUserPlus} />
                     </li>
-                  ))}
-              </ul>
-            </div>
-          </>
-        }
-      />
-    </section>
+                  ))
+                )
+              ) : (
+                <p className="py-10 text-center font-semibold">
+                  이름으로 검색해주세요
+                </p>
+              )}
+            </ul>
+          </div>
+        </>
+      }
+    />
   );
 };

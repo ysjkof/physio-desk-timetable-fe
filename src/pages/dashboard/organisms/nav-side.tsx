@@ -5,7 +5,11 @@ import { useRef, useState } from "react";
 import { checkIsManager, getIsStayed, SelectedMenuType } from "..";
 import { ModalTemplate } from "../../../components/molecules/modal-template";
 import { MeQuery } from "../../../graphql/generated/graphql";
-import { getPositionRef, saveSelectedClinic } from "../../../libs/utils";
+import {
+  checkMember,
+  getPositionRef,
+  saveSelectedClinic,
+} from "../../../libs/utils";
 import { clinicListsVar, selectedClinicVar, selecteMe } from "../../../store";
 import { DashboardNavList } from "../components/dashboadr-nav-list";
 import { ClinicName } from "../molecules/clinicName";
@@ -24,6 +28,13 @@ export const DashboardSideNav = ({
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const [openClinicSelect, setOpenClinicSelect] = useState(false);
+  const onlyMeMemberClinicLists = clinicLists.map((clinic) => {
+    const idx = clinic.members.findIndex(
+      (member) => member.user.id === meData.me.id
+    );
+
+    return { id: clinic.id, name: clinic.name, member: clinic.members[idx] };
+  });
 
   const ref = useRef<HTMLDivElement>(null);
   const [top, left] = getPositionRef(ref, 0);
@@ -56,17 +67,22 @@ export const DashboardSideNav = ({
                 >
                   {selecteMe.name}
                 </li>
-                {clinicLists.map((clinic) => (
+                {onlyMeMemberClinicLists.map((clinic) => (
                   <ClinicName
                     key={clinic.id}
-                    clinic={clinic}
-                    selectedClinic={selectedClinic}
-                    meData={meData}
+                    clinicName={clinic.name}
+                    isSelected={selectedClinic.id === clinic.id}
+                    memberState={checkMember(
+                      clinic.member.staying,
+                      clinic.member.accepted
+                    )}
                     onClick={() => {
                       const newSelectedClinic = {
                         id: clinic.id,
                         name: clinic.name,
-                        members: clinic.members,
+                        members: clinicLists.find(
+                          (clinicInFind) => clinicInFind.id === clinic.id
+                        )?.members,
                         isManager: checkIsManager(clinic.id, meData),
                         isStayed: getIsStayed(clinic.id, meData),
                       };

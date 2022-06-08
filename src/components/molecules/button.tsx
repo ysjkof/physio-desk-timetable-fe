@@ -8,6 +8,7 @@ interface ButtonProps {
   isSmall?: boolean;
   isWidthFull?: boolean;
   type?: "button" | "reset" | "submit";
+  onClick?: () => void;
 }
 
 export const Button = ({
@@ -17,6 +18,7 @@ export const Button = ({
   isSmall,
   isWidthFull,
   type = "button",
+  onClick,
 }: ButtonProps) => (
   <button
     type={type}
@@ -25,6 +27,7 @@ export const Button = ({
     }${isWidthFull ? " w-full" : ""}${
       canClick ? " bg-green-600" : " pointer-events-none opacity-50"
     }`}
+    onClick={onClick}
   >
     {loading ? (
       <FontAwesomeIcon
