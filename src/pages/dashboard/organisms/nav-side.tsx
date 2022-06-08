@@ -31,7 +31,7 @@ export const DashboardSideNav = ({
   return (
     <nav className="dashboard-side-nav h-full space-y-2">
       <div
-        className="btn-menu flex h-8 cursor-pointer items-center justify-between gap-2  rounded-none border-b px-2 py-2 text-sm font-semibold"
+        className="btn-menu flex h-8 cursor-pointer items-center justify-between gap-2 rounded-none border-b px-2 py-2 text-sm font-semibold"
         onClick={() => setOpenClinicSelect((prev) => !prev)}
         ref={ref}
       >

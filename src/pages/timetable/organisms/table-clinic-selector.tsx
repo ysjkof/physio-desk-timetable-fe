@@ -3,7 +3,7 @@ import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion, Variants } from "framer-motion";
 import { Fragment } from "react";
-import { BtnMenu } from "../../../components/button-menu";
+import { BtnMenu } from "../../../components/molecules/button-menu";
 import { saveClinicLists, saveSelectedClinic } from "../../../libs/utils";
 import {
   clinicListsVar,
@@ -12,11 +12,7 @@ import {
   selecteMe,
   viewOptionsVar,
 } from "../../../store";
-import {
-  LOCALSTORAGE_SELECTED_CLINIC,
-  LOCALSTORAGE_CLINIC_LISTS,
-  NEXT,
-} from "../../../variables";
+import { NEXT } from "../../../variables";
 import { ModifiedClinic } from "../../dashboard";
 import { BtnArrow } from "../molecules/button-arrow";
 

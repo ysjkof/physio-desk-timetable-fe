@@ -1,21 +1,24 @@
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../components/button";
+import { Button } from "../../components/molecules/button";
 import { FormError } from "../../components/form-error";
 import {
   CreateAccountInput,
   CreateAccountMutation,
   useCreateAccountMutation,
 } from "../../graphql/generated/graphql";
+import { Input } from "../../components/molecules/input";
+import { REGEX_EMAIL } from "../../variables";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 
 export const CreateAccount = () => {
   const {
     register,
     getValues,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
-    formState,
   } = useForm<CreateAccountInput>({
     mode: "onChange",
   });
@@ -48,53 +51,68 @@ export const CreateAccount = () => {
       <Helmet>
         <title>Create Account | Muool</title>
       </Helmet>
-
-      <h4 className="mb-5 w-full text-left font-medium">Let's get started</h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-5 mb-5 grid w-full gap-3"
       >
-        <input
-          {...register("name", {
-            required: "Name is required",
+        <Input
+          name="name"
+          label={"이름"}
+          register={register("name", {
+            required: "이름을 입력하세요",
+            maxLength: { value: 30, message: "최대 30자 입니다" },
           })}
           type="text"
           placeholder="Name"
-          className="input"
+          children={
+            errors.name?.message && (
+              <FormError errorMessage={errors.name.message} />
+            )
+          }
         />
-        <input
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value:
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              message: "Email 형식으로 입력하세요.",
-            },
-          })}
+        <Input
           type="email"
           placeholder="Email"
-          className="input"
+          name="email"
+          label={"Email"}
+          register={register("email", {
+            required: "Email을 입력하세요",
+            pattern: REGEX_EMAIL,
+          })}
+          children={
+            <>
+              <div className="group absolute left-[2.5rem] top-[0.08rem] cursor-pointer">
+                <FontAwesomeIcon icon={faCircleQuestion} fontSize={14} />
+                <p className="bubble-arrow-t-2-5 absolute top-7 -left-12 hidden w-44 rounded-md bg-black px-3 py-2 text-center text-white group-hover:block">
+                  Email은 로그인에 사용됩니다
+                </p>
+              </div>
+              {errors.email?.message && (
+                <FormError errorMessage={errors.email.message} />
+              )}
+              {errors.email?.type === "pattern" && (
+                <FormError errorMessage={"Email형식으로 입력하세요"} />
+              )}
+            </>
+          }
         />
-        {errors.email?.message && (
-          <FormError errorMessage={errors.email?.message} />
-        )}
-        <input
-          {...register("password", { required: "Password is required" })}
+        <Input
           type="password"
           placeholder="Password"
-          className="input"
+          name="password"
+          label="비밀번호"
+          register={register("password", { required: "비밀번호를 입력하세요" })}
+          children={
+            errors.password?.message && (
+              <FormError errorMessage={errors.password.message} />
+            )
+          }
         />
-        {errors.password?.message && (
-          <FormError errorMessage={errors.password?.message} />
-        )}
-        {errors.password?.type === "minLength" && (
-          <FormError errorMessage="Password must be more than 10 chars." />
-        )}
         <Button
           type="submit"
-          canClick={formState.isValid}
+          canClick={isValid}
           loading={loading}
-          textContents={"Create Account"}
+          textContents={"계정 만들기"}
         />
         {createaAccountMutationResult?.createAccount.error && (
           <FormError

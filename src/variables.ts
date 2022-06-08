@@ -25,6 +25,9 @@ export const REGEX_YYYYMMDD =
 // export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
 // 이하는 1분 단위는 0만 가능
 export const REGEX_HHMM = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0])$/;
+export const REGEX_NUMBER_END_DIGIT_OF_ZERO = /^[0-9]*0$/;
+export const REGEX_EMAIL =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export const TABLE_MAIN_COMPONENT_LAYOUT_PADDING_TOP = 50; // px
 export const TABLE_CELL_HEIGHT = 20; // px

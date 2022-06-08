@@ -21,7 +21,7 @@ import { getDateFromYMDHM } from "../../../libs/utils";
 import { TIMETABLE } from "../../../variables";
 import { ModalContentsLayout } from "../../../components/templates/modal-contents-layout";
 import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
-import { Button } from "../../../components/button";
+import { Button } from "../../../components/molecules/button";
 import { FormError } from "../../../components/form-error";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
 

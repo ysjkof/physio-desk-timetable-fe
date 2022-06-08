@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form";
 import { FormError } from "../form-error";
-import { Button } from "../button";
+import { Button } from "../molecules/button";
 import {
   CreatePatientInput,
   CreatePatientMutation,
   useCreatePatientMutation,
 } from "../../graphql/generated/graphql";
-import { Input } from "../input";
+import { Input } from "../molecules/input";
 import { selectedClinicVar, selectedPatientVar } from "../../store";
 import { useReactiveVar } from "@apollo/client";
 import { ModalContentsLayout } from "../templates/modal-contents-layout";
@@ -105,7 +105,7 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
               })}
               children={
                 errors.name?.message && (
-                  <FormError errorMessage={errors.name?.message} />
+                  <FormError errorMessage={errors.name.message} />
                 )
               }
             />
@@ -166,9 +166,7 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
               })}
               children={
                 errors.registrationNumber?.message && (
-                  <FormError
-                    errorMessage={errors.registrationNumber?.message}
-                  />
+                  <FormError errorMessage={errors.registrationNumber.message} />
                 )
               }
             />
@@ -176,6 +174,7 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
               label={"메모"}
               name={"memo"}
               type={"textarea"}
+              rows={8}
               placeholder={"메모를 입력하세요"}
               required={false}
               register={register("memo", {
@@ -183,7 +182,7 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
               })}
               children={
                 errors.memo?.message && (
-                  <FormError errorMessage={errors.memo?.message} />
+                  <FormError errorMessage={errors.memo.message} />
                 )
               }
             />

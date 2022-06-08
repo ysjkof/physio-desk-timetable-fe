@@ -1,8 +1,7 @@
-import React from "react";
 import { gql, useApolloClient } from "@apollo/client";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Button } from "../../components/button";
+import { Button } from "../../components/molecules/button";
 import { useMe } from "../../hooks/useMe";
 import {
   EditProfileInput,
@@ -74,7 +73,6 @@ export const EditProfile = () => {
         <title>Edit Profile | Muool</title>
       </Helmet>
       <div className="container mx-auto h-full">
-        <h4 className="mb-3 font-semibold">Edit Profile</h4>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mx-auto grid w-full max-w-md gap-3 space-y-4 rounded-md bg-white px-4 py-8 shadow"

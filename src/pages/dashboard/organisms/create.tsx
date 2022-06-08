@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form";
-import { Button } from "../../../components/button";
+import { FormError } from "../../../components/form-error";
+import { Button } from "../../../components/molecules/button";
+import { Input } from "../../../components/molecules/input";
 import {
   CreateClinicInput,
   useCreateClinicMutation,
 } from "../../../graphql/generated/graphql";
-import { InputPriscription } from "../components/input-priscription";
 import { DashboardSectionLayout } from "../components/section-layout";
 
 export const CreateClinic = () => {
@@ -12,7 +13,7 @@ export const CreateClinic = () => {
     register,
     handleSubmit,
     getValues,
-    formState: { isValid },
+    formState: { errors, isValid },
   } = useForm<CreateClinicInput>({ mode: "onChange" });
 
   const [createClinicMutation, { loading }] = useCreateClinicMutation();
@@ -35,15 +36,23 @@ export const CreateClinic = () => {
             onSubmit={handleSubmit(onSubmitCreateClinic)}
             className="mt-8 space-y-3"
           >
-            <InputPriscription
+            <Input
+              name="name"
               label={"이름*"}
               placeholder={"병원 이름"}
               type="text"
               register={register("name", {
-                required: "Name is required",
+                required: "이름을 입력하세요",
+                maxLength: { value: 30, message: "최대 30자 입니다" },
               })}
+              children={
+                errors.name?.message && (
+                  <FormError errorMessage={errors.name.message} />
+                )
+              }
             />
             <Button
+              isWidthFull
               type="submit"
               textContents={"만들기"}
               canClick={isValid}

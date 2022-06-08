@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchPatientByNameLazyQuery } from "../../graphql/generated/graphql";
 import { selectedClinicVar, selectedPatientVar } from "../../store";
-import { BtnMenu } from "../button-menu";
+import { BtnMenu } from "../molecules/button-menu";
 import { NameTag } from "../name-tag";
 interface SearchPatientProps {}
 

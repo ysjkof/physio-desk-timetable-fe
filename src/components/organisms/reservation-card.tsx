@@ -14,8 +14,8 @@ import {
 } from "../../graphql/generated/graphql";
 import { ModalContentsLayout } from "../templates/modal-contents-layout";
 import { ReservationCardDetail } from "../molecules/reservation-card-detail";
-import { BtnMenuToggle } from "../button-menu-toggle";
-import { BtnMenu } from "../button-menu";
+import { BtnMenuToggle } from "../molecules/button-menu-toggle";
+import { BtnMenu } from "../molecules/button-menu";
 
 export const ReservationCard = ({
   closeAction,

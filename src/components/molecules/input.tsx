@@ -7,10 +7,12 @@ interface InputProps {
   placeholder: string;
   register: UseFormRegisterReturn;
   type: HTMLInputTypeAttribute;
-  required: boolean;
+  required?: boolean;
   value?: any;
   autoFocus?: boolean;
   children?: ReactNode;
+  step?: number;
+  rows?: number;
 }
 
 export const Input = ({
@@ -23,9 +25,11 @@ export const Input = ({
   value,
   autoFocus = false,
   children,
+  step,
+  rows,
 }: InputProps) => {
   return (
-    <label className="relative flex flex-col gap-2" htmlFor={name}>
+    <label className="relative flex w-full flex-col gap-2" htmlFor={name}>
       {label}
       {type !== "textarea" ? (
         <input
@@ -37,6 +41,8 @@ export const Input = ({
           className="input"
           value={value}
           autoFocus={autoFocus}
+          autoComplete="off"
+          step={step}
         />
       ) : (
         <textarea
@@ -47,7 +53,7 @@ export const Input = ({
           className="input"
           value={value}
           autoFocus={autoFocus}
-          rows={8}
+          rows={rows}
         />
       )}
       {children}

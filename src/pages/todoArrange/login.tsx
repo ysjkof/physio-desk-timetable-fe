@@ -6,10 +6,11 @@ import {
   LoginMutation,
   useLoginMutation,
 } from "../../graphql/generated/graphql";
-import { LOCALSTORAGE_TOKEN } from "../../variables";
+import { LOCALSTORAGE_TOKEN, REGEX_EMAIL } from "../../variables";
 import { authTokenVar, isLoggedInVar } from "../../apollo";
 import { FormError } from "../../components/form-error";
-import { Button } from "../../components/button";
+import { Button } from "../../components/molecules/button";
+import { Input } from "../../components/molecules/input";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -59,45 +60,51 @@ export const Login = () => {
         <title>Login | Muool</title>
       </Helmet>
 
-      <h4 className="mb-5 w-full text-left  font-medium">
+      <h4 className="mb-6 text-center text-base font-semibold">
         물리치료사를 위한 하나의 앱
       </h4>
-      <div className="error-box relative w-full">
-        {errors.email?.message && (
-          <FormError errorMessage={errors.email?.message} />
-        )}
-        {errors.email?.type === "pattern" && (
-          <FormError errorMessage={"Please enter a valid email"} />
-        )}
-        {errors.password?.message && (
-          <FormError errorMessage={errors.password.message} />
-        )}
-      </div>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-5 mb-5 grid w-full gap-3"
       >
-        <input
+        <Input
           type="email"
           placeholder="Email"
-          className="input "
-          {...register("email", {
-            required: "Email is required",
-            pattern:
-              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          name="email"
+          label={"Email"}
+          register={register("email", {
+            required: "Email을 입력하세요",
+            pattern: REGEX_EMAIL,
           })}
+          children={
+            <>
+              {errors.email?.message && (
+                <FormError errorMessage={errors.email.message} />
+              )}
+              {errors.email?.type === "pattern" && (
+                <FormError errorMessage={"Email형식으로 입력하세요"} />
+              )}
+            </>
+          }
         />
-        <input
+        <Input
           type="password"
           placeholder="Password"
-          className="input"
-          {...register("password", { required: "Password is required" })}
+          name="password"
+          label="비밀번호"
+          register={register("password", { required: "비밀번호를 입력하세요" })}
+          children={
+            errors.password?.message && (
+              <FormError errorMessage={errors.password.message} />
+            )
+          }
         />
         <Button
           type="submit"
           canClick={isValid}
           loading={loading}
-          textContents={"Log in"}
+          textContents={"로그인"}
         />
       </form>
     </>

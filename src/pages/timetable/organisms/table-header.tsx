@@ -7,8 +7,8 @@ import {
   faList,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { BtnMenu } from "../../../components/button-menu";
-import { BtnMenuToggle } from "../../../components/button-menu-toggle";
+import { BtnMenu } from "../../../components/molecules/button-menu";
+import { BtnMenuToggle } from "../../../components/molecules/button-menu-toggle";
 import { saveViewOptions } from "../../../libs/utils";
 import {
   IViewOption,

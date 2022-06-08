@@ -7,6 +7,7 @@ interface BtnDotProps {
   hasBorder?: boolean;
   hasActiveRing?: boolean;
   thinFont?: boolean;
+  type?: "button" | "reset" | "submit";
 }
 
 export const BtnMenu = ({
@@ -18,9 +19,10 @@ export const BtnMenu = ({
   hasBorder,
   hasActiveRing,
   thinFont,
+  type = "button",
 }: BtnDotProps) => (
   <button
-    type="button"
+    type={type}
     className={`btn-menu flex items-center gap-1 whitespace-nowrap${
       hasBorder ? " border" : ""
     }${

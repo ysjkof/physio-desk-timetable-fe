@@ -8,11 +8,12 @@ import { useEffect, useState } from "react";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
 import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
 import { InDashboardPageProps } from "..";
-import { BtnMenu } from "../../../components/button-menu";
-import { Button } from "../../../components/button";
+
+import { Button } from "../../../components/molecules/button";
 import { selectedClinicVar } from "../../../store";
 import { useReactiveVar } from "@apollo/client";
 import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
+import { BtnMenu } from "../../../components/molecules/button-menu";
 
 interface UserStatis {
   name: string;
@@ -219,7 +220,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   }, [clinicId]);
 
   useEffect(() => {
-    if (!loadingStatisticsData && data) {
+    if (!loadingStatisticsData && data?.getStatistics.ok) {
       const users: UserStatis[] = data.getStatistics.results!.map((result) => ({
         name: result.userName,
         prescriptions: {},
