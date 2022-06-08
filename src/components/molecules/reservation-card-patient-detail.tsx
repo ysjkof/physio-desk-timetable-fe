@@ -1,4 +1,4 @@
-import { Patient } from "../../../graphql/generated/graphql";
+import { Patient } from "../../graphql/generated/graphql";
 
 export const ReservationCardPatientDetail = ({
   name,
