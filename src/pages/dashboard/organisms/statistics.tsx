@@ -90,12 +90,11 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
   endDate.setHours(23, 59, 59); // 입력 날짜의 오전 00시를 구하기 때문에 날짜 +1해줘야 바르게 검색된다.
 
-  let userIds: number[] = [];
-  memberState?.forEach((member) => {
-    if (member.isSelected === true) {
-      userIds.push(member.id);
-    }
-  });
+  const userIds = memberState
+    ? memberState
+        .filter((member) => member.isSelected)
+        .map((member) => member.id)
+    : [];
 
   const [getStatisticsLzq, { data, loading: loadingStatisticsData }] =
     useGetStatisticsLazyQuery({
@@ -104,7 +103,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           startDate,
           endDate,
           ...(typeof clinicId === "number" &&
-            clinicId !== 0 && {
+            clinicId !== 0 &&
+            userIds.length !== 0 && {
               clinicId,
               userIds,
             }),
@@ -174,7 +174,6 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
   useEffect(() => {
     if (clinicId !== 0 && members) {
-      console.log(1);
       setMemberState(
         members.map((m) => ({
           id: m.user.id,
@@ -183,12 +182,10 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         }))
       );
     } else {
-      console.log(2);
       setMemberState([]);
     }
     setUserStatis(undefined);
     setStatisticsData(undefined);
-    console.log(3);
   }, [clinicId]);
 
   useEffect(() => {
@@ -340,7 +337,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                   </div>
                 </h3>
 
-                <div className="grid min-h-[16rem] grid-cols-2 gap-10 px-4 pt-6">
+                <div className="grid grid-cols-2 gap-10 px-4 pt-6">
                   {userStatis.map((user, idx) => (
                     <div key={idx} className="flex flex-col">
                       <h4 className="mb-4 text-center">{user.name}</h4>
@@ -348,14 +345,15 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                         <DashboardLi
                           key={i}
                           name={prescription.name}
-                          price={prescription.price * prescription.count}
+                          price={prescription.price}
                           count={prescription.count}
+                          sum={prescription.price * prescription.count}
                         />
                       ))}
                       <div className="mt-6 border-t" />
                       <DashboardLi
-                        price={user.prescriptions.reduce(
-                          (acc, cur) => acc + cur.price * cur.price,
+                        sum={user.prescriptions.reduce(
+                          (acc, cur) => acc + cur.price * cur.count,
                           0
                         )}
                         count={user.prescriptions.reduce(
@@ -367,30 +365,25 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     </div>
                   ))}
                 </div>
-
-                <div className="grid grid-cols-[1fr_7.5rem_3.3rem] justify-between gap-3 border-t border-black">
-                  <span className="">총합</span>
-                  <span className="text-center">
-                    {userStatis
-                      .map((user) =>
-                        user.prescriptions.reduce(
-                          (acc, cur) => acc + cur.price * cur.price,
-                          0
-                        )
+                <DashboardLi
+                  isTotalSum
+                  sum={userStatis
+                    .map((user) =>
+                      user.prescriptions.reduce(
+                        (acc, cur) => acc + cur.price * cur.count,
+                        0
                       )
-                      .toLocaleString()}
-                    원
-                  </span>
-                  <span className="text-center">
-                    {userStatis.map((user) =>
+                    )
+                    .reduce((acc, cur) => acc + cur, 0)}
+                  count={userStatis
+                    .map((user) =>
                       user.prescriptions.reduce(
                         (acc, cur) => acc + cur.count,
                         0
                       )
-                    )}
-                    번
-                  </span>
-                </div>
+                    )
+                    .reduce((acc, cur) => acc + cur, 0)}
+                />
               </>
             }
           />
