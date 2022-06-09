@@ -1,5 +1,5 @@
 import { DashboardSectionLayout } from "../components/section-layout";
-import { useGetStatisticsQuery } from "../../../graphql/generated/graphql";
+import { useGetStatisticsLazyQuery } from "../../../graphql/generated/graphql";
 import { getDateFromYMDHM } from "../../../libs/utils";
 import { useForm } from "react-hook-form";
 import { DashboardLi } from "../components/li";
@@ -8,19 +8,25 @@ import { useEffect, useState } from "react";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
 import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
 import { InDashboardPageProps } from "..";
-
 import { Button } from "../../../components/molecules/button";
 import { selectedClinicVar } from "../../../store";
 import { useReactiveVar } from "@apollo/client";
 import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 
-interface UserStatis {
+type UserStatis = {
   name: string;
-  prescriptions: { [key: string]: number };
-}
+  prescriptions: {
+    __typename?: "PrescriptionInfo" | undefined;
+    id: number;
+    name: string;
+    requiredTime: number;
+    price: number;
+    count: number;
+  }[];
+};
 
-type StastisticsData = {
+type StastisticsResults = {
   __typename?: "StatisticsRsult";
   userName: string;
   statistics: Array<{
@@ -53,19 +59,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   const [memberState, setMemberState] = useState<MemberState[]>();
   const [userStatis, setUserStatis] = useState<UserStatis[]>();
   const [statisticsData, setStatisticsData] = useState<
-    {
-      __typename?: "StatisticsRsult";
-      userName: string;
-      statistics: Array<{
-        __typename?: "DayCount";
-        date: any;
-        prescriptions: Array<{
-          __typename?: "PrescriptionStatistics";
-          name: string;
-          count: number;
-        }>;
-      }>;
-    }[]
+    StastisticsResults[] | null
   >();
 
   const {
@@ -103,47 +97,28 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
     }
   });
 
-  const { data, loading: loadingStatisticsData } = useGetStatisticsQuery({
-    variables: {
-      input: {
-        startDate,
-        endDate,
-        ...(typeof clinicId === "number" &&
-          clinicId !== 0 && {
-            clinicId,
-            userIds,
-          }),
+  const [getStatisticsLzq, { data, loading: loadingStatisticsData }] =
+    useGetStatisticsLazyQuery({
+      variables: {
+        input: {
+          startDate,
+          endDate,
+          ...(typeof clinicId === "number" &&
+            clinicId !== 0 && {
+              clinicId,
+              userIds,
+            }),
+        },
       },
-    },
-  });
+    });
 
   const onSubmit = () => {
-    console.log("온서브밋", loadingStatisticsData);
-    if (!loadingStatisticsData) {
-    }
+    if (!loadingStatisticsData) getStatisticsLzq();
   };
 
-  function calcTotalUsers(
-    prescName: string,
-    data: StastisticsData[] | undefined | null
-  ) {
-    if (!data) return 0;
-    return data.reduce(
-      (acc, cur) =>
-        acc +
-        cur.statistics.reduce((acc, cur) => {
-          const exist = cur.prescriptions.find((p) => p.name === prescName);
-          if (exist) {
-            return acc + exist.count;
-          }
-          return acc;
-        }, 0),
-      0
-    );
-  }
   function calcPrescNumOfTime(
     prescName: string,
-    data: StastisticsData | undefined | null
+    data: StastisticsResults | undefined | null
   ) {
     if (!data) return 0;
     return data.statistics.reduce((acc, cur) => {
@@ -155,7 +130,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
     }, 0);
   }
 
-  function onCLickSetDate(
+  function onClickSetDate(
     duration: "지난달" | "이번달" | "지난2주" | "지난주" | "그제" | "어제"
   ) {
     let startDate = new Date();
@@ -189,22 +164,17 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         endDate.setDate(endDate.getDate() - 1);
         break;
     }
-    let startDateYear = startDate.getFullYear();
-    let startDateMonth = startDate.getMonth() + 1;
-    let startDateDate = startDate.getDate();
-    let endDateYear = endDate.getFullYear();
-    let endDateMonth = endDate.getMonth() + 1;
-    let endDateDate = endDate.getDate();
-    setValue("startDateYear", startDateYear);
-    setValue("startDateMonth", startDateMonth);
-    setValue("startDateDate", startDateDate);
-    setValue("endDateYear", endDateYear);
-    setValue("endDateMonth", endDateMonth);
-    setValue("endDateDate", endDateDate);
+    setValue("startDateYear", startDate.getFullYear());
+    setValue("startDateMonth", startDate.getMonth() + 1);
+    setValue("startDateDate", startDate.getDate());
+    setValue("endDateYear", endDate.getFullYear());
+    setValue("endDateMonth", endDate.getMonth() + 1);
+    setValue("endDateDate", endDate.getDate());
   }
 
   useEffect(() => {
     if (clinicId !== 0 && members) {
+      console.log(1);
       setMemberState(
         members.map((m) => ({
           id: m.user.id,
@@ -213,28 +183,47 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         }))
       );
     } else {
+      console.log(2);
       setMemberState([]);
     }
-    setUserStatis([]);
+    setUserStatis(undefined);
     setStatisticsData(undefined);
+    console.log(3);
   }, [clinicId]);
 
   useEffect(() => {
-    if (!loadingStatisticsData && data?.getStatistics.ok) {
-      const users: UserStatis[] = data.getStatistics.results!.map((result) => ({
-        name: result.userName,
-        prescriptions: {},
-      }));
-      data.getStatistics.prescriptionInfo?.forEach((presc) => {
-        users.forEach((user, idx) => {
-          user.prescriptions[presc.name] = calcPrescNumOfTime(
-            presc.name,
-            data?.getStatistics.results![idx]
-          );
+    if (data?.getStatistics.ok) {
+      const { prescriptionInfo, results } = data.getStatistics;
+      function makeFrame(): UserStatis[] {
+        if (results && prescriptionInfo) {
+          return results.map((result) => ({
+            name: result.userName,
+            prescriptions: prescriptionInfo.map((prescription) => ({
+              ...prescription,
+              count: 0,
+            })),
+          }));
+        }
+        throw new Error(
+          "getStatisticsLzq > onCompleted > makeFrame > results || prescriptionInfo false"
+        );
+      }
+      const users = makeFrame();
+
+      function injectCount() {
+        return users.map((user, i) => {
+          const prescriptions = user.prescriptions.map((prescription) => ({
+            ...prescription,
+            count: calcPrescNumOfTime(
+              prescription.name,
+              data?.getStatistics.results![i]
+            ),
+          }));
+          return { name: user.name, prescriptions };
         });
-      });
-      setStatisticsData(data.getStatistics.results!);
-      setUserStatis(users);
+      }
+      setStatisticsData(results);
+      setUserStatis(injectCount());
     }
   }, [data]);
 
@@ -255,7 +244,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     thinFont
                     enabled={m.isSelected}
                     onClick={() => {
-                      memberState[i].isSelected = memberState[i].isSelected;
+                      memberState[i].isSelected = !memberState[i].isSelected;
                       setMemberState([...memberState]);
                     }}
                   />
@@ -265,42 +254,42 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
             <div className="flex items-center gap-2">
               <BtnMenu
                 hasBorder
-                onClick={() => onCLickSetDate("지난달")}
+                onClick={() => onClickSetDate("지난달")}
                 label="지난달"
                 enabled
                 thinFont
               />
               <BtnMenu
                 hasBorder
-                onClick={() => onCLickSetDate("이번달")}
+                onClick={() => onClickSetDate("이번달")}
                 label="이번달"
                 enabled
                 thinFont
               />
               <BtnMenu
                 hasBorder
-                onClick={() => onCLickSetDate("지난2주")}
+                onClick={() => onClickSetDate("지난2주")}
                 label="지난2주"
                 enabled
                 thinFont
               />
               <BtnMenu
                 hasBorder
-                onClick={() => onCLickSetDate("지난주")}
+                onClick={() => onClickSetDate("지난주")}
                 label="지난주"
                 enabled
                 thinFont
               />
               <BtnMenu
                 hasBorder
-                onClick={() => onCLickSetDate("그제")}
+                onClick={() => onClickSetDate("그제")}
                 label="그제"
                 enabled
                 thinFont
               />
               <BtnMenu
                 hasBorder
-                onClick={() => onCLickSetDate("어제")}
+                onClick={() => onClickSetDate("어제")}
                 label="어제"
                 enabled
                 thinFont
@@ -355,31 +344,22 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                   {userStatis.map((user, idx) => (
                     <div key={idx} className="flex flex-col">
                       <h4 className="mb-4 text-center">{user.name}</h4>
-                      {Object.entries(user.prescriptions).map((presc, i) => (
+                      {user.prescriptions.map((prescription, i) => (
                         <DashboardLi
                           key={i}
-                          name={presc[0]}
-                          price={
-                            data?.getStatistics.prescriptionInfo?.find(
-                              (v) => v.name === presc[0]
-                            )?.price! * presc[1] ?? 0
-                          }
-                          count={presc[1]}
+                          name={prescription.name}
+                          price={prescription.price * prescription.count}
+                          count={prescription.count}
                         />
                       ))}
                       <div className="mt-6 border-t" />
                       <DashboardLi
-                        price={Object.entries(user.prescriptions).reduce(
-                          (acc, cur) =>
-                            acc +
-                            data?.getStatistics.prescriptionInfo?.find(
-                              (presc) => presc.name === cur[0]
-                            )?.price! *
-                              cur[1],
+                        price={user.prescriptions.reduce(
+                          (acc, cur) => acc + cur.price * cur.price,
                           0
                         )}
-                        count={Object.values(user.prescriptions).reduce(
-                          (acc, cur) => acc + cur,
+                        count={user.prescriptions.reduce(
+                          (acc, cur) => acc + cur.count,
                           0
                         )}
                       />
@@ -393,29 +373,21 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                   <span className="text-center">
                     {userStatis
                       .map((user) =>
-                        Object.entries(user.prescriptions).reduce(
-                          (acc, cur) =>
-                            acc +
-                            data?.getStatistics.prescriptionInfo?.find(
-                              (presc) => presc.name === cur[0]
-                            )?.price! *
-                              cur[1],
+                        user.prescriptions.reduce(
+                          (acc, cur) => acc + cur.price * cur.price,
                           0
                         )
                       )
-                      .reduce((acc, cur) => acc + cur, 0)
                       .toLocaleString()}
                     원
                   </span>
                   <span className="text-center">
-                    {userStatis
-                      .map((user) =>
-                        Object.values(user.prescriptions).reduce(
-                          (acc, cur) => acc + cur,
-                          0
-                        )
+                    {userStatis.map((user) =>
+                      user.prescriptions.reduce(
+                        (acc, cur) => acc + cur.count,
+                        0
                       )
-                      .reduce((acc, cur) => acc + cur, 0)}
+                    )}
                     번
                   </span>
                 </div>
