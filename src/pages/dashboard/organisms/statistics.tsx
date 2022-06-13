@@ -39,6 +39,11 @@ type StastisticsResults = {
     }>;
   }>;
 };
+type PrescriptionStatis = {
+  name: string;
+  count: number;
+  price: number;
+};
 
 export interface MemberState {
   id: number;
@@ -58,6 +63,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
   const [memberState, setMemberState] = useState<MemberState[]>();
   const [userStatis, setUserStatis] = useState<UserStatis[]>();
+  const [prescriptionsStatis, setPrescriptionsStatis] =
+    useState<PrescriptionStatis[]>();
   const [statisticsData, setStatisticsData] = useState<
     StastisticsResults[] | null
   >();
@@ -219,8 +226,45 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           return { name: user.name, prescriptions };
         });
       }
+      const newUserStatis = injectCount();
+
+      function makePrescriptionStatistics() {
+        if (prescriptionInfo) {
+          const newPrescriptionsStatis: PrescriptionStatis[] =
+            prescriptionInfo.map((info) => ({
+              name: info.name,
+              price: 0,
+              count: 0,
+            }));
+          return newPrescriptionsStatis.map((prescription) => {
+            const [price, count] = newUserStatis.reduce(
+              (acc, cur) => {
+                const findPrescription = cur.prescriptions.find(
+                  (presc) => presc.name === prescription.name
+                );
+                if (findPrescription) {
+                  return [
+                    findPrescription.price * findPrescription.count + acc[0],
+                    findPrescription.count + acc[1],
+                  ];
+                }
+                throw new Error("findPrescription을 알 수 없습니다");
+              },
+              [0, 0]
+            );
+            return { ...prescription, price, count };
+          });
+        }
+        console.warn(
+          "makePrescriptionStatistics결과 prescriptionInfo가 없습니다"
+        );
+        return [];
+      }
+      const newPrescriptionsStatis = makePrescriptionStatistics();
+
       setStatisticsData(results);
-      setUserStatis(injectCount());
+      setUserStatis(newUserStatis);
+      setPrescriptionsStatis(newPrescriptionsStatis);
     }
   }, [data]);
 
@@ -323,7 +367,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         }
       />
 
-      {statisticsData && userStatis ? (
+      {statisticsData && userStatis && prescriptionsStatis && data ? (
         <>
           <DashboardSectionLayout
             padding
@@ -337,20 +381,32 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                   </div>
                 </h3>
 
-                <div className="grid grid-cols-2 gap-10 px-4 pt-6">
+                <div className="flex px-4 pt-6">
+                  <div className="flex flex-col px-2">
+                    <h4 className="mb-4 text-center">목록</h4>
+                    {data.getStatistics.prescriptionInfo?.map((info) => (
+                      <div key={info.id} className="flex flex-col gap-1 py-1">
+                        <span className="text-center">{info.name}</span>
+                        <span className="text-right">
+                          ￦{info.price.toLocaleString()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                   {userStatis.map((user, idx) => (
-                    <div key={idx} className="flex flex-col">
+                    <div
+                      key={idx}
+                      className="flex w-full flex-col border-x px-2"
+                    >
                       <h4 className="mb-4 text-center">{user.name}</h4>
                       {user.prescriptions.map((prescription, i) => (
                         <DashboardLi
                           key={i}
-                          name={prescription.name}
-                          price={prescription.price}
                           count={prescription.count}
                           sum={prescription.price * prescription.count}
                         />
                       ))}
-                      <div className="mt-6 border-t" />
+                      <div className="mt-2 border-t border-black" />
                       <DashboardLi
                         sum={user.prescriptions.reduce(
                           (acc, cur) => acc + cur.price * cur.count,
@@ -361,29 +417,32 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                           0
                         )}
                       />
-                      <div></div>
                     </div>
                   ))}
+                  {userStatis.length > 1 && (
+                    <div className="flex w-full flex-col px-2">
+                      <h4 className="mb-4 text-center">총합</h4>
+                      {prescriptionsStatis.map((info, idx) => (
+                        <DashboardLi
+                          key={idx}
+                          sum={info.price}
+                          count={info.count}
+                        />
+                      ))}
+                      <div className="mt-2 border-t border-black" />
+                      <DashboardLi
+                        sum={prescriptionsStatis.reduce(
+                          (acc, cur) => acc + cur.price,
+                          0
+                        )}
+                        count={prescriptionsStatis.reduce(
+                          (acc, cur) => acc + cur.count,
+                          0
+                        )}
+                      />
+                    </div>
+                  )}
                 </div>
-                <DashboardLi
-                  isTotalSum
-                  sum={userStatis
-                    .map((user) =>
-                      user.prescriptions.reduce(
-                        (acc, cur) => acc + cur.price * cur.count,
-                        0
-                      )
-                    )
-                    .reduce((acc, cur) => acc + cur, 0)}
-                  count={userStatis
-                    .map((user) =>
-                      user.prescriptions.reduce(
-                        (acc, cur) => acc + cur.count,
-                        0
-                      )
-                    )
-                    .reduce((acc, cur) => acc + cur, 0)}
-                />
               </>
             }
           />
