@@ -36,7 +36,7 @@ export const BtnMenu = ({
           : " font-semibold"
         : " opacity-50"
     }${isWidthFull ? " w-full" : ""}${
-      thinFont ? " py-0 text-[0.25rem] font-normal" : ""
+      thinFont ? " py-0 text-[0.7rem] font-normal" : ""
     }${isCenter ? " mx-auto" : ""}`}
     onClick={onClick}
   >

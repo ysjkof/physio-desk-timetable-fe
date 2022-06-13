@@ -120,9 +120,10 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
   return (
     <>
       {isStayed ? (
-        <>
+        <div className="flex h-full w-full">
           <DashboardSectionLayout
             width="md"
+            heightFull
             children={
               <>
                 <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b">
@@ -171,6 +172,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
           />
           <DashboardSectionLayout
             width="md"
+            heightFull
             children={
               <details open={isManager}>
                 <summary>처방 만들기</summary>
@@ -295,7 +297,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
               </details>
             }
           />
-        </>
+        </div>
       ) : (
         <h3 className="mx-auto mt-10 text-center">권한이 없습니다</h3>
       )}

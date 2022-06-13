@@ -12,7 +12,7 @@ export const InactivatedClinic = () => {
     <span>Loading...</span>
   ) : (
     <DashboardSectionLayout
-      title="조회"
+      title="비활성 병원 보기"
       width="md"
       heightFull
       tooltip="가입했던 병원의 활성화 상태를 봅니다"

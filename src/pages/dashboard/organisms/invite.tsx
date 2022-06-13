@@ -66,6 +66,7 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
   return (
     <DashboardSectionLayout
       width="md"
+      title="병원에 초대"
       heightFull
       children={
         <>
