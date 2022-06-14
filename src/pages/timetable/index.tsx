@@ -120,7 +120,9 @@ export const TimeTable = () => {
         );
       }
     } else {
-      console.warn("✅ 시간표 > useEffect 실패");
+      console.warn(
+        `✅ 시간표 > useEffect 실패; data is:${data?.listReservations.ok}; loggedInUser:${loggedInUser?.id}`
+      );
     }
   }, [data, clinicLists]);
 

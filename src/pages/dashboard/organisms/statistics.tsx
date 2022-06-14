@@ -5,7 +5,6 @@ import {
 } from "../../../graphql/generated/graphql";
 import { getDateFromYMDHM } from "../../../libs/utils";
 import { useForm } from "react-hook-form";
-import { DashboardLi } from "../components/li";
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
 import { useEffect, useState } from "react";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
@@ -16,7 +15,6 @@ import { selectedClinicVar } from "../../../store";
 import { useReactiveVar } from "@apollo/client";
 import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
 import { BtnMenu } from "../../../components/molecules/button-menu";
-import { TableChartCol } from "../molecules/table-chart-col";
 import { TableChartColLayout } from "../molecules/table-chart-col-layout";
 
 interface IDataResult {
@@ -456,271 +454,105 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         <>
           <div className="flex">
             <DashboardSectionLayout
-              elementName="table_chart_prescription_count"
+              elementName="TABLE_CHART_PRESCRIPTION_COUNT"
               padding
               children={
                 <>
-                  <TableChartColLayout>
-                    <TableChartCol
-                      title="이름"
-                      titleBorderRight
-                      children={
-                        <>
-                          {data.getStatistics.prescriptionInfo?.map((info) => (
-                            <DashboardLi
-                              key={info.id}
-                              textCenter
-                              borderRight
-                              textContents={info.name}
-                            />
-                          ))}
-                          <DashboardLi
-                            borderTop
-                            textCenter
-                            borderRight
-                            textContents={"합계"}
-                          />
-                        </>
-                      }
-                    />
-                    {userStatis.map((user, idx) => (
-                      <TableChartCol
-                        title={user.name}
-                        children={
-                          <>
-                            {user.prescriptions.map((prescription, i) => (
-                              <DashboardLi
-                                key={i}
-                                textContents={`${
-                                  prescription.reservedCount ?? 0
-                                }번`}
-                              />
-                            ))}
-                            <DashboardLi
-                              borderTop
-                              textContents={`${user.prescriptions.reduce(
-                                (acc, cur) => acc + cur.reservedCount,
-                                0
-                              )}번`}
-                            />
-                          </>
-                        }
-                      />
-                    ))}
-                    {userStatis.length > 1 ? (
-                      <TableChartCol
-                        title="합계"
-                        children={
-                          <>
-                            {prescriptionsStatis.map((info, idx) => (
-                              <DashboardLi
-                                key={idx}
-                                textContents={`${info.reservedCount}번`}
-                              />
-                            ))}
-                            <DashboardLi
-                              borderTop
-                              textContents={`${prescriptionsStatis.reduce(
-                                (acc, cur) => acc + cur.reservedCount,
-                                0
-                              )}번`}
-                            />
-                          </>
-                        }
-                      />
-                    ) : (
-                      ""
+                  <TableChartColLayout
+                    labelNames={data.getStatistics.prescriptionInfo!.map(
+                      (info) => info.name
                     )}
-                  </TableChartColLayout>
+                    hasLabelTotal
+                    individualData={userStatis.map((user) => ({
+                      name: user.name,
+                      counts: user.prescriptions.map(
+                        (prescription) => prescription.reservedCount ?? 0
+                      ),
+                      countTotal: user.prescriptions.reduce(
+                        (acc, cur) => acc + cur.reservedCount,
+                        0
+                      ),
+                    }))}
+                    counts={prescriptionsStatis.map(
+                      (info, idx) => info.reservedCount
+                    )}
+                    countTotal={prescriptionsStatis.reduce(
+                      (acc, cur) => acc + cur.reservedCount,
+                      0
+                    )}
+                  />
                 </>
               }
             />
             <DashboardSectionLayout
-              elementName="table_chart_prescription_price"
+              elementName="TABLE_CHART_PRESCRIPTION_PRICE"
               padding
               children={
                 <>
-                  <TableChartColLayout>
-                    <TableChartCol
-                      title="이름"
-                      titleBorderRight
-                      children={
-                        <>
-                          {data.getStatistics.prescriptionInfo?.map((info) => (
-                            <DashboardLi
-                              key={info.id}
-                              textCenter
-                              borderRight
-                              textContents={info.name}
-                            />
-                          ))}
-                          <DashboardLi
-                            borderTop
-                            textCenter
-                            borderRight
-                            textContents={"합계"}
-                          />
-                        </>
-                      }
-                    />
-                    {userStatis.map((user, idx) => (
-                      <TableChartCol
-                        title={user.name}
-                        children={
-                          <>
-                            {user.prescriptions.map((prescription, idx) => (
-                              <DashboardLi
-                                key={idx}
-                                textContents={`￦${(
-                                  prescription.price *
-                                  prescription.reservedCount
-                                ).toLocaleString()}`}
-                              />
-                            ))}
-                            <DashboardLi
-                              borderTop
-                              textContents={`￦${user.prescriptions
-                                .reduce(
-                                  (acc, cur) =>
-                                    acc + cur.price * cur.reservedCount,
-                                  0
-                                )
-                                .toLocaleString()}`}
-                            />
-                          </>
-                        }
-                      />
-                    ))}
-                    {userStatis.length > 1 ? (
-                      <TableChartCol
-                        title="합계"
-                        children={
-                          <>
-                            {prescriptionsStatis.map((info, idx) => (
-                              <DashboardLi
-                                key={idx}
-                                textContents={`￦${info.price}`}
-                              />
-                            ))}
-                            <DashboardLi
-                              borderTop
-                              textContents={`￦${prescriptionsStatis
-                                .reduce((acc, cur) => acc + cur.price, 0)
-                                .toLocaleString()}`}
-                            />
-                          </>
-                        }
-                      />
-                    ) : (
-                      ""
+                  <TableChartColLayout
+                    labelNames={data.getStatistics.prescriptionInfo!.map(
+                      (info) => info.name
                     )}
-                  </TableChartColLayout>
+                    hasLabelTotal
+                    individualData={userStatis.map((user) => ({
+                      name: user.name,
+                      counts: user.prescriptions.map(
+                        (prescription) =>
+                          prescription.price * prescription.reservedCount
+                      ),
+                      countTotal: user.prescriptions.reduce(
+                        (acc, cur) => acc + cur.price * cur.reservedCount,
+                        0
+                      ),
+                    }))}
+                    counts={prescriptionsStatis.map((info, idx) => info.price)}
+                    countTotal={prescriptionsStatis.reduce(
+                      (acc, cur) => acc + cur.price,
+                      0
+                    )}
+                  />
                 </>
               }
             />
           </div>
           <DashboardSectionLayout
-            elementName="table_chart_counts"
+            elementName="TABLE_CHART_COUNTS"
             padding
             children={
               <>
-                <TableChartColLayout>
-                  <TableChartCol
-                    title={"이름"}
-                    titleBorderRight
-                    children={
-                      <>
-                        <DashboardLi
-                          borderRight
-                          textCenter
-                          textContents={"예약"}
-                        />
-                        <DashboardLi
-                          borderRight
-                          textCenter
-                          textContents={"신규"}
-                        />
-                        <DashboardLi
-                          borderRight
-                          textCenter
-                          textContents={"부도"}
-                        />
-                        <DashboardLi
-                          borderRight
-                          textCenter
-                          textContents={"취소"}
-                        />
-                      </>
-                    }
-                  />
-
-                  {userStatis.map((user, idx) => (
-                    <TableChartCol
-                      title={user.name}
-                      children={
-                        <>
-                          <DashboardLi
-                            textContents={`${user.prescriptions
-                              .reduce((acc, cur) => acc + cur.reservedCount, 0)
-                              .toLocaleString()}번`}
-                          />
-                          <DashboardLi
-                            textContents={`${user.prescriptions
-                              .reduce(
-                                (acc, cur) => acc + cur.firstReservationCount,
-                                0
-                              )
-                              .toLocaleString()}명`}
-                          />
-                          <DashboardLi
-                            textContents={`${user.prescriptions
-                              .reduce((acc, cur) => acc + cur.noshowCount, 0)
-                              .toLocaleString()}번`}
-                          />
-                          <DashboardLi
-                            textContents={`${user.prescriptions
-                              .reduce((acc, cur) => acc + cur.cancelCount, 0)
-                              .toLocaleString()}번`}
-                          />
-                        </>
-                      }
-                    />
-                  ))}
-                  {userStatis.length > 1 ? (
-                    <TableChartCol
-                      title={"합계"}
-                      children={
-                        <>
-                          <DashboardLi
-                            textContents={`${prescriptionsStatis
-                              .reduce((acc, cur) => acc + cur.reservedCount, 0)
-                              .toLocaleString()}번`}
-                          />
-                          <DashboardLi
-                            textContents={`${prescriptionsStatis
-                              .reduce(
-                                (acc, cur) => acc + cur.firstReservationCount,
-                                0
-                              )
-                              .toLocaleString()}명`}
-                          />
-                          <DashboardLi
-                            textContents={`${prescriptionsStatis
-                              .reduce((acc, cur) => acc + cur.noshowCount, 0)
-                              .toLocaleString()}번`}
-                          />
-                          <DashboardLi
-                            textContents={`${prescriptionsStatis
-                              .reduce((acc, cur) => acc + cur.cancelCount, 0)
-                              .toLocaleString()}번`}
-                          />
-                        </>
-                      }
-                    />
-                  ) : (
-                    ""
-                  )}
-                </TableChartColLayout>
+                <TableChartColLayout
+                  labelNames={["예약", "신규", "부도", "취소"]}
+                  individualData={userStatis.map((user) => ({
+                    name: user.name,
+                    counts: user.prescriptions.reduce(
+                      (acc, cur) => [
+                        acc[0] + cur.reservedCount,
+                        acc[0] + cur.firstReservationCount,
+                        acc[0] + cur.noshowCount,
+                        acc[0] + cur.cancelCount,
+                      ],
+                      [0, 0, 0, 0]
+                    ),
+                  }))}
+                  counts={[
+                    prescriptionsStatis?.reduce(
+                      (acc, cur) => acc + cur.reservedCount,
+                      0
+                    )!,
+                    prescriptionsStatis?.reduce(
+                      (acc, cur) => acc + cur.firstReservationCount,
+                      0
+                    )!,
+                    prescriptionsStatis?.reduce(
+                      (acc, cur) => acc + cur.noshowCount,
+                      0
+                    )!,
+                    prescriptionsStatis?.reduce(
+                      (acc, cur) => acc + cur.cancelCount,
+                      0
+                    )!,
+                  ]}
+                />
               </>
             }
           />
