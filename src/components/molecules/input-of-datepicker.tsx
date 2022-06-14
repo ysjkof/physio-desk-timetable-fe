@@ -8,6 +8,7 @@ interface InputInDatepickerProps {
   prefix: "startDate" | "endDate" | "birthday";
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   formError?: IFormErrors;
+  textColor?: string;
 }
 
 export const InputOfDatepicker = ({
@@ -16,6 +17,7 @@ export const InputOfDatepicker = ({
   prefix,
   setOpen,
   formError,
+  textColor,
 }: InputInDatepickerProps) => {
   return (
     <div
@@ -23,6 +25,7 @@ export const InputOfDatepicker = ({
         see === "ymd-hm" ? "grid-cols-[1fr_repeat(4,_0.7fr)]" : ""
       } ${see === "ymd" ? "grid-cols-[1fr_repeat(2,_0.7fr)]" : ""}`}
       onFocus={() => (setOpen ? setOpen(true) : undefined)}
+      style={{ ...(textColor && { color: textColor }) }}
     >
       {prefix === "birthday" && formError?.birthdayYear?.message ? (
         <FormError errorMessage={formError.birthdayYear.message} isHighter />

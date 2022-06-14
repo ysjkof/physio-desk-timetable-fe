@@ -10,6 +10,7 @@ interface IDatepickerWithInputProps {
   see: "ymd-hm" | "ymd";
   dateType: "startDate" | "endDate" | "birthday";
   formError?: IFormErrors;
+  textColor?: string;
 }
 
 export const DatepickerWithInput = ({
@@ -19,6 +20,7 @@ export const DatepickerWithInput = ({
   see,
   dateType,
   formError,
+  textColor,
 }: IDatepickerWithInputProps) => {
   const [open, setOpen] = useState(false);
   return (
@@ -36,6 +38,7 @@ export const DatepickerWithInput = ({
         prefix={dateType}
         setOpen={setOpen}
         formError={formError}
+        textColor={textColor}
       />
     </div>
   );
