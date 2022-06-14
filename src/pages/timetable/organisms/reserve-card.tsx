@@ -204,8 +204,9 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
   }
 
   const onClickPrescription = (id: number) => {
+    let newPrescriptions: typeof prescriptions = [];
     setPrescriptions((prevState) => {
-      const newPrescriptions = prevState.map((prev) => {
+      newPrescriptions = prevState.map((prev) => {
         if (prev.id === id) {
           return { ...prev, isSelect: !prev.isSelect };
         }
@@ -213,6 +214,14 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
       });
       return newPrescriptions;
     });
+    const newState = {
+      minute: getTotal("requiredTime", newPrescriptions),
+      price: getTotal("price", newPrescriptions),
+      prescriptions: newPrescriptions
+        .filter((prescription) => prescription.isSelect)
+        .map((prescription) => prescription.id),
+    };
+    setSelectedPrescription(newState);
   };
 
   useEffect(() => {
@@ -232,17 +241,6 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
       setPrescriptions(prescriptions);
     }
   }, [prescriptionsData]);
-
-  useEffect(() => {
-    const newState = {
-      minute: getTotal("requiredTime", prescriptions),
-      price: getTotal("price", prescriptions),
-      prescriptions: prescriptions
-        .filter((prescription) => prescription.isSelect)
-        .map((prescription) => prescription.id),
-    };
-    setSelectedPrescription(newState);
-  }, [prescriptions]);
 
   useEffect(() => {
     setValue("userId", member.id);
