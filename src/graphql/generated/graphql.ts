@@ -123,6 +123,7 @@ export type CreateReservationOutput = {
 export type DayCount = {
   __typename?: 'DayCount';
   date: Scalars['DateTime'];
+  firstReservations: Array<Reservation>;
   prescriptions: Array<PrescriptionStatistics>;
 };
 
@@ -488,9 +489,11 @@ export type Patient = {
   createdAt?: Maybe<Scalars['DateTime']>;
   gender: Scalars['String'];
   id: Scalars['Float'];
+  isNew?: Maybe<Scalars['Boolean']>;
   memo?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   registrationNumber?: Maybe<Scalars['String']>;
+  reservationCount: Scalars['Int'];
   updatedAt?: Maybe<Scalars['DateTime']>;
   users: Array<User>;
 };
@@ -526,8 +529,10 @@ export type PrescriptionInfo = {
 
 export type PrescriptionStatistics = {
   __typename?: 'PrescriptionStatistics';
-  count: Scalars['Int'];
+  cancelCount: Scalars['Int'];
   name: Scalars['String'];
+  noshowCount: Scalars['Int'];
+  reservedCount: Scalars['Int'];
 };
 
 export type Query = {
@@ -614,6 +619,7 @@ export type Reservation = {
   createdAt?: Maybe<Scalars['DateTime']>;
   endDate: Scalars['DateTime'];
   id: Scalars['Float'];
+  isFirst: Scalars['Boolean'];
   lastModifier?: Maybe<User>;
   memo?: Maybe<Scalars['String']>;
   patient: Patient;
@@ -817,7 +823,7 @@ export type GetStatisticsQueryVariables = Exact<{
 }>;
 
 
-export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, results?: Array<{ __typename?: 'StatisticsRsult', userName: string, statistics: Array<{ __typename?: 'DayCount', date: any, prescriptions: Array<{ __typename?: 'PrescriptionStatistics', name: string, count: number }> }> }> | null, prescriptionInfo?: Array<{ __typename?: 'PrescriptionInfo', id: number, name: string, requiredTime: number, price: number }> | null } };
+export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, results?: Array<{ __typename?: 'StatisticsRsult', userName: string, statistics: Array<{ __typename?: 'DayCount', date: any, firstReservations: Array<{ __typename?: 'Reservation', id: number, isFirst: boolean, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } }>, prescriptions: Array<{ __typename?: 'PrescriptionStatistics', name: string, reservedCount: number, noshowCount: number, cancelCount: number }> }> }> | null, prescriptionInfo?: Array<{ __typename?: 'PrescriptionInfo', id: number, name: string, requiredTime: number, price: number }> | null } };
 
 export type InviteClinicMutationVariables = Exact<{
   input: InviteClinicInput;
@@ -1543,9 +1549,31 @@ export const GetStatisticsDocument = gql`
       userName
       statistics {
         date
+        firstReservations {
+          id
+          isFirst
+          startDate
+          endDate
+          state
+          memo
+          user {
+            id
+            name
+          }
+          patient {
+            id
+            name
+            gender
+            registrationNumber
+            birthday
+            memo
+          }
+        }
         prescriptions {
           name
-          count
+          reservedCount
+          noshowCount
+          cancelCount
         }
       }
     }

@@ -1,10 +1,13 @@
 import { DashboardSectionLayout } from "../components/section-layout";
-import { useGetStatisticsLazyQuery } from "../../../graphql/generated/graphql";
+import {
+  ReservationState,
+  useGetStatisticsLazyQuery,
+} from "../../../graphql/generated/graphql";
 import { getDateFromYMDHM } from "../../../libs/utils";
 import { useForm } from "react-hook-form";
 import { DashboardLi } from "../components/li";
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
 import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
 import { InDashboardPageProps } from "..";
@@ -14,36 +17,63 @@ import { useReactiveVar } from "@apollo/client";
 import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 
-type UserStatis = {
-  name: string;
-  prescriptions: {
-    __typename?: "PrescriptionInfo" | undefined;
-    id: number;
-    name: string;
-    requiredTime: number;
-    price: number;
-    count: number;
-  }[];
-};
-
-type StastisticsResults = {
+interface IDataResult {
   __typename?: "StatisticsRsult";
   userName: string;
   statistics: Array<{
     __typename?: "DayCount";
     date: any;
+    firstReservations: Array<{
+      __typename?: "Reservation";
+      id: number;
+      isFirst: boolean;
+      startDate: any;
+      endDate: any;
+      state: ReservationState;
+      memo?: string | null;
+      user: { __typename?: "User"; id: number; name: string };
+      patient: {
+        __typename?: "Patient";
+        id: number;
+        name: string;
+        gender: string;
+        registrationNumber?: string | null;
+        birthday?: any | null;
+        memo?: string | null;
+      };
+    }>;
     prescriptions: Array<{
       __typename?: "PrescriptionStatistics";
       name: string;
-      count: number;
+      reservedCount: number;
+      noshowCount: number;
+      cancelCount: number;
     }>;
   }>;
-};
-type PrescriptionStatis = {
+}
+interface IPrescriptionCounts {
+  reservedCount: number;
+  noshowCount: number;
+  cancelCount: number;
+  firstReservationCount: number;
+}
+interface IPrescriptionNamePrice {
   name: string;
-  count: number;
   price: number;
-};
+}
+interface IPrescription extends IPrescriptionNamePrice, IPrescriptionCounts {
+  name: string;
+  price: number;
+}
+interface Prescriptions extends IPrescription {
+  __typename?: "PrescriptionInfo" | undefined;
+  id: number;
+  requiredTime: number;
+}
+interface UserStatis {
+  name: string;
+  prescriptions: Prescriptions[];
+}
 
 export interface MemberState {
   id: number;
@@ -64,10 +94,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   const [memberState, setMemberState] = useState<MemberState[]>();
   const [userStatis, setUserStatis] = useState<UserStatis[]>();
   const [prescriptionsStatis, setPrescriptionsStatis] =
-    useState<PrescriptionStatis[]>();
-  const [statisticsData, setStatisticsData] = useState<
-    StastisticsResults[] | null
-  >();
+    useState<IPrescription[]>();
+  const [_, setStatisticsData] = useState<typeof data>();
 
   const {
     register,
@@ -122,20 +150,6 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   const onSubmit = () => {
     if (!loadingStatisticsData) getStatisticsLzq();
   };
-
-  function calcPrescNumOfTime(
-    prescName: string,
-    data: StastisticsResults | undefined | null
-  ) {
-    if (!data) return 0;
-    return data.statistics.reduce((acc, cur) => {
-      const prescription = cur.prescriptions.find((p) => p.name === prescName);
-      if (prescription) {
-        return acc + prescription.count;
-      }
-      return acc;
-    }, 0);
-  }
 
   function onClickSetDate(
     duration: "지난달" | "이번달" | "지난2주" | "지난주" | "그제" | "어제"
@@ -196,6 +210,34 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   }, [clinicId]);
 
   useEffect(() => {
+    const defaultCountsObj = {
+      reservedCount: 0,
+      noshowCount: 0,
+      cancelCount: 0,
+      firstReservationCount: 0,
+    };
+    function getPrescriptionTotalCount(
+      prescName: string,
+      data: IDataResult | undefined | null
+    ) {
+      if (!data) return defaultCountsObj;
+      return data.statistics.reduce((acc, cur) => {
+        const prescription = cur.prescriptions.find(
+          (p) => p.name === prescName
+        );
+        if (prescription) {
+          return {
+            reservedCount: acc.reservedCount + prescription.reservedCount,
+            noshowCount: acc.noshowCount + prescription.noshowCount,
+            cancelCount: acc.cancelCount + prescription.cancelCount,
+            firstReservationCount:
+              acc.firstReservationCount + cur.firstReservations.length,
+          };
+        }
+        return acc;
+      }, defaultCountsObj);
+    }
+
     if (data?.getStatistics.ok) {
       const { prescriptionInfo, results } = data.getStatistics;
       function makeFrame(): UserStatis[] {
@@ -204,7 +246,10 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
             name: result.userName,
             prescriptions: prescriptionInfo.map((prescription) => ({
               ...prescription,
-              count: 0,
+              reservedCount: 0,
+              cancelCount: 0,
+              noshowCount: 0,
+              firstReservationCount: 0,
             })),
           }));
         }
@@ -212,17 +257,24 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           "getStatisticsLzq > onCompleted > makeFrame > results || prescriptionInfo false"
         );
       }
-      const users = makeFrame();
+      const userStatisFrame = makeFrame();
 
       function injectCount() {
-        return users.map((user, i) => {
-          const prescriptions = user.prescriptions.map((prescription) => ({
-            ...prescription,
-            count: calcPrescNumOfTime(
+        return userStatisFrame.map((user, i) => {
+          const prescriptions = user.prescriptions.map((prescription) => {
+            const prescriptionTotalCount = getPrescriptionTotalCount(
               prescription.name,
               data?.getStatistics.results![i]
-            ),
-          }));
+            );
+            return {
+              ...prescription,
+              reservedCount: prescriptionTotalCount.reservedCount,
+              noshowCount: prescriptionTotalCount.noshowCount,
+              cancelCount: prescriptionTotalCount.cancelCount,
+              firstReservationCount:
+                prescriptionTotalCount.firstReservationCount,
+            };
+          });
           return { name: user.name, prescriptions };
         });
       }
@@ -230,29 +282,50 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
       function makePrescriptionStatistics() {
         if (prescriptionInfo) {
-          const newPrescriptionsStatis: PrescriptionStatis[] =
-            prescriptionInfo.map((info) => ({
+          const newPrescriptionsStatis: IPrescription[] = prescriptionInfo.map(
+            (info) => ({
               name: info.name,
-              price: 0,
-              count: 0,
-            }));
+              reservedCount: 0,
+              cancelCount: 0,
+              noshowCount: 0,
+              price: info.price,
+              firstReservationCount: 0,
+            })
+          );
           return newPrescriptionsStatis.map((prescription) => {
-            const [price, count] = newUserStatis.reduce(
-              (acc, cur) => {
-                const findPrescription = cur.prescriptions.find(
-                  (presc) => presc.name === prescription.name
-                );
-                if (findPrescription) {
-                  return [
-                    findPrescription.price * findPrescription.count + acc[0],
-                    findPrescription.count + acc[1],
-                  ];
-                }
-                throw new Error("findPrescription을 알 수 없습니다");
-              },
-              [0, 0]
-            );
-            return { ...prescription, price, count };
+            const { price, reservedCount, cancelCount, noshowCount } =
+              newUserStatis.reduce(
+                (acc, cur) => {
+                  const findPrescription = cur.prescriptions.find(
+                    (presc) => presc.name === prescription.name
+                  );
+                  if (findPrescription) {
+                    return {
+                      price:
+                        findPrescription.price *
+                        (findPrescription.reservedCount + acc.reservedCount),
+                      reservedCount:
+                        findPrescription.reservedCount + acc.reservedCount,
+                      cancelCount:
+                        findPrescription.cancelCount + acc.cancelCount,
+                      noshowCount:
+                        findPrescription.noshowCount + acc.noshowCount,
+                      firstReservationCount:
+                        findPrescription.firstReservationCount +
+                        acc.firstReservationCount,
+                    };
+                  }
+                  throw new Error("findPrescription을 알 수 없습니다");
+                },
+                { ...defaultCountsObj, price: 0 }
+              );
+            return {
+              ...prescription,
+              price,
+              reservedCount,
+              cancelCount,
+              noshowCount,
+            };
           });
         }
         console.warn(
@@ -261,8 +334,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         return [];
       }
       const newPrescriptionsStatis = makePrescriptionStatistics();
-
-      setStatisticsData(results);
+      setStatisticsData(data); // 페이지 바뀔때 화면 초기화 위해서 필요함
       setUserStatis(newUserStatis);
       setPrescriptionsStatis(newPrescriptionsStatis);
     }
@@ -367,9 +439,10 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         }
       />
 
-      {statisticsData && userStatis && prescriptionsStatis && data ? (
+      {userStatis && prescriptionsStatis && data ? (
         <>
           <DashboardSectionLayout
+            elementName="table_chart_prescription_count"
             padding
             children={
               <>
@@ -383,15 +456,14 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
                 <div className="flex px-4 pt-6">
                   <div className="flex flex-col px-2">
-                    <h4 className="mb-4 text-center">목록</h4>
+                    <h4 className="mb-4 text-center">이름</h4>
                     {data.getStatistics.prescriptionInfo?.map((info) => (
-                      <div key={info.id} className="flex flex-col gap-1 py-1">
-                        <span className="text-center">{info.name}</span>
-                        <span className="text-right">
-                          ￦{info.price.toLocaleString()}
-                        </span>
-                      </div>
+                      <Fragment key={info.id}>
+                        <DashboardLi textContents={info.name} />
+                      </Fragment>
                     ))}
+
+                    <div className="mt-2 border-t border-black" />
                   </div>
                   {userStatis.map((user, idx) => (
                     <div
@@ -400,22 +472,21 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     >
                       <h4 className="mb-4 text-center">{user.name}</h4>
                       {user.prescriptions.map((prescription, i) => (
-                        <DashboardLi
-                          key={i}
-                          count={prescription.count}
-                          sum={prescription.price * prescription.count}
-                        />
+                        <Fragment key={i}>
+                          <DashboardLi
+                            textContents={`${
+                              prescription.reservedCount ?? 0
+                            }번`}
+                          />
+                        </Fragment>
                       ))}
                       <div className="mt-2 border-t border-black" />
+
                       <DashboardLi
-                        sum={user.prescriptions.reduce(
-                          (acc, cur) => acc + cur.price * cur.count,
+                        textContents={`${user.prescriptions.reduce(
+                          (acc, cur) => acc + cur.reservedCount,
                           0
-                        )}
-                        count={user.prescriptions.reduce(
-                          (acc, cur) => acc + cur.count,
-                          0
-                        )}
+                        )}번`}
                       />
                     </div>
                   ))}
@@ -423,22 +494,156 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     <div className="flex w-full flex-col px-2">
                       <h4 className="mb-4 text-center">총합</h4>
                       {prescriptionsStatis.map((info, idx) => (
-                        <DashboardLi
-                          key={idx}
-                          sum={info.price}
-                          count={info.count}
-                        />
+                        <Fragment key={idx}>
+                          <DashboardLi
+                            textContents={`${info.reservedCount}번`}
+                          />
+                        </Fragment>
+                      ))}
+                      <div className="mt-2 border-t border-black" />
+
+                      <DashboardLi
+                        textContents={`${prescriptionsStatis.reduce(
+                          (acc, cur) => acc + cur.reservedCount,
+                          0
+                        )}번`}
+                      />
+                    </div>
+                  )}
+                </div>
+              </>
+            }
+          />
+          <DashboardSectionLayout
+            elementName="table_chart_prescription_price"
+            padding
+            children={
+              <>
+                <div className="flex px-4 pt-6">
+                  <div className="flex flex-col px-2">
+                    {/* <h4 className="mb-4 text-center">이름</h4> */}
+                    {data.getStatistics.prescriptionInfo?.map((info) => (
+                      <Fragment key={info.id}>
+                        <DashboardLi textContents={info.name} />
+                      </Fragment>
+                    ))}
+                    <div className="mt-2 border-t border-black" />
+                  </div>
+                  {userStatis.map((user, idx) => (
+                    <div
+                      key={idx}
+                      className="flex w-full flex-col border-x px-2"
+                    >
+                      {/* <h4 className="mb-4 text-center">{user.name}</h4> */}
+                      {user.prescriptions.map((prescription, i) => (
+                        <Fragment key={i}>
+                          <DashboardLi
+                            textContents={`￦${(
+                              prescription.price * prescription.reservedCount
+                            ).toLocaleString()}`}
+                          />
+                        </Fragment>
                       ))}
                       <div className="mt-2 border-t border-black" />
                       <DashboardLi
-                        sum={prescriptionsStatis.reduce(
-                          (acc, cur) => acc + cur.price,
-                          0
-                        )}
-                        count={prescriptionsStatis.reduce(
-                          (acc, cur) => acc + cur.count,
-                          0
-                        )}
+                        textContents={`￦${user.prescriptions
+                          .reduce(
+                            (acc, cur) => acc + cur.price * cur.reservedCount,
+                            0
+                          )
+                          .toLocaleString()}`}
+                      />
+                    </div>
+                  ))}
+                  {userStatis.length > 1 && (
+                    <div className="flex w-full flex-col px-2">
+                      {/* <h4 className="mb-4 text-center">총합</h4> */}
+                      {prescriptionsStatis.map((info, idx) => (
+                        <Fragment key={idx}>
+                          <DashboardLi textContents={`￦${info.price}`} />
+                        </Fragment>
+                      ))}
+                      <div className="mt-2 border-t border-black" />
+                      <DashboardLi
+                        textContents={`￦${prescriptionsStatis
+                          .reduce((acc, cur) => acc + cur.price, 0)
+                          .toLocaleString()}`}
+                      />
+                    </div>
+                  )}
+                </div>
+              </>
+            }
+          />
+          <DashboardSectionLayout
+            elementName="table_chart_counts"
+            padding
+            children={
+              <>
+                <div className="flex px-4 pt-6">
+                  <div className="flex flex-col px-2">
+                    {/* <h4 className="mb-4 whitespace-nowrap text-center">이름</h4> */}
+                    <DashboardLi textContents={"예약"} />
+                    <DashboardLi textContents={"신규"} />
+                    <DashboardLi textContents={"부도"} />
+                    <DashboardLi textContents={"취소"} />
+                  </div>
+                  {userStatis.map((user, idx) => (
+                    <div
+                      key={idx}
+                      className="flex w-full flex-col border-x px-2"
+                    >
+                      {/* <h4 className="mb-4 text-center">{user.name}</h4> */}
+                      <DashboardLi
+                        textContents={`${user.prescriptions
+                          .reduce((acc, cur) => acc + cur.reservedCount, 0)
+                          .toLocaleString()}번`}
+                      />
+                      <DashboardLi
+                        textContents={`${user.prescriptions
+                          .reduce(
+                            (acc, cur) => acc + cur.firstReservationCount,
+                            0
+                          )
+                          .toLocaleString()}명`}
+                      />
+                      <DashboardLi
+                        textContents={`${user.prescriptions
+                          .reduce((acc, cur) => acc + cur.noshowCount, 0)
+                          .toLocaleString()}번`}
+                      />
+                      <DashboardLi
+                        textContents={`${user.prescriptions
+                          .reduce((acc, cur) => acc + cur.cancelCount, 0)
+                          .toLocaleString()}번`}
+                      />
+                    </div>
+                  ))}
+                  {userStatis.length > 1 && (
+                    <div className="flex w-full flex-col px-2">
+                      {/* <h4 className="mb-4 text-center">총합</h4> */}
+                      <DashboardLi
+                        textContents={`${prescriptionsStatis
+                          .reduce((acc, cur) => acc + cur.reservedCount, 0)
+                          .toLocaleString()}번`}
+                      />
+                      <DashboardLi
+                        textContents={`${prescriptionsStatis
+                          .reduce(
+                            (acc, cur) => acc + cur.firstReservationCount,
+                            0
+                          )
+                          .toLocaleString()}명`}
+                      />
+                      <DashboardLi
+                        textContents={`${prescriptionsStatis
+                          .reduce((acc, cur) => acc + cur.noshowCount, 0)
+                          .toLocaleString()}번`}
+                      />
+                      <DashboardLi
+                        textContents={`${prescriptionsStatis
+                          .reduce((acc, cur) => acc + cur.cancelCount, 0)
+                          .toLocaleString()}번`}
                       />
                     </div>
                   )}
@@ -448,7 +653,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           />
 
           <DashboardSectionLayout
-            elementName="chart"
+            elementName="graph_chart"
             children={
               <>
                 <div className="relative">
@@ -467,13 +672,13 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                   >
                     <VictoryLine
                       data={
-                        statisticsData.length !== 0
-                          ? statisticsData
-                              .map((result) =>
+                        data.getStatistics.results?.length !== 0
+                          ? data.getStatistics.results
+                              ?.map((result) =>
                                 result.statistics?.map((data) => ({
                                   x: data.date,
                                   y: data.prescriptions.reduce(
-                                    (prev, curr) => prev + curr.count,
+                                    (prev, curr) => prev + curr.reservedCount,
                                     0
                                   ),
                                 }))

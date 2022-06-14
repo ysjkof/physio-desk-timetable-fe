@@ -6,9 +6,31 @@ query getStatistics($input: GetStatisticsInput!) {
       userName
       statistics {
         date
+        firstReservations {
+          id
+          isFirst
+          startDate
+          endDate
+          state
+          memo
+          user {
+            id
+            name
+          }
+          patient {
+            id
+            name
+            gender
+            registrationNumber
+            birthday
+            memo
+          }
+        }
         prescriptions {
           name
-          count
+          reservedCount
+          noshowCount
+          cancelCount
         }
       }
     }
