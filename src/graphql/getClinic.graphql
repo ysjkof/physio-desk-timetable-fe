@@ -1,5 +1,5 @@
-query findClinicById($input: FindClinicByIdInput!) {
-  findClinicById(input: $input) {
+query getClinic($input: GetClinicInput!) {
+  getClinic(input: $input) {
     ok
     error
     clinic {

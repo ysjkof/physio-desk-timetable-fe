@@ -1,5 +1,5 @@
-query searchPatientByName($input: SearchPatientInput!) {
-  searchPatientByName(input: $input) {
+query searchPatient($input: SearchPatientInput!) {
+  searchPatient(input: $input) {
     error
     ok
     totalPages

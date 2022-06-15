@@ -1,0 +1,12 @@
+query searchUsers($input: SearchUsersInput!) {
+  searchUsers(input: $input) {
+    ok
+    error
+    totalCount
+    results {
+      id
+      name
+      email
+    }
+  }
+}

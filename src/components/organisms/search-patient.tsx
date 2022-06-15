@@ -3,7 +3,7 @@ import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSearchPatientByNameLazyQuery } from "../../graphql/generated/graphql";
+import { useSearchPatientLazyQuery } from "../../graphql/generated/graphql";
 import { selectedClinicVar, selectedPatientVar } from "../../store";
 import { BtnMenu } from "../molecules/button-menu";
 import { NameTag } from "../name-tag";
@@ -18,7 +18,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const [callQuery, { loading, data: searchPatientResult }] =
-    useSearchPatientByNameLazyQuery();
+    useSearchPatientLazyQuery();
   const onSubmit = () => {
     if (!loading) {
       const { patientName } = getValues();
@@ -79,22 +79,20 @@ export const SearchPatient = ({}: SearchPatientProps) => {
         }`}
       >
         {!selectedPatient &&
-          searchPatientResult?.searchPatientByName.patients?.map(
-            (patient, index) => (
-              <div key={index} className="btn-menu rounded-none">
-                <NameTag
-                  id={patient.id}
-                  gender={patient.gender}
-                  name={patient.name}
-                  registrationNumber={patient.registrationNumber}
-                  birthday={patient.birthday}
-                  canClick
-                  clinicName={patient.clinic?.name ?? ""}
-                  user={patient.users[patient.users.length - 1]}
-                />
-              </div>
-            )
-          )}
+          searchPatientResult?.searchPatient.patients?.map((patient, index) => (
+            <div key={index} className="btn-menu rounded-none">
+              <NameTag
+                id={patient.id}
+                gender={patient.gender}
+                name={patient.name}
+                registrationNumber={patient.registrationNumber}
+                birthday={patient.birthday}
+                canClick
+                clinicName={patient.clinic?.name ?? ""}
+                user={patient.users[patient.users.length - 1]}
+              />
+            </div>
+          ))}
         {!selectedPatient && !searchPatientResult ? (
           <p className="text-center">
             환자 목록
@@ -102,7 +100,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
             검색하면 나타납니다
           </p>
         ) : (
-          searchPatientResult?.searchPatientByName.patients?.length === 0 && (
+          searchPatientResult?.searchPatient.patients?.length === 0 && (
             <p className="text-center ">검색결과가 없습니다.</p>
           )
         )}
@@ -127,24 +125,24 @@ export const SearchPatient = ({}: SearchPatientProps) => {
       </div>
       <div className="page-list mt-1 h-1 space-x-4 text-center">
         {searchPatientResult
-          ? pageNumbers(
-              searchPatientResult.searchPatientByName.totalPages ?? 0
-            ).map((pageNumber) => (
-              <button
-                key={pageNumber}
-                className={`appearance-none px-1 focus:rounded-sm focus:outline-none focus:ring-1 focus:ring-green-500 ${
-                  queryPageNumber === pageNumber + 1
-                    ? "font-bold text-red-500"
-                    : ""
-                }`}
-                onClick={() => {
-                  selectedPatientVar(null);
-                  setQueryPageNumber(pageNumber + 1);
-                }}
-              >
-                {pageNumber + 1}
-              </button>
-            ))
+          ? pageNumbers(searchPatientResult.searchPatient.totalPages ?? 0).map(
+              (pageNumber) => (
+                <button
+                  key={pageNumber}
+                  className={`appearance-none px-1 focus:rounded-sm focus:outline-none focus:ring-1 focus:ring-green-500 ${
+                    queryPageNumber === pageNumber + 1
+                      ? "font-bold text-red-500"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    selectedPatientVar(null);
+                    setQueryPageNumber(pageNumber + 1);
+                  }}
+                >
+                  {pageNumber + 1}
+                </button>
+              )
+            )
           : ""}
       </div>
     </form>

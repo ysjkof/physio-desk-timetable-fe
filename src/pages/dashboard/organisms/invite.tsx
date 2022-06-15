@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { InDashboardPageProps } from "..";
 import {
-  SearchUsersByNameInput,
+  SearchUsersInput,
   useInviteClinicMutation,
-  useSearchUsersByNameLazyQuery,
+  useSearchUsersLazyQuery,
 } from "../../../graphql/generated/graphql";
 import { cls } from "../../../libs/utils";
 import { selectedClinicVar } from "../../../store";
@@ -23,9 +23,9 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
   if (!isStayed || !isManager) {
     return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
   }
-  const { register, handleSubmit, getValues } = useForm<SearchUsersByNameInput>(
-    { mode: "onChange" }
-  );
+  const { register, handleSubmit, getValues } = useForm<SearchUsersInput>({
+    mode: "onChange",
+  });
 
   const [inviteClinicMutation, { loading: inviteClinicLoading }] =
     useInviteClinicMutation();
@@ -47,21 +47,21 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
   }
 
   const [
-    searchUsersByName,
-    { data: searchUsersByNameData, loading: searchUserByNameLoading },
-  ] = useSearchUsersByNameLazyQuery();
+    searchUsers,
+    { data: searchUsersData, loading: searchUserByNameLoading },
+  ] = useSearchUsersLazyQuery();
 
-  const onSubmitSearchUsersByName = () => {
+  const onSubmitSearchUsers = () => {
     if (!searchUserByNameLoading) {
       const { name } = getValues();
-      searchUsersByName({
+      searchUsers({
         variables: {
           input: { name },
         },
       });
     }
   };
-  const searchUserResults = searchUsersByNameData?.searchUsersByName.results;
+  const searchUserResults = searchUsersData?.searchUsers.results;
 
   return (
     <DashboardSectionLayout
@@ -70,7 +70,7 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
       heightFull
       children={
         <>
-          <form onSubmit={handleSubmit(onSubmitSearchUsersByName)}>
+          <form onSubmit={handleSubmit(onSubmitSearchUsers)}>
             <div className="relative flex items-center shadow-sm">
               <input
                 {...register("name", {

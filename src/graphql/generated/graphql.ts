@@ -209,17 +209,6 @@ export type FindAtomPrescriptionsOutput = {
   results?: Maybe<Array<PrescriptionAtom>>;
 };
 
-export type FindClinicByIdInput = {
-  clinicId: Scalars['Int'];
-};
-
-export type FindClinicByIdOutput = {
-  __typename?: 'FindClinicByIdOutput';
-  clinic?: Maybe<Clinic>;
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-};
-
 export type FindMyClinicsInput = {
   includeInactivate?: InputMaybe<Scalars['Boolean']>;
 };
@@ -229,17 +218,6 @@ export type FindMyClinicsOutput = {
   clinics?: Maybe<Array<Clinic>>;
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-};
-
-export type FindPatientByIdInput = {
-  patientId: Scalars['Int'];
-};
-
-export type FindPatientByIdOutput = {
-  __typename?: 'FindPatientByIdOutput';
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-  patient?: Maybe<Patient>;
 };
 
 export type FindPrescriptionsInput = {
@@ -252,18 +230,6 @@ export type FindPrescriptionsOutput = {
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
   prescriptions?: Maybe<Array<Prescription>>;
-};
-
-export type FindReservationByIdInput = {
-  clinicId?: InputMaybe<Scalars['Int']>;
-  reservationId: Scalars['Int'];
-};
-
-export type FindReservationByIdOutput = {
-  __typename?: 'FindReservationByIdOutput';
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-  reservation?: Maybe<Reservation>;
 };
 
 export type FindReservationByPatientInput = {
@@ -281,6 +247,40 @@ export type FindReservationByPatientOutput = {
   totalPages?: Maybe<Scalars['Int']>;
 };
 
+export type GetClinicInput = {
+  clinicId: Scalars['Int'];
+};
+
+export type GetClinicOutput = {
+  __typename?: 'GetClinicOutput';
+  clinic?: Maybe<Clinic>;
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
+export type GetPatientInput = {
+  patientId: Scalars['Int'];
+};
+
+export type GetPatientOutput = {
+  __typename?: 'GetPatientOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  patient?: Maybe<Patient>;
+};
+
+export type GetReservationInput = {
+  clinicId?: InputMaybe<Scalars['Int']>;
+  reservationId: Scalars['Int'];
+};
+
+export type GetReservationOutput = {
+  __typename?: 'GetReservationOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  reservation?: Maybe<Reservation>;
+};
+
 export type GetStatisticsInput = {
   clinicId?: InputMaybe<Scalars['Int']>;
   endDate: Scalars['DateTime'];
@@ -295,6 +295,13 @@ export type GetStatisticsOutput = {
   ok: Scalars['Boolean'];
   prescriptionInfo?: Maybe<Array<PrescriptionInfo>>;
   results?: Maybe<Array<StatisticsRsult>>;
+};
+
+export type GetUserOutput = {
+  __typename?: 'GetUserOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  user?: Maybe<User>;
 };
 
 export type InactivateClinicInput = {
@@ -540,18 +547,18 @@ export type Query = {
   __typename?: 'Query';
   findAllPatients: FindAllPatientsOutput;
   findAtomPrescriptions: FindAtomPrescriptionsOutput;
-  findClinicById: FindClinicByIdOutput;
   findMyClinics: FindMyClinicsOutput;
-  findPatientById: FindPatientByIdOutput;
   findPrescriptions: FindPrescriptionsOutput;
-  findReservationById: FindReservationByIdOutput;
   findReservationByPatient: FindReservationByPatientOutput;
+  getClinic: GetClinicOutput;
+  getPatient: GetPatientOutput;
+  getReservation: GetReservationOutput;
   getStatistics: GetStatisticsOutput;
   listReservations: ListReservationsOutput;
   me: User;
-  searchPatientByName: SearchPatientOutput;
-  searchUsersByName: SearchUsersByNameOutput;
-  userProfile: UserProfileOutput;
+  searchPatient: SearchPatientOutput;
+  searchUsers: SearchUsersOutput;
+  userProfile: GetUserOutput;
 };
 
 
@@ -560,18 +567,8 @@ export type QueryFindAllPatientsArgs = {
 };
 
 
-export type QueryFindClinicByIdArgs = {
-  input: FindClinicByIdInput;
-};
-
-
 export type QueryFindMyClinicsArgs = {
   input: FindMyClinicsInput;
-};
-
-
-export type QueryFindPatientByIdArgs = {
-  input: FindPatientByIdInput;
 };
 
 
@@ -580,13 +577,23 @@ export type QueryFindPrescriptionsArgs = {
 };
 
 
-export type QueryFindReservationByIdArgs = {
-  input: FindReservationByIdInput;
+export type QueryFindReservationByPatientArgs = {
+  input: FindReservationByPatientInput;
 };
 
 
-export type QueryFindReservationByPatientArgs = {
-  input: FindReservationByPatientInput;
+export type QueryGetClinicArgs = {
+  input: GetClinicInput;
+};
+
+
+export type QueryGetPatientArgs = {
+  input: GetPatientInput;
+};
+
+
+export type QueryGetReservationArgs = {
+  input: GetReservationInput;
 };
 
 
@@ -600,18 +607,18 @@ export type QueryListReservationsArgs = {
 };
 
 
-export type QuerySearchPatientByNameArgs = {
+export type QuerySearchPatientArgs = {
   input: SearchPatientInput;
 };
 
 
-export type QuerySearchUsersByNameArgs = {
-  input: SearchUsersByNameInput;
+export type QuerySearchUsersArgs = {
+  input: SearchUsersInput;
 };
 
 
 export type QueryUserProfileArgs = {
-  userId: Scalars['Float'];
+  id: Scalars['Float'];
 };
 
 export type Reservation = {
@@ -652,12 +659,12 @@ export type SearchPatientOutput = {
   totalPages?: Maybe<Scalars['Int']>;
 };
 
-export type SearchUsersByNameInput = {
+export type SearchUsersInput = {
   name: Scalars['String'];
 };
 
-export type SearchUsersByNameOutput = {
-  __typename?: 'SearchUsersByNameOutput';
+export type SearchUsersOutput = {
+  __typename?: 'SearchUsersOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
   results?: Maybe<Array<User>>;
@@ -683,13 +690,6 @@ export type User = {
   role: UserRole;
   updatedAt?: Maybe<Scalars['DateTime']>;
   verified: Scalars['Boolean'];
-};
-
-export type UserProfileOutput = {
-  __typename?: 'UserProfileOutput';
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-  user?: Maybe<User>;
 };
 
 export enum UserRole {
@@ -791,13 +791,6 @@ export type FindAtomPrescriptionsQueryVariables = Exact<{ [key: string]: never; 
 
 export type FindAtomPrescriptionsQuery = { __typename?: 'Query', findAtomPrescriptions: { __typename?: 'FindAtomPrescriptionsOutput', ok: boolean, error?: string | null, results?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null } };
 
-export type FindClinicByIdQueryVariables = Exact<{
-  input: FindClinicByIdInput;
-}>;
-
-
-export type FindClinicByIdQuery = { __typename?: 'Query', findClinicById: { __typename?: 'FindClinicByIdOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, members: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
-
 export type FindMyClinicsQueryVariables = Exact<{
   input: FindMyClinicsInput;
 }>;
@@ -812,12 +805,26 @@ export type FindPrescriptionsQueryVariables = Exact<{
 
 export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate: boolean, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
 
-export type FindReservationByIdQueryVariables = Exact<{
-  input: FindReservationByIdInput;
+export type GetClinicQueryVariables = Exact<{
+  input: GetClinicInput;
 }>;
 
 
-export type FindReservationByIdQuery = { __typename?: 'Query', findReservationById: { __typename?: 'FindReservationByIdOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string, email: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, lastModifier?: { __typename?: 'User', id: number, name: string, email: string } | null } | null } };
+export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, members: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+
+export type GetPatientQueryVariables = Exact<{
+  input: GetPatientInput;
+}>;
+
+
+export type GetPatientQuery = { __typename?: 'Query', getPatient: { __typename?: 'GetPatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
+
+export type GetReservationQueryVariables = Exact<{
+  input: GetReservationInput;
+}>;
+
+
+export type GetReservationQuery = { __typename?: 'Query', getReservation: { __typename?: 'GetReservationOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string, email: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, lastModifier?: { __typename?: 'User', id: number, name: string, email: string } | null } | null } };
 
 export type GetStatisticsQueryVariables = Exact<{
   input: GetStatisticsInput;
@@ -859,26 +866,19 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, members?: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, clinic: { __typename?: 'Clinic', id: number, name: string, isActivated: boolean } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
 
-export type SearchPatientByNameQueryVariables = Exact<{
+export type SearchPatientQueryVariables = Exact<{
   input: SearchPatientInput;
 }>;
 
 
-export type SearchPatientByNameQuery = { __typename?: 'Query', searchPatientByName: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, users: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
+export type SearchPatientQuery = { __typename?: 'Query', searchPatient: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, users: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
 
-export type FindPatientByIdQueryVariables = Exact<{
-  input: FindPatientByIdInput;
+export type SearchUsersQueryVariables = Exact<{
+  input: SearchUsersInput;
 }>;
 
 
-export type FindPatientByIdQuery = { __typename?: 'Query', findPatientById: { __typename?: 'FindPatientByIdOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
-
-export type SearchUsersByNameQueryVariables = Exact<{
-  input: SearchUsersByNameInput;
-}>;
-
-
-export type SearchUsersByNameQuery = { __typename?: 'Query', searchUsersByName: { __typename?: 'SearchUsersByNameOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'User', id: number, name: string, email: string }> | null } };
+export type SearchUsersQuery = { __typename?: 'Query', searchUsers: { __typename?: 'SearchUsersOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'User', id: number, name: string, email: string }> | null } };
 
 export type VerifyEmailMutationVariables = Exact<{
   input: VerifyEmailInput;
@@ -1323,57 +1323,6 @@ export function useFindAtomPrescriptionsLazyQuery(baseOptions?: Apollo.LazyQuery
 export type FindAtomPrescriptionsQueryHookResult = ReturnType<typeof useFindAtomPrescriptionsQuery>;
 export type FindAtomPrescriptionsLazyQueryHookResult = ReturnType<typeof useFindAtomPrescriptionsLazyQuery>;
 export type FindAtomPrescriptionsQueryResult = Apollo.QueryResult<FindAtomPrescriptionsQuery, FindAtomPrescriptionsQueryVariables>;
-export const FindClinicByIdDocument = gql`
-    query findClinicById($input: FindClinicByIdInput!) {
-  findClinicById(input: $input) {
-    ok
-    error
-    clinic {
-      id
-      name
-      members {
-        id
-        staying
-        manager
-        accepted
-        user {
-          id
-          name
-          email
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useFindClinicByIdQuery__
- *
- * To run a query within a React component, call `useFindClinicByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindClinicByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindClinicByIdQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFindClinicByIdQuery(baseOptions: Apollo.QueryHookOptions<FindClinicByIdQuery, FindClinicByIdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FindClinicByIdQuery, FindClinicByIdQueryVariables>(FindClinicByIdDocument, options);
-      }
-export function useFindClinicByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindClinicByIdQuery, FindClinicByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FindClinicByIdQuery, FindClinicByIdQueryVariables>(FindClinicByIdDocument, options);
-        }
-export type FindClinicByIdQueryHookResult = ReturnType<typeof useFindClinicByIdQuery>;
-export type FindClinicByIdLazyQueryHookResult = ReturnType<typeof useFindClinicByIdLazyQuery>;
-export type FindClinicByIdQueryResult = Apollo.QueryResult<FindClinicByIdQuery, FindClinicByIdQueryVariables>;
 export const FindMyClinicsDocument = gql`
     query findMyClinics($input: FindMyClinicsInput!) {
   findMyClinics(input: $input) {
@@ -1477,9 +1426,104 @@ export function useFindPrescriptionsLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type FindPrescriptionsQueryHookResult = ReturnType<typeof useFindPrescriptionsQuery>;
 export type FindPrescriptionsLazyQueryHookResult = ReturnType<typeof useFindPrescriptionsLazyQuery>;
 export type FindPrescriptionsQueryResult = Apollo.QueryResult<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>;
-export const FindReservationByIdDocument = gql`
-    query findReservationById($input: FindReservationByIdInput!) {
-  findReservationById(input: $input) {
+export const GetClinicDocument = gql`
+    query getClinic($input: GetClinicInput!) {
+  getClinic(input: $input) {
+    ok
+    error
+    clinic {
+      id
+      name
+      members {
+        id
+        staying
+        manager
+        accepted
+        user {
+          id
+          name
+          email
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetClinicQuery__
+ *
+ * To run a query within a React component, call `useGetClinicQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClinicQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClinicQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetClinicQuery(baseOptions: Apollo.QueryHookOptions<GetClinicQuery, GetClinicQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetClinicQuery, GetClinicQueryVariables>(GetClinicDocument, options);
+      }
+export function useGetClinicLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClinicQuery, GetClinicQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetClinicQuery, GetClinicQueryVariables>(GetClinicDocument, options);
+        }
+export type GetClinicQueryHookResult = ReturnType<typeof useGetClinicQuery>;
+export type GetClinicLazyQueryHookResult = ReturnType<typeof useGetClinicLazyQuery>;
+export type GetClinicQueryResult = Apollo.QueryResult<GetClinicQuery, GetClinicQueryVariables>;
+export const GetPatientDocument = gql`
+    query getPatient($input: GetPatientInput!) {
+  getPatient(input: $input) {
+    ok
+    error
+    patient {
+      id
+      name
+      gender
+      registrationNumber
+      birthday
+      memo
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPatientQuery__
+ *
+ * To run a query within a React component, call `useGetPatientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPatientQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPatientQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetPatientQuery(baseOptions: Apollo.QueryHookOptions<GetPatientQuery, GetPatientQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPatientQuery, GetPatientQueryVariables>(GetPatientDocument, options);
+      }
+export function useGetPatientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPatientQuery, GetPatientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPatientQuery, GetPatientQueryVariables>(GetPatientDocument, options);
+        }
+export type GetPatientQueryHookResult = ReturnType<typeof useGetPatientQuery>;
+export type GetPatientLazyQueryHookResult = ReturnType<typeof useGetPatientLazyQuery>;
+export type GetPatientQueryResult = Apollo.QueryResult<GetPatientQuery, GetPatientQueryVariables>;
+export const GetReservationDocument = gql`
+    query getReservation($input: GetReservationInput!) {
+  getReservation(input: $input) {
     error
     ok
     reservation {
@@ -1515,32 +1559,32 @@ export const FindReservationByIdDocument = gql`
     `;
 
 /**
- * __useFindReservationByIdQuery__
+ * __useGetReservationQuery__
  *
- * To run a query within a React component, call `useFindReservationByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindReservationByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetReservationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReservationQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindReservationByIdQuery({
+ * const { data, loading, error } = useGetReservationQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useFindReservationByIdQuery(baseOptions: Apollo.QueryHookOptions<FindReservationByIdQuery, FindReservationByIdQueryVariables>) {
+export function useGetReservationQuery(baseOptions: Apollo.QueryHookOptions<GetReservationQuery, GetReservationQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FindReservationByIdQuery, FindReservationByIdQueryVariables>(FindReservationByIdDocument, options);
+        return Apollo.useQuery<GetReservationQuery, GetReservationQueryVariables>(GetReservationDocument, options);
       }
-export function useFindReservationByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindReservationByIdQuery, FindReservationByIdQueryVariables>) {
+export function useGetReservationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReservationQuery, GetReservationQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FindReservationByIdQuery, FindReservationByIdQueryVariables>(FindReservationByIdDocument, options);
+          return Apollo.useLazyQuery<GetReservationQuery, GetReservationQueryVariables>(GetReservationDocument, options);
         }
-export type FindReservationByIdQueryHookResult = ReturnType<typeof useFindReservationByIdQuery>;
-export type FindReservationByIdLazyQueryHookResult = ReturnType<typeof useFindReservationByIdLazyQuery>;
-export type FindReservationByIdQueryResult = Apollo.QueryResult<FindReservationByIdQuery, FindReservationByIdQueryVariables>;
+export type GetReservationQueryHookResult = ReturnType<typeof useGetReservationQuery>;
+export type GetReservationLazyQueryHookResult = ReturnType<typeof useGetReservationLazyQuery>;
+export type GetReservationQueryResult = Apollo.QueryResult<GetReservationQuery, GetReservationQueryVariables>;
 export const GetStatisticsDocument = gql`
     query getStatistics($input: GetStatisticsInput!) {
   getStatistics(input: $input) {
@@ -1840,9 +1884,9 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
-export const SearchPatientByNameDocument = gql`
-    query searchPatientByName($input: SearchPatientInput!) {
-  searchPatientByName(input: $input) {
+export const SearchPatientDocument = gql`
+    query searchPatient($input: SearchPatientInput!) {
+  searchPatient(input: $input) {
     error
     ok
     totalPages
@@ -1867,79 +1911,35 @@ export const SearchPatientByNameDocument = gql`
     `;
 
 /**
- * __useSearchPatientByNameQuery__
+ * __useSearchPatientQuery__
  *
- * To run a query within a React component, call `useSearchPatientByNameQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchPatientByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchPatientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchPatientQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchPatientByNameQuery({
+ * const { data, loading, error } = useSearchPatientQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useSearchPatientByNameQuery(baseOptions: Apollo.QueryHookOptions<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>) {
+export function useSearchPatientQuery(baseOptions: Apollo.QueryHookOptions<SearchPatientQuery, SearchPatientQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>(SearchPatientByNameDocument, options);
+        return Apollo.useQuery<SearchPatientQuery, SearchPatientQueryVariables>(SearchPatientDocument, options);
       }
-export function useSearchPatientByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>) {
+export function useSearchPatientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPatientQuery, SearchPatientQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>(SearchPatientByNameDocument, options);
+          return Apollo.useLazyQuery<SearchPatientQuery, SearchPatientQueryVariables>(SearchPatientDocument, options);
         }
-export type SearchPatientByNameQueryHookResult = ReturnType<typeof useSearchPatientByNameQuery>;
-export type SearchPatientByNameLazyQueryHookResult = ReturnType<typeof useSearchPatientByNameLazyQuery>;
-export type SearchPatientByNameQueryResult = Apollo.QueryResult<SearchPatientByNameQuery, SearchPatientByNameQueryVariables>;
-export const FindPatientByIdDocument = gql`
-    query findPatientById($input: FindPatientByIdInput!) {
-  findPatientById(input: $input) {
-    ok
-    error
-    patient {
-      id
-      name
-      gender
-      registrationNumber
-      birthday
-      memo
-    }
-  }
-}
-    `;
-
-/**
- * __useFindPatientByIdQuery__
- *
- * To run a query within a React component, call `useFindPatientByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindPatientByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindPatientByIdQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFindPatientByIdQuery(baseOptions: Apollo.QueryHookOptions<FindPatientByIdQuery, FindPatientByIdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FindPatientByIdQuery, FindPatientByIdQueryVariables>(FindPatientByIdDocument, options);
-      }
-export function useFindPatientByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindPatientByIdQuery, FindPatientByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FindPatientByIdQuery, FindPatientByIdQueryVariables>(FindPatientByIdDocument, options);
-        }
-export type FindPatientByIdQueryHookResult = ReturnType<typeof useFindPatientByIdQuery>;
-export type FindPatientByIdLazyQueryHookResult = ReturnType<typeof useFindPatientByIdLazyQuery>;
-export type FindPatientByIdQueryResult = Apollo.QueryResult<FindPatientByIdQuery, FindPatientByIdQueryVariables>;
-export const SearchUsersByNameDocument = gql`
-    query searchUsersByName($input: SearchUsersByNameInput!) {
-  searchUsersByName(input: $input) {
+export type SearchPatientQueryHookResult = ReturnType<typeof useSearchPatientQuery>;
+export type SearchPatientLazyQueryHookResult = ReturnType<typeof useSearchPatientLazyQuery>;
+export type SearchPatientQueryResult = Apollo.QueryResult<SearchPatientQuery, SearchPatientQueryVariables>;
+export const SearchUsersDocument = gql`
+    query searchUsers($input: SearchUsersInput!) {
+  searchUsers(input: $input) {
     ok
     error
     totalCount
@@ -1953,32 +1953,32 @@ export const SearchUsersByNameDocument = gql`
     `;
 
 /**
- * __useSearchUsersByNameQuery__
+ * __useSearchUsersQuery__
  *
- * To run a query within a React component, call `useSearchUsersByNameQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchUsersByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSearchUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchUsersByNameQuery({
+ * const { data, loading, error } = useSearchUsersQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useSearchUsersByNameQuery(baseOptions: Apollo.QueryHookOptions<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>) {
+export function useSearchUsersQuery(baseOptions: Apollo.QueryHookOptions<SearchUsersQuery, SearchUsersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>(SearchUsersByNameDocument, options);
+        return Apollo.useQuery<SearchUsersQuery, SearchUsersQueryVariables>(SearchUsersDocument, options);
       }
-export function useSearchUsersByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>) {
+export function useSearchUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchUsersQuery, SearchUsersQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>(SearchUsersByNameDocument, options);
+          return Apollo.useLazyQuery<SearchUsersQuery, SearchUsersQueryVariables>(SearchUsersDocument, options);
         }
-export type SearchUsersByNameQueryHookResult = ReturnType<typeof useSearchUsersByNameQuery>;
-export type SearchUsersByNameLazyQueryHookResult = ReturnType<typeof useSearchUsersByNameLazyQuery>;
-export type SearchUsersByNameQueryResult = Apollo.QueryResult<SearchUsersByNameQuery, SearchUsersByNameQueryVariables>;
+export type SearchUsersQueryHookResult = ReturnType<typeof useSearchUsersQuery>;
+export type SearchUsersLazyQueryHookResult = ReturnType<typeof useSearchUsersLazyQuery>;
+export type SearchUsersQueryResult = Apollo.QueryResult<SearchUsersQuery, SearchUsersQueryVariables>;
 export const VerifyEmailDocument = gql`
     mutation verifyEmail($input: VerifyEmailInput!) {
   verifyEmail(input: $input) {

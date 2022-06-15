@@ -1,5 +1,5 @@
-query findReservationById($input: FindReservationByIdInput!) {
-  findReservationById(input: $input) {
+query getReservation($input: GetReservationInput!) {
+  getReservation(input: $input) {
     error
     ok
     reservation {

@@ -2,12 +2,12 @@ import { Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SearchName } from "../../components/search-name";
-import { useSearchPatientByNameLazyQuery } from "../../graphql/generated/graphql";
+import { useSearchPatientLazyQuery } from "../../graphql/generated/graphql";
 
 export const Search = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [callQuery, { loading, data }] = useSearchPatientByNameLazyQuery();
+  const [callQuery, { loading, data }] = useSearchPatientLazyQuery();
 
   const onClick = (patientId: number) => {
     navigate("/patient", {
@@ -31,14 +31,14 @@ export const Search = () => {
         <title>검색 | Muool</title>
       </Helmet>
       {loading && <p>loading ...</p>}
-      {!loading && data?.searchPatientByName.patients?.length === 0 ? (
+      {!loading && data?.searchPatient.patients?.length === 0 ? (
         <div className="container py-20 px-10">
           <p>검색결과가 없습니다</p>
         </div>
       ) : (
         <div className="container mx-auto divide-y">
           <h1 className="font-bold">검색 결과</h1>
-          {data?.searchPatientByName.patients?.map((patient) => (
+          {data?.searchPatient.patients?.map((patient) => (
             <Fragment key={patient.id}>
               <SearchName
                 id={patient.id}
