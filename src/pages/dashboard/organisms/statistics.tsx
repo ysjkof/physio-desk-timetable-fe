@@ -240,24 +240,46 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
     if (data?.getStatistics.ok) {
       const { prescriptionInfo, results } = data.getStatistics;
-      function makeFrame(): UserStatis[] {
+      function makeUserStatisFrame(): UserStatis[] {
         if (results && prescriptionInfo) {
-          return results.map((result) => ({
-            name: result.userName,
-            prescriptions: prescriptionInfo.map((prescription) => ({
-              ...prescription,
-              reservedCount: 0,
-              cancelCount: 0,
-              noshowCount: 0,
-              firstReservationCount: 0,
-            })),
+          if (!memberState)
+            throw new Error(
+              "getStatisticsLzq > onCompleted > makeFrame > memberState is undefined"
+            );
+          const filterMember = memberState.filter(
+            (member) => member.isSelected
+          );
+          const userFrame = filterMember.map((member) => ({
+            name: member.name,
           }));
+          const prescriptions = prescriptionInfo.map((prescription) => ({
+            ...prescription,
+            reservedCount: 0,
+            cancelCount: 0,
+            noshowCount: 0,
+            firstReservationCount: 0,
+          }));
+          return userFrame.map((user) => {
+            const existUser = results.find(
+              (member) => member.userName === user.name
+            );
+            if (existUser) {
+              return {
+                name: existUser.userName,
+                prescriptions: [...prescriptions],
+              };
+            }
+            return {
+              name: user.name,
+              prescriptions: [...prescriptions],
+            };
+          });
         }
         throw new Error(
           "getStatisticsLzq > onCompleted > makeFrame > results || prescriptionInfo false"
         );
       }
-      const userStatisFrame = makeFrame();
+      const userStatisFrame = makeUserStatisFrame();
 
       function injectCount() {
         return userStatisFrame.map((user, i) => {
@@ -344,12 +366,6 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
     }
   }, [data]);
 
-  console.log(
-    userStatis?.map((a) =>
-      a.prescriptions.map((d) => [d.name, d.firstReservationCount])
-    )
-  );
-  console.log(prescriptionsStatis);
   return (
     <>
       <DashboardSectionLayout

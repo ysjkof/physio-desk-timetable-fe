@@ -33,30 +33,36 @@ export const TableChartColLayout = ({
                 textContents={name}
               />
             ))}
-            {hasLabelTotal && (
+            {hasLabelTotal ? (
               <DashboardLi borderTop textCenter textContents={"합계"} />
+            ) : (
+              ""
             )}
           </>
         }
       />
 
-      {individualData.map((data) => (
+      {individualData.map((data, idx) => (
         <TableChartCol
+          key={idx}
           title={data.name}
           children={
             <>
               {data.counts.map((count, i) => (
                 <DashboardLi
+                  key={i}
                   textContents={
                     i === 1 ? count.toLocaleString() : count.toLocaleString()
                   }
                 />
               ))}
-              {data.countTotal && (
+              {typeof data.countTotal === "number" ? (
                 <DashboardLi
                   borderTop
                   textContents={data.countTotal.toLocaleString()}
                 />
+              ) : (
+                ""
               )}
             </>
           }
@@ -68,14 +74,19 @@ export const TableChartColLayout = ({
           title="합계"
           children={
             <>
-              {counts.map((totalCount) => (
-                <DashboardLi textContents={totalCount.toLocaleString()} />
+              {counts.map((totalCount, i) => (
+                <DashboardLi
+                  key={i}
+                  textContents={totalCount.toLocaleString()}
+                />
               ))}
-              {countTotal && (
+              {countTotal ? (
                 <DashboardLi
                   borderTop
                   textContents={countTotal.toLocaleString()}
                 />
+              ) : (
+                ""
               )}
             </>
           }
