@@ -23,18 +23,17 @@ export function getDateFromYMDHM(
   startDateHours?: number,
   startDateMinutes?: number
 ) {
-  const ymd = `${startDateYear}-${String(startDateMonth).padStart(
-    2,
-    "0"
-  )}-${String(startDateDate).padStart(2, "0")}`;
+  const MM = String(startDateMonth).padStart(2, "0");
+  const DD = String(startDateDate).padStart(2, "0");
+  const ymd = `${startDateYear}-${MM}-${DD}`;
   let hms = `T00:00:00.000`;
   if (
     typeof startDateHours === "number" &&
     typeof startDateMinutes === "number"
   ) {
-    hms = `T${String(startDateHours).padStart(2, "0")}:${String(
-      startDateMinutes
-    ).padStart(2, "0")}:00.000`;
+    const HH = String(startDateHours).padStart(2, "0");
+    const MM = String(startDateMinutes).padStart(2, "0");
+    hms = `T${HH}:${MM}:00.000`;
   }
   return new Date(ymd + hms);
 }
