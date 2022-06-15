@@ -12,7 +12,6 @@ import { TimeTable } from "./pages/timetable";
 import { CreateAccount } from "./pages/todoArrange/create-account";
 import { Login } from "./pages/todoArrange/login";
 import { Search } from "./pages/todoArrange/search";
-import { PateintDetail } from "./pages/todoArrange/patient-detail";
 import { ListPatient } from "./pages/todoArrange/list-patient";
 import { Dashboard } from "./pages/dashboard";
 
@@ -34,7 +33,6 @@ function App() {
             </Route>
             <Route path="list-patient" element={<ListPatient />} />
             <Route path="search" element={<Search />} />
-            <Route path="patient" element={<PateintDetail />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="test" element={<Test />} />
           </>
