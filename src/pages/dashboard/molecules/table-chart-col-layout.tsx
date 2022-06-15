@@ -4,7 +4,11 @@ import { TableChartCol } from "./table-chart-col";
 interface TableChartColLayoutProps {
   labelNames: string[];
   hasLabelTotal?: boolean;
-  individualData: { name: string; counts: number[]; countTotal?: number }[];
+  individualData: {
+    name: string;
+    counts: number[];
+    countTotal?: number;
+  }[];
   countTotal?: number;
   counts: number[];
 }
@@ -19,7 +23,6 @@ export const TableChartColLayout = ({
     <div className="TABLE_CHART_COL_LAYOUT flex px-4">
       <TableChartCol
         title="이름"
-        titleBorderRight
         children={
           <>
             {labelNames.map((name, idx) => (
@@ -44,11 +47,16 @@ export const TableChartColLayout = ({
             <>
               {data.counts.map((count, i) => (
                 <DashboardLi
-                  textContents={i === 1 ? `${count}명` : `${count}번`}
+                  textContents={
+                    i === 1 ? count.toLocaleString() : count.toLocaleString()
+                  }
                 />
               ))}
               {data.countTotal && (
-                <DashboardLi borderTop textContents={`${data.countTotal}번`} />
+                <DashboardLi
+                  borderTop
+                  textContents={data.countTotal.toLocaleString()}
+                />
               )}
             </>
           }
@@ -61,10 +69,13 @@ export const TableChartColLayout = ({
           children={
             <>
               {counts.map((totalCount) => (
-                <DashboardLi textContents={`${totalCount}번`} />
+                <DashboardLi textContents={totalCount.toLocaleString()} />
               ))}
               {countTotal && (
-                <DashboardLi borderTop textContents={`${countTotal}번`} />
+                <DashboardLi
+                  borderTop
+                  textContents={countTotal.toLocaleString()}
+                />
               )}
             </>
           }
