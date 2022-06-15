@@ -270,7 +270,6 @@ export type GetPatientOutput = {
 };
 
 export type GetReservationInput = {
-  clinicId?: InputMaybe<Scalars['Int']>;
   reservationId: Scalars['Int'];
 };
 
@@ -819,13 +818,6 @@ export type GetPatientQueryVariables = Exact<{
 
 export type GetPatientQuery = { __typename?: 'Query', getPatient: { __typename?: 'GetPatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
 
-export type GetReservationQueryVariables = Exact<{
-  input: GetReservationInput;
-}>;
-
-
-export type GetReservationQuery = { __typename?: 'Query', getReservation: { __typename?: 'GetReservationOutput', error?: string | null, ok: boolean, reservation?: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string, email: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, lastModifier?: { __typename?: 'User', id: number, name: string, email: string } | null } | null } };
-
 export type GetStatisticsQueryVariables = Exact<{
   input: GetStatisticsInput;
 }>;
@@ -852,7 +844,7 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, prescriptions?: Array<{ __typename?: 'Prescription', name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, prescriptions?: Array<{ __typename?: 'Prescription', name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -1521,70 +1513,6 @@ export function useGetPatientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetPatientQueryHookResult = ReturnType<typeof useGetPatientQuery>;
 export type GetPatientLazyQueryHookResult = ReturnType<typeof useGetPatientLazyQuery>;
 export type GetPatientQueryResult = Apollo.QueryResult<GetPatientQuery, GetPatientQueryVariables>;
-export const GetReservationDocument = gql`
-    query getReservation($input: GetReservationInput!) {
-  getReservation(input: $input) {
-    error
-    ok
-    reservation {
-      id
-      startDate
-      endDate
-      state
-      memo
-      user {
-        id
-        name
-        email
-      }
-      patient {
-        id
-        name
-        gender
-        registrationNumber
-        birthday
-      }
-      clinic {
-        id
-        name
-      }
-      lastModifier {
-        id
-        name
-        email
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetReservationQuery__
- *
- * To run a query within a React component, call `useGetReservationQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetReservationQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetReservationQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useGetReservationQuery(baseOptions: Apollo.QueryHookOptions<GetReservationQuery, GetReservationQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetReservationQuery, GetReservationQueryVariables>(GetReservationDocument, options);
-      }
-export function useGetReservationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReservationQuery, GetReservationQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetReservationQuery, GetReservationQueryVariables>(GetReservationDocument, options);
-        }
-export type GetReservationQueryHookResult = ReturnType<typeof useGetReservationQuery>;
-export type GetReservationLazyQueryHookResult = ReturnType<typeof useGetReservationLazyQuery>;
-export type GetReservationQueryResult = Apollo.QueryResult<GetReservationQuery, GetReservationQueryVariables>;
 export const GetStatisticsDocument = gql`
     query getStatistics($input: GetStatisticsInput!) {
   getStatistics(input: $input) {
@@ -1738,6 +1666,7 @@ export const ListReservationsDocument = gql`
       endDate
       state
       memo
+      isFirst
       user {
         id
         name
@@ -1748,6 +1677,7 @@ export const ListReservationsDocument = gql`
         gender
         registrationNumber
         birthday
+        memo
       }
       lastModifier {
         id
