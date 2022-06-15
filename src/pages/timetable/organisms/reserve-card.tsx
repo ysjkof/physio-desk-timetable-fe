@@ -149,7 +149,9 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
   }
 
   const onSubmit = () => {
+    console.log("onSubmit 시작");
     if (!loading && selectedPatient?.id) {
+      console.log("onSubmit if 통과");
       const {
         startDateYear,
         startDateMonth,
@@ -160,37 +162,38 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
         userId,
       } = getValues();
       if (
-        !startDateYear ||
-        !startDateMonth ||
-        !startDateDate ||
-        !startDateHours ||
-        !startDateMinutes
-      )
-        return console.error("input value undefined");
-      const startDate = getDateFromYMDHM(
-        startDateYear,
-        startDateMonth,
-        startDateDate,
-        startDateHours,
-        startDateMinutes
-      );
-      const endDate = new Date(startDate);
-      // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-      endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
-      createDummyReserve(userId);
-      // createReservationMutation({
-      //   variables: {
-      //     input: {
-      //       startDate: startDate,
-      //       endDate,
-      //       memo,
-      //       patientId: selectedPatient.id,
-      //       userId: +userId!,
-      //       clinicId: selectedClinic?.id,
-      //       prescriptionIds: selectedPrescription.prescriptions,
-      //     },
-      //   },
-      // });
+        startDateYear !== undefined &&
+        startDateMonth !== undefined &&
+        startDateDate !== undefined &&
+        startDateHours !== undefined &&
+        startDateMinutes !== undefined
+      ) {
+        const startDate = getDateFromYMDHM(
+          startDateYear,
+          startDateMonth,
+          startDateDate,
+          startDateHours,
+          startDateMinutes
+        );
+        const endDate = new Date(startDate);
+        // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
+        endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
+        // createDummyReserve(userId);
+        createReservationMutation({
+          variables: {
+            input: {
+              startDate: startDate,
+              endDate,
+              memo,
+              patientId: selectedPatient.id,
+              userId: +userId!,
+              clinicId: selectedClinic?.id,
+              prescriptionIds: selectedPrescription.prescriptions,
+            },
+          },
+        });
+      }
+      return console.error("timetable > organisms > reserve-card.tsx; 196 row");
     }
   };
 
@@ -204,15 +207,11 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
   }
 
   const onClickPrescription = (id: number) => {
-    let newPrescriptions: typeof prescriptions = [];
-    setPrescriptions((prevState) => {
-      newPrescriptions = prevState.map((prev) => {
-        if (prev.id === id) {
-          return { ...prev, isSelect: !prev.isSelect };
-        }
-        return prev;
-      });
-      return newPrescriptions;
+    const newPrescriptions = prescriptions.map((prev) => {
+      if (prev.id === id) {
+        return { ...prev, isSelect: !prev.isSelect };
+      }
+      return prev;
     });
     const newState = {
       minute: getTotal("requiredTime", newPrescriptions),
@@ -221,6 +220,8 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
         .filter((prescription) => prescription.isSelect)
         .map((prescription) => prescription.id),
     };
+
+    setPrescriptions(newPrescriptions);
     setSelectedPrescription(newState);
   };
 
