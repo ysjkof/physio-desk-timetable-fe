@@ -59,6 +59,12 @@ function selectPrescriptionForTest(inputPresc: PrescriptionWithSelect[]) {
   };
 }
 
+interface SelectedPrescription {
+  price: number;
+  minute: number;
+  prescriptions: number[];
+}
+
 interface ReserveForm extends DatepickerForm {
   memo?: string;
   userId?: number;
@@ -79,11 +85,12 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
-  const [selectedPrescription, setSelectedPrescription] = useState({
-    price: 0,
-    minute: 0,
-    prescriptions: [0],
-  });
+  const [selectedPrescription, setSelectedPrescription] =
+    useState<SelectedPrescription>({
+      price: 0,
+      minute: 0,
+      prescriptions: [],
+    });
   const [prescriptions, setPrescriptions] = useState<PrescriptionWithSelect[]>(
     []
   );
@@ -363,7 +370,9 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
             <Button
               type="submit"
               canClick={
-                selectedPatient && isValid && prescriptions.length !== 0
+                selectedPatient &&
+                isValid &&
+                selectedPrescription.prescriptions.length >= 1
               }
               loading={loading}
               textContents={"예약등록"}
