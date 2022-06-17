@@ -1,7 +1,8 @@
-import { ModifiedClinic } from "../pages/dashboard";
 import {
   clinicListsVar,
+  IClinicList,
   IViewOption,
+  ISelectedClinic,
   selectedClinicVar,
   viewOptionsVar,
 } from "../store";
@@ -10,7 +11,6 @@ import {
   LOCALSTORAGE_CLINIC_LISTS,
   LOCALSTORAGE_VIEW_OPTION,
 } from "../variables";
-import { ClinicWithOptions } from "./timetable-utils";
 
 export function cls(...classnames: string[]) {
   return classnames.join(" ");
@@ -50,7 +50,7 @@ export function getPositionRef(
 }
 
 export function saveSelectedClinic(
-  newSelectedClinic: ModifiedClinic,
+  newSelectedClinic: ISelectedClinic,
   loggedInUserId: number
 ) {
   localStorage.setItem(
@@ -60,14 +60,14 @@ export function saveSelectedClinic(
   selectedClinicVar(newSelectedClinic);
 }
 export function saveClinicLists(
-  newClinicList: ClinicWithOptions[],
-  loggedInUserId: number
+  clinicList: IClinicList[],
+  loginUserId: number
 ) {
   localStorage.setItem(
-    LOCALSTORAGE_CLINIC_LISTS + loggedInUserId,
-    JSON.stringify(newClinicList)
+    LOCALSTORAGE_CLINIC_LISTS + loginUserId,
+    JSON.stringify(clinicList)
   );
-  clinicListsVar(newClinicList);
+  clinicListsVar(clinicList);
 }
 export function saveViewOptions(
   newViewOptions: IViewOption,

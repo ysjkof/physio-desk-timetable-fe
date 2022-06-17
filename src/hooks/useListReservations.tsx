@@ -14,12 +14,10 @@ export const useListReservations = () => {
       input: {
         startDate: sunday,
         endDate: getAfterDate(sunday, 7), // sunday가 1일이면 endDate는 8일 0시 00분이다. 그래서 1일~7일까지 쿼리된다.
-        ...(selectedClinic.id !== 0 && {
-          userIds: clinicLists
-            .find((g) => g.id === selectedClinic.id)
-            ?.members.map((m) => m.user.id),
-          clinicId: selectedClinic.id,
-        }),
+        userIds: clinicLists
+          .find((g) => g.id === selectedClinic?.id)
+          ?.members.map((m) => m.user.id) ?? [0],
+        clinicId: selectedClinic?.id ?? 0,
       },
     },
   });

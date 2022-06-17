@@ -2,7 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRef, useState } from "react";
-import { checkIsManager, getIsStayed, SelectedMenuType } from "..";
+import { checkManager, checkStay, SelectedMenuType } from "..";
 import { ModalTemplate } from "../../../components/molecules/modal-template";
 import { MeQuery } from "../../../graphql/generated/graphql";
 import {
@@ -10,7 +10,7 @@ import {
   getPositionRef,
   saveSelectedClinic,
 } from "../../../libs/utils";
-import { clinicListsVar, selectedClinicVar, selecteMe } from "../../../store";
+import { clinicListsVar, selectedClinicVar } from "../../../store";
 import { DashboardNavList } from "../components/dashboadr-nav-list";
 import { ClinicName } from "../molecules/clinicName";
 
@@ -33,13 +33,18 @@ export const DashboardSideNav = ({
       (member) => member.user.id === meData.me.id
     );
 
-    return { id: clinic.id, name: clinic.name, member: clinic.members[idx] };
+    return {
+      id: clinic.id,
+      name: clinic.name,
+      type: clinic.type,
+      member: clinic.members[idx],
+    };
   });
 
   const ref = useRef<HTMLDivElement>(null);
   const [top, left] = getPositionRef(ref, 0);
 
-  return (
+  return selectedClinic ? (
     <nav className="dashboard-side-nav h-full space-y-2">
       <div
         className="btn-menu flex h-8 cursor-pointer items-center justify-between gap-2 rounded-none border-b px-2 py-2 text-sm font-semibold"
@@ -57,16 +62,6 @@ export const DashboardSideNav = ({
             onClick={() => setOpenClinicSelect}
             children={
               <ul className="w-[250px] divide-y overflow-hidden rounded-md bg-white text-xs font-normal shadow-cst">
-                <li
-                  className={`btn-menu relative cursor-pointer py-1.5 px-6 ${
-                    selectedClinic.id === 0 ? "font-semibold" : ""
-                  }`}
-                  onClick={() => {
-                    saveSelectedClinic(selecteMe, meData.me.id);
-                  }}
-                >
-                  {selecteMe.name}
-                </li>
                 {onlyMeMemberClinicLists.map((clinic) => (
                   <ClinicName
                     key={clinic.id}
@@ -77,14 +72,17 @@ export const DashboardSideNav = ({
                       clinic.member.accepted
                     )}
                     onClick={() => {
+                      console.log(clinicLists);
                       const newSelectedClinic = {
                         id: clinic.id,
                         name: clinic.name,
-                        members: clinicLists.find(
-                          (clinicInFind) => clinicInFind.id === clinic.id
-                        )?.members,
-                        isManager: checkIsManager(clinic.id, meData),
-                        isStayed: getIsStayed(clinic.id, meData),
+                        type: clinic.type,
+                        members:
+                          clinicLists.find(
+                            (clinicInFind) => clinicInFind.id === clinic.id
+                          )?.members ?? [],
+                        isManager: checkManager(clinic.id, meData),
+                        isStayed: checkStay(clinic.id, meData),
                       };
                       saveSelectedClinic(newSelectedClinic, meData.me.id);
                     }}
@@ -142,5 +140,7 @@ export const DashboardSideNav = ({
         />
       </ul>
     </nav>
+  ) : (
+    <></>
   );
 };

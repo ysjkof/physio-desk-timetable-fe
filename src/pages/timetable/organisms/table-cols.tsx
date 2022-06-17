@@ -28,48 +28,39 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
             key={i}
             className="relative grid"
             style={{
-              gridTemplateColumns: `repeat(${
-                day.users.filter((member) => member.activation).length
-              }, 1fr)`,
+              gridTemplateColumns: `repeat(${day.users.length}, 1fr)`,
             }}
           >
             <TimeIndicatorBar
               isActive={compareDateMatch(day.date, selectedDate, "ymd")}
               labels={labels}
             />
-            {day.users.map(
-              (member, userIndex) =>
-                member.activation && (
-                  <div key={member.id} className="user-col relative">
-                    {member.events?.map((event) => (
-                      <EventBox
-                        key={event.id}
-                        reservationId={event.id}
-                        userIndex={userIndex}
-                        reservationState={event.state}
-                        memo={event.memo}
-                        registrationNumber={event.patient.registrationNumber}
-                        patientName={event.patient.name}
-                        prescriptions={event.prescriptions ?? []}
-                        startDate={event.startDate}
-                        endDate={event.endDate}
-                        inset={`${
-                          labels.findIndex((label) =>
-                            compareDateMatch(
-                              label,
-                              new Date(event.startDate),
-                              "hm"
-                            )
-                          ) * TABLE_CELL_HEIGHT
-                        }px 0%`}
-                        height={`${
-                          getTimeLength(event.startDate, event.endDate) * 2
-                        }px`}
-                      />
-                    ))}
-                  </div>
-                )
-            )}
+            {day.users.map((member, userIndex) => (
+              <div key={member.id} className="user-col relative">
+                {member.events?.map((event) => (
+                  <EventBox
+                    key={event.id}
+                    reservationId={event.id}
+                    userIndex={userIndex}
+                    reservationState={event.state}
+                    memo={event.memo}
+                    registrationNumber={event.patient.registrationNumber}
+                    patientName={event.patient.name}
+                    prescriptions={event.prescriptions ?? []}
+                    startDate={event.startDate}
+                    endDate={event.endDate}
+                    inset={`${
+                      labels.findIndex((label) =>
+                        compareDateMatch(label, new Date(event.startDate), "hm")
+                      ) * TABLE_CELL_HEIGHT
+                    }px 0%`}
+                    height={`${
+                      getTimeLength(event.startDate, event.endDate) * 2
+                    }px`}
+                  />
+                ))}
+              </div>
+            ))}
           </div>
         ))}
       />

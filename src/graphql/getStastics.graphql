@@ -2,43 +2,55 @@ query getStatistics($input: GetStatisticsInput!) {
   getStatistics(input: $input) {
     error
     ok
-    results {
-      userName
-      statistics {
-        date
-        firstReservations {
+    prescriptions {
+      id
+      name
+      price
+      requiredTime
+    }
+    dailyReport {
+      date
+      reservationCount
+      noshow
+      cancel
+      newPatient
+      users {
+        id
+        name
+        reservationCount
+        noshow
+        cancel
+        newPatient
+        visitMoreThanThirty
+        visitMoreThanSixty
+        visitMoreThanNinety
+        prescriptions {
           id
-          isFirst
+          name
+          count
+        }
+        reservations {
           startDate
           endDate
           state
           memo
-          user {
+          isFirst
+          prescriptions {
             id
             name
+            price
+            requiredTime
           }
           patient {
             id
             name
-            gender
-            registrationNumber
-            birthday
-            memo
+          }
+          lastModifier {
+            id
+            name
           }
         }
-        prescriptions {
-          name
-          reservedCount
-          noshowCount
-          cancelCount
-        }
       }
-    }
-    prescriptionInfo {
-      id
-      name
-      requiredTime
-      price
     }
   }
 }

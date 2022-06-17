@@ -17,6 +17,7 @@ export const ModalContentsLayout = ({
   closeAction,
 }: ModalContentLayoutProps) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
+
   return (
     <>
       <Helmet>
@@ -27,7 +28,7 @@ export const ModalContentsLayout = ({
       </button>
       <div className="w-full text-base font-semibold">
         {title}
-        {selectedClinic.name && (
+        {selectedClinic?.name && (
           <span className="ml-3 text-xs">{selectedClinic.name}</span>
         )}
       </div>

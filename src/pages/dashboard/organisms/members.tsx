@@ -6,7 +6,7 @@ import { selectedClinicVar } from "../../../store";
 import { DashboardSectionLayout } from "../components/section-layout";
 
 export const Members = ({ loggedInUser }: InDashboardPageProps) => {
-  const { id: clinicId, members } = useReactiveVar(selectedClinicVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const [acceptInvitation] = useAcceptInvitationMutation();
 
@@ -15,13 +15,13 @@ export const Members = ({ loggedInUser }: InDashboardPageProps) => {
       acceptInvitation({
         variables: {
           input: {
-            clinicId,
+            clinicId: selectedClinic?.id ?? 0,
           },
         },
       });
     }
   }
-
+  console.log(selectedClinic?.members);
   return (
     <DashboardSectionLayout
       title="구성원"
@@ -36,7 +36,7 @@ export const Members = ({ loggedInUser }: InDashboardPageProps) => {
             <span className="text-center">상태</span>
           </div>
           <ul className="space-y-2 overflow-y-scroll">
-            {members?.map((member) => (
+            {selectedClinic?.members?.map((member) => (
               <div
                 key={member.id}
                 className="grid grid-cols-[2.4rem_1fr_4.2rem_4rem] items-center gap-3 "

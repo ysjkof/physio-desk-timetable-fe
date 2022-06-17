@@ -1,15 +1,13 @@
 import { makeVar } from "@apollo/client";
-import { ListReservationsQuery, Patient } from "./graphql/generated/graphql";
+import {
+  Clinic,
+  FindMyClinicsQuery,
+  ListReservationsQuery,
+  Patient,
+  Prescription,
+} from "./graphql/generated/graphql";
 import { ModifiedLoggedInUser } from "./hooks/useMe";
-import { ClinicWithOptions } from "./libs/timetable-utils";
-import { ModifiedClinic } from "./pages/dashboard";
 import { ONE_DAY, ONE_WEEK } from "./variables";
-
-// 이곳에서 전역 변수 관리
-
-export const queryResultVar = makeVar<ListReservationsQuery | undefined>(
-  undefined
-);
 
 export interface SelectedPatient
   extends Pick<Patient, "name" | "gender" | "registrationNumber" | "birthday"> {
@@ -43,19 +41,41 @@ const defaultViewOptions: IViewOption = {
   },
 };
 
-export const selecteMe = {
-  id: 0,
-  name: "개인",
-  isManager: true,
-  isStayed: true,
-};
+// typescript type & interface
+export type IFindMyClinics = FindMyClinicsQuery["findMyClinics"]["clinics"];
+export type IClinic = NonNullable<FlatArray<IFindMyClinics, 0>>;
+
+export type IMember = IClinic["members"][0];
+export type IMemberWithActivate = IMember & { isActivate: boolean };
+
+export interface IClinicList extends Omit<IClinic, "members"> {
+  members: IMemberWithActivate[];
+}
+export type IListReservation = NonNullable<
+  ListReservationsQuery["listReservations"]["results"]
+>[0];
+
+export interface PrescriptionWithSelect extends Prescription {
+  isSelect: boolean;
+}
+
+export interface ISelectedClinic extends Pick<Clinic, "id" | "name" | "type"> {
+  isManager: IMember["manager"];
+  isStayed: IMember["staying"];
+  members: IMemberWithActivate[];
+}
+
+// global state
+export const queryResultVar = makeVar<ListReservationsQuery | undefined>(
+  undefined
+);
 
 export const todayNowVar = makeVar<Date>(new Date());
 export const loggedInUserVar = makeVar<ModifiedLoggedInUser | null>(null);
 
 export const viewOptionsVar = makeVar<IViewOption>(defaultViewOptions);
-export const clinicListsVar = makeVar<ClinicWithOptions[]>([]); // member의 activated key를 저장하기 위해서 필요함.
+export const clinicListsVar = makeVar<IClinicList[]>([]); // member의 activated key를 저장하기 위해서 필요함.
 
 export const selectedDateVar = makeVar(new Date());
-export const selectedClinicVar = makeVar<ModifiedClinic>(selecteMe);
+export const selectedClinicVar = makeVar<ISelectedClinic | null>(null);
 export const selectedPatientVar = makeVar<null | SelectedPatient>(null);

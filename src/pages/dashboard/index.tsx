@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Clinic, Member, MeQuery, User } from "../../graphql/generated/graphql";
+import { ClinicType, MeQuery } from "../../graphql/generated/graphql";
 import { ModifiedLoggedInUser, useMe } from "../../hooks/useMe";
 import { Members } from "./organisms/members";
 import { InviteClinic } from "./organisms/invite";
@@ -13,8 +13,9 @@ import { Statistics } from "./organisms/statistics";
 import { DashboardTemplate } from "./dashboard-template";
 import { DashboardSideNav } from "./organisms/nav-side";
 import { DashboardTitle } from "./components/title";
-import { selectedClinicVar, selecteMe } from "../../store";
+import { IMemberWithActivate, selectedClinicVar } from "../../store";
 import { useReactiveVar } from "@apollo/client";
+import { Loading } from "../../components/atoms/loading";
 
 export type SelectedMenuType =
   | "main"
@@ -26,28 +27,18 @@ export type SelectedMenuType =
   | "prescription"
   | "statistics";
 
-export interface ModifiedClinicMemberWithUser
-  extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
-  user: Pick<User, "id" | "name">;
-}
-export interface ModifiedClinic extends Pick<Clinic, "id" | "name"> {
-  members?: ModifiedClinicMemberWithUser[];
-  isManager: boolean;
-  isStayed: boolean;
-}
-
 export interface InDashboardPageProps {
   loggedInUser: ModifiedLoggedInUser;
 }
 
-export function checkIsManager(clinicId: number, meData: MeQuery) {
+export function checkManager(clinicId: number, meData: MeQuery) {
   return Boolean(
     meData.me.members?.find(
       (member) => member.clinic.id === clinicId && member.manager
     )
   );
 }
-export function getIsStayed(clinicId: number, meData: MeQuery) {
+export function checkStay(clinicId: number, meData: MeQuery) {
   return Boolean(
     meData.me.members?.find(
       (member) =>
@@ -63,7 +54,9 @@ export const Dashboard = () => {
   const state = location.state as {
     selectedClinicId: number;
     selectedClinicName: string;
+    selectedClinicType: ClinicType;
     selectedMenu: SelectedMenuType;
+    selectedClinicMembers: IMemberWithActivate[];
   };
   const selectedClinic = useReactiveVar(selectedClinicVar);
 
@@ -71,22 +64,19 @@ export const Dashboard = () => {
 
   useEffect(() => {
     if (meData && state) {
-      if (
-        state.selectedClinicId === undefined &&
-        state.selectedClinicName === undefined
-      ) {
-        selectedClinicVar(selecteMe);
-      } else {
-        selectedClinicVar({
-          id: state.selectedClinicId,
-          name: state.selectedClinicName,
-          isManager: checkIsManager(state.selectedClinicId, meData),
-          isStayed: getIsStayed(state.selectedClinicId, meData),
-        });
-      }
+      selectedClinicVar({
+        id: state.selectedClinicId,
+        name: state.selectedClinicName,
+        type: state.selectedClinicType,
+        isManager: checkManager(state.selectedClinicId, meData),
+        isStayed: checkStay(state.selectedClinicId, meData),
+        members: state.selectedClinicMembers,
+      });
     }
   }, [state, meData]);
   useEffect(() => {
+    if (!selectedClinic) return;
+
     if (
       selectedClinic.id === 0 &&
       (selectedMenu === "member" ||
@@ -112,7 +102,7 @@ export const Dashboard = () => {
     }
   }, [selectedClinic]);
 
-  return meData ? (
+  return meData && selectedClinic ? (
     <>
       <Helmet>
         <title>대시보드| Muool</title>
@@ -161,6 +151,6 @@ export const Dashboard = () => {
       />
     </>
   ) : (
-    <span>Loading...</span>
+    <Loading />
   );
 };

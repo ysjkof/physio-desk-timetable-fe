@@ -1,8 +1,9 @@
-import { ModifiedClinic, SelectedMenuType } from "..";
+import { SelectedMenuType } from "..";
+import { ISelectedClinic } from "../../../store";
 
 interface DashboardNavListProps {
   selectedMenu: SelectedMenuType;
-  selectedClinic: ModifiedClinic;
+  selectedClinic: ISelectedClinic;
   type: string;
   onClick: () => void;
 }

@@ -5,6 +5,7 @@ query findMyClinics($input: FindMyClinicsInput!) {
     clinics {
       id
       name
+      type
       isActivated
       members {
         id

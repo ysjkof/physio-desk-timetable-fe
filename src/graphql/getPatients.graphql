@@ -1,8 +1,8 @@
-query getPatient($input: GetPatientInput!) {
-  getPatient(input: $input) {
+query getPatients($input: GetPatientsInput!) {
+  getPatients(input: $input) {
     ok
     error
-    patient {
+    patients {
       id
       name
       gender

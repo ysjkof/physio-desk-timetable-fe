@@ -3,6 +3,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { InDashboardPageProps } from "..";
+import { NotPermission } from "../../../components/atoms/not-permission";
 import { Button } from "../../../components/molecules/button";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { useInactivateClinicMutation } from "../../../graphql/generated/graphql";
@@ -10,16 +11,9 @@ import { selectedClinicVar } from "../../../store";
 import { DashboardSectionLayout } from "../components/section-layout";
 
 export const InactivateClinic = ({ loggedInUser }: InDashboardPageProps) => {
-  const {
-    id: clinicId,
-    name,
-    isStayed,
-    isManager,
-  } = useReactiveVar(selectedClinicVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
   const [agree, setAgree] = useState(false);
-  if (!isStayed || !isManager) {
-    return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
-  }
+
   const [mutationInactivateClinic, { loading }] = useInactivateClinicMutation();
 
   const onClick = () => {
@@ -29,12 +23,14 @@ export const InactivateClinic = ({ loggedInUser }: InDashboardPageProps) => {
                           ${name}`)
     ) {
       mutationInactivateClinic({
-        variables: { input: { clinicId } },
+        variables: { input: { clinicId: selectedClinic?.id ?? 0 } },
       });
     }
   };
 
-  return (
+  return selectedClinic?.isStayed && selectedClinic.isManager ? (
+    <NotPermission />
+  ) : (
     <DashboardSectionLayout
       title="병원 비활성"
       width="md"

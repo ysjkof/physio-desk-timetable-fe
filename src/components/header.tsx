@@ -8,15 +8,16 @@ import { useMe } from "../hooks/useMe";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
-  FindMyClinicsQuery,
+  ClinicType,
   useFindMyClinicsQuery,
 } from "../graphql/generated/graphql";
-import { ClinicWithOptions } from "../libs/timetable-utils";
 import {
+  IClinicList,
+  IClinic,
   loggedInUserVar,
-  selecteMe,
   selectedClinicVar,
   viewOptionsVar,
+  ISelectedClinic,
 } from "../store";
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
@@ -25,25 +26,6 @@ import {
 } from "../variables";
 import { saveClinicLists, saveSelectedClinic } from "../libs/utils";
 
-function injectKeyValue(
-  data: FindMyClinicsQuery | undefined | null,
-  loggedInUserId: number
-) {
-  const result: ClinicWithOptions[] = [];
-  if (data && data.findMyClinics.clinics) {
-    data.findMyClinics.clinics.forEach((clinic) => {
-      const members = clinic.members.map((member) => ({
-        ...member,
-        activation: true,
-        loginUser: member.user.id === loggedInUserId && true,
-      }));
-      if (Array.isArray(members) && members[0]) {
-        result.push({ ...clinic, members });
-      }
-    });
-  }
-  return result;
-}
 interface Notice {
   __typename?: "Notice" | undefined;
   message: string;
@@ -107,10 +89,24 @@ export const Header = () => {
   useEffect(() => {
     console.log(2, "시작 Header : in useEffect");
     if (!meData) return;
-    let updatedMyClinics: ClinicWithOptions[] = [];
-    const myClinics = injectKeyValue(findMyClinicsData, meData.me.id);
+    if (!findMyClinicsData || !findMyClinicsData.findMyClinics.clinics) return;
 
-    const localClinics: ClinicWithOptions[] = JSON.parse(
+    const { clinics } = findMyClinicsData.findMyClinics;
+    let updatedMyClinics: IClinicList[] = [];
+
+    function injectKeyValue(clinics: IClinic[]): IClinicList[] {
+      return clinics.map((clinic) => {
+        const members = clinic.members.map((member) => ({
+          ...member,
+          isActivate: true,
+        }));
+        return { ...clinic, members };
+      });
+    }
+
+    const myClinics = injectKeyValue(clinics);
+
+    const localClinics: IClinicList[] = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_CLINIC_LISTS + meData.me.id)!
     );
     if (localClinics) {
@@ -118,40 +114,53 @@ export const Header = () => {
         const localClinic = localClinics.find(
           (localClinic) => localClinic.id === clinic.id
         );
-        if (localClinic) {
-          return {
-            id: clinic.id,
-            name: clinic.name,
-            members: clinic.members.map((member) => {
-              const sameMember = localClinic.members.find(
-                (lgm) => lgm.id === member.id
-              );
-              return {
-                ...member,
-                ...(sameMember && { activation: sameMember.activation }),
-              };
-            }),
-          };
-        } else {
-          return clinic;
-        }
+
+        if (!localClinic) return clinic;
+
+        return {
+          ...localClinic,
+          id: clinic.id,
+          name: clinic.name,
+          type: clinic.type,
+          members: clinic.members.map((member) => {
+            const sameMember = localClinic.members.find(
+              (lgm) => lgm.id === member.id
+            );
+            return {
+              ...member,
+              ...(sameMember && { isActivate: sameMember.isActivate }),
+            };
+          }),
+        };
       });
-    } else {
-      updatedMyClinics = myClinics;
     }
+    if (!localClinics) updatedMyClinics = myClinics;
+
     saveClinicLists(updatedMyClinics, meData.me.id);
 
-    const localSelectClinic: typeof selecteMe = JSON.parse(
+    function makeSelectedClinic(clinic: IClinicList, userId: number) {
+      return {
+        id: clinic.id,
+        name: clinic.name,
+        type: clinic.type,
+        isManager: !!clinic.members.find((member) => member.user.id === userId)
+          ?.manager,
+        isStayed: !!clinic.members.find((member) => member.user.id === userId)
+          ?.staying,
+        members: clinic.members,
+      };
+    }
+    const localSelectClinic: ISelectedClinic = JSON.parse(
       localStorage.getItem(LOCALSTORAGE_SELECTED_CLINIC + meData.me.id)!
     );
-    if (
-      localSelectClinic &&
-      myClinics.find((g) => g.id === localSelectClinic.id)
-    ) {
-      selectedClinicVar(localSelectClinic);
-    } else {
-      saveSelectedClinic(selecteMe, meData.me.id);
-    }
+    const clinic = updatedMyClinics.find((clinic) =>
+      localSelectClinic
+        ? clinic.id === localSelectClinic.id
+        : clinic.type === ClinicType.Personal
+    );
+    if (!clinic) return;
+    const newSelectedClinic = makeSelectedClinic(clinic, meData.me.id);
+    saveSelectedClinic(newSelectedClinic, meData.me.id);
   }, [findMyClinicsData]);
 
   return (

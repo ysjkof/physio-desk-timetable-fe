@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Loading } from "./atoms/loading";
 
 interface ILiProps {
   id: number;
@@ -20,7 +21,7 @@ export const Li: React.FC<ILiProps> = ({
 }) => (
   <li className="flex justify-between px-10">
     {loading ? (
-      "Loading..."
+      <Loading />
     ) : (
       <>
         <span className="w-1/4">{name}</span>

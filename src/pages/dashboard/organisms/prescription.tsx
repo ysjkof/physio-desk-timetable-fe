@@ -22,11 +22,7 @@ import { REGEX_NUMBER_END_DIGIT_OF_ZERO } from "../../../variables";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 
 export const PrescriptionPage = ({}: InDashboardPageProps) => {
-  const {
-    id: clinicId,
-    isStayed,
-    isManager,
-  } = useReactiveVar(selectedClinicVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const [atomList, setAtomList] = useState<
     { id: number; name: string; onSelect: boolean }[]
@@ -38,8 +34,8 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
     useFindPrescriptionsQuery({
       variables: {
         input: {
-          includeInactivate: false,
-          clinicId,
+          clinicId: selectedClinic ? selectedClinic.id : 0,
+          onlyLookUpActive: false,
         },
       },
     });
@@ -79,7 +75,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
             price: +price,
             description,
             prescriptionAtomIds,
-            ...(clinicId && { clinicId }),
+            clinicId: selectedClinic ? selectedClinic.id : 0,
           },
         },
       });
@@ -119,7 +115,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
 
   return (
     <>
-      {isStayed ? (
+      {selectedClinic?.isStayed ? (
         <div className="flex h-full w-full">
           <DashboardSectionLayout
             width="md"
@@ -174,7 +170,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
             width="md"
             heightFull
             children={
-              <details open={isManager}>
+              <details open={selectedClinic.isManager}>
                 <summary>처방 만들기</summary>
                 <form
                   onSubmit={handleSubmit(onSubmitCreatePresciption)}

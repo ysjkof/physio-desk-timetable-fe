@@ -57,7 +57,6 @@ export const ReservationCard = ({
           input: {
             reservationId,
             state: nextState,
-            ...(reservation?.clinic?.id && { clinicId: reservation.clinic.id }),
           },
         },
       });

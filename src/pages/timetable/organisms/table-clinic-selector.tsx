@@ -9,11 +9,9 @@ import {
   clinicListsVar,
   loggedInUserVar,
   selectedClinicVar,
-  selecteMe,
   viewOptionsVar,
 } from "../../../store";
 import { NEXT } from "../../../variables";
-import { ModifiedClinic } from "../../dashboard";
 import { BtnArrow } from "../molecules/button-arrow";
 
 export function TableClinicSelector() {
@@ -34,37 +32,36 @@ export function TableClinicSelector() {
     if (mIndex === -1) return console.warn("❌ member index가 -1입니다");
 
     const activateLength = clinicLists[gIndex].members.filter(
-      (member) => member.activation
+      (member) => member.isActivate
     ).length;
-    let isActivate = clinicLists[gIndex].members[mIndex].activation;
+    let isActivate = clinicLists[gIndex].members[mIndex].isActivate;
 
     if (isActivate && activateLength === 1) {
       return;
     }
-    clinicLists[gIndex].members[mIndex].activation = !isActivate;
+    clinicLists[gIndex].members[mIndex].isActivate = !isActivate;
     saveClinicLists([...clinicLists], loggedInUser.id);
   };
 
   const onClickChangeSelectClinic = (id: number, name: string) => {
     if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
-    let newSelectedClinic: ModifiedClinic = selecteMe;
-    if (selectedClinic.id === id) {
-    } else {
+    if (selectedClinic?.id !== id) {
       const clinic = clinicLists.find((clinic) => clinic.id === id);
       const me = loggedInUser.members?.find(
         (member) => member.clinic.id === id
       );
       if (clinic && me) {
-        newSelectedClinic = {
+        const newSelectedClinic = {
           id,
           name: clinic.name,
+          type: clinic.type,
           isManager: me.manager,
           isStayed: me.staying,
           members: clinic.members,
         };
+        saveSelectedClinic(newSelectedClinic, loggedInUser.id);
       }
     }
-    saveSelectedClinic(newSelectedClinic, loggedInUser.id);
   };
 
   const onClickChangeSeeActiveOption = () => {
@@ -83,7 +80,7 @@ export function TableClinicSelector() {
     exit: { x: 300, transition: { duration: 0.3 } },
   };
 
-  return (
+  return selectedClinic ? (
     <motion.div
       variants={variants}
       initial="init"
@@ -136,14 +133,14 @@ export function TableClinicSelector() {
                     label={member.user.name}
                     isWidthFull
                     enabled={
-                      clinic.id === selectedClinic.id && member.activation
+                      clinic.id === selectedClinic.id && member.isActivate
                     }
                     icon={
                       <FontAwesomeIcon
                         icon={faCheckCircle}
                         fontSize={16}
                         className={`${
-                          clinic.id === selectedClinic.id && member.activation
+                          clinic.id === selectedClinic.id && member.isActivate
                             ? "text-green-500"
                             : ""
                         }`}
@@ -159,5 +156,7 @@ export function TableClinicSelector() {
         )}
       </ul>
     </motion.div>
+  ) : (
+    <></>
   );
 }

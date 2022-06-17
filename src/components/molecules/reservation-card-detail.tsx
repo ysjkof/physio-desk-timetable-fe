@@ -1,9 +1,9 @@
-import { ModifiedReservation } from "../../pages/timetable";
 import { getHHMM, getTimeLength, getYMD } from "../../libs/timetable-utils";
 import { RESERVATION_STATE_KOR } from "../../variables";
+import { IListReservation } from "../../store";
 
 interface ReservationCardDetailProps {
-  reservation: ModifiedReservation;
+  reservation: IListReservation;
 }
 
 export const ReservationCardDetail = ({

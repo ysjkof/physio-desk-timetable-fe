@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SearchPatient } from "../../../components/organisms/search-patient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { PrescriptionWithSelect, TimetableModalProps } from "..";
+import { TimetableModalProps } from "..";
 import {
   CreateReservationMutation,
   useCreateReservationMutation,
@@ -14,6 +14,7 @@ import {
 import {
   clinicListsVar,
   loggedInUserVar,
+  PrescriptionWithSelect,
   selectedClinicVar,
   selectedPatientVar,
 } from "../../../store";
@@ -90,8 +91,8 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
     variables: {
       input: {
-        includeInactivate: false,
-        clinicId: selectedClinic.id,
+        clinicId: selectedClinic!.id,
+        onlyLookUpActive: false,
       },
     },
   });
@@ -136,9 +137,9 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
             input: {
               startDate: t[0],
               endDate: t[1],
-              patientId: selectedPatient?.id!,
+              patientId: selectedPatient!.id,
               userId: +userId!,
-              clinicId: selectedClinic?.id,
+              clinicId: selectedClinic!.id,
               prescriptionIds: [presc.id],
             },
           },
@@ -187,7 +188,7 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
               memo,
               patientId: selectedPatient.id,
               userId: +userId!,
-              clinicId: selectedClinic?.id,
+              clinicId: selectedClinic!.id,
               prescriptionIds: selectedPrescription.prescriptions,
             },
           },
@@ -264,7 +265,7 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
                 {...register("userId")}
                 className="w-full rounded-md border text-center"
               >
-                {selectedClinic.id === 0 ? (
+                {selectedClinic!.id === 0 ? (
                   <option value={loggedInUser?.id}>{loggedInUser?.name}</option>
                 ) : (
                   clinicLists
@@ -296,6 +297,8 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
                   state={{
                     selectedClinicId: selectedClinic?.id,
                     selectedClinicName: selectedClinic?.name,
+                    selectedClinicType: selectedClinic?.type,
+                    selectedClinicMembers: selectedClinic?.members,
                     selectedMenu: "prescription",
                   }}
                 >
@@ -316,6 +319,8 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
                       state={{
                         selectedClinicId: selectedClinic?.id,
                         selectedClinicName: selectedClinic?.name,
+                        selectedClinicType: selectedClinic?.type,
+                        selectedClinicMembers: selectedClinic?.members,
                         selectedMenu: "prescription",
                       }}
                     >

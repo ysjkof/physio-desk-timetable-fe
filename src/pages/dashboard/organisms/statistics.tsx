@@ -1,6 +1,6 @@
 import { DashboardSectionLayout } from "../components/section-layout";
 import {
-  ReservationState,
+  GetStatisticsQuery,
   useGetStatisticsLazyQuery,
 } from "../../../graphql/generated/graphql";
 import { getDateFromYMDHM } from "../../../libs/utils";
@@ -17,40 +17,9 @@ import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { TableChartColLayout } from "../molecules/table-chart-col-layout";
 
-interface IDataResult {
-  __typename?: "StatisticsRsult";
-  userName: string;
-  statistics: Array<{
-    __typename?: "DayCount";
-    date: any;
-    firstReservations: Array<{
-      __typename?: "Reservation";
-      id: number;
-      isFirst: boolean;
-      startDate: any;
-      endDate: any;
-      state: ReservationState;
-      memo?: string | null;
-      user: { __typename?: "User"; id: number; name: string };
-      patient: {
-        __typename?: "Patient";
-        id: number;
-        name: string;
-        gender: string;
-        registrationNumber?: string | null;
-        birthday?: any | null;
-        memo?: string | null;
-      };
-    }>;
-    prescriptions: Array<{
-      __typename?: "PrescriptionStatistics";
-      name: string;
-      reservedCount: number;
-      noshowCount: number;
-      cancelCount: number;
-    }>;
-  }>;
-}
+type IDataResults = GetStatisticsQuery["getStatistics"]["dailyReport"];
+type IDataResult = FlatArray<IDataResults, 0>;
+
 interface IPrescriptionCounts {
   reservedCount: number;
   noshowCount: number;
@@ -85,7 +54,7 @@ interface ModifiedDatepickerForm extends DatepickerForm {
 }
 
 export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
-  const { id: clinicId, members } = useReactiveVar(selectedClinicVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   let defaultDate: Date[] = [new Date(), new Date()];
   defaultDate[0].setDate(1);
@@ -137,12 +106,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         input: {
           startDate,
           endDate,
-          ...(typeof clinicId === "number" &&
-            clinicId !== 0 &&
-            userIds.length !== 0 && {
-              clinicId,
-              userIds,
-            }),
+          clinicId: selectedClinic?.id ?? 0,
+          userIds,
         },
       },
     });
@@ -194,178 +159,176 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   }
 
   useEffect(() => {
-    if (clinicId !== 0 && members) {
-      setMemberState(
-        members.map((m) => ({
-          id: m.user.id,
-          name: m.user.name,
-          isSelected: true,
-        }))
-      );
-    } else {
-      setMemberState([]);
-    }
+    setMemberState(
+      selectedClinic?.members?.map((m) => ({
+        id: m.user.id,
+        name: m.user.name,
+        isSelected: true,
+      }))
+    );
     setUserStatis(undefined);
     setStatisticsData(undefined);
-  }, [clinicId]);
+  }, [selectedClinic]);
 
   useEffect(() => {
-    const defaultCountsObj = {
-      reservedCount: 0,
-      noshowCount: 0,
-      cancelCount: 0,
-      firstReservationCount: 0,
-    };
-    function getPrescriptionTotalCount(
-      prescName: string,
-      data: IDataResult | undefined | null
-    ) {
-      if (!data) return defaultCountsObj;
-      return data.statistics.reduce((acc, cur) => {
-        const prescription = cur.prescriptions.find(
-          (p) => p.name === prescName
-        );
-        if (prescription) {
-          return {
-            reservedCount: acc.reservedCount + prescription.reservedCount,
-            noshowCount: acc.noshowCount + prescription.noshowCount,
-            cancelCount: acc.cancelCount + prescription.cancelCount,
-            firstReservationCount:
-              acc.firstReservationCount + cur.firstReservations.length,
-          };
-        }
-        return acc;
-      }, defaultCountsObj);
-    }
-
-    if (data?.getStatistics.ok) {
-      const { prescriptionInfo, results } = data.getStatistics;
-      function makeUserStatisFrame(): UserStatis[] {
-        if (results && prescriptionInfo) {
-          if (!memberState)
-            throw new Error(
-              "getStatisticsLzq > onCompleted > makeFrame > memberState is undefined"
-            );
-          const filterMember = memberState.filter(
-            (member) => member.isSelected
-          );
-          const userFrame = filterMember.map((member) => ({
-            name: member.name,
-          }));
-          const prescriptions = prescriptionInfo.map((prescription) => ({
-            ...prescription,
-            reservedCount: 0,
-            cancelCount: 0,
-            noshowCount: 0,
-            firstReservationCount: 0,
-          }));
-          return userFrame.map((user) => {
-            const existUser = results.find(
-              (member) => member.userName === user.name
-            );
-            if (existUser) {
-              return {
-                name: existUser.userName,
-                prescriptions: [...prescriptions],
-              };
-            }
-            return {
-              name: user.name,
-              prescriptions: [...prescriptions],
-            };
-          });
-        }
-        throw new Error(
-          "getStatisticsLzq > onCompleted > makeFrame > results || prescriptionInfo false"
-        );
-      }
-      const userStatisFrame = makeUserStatisFrame();
-
-      function injectCount() {
-        return userStatisFrame.map((user, i) => {
-          const prescriptions = user.prescriptions.map((prescription) => {
-            const prescriptionTotalCount = getPrescriptionTotalCount(
-              prescription.name,
-              data?.getStatistics.results![i]
-            );
-            return {
-              ...prescription,
-              reservedCount: prescriptionTotalCount.reservedCount,
-              noshowCount: prescriptionTotalCount.noshowCount,
-              cancelCount: prescriptionTotalCount.cancelCount,
-              firstReservationCount:
-                prescriptionTotalCount.firstReservationCount,
-            };
-          });
-          return { name: user.name, prescriptions };
-        });
-      }
-      const newUserStatis = injectCount();
-
-      function makePrescriptionStatistics() {
-        if (prescriptionInfo) {
-          const newPrescriptionsStatis: IPrescription[] = prescriptionInfo.map(
-            (info) => ({
-              name: info.name,
-              reservedCount: 0,
-              cancelCount: 0,
-              noshowCount: 0,
-              price: info.price,
-              firstReservationCount: 0,
-            })
-          );
-          return newPrescriptionsStatis.map((prescription) => {
-            const {
-              price,
-              reservedCount,
-              cancelCount,
-              noshowCount,
-              firstReservationCount,
-            } = newUserStatis.reduce(
-              (acc, cur) => {
-                const findPrescription = cur.prescriptions.find(
-                  (presc) => presc.name === prescription.name
-                );
-                if (findPrescription) {
-                  return {
-                    price:
-                      findPrescription.price *
-                      (findPrescription.reservedCount + acc.reservedCount),
-                    reservedCount:
-                      findPrescription.reservedCount + acc.reservedCount,
-                    cancelCount: findPrescription.cancelCount + acc.cancelCount,
-                    noshowCount: findPrescription.noshowCount + acc.noshowCount,
-                    firstReservationCount:
-                      findPrescription.firstReservationCount +
-                      acc.firstReservationCount,
-                  };
-                }
-                throw new Error("findPrescription을 알 수 없습니다");
-              },
-              { ...defaultCountsObj, price: 0 }
-            );
-            return {
-              ...prescription,
-              price,
-              reservedCount,
-              cancelCount,
-              noshowCount,
-              firstReservationCount,
-            };
-          });
-        }
-        console.warn(
-          "makePrescriptionStatistics결과 prescriptionInfo가 없습니다"
-        );
-        return [];
-      }
-      const newPrescriptionsStatis = makePrescriptionStatistics();
-      setStatisticsData(data); // 페이지 바뀔때 화면 초기화 위해서 필요함
-      setUserStatis(newUserStatis);
-      setPrescriptionsStatis(newPrescriptionsStatis);
-    }
+    console.log(data);
+    // const defaultCountsObj = {
+    //   reservedCount: 0,
+    //   noshowCount: 0,
+    //   cancelCount: 0,
+    //   firstReservationCount: 0,
+    // };
+    // function getPrescriptionTotalCount(prescName: string, data: IDataResult) {
+    //   if (!data) return defaultCountsObj;
+    //   return data.statistics.reduce((acc, cur) => {
+    //     const prescription = cur.prescriptions.find(
+    //       (p) => p.name === prescName
+    //     );
+    //     if (prescription) {
+    //       return {
+    //         reservedCount: acc.reservedCount + prescription.reservedCount,
+    //         noshowCount: acc.noshowCount + prescription.noshowCount,
+    //         cancelCount: acc.cancelCount + prescription.cancelCount,
+    //         firstReservationCount:
+    //           acc.firstReservationCount + cur.firstReservations.length,
+    //       };
+    //     }
+    //     return acc;
+    //   }, defaultCountsObj);
+    // }
+    // type IGetStatisticsQuery = GetStatisticsQuery["getStatistics"];
+    // type IGetStatisticsDailyReport =
+    //   GetStatisticsQuery["getStatistics"]["dailyReport"];
+    // type IGetStatisticsPrescriptions = NonNullable<
+    //   GetStatisticsQuery["getStatistics"]["prescriptions"]
+    // >;
+    // if (data?.getStatistics.ok) {
+    //   const { dailyReport, prescriptions } = data.getStatistics;
+    //   if (!dailyReport || !prescriptions) {
+    //     throw new Error(
+    //       "getStatisticsLzq > onCompleted > makeFrame > results || prescriptionInfo false"
+    //     );
+    //   }
+    //   function makeUserStatisFrame(
+    //     dailyReport: IGetStatisticsDailyReport,
+    //     prescriptionsInfo: IGetStatisticsPrescriptions
+    //   ): UserStatis[] {
+    //     if (!memberState)
+    //       throw new Error(
+    //         "getStatisticsLzq > onCompleted > makeFrame > memberState is undefined"
+    //       );
+    //     const filterMember = memberState.filter((member) => member.isSelected);
+    //     const userFrame = filterMember.map((member) => ({
+    //       name: member.name,
+    //     }));
+    //     const prescriptions = prescriptionsInfo.map((prescription) => ({
+    //       ...prescription,
+    //       reservedCount: 0,
+    //       cancelCount: 0,
+    //       noshowCount: 0,
+    //       firstReservationCount: 0,
+    //     }));
+    //     return userFrame.map((user) => {
+    //       const existUser = results.find(
+    //         (member) => member.userName === user.name
+    //       );
+    //       if (existUser) {
+    //         return {
+    //           name: existUser.userName,
+    //           prescriptions: [...prescriptions],
+    //         };
+    //       }
+    //       return {
+    //         name: user.name,
+    //         prescriptions: [...prescriptions],
+    //       };
+    //     });
+    //   }
+    //   const userStatisFrame = makeUserStatisFrame();
+    //   function injectCount() {
+    //     return userStatisFrame.map((user, i) => {
+    //       const prescriptions = user.prescriptions.map((prescription) => {
+    //         const prescriptionTotalCount = getPrescriptionTotalCount(
+    //           prescription.name,
+    //           data?.getStatistics.results![i]
+    //         );
+    //         return {
+    //           ...prescription,
+    //           reservedCount: prescriptionTotalCount.reservedCount,
+    //           noshowCount: prescriptionTotalCount.noshowCount,
+    //           cancelCount: prescriptionTotalCount.cancelCount,
+    //           firstReservationCount:
+    //             prescriptionTotalCount.firstReservationCount,
+    //         };
+    //       });
+    //       return { name: user.name, prescriptions };
+    //     });
+    //   }
+    //   const newUserStatis = injectCount();
+    //   function makePrescriptionStatistics() {
+    //     if (prescriptionInfo) {
+    //       const newPrescriptionsStatis: IPrescription[] = prescriptionInfo.map(
+    //         (info) => ({
+    //           name: info.name,
+    //           reservedCount: 0,
+    //           cancelCount: 0,
+    //           noshowCount: 0,
+    //           price: info.price,
+    //           firstReservationCount: 0,
+    //         })
+    //       );
+    //       return newPrescriptionsStatis.map((prescription) => {
+    //         const {
+    //           price,
+    //           reservedCount,
+    //           cancelCount,
+    //           noshowCount,
+    //           firstReservationCount,
+    //         } = newUserStatis.reduce(
+    //           (acc, cur) => {
+    //             const findPrescription = cur.prescriptions.find(
+    //               (presc) => presc.name === prescription.name
+    //             );
+    //             if (findPrescription) {
+    //               return {
+    //                 price:
+    //                   findPrescription.price *
+    //                   (findPrescription.reservedCount + acc.reservedCount),
+    //                 reservedCount:
+    //                   findPrescription.reservedCount + acc.reservedCount,
+    //                 cancelCount: findPrescription.cancelCount + acc.cancelCount,
+    //                 noshowCount: findPrescription.noshowCount + acc.noshowCount,
+    //                 firstReservationCount:
+    //                   findPrescription.firstReservationCount +
+    //                   acc.firstReservationCount,
+    //               };
+    //             }
+    //             throw new Error("findPrescription을 알 수 없습니다");
+    //           },
+    //           { ...defaultCountsObj, price: 0 }
+    //         );
+    //         return {
+    //           ...prescription,
+    //           price,
+    //           reservedCount,
+    //           cancelCount,
+    //           noshowCount,
+    //           firstReservationCount,
+    //         };
+    //       });
+    //     }
+    //     console.warn(
+    //       "makePrescriptionStatistics결과 prescriptionInfo가 없습니다"
+    //     );
+    //     return [];
+    //   }
+    //   const newPrescriptionsStatis = makePrescriptionStatistics();
+    //   setStatisticsData(data); // 페이지 바뀔때 화면 초기화 위해서 필요함
+    //   setUserStatis(newUserStatis);
+    //   setPrescriptionsStatis(newPrescriptionsStatis);
+    // }
   }, [data]);
-
+  console.log(data);
   return (
     <>
       <DashboardSectionLayout
@@ -456,9 +419,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                 isSmall
                 textContents="검색"
                 canClick={
-                  isValid &&
-                  !loadingStatisticsData &&
-                  (clinicId === 0 ? true : userIds.length > 0)
+                  isValid && !loadingStatisticsData && userIds.length > 0
                 }
                 loading={loadingStatisticsData}
               />
@@ -467,193 +428,194 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         }
       />
       {userStatis && prescriptionsStatis && data ? (
-        <>
-          <div className="flex">
-            <DashboardSectionLayout
-              elementName="TABLE_CHART_PRESCRIPTION_COUNT"
-              padding
-              children={
-                <>
-                  <TableChartColLayout
-                    labelNames={data.getStatistics.prescriptionInfo!.map(
-                      (info) => info.name
-                    )}
-                    hasLabelTotal
-                    individualData={userStatis.map((user) => ({
-                      name: user.name,
-                      counts: user.prescriptions.map(
-                        (prescription) => prescription.reservedCount ?? 0
-                      ),
-                      countTotal: user.prescriptions.reduce(
-                        (acc, cur) => acc + cur.reservedCount,
-                        0
-                      ),
-                    }))}
-                    counts={prescriptionsStatis.map(
-                      (info, idx) => info.reservedCount
-                    )}
-                    countTotal={prescriptionsStatis.reduce(
-                      (acc, cur) => acc + cur.reservedCount,
-                      0
-                    )}
-                  />
-                </>
-              }
-            />
-            <DashboardSectionLayout
-              elementName="TABLE_CHART_PRESCRIPTION_PRICE"
-              padding
-              children={
-                <>
-                  <TableChartColLayout
-                    labelNames={data.getStatistics.prescriptionInfo!.map(
-                      (info) => info.name
-                    )}
-                    hasLabelTotal
-                    individualData={userStatis.map((user) => ({
-                      name: user.name,
-                      counts: user.prescriptions.map(
-                        (prescription) =>
-                          prescription.price * prescription.reservedCount
-                      ),
-                      countTotal: user.prescriptions.reduce(
-                        (acc, cur) => acc + cur.price * cur.reservedCount,
-                        0
-                      ),
-                    }))}
-                    counts={prescriptionsStatis.map((info, idx) => info.price)}
-                    countTotal={prescriptionsStatis.reduce(
-                      (acc, cur) => acc + cur.price,
-                      0
-                    )}
-                  />
-                </>
-              }
-            />
-          </div>
-          <DashboardSectionLayout
-            elementName="TABLE_CHART_COUNTS"
-            padding
-            children={
-              <>
-                <TableChartColLayout
-                  labelNames={["예약", "신규", "부도", "취소"]}
-                  individualData={userStatis.map((user) => ({
-                    name: user.name,
-                    counts: user.prescriptions.reduce(
-                      (acc, cur) => [
-                        acc[0] + cur.reservedCount,
-                        acc[0] + cur.firstReservationCount,
-                        acc[0] + cur.noshowCount,
-                        acc[0] + cur.cancelCount,
-                      ],
-                      [0, 0, 0, 0]
-                    ),
-                  }))}
-                  counts={[
-                    prescriptionsStatis?.reduce(
-                      (acc, cur) => acc + cur.reservedCount,
-                      0
-                    )!,
-                    prescriptionsStatis?.reduce(
-                      (acc, cur) => acc + cur.firstReservationCount,
-                      0
-                    )!,
-                    prescriptionsStatis?.reduce(
-                      (acc, cur) => acc + cur.noshowCount,
-                      0
-                    )!,
-                    prescriptionsStatis?.reduce(
-                      (acc, cur) => acc + cur.cancelCount,
-                      0
-                    )!,
-                  ]}
-                />
-              </>
-            }
-          />
+        // <>
+        //   <div className="flex">
+        //     <DashboardSectionLayout
+        //       elementName="TABLE_CHART_PRESCRIPTION_COUNT"
+        //       padding
+        //       children={
+        //         <>
+        //           <TableChartColLayout
+        //             labelNames={data.getStatistics.prescriptionInfo!.map(
+        //               (info) => info.name
+        //             )}
+        //             hasLabelTotal
+        //             individualData={userStatis.map((user) => ({
+        //               name: user.name,
+        //               counts: user.prescriptions.map(
+        //                 (prescription) => prescription.reservedCount ?? 0
+        //               ),
+        //               countTotal: user.prescriptions.reduce(
+        //                 (acc, cur) => acc + cur.reservedCount,
+        //                 0
+        //               ),
+        //             }))}
+        //             counts={prescriptionsStatis.map(
+        //               (info, idx) => info.reservedCount
+        //             )}
+        //             countTotal={prescriptionsStatis.reduce(
+        //               (acc, cur) => acc + cur.reservedCount,
+        //               0
+        //             )}
+        //           />
+        //         </>
+        //       }
+        //     />
+        //     <DashboardSectionLayout
+        //       elementName="TABLE_CHART_PRESCRIPTION_PRICE"
+        //       padding
+        //       children={
+        //         <>
+        //           <TableChartColLayout
+        //             labelNames={data.getStatistics.prescriptionInfo!.map(
+        //               (info) => info.name
+        //             )}
+        //             hasLabelTotal
+        //             individualData={userStatis.map((user) => ({
+        //               name: user.name,
+        //               counts: user.prescriptions.map(
+        //                 (prescription) =>
+        //                   prescription.price * prescription.reservedCount
+        //               ),
+        //               countTotal: user.prescriptions.reduce(
+        //                 (acc, cur) => acc + cur.price * cur.reservedCount,
+        //                 0
+        //               ),
+        //             }))}
+        //             counts={prescriptionsStatis.map((info, idx) => info.price)}
+        //             countTotal={prescriptionsStatis.reduce(
+        //               (acc, cur) => acc + cur.price,
+        //               0
+        //             )}
+        //           />
+        //         </>
+        //       }
+        //     />
+        //   </div>
+        //   <DashboardSectionLayout
+        //     elementName="TABLE_CHART_COUNTS"
+        //     padding
+        //     children={
+        //       <>
+        //         <TableChartColLayout
+        //           labelNames={["예약", "신규", "부도", "취소"]}
+        //           individualData={userStatis.map((user) => ({
+        //             name: user.name,
+        //             counts: user.prescriptions.reduce(
+        //               (acc, cur) => [
+        //                 acc[0] + cur.reservedCount,
+        //                 acc[0] + cur.firstReservationCount,
+        //                 acc[0] + cur.noshowCount,
+        //                 acc[0] + cur.cancelCount,
+        //               ],
+        //               [0, 0, 0, 0]
+        //             ),
+        //           }))}
+        //           counts={[
+        //             prescriptionsStatis?.reduce(
+        //               (acc, cur) => acc + cur.reservedCount,
+        //               0
+        //             )!,
+        //             prescriptionsStatis?.reduce(
+        //               (acc, cur) => acc + cur.firstReservationCount,
+        //               0
+        //             )!,
+        //             prescriptionsStatis?.reduce(
+        //               (acc, cur) => acc + cur.noshowCount,
+        //               0
+        //             )!,
+        //             prescriptionsStatis?.reduce(
+        //               (acc, cur) => acc + cur.cancelCount,
+        //               0
+        //             )!,
+        //           ]}
+        //         />
+        //       </>
+        //     }
+        //   />
 
-          <DashboardSectionLayout
-            elementName="graph_chart"
-            children={
-              <>
-                <div className="relative">
-                  <VictoryChart
-                    height={500}
-                    width={window.innerWidth}
-                    domainPadding={50}
-                    theme={VictoryTheme.material}
-                    minDomain={{ y: 0 }}
-                    padding={{
-                      top: 60,
-                      bottom: 60,
-                      left: 70,
-                      right: 70,
-                    }}
-                  >
-                    <VictoryLine
-                      data={
-                        data.getStatistics.results?.length !== 0
-                          ? data.getStatistics.results
-                              ?.map((result) =>
-                                result.statistics?.map((data) => ({
-                                  x: data.date,
-                                  y: data.prescriptions.reduce(
-                                    (prev, curr) => prev + curr.reservedCount,
-                                    0
-                                  ),
-                                }))
-                              )
-                              .reduce((prev, curr) => {
-                                curr?.forEach((c) => {
-                                  const idx = prev!.findIndex(
-                                    (p) => p.x === c.x
-                                  );
-                                  if (idx === -1) {
-                                    prev?.push(c);
-                                  } else {
-                                    prev![idx].y = c.y + prev![idx].y;
-                                  }
-                                });
-                                return prev;
-                              })
-                          : undefined
-                      }
-                      style={{
-                        data: {
-                          strokeWidth: 5,
-                        },
-                      }}
-                      labels={({ datum }) => datum.y}
-                    />
+        //   <DashboardSectionLayout
+        //     elementName="graph_chart"
+        //     children={
+        //       <>
+        //         <div className="relative">
+        //           <VictoryChart
+        //             height={500}
+        //             width={window.innerWidth}
+        //             domainPadding={50}
+        //             theme={VictoryTheme.material}
+        //             minDomain={{ y: 0 }}
+        //             padding={{
+        //               top: 60,
+        //               bottom: 60,
+        //               left: 70,
+        //               right: 70,
+        //             }}
+        //           >
+        //             <VictoryLine
+        //               data={
+        //                 data.getStatistics.results?.length !== 0
+        //                   ? data.getStatistics.results
+        //                       ?.map((result) =>
+        //                         result.statistics?.map((data) => ({
+        //                           x: data.date,
+        //                           y: data.prescriptions.reduce(
+        //                             (prev, curr) => prev + curr.reservedCount,
+        //                             0
+        //                           ),
+        //                         }))
+        //                       )
+        //                       .reduce((prev, curr) => {
+        //                         curr?.forEach((c) => {
+        //                           const idx = prev!.findIndex(
+        //                             (p) => p.x === c.x
+        //                           );
+        //                           if (idx === -1) {
+        //                             prev?.push(c);
+        //                           } else {
+        //                             prev![idx].y = c.y + prev![idx].y;
+        //                           }
+        //                         });
+        //                         return prev;
+        //                       })
+        //                   : undefined
+        //               }
+        //               style={{
+        //                 data: {
+        //                   strokeWidth: 5,
+        //                 },
+        //               }}
+        //               labels={({ datum }) => datum.y}
+        //             />
 
-                    <VictoryAxis
-                      dependentAxis
-                      style={{
-                        tickLabels: {
-                          fontSize: 14,
-                        } as any,
-                      }}
-                      tickFormat={(tick) => `${tick}명`}
-                    />
-                    <VictoryAxis
-                      style={{
-                        tickLabels: {
-                          fontSize: 14,
-                        } as any,
-                      }}
-                      tickFormat={(tick) =>
-                        new Date(tick).toLocaleDateString("ko", {
-                          day: "2-digit",
-                        })
-                      }
-                    />
-                  </VictoryChart>
-                </div>
-              </>
-            }
-          />
-        </>
+        //             <VictoryAxis
+        //               dependentAxis
+        //               style={{
+        //                 tickLabels: {
+        //                   fontSize: 14,
+        //                 } as any,
+        //               }}
+        //               tickFormat={(tick) => `${tick}명`}
+        //             />
+        //             <VictoryAxis
+        //               style={{
+        //                 tickLabels: {
+        //                   fontSize: 14,
+        //                 } as any,
+        //               }}
+        //               tickFormat={(tick) =>
+        //                 new Date(tick).toLocaleDateString("ko", {
+        //                   day: "2-digit",
+        //                 })
+        //               }
+        //             />
+        //           </VictoryChart>
+        //         </div>
+        //       </>
+        //     }
+        //   />
+        // </>
+        "제작중"
       ) : (
         <p className="position-center absolute text-base">
           검색조건을 설정한 다음 검색을 누르세요

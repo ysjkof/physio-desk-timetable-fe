@@ -1,14 +1,8 @@
 import { Helmet } from "react-helmet-async";
-import {
-  Clinic,
-  Patient,
-  Prescription,
-  Reservation,
-  User,
-} from "../../graphql/generated/graphql";
 import { useReactiveVar } from "@apollo/client";
 import {
   clinicListsVar,
+  IListReservation,
   loggedInUserVar,
   selectedClinicVar,
   selectedDateVar,
@@ -39,22 +33,7 @@ import { TableRows } from "./organisms/table-rows";
 import { TableCols } from "./organisms/table-cols";
 import { TableClinicSelector } from "./organisms/table-clinic-selector";
 import { TableModals } from "./organisms/table-modal";
-
-export interface PrescriptionWithSelect extends Prescription {
-  isSelect: boolean;
-}
-
-export interface ModifiedReservation
-  extends Pick<Reservation, "id" | "startDate" | "endDate" | "state" | "memo"> {
-  user: Pick<User, "id" | "name">;
-  lastModifier?: Pick<User, "id" | "name" | "email"> | null;
-  patient: Pick<
-    Patient,
-    "id" | "name" | "gender" | "registrationNumber" | "birthday"
-  >;
-  clinic?: Pick<Clinic, "id" | "name"> | null;
-  prescriptions?: Pick<Prescription, "name">[] | null;
-}
+import { Loading } from "../../components/atoms/loading";
 
 export interface TimetableModalProps {
   closeAction: () => void;
@@ -85,12 +64,12 @@ export const TimeTable = () => {
     TABLE_TIME_GAP
   );
 
-  function distributor(events: ModifiedReservation[] | undefined | null) {
+  function distributor(events: IListReservation[]) {
     if (!loggedInUser) return;
+
     const userFrame = makeDayWithUsers(
-      getWeeks(getSunday(selectedDate)),
-      loggedInUser,
-      spreadClinicMembers(clinicLists, selectedClinic?.id)
+      spreadClinicMembers(clinicLists, selectedClinic!.id),
+      getWeeks(getSunday(selectedDate))
     );
     events?.forEach((event) => {
       const dateIndex = userFrame.findIndex((day) =>
@@ -107,10 +86,10 @@ export const TimeTable = () => {
     });
     return userFrame;
   }
-
   useEffect(() => {
     if (data?.listReservations.ok && loggedInUser) {
-      const distributeEvents = distributor(data.listReservations.results);
+      const { results } = data.listReservations;
+      const distributeEvents = distributor(results!);
       if (distributeEvents) {
         setWeekEvents(distributeEvents);
       } else {
@@ -173,7 +152,7 @@ export const TimeTable = () => {
       <TimetableTemplate
         children={
           !viewOptions || !optionalWeekEvents || !viewOptions ? (
-            <p>불러오는 중입니다. 몇초 뒤에 변화가 없으면 새로고침하세요.</p>
+            <Loading />
           ) : (
             <>
               <TableHeader today={today} />

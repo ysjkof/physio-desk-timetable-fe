@@ -1,21 +1,5 @@
-import { Clinic, Member, User } from "../graphql/generated/graphql";
-import { ModifiedLoggedInUser } from "../hooks/useMe";
-import { ModifiedReservation } from "../pages/timetable";
-
-interface ModifiedClinicMemberWithUserAndClinic
-  extends Pick<Member, "id" | "staying" | "manager" | "accepted"> {
-  user: Pick<User, "id" | "name">;
-  clinic: Pick<Clinic, "id" | "name">;
-}
-export interface ClinicMemberWithOptions
-  extends ModifiedClinicMemberWithUserAndClinic {
-  activation: boolean;
-  loginUser: boolean;
-}
-interface ModifiedClinic extends Pick<Clinic, "id" | "name"> {
-  members: ClinicMemberWithOptions[];
-}
-export interface ClinicWithOptions extends ModifiedClinic {}
+import { Reservation } from "../graphql/generated/graphql";
+import { IClinicList, IListReservation, IMember } from "../store";
 
 export const getSunday = (date: Date) => {
   const returnDate = new Date(date);
@@ -32,15 +16,13 @@ export function getAfterDate(startDate: Date, afterDay: number) {
 }
 
 export const spreadClinicMembers = (
-  clinics: ClinicWithOptions[] | null,
-  selectedClinicId: number
+  clinics: IClinicList[] | null,
+  clinicId: number
 ) => {
-  const result: ClinicMemberWithOptions[] = [];
-  const selectedClinic = clinics?.find(
-    (clinic) => clinic.id === selectedClinicId
-  );
-  if (selectedClinic) {
-    const newMember = selectedClinic.members.map((member) => member);
+  const result: IMember[] = [];
+  const clinic = clinics?.find((clinic) => clinic.id === clinicId);
+  if (clinic) {
+    const newMember = clinic.members.map((member) => member);
     result.push(...newMember);
   }
   return result;
@@ -54,13 +36,6 @@ export const compareNumAfterGetMinutes = (
   return compareNumbers.includes(minutes);
 };
 
-interface UserWithEvents extends ClinicMemberWithOptions {
-  events: ModifiedReservation[];
-}
-export interface DayWithUsers {
-  date: Date;
-  users: UserWithEvents[];
-}
 export const getWeeks = (dateOfSunday: Date) => {
   let result: { date: Date }[] = [];
   for (let i = 0; i < 7; i++) {
@@ -70,57 +45,22 @@ export const getWeeks = (dateOfSunday: Date) => {
   }
   return result;
 };
-export const mergeLoggedInUser = (
-  loginUser: ModifiedLoggedInUser,
-  members: ClinicMemberWithOptions[]
-) => {
-  let result: ClinicMemberWithOptions[] = [];
-  const loggedInUser = {
-    id: 0,
-    staying: true,
-    manager: true,
-    accepted: true,
-    user: {
-      id: loginUser.id,
-      name: loginUser.name,
-      email: loginUser.email,
-    },
-    clinic: {
-      id: 0,
-      name: "",
-    },
-    activation: true,
-    loginUser: true,
-  };
-  if (members.length >= 1) {
-    const activatedMembers = members.filter((member) => member.activation);
-    const removeLoggedInUser = activatedMembers.filter(
-      (member) => member.user.id !== loginUser.id
-    );
-    const isThereLoginUser = activatedMembers.find(
-      (member) => member.user.id === loginUser.id
-    );
-    if (isThereLoginUser) {
-      result.push(loggedInUser);
-    }
-    result.push(...removeLoggedInUser);
-  } else {
-    result.push(loggedInUser);
-  }
-  return result;
-};
-// 겟위크 결과값에 객체 필드 넣는 기능을 따로 빼자.
+
+interface IUserWithEvent extends IMember {
+  events: IListReservation[];
+}
+export interface DayWithUsers {
+  date: Date;
+  users: IUserWithEvent[];
+}
+
 export const makeDayWithUsers = (
-  weeks: { date: Date }[],
-  loginUser: ModifiedLoggedInUser,
-  members: ClinicMemberWithOptions[]
+  members: IMember[],
+  weeks: { date: Date }[]
 ) => {
   const result: DayWithUsers[] = [];
-  function makeNewUsers() {
-    return mergeLoggedInUser(loginUser, members).map((user) => ({
-      ...user,
-      events: [],
-    }));
+  function makeNewUsers(): IUserWithEvent[] {
+    return members.map((user) => ({ ...user, events: [] }));
   }
   weeks.forEach((day) => {
     result.push({

@@ -24,17 +24,14 @@ export function TableRows({ weekEvents, labels }: TableRowProps) {
           isActiveBorderTop={compareNumAfterGetMinutes(label, [0, 30])}
           children={weekEvents.map((day, ii) => (
             <div key={ii} className="relative flex">
-              {day?.users.map(
-                (member, userIndex) =>
-                  member.activation && (
-                    <ReserveBtn
-                      key={userIndex}
-                      label={combineYMDHM(day.date, label)}
-                      userIndex={userIndex}
-                      member={{ id: member.user.id, name: member.user.name }}
-                    />
-                  )
-              )}
+              {day?.users.map((member, userIndex) => (
+                <ReserveBtn
+                  key={userIndex}
+                  label={combineYMDHM(day.date, label)}
+                  userIndex={userIndex}
+                  member={{ id: member.user.id, name: member.user.name }}
+                />
+              ))}
             </div>
           ))}
         />

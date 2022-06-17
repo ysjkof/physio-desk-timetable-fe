@@ -31,9 +31,8 @@ export function TableSubHeader({}: TableSubHeaderProps) {
   useEffect(() => {
     if (loggedInUser) {
       const userFrame = makeDayWithUsers(
-        getWeeks(getSunday(selectedDate)),
-        loggedInUser,
-        spreadClinicMembers(clinicLists, selectedClinic.id)
+        spreadClinicMembers(clinicLists, selectedClinic!.id),
+        getWeeks(getSunday(selectedDate))
       );
       setUserFrame(userFrame);
     }
@@ -84,33 +83,30 @@ export function TableSubHeader({}: TableSubHeaderProps) {
               key={i}
               className="relative flex items-center bg-white shadow-b"
             >
-              {day?.users.map(
-                (member, userIndex) =>
-                  member.activation && (
-                    <span
-                      key={member.id}
-                      className={`flex h-full w-full items-center justify-center first:border-l-0 ${
-                        member.user.name === loggedInUser?.name
-                          ? "font-semibold"
-                          : ""
-                      } ${
-                        userIndex === 0
-                          ? "user-color-1"
-                          : userIndex === 1
-                          ? "user-color-2"
-                          : userIndex === 2
-                          ? "user-color-3"
-                          : userIndex === 3
-                          ? "user-color-4"
-                          : userIndex === 4
-                          ? "user-color-5"
-                          : ""
-                      }`}
-                    >
-                      {member.user.name}
-                    </span>
-                  )
-              )}
+              {day?.users.map((member, userIndex) => (
+                <span
+                  key={member.id}
+                  className={`flex h-full w-full items-center justify-center first:border-l-0 ${
+                    member.user.name === loggedInUser?.name
+                      ? "font-semibold"
+                      : ""
+                  } ${
+                    userIndex === 0
+                      ? "user-color-1"
+                      : userIndex === 1
+                      ? "user-color-2"
+                      : userIndex === 2
+                      ? "user-color-3"
+                      : userIndex === 3
+                      ? "user-color-4"
+                      : userIndex === 4
+                      ? "user-color-5"
+                      : ""
+                  }`}
+                >
+                  {member.user.name}
+                </span>
+              ))}
             </div>
           ))}
         />

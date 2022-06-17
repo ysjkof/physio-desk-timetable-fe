@@ -1,5 +1,6 @@
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Loading } from "../../../components/atoms/loading";
 import { useFindMyClinicsQuery } from "../../../graphql/generated/graphql";
 import { DashboardSectionLayout } from "../components/section-layout";
 
@@ -9,7 +10,7 @@ export const InactivatedClinic = () => {
   });
 
   return loading ? (
-    <span>Loading...</span>
+    <Loading />
   ) : (
     <DashboardSectionLayout
       title="비활성 병원 보기"
