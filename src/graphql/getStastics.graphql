@@ -8,15 +8,18 @@ query getStatistics($input: GetStatisticsInput!) {
       price
       requiredTime
     }
-    dailyReport {
+    visitRates {
+      patientId
+      visited
+    }
+    dailyReports {
       date
       reservationCount
       noshow
       cancel
       newPatient
       users {
-        id
-        name
+        userId
         reservationCount
         noshow
         cancel
@@ -30,6 +33,7 @@ query getStatistics($input: GetStatisticsInput!) {
           count
         }
         reservations {
+          id
           startDate
           endDate
           state

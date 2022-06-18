@@ -134,7 +134,7 @@ export type DailyReport = {
   newPatient: Scalars['Int'];
   noshow: Scalars['Int'];
   reservationCount: Scalars['Int'];
-  users: UserInDailyReport;
+  users: Array<UserInDailyReport>;
 };
 
 export type DeletePatientInput = {
@@ -314,10 +314,11 @@ export type GetStatisticsInput = {
 
 export type GetStatisticsOutput = {
   __typename?: 'GetStatisticsOutput';
-  dailyReport?: Maybe<Array<DailyReport>>;
+  dailyReports?: Maybe<Array<DailyReport>>;
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
   prescriptions?: Maybe<Array<Prescription>>;
+  visitRates?: Maybe<Array<VisitRate>>;
 };
 
 export type GetUserOutput = {
@@ -700,13 +701,12 @@ export type User = {
 export type UserInDailyReport = {
   __typename?: 'UserInDailyReport';
   cancel: Scalars['Int'];
-  id: Scalars['Int'];
-  name: Scalars['String'];
   newPatient: Scalars['Int'];
   noshow: Scalars['Int'];
   prescriptions: Array<GetStatisticsOutputPrescription>;
   reservationCount: Scalars['Int'];
   reservations: Array<Reservation>;
+  userId: Scalars['Int'];
   visitMoreThanNinety: Scalars['Int'];
   visitMoreThanSixty: Scalars['Int'];
   visitMoreThanThirty: Scalars['Int'];
@@ -727,6 +727,12 @@ export type VerifyEmailOutput = {
   __typename?: 'VerifyEmailOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
+};
+
+export type VisitRate = {
+  __typename?: 'VisitRate';
+  patientId: Scalars['Int'];
+  visited: Array<Scalars['Boolean']>;
 };
 
 export type GetStatisticsOutputPrescription = {
@@ -851,7 +857,7 @@ export type GetStatisticsQueryVariables = Exact<{
 }>;
 
 
-export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, dailyReport?: Array<{ __typename?: 'DailyReport', date: any, reservationCount: number, noshow: number, cancel: number, newPatient: number, users: { __typename?: 'UserInDailyReport', id: number, name: string, reservationCount: number, noshow: number, cancel: number, newPatient: number, visitMoreThanThirty: number, visitMoreThanSixty: number, visitMoreThanNinety: number, prescriptions: Array<{ __typename?: 'getStatisticsOutputPrescription', id: number, name: string, count: number }>, reservations: Array<{ __typename?: 'Reservation', startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, patient: { __typename?: 'Patient', id: number, name: string }, lastModifier?: { __typename?: 'User', id: number, name: string } | null }> } }> | null } };
+export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, visitRates?: Array<{ __typename?: 'VisitRate', patientId: number, visited: Array<boolean> }> | null, dailyReports?: Array<{ __typename?: 'DailyReport', date: any, reservationCount: number, noshow: number, cancel: number, newPatient: number, users: Array<{ __typename?: 'UserInDailyReport', userId: number, reservationCount: number, noshow: number, cancel: number, newPatient: number, visitMoreThanThirty: number, visitMoreThanSixty: number, visitMoreThanNinety: number, prescriptions: Array<{ __typename?: 'getStatisticsOutputPrescription', id: number, name: string, count: number }>, reservations: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, patient: { __typename?: 'Patient', id: number, name: string }, lastModifier?: { __typename?: 'User', id: number, name: string } | null }> }> }> | null } };
 
 export type InviteClinicMutationVariables = Exact<{
   input: InviteClinicInput;
@@ -1553,15 +1559,18 @@ export const GetStatisticsDocument = gql`
       price
       requiredTime
     }
-    dailyReport {
+    visitRates {
+      patientId
+      visited
+    }
+    dailyReports {
       date
       reservationCount
       noshow
       cancel
       newPatient
       users {
-        id
-        name
+        userId
         reservationCount
         noshow
         cancel
@@ -1575,6 +1584,7 @@ export const GetStatisticsDocument = gql`
           count
         }
         reservations {
+          id
           startDate
           endDate
           state

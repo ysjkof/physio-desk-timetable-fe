@@ -1,12 +1,13 @@
 import { DashboardLi } from "../components/li";
+import { CountLists } from "../organisms/statistics";
 import { TableChartCol } from "./table-chart-col";
 
 interface TableChartColLayoutProps {
   labelNames: string[];
   hasLabelTotal?: boolean;
   individualData: {
-    name: string;
-    counts: number[];
+    userName: string;
+    counts: CountLists;
     countTotal?: number;
   }[];
   countTotal?: number;
@@ -45,10 +46,10 @@ export const TableChartColLayout = ({
       {individualData.map((data, idx) => (
         <TableChartCol
           key={idx}
-          title={data.name}
+          title={data.userName}
           children={
             <>
-              {data.counts.map((count, i) => (
+              {Object.values(data.counts).map((count, i) => (
                 <DashboardLi
                   key={i}
                   textContents={
