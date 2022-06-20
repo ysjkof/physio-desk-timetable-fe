@@ -3,19 +3,8 @@ import {
   GetStatisticsQuery,
   useGetStatisticsLazyQuery,
 } from "../../../graphql/generated/graphql";
-import {
-  getDateFromYMDHM,
-  getHowManyDayFromMillisec,
-} from "../../../libs/utils";
+import { getDateFromYMDHM } from "../../../libs/utils";
 import { useForm } from "react-hook-form";
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryGroup,
-  VictoryLine,
-  VictoryTheme,
-} from "victory";
 import { useEffect, useState } from "react";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
 import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
@@ -23,15 +12,10 @@ import { InDashboardPageProps } from "..";
 import { Button } from "../../../components/molecules/button";
 import { selectedClinicVar } from "../../../store";
 import { useReactiveVar } from "@apollo/client";
-import {
-  compareDateMatch,
-  getAfterDate,
-  getSunday,
-  getYMD,
-} from "../../../libs/timetable-utils";
+import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
 import { BtnMenu } from "../../../components/molecules/button-menu";
-import { TableChartColLayout } from "../molecules/table-chart-col-layout";
 import { Worning } from "../../../components/atoms/warning";
+import { Charts } from "../molecules/charts";
 
 type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
 export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
@@ -206,7 +190,6 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   }, [selectedClinic]);
 
   useEffect(() => {
-    console.log("👀 dataa is : ", !!data);
     if (data?.getStatistics.dailyReports && data?.getStatistics.prescriptions) {
       const { dailyReports, prescriptions, visitRates } = data.getStatistics;
 
@@ -354,56 +337,12 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         const arrReport = convertObjToArr(objReport);
         return arrReport;
       }
+
       const newUserStatistics = combineUserStatistics();
       console.log("newUserStatistics", newUserStatistics);
       setUserStatistics(newUserStatistics);
     }
   }, [data]);
-
-  function getGraphEveryDayCounts(
-    dailyReports: IDailyReport[],
-    startDate: Date,
-    endDate: Date
-  ) {
-    function getEveryDay(startDate: Date, endDate: Date) {
-      console.log(startDate, endDate);
-      let arr: number[] = [];
-      const start = startDate.getTime();
-      const end = endDate.getTime();
-      const duration = end - start;
-      const days = getHowManyDayFromMillisec(duration);
-      arr.length = days;
-      arr.fill(0);
-      return arr.map((v, idx) => {
-        const newDate = new Date(startDate);
-        newDate.setDate(newDate.getDate() + idx);
-        return newDate;
-      });
-    }
-
-    const everyDay = getEveryDay(startDate, endDate);
-    const graphData = everyDay.map((day) => ({
-      x: getYMD(day, "mmdd"),
-      y: 0,
-    }));
-
-    dailyReports.forEach((day) => {
-      const idx = everyDay.findIndex((everyDate) =>
-        compareDateMatch(new Date(day.date), everyDate, "ymd")
-      );
-      if (idx) {
-        graphData[idx].y = graphData[idx].y + day.reservationCount;
-      }
-    });
-    return graphData;
-  }
-  function getGraphEachUserTotalCounts(
-    userStatistics: IUserStatistics[]
-  ): { x: string; y: number }[][] {
-    return userStatistics.map((user) =>
-      Object.entries(user.counts).map(([key, count]) => ({ x: key, y: count }))
-    );
-  }
 
   return (
     <>
@@ -523,160 +462,13 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           )}
           {data.getStatistics.prescriptions.length > 1 &&
             data.getStatistics.dailyReports.length > 1 && (
-              <>
-                <div className="flex">
-                  <DashboardSectionLayout
-                    elementName="TABLE_CHART_PRESCRIPTION_COUNTS"
-                    padding
-                    children={
-                      <>
-                        <TableChartColLayout
-                          userStatistics={userStatistics}
-                          prescriptionInfo={data.getStatistics.prescriptions}
-                          renderIt={"prescriptions"}
-                          hasTotalInRow
-                          hasTotalInColumn
-                        />
-                      </>
-                    }
-                  />
-                  <DashboardSectionLayout
-                    elementName="TABLE_CHART_PRESCRIPTION_PRICE"
-                    padding
-                    children={
-                      <>
-                        <TableChartColLayout
-                          userStatistics={userStatistics}
-                          prescriptionInfo={data.getStatistics.prescriptions}
-                          renderIt={"prescriptions"}
-                          hasTotalInRow
-                          hasTotalInColumn
-                        />
-                      </>
-                    }
-                  />
-                </div>
-
-                <DashboardSectionLayout
-                  elementName="GRAPH_CHART_EVERYDAY_COUNTS"
-                  children={
-                    <div className="position-center-x relative max-w-4xl">
-                      <VictoryChart
-                        height={300}
-                        width={1000}
-                        domainPadding={[10, 0]}
-                        minDomain={{ y: 0 }}
-                        padding={{
-                          top: 60,
-                          bottom: 60,
-                          left: 70,
-                          right: 70,
-                        }}
-                      >
-                        <VictoryBar
-                          data={getGraphEveryDayCounts(
-                            data.getStatistics.dailyReports,
-                            startDate,
-                            endDate
-                          )}
-                          style={{
-                            data: {
-                              width: 10,
-                            },
-                          }}
-                          labels={({ datum }) => datum.y}
-                        />
-                        {/* <VictoryLine
-                          data={getGraphEveryDayCounts(
-                            data.getStatistics.dailyReports,
-                            startDate,
-                            endDate
-                          )}
-                          style={{
-                            data: {
-                              strokeWidth: 2,
-                            },
-                          }}
-                          labels={({ datum }) => datum.y}
-                        /> */}
-                        <VictoryAxis
-                          dependentAxis
-                          style={{
-                            tickLabels: {
-                              fontSize: 14,
-                            } as any,
-                          }}
-                          tickFormat={(tick) => `${tick}명`}
-                        />
-                        <VictoryAxis
-                          style={{
-                            tickLabels: {
-                              fontSize: 14,
-                              angle: -35,
-                            } as any,
-                          }}
-                          tickFormat={(tick) => {
-                            return `${tick.substring(0, 2)}월 ${tick.substring(
-                              2,
-                              4
-                            )}일`;
-                          }}
-                        />
-                      </VictoryChart>
-                    </div>
-                  }
-                />
-
-                <DashboardSectionLayout
-                  elementName="TABLE_CHART_EACH_USER_TOTAL_COUNTS"
-                  padding
-                  children={
-                    <>
-                      <TableChartColLayout
-                        userStatistics={userStatistics}
-                        prescriptionInfo={data.getStatistics.prescriptions}
-                        dailyReports={data.getStatistics.dailyReports!}
-                        renderIt={"counts"}
-                        labelNames={[
-                          "예약",
-                          "신규",
-                          "부도",
-                          "취소",
-                          "30일 경과",
-                        ]}
-                        hasTotalInRow
-                      />
-                    </>
-                  }
-                />
-                <DashboardSectionLayout
-                  elementName="GRAPH_CHART_EACH_USER_TOTAL_COUNTS"
-                  children={
-                    <div className="position-center-x relative max-w-4xl">
-                      <VictoryChart
-                        height={300}
-                        width={1000}
-                        minDomain={{ y: 0 }}
-                      >
-                        <VictoryGroup
-                          offset={20}
-                          domainPadding={0}
-                          colorScale={"red"}
-                        >
-                          {getGraphEachUserTotalCounts(userStatistics).map(
-                            (user) => (
-                              <VictoryBar
-                                data={user}
-                                style={{ data: { width: 10 } }}
-                              />
-                            )
-                          )}
-                        </VictoryGroup>
-                      </VictoryChart>
-                    </div>
-                  }
-                />
-              </>
+              <Charts
+                userStatistics={userStatistics}
+                prescriptions={data.getStatistics.prescriptions}
+                dailyReports={data.getStatistics.dailyReports}
+                startDate={startDate}
+                endDate={endDate}
+              />
             )}
         </>
       ) : (
