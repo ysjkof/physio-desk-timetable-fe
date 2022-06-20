@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { InDashboardPageProps } from "..";
 import { Loading } from "../../../components/atoms/loading";
-import { NotPermission } from "../../../components/atoms/not-permission";
+import { Worning } from "../../../components/atoms/warning";
 import {
   SearchUsersInput,
   useInviteClinicMutation,
@@ -62,7 +62,7 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
 
   return selectedClinic ? (
     selectedClinic?.isStayed && selectedClinic.isManager ? (
-      <NotPermission />
+      <Worning type="hasNotPermission" />
     ) : (
       <DashboardSectionLayout
         width="md"

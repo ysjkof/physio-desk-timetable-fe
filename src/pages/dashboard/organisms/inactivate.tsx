@@ -3,7 +3,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { InDashboardPageProps } from "..";
-import { NotPermission } from "../../../components/atoms/not-permission";
+import { Worning } from "../../../components/atoms/warning";
 import { Button } from "../../../components/molecules/button";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { useInactivateClinicMutation } from "../../../graphql/generated/graphql";
@@ -29,7 +29,7 @@ export const InactivateClinic = ({ loggedInUser }: InDashboardPageProps) => {
   };
 
   return selectedClinic?.isStayed && selectedClinic.isManager ? (
-    <NotPermission />
+    <Worning type="hasNotPermission" />
   ) : (
     <DashboardSectionLayout
       title="병원 비활성"

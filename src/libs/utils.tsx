@@ -90,3 +90,10 @@ export function checkMember(staying: boolean, accepted: boolean) {
   // if (!staying && !accepted) return "수락대기";
   // if (!staying && accepted) return "탈퇴";
 }
+
+export function makeArrFromLength(length: number) {
+  const arr: number[] = [];
+  arr.length = length;
+  arr.fill(0);
+  return arr;
+}

@@ -16,9 +16,18 @@ import { useReactiveVar } from "@apollo/client";
 import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { TableChartColLayout } from "../molecules/table-chart-col-layout";
+import { Worning } from "../../../components/atoms/warning";
 
 type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
-type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
+export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
+
+type IDailyPrescriptions = GetStatisticsQuery["getStatistics"]["prescriptions"];
+export type IDailyPrescription = NonNullable<FlatArray<IDailyPrescriptions, 0>>;
+interface IDailyPrescriptionWithCount extends IDailyPrescription {
+  count: number;
+}
+export type IPrescriptionOfUser = IDailyReport["users"][0]["prescriptions"][0];
+
 export type CountLists = {
   reservationCount: number;
   newPatient: number;
@@ -26,9 +35,10 @@ export type CountLists = {
   cancel: number;
   visitMoreThanThirty: number;
 };
-interface IUserStatistics {
-  userName: string;
+export interface IUserStatistics {
+  name: string;
   counts: CountLists;
+  prescriptions: IDailyPrescriptionWithCount[];
 }
 
 interface IPrescriptionCounts {
@@ -44,11 +54,6 @@ interface IPrescriptionNamePrice {
 interface IPrescription extends IPrescriptionNamePrice, IPrescriptionCounts {
   name: string;
   price: number;
-}
-interface Prescriptions extends IPrescription {
-  __typename?: "PrescriptionInfo" | undefined;
-  id: number;
-  requiredTime: number;
 }
 
 export interface MemberState {
@@ -77,7 +82,9 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   const [memberState, setMemberState] = useState<MemberState[]>();
   const [prescriptionsStatis, setPrescriptionsStatis] =
     useState<IPrescription[]>();
-  const [userStatistics, setUserStatistics] = useState<IUserStatistics[]>([]);
+  const [userStatistics, setUserStatistics] = useState<
+    IUserStatistics[] | null
+  >(null);
 
   const {
     register,
@@ -187,6 +194,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
     console.log("👀 dataa is : ", !!data);
     if (data?.getStatistics.dailyReports && data?.getStatistics.prescriptions) {
       const { dailyReports, prescriptions, visitRates } = data.getStatistics;
+
       console.log("dailyReports", dailyReports);
       console.log("prescriptions", prescriptions);
       console.log("visitRates", visitRates);
@@ -205,10 +213,63 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
               noshow: number;
               cancel: number;
               visitMoreThanThirty: number;
+              prescriptions: IDailyPrescriptionWithCount[];
             };
           } = {};
+
           flatReports.forEach((user) => {
             const userKey = user.userId;
+
+            function makePrescriptionList(): IDailyPrescriptionWithCount[] {
+              return prescriptions.map((prescription) => ({
+                id: prescription.id,
+                name: prescription.name,
+                count: 0,
+                price: 0,
+                requiredTime: 0,
+              }));
+            }
+            function combinePrescriptions(
+              prevPrescriptions: IDailyPrescriptionWithCount[],
+              nextPrescriptions: IPrescriptionOfUser[]
+            ) {
+              nextPrescriptions.forEach((prescription) => {
+                const idx = prevPrescriptions.findIndex(
+                  (prevPrescription) => prevPrescription.id === prescription.id
+                );
+                if (idx !== -1) {
+                  prevPrescriptions[idx].count =
+                    prevPrescriptions[idx].count + prescription.count;
+                  prevPrescriptions[idx].price = 0;
+                  prevPrescriptions[idx].requiredTime = 0;
+                }
+              });
+              return prevPrescriptions;
+            }
+
+            const prevPrescriptions = obj[userKey]
+              ? obj[userKey].prescriptions
+              : makePrescriptionList();
+            const nextPrescription = user.prescriptions;
+            const injectedCount = combinePrescriptions(
+              prevPrescriptions,
+              nextPrescription
+            );
+            const injectedOther = injectedCount.map((prescription) => {
+              const selectedPrescription = prescriptions.find(
+                (prescriptionInList) =>
+                  prescriptionInList.id === prescription.id
+              );
+              if (!selectedPrescription)
+                throw new Error("처방을 찾을 수 없습니다");
+              return {
+                ...prescription,
+                price: prescription.count * selectedPrescription.price,
+                requiredTime:
+                  prescription.count * selectedPrescription.requiredTime,
+              };
+            });
+
             if (obj[userKey]) {
               obj[userKey] = {
                 reservationCount:
@@ -218,6 +279,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                 cancel: obj[userKey].cancel + user.cancel,
                 visitMoreThanThirty:
                   obj[userKey].visitMoreThanThirty + user.visitMoreThanThirty,
+                prescriptions: injectedOther,
               };
             } else {
               obj[userKey] = {
@@ -226,6 +288,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                 noshow: user.noshow,
                 cancel: user.cancel,
                 visitMoreThanThirty: user.visitMoreThanThirty,
+                prescriptions: injectedOther,
               };
             }
           });
@@ -235,31 +298,52 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           objReport: ReturnType<typeof combineSameUser>
         ) => {
           const toArrReport = Object.entries(objReport);
-          return toArrReport.map(([userId, reports]) => {
+          const injectUserName = toArrReport.map(([userId, reports]) => {
             function injectUserName() {
               const member = memberState?.find(
                 (member) => member.userId === +userId
               );
               return member ? member.name : userId;
             }
-
+            function divideReports() {
+              const {
+                reservationCount,
+                newPatient,
+                noshow,
+                cancel,
+                visitMoreThanThirty,
+                prescriptions,
+              } = reports;
+              return {
+                counts: {
+                  reservationCount,
+                  newPatient,
+                  noshow,
+                  cancel,
+                  visitMoreThanThirty,
+                },
+                prescriptions,
+              };
+            }
+            const { counts, prescriptions } = divideReports();
             return {
-              userName: injectUserName(),
-              counts: reports,
+              name: injectUserName(),
+              counts,
+              prescriptions,
             };
           });
+          return injectUserName;
         };
         const flatReports = flattening(dailyReports);
         const objReport = combineSameUser(flatReports);
-        console.log("objReport", objReport);
         const arrReport = convertObjToArr(objReport);
         setUserStatistics(arrReport);
       }
       combineUserStatistics();
     }
-    console.log("userStatistics", userStatistics);
   }, [data]);
 
+  console.log("userStatistics", userStatistics);
   return (
     <>
       <DashboardSectionLayout
@@ -365,99 +449,76 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           </form>
         }
       />
-      {data ? (
+      {data &&
+      data.getStatistics.prescriptions &&
+      data.getStatistics.dailyReports &&
+      userStatistics ? (
         <>
-          {/* <div className="flex">
-            <DashboardSectionLayout
-              elementName="TABLE_CHART_PRESCRIPTION_COUNT"
-              padding
-              children={
-                <>
-                  <TableChartColLayout
-                    labelNames={data.getStatistics.prescriptionInfo!.map(
-                      (info) => info.name
-                    )}
-                    hasLabelTotal
-                    individualData={userStatis.map((user) => ({
-                      name: user.name,
-                      counts: user.prescriptions.map(
-                        (prescription) => prescription.reservedCount ?? 0
-                      ),
-                      countTotal: user.prescriptions.reduce(
-                        (acc, cur) => acc + cur.reservedCount,
-                        0
-                      ),
-                    }))}
-                    counts={prescriptionsStatis.map(
-                      (info, idx) => info.reservedCount
-                    )}
-                    countTotal={prescriptionsStatis.reduce(
-                      (acc, cur) => acc + cur.reservedCount,
-                      0
-                    )}
-                  />
-                </>
-              }
-            />
-            <DashboardSectionLayout
-              elementName="TABLE_CHART_PRESCRIPTION_PRICE"
-              padding
-              children={
-                <>
-                  <TableChartColLayout
-                    labelNames={data.getStatistics.prescriptionInfo!.map(
-                      (info) => info.name
-                    )}
-                    hasLabelTotal
-                    individualData={userStatis.map((user) => ({
-                      name: user.name,
-                      counts: user.prescriptions.map(
-                        (prescription) =>
-                          prescription.price * prescription.reservedCount
-                      ),
-                      countTotal: user.prescriptions.reduce(
-                        (acc, cur) => acc + cur.price * cur.reservedCount,
-                        0
-                      ),
-                    }))}
-                    counts={prescriptionsStatis.map((info, idx) => info.price)}
-                    countTotal={prescriptionsStatis.reduce(
-                      (acc, cur) => acc + cur.price,
-                      0
-                    )}
-                  />
-                </>
-              }
-            />
-          </div> */}
-          <DashboardSectionLayout
-            elementName="TABLE_CHART_USER_COUNTS"
-            padding
-            children={
+          {data.getStatistics.prescriptions.length < 1 && (
+            <Worning type="hasNotPrescription" />
+          )}
+          {data.getStatistics.dailyReports.length < 1 && (
+            <Worning type="hasNotStatistics" />
+          )}
+          {data.getStatistics.prescriptions.length > 1 &&
+            data.getStatistics.dailyReports.length > 1 && (
               <>
-                <TableChartColLayout
-                  labelNames={["예약", "신규", "부도", "취소", "30일 경과"]}
-                  individualData={userStatistics}
-                  counts={data.getStatistics.dailyReports!.reduce(
-                    (acc, cur) => [
-                      acc[0] + cur.reservationCount,
-                      acc[1] + cur.newPatient,
-                      acc[2] + cur.noshow,
-                      acc[3] + cur.cancel,
-                      acc[4] +
-                        cur.users.reduce(
-                          (acc, cur) => acc + cur.visitMoreThanThirty,
-                          0
-                        ),
-                    ],
-                    [0, 0, 0, 0, 0]
-                  )}
+                <div className="flex">
+                  <DashboardSectionLayout
+                    elementName="TABLE_CHART_PRESCRIPTION_COUNT"
+                    padding
+                    children={
+                      <>
+                        <TableChartColLayout
+                          userStatistics={userStatistics}
+                          prescriptionInfo={data.getStatistics.prescriptions}
+                          renderIt={"prescriptions"}
+                          hasTotalInRow
+                          hasTotalInColumn
+                        />
+                      </>
+                    }
+                  />
+                  <DashboardSectionLayout
+                    elementName="TABLE_CHART_PRESCRIPTION_PRICE"
+                    padding
+                    children={
+                      <>
+                        <TableChartColLayout
+                          userStatistics={userStatistics}
+                          prescriptionInfo={data.getStatistics.prescriptions}
+                          renderIt={"prescriptions"}
+                          hasTotalInRow
+                          hasTotalInColumn
+                        />
+                      </>
+                    }
+                  />
+                </div>
+                <DashboardSectionLayout
+                  elementName="TABLE_CHART_USER_COUNTS"
+                  padding
+                  children={
+                    <>
+                      <TableChartColLayout
+                        userStatistics={userStatistics}
+                        prescriptionInfo={data.getStatistics.prescriptions}
+                        dailyReports={data.getStatistics.dailyReports!}
+                        renderIt={"counts"}
+                        labelNames={[
+                          "예약",
+                          "신규",
+                          "부도",
+                          "취소",
+                          "30일 경과",
+                        ]}
+                        hasTotalInRow
+                      />
+                    </>
+                  }
                 />
-              </>
-            }
-          />
 
-          {/* <DashboardSectionLayout
+                {/* <DashboardSectionLayout
             elementName="graph_chart"
             children={
               <>
@@ -537,6 +598,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
               </>
             }
           /> */}
+              </>
+            )}
         </>
       ) : (
         <p className="position-center absolute text-base">
