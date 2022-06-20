@@ -3,9 +3,19 @@ import {
   GetStatisticsQuery,
   useGetStatisticsLazyQuery,
 } from "../../../graphql/generated/graphql";
-import { getDateFromYMDHM } from "../../../libs/utils";
+import {
+  getDateFromYMDHM,
+  getHowManyDayFromMillisec,
+} from "../../../libs/utils";
 import { useForm } from "react-hook-form";
-import { VictoryAxis, VictoryChart, VictoryLine, VictoryTheme } from "victory";
+import {
+  VictoryAxis,
+  VictoryBar,
+  VictoryChart,
+  VictoryGroup,
+  VictoryLine,
+  VictoryTheme,
+} from "victory";
 import { useEffect, useState } from "react";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
 import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
@@ -13,7 +23,12 @@ import { InDashboardPageProps } from "..";
 import { Button } from "../../../components/molecules/button";
 import { selectedClinicVar } from "../../../store";
 import { useReactiveVar } from "@apollo/client";
-import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
+import {
+  compareDateMatch,
+  getAfterDate,
+  getSunday,
+  getYMD,
+} from "../../../libs/timetable-utils";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { TableChartColLayout } from "../molecules/table-chart-col-layout";
 import { Worning } from "../../../components/atoms/warning";
@@ -337,13 +352,59 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         const flatReports = flattening(dailyReports);
         const objReport = combineSameUser(flatReports);
         const arrReport = convertObjToArr(objReport);
-        setUserStatistics(arrReport);
+        return arrReport;
       }
-      combineUserStatistics();
+      const newUserStatistics = combineUserStatistics();
+      console.log("newUserStatistics", newUserStatistics);
+      setUserStatistics(newUserStatistics);
     }
   }, [data]);
 
-  console.log("userStatistics", userStatistics);
+  function getGraphEveryDayCounts(
+    dailyReports: IDailyReport[],
+    startDate: Date,
+    endDate: Date
+  ) {
+    function getEveryDay(startDate: Date, endDate: Date) {
+      console.log(startDate, endDate);
+      let arr: number[] = [];
+      const start = startDate.getTime();
+      const end = endDate.getTime();
+      const duration = end - start;
+      const days = getHowManyDayFromMillisec(duration);
+      arr.length = days;
+      arr.fill(0);
+      return arr.map((v, idx) => {
+        const newDate = new Date(startDate);
+        newDate.setDate(newDate.getDate() + idx);
+        return newDate;
+      });
+    }
+
+    const everyDay = getEveryDay(startDate, endDate);
+    const graphData = everyDay.map((day) => ({
+      x: getYMD(day, "mmdd"),
+      y: 0,
+    }));
+
+    dailyReports.forEach((day) => {
+      const idx = everyDay.findIndex((everyDate) =>
+        compareDateMatch(new Date(day.date), everyDate, "ymd")
+      );
+      if (idx) {
+        graphData[idx].y = graphData[idx].y + day.reservationCount;
+      }
+    });
+    return graphData;
+  }
+  function getGraphEachUserTotalCounts(
+    userStatistics: IUserStatistics[]
+  ): { x: string; y: number }[][] {
+    return userStatistics.map((user) =>
+      Object.entries(user.counts).map(([key, count]) => ({ x: key, y: count }))
+    );
+  }
+
   return (
     <>
       <DashboardSectionLayout
@@ -465,7 +526,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
               <>
                 <div className="flex">
                   <DashboardSectionLayout
-                    elementName="TABLE_CHART_PRESCRIPTION_COUNT"
+                    elementName="TABLE_CHART_PRESCRIPTION_COUNTS"
                     padding
                     children={
                       <>
@@ -495,8 +556,79 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     }
                   />
                 </div>
+
                 <DashboardSectionLayout
-                  elementName="TABLE_CHART_USER_COUNTS"
+                  elementName="GRAPH_CHART_EVERYDAY_COUNTS"
+                  children={
+                    <div className="position-center-x relative max-w-4xl">
+                      <VictoryChart
+                        height={300}
+                        width={1000}
+                        domainPadding={[10, 0]}
+                        minDomain={{ y: 0 }}
+                        padding={{
+                          top: 60,
+                          bottom: 60,
+                          left: 70,
+                          right: 70,
+                        }}
+                      >
+                        <VictoryBar
+                          data={getGraphEveryDayCounts(
+                            data.getStatistics.dailyReports,
+                            startDate,
+                            endDate
+                          )}
+                          style={{
+                            data: {
+                              width: 10,
+                            },
+                          }}
+                          labels={({ datum }) => datum.y}
+                        />
+                        {/* <VictoryLine
+                          data={getGraphEveryDayCounts(
+                            data.getStatistics.dailyReports,
+                            startDate,
+                            endDate
+                          )}
+                          style={{
+                            data: {
+                              strokeWidth: 2,
+                            },
+                          }}
+                          labels={({ datum }) => datum.y}
+                        /> */}
+                        <VictoryAxis
+                          dependentAxis
+                          style={{
+                            tickLabels: {
+                              fontSize: 14,
+                            } as any,
+                          }}
+                          tickFormat={(tick) => `${tick}명`}
+                        />
+                        <VictoryAxis
+                          style={{
+                            tickLabels: {
+                              fontSize: 14,
+                              angle: -35,
+                            } as any,
+                          }}
+                          tickFormat={(tick) => {
+                            return `${tick.substring(0, 2)}월 ${tick.substring(
+                              2,
+                              4
+                            )}일`;
+                          }}
+                        />
+                      </VictoryChart>
+                    </div>
+                  }
+                />
+
+                <DashboardSectionLayout
+                  elementName="TABLE_CHART_EACH_USER_TOTAL_COUNTS"
                   padding
                   children={
                     <>
@@ -517,87 +649,33 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     </>
                   }
                 />
-
-                {/* <DashboardSectionLayout
-            elementName="graph_chart"
-            children={
-              <>
-                <div className="relative">
-                  <VictoryChart
-                    height={500}
-                    width={window.innerWidth}
-                    domainPadding={50}
-                    theme={VictoryTheme.material}
-                    minDomain={{ y: 0 }}
-                    padding={{
-                      top: 60,
-                      bottom: 60,
-                      left: 70,
-                      right: 70,
-                    }}
-                  >
-                    <VictoryLine
-                      data={
-                        data.getStatistics.results?.length !== 0
-                          ? data.getStatistics.results
-                              ?.map((result) =>
-                                result.statistics?.map((data) => ({
-                                  x: data.date,
-                                  y: data.prescriptions.reduce(
-                                    (prev, curr) => prev + curr.reservedCount,
-                                    0
-                                  ),
-                                }))
-                              )
-                              .reduce((prev, curr) => {
-                                curr?.forEach((c) => {
-                                  const idx = prev!.findIndex(
-                                    (p) => p.x === c.x
-                                  );
-                                  if (idx === -1) {
-                                    prev?.push(c);
-                                  } else {
-                                    prev![idx].y = c.y + prev![idx].y;
-                                  }
-                                });
-                                return prev;
-                              })
-                          : undefined
-                      }
-                      style={{
-                        data: {
-                          strokeWidth: 5,
-                        },
-                      }}
-                      labels={({ datum }) => datum.y}
-                    />
-
-                    <VictoryAxis
-                      dependentAxis
-                      style={{
-                        tickLabels: {
-                          fontSize: 14,
-                        } as any,
-                      }}
-                      tickFormat={(tick) => `${tick}명`}
-                    />
-                    <VictoryAxis
-                      style={{
-                        tickLabels: {
-                          fontSize: 14,
-                        } as any,
-                      }}
-                      tickFormat={(tick) =>
-                        new Date(tick).toLocaleDateString("ko", {
-                          day: "2-digit",
-                        })
-                      }
-                    />
-                  </VictoryChart>
-                </div>
-              </>
-            }
-          /> */}
+                <DashboardSectionLayout
+                  elementName="GRAPH_CHART_EACH_USER_TOTAL_COUNTS"
+                  children={
+                    <div className="position-center-x relative max-w-4xl">
+                      <VictoryChart
+                        height={300}
+                        width={1000}
+                        minDomain={{ y: 0 }}
+                      >
+                        <VictoryGroup
+                          offset={20}
+                          domainPadding={0}
+                          colorScale={"red"}
+                        >
+                          {getGraphEachUserTotalCounts(userStatistics).map(
+                            (user) => (
+                              <VictoryBar
+                                data={user}
+                                style={{ data: { width: 10 } }}
+                              />
+                            )
+                          )}
+                        </VictoryGroup>
+                      </VictoryChart>
+                    </div>
+                  }
+                />
               </>
             )}
         </>

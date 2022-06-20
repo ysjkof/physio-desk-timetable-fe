@@ -97,3 +97,12 @@ export function makeArrFromLength(length: number) {
   arr.fill(0);
   return arr;
 }
+
+export function getHowManyDayFromMillisec(millisecond: number) {
+  // MILLISECOND_TO_DAY = 1000 / 60 / 60 / 24
+  return millisecond / 1000 / 60 / 60 / 24;
+}
+// export function makeStartDate(date: Date, howManyDay: number) {
+//   const millisecondToDay = getHowManyDayFromMillisec(date.getTime());
+//   return new Date(millisecondToDay / howManyDay);
+// }

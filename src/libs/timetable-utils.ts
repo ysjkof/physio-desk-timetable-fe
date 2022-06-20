@@ -73,17 +73,25 @@ export const makeDayWithUsers = (
 
 export const getYMD = (
   inputDate: string | Date,
-  option: "yyyymmdd" | "yymmdd",
+  option: "yyyymmdd" | "yymmdd" | "mmdd",
   separator?: "-"
 ) => {
   const localDate = new Date(inputDate);
-  let year;
-  if (option === "yymmdd") year = String(localDate.getFullYear()).substring(2);
-  if (option === "yyyymmdd") year = String(localDate.getFullYear());
+  let year = undefined;
+  switch (option) {
+    case "mmdd":
+      break;
+    case "yymmdd":
+      year = String(localDate.getFullYear()).substring(2);
+      break;
+    case "yyyymmdd":
+      year = String(localDate.getFullYear());
+      break;
+  }
   const month = String(localDate.getMonth() + 1).padStart(2, "0");
   const date = String(localDate.getDate()).padStart(2, "0");
   if (separator) return `${year}-${month}-${date}`;
-  return `${year}${month}${date}`;
+  return `${year ?? ""}${month}${date}`;
 };
 
 export function getHHMM(inputDate: string | Date, seperator?: ":") {
@@ -139,21 +147,21 @@ export const compareDateMatch = (
   switch (option) {
     case "ymd":
       return (
-        inputDate.getFullYear() === comparisonDate.getFullYear() &&
+        inputDate.getDate() === comparisonDate.getDate() &&
         inputDate.getMonth() === comparisonDate.getMonth() &&
-        inputDate.getDate() === comparisonDate.getDate()
+        inputDate.getFullYear() === comparisonDate.getFullYear()
       );
     case "ym":
       return (
-        inputDate.getFullYear() === comparisonDate.getFullYear() &&
-        inputDate.getMonth() === comparisonDate.getMonth()
+        inputDate.getMonth() === comparisonDate.getMonth() &&
+        inputDate.getFullYear() === comparisonDate.getFullYear()
       );
     case "d":
       return inputDate.getDate() === comparisonDate.getDate();
     case "hm":
       return (
-        inputDate.getHours() === comparisonDate.getHours() &&
-        inputDate.getMinutes() === comparisonDate.getMinutes()
+        inputDate.getMinutes() === comparisonDate.getMinutes() &&
+        inputDate.getHours() === comparisonDate.getHours()
       );
   }
 };
