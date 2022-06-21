@@ -38,9 +38,11 @@ export const Charts = ({
   startDate,
   endDate,
 }: IChartsProps) => {
+  console.log("startDate", startDate);
   const userLengthArr: any[] = [];
   userLengthArr.length = userStatistics.length;
   userLengthArr.fill(0);
+
   function getCountsLabelsToKor(prescriptionName: STATISTICS_LABEL) {
     switch (prescriptionName) {
       case "reservationCount":
@@ -55,29 +57,28 @@ export const Charts = ({
         return "방문한지 30일 경과";
     }
   }
-
   function injectEveryDayToDailyRreports(
     dailyReports: IDailyReport[],
-    startDate: Date,
-    endDate: Date
+    startD: Date,
+    endD: Date
   ) {
-    function getEveryDay(startDate: Date, endDate: Date) {
+    function getEveryDay(std: Date, edd: Date) {
       let arr: number[] = [];
-      const start = startDate.getTime();
-      const end = endDate.getTime();
+      const start = std.getTime();
+      const end = edd.getTime();
       const duration = end - start;
-      const days = getHowManyDayFromMillisec(duration);
+      const days = Math.ceil(getHowManyDayFromMillisec(duration));
       arr.length = days;
       arr.fill(0);
       return arr.map((v, idx) => {
-        const newDate = new Date(startDate);
+        const newDate = new Date(std);
         newDate.setDate(newDate.getDate() + idx);
         return newDate;
       });
     }
 
     type TypeGraphData = typeof dailyReports[0];
-    const everyDay = getEveryDay(startDate, endDate);
+    const everyDay = getEveryDay(startD, endD);
     const frame: TypeGraphData[] = everyDay.map((day) => ({
       date: day,
       reservationCount: 0,

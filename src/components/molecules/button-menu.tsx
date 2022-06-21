@@ -1,13 +1,14 @@
 import { ReactNode } from "react";
 
 interface BtnDotProps {
-  onClick: any;
+  onClick?: any;
   label?: string;
   icon?: ReactNode;
   enabled?: boolean;
   isWidthFull?: boolean;
   hasBorder?: boolean;
   hasActiveRing?: boolean;
+  hasFocus?: boolean;
   thinFont?: boolean;
   type?: "button" | "reset" | "submit";
   isCenter?: boolean;
@@ -21,6 +22,7 @@ export const BtnMenu = ({
   isWidthFull,
   hasBorder,
   hasActiveRing,
+  hasFocus,
   thinFont,
   type = "button",
   isCenter,
@@ -37,7 +39,9 @@ export const BtnMenu = ({
         : " opacity-50"
     }${isWidthFull ? " w-full" : ""}${
       thinFont ? " py-0 text-[0.7rem] font-normal" : ""
-    }${isCenter ? " mx-auto" : ""}`}
+    }${isCenter ? " mx-auto" : ""}${
+      onClick ? "" : " cursor-default hover:bg-inherit"
+    }${hasFocus ? " focus:emphasize-ring" : ""}`}
     onClick={onClick}
   >
     {icon} {label}

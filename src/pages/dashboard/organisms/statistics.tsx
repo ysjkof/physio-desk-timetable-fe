@@ -7,15 +7,18 @@ import { getDateFromYMDHM } from "../../../libs/utils";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
-import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
 import { InDashboardPageProps } from "..";
 import { Button } from "../../../components/molecules/button";
-import { selectedClinicVar } from "../../../store";
+import { selectedClinicVar, selectedDateVar } from "../../../store";
 import { useReactiveVar } from "@apollo/client";
-import { getAfterDate, getSunday } from "../../../libs/timetable-utils";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { Worning } from "../../../components/atoms/warning";
 import { Charts } from "../molecules/charts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
 export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
@@ -64,32 +67,23 @@ export interface MemberState {
 interface ModifiedDatepickerForm extends DatepickerForm {
   userIds?: number[];
 }
-type Durations =
-  | "지난달"
-  | "이번달"
-  | "지난2주"
-  | "지난주"
-  | "이번주"
-  | "그제"
-  | "어제";
+
 export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
+  const selectedDate = useReactiveVar(selectedDateVar);
 
   let defaultDate: Date[] = [new Date(), new Date()];
   defaultDate[0].setDate(1);
   defaultDate[1].setMonth(defaultDate[0].getMonth() + 1, 0);
 
   const [memberState, setMemberState] = useState<MemberState[]>();
-  const [prescriptionsStatis, setPrescriptionsStatis] =
-    useState<IPrescription[]>();
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);
 
   const {
-    register,
     getValues,
-    formState: { errors, isValid },
+    formState: { isValid },
     handleSubmit,
     setValue,
   } = useForm<ModifiedDatepickerForm>({
@@ -112,7 +106,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   );
   const endDate = getDateFromYMDHM(endDateYear!, endDateMonth!, endDateDate!);
 
-  endDate.setHours(24, 0, 0); // 입력 날짜의 00시를 LassThan하기 때문에 00시 00분 00초로 한다
+  endDate.setHours(23, 59, 59); // 입력 날짜의 00시를 LassThan하기 때문에 00시 00분 00초로 한다
 
   const userIds = memberState
     ? memberState
@@ -136,49 +130,39 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
     if (!loadingStatisticsData) getStatisticsLzq();
   };
 
-  function onClickSetDate(duration: Durations) {
-    let startDate = new Date();
-    let endDate = new Date();
-    const startMonth = startDate.getMonth();
-    const sunday = getSunday(startDate);
-
-    switch (duration) {
-      case "지난달":
-        startDate.setMonth(startMonth - 1, 1);
-        endDate.setMonth(startMonth, 0);
+  function onClickSetDate(
+    date: Date,
+    month: number,
+    changeYear?: "prev" | "next"
+  ) {
+    const startDate = new Date(date);
+    switch (changeYear) {
+      case "prev":
+        startDate.setFullYear(startDate.getFullYear() - 1);
         break;
-      case "이번달":
-        startDate.setMonth(startMonth, 1);
-        endDate.setMonth(startMonth + 1, 0);
-        break;
-      case "지난2주":
-        startDate = new Date(sunday.setDate(sunday.getDate() - 14));
-        endDate = getAfterDate(sunday, 13);
-        break;
-      case "지난주":
-        startDate = new Date(sunday.setDate(sunday.getDate() - 7));
-        endDate = getAfterDate(sunday, 6);
-        break;
-      case "이번주":
-        startDate = sunday;
-        endDate = getAfterDate(sunday, 6);
-        break;
-      case "그제":
-        startDate.setDate(startDate.getDate() - 2);
-        endDate.setDate(endDate.getDate() - 2);
-        break;
-      case "어제":
-        startDate.setDate(startDate.getDate() - 1);
-        endDate.setDate(endDate.getDate() - 1);
+      case "next":
+        startDate.setFullYear(startDate.getFullYear() + 1);
         break;
     }
+    startDate.setMonth(month);
+    startDate.setDate(1);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(startDate);
+    endDate.setMonth(month + 1);
+    endDate.setDate(0);
+
     setValue("startDateYear", startDate.getFullYear());
     setValue("startDateMonth", startDate.getMonth() + 1);
     setValue("startDateDate", startDate.getDate());
     setValue("endDateYear", endDate.getFullYear());
     setValue("endDateMonth", endDate.getMonth() + 1);
     setValue("endDateDate", endDate.getDate());
+    return startDate;
   }
+
+  useEffect(() => {
+    onClickSetDate(selectedDate, selectedDate.getMonth());
+  }, []);
 
   useEffect(() => {
     setMemberState(
@@ -351,8 +335,65 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         elementName="date-picker"
         children={
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+            {userStatistics && (
+              <span className="position-center-x absolute text-blue-700">
+                {startDate.toLocaleDateString()} ~{" "}
+                {endDate.toLocaleDateString()}
+              </span>
+            )}
+            <div className="flex items-center justify-end gap-6">
+              <BtnMenu
+                onClick={() => {
+                  const newStartDate = onClickSetDate(
+                    startDate,
+                    selectedDate.getMonth(),
+                    "prev"
+                  );
+                  selectedDateVar(new Date(newStartDate));
+                }}
+                icon={<FontAwesomeIcon icon={faChevronLeft} fontSize={14} />}
+                enabled
+                hasBorder
+              />
+              <BtnMenu label={selectedDate.getFullYear() + "년 "} enabled />
+              <BtnMenu
+                onClick={() => {
+                  const newStartDate = onClickSetDate(
+                    startDate,
+                    selectedDate.getMonth(),
+                    "next"
+                  );
+                  selectedDateVar(new Date(newStartDate));
+                }}
+                enabled
+                icon={<FontAwesomeIcon icon={faChevronRight} fontSize={14} />}
+                hasBorder
+              />
+            </div>
+            <div className="flex items-center justify-end gap-2">
+              {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, idx) => (
+                <BtnMenu
+                  hasBorder
+                  onClick={() => onClickSetDate(startDate, idx)}
+                  label={idx + 1 + "월"}
+                  enabled={startDate.getMonth() === idx}
+                  hasActiveRing
+                  thinFont
+                  hasFocus
+                />
+              ))}
+              <Button
+                type="submit"
+                isSmall
+                textContents="검색"
+                canClick={
+                  isValid && !loadingStatisticsData && userIds.length > 0
+                }
+                loading={loadingStatisticsData}
+              />
+            </div>
             {memberState && (
-              <div className="flex w-full flex-wrap gap-4 px-2">
+              <div className="flex w-full flex-wrap justify-end gap-4 px-2">
                 {memberState.map((m, i) => (
                   <BtnMenu
                     key={m.userId}
@@ -369,84 +410,6 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                 ))}
               </div>
             )}
-            <div className="flex items-center gap-2">
-              <BtnMenu
-                hasBorder
-                onClick={() => onClickSetDate("지난달")}
-                label="지난달"
-                enabled
-                thinFont
-              />
-              <BtnMenu
-                hasBorder
-                onClick={() => onClickSetDate("이번달")}
-                label="이번달"
-                enabled
-                thinFont
-              />
-              <BtnMenu
-                hasBorder
-                onClick={() => onClickSetDate("지난2주")}
-                label="지난2주"
-                enabled
-                thinFont
-              />
-              <BtnMenu
-                hasBorder
-                onClick={() => onClickSetDate("지난주")}
-                label="지난주"
-                enabled
-                thinFont
-              />
-              <BtnMenu
-                hasBorder
-                onClick={() => onClickSetDate("이번주")}
-                label="이번주"
-                enabled
-                thinFont
-              />
-              <BtnMenu
-                hasBorder
-                onClick={() => onClickSetDate("그제")}
-                label="그제"
-                enabled
-                thinFont
-              />
-              <BtnMenu
-                hasBorder
-                onClick={() => onClickSetDate("어제")}
-                label="어제"
-                enabled
-                thinFont
-              />
-              <DatepickerWithInput
-                setValue={setValue}
-                defaultDate={defaultDate[0]}
-                register={register}
-                see="ymd"
-                dateType={"startDate"}
-                textColor="blue"
-              />
-              ~
-              <DatepickerWithInput
-                formError={errors}
-                setValue={setValue}
-                defaultDate={defaultDate[1]}
-                register={register}
-                see="ymd"
-                dateType={"endDate"}
-                textColor="blue"
-              />
-              <Button
-                type="submit"
-                isSmall
-                textContents="검색"
-                canClick={
-                  isValid && !loadingStatisticsData && userIds.length > 0
-                }
-                loading={loadingStatisticsData}
-              />
-            </div>
           </form>
         }
       />
