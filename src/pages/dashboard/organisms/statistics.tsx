@@ -19,6 +19,7 @@ import { Charts } from "../molecules/charts";
 
 type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
 export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
+export type IUserInDaily = IDailyReport["users"][0];
 
 type IDailyPrescriptions = GetStatisticsQuery["getStatistics"]["prescriptions"];
 export type IDailyPrescription = NonNullable<FlatArray<IDailyPrescriptions, 0>>;
@@ -460,8 +461,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           {data.getStatistics.dailyReports.length < 1 && (
             <Worning type="hasNotStatistics" />
           )}
-          {data.getStatistics.prescriptions.length > 1 &&
-            data.getStatistics.dailyReports.length > 1 && (
+          {data.getStatistics.prescriptions.length > 0 &&
+            data.getStatistics.dailyReports.length > 0 && (
               <Charts
                 userStatistics={userStatistics}
                 prescriptions={data.getStatistics.prescriptions}

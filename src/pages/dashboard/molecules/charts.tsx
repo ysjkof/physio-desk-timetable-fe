@@ -7,23 +7,21 @@ import {
   VictoryGroup,
   VictoryLabel,
   VictoryLegend,
-  VictoryLine,
   VictoryPie,
 } from "victory";
-import { compareDateMatch, getYMD } from "../../../libs/timetable-utils";
+import { compareDateMatch } from "../../../libs/timetable-utils";
 import { TableChartColLayout } from "./table-chart-col-layout";
 import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
 } from "../organisms/statistics";
-
-type TypePrescriptionName =
-  | "reservationCount"
-  | "newPatient"
-  | "noshow"
-  | "cancel"
-  | "visitMoreThanThirty";
+import {
+  STATISTICS_LABEL,
+  STATISTICS_LABEL_COLORS,
+  STATISTICS_LABEL_ENG,
+  STATISTICS_LABEL_KOR,
+} from "../../../variables";
 
 interface IChartsProps {
   userStatistics: IUserStatistics[];
@@ -40,10 +38,10 @@ export const Charts = ({
   startDate,
   endDate,
 }: IChartsProps) => {
-  const COUNTS_LABELS = ["예약", "신규", "부도", "취소", "30일 경과"];
-  const LABLES_COLORS = ["#233d4d", "#fe7f2d", "#fcca46", "#a1c181", "#619b8a"];
-
-  function getCountsLabelsToKor(prescriptionName: TypePrescriptionName) {
+  const userLengthArr: any[] = [];
+  userLengthArr.length = userStatistics.length;
+  userLengthArr.fill(0);
+  function getCountsLabelsToKor(prescriptionName: STATISTICS_LABEL) {
     switch (prescriptionName) {
       case "reservationCount":
         return "예약";
@@ -54,7 +52,7 @@ export const Charts = ({
       case "cancel":
         return "취소";
       case "visitMoreThanThirty":
-        return "30일 경과";
+        return "방문한지 30일 경과";
     }
   }
 
@@ -78,34 +76,32 @@ export const Charts = ({
       });
     }
 
+    type TypeGraphData = typeof dailyReports[0];
     const everyDay = getEveryDay(startDate, endDate);
-
-    const graphData = everyDay.map((day) => ({
-      x: getYMD(day, "mmdd"),
-      y: {
-        reservationCount: 0,
-        noshow: 0,
-        cancel: 0,
-        newPatient: 0,
-        users: [],
-      },
+    const frame: TypeGraphData[] = everyDay.map((day) => ({
+      date: day,
+      reservationCount: 0,
+      noshow: 0,
+      cancel: 0,
+      newPatient: 0,
+      users: [],
     }));
 
+    const emptyUserList = userLengthArr;
     dailyReports.forEach((day) => {
       const idx = everyDay.findIndex((everyDate) =>
         compareDateMatch(new Date(day.date), everyDate, "ymd")
       );
-      if (idx) {
-        // @ts-ignore
-        graphData[idx].y = { ...day };
+      if (idx !== -1) {
+        frame[idx] = day;
       } else {
-        graphData[idx].y = { ...graphData[idx].y };
+        frame[idx].users = emptyUserList;
       }
     });
-    return graphData;
+    return frame;
   }
 
-  function getGraphEachUserTotalCounts(
+  function getUserReports(
     userStatistics: IUserStatistics[]
   ): { x: string; y: number }[][] {
     return userStatistics.map((user) =>
@@ -118,9 +114,10 @@ export const Charts = ({
     startDate,
     endDate
   );
+  const userReports = getUserReports(userStatistics);
 
-  const graphEachUserTotalCounts = getGraphEachUserTotalCounts(userStatistics);
-
+  console.log("userReports", userReports);
+  console.log("finalDailyReports", finalDailyReports);
   return (
     <>
       <div className="PRESCRIPTION_COUNTS flex">
@@ -156,284 +153,87 @@ export const Charts = ({
           }
         />
       </div>
-
       <div className="EVERYDAY_COUNTS">
-        <DashboardSectionLayout
-          elementName="GRAPH_EVERYDAY_RESERVATION"
-          children={
-            <div className="position-center-x relative max-w-4xl">
-              <VictoryChart height={300} width={1000} minDomain={{ y: 0 }}>
-                <VictoryLegend
-                  x={500}
-                  title="일별 예약"
-                  centerTitle
-                  style={{ title: { fontSize: 16 } }}
-                  data={[]}
-                />
-                <VictoryBar
-                  data={finalDailyReports.map((data) => ({
-                    x: data.x,
-                    y: data.y.reservationCount,
-                  }))}
-                  style={{
-                    data: {
-                      width: 10,
-                      fill: "rgb(0,0,0,0.7)",
-                    },
-                  }}
-                  labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
-                />
-                {/* <VictoryLine
-                  data={finalDailyReports.map((data) => ({
-                    x: data.x,
-                    y: data.y.reservationCount,
-                  }))}
-                  style={{
-                    data: {
-                      strokeWidth: 2,
-                    },
-                  }}
-                  labels={({ datum }) => datum.y}
-                /> */}
-                <VictoryAxis
-                  dependentAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                    },
-                  }}
-                  tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : "")}
-                />
-                <VictoryAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                      angle: -35,
-                    },
-                    axisLabel: { padding: 35 },
-                  }}
-                  tickFormat={(tick) => {
-                    return `${tick.substring(0, 2)} / ${tick.substring(2, 4)}`;
-                  }}
-                  label="(월/일)"
-                />
-              </VictoryChart>
-            </div>
-          }
-        />
-        <DashboardSectionLayout
-          elementName="GRAPH_EVERYDAY_NEW_PATIENT"
-          children={
-            <div className="position-center-x relative max-w-4xl">
-              <VictoryChart height={300} width={1000} minDomain={{ y: 0 }}>
-                <VictoryLegend
-                  x={500}
-                  title="일별 신환"
-                  centerTitle
-                  style={{ title: { fontSize: 16 } }}
-                  data={[]}
-                />
-                <VictoryBar
-                  data={finalDailyReports.map((data) => ({
-                    x: data.x,
-                    y: data.y.newPatient,
-                  }))}
-                  style={{
-                    data: {
-                      width: 10,
-                      fill: "rgb(0,0,0,0.7)",
-                    },
-                  }}
-                  labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                    },
-                  }}
-                  tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : "")}
-                />
-                <VictoryAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                      angle: -35,
-                    },
-                    axisLabel: { padding: 35 },
-                  }}
-                  tickFormat={(tick) => {
-                    return `${tick.substring(0, 2)} / ${tick.substring(2, 4)}`;
-                  }}
-                  label="(월/일)"
-                />
-              </VictoryChart>
-            </div>
-          }
-        />
-        <DashboardSectionLayout
-          elementName="GRAPH_EVERYDAY_NOSHOW"
-          children={
-            <div className="position-center-x relative max-w-4xl">
-              <VictoryChart height={300} width={1000} minDomain={{ y: 0 }}>
-                <VictoryLegend
-                  x={500}
-                  title="일별 부도"
-                  centerTitle
-                  style={{ title: { fontSize: 16 } }}
-                  data={[]}
-                />
-                <VictoryBar
-                  data={finalDailyReports.map((data) => ({
-                    x: data.x,
-                    y: data.y.noshow,
-                  }))}
-                  style={{
-                    data: {
-                      width: 10,
-                      fill: "rgb(0,0,0,0.7)",
-                    },
-                  }}
-                  labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                    },
-                  }}
-                  tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : "")}
-                />
-                <VictoryAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                      angle: -35,
-                    },
-                    axisLabel: { padding: 35 },
-                  }}
-                  tickFormat={(tick) => {
-                    return `${tick.substring(0, 2)} / ${tick.substring(2, 4)}`;
-                  }}
-                  label="(월/일)"
-                />
-              </VictoryChart>
-            </div>
-          }
-        />
-        <DashboardSectionLayout
-          elementName="GRAPH_EVERYDAY_CANCEL"
-          children={
-            <div className="position-center-x relative max-w-4xl">
-              <VictoryChart height={300} width={1000} minDomain={{ y: 0 }}>
-                <VictoryLegend
-                  x={500}
-                  title="일별 취소"
-                  centerTitle
-                  style={{ title: { fontSize: 16 } }}
-                  data={[]}
-                />
-                <VictoryBar
-                  data={finalDailyReports.map((data) => ({
-                    x: data.x,
-                    y: data.y.cancel,
-                  }))}
-                  style={{
-                    data: {
-                      width: 10,
-                      fill: "rgb(0,0,0,0.7)",
-                    },
-                  }}
-                  labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                    },
-                  }}
-                  tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : "")}
-                />
-                <VictoryAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                      angle: -35,
-                    },
-                    axisLabel: { padding: 35 },
-                  }}
-                  tickFormat={(tick) => {
-                    return `${tick.substring(0, 2)} / ${tick.substring(2, 4)}`;
-                  }}
-                  label="(월/일)"
-                />
-              </VictoryChart>
-            </div>
-          }
-        />
-        <DashboardSectionLayout
-          elementName="GRAPH_EVERYDAY_thirty"
-          children={
-            <div className="position-center-x relative max-w-4xl">
-              <VictoryChart height={300} width={1000} minDomain={{ y: 0 }}>
-                <VictoryLegend
-                  x={500}
-                  title="일별 30일 경과"
-                  centerTitle
-                  style={{ title: { fontSize: 16 } }}
-                  data={[]}
-                />
-                <VictoryBar
-                  data={finalDailyReports.map((data) => ({
-                    x: data.x,
-                    y: data.y.users.reduce(
-                      (acc, user) => acc + user.visitMoreThanThirty,
-                      0
-                    ),
-                  }))}
-                  style={{
-                    data: {
-                      width: 10,
-                      fill: "rgb(0,0,0,0.7)",
-                    },
-                  }}
-                  labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                    },
-                  }}
-                  tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : "")}
-                />
-                <VictoryAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                      angle: -35,
-                    },
-                    axisLabel: { padding: 35 },
-                  }}
-                  tickFormat={(tick) => {
-                    return `${tick.substring(0, 2)} / ${tick.substring(2, 4)}`;
-                  }}
-                  label="(월/일)"
-                />
-              </VictoryChart>
-            </div>
-          }
-        />
+        {STATISTICS_LABEL_ENG.map((label, i) => (
+          <DashboardSectionLayout
+            key={i}
+            padding
+            elementName="GRAPH_EVERYDAY_RESERVATION"
+            children={
+              <div className="position-center-x relative max-w-4xl">
+                <VictoryChart
+                  height={200}
+                  width={1000}
+                  minDomain={{ y: 0 }}
+                  domainPadding={{ x: 5 }}
+                >
+                  <VictoryLegend
+                    x={80}
+                    title={`일별 ${getCountsLabelsToKor(label)}`}
+                    centerTitle
+                    style={{ title: { fontSize: 14 } }}
+                    data={[]}
+                  />
+                  <VictoryGroup
+                    offset={10}
+                    colorScale={STATISTICS_LABEL_COLORS[0]}
+                  >
+                    {userLengthArr.map((aa, idx) => (
+                      <VictoryBar
+                        key={idx}
+                        alignment="start"
+                        data={finalDailyReports.map((day) => ({
+                          x: day.date,
+                          y: day.users[idx] ? day.users[idx][label] : 0,
+                        }))}
+                        style={{
+                          data: {
+                            width: 10,
+                          },
+                        }}
+                        labelComponent={<VictoryLabel dx={5} />}
+                        labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
+                      />
+                    ))}
+                  </VictoryGroup>
+                  <VictoryAxis
+                    dependentAxis
+                    style={{
+                      tickLabels: {
+                        fontSize: 12,
+                      },
+                    }}
+                    tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : "")}
+                  />
+                  <VictoryAxis
+                    style={{
+                      tickLabels: {
+                        fontSize: 12,
+                        angle: -35,
+                      },
+                      axisLabel: { padding: 35 },
+                    }}
+                    tickValues={finalDailyReports.map((day) => day.date)}
+                    tickFormat={(tick) => {
+                      return `${tick.substring(5, 7)} / ${tick.substring(
+                        8,
+                        10
+                      )}`;
+                    }}
+                    label="(월/일)"
+                  />
+                </VictoryChart>
+              </div>
+            }
+          />
+        ))}
       </div>
 
+      {/* graphEachUserTotalCounts */}
       <div className="EACH_USER_TOTAL_COUNTS">
         <DashboardSectionLayout
           elementName="TABLE_EACH_USER_TOTAL_COUNTS"
-          // padding
+          padding
           children={
             <>
               <TableChartColLayout
@@ -441,7 +241,7 @@ export const Charts = ({
                 prescriptionInfo={prescriptions}
                 dailyReports={dailyReports}
                 renderIt={"counts"}
-                labelNames={COUNTS_LABELS}
+                labelNames={STATISTICS_LABEL_KOR}
                 hasTotalInRow
               />
             </>
@@ -449,81 +249,29 @@ export const Charts = ({
         />
 
         <DashboardSectionLayout
-          elementName="GRAPH_EACH_USER_TOTAL_COUNTS"
-          // padding
-          children={
-            <div className="position-center-x relative max-w-4xl">
-              <VictoryChart height={300} width={1000} minDomain={{ y: 0 }}>
-                <VictoryLegend
-                  x={500}
-                  title="사용자별 통계"
-                  centerTitle
-                  style={{ title: { fontSize: 16 } }}
-                  data={[]}
-                />
-                <VictoryGroup offset={20} domainPadding={0} colorScale={"red"}>
-                  {graphEachUserTotalCounts.map((user, i) => (
-                    <VictoryBar
-                      key={i}
-                      data={user}
-                      style={{ data: { width: 10 } }}
-                      labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
-                    />
-                  ))}
-                </VictoryGroup>
-
-                <VictoryAxis
-                  dependentAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                    },
-                  }}
-                  tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : "")}
-                />
-                <VictoryAxis
-                  style={{
-                    tickLabels: {
-                      fontSize: 14,
-                      fill: LABLES_COLORS[4],
-                    },
-                  }}
-                  tickFormat={(tick) => getCountsLabelsToKor(tick)}
-                />
-              </VictoryChart>
-            </div>
-          }
-        />
-        <DashboardSectionLayout
           elementName="GRAPH_EACH_USER_TOTAL_COUNTS_CIRCLES"
+          padding
           children={
             <div className="position-center-x relative max-w-4xl ">
               <VictoryLegend
                 height={24}
                 orientation="horizontal"
                 gutter={30}
-                data={COUNTS_LABELS.map((label, idx) => ({
+                data={STATISTICS_LABEL_KOR.map((label) => ({
                   name: label,
                 }))}
                 labelComponent={<VictoryLabel style={{ fontSize: 10 }} />}
-                colorScale={LABLES_COLORS}
+                colorScale={STATISTICS_LABEL_COLORS[0]}
               />
               <div className="grid grid-cols-2">
-                {graphEachUserTotalCounts.map((user, i) => (
+                {userReports.map((user, i) => (
                   <VictoryPie
                     key={i}
                     data={user}
                     padding={70}
-                    // innerRadius={50}
                     style={{ labels: { fontSize: 16 } }}
-                    labels={({ datum }) =>
-                      datum.y === 0
-                        ? ""
-                        : `${getCountsLabelsToKor(datum.x)} : ${datum.y}`
-                    }
-                    padAngle={({ datum }) => datum.y}
-                    innerRadius={5}
-                    colorScale={LABLES_COLORS}
+                    labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
+                    colorScale={STATISTICS_LABEL_COLORS[0]}
                   />
                 ))}
               </div>

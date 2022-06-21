@@ -51,3 +51,30 @@ export const RESERVATION_STATE_KOR = {
   [ReservationState.NoShow]: "부도",
   [ReservationState.Reserved]: "예약",
 };
+
+// 통계
+export const STATISTICS_LABEL_KOR = [
+  "예약",
+  "신규",
+  "부도",
+  "취소",
+  "방문한지 30일 경과",
+];
+export const STATISTICS_LABEL_ENG: STATISTICS_LABEL[] = [
+  "reservationCount",
+  "newPatient",
+  "noshow",
+  "cancel",
+  "visitMoreThanThirty",
+];
+export type STATISTICS_LABEL =
+  | "reservationCount"
+  | "newPatient"
+  | "noshow"
+  | "cancel"
+  | "visitMoreThanThirty";
+
+export const STATISTICS_LABEL_COLORS = [
+  ["#233d4d", "#fcca46", "#a1c181", "#fe7f2d", "#619b8a"],
+  ["#0d3b66", "#f4d35e", "#faf0ca", "#f95738", "#ee964b"],
+];
