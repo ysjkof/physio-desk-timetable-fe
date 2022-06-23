@@ -21,6 +21,7 @@ import {
   STATISTICS_LABEL_COLORS,
   STATISTICS_LABEL_ENG,
   STATISTICS_LABEL_KOR,
+  USER_COLORS,
 } from "../../../variables";
 import { useEffect, useState } from "react";
 
@@ -182,10 +183,7 @@ export const Charts = ({
                       style={{ title: { fontSize: 14 } }}
                       data={[]}
                     />
-                    <VictoryGroup
-                      offset={10}
-                      colorScale={STATISTICS_LABEL_COLORS[0]}
-                    >
+                    <VictoryGroup offset={10} colorScale={USER_COLORS[0]}>
                       {userLengthArr.map((aa, idx) => (
                         <VictoryBar
                           key={idx}

@@ -6,24 +6,20 @@ interface ReserveBtnProps {
   label: Date;
   userIndex: number;
   member: { id: number; name: string };
+  isActiveBorderTop?: boolean;
 }
 
-export const ReserveBtn = ({ label, userIndex, member }: ReserveBtnProps) => {
+export const ReserveBtn = ({
+  label,
+  userIndex,
+  member,
+  isActiveBorderTop = false,
+}: ReserveBtnProps) => {
   const navigate = useNavigate();
   return (
     <div
       className={`reserve-btn-box group ${
-        userIndex === 0
-          ? "user-color-1"
-          : userIndex === 1
-          ? "user-color-2"
-          : userIndex === 2
-          ? "user-color-3"
-          : userIndex === 3
-          ? "user-color-4"
-          : userIndex === 4
-          ? "user-color-5"
-          : ""
+        isActiveBorderTop ? " border-t border-gray-200" : ""
       }`}
       onClick={() =>
         navigate(RESERVE_DETAIL, { state: { startDate: label, member } })

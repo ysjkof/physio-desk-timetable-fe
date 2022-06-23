@@ -19,7 +19,7 @@ export function TableClinicSelector() {
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
-
+  console.log("인");
   const onClickToggleUser = (clinicId: number, memberId: number) => {
     if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
     const gIndex = clinicLists.findIndex(

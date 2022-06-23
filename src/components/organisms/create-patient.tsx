@@ -50,7 +50,7 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
         registrationNumber: patient?.registrationNumber,
         birthday: patient?.birthday,
         id: patient?.id!,
-        clinicName: selectedClinic.name ?? "",
+        clinicName: selectedClinic?.name ?? "",
       });
     }
   };
@@ -74,8 +74,8 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
             registrationNumber,
             memo,
             ...(birthday && { birthday }),
-            ...(typeof selectedClinic.id === "number" &&
-              selectedClinic.id !== 0 && { clinicId: selectedClinic.id }),
+            ...(typeof selectedClinic?.id === "number" &&
+              selectedClinic?.id !== 0 && { clinicId: selectedClinic?.id }),
           },
         },
       });

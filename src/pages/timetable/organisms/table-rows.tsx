@@ -1,3 +1,4 @@
+import { getActiveUserLength } from "..";
 import {
   combineYMDHM,
   compareNumAfterGetMinutes,
@@ -13,25 +14,33 @@ interface TableRowProps {
 }
 
 export function TableRows({ weekEvents, labels }: TableRowProps) {
-  const userLength = weekEvents[0].users.length;
+  const userLength = getActiveUserLength(weekEvents[0].users);
 
   return (
-    <TableMainComponentLayout componentName="table-rows">
+    <TableMainComponentLayout componentName="TABLE_ROWS">
       {labels.map((label, i) => (
         <TableLoopLayout
           key={i}
+          direction="row"
           userLength={userLength}
-          isActiveBorderTop={compareNumAfterGetMinutes(label, [0, 30])}
           children={weekEvents.map((day, ii) => (
             <div key={ii} className="relative flex">
-              {day?.users.map((member, userIndex) => (
-                <ReserveBtn
-                  key={userIndex}
-                  label={combineYMDHM(day.date, label)}
-                  userIndex={userIndex}
-                  member={{ id: member.user.id, name: member.user.name }}
-                />
-              ))}
+              {day?.users.map((member, userIndex) =>
+                member.isActivate ? (
+                  <ReserveBtn
+                    key={userIndex}
+                    userIndex={userIndex}
+                    label={combineYMDHM(day.date, label)}
+                    member={{ id: member.user.id, name: member.user.name }}
+                    isActiveBorderTop={compareNumAfterGetMinutes(
+                      label,
+                      [0, 30]
+                    )}
+                  />
+                ) : (
+                  ""
+                )
+              )}
             </div>
           ))}
         />

@@ -59,11 +59,9 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
     }
   };
   const searchUserResults = searchUsersData?.searchUsers.results;
-
+  console.log(selectedClinic);
   return selectedClinic ? (
-    selectedClinic?.isStayed && selectedClinic.isManager ? (
-      <Worning type="hasNotPermission" />
-    ) : (
+    selectedClinic?.isStayed && selectedClinic?.isManager ? (
       <DashboardSectionLayout
         width="md"
         title="병원에 초대"
@@ -141,6 +139,8 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
           </>
         }
       />
+    ) : (
+      <Worning type="hasNotPermission" />
     )
   ) : (
     <Loading />

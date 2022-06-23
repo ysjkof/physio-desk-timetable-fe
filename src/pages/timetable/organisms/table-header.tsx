@@ -30,7 +30,7 @@ export function TableHeader({ today }: TableNavProps) {
   return (
     <div id="table-header" className="table-header">
       <button
-        className="min-w-[120px] font-medium  hover:font-bold"
+        className="min-w-[120px] font-medium hover:font-bold"
         onClick={() => selectedDateVar(today)}
       >
         {today.toLocaleString("ko-KR", {

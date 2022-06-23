@@ -15,7 +15,6 @@ import {
   IClinicList,
   IClinic,
   loggedInUserVar,
-  selectedClinicVar,
   viewOptionsVar,
   ISelectedClinic,
 } from "../store";

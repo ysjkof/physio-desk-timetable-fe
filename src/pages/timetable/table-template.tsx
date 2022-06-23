@@ -9,7 +9,7 @@ export const TimetableTemplate = ({ children }: ITimetableProps) => {
   return (
     <motion.div
       animate={{ opacity: 1 }}
-      className="timetable-layout-container opacity-0"
+      className="TIMETABLE-LAYOUT-CONTAINER opacity-0"
     >
       {children}
     </motion.div>

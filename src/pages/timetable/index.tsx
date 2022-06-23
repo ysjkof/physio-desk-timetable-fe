@@ -19,6 +19,7 @@ import {
   getSunday,
   getTimeGaps,
   getWeeks,
+  IUserWithEvent,
   makeDayWithUsers,
   spreadClinicMembers,
 } from "../../libs/timetable-utils";
@@ -39,6 +40,9 @@ export interface TimetableModalProps {
   closeAction: () => void;
   refetch: () => void;
 }
+
+export const getActiveUserLength = (users: IUserWithEvent[]) =>
+  users.filter((user) => user.isActivate).length;
 
 export const TimeTable = () => {
   const today = useReactiveVar(todayNowVar);
@@ -169,7 +173,7 @@ export const TimeTable = () => {
                     <motion.div
                       initial={{ y: 300 }}
                       animate={{ y: 0, transition: { duration: 0.3 } }}
-                      className="table-main"
+                      className="table-main overflow-scroll"
                       style={{ height: height ? height : "80vh" }}
                     >
                       {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곳에서 동일하게 한다 */}
@@ -180,8 +184,8 @@ export const TimeTable = () => {
                         weekEvents={optionalWeekEvents}
                       />
                       <TableCols
-                        weekEvents={optionalWeekEvents}
                         labels={labels}
+                        weekEvents={optionalWeekEvents}
                       />
                     </motion.div>
                     {viewOptions.seeActiveOption && <TableClinicSelector />}

@@ -6,21 +6,22 @@ import { ONE_DAY } from "../../../../variables";
 interface TableLoopLayoutProps {
   userLength: number;
   children: ReactNode;
+  direction?: "col" | "row";
   isDivide?: boolean;
   isActiveBorderTop?: boolean;
 }
 export function TableLoopLayout({
   userLength,
   children,
+  direction,
   isDivide = true,
-  isActiveBorderTop = false,
 }: TableLoopLayoutProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
 
   return (
     <div
-      className={`grid h-5 w-full ${isDivide ? "divide-x divide-black" : ""} ${
-        isActiveBorderTop ? "border-t border-white" : ""
+      className={`grid w-full${direction === "col" ? " h-full" : " h-5"}${
+        isDivide ? " divide-x divide-blue-800" : ""
       }`}
       style={
         viewOptions.periodToView === ONE_DAY

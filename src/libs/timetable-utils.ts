@@ -46,8 +46,9 @@ export const getWeeks = (dateOfSunday: Date) => {
   return result;
 };
 
-interface IUserWithEvent extends IMember {
+export interface IUserWithEvent extends IMember {
   events: IListReservation[];
+  isActivate?: boolean;
 }
 export interface DayWithUsers {
   date: Date;

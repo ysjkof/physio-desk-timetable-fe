@@ -1,4 +1,6 @@
 import { useReactiveVar } from "@apollo/client";
+import { useState } from "react";
+import { getActiveUserLength } from "..";
 import {
   compareDateMatch,
   DayWithUsers,
@@ -17,50 +19,67 @@ interface TableColsProps {
 }
 export function TableCols({ weekEvents, labels }: TableColsProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
-  const userLength = weekEvents[0].users.length;
+  const [maxColHeight, setMaxColHeight] = useState(
+    () => labels.length * TABLE_CELL_HEIGHT
+  );
+  const userLength = getActiveUserLength(weekEvents[0].users);
+  labels.length * TABLE_CELL_HEIGHT;
 
   return (
-    <TableMainComponentLayout componentName="table-cols">
+    <TableMainComponentLayout componentName="TABLE_COLS ">
       <TableLoopLayout
+        direction="col"
         userLength={userLength}
         children={weekEvents.map((day, i) => (
           <div
             key={i}
             className="relative grid"
             style={{
-              gridTemplateColumns: `repeat(${day.users.length}, 1fr)`,
+              gridTemplateColumns: `repeat(${userLength}, 1fr)`,
             }}
           >
             <TimeIndicatorBar
               isActive={compareDateMatch(day.date, selectedDate, "ymd")}
               labels={labels}
             />
-            {day.users.map((member, userIndex) => (
-              <div key={member.id} className="user-col relative">
-                {member.events?.map((event) => (
-                  <EventBox
-                    key={event.id}
-                    reservationId={event.id}
-                    userIndex={userIndex}
-                    reservationState={event.state}
-                    memo={event.memo}
-                    registrationNumber={event.patient.registrationNumber}
-                    patientName={event.patient.name}
-                    prescriptions={event.prescriptions ?? []}
-                    startDate={event.startDate}
-                    endDate={event.endDate}
-                    inset={`${
-                      labels.findIndex((label) =>
-                        compareDateMatch(label, new Date(event.startDate), "hm")
-                      ) * TABLE_CELL_HEIGHT
-                    }px 0%`}
-                    height={`${
-                      getTimeLength(event.startDate, event.endDate) * 2
-                    }px`}
-                  />
-                ))}
-              </div>
-            ))}
+            {day.users.map((member, userIndex) =>
+              member.isActivate ? (
+                <div
+                  key={member.id}
+                  className="USER_COL border-gray relative border-r"
+                  style={{ height: maxColHeight }}
+                >
+                  {member.events?.map((event) => (
+                    <EventBox
+                      key={event.id}
+                      reservationId={event.id}
+                      userIndex={userIndex}
+                      reservationState={event.state}
+                      memo={event.memo}
+                      registrationNumber={event.patient.registrationNumber}
+                      patientName={event.patient.name}
+                      prescriptions={event.prescriptions ?? []}
+                      startDate={event.startDate}
+                      endDate={event.endDate}
+                      inset={`${
+                        labels.findIndex((label) =>
+                          compareDateMatch(
+                            label,
+                            new Date(event.startDate),
+                            "hm"
+                          )
+                        ) * TABLE_CELL_HEIGHT
+                      }px 0%`}
+                      height={`${
+                        getTimeLength(event.startDate, event.endDate) * 2
+                      }px`}
+                    />
+                  ))}
+                </div>
+              ) : (
+                ""
+              )
+            )}
           </div>
         ))}
       />

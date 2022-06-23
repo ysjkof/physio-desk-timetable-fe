@@ -1,5 +1,6 @@
 import { useReactiveVar } from "@apollo/client";
 import { useEffect, useState } from "react";
+import { getActiveUserLength } from "..";
 import {
   compareDateMatch,
   DayWithUsers,
@@ -14,7 +15,7 @@ import {
   selectedClinicVar,
   selectedDateVar,
 } from "../../../store";
-import { SCROLL_ADRESS } from "../../../variables";
+import { SCROLL_ADRESS, USER_COLORS } from "../../../variables";
 import { BtnDatecheck } from "../molecules/button-datecheck";
 import { TableLoopLayout } from "./templates/table-loop-layout";
 import { TableMainComponentLayout } from "./templates/table-main-component-layout";
@@ -26,7 +27,7 @@ export function TableSubHeader({}: TableSubHeaderProps) {
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const [userFrame, setUserFrame] = useState<DayWithUsers[] | null>(null);
-  const userLength = userFrame && userFrame[0].users.length;
+  const userLength = userFrame && getActiveUserLength(userFrame[0].users);
 
   useEffect(() => {
     if (loggedInUser) {
@@ -40,10 +41,10 @@ export function TableSubHeader({}: TableSubHeaderProps) {
 
   if (!userLength) return <></>;
   return (
-    <TableMainComponentLayout componentName="table-sub-header" isTitle>
+    <TableMainComponentLayout componentName="TABLE_SUB_HEADER" isTitle>
       <div className="sticky top-0 z-[31]">
         <TableLoopLayout
-          isDivide={false}
+          isDivide
           userLength={userLength}
           children={userFrame?.map((day, i) => (
             // id={day.date + ""}로 table-nav에서 스크롤 조정함
@@ -83,30 +84,26 @@ export function TableSubHeader({}: TableSubHeaderProps) {
               key={i}
               className="relative flex items-center bg-white shadow-b"
             >
-              {day?.users.map((member, userIndex) => (
-                <span
-                  key={member.id}
-                  className={`flex h-full w-full items-center justify-center first:border-l-0 ${
-                    member.user.name === loggedInUser?.name
-                      ? "font-semibold"
-                      : ""
-                  } ${
-                    userIndex === 0
-                      ? "user-color-1"
-                      : userIndex === 1
-                      ? "user-color-2"
-                      : userIndex === 2
-                      ? "user-color-3"
-                      : userIndex === 3
-                      ? "user-color-4"
-                      : userIndex === 4
-                      ? "user-color-5"
-                      : ""
-                  }`}
-                >
-                  {member.user.name}
-                </span>
-              ))}
+              {day?.users.map((member, userIndex) =>
+                member.isActivate ? (
+                  <span
+                    key={member.id}
+                    className={`flex h-full w-full items-center justify-center  first:border-l-0  ${
+                      member.user.name === loggedInUser?.name
+                        ? " font-semibold"
+                        : ""
+                    }`}
+                  >
+                    <span
+                      className="mr-1 h-2 w-2 rounded-full"
+                      style={{ backgroundColor: USER_COLORS[0][userIndex] }}
+                    />
+                    {member.user.name}
+                  </span>
+                ) : (
+                  ""
+                )
+              )}
             </div>
           ))}
         />

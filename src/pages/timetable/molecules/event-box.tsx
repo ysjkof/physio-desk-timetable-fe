@@ -8,6 +8,7 @@ import {
   RESERVE_DETAIL,
   RESERVE_EDIT,
   TABLE_CELL_HEIGHT,
+  USER_COLORS,
 } from "../../../variables";
 interface EventBoxProps {
   reservationId: number;
@@ -47,23 +48,11 @@ export function EventBox({
       onClick={() =>
         isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
       }
-      className={`group absolute z-30 mx-0.5 grid cursor-pointer items-center justify-center px-1 ring-1 ${
+      className={`group absolute z-30 grid cursor-pointer items-center justify-center border bg-white px-1 ${
         height === TABLE_CELL_HEIGHT + "px"
           ? "grid-cols-2"
           : `grid-rows-[${TABLE_CELL_HEIGHT + "px"},
               ${TABLE_CELL_HEIGHT + "px"},1fr]`
-      } ${
-        userIndex === 0
-          ? "user-color-1"
-          : userIndex === 1
-          ? "user-color-2"
-          : userIndex === 2
-          ? "user-color-3"
-          : userIndex === 3
-          ? "user-color-4"
-          : userIndex === 4
-          ? "user-color-5"
-          : ""
       } ${
         !viewOptions.seeCancel && reservationState === ReservationState.Canceled
           ? "hidden"
@@ -73,14 +62,15 @@ export function EventBox({
           : ""
       } ${
         reservationState === ReservationState.NoShow
-          ? "noshow opacity-50"
+          ? "noshow"
           : reservationState === ReservationState.Canceled
-          ? "cancel opacity-50"
+          ? "cancel"
           : ""
       }`}
       style={{
         inset,
         height,
+        borderColor: USER_COLORS[0][userIndex],
       }}
     >
       <div className="h-5 overflow-hidden whitespace-nowrap text-center">

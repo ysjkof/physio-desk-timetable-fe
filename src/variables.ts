@@ -78,3 +78,7 @@ export const STATISTICS_LABEL_COLORS = [
   ["#233d4d", "#fcca46", "#a1c181", "#fe7f2d", "#619b8a"],
   ["#0d3b66", "#f4d35e", "#faf0ca", "#f95738", "#ee964b"],
 ];
+
+export const USER_COLORS = [
+  ["#FCA5A5", "#FDBA74", "#FDE047", "#86EFAC", "#93C5FD", "#A5B4FC", "#C4B5FD"],
+];
