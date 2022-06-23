@@ -3,6 +3,7 @@ import { useReactiveVar } from "@apollo/client";
 import {
   clinicListsVar,
   IListReservation,
+  IMemberWithActivate,
   loggedInUserVar,
   selectedClinicVar,
   selectedDateVar,
@@ -19,7 +20,6 @@ import {
   getSunday,
   getTimeGaps,
   getWeeks,
-  IUserWithEvent,
   makeDayWithUsers,
   spreadClinicMembers,
 } from "../../libs/timetable-utils";
@@ -41,8 +41,8 @@ export interface TimetableModalProps {
   refetch: () => void;
 }
 
-export const getActiveUserLength = (users: IUserWithEvent[]) =>
-  users.filter((user) => user.isActivate).length;
+export const getActiveUserLength = (members?: IMemberWithActivate[]) =>
+  members?.filter((user) => user.isActivate).length ?? 0;
 
 export const TimeTable = () => {
   const today = useReactiveVar(todayNowVar);
@@ -53,12 +53,16 @@ export const TimeTable = () => {
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
+  console.log(selectedClinic);
+
   const { data, refetch } = useListReservations();
 
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
       ? weekEvents && [weekEvents[selectedDate.getDay()]]
       : weekEvents;
+
+  let userLength = 0;
 
   const labels = getTimeGaps(
     viewOptions.tableDuration.start.hours,
@@ -90,6 +94,11 @@ export const TimeTable = () => {
     });
     return userFrame;
   }
+
+  useEffect(() => {
+    userLength = getActiveUserLength(selectedClinic?.members);
+  }, [selectedClinic]);
+
   useEffect(() => {
     if (data?.listReservations.ok && loggedInUser) {
       const { results } = data.listReservations;
@@ -164,12 +173,12 @@ export const TimeTable = () => {
                 {viewOptions.navigationExpand ? (
                   <TableNavExpand varients={tableNavVarients} />
                 ) : (
-                  <TableNav varients={tableNavVarients} />
+                  userLength > 1 && <TableNav varients={tableNavVarients} />
                 )}
               </AnimatePresence>
               <AnimatePresence>
                 {viewOptions.seeList === false && (
-                  <div className="flex">
+                  <div className="flex border-t">
                     <motion.div
                       initial={{ y: 300 }}
                       animate={{ y: 0, transition: { duration: 0.3 } }}

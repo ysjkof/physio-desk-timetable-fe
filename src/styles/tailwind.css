@@ -19,7 +19,7 @@
     @apply w-full appearance-none rounded-md border border-gray-300 px-5 font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
   }
   .sunday {
-    @apply text-red-600;
+    @apply text-red-400;
   }
   .saturday {
     @apply text-blue-600;
@@ -35,7 +35,7 @@
   }
 
   .btn-menu {
-    @apply relative rounded-md px-1.5 py-1 tracking-widest hover:bg-gray-200;
+    @apply relative rounded-md px-1.5 py-1 font-light tracking-widest hover:bg-gray-200;
   }
 
   .emphasize-hover {
@@ -106,18 +106,12 @@
     @apply top-1/2 -translate-y-1/2;
   }
 
-  /* .noshow {
-    @apply border-yellow-800 bg-yellow-100 text-yellow-800 ring-yellow-800;
-  } */
   .noshow {
-    @apply border-none bg-gray-100 text-red-600 line-through ring-1 ring-gray-300;
+    @apply border-none bg-gray-100 text-red-400 line-through ring-1 ring-gray-300;
   }
   .cancel {
     @apply border-none bg-gray-100 text-yellow-600 line-through ring-1 ring-gray-300;
   }
-  /* .cancel {
-    @apply border-red-800 bg-red-100 text-red-800 ring-red-800;
-  } */
 }
 
 .search-result {

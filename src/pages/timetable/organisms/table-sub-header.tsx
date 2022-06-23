@@ -27,7 +27,7 @@ export function TableSubHeader({}: TableSubHeaderProps) {
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const [userFrame, setUserFrame] = useState<DayWithUsers[] | null>(null);
-  const userLength = userFrame && getActiveUserLength(userFrame[0].users);
+  const userLength = userFrame && getActiveUserLength(selectedClinic?.members);
 
   useEffect(() => {
     if (loggedInUser) {
@@ -95,7 +95,7 @@ export function TableSubHeader({}: TableSubHeaderProps) {
                     }`}
                   >
                     <span
-                      className="mr-1 h-2 w-2 rounded-full"
+                      className="mr-1.5 h-1.5 w-1.5 rounded-full"
                       style={{ backgroundColor: USER_COLORS[0][userIndex] }}
                     />
                     {member.user.name}

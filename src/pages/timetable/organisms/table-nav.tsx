@@ -45,7 +45,7 @@ export function TableNav({ varients }: TableNavProps) {
       variants={varients}
       initial="ini"
       animate="start"
-      className="table-nav"
+      className="TABLE_NAV table-nav"
     >
       <BtnArrow direction={PREV} onClick={handleDateNavMovePrev} />
       {weeks.map((day, i) => (

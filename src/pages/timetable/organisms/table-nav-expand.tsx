@@ -48,7 +48,7 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
   }, [selectedDate]);
   return (
     <motion.div
-      className="table-nav pt-6"
+      className="TABLE_NAV table-nav pt-6"
       custom={true}
       variants={varients}
       initial="ini"

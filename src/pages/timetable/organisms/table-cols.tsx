@@ -6,7 +6,7 @@ import {
   DayWithUsers,
   getTimeLength,
 } from "../../../libs/timetable-utils";
-import { selectedDateVar } from "../../../store";
+import { selectedClinicVar, selectedDateVar } from "../../../store";
 import { TABLE_CELL_HEIGHT } from "../../../variables";
 import { EventBox } from "../molecules/event-box";
 import { TableLoopLayout } from "./templates/table-loop-layout";
@@ -19,10 +19,11 @@ interface TableColsProps {
 }
 export function TableCols({ weekEvents, labels }: TableColsProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
   const [maxColHeight, setMaxColHeight] = useState(
     () => labels.length * TABLE_CELL_HEIGHT
   );
-  const userLength = getActiveUserLength(weekEvents[0].users);
+  const userLength = getActiveUserLength(selectedClinic?.members);
   labels.length * TABLE_CELL_HEIGHT;
 
   return (

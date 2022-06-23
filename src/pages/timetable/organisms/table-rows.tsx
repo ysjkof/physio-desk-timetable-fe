@@ -1,9 +1,11 @@
+import { useReactiveVar } from "@apollo/client";
 import { getActiveUserLength } from "..";
 import {
   combineYMDHM,
   compareNumAfterGetMinutes,
   DayWithUsers,
 } from "../../../libs/timetable-utils";
+import { selectedClinicVar } from "../../../store";
 import { ReserveBtn } from "../molecules/reserve-btn";
 import { TableLoopLayout } from "./templates/table-loop-layout";
 import { TableMainComponentLayout } from "./templates/table-main-component-layout";
@@ -14,7 +16,8 @@ interface TableRowProps {
 }
 
 export function TableRows({ weekEvents, labels }: TableRowProps) {
-  const userLength = getActiveUserLength(weekEvents[0].users);
+  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const userLength = getActiveUserLength(selectedClinic?.members);
 
   return (
     <TableMainComponentLayout componentName="TABLE_ROWS">

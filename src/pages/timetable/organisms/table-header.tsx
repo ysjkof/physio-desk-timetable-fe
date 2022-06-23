@@ -28,7 +28,7 @@ export function TableHeader({ today }: TableNavProps) {
 
   if (!loggedInUser || !viewOptions) return <></>;
   return (
-    <div id="table-header" className="table-header">
+    <div id="table-header" className="TABLE_HEADER table-header">
       <button
         className="min-w-[120px] font-medium hover:font-bold"
         onClick={() => selectedDateVar(today)}
@@ -43,7 +43,13 @@ export function TableHeader({ today }: TableNavProps) {
 
       <div className="flex w-full items-center justify-end space-x-2">
         <BtnMenu
-          icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
+          icon={
+            <FontAwesomeIcon
+              icon={faBan}
+              fontSize={14}
+              className="text-yellow-600"
+            />
+          }
           enabled={viewOptions.seeCancel}
           label={"취소"}
           onClick={() => {
@@ -55,7 +61,13 @@ export function TableHeader({ today }: TableNavProps) {
           }}
         />
         <BtnMenu
-          icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
+          icon={
+            <FontAwesomeIcon
+              icon={faCommentSlash}
+              fontSize={14}
+              className="text-red-400"
+            />
+          }
           enabled={viewOptions.seeNoshow}
           label={"부도"}
           onClick={() => {
