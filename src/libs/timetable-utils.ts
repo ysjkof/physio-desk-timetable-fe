@@ -74,10 +74,12 @@ export const makeDayWithUsers = (
 export const getYMD = (
   inputDate: string | Date,
   option: "yyyymmdd" | "yymmdd" | "mmdd",
-  separator?: "-"
+  separator?: "-" | "/"
 ) => {
   const localDate = new Date(inputDate);
-  let year = undefined;
+  let year = "";
+  const month = String(localDate.getMonth() + 1).padStart(2, "0");
+  const date = String(localDate.getDate()).padStart(2, "0");
   switch (option) {
     case "mmdd":
       break;
@@ -88,10 +90,11 @@ export const getYMD = (
       year = String(localDate.getFullYear());
       break;
   }
-  const month = String(localDate.getMonth() + 1).padStart(2, "0");
-  const date = String(localDate.getDate()).padStart(2, "0");
-  if (separator) return `${year}-${month}-${date}`;
-  return `${year ?? ""}${month}${date}`;
+  if (separator)
+    return year
+      ? `${year}${separator}${month}${separator}${date}`
+      : `${month}${separator}${date}`;
+  return year ? `${year ?? ""}${month}${date}` : `${month}${date}`;
 };
 
 export function getHHMM(inputDate: string | Date, seperator?: ":") {
@@ -194,4 +197,15 @@ export function getTimeGaps(
     if (start.valueOf() > end.valueOf()) i = 1500;
   }
   return labels;
+}
+
+export function getMonthStartEnd(date: Date) {
+  const startDate = new Date(date);
+  startDate.setHours(0, 0, 0, 0);
+  const endDate = new Date(startDate);
+  startDate.setDate(1);
+  endDate.setMonth(endDate.getMonth() + 1);
+  endDate.setDate(0);
+  endDate.setMinutes(23, 59, 999);
+  return [startDate, endDate];
 }

@@ -1,14 +1,11 @@
 import { DashboardSectionLayout } from "../components/section-layout";
 import {
   GetStatisticsQuery,
-  useGetStatisticsLazyQuery,
+  useGetStatisticsQuery,
 } from "../../../graphql/generated/graphql";
-import { getDateFromYMDHM } from "../../../libs/utils";
-import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
 import { InDashboardPageProps } from "..";
-import { Button } from "../../../components/molecules/button";
 import { selectedClinicVar, selectedDateVar } from "../../../store";
 import { useReactiveVar } from "@apollo/client";
 import { BtnMenu } from "../../../components/molecules/button-menu";
@@ -19,6 +16,8 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { getMonthStartEnd } from "../../../libs/timetable-utils";
+import { Loading } from "../../../components/atoms/loading";
 
 type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
 export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
@@ -67,46 +66,18 @@ export interface MemberState {
 interface ModifiedDatepickerForm extends DatepickerForm {
   userIds?: number[];
 }
+const initialDate = getMonthStartEnd(new Date());
 
 export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const selectedDate = useReactiveVar(selectedDateVar);
-
-  let defaultDate: Date[] = [new Date(), new Date()];
-  defaultDate[0].setDate(1);
-  defaultDate[1].setMonth(defaultDate[0].getMonth() + 1, 0);
+  const [startDate, setStartDate] = useState(initialDate[0]);
+  const [endDate, setEndDate] = useState(initialDate[1]);
 
   const [memberState, setMemberState] = useState<MemberState[]>();
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);
-
-  const {
-    getValues,
-    formState: { isValid },
-    handleSubmit,
-    setValue,
-  } = useForm<ModifiedDatepickerForm>({
-    mode: "onChange",
-  });
-
-  const {
-    startDateYear,
-    startDateMonth,
-    startDateDate,
-    endDateYear,
-    endDateMonth,
-    endDateDate,
-  } = getValues();
-
-  const startDate = getDateFromYMDHM(
-    startDateYear!,
-    startDateMonth!,
-    startDateDate!
-  );
-  const endDate = getDateFromYMDHM(endDateYear!, endDateMonth!, endDateDate!);
-
-  endDate.setHours(23, 59, 59); // 입력 날짜의 00시를 LassThan하기 때문에 00시 00분 00초로 한다
 
   const userIds = memberState
     ? memberState
@@ -114,55 +85,52 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         .map((member) => member.userId)
     : [];
 
-  const [getStatisticsLzq, { data, loading: loadingStatisticsData }] =
-    useGetStatisticsLazyQuery({
-      variables: {
-        input: {
-          startDate,
-          endDate,
-          clinicId: selectedClinic?.id ?? 0,
-          userIds,
-        },
+  const {
+    data,
+    loading: loadingStatisticsData,
+    refetch,
+  } = useGetStatisticsQuery({
+    variables: {
+      input: {
+        startDate,
+        endDate,
+        clinicId: selectedClinic?.id ?? 0,
+        userIds,
       },
-    });
-
-  const onSubmit = () => {
-    if (!loadingStatisticsData) getStatisticsLzq();
-  };
+    },
+  });
 
   function onClickSetDate(
     date: Date,
     month: number,
     changeYear?: "prev" | "next"
   ) {
-    const startDate = new Date(date);
+    const start = new Date(date);
+    start.setMonth(month);
+
     switch (changeYear) {
       case "prev":
-        startDate.setFullYear(startDate.getFullYear() - 1);
+        start.setFullYear(start.getFullYear() - 1);
         break;
       case "next":
-        startDate.setFullYear(startDate.getFullYear() + 1);
+        start.setFullYear(start.getFullYear() + 1);
         break;
     }
-    startDate.setMonth(month);
-    startDate.setDate(1);
-    startDate.setHours(0, 0, 0, 0);
-    const endDate = new Date(startDate);
-    endDate.setMonth(month + 1);
-    endDate.setDate(0);
 
-    setValue("startDateYear", startDate.getFullYear());
-    setValue("startDateMonth", startDate.getMonth() + 1);
-    setValue("startDateDate", startDate.getDate());
-    setValue("endDateYear", endDate.getFullYear());
-    setValue("endDateMonth", endDate.getMonth() + 1);
-    setValue("endDateDate", endDate.getDate());
+    const [startDate, endDate] = getMonthStartEnd(start);
+    setStartDate(startDate);
+    setEndDate(endDate);
+
+    refetch({
+      input: {
+        startDate,
+        endDate,
+        clinicId: selectedClinic?.id ?? 0,
+        userIds,
+      },
+    });
     return startDate;
   }
-
-  useEffect(() => {
-    onClickSetDate(selectedDate, selectedDate.getMonth());
-  }, []);
 
   useEffect(() => {
     setMemberState(
@@ -175,6 +143,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   }, [selectedClinic]);
 
   useEffect(() => {
+    if (loadingStatisticsData) return;
     if (data?.getStatistics.dailyReports && data?.getStatistics.prescriptions) {
       const { dailyReports, prescriptions, visitRates } = data.getStatistics;
 
@@ -288,27 +257,23 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
               );
               return member ? member.name : userId;
             }
-            function divideReports() {
-              const {
-                reservationCount,
-                newPatient,
-                noshow,
-                cancel,
-                visitMoreThanThirty,
-                prescriptions,
-              } = reports;
-              return {
-                counts: {
-                  reservationCount,
-                  newPatient,
-                  noshow,
-                  cancel,
-                  visitMoreThanThirty,
-                },
-                prescriptions,
-              };
-            }
-            const { counts, prescriptions } = divideReports();
+            const {
+              reservationCount,
+              newPatient,
+              noshow,
+              cancel,
+              visitMoreThanThirty,
+              prescriptions,
+            } = reports;
+
+            const counts = {
+              reservationCount,
+              newPatient,
+              noshow,
+              cancel,
+              visitMoreThanThirty,
+            };
+
             return {
               name: injectUserName(),
               counts,
@@ -317,6 +282,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           });
           return injectUserName;
         };
+
         const flatReports = flattening(dailyReports);
         const objReport = combineSameUser(flatReports);
         const arrReport = convertObjToArr(objReport);
@@ -324,7 +290,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       }
 
       const newUserStatistics = combineUserStatistics();
-      console.log("newUserStatistics", newUserStatistics);
+
       setUserStatistics(newUserStatistics);
     }
   }, [data]);
@@ -334,66 +300,60 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       <DashboardSectionLayout
         elementName="date-picker"
         children={
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
-            {userStatistics && (
+          <div className="flex flex-col items-center justify-center gap-x-4 gap-y-1">
+            {/* {userStatistics && (
               <span className="position-center-x absolute text-blue-700">
                 {startDate.toLocaleDateString()} ~{" "}
                 {endDate.toLocaleDateString()}
               </span>
-            )}
-            <div className="flex items-center justify-end gap-6">
-              <BtnMenu
-                onClick={() => {
-                  const newStartDate = onClickSetDate(
-                    startDate,
-                    selectedDate.getMonth(),
-                    "prev"
-                  );
-                  selectedDateVar(new Date(newStartDate));
-                }}
-                icon={<FontAwesomeIcon icon={faChevronLeft} fontSize={14} />}
-                enabled
-                hasBorder
-              />
-              <BtnMenu label={selectedDate.getFullYear() + "년 "} enabled />
-              <BtnMenu
-                onClick={() => {
-                  const newStartDate = onClickSetDate(
-                    startDate,
-                    selectedDate.getMonth(),
-                    "next"
-                  );
-                  selectedDateVar(new Date(newStartDate));
-                }}
-                enabled
-                icon={<FontAwesomeIcon icon={faChevronRight} fontSize={14} />}
-                hasBorder
-              />
-            </div>
-            <div className="flex items-center justify-end gap-2">
-              {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, idx) => (
+            )} */}
+            <div className="flex w-full justify-between gap-4">
+              <div className="flex items-center">
                 <BtnMenu
+                  onClick={() => {
+                    const newStartDate = onClickSetDate(
+                      startDate,
+                      selectedDate.getMonth(),
+                      "prev"
+                    );
+                    selectedDateVar(new Date(newStartDate));
+                  }}
+                  icon={<FontAwesomeIcon icon={faChevronLeft} fontSize={14} />}
+                  enabled
                   hasBorder
-                  onClick={() => onClickSetDate(startDate, idx)}
-                  label={idx + 1 + "월"}
-                  enabled={startDate.getMonth() === idx}
-                  hasActiveRing
-                  thinFont
-                  hasFocus
                 />
-              ))}
-              <Button
-                type="submit"
-                isSmall
-                textContents="검색"
-                canClick={
-                  isValid && !loadingStatisticsData && userIds.length > 0
-                }
-                loading={loadingStatisticsData}
-              />
+                <BtnMenu label={selectedDate.getFullYear() + "년 "} enabled />
+                <BtnMenu
+                  onClick={() => {
+                    const newStartDate = onClickSetDate(
+                      startDate,
+                      selectedDate.getMonth(),
+                      "next"
+                    );
+                    selectedDateVar(new Date(newStartDate));
+                  }}
+                  enabled
+                  icon={<FontAwesomeIcon icon={faChevronRight} fontSize={14} />}
+                  hasBorder
+                />
+              </div>
+              <div className="flex items-center gap-x-1.5">
+                {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, idx) => (
+                  <BtnMenu
+                    key={idx}
+                    hasBorder
+                    onClick={() => onClickSetDate(startDate, idx)}
+                    label={idx + 1 + "월"}
+                    enabled={startDate.getMonth() === idx}
+                    hasActiveRing
+                    thinFont
+                    hasFocus
+                  />
+                ))}
+              </div>
             </div>
             {memberState && (
-              <div className="flex w-full flex-wrap justify-end gap-4 px-2">
+              <div className="flex w-full justify-end gap-x-4">
                 {memberState.map((m, i) => (
                   <BtnMenu
                     key={m.userId}
@@ -410,22 +370,22 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                 ))}
               </div>
             )}
-          </form>
+          </div>
         }
       />
-      {data &&
+
+      {userStatistics &&
+      data &&
       data.getStatistics.prescriptions &&
       data.getStatistics.dailyReports &&
       userStatistics ? (
         <>
-          {data.getStatistics.prescriptions.length < 1 && (
+          {data.getStatistics.prescriptions.length < 1 ? (
             <Worning type="hasNotPrescription" />
-          )}
-          {data.getStatistics.dailyReports.length < 1 && (
+          ) : data.getStatistics.dailyReports.length < 1 ? (
             <Worning type="hasNotStatistics" />
-          )}
-          {data.getStatistics.prescriptions.length > 0 &&
-            data.getStatistics.dailyReports.length > 0 && (
+          ) : (
+            userStatistics.length > 0 && (
               <Charts
                 userStatistics={userStatistics}
                 prescriptions={data.getStatistics.prescriptions}
@@ -433,12 +393,13 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                 startDate={startDate}
                 endDate={endDate}
               />
-            )}
+            )
+          )}
         </>
+      ) : userIds.length === 0 ? (
+        <Worning type="emptyUserIds" />
       ) : (
-        <p className="position-center absolute text-base">
-          검색조건을 설정한 다음 검색을 누르세요
-        </p>
+        <Loading />
       )}
     </>
   );

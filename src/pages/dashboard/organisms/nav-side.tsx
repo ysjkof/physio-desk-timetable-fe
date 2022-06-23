@@ -72,7 +72,6 @@ export const DashboardSideNav = ({
                       clinic.member.accepted
                     )}
                     onClick={() => {
-                      console.log(clinicLists);
                       const newSelectedClinic = {
                         id: clinic.id,
                         name: clinic.name,
