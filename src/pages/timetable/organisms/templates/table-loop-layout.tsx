@@ -6,7 +6,7 @@ import { ONE_DAY } from "../../../../variables";
 interface TableLoopLayoutProps {
   userLength: number;
   children: ReactNode;
-  direction?: "col" | "row";
+  direction?: "col";
   isDivide?: boolean;
   isActiveBorderTop?: boolean;
 }

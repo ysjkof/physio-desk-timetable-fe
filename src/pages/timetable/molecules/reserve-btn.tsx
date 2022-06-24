@@ -18,7 +18,7 @@ export const ReserveBtn = ({
   const navigate = useNavigate();
   return (
     <div
-      className={`reserve-btn-box group ${
+      className={`reserve-btn-box group h-5 ${
         isActiveBorderTop ? " border-t border-gray-200" : ""
       }`}
       onClick={() =>

@@ -30,7 +30,6 @@ import { TableNavExpand } from "./organisms/table-nav-expand";
 import { TableNav } from "./organisms/table-nav";
 import { TableLabels } from "./organisms/table-labels";
 import { TableSubHeader } from "./organisms/table-sub-header";
-import { TableRows } from "./organisms/table-rows";
 import { TableCols } from "./organisms/table-cols";
 import { TableClinicSelector } from "./organisms/table-clinic-selector";
 import { TableModals } from "./organisms/table-modal";
@@ -53,7 +52,6 @@ export const TimeTable = () => {
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
-  console.log(selectedClinic);
 
   const { data, refetch } = useListReservations();
 
@@ -130,28 +128,6 @@ export const TimeTable = () => {
     setPrevSelectedDate(selectedDate);
   }, [selectedDate]);
 
-  const [height, setHeight] = useState<number | null>(null);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | false = false;
-    function handleTableHeight() {
-      const headerElement = document.getElementById("header");
-      const tableHeaderElement = document.getElementById("table-header");
-      const height =
-        window.innerHeight -
-        headerElement?.offsetHeight! -
-        tableHeaderElement?.offsetHeight! -
-        40;
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        setHeight(height);
-      }, 200);
-    }
-    handleTableHeight();
-    window.addEventListener("resize", handleTableHeight);
-    return () => window.removeEventListener("resize", handleTableHeight);
-  }, []);
-
   const tableNavVarients = {
     ini: (isUp: boolean) => ({ y: isUp ? -40 : 30 }),
     start: { y: 0, transition: { type: "tween", duration: 0.3 } },
@@ -178,20 +154,15 @@ export const TimeTable = () => {
               </AnimatePresence>
               <AnimatePresence>
                 {viewOptions.seeList === false && (
-                  <div className="flex border-t">
+                  <div className="TABLE_BODY flex h-screen border-t pb-[21px]">
                     <motion.div
                       initial={{ y: 300 }}
                       animate={{ y: 0, transition: { duration: 0.3 } }}
-                      className="table-main overflow-scroll"
-                      style={{ height: height ? height : "80vh" }}
+                      className="TABLE_MAIN table-main overflow-scroll"
                     >
                       {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곳에서 동일하게 한다 */}
                       <TableSubHeader />
                       <TableLabels labels={labels} />
-                      <TableRows
-                        labels={labels}
-                        weekEvents={optionalWeekEvents}
-                      />
                       <TableCols
                         labels={labels}
                         weekEvents={optionalWeekEvents}

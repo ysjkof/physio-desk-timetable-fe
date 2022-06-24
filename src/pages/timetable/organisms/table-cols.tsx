@@ -2,13 +2,16 @@ import { useReactiveVar } from "@apollo/client";
 import { useState } from "react";
 import { getActiveUserLength } from "..";
 import {
+  combineYMDHM,
   compareDateMatch,
+  compareNumAfterGetMinutes,
   DayWithUsers,
   getTimeLength,
 } from "../../../libs/timetable-utils";
 import { selectedClinicVar, selectedDateVar } from "../../../store";
 import { TABLE_CELL_HEIGHT } from "../../../variables";
 import { EventBox } from "../molecules/event-box";
+import { ReserveBtn } from "../molecules/reserve-btn";
 import { TableLoopLayout } from "./templates/table-loop-layout";
 import { TableMainComponentLayout } from "./templates/table-main-component-layout";
 import { TimeIndicatorBar } from "./time-indicator-bar";
@@ -20,11 +23,8 @@ interface TableColsProps {
 export function TableCols({ weekEvents, labels }: TableColsProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
-  const [maxColHeight, setMaxColHeight] = useState(
-    () => labels.length * TABLE_CELL_HEIGHT
-  );
+
   const userLength = getActiveUserLength(selectedClinic?.members);
-  labels.length * TABLE_CELL_HEIGHT;
 
   return (
     <TableMainComponentLayout componentName="TABLE_COLS ">
@@ -48,8 +48,19 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
                 <div
                   key={member.id}
                   className="USER_COL border-gray relative border-r"
-                  style={{ height: maxColHeight }}
                 >
+                  {labels.map((label) => (
+                    <ReserveBtn
+                      key={label.getTime()}
+                      userIndex={userIndex}
+                      label={combineYMDHM(day.date, label)}
+                      member={{ id: member.user.id, name: member.user.name }}
+                      isActiveBorderTop={compareNumAfterGetMinutes(
+                        label,
+                        [0, 30]
+                      )}
+                    />
+                  ))}
                   {member.events?.map((event) => (
                     <EventBox
                       key={event.id}
