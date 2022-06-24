@@ -62,7 +62,7 @@ export function TableNav({ varients }: TableNavProps) {
           }
           day={day.date.getDay()}
           selectedMonth={compareDateMatch(selectedDate, day.date, "ym")}
-          isToday={compareDateMatch(selectedDate, day.date, "ymd")}
+          selectedDay={compareDateMatch(selectedDate, day.date, "ymd")}
           onClick={() => {
             // table-row의 요소를 불러와 스크롤 조절함
             const el = document.getElementById(SCROLL_ADRESS + day.date);

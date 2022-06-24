@@ -12,7 +12,7 @@ export const BtnMenuToggle = ({
   onClick,
 }: BtnMenuToggleProps) => (
   <button
-    className={`btn-menu rounded-md border ${
+    className={`btn-menu border-inherit ${
       width ? "w-full justify-around space-x-20" : "space-x-2"
     }`}
     onClick={onClick}

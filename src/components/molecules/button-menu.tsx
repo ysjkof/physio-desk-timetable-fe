@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { cls } from "../../libs/utils";
 
 interface BtnDotProps {
   onClick?: any;
@@ -29,19 +30,25 @@ export const BtnMenu = ({
 }: BtnDotProps) => (
   <button
     type={type}
-    className={`btn-menu flex items-center gap-1 whitespace-nowrap${
-      hasBorder ? " border" : ""
-    }${
+    className={cls(
+      "btn-menu flex items-center gap-1 whitespace-nowrap",
+      hasBorder ? "border-gray-300" : "",
       enabled
         ? hasActiveRing
           ? " emphasize-ring border-transparent font-semibold"
           : " font-semibold"
-        : " opacity-50"
-    }${isWidthFull ? " w-full" : ""}${
-      thinFont ? " py-0 text-[0.7rem] font-normal" : ""
-    }${isCenter ? " mx-auto" : ""}${
-      onClick ? "" : " cursor-default hover:bg-inherit"
-    }${hasFocus ? " focus:emphasize-ring" : ""}`}
+        : " opacity-50",
+      isWidthFull ? " w-full" : "",
+      thinFont ? " py-0 text-[0.7rem] font-normal" : "",
+      isCenter ? " mx-auto" : "",
+      onClick ? "" : " cursor-default hover:bg-inherit",
+      hasFocus ? " focus:emphasize-ring" : "",
+      label === "부도"
+        ? "text-red-400"
+        : label === "취소"
+        ? "text-yellow-600"
+        : ""
+    )}
     onClick={onClick}
   >
     {icon} {label}

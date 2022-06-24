@@ -45,7 +45,6 @@ export const InactivateClinic = ({ loggedInUser }: InDashboardPageProps) => {
           <BtnMenu
             label="동의"
             enabled={agree}
-            hasBorder
             hasActiveRing
             icon={<FontAwesomeIcon icon={faCheck} fontSize={14} />}
             onClick={() => setAgree((prev) => !prev)}

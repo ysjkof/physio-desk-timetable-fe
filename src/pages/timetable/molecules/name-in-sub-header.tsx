@@ -15,7 +15,7 @@ export const NameInSubHeader = ({
   return (
     <div
       className={cls(
-        "flex w-full items-center justify-center border-x-[0.5px] pt-1",
+        "border-r-[0.5] flex w-full items-center justify-center py-0.5 last:border-r-0",
         isMe ? " font-semibold" : ""
       )}
     >

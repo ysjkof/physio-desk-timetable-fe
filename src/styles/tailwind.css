@@ -28,18 +28,18 @@
     @apply flex w-full justify-between px-2;
   }
   .table-nav {
-    @apply relative flex bg-white py-2 px-2;
+    @apply relative flex bg-white px-2;
   }
   .table-main {
     @apply relative h-full w-full;
   }
 
   .btn-menu {
-    @apply relative rounded-md px-1.5 font-light tracking-widest hover:bg-gray-200;
+    @apply relative rounded-sm border border-transparent py-[1px] px-1.5 tracking-widest hover:bg-gray-200;
   }
 
-  .emphasize-hover {
-    @apply hover:ring-2 hover:ring-green-500;
+  .emphasize-border {
+    @apply hover:border-b-gray-500 hover:bg-white;
   }
   .emphasize-ring {
     @apply ring-2 ring-green-500;
@@ -49,10 +49,10 @@
   }
 
   .reserve-btn-box {
-    @apply relative z-10 w-full from-sky-500 to-indigo-500 text-center hover:bg-gradient-to-r;
+    @apply relative z-10 h-5 w-full cursor-pointer from-sky-500 to-indigo-500 text-center hover:bg-gradient-to-r;
   }
   .reserve-btn {
-    @apply invisible mx-auto whitespace-nowrap align-middle text-white hover:cursor-pointer group-hover:visible;
+    @apply invisible mx-auto whitespace-nowrap align-middle text-white group-hover:visible;
   }
   .modal-parents {
     @apply fixed top-0 left-0 z-40 h-screen w-screen;
@@ -92,6 +92,10 @@
   }
   .seperate-bar {
     @apply w-full border-b;
+  }
+
+  .user-cols-divide {
+    @apply border-r border-x-gray-500 last:border-r-transparent;
   }
 }
 

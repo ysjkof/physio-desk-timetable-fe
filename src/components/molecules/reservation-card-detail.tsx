@@ -17,7 +17,8 @@ export const ReservationCardDetail = ({
         <span className="col-start-2">
           {getHHMM(reservation.startDate, ":")} ~{" "}
           {getHHMM(reservation.endDate, ":")} (
-          {getTimeLength(reservation.startDate, reservation.endDate)}분)
+          {getTimeLength(reservation.startDate, reservation.endDate, "minute")}
+          분)
         </span>
       </div>
 
@@ -27,7 +28,7 @@ export const ReservationCardDetail = ({
       </div>
       <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">마지막 수정</span>
-        <span>{reservation.lastModifier?.email}</span>
+        <span>{reservation.lastModifier?.name}</span>
       </div>
 
       <div className="grid grid-cols-[5rem,1fr] items-center">

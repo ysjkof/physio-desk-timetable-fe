@@ -14,17 +14,14 @@ interface TableLoopLayoutProps {
 export function TableLoopLayout({
   userLength,
   children,
+
   elementName,
 }: TableLoopLayoutProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
 
   return (
     <div
-      className={cls(
-        elementName ? elementName : "",
-        "grid w-full divide-x",
-        userLength !== 1 ? "divide-blue-800" : ""
-      )}
+      className={cls(elementName ? elementName : "", "grid w-full")}
       style={
         viewOptions.periodToView === ONE_DAY
           ? {

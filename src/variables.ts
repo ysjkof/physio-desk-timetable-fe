@@ -31,6 +31,7 @@ export const REGEX_EMAIL =
 
 export const TABLE_MAIN_COMPONENT_LAYOUT_PADDING_TOP = 50; // px
 export const TABLE_CELL_HEIGHT = 20; // px
+export const TABLE_CELL_HEIGHT_IN_ONE_MINUTE = 2; // px
 export const TABLE_TIME_GAP = 10; // 분 단위, 나중에 전역변수로 조절할 수 있게 고려
 
 export const NEXT = "next";

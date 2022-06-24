@@ -7,6 +7,7 @@ import {
   DayWithUsers,
   getTimeLength,
 } from "../../../libs/timetable-utils";
+import { cls } from "../../../libs/utils";
 import { selectedClinicVar, selectedDateVar } from "../../../store";
 import { TABLE_CELL_HEIGHT } from "../../../variables";
 import { EventBox } from "../molecules/event-box";
@@ -31,7 +32,10 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
       children={weekEvents.map((day, i) => (
         <div
           key={i}
-          className="relative grid"
+          className={cls(
+            "user-cols-divide relative grid ",
+            userLength === 1 ? "border-x-inherit" : ""
+          )}
           style={{
             gridTemplateColumns: `repeat(${userLength}, 1fr)`,
           }}
@@ -44,12 +48,11 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
             member.isActivate ? (
               <div
                 key={member.id}
-                className="USER_COL relative w-full border-x-[0.5px] hover:border-transparent hover:bg-gray-200/50"
+                className="USER_COL relative w-full border-r-[0.5px] last:border-r-0 hover:border-transparent hover:bg-gray-200/50"
               >
                 {labels.map((label) => (
                   <ReserveBtn
                     key={label.getTime()}
-                    userIndex={userIndex}
                     label={combineYMDHM(day.date, label)}
                     member={{ id: member.user.id, name: member.user.name }}
                     isActiveBorderTop={compareNumAfterGetMinutes(
@@ -75,9 +78,11 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
                         compareDateMatch(label, new Date(event.startDate), "hm")
                       ) * TABLE_CELL_HEIGHT
                     }px 0%`}
-                    height={`${
-                      getTimeLength(event.startDate, event.endDate) * 2
-                    }px`}
+                    numberOfCell={getTimeLength(
+                      event.startDate,
+                      event.endDate,
+                      "20minute"
+                    )}
                   />
                 ))}
               </div>

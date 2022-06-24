@@ -116,10 +116,22 @@ export function combineYMDHM(YMDDate: Date, HMDate: Date) {
   return new Date(year, month, date, h, m);
 }
 
-export const getTimeLength = (startDate: Date, endDate: Date) => {
+export const getTimeLength = (
+  startDate: Date,
+  endDate: Date,
+  unit: "minute" | "20minute"
+) => {
   const sd = new Date(startDate);
   const ed = new Date(endDate);
-  return (ed.getTime() - sd.getTime()) / 1000 / 60;
+  let value = 60;
+  switch (unit) {
+    case "minute":
+      break;
+    case "20minute": // 시간표 한 칸의 최소 높이가 10분 20px이라서 한 번에 구하기 위함
+      value = 60 * 10;
+      break;
+  }
+  return (ed.getTime() - sd.getTime()) / 1000 / value;
 };
 
 export const getWeeksOfMonth = (date: Date) => {

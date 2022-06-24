@@ -98,7 +98,7 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
     variables: {
       input: {
-        clinicId: selectedClinic!.id,
+        clinicId: selectedClinic?.id ?? 0,
         onlyLookUpActive: false,
       },
     },
@@ -272,7 +272,7 @@ export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
                 {...register("userId")}
                 className="w-full rounded-md border text-center"
               >
-                {selectedClinic!.id === 0 ? (
+                {selectedClinic?.id === 0 ? (
                   <option value={loggedInUser?.id}>{loggedInUser?.name}</option>
                 ) : (
                   clinicLists

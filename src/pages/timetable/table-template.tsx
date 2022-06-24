@@ -12,24 +12,34 @@ export const TimetableTemplate = ({
   labels,
   body,
 }: ITimetableProps) => {
-  const [height, setBodyHeight] = useState<null | number>(null);
+  const [height, setHeight] = useState<null | number>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const HEADER_HEIGHT = 41;
     if (headerRef.current) {
+      let timer: NodeJS.Timeout | false = false;
       const headerHeight = headerRef.current.clientHeight;
-      const windowHeight = window.innerHeight;
-      setBodyHeight(windowHeight - headerHeight - HEADER_HEIGHT);
+      function handleTableHeight() {
+        const HEADER_HEIGHT = 41;
+        const windowHeight = window.innerHeight;
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          setHeight(windowHeight - headerHeight - HEADER_HEIGHT);
+        }, 200);
+      }
+      handleTableHeight();
+      window.addEventListener("resize", handleTableHeight);
+      return () => window.removeEventListener("resize", handleTableHeight);
     }
-  }, [headerRef]);
+  }, []);
+
   return (
     <motion.div
       animate={{ opacity: 1 }}
       className="TIMETABLE_TEMPLATE h-full opacity-0"
     >
       <div
-        className="TABLE_HEADER table-header relative z-[34] flex flex-col bg-white shadow-b"
+        className="TABLE_HEADER table-header relative z-[34] flex flex-col border-b bg-white"
         ref={headerRef}
       >
         {header}
@@ -40,7 +50,7 @@ export const TimetableTemplate = ({
           className="TABLE_BODY grid h-screen w-full grid-cols-[40px,1fr] overflow-scroll"
           style={{ height: height + "px" }}
         >
-          <div className="TABLE_LABELS sticky left-0 z-30 border-r-2 border-black bg-white pt-[44px]">
+          <div className="TABLE_LABELS sticky left-0 z-[32] border-r-2 border-black bg-white pt-[50px]">
             {labels}
           </div>
           <div className="TABLE_MAIN flex h-screen flex-col">{body}</div>

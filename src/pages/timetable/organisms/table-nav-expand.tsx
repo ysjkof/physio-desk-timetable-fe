@@ -5,6 +5,7 @@ import {
   compareDateMatch,
   getWeeksOfMonth,
 } from "../../../libs/timetable-utils";
+import { cls } from "../../../libs/utils";
 import { selectedDateVar } from "../../../store";
 import { NEXT, PREV } from "../../../variables";
 import { BtnArrow } from "../molecules/button-arrow";
@@ -63,24 +64,25 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
           <div
             key={i}
             onClick={() => selectedDateVar(day.date)}
-            className={`btn-menu cursor-pointer py-0.5 text-center ${
+            className={cls(
+              "btn-menu cursor-pointer py-0.5 text-center",
+              day.date.getDay() === 0
+                ? "sunday"
+                : day.date.getDay() === 6
+                ? "saturday"
+                : "",
               compareDateMatch(day.date, selectedDate, "ymd")
-                ? "emphasize-ring"
+                ? "bg-black text-white"
                 : ""
-            }`}
+            )}
           >
             <span
-              className={`font-medium ${
-                day.date.getDay() === 0
-                  ? "sunday"
-                  : day.date.getDay() === 6
-                  ? "saturday"
-                  : ""
-              } ${
+              className={cls(
+                "font-medium",
                 compareDateMatch(calendar.selectedMonth[7].date, day.date, "ym")
                   ? ""
                   : "opacity-50"
-              }`}
+              )}
             >
               {day.date.getDate()}
             </span>

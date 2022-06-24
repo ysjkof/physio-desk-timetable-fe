@@ -1,13 +1,18 @@
 import { useReactiveVar } from "@apollo/client";
-import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCalendarAlt,
+  faPlusSquare,
+} from "@fortawesome/free-regular-svg-icons";
 import {
   faBan,
   faCommentSlash,
   faGear,
   faList,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { getActiveUserLength } from "..";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { BtnMenuToggle } from "../../../components/molecules/button-menu-toggle";
@@ -19,7 +24,8 @@ import {
   selectedDateVar,
   viewOptionsVar,
 } from "../../../store";
-import { ONE_DAY, ONE_WEEK } from "../../../variables";
+import { NEXT, ONE_DAY, ONE_WEEK, PREV } from "../../../variables";
+import { BtnArrow } from "../molecules/button-arrow";
 import { TableClinicSelector } from "./table-clinic-selector";
 import { TableNav } from "./table-nav";
 import { TableNavExpand } from "./table-nav-expand";
@@ -37,9 +43,26 @@ export function TableHeader({ today }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
+  const selectedDate = useReactiveVar(selectedDateVar);
+
+  const navigate = useNavigate();
 
   if (!loggedInUser || !viewOptions) return <></>;
 
+  const handleDateNavMovePrev = () => {
+    const date = new Date(selectedDate);
+    viewOptions.navigationExpand
+      ? date.setMonth(date.getMonth() - 1)
+      : date.setDate(date.getDate() - 7);
+    selectedDateVar(date);
+  };
+  const handleDateNavMoveNext = () => {
+    const date = new Date(selectedDate);
+    viewOptions.navigationExpand
+      ? date.setMonth(date.getMonth() + 1)
+      : date.setDate(date.getDate() + 7);
+    selectedDateVar(date);
+  };
   return (
     <>
       <div className="flex w-full items-center justify-between pt-1">
@@ -57,12 +80,14 @@ export function TableHeader({ today }: TableNavProps) {
         <div className="flex w-full items-center justify-end gap-x-2">
           <BtnMenu
             icon={
-              <FontAwesomeIcon
-                icon={faBan}
-                fontSize={14}
-                className="text-yellow-600"
-              />
+              <FontAwesomeIcon icon={faPlusSquare} fontSize={14} className="" />
             }
+            enabled
+            label={"환자등록"}
+            onClick={() => navigate("create-patient")}
+          />
+          <BtnMenu
+            icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
             enabled={viewOptions.seeCancel}
             label={"취소"}
             onClick={() => {
@@ -74,13 +99,7 @@ export function TableHeader({ today }: TableNavProps) {
             }}
           />
           <BtnMenu
-            icon={
-              <FontAwesomeIcon
-                icon={faCommentSlash}
-                fontSize={14}
-                className="text-red-400"
-              />
-            }
+            icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
             enabled={viewOptions.seeNoshow}
             label={"부도"}
             onClick={() => {
@@ -147,14 +166,24 @@ export function TableHeader({ today }: TableNavProps) {
           </AnimatePresence>
         </div>
       </div>
-
       <AnimatePresence>
         {viewOptions.navigationExpand ? (
           <TableNavExpand varients={tableNavVarients} />
+        ) : getActiveUserLength(selectedClinic?.members) > 1 ? (
+          <TableNav varients={tableNavVarients} />
         ) : (
-          getActiveUserLength(selectedClinic?.members) > 1 && (
-            <TableNav varients={tableNavVarients} />
-          )
+          <>
+            <div className="absolute top-[25px] left-0 flex h-[29px] w-[38px] items-center bg-white">
+              <BtnArrow direction={PREV} onClick={handleDateNavMovePrev} />
+            </div>
+            <BtnArrow
+              direction={NEXT}
+              onClick={handleDateNavMoveNext}
+              className={
+                "absolute top-[25px] right-0 flex h-[29px] items-center"
+              }
+            />
+          </>
         )}
       </AnimatePresence>
     </>
