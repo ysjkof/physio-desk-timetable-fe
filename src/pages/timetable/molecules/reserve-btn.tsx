@@ -19,7 +19,7 @@ export const ReserveBtn = ({
   return (
     <div
       className={`reserve-btn-box group h-5 ${
-        isActiveBorderTop ? " border-t border-gray-200" : ""
+        isActiveBorderTop ? " border-t border-gray-200 first:border-t-0" : ""
       }`}
       onClick={() =>
         navigate(RESERVE_DETAIL, { state: { startDate: label, member } })

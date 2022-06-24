@@ -465,10 +465,11 @@ array.map((label) => <span>{getHHMM(label, ":")}</span>);
 reserve-btn : 10
 time-indicator-bar : 20
 event-box : 30 { hover: 32 }
+table-labels : 30
 table-sub-header : 31
-table-labels : 33
+TABLE_HEADER : 34
 modal-portal : 40
-table-clinic-selector : 40
+USER_VIEW_CONTROLLER : 35
 dropdown menu in Header : 50(table-clinic-selector과 겹침)
 
 **추후확인**

@@ -1,28 +1,30 @@
 import { useReactiveVar } from "@apollo/client";
 import { ReactNode } from "react";
+import { cls } from "../../../../libs/utils";
 import { viewOptionsVar } from "../../../../store";
 import { ONE_DAY } from "../../../../variables";
 
 interface TableLoopLayoutProps {
   userLength: number;
   children: ReactNode;
-  direction?: "col";
-  isDivide?: boolean;
+  isUserCols?: boolean;
   isActiveBorderTop?: boolean;
+  elementName?: string;
 }
 export function TableLoopLayout({
   userLength,
   children,
-  direction,
-  isDivide = true,
+  elementName,
 }: TableLoopLayoutProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
 
   return (
     <div
-      className={`grid w-full${direction === "col" ? " h-full" : " h-5"}${
-        isDivide ? " divide-x divide-blue-800" : ""
-      }`}
+      className={cls(
+        elementName ? elementName : "",
+        "grid w-full divide-x",
+        userLength !== 1 ? "divide-blue-800" : ""
+      )}
       style={
         viewOptions.periodToView === ONE_DAY
           ? {

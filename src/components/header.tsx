@@ -169,8 +169,8 @@ export const Header = () => {
           <span>Please verify your email.</span>
         </div>
       )} */}
-      <header className="header" id="header">
-        <div className="flex w-full items-center gap-10 py-1">
+      <header className="HEADER header" id="header">
+        <div className="flex w-full items-center gap-10">
           <Link to="/">
             {/* <img src={muoolLogo} className="w-36" alt="Muool" /> */}
             <span className="header-title">Muool</span>
@@ -196,7 +196,7 @@ export const Header = () => {
               </Link>
               <div className="group relative cursor-pointer">
                 <FontAwesomeIcon fontSize={24} icon={faBell} />
-                <div className="dropdown absolute top-6 right-0 z-50 hidden h-80 w-60 flex-col items-center overflow-y-scroll border bg-white py-2 px-4 shadow-cst group-hover:flex">
+                <div className="DROPDOWN absolute top-6 right-0 z-50 hidden h-80 w-60 flex-col items-center overflow-y-scroll border bg-white py-2 px-4 shadow-cst group-hover:flex">
                   {!notices || notices.length === 0
                     ? "알림이 없습니다."
                     : notices.map((notice) => (
@@ -206,7 +206,7 @@ export const Header = () => {
               </div>
               <div className="group relative cursor-pointer">
                 <FontAwesomeIcon fontSize={24} icon={faUser} />
-                <div className="dropdown absolute top-6 right-0 z-50 hidden w-40 flex-col items-center border bg-white py-2 px-4 shadow-cst group-hover:flex">
+                <div className="DROPDOWN absolute top-6 right-0 z-50 hidden w-40 flex-col items-center border bg-white py-2 px-4 shadow-cst group-hover:flex">
                   <Link
                     to="/edit-profile"
                     className="w-full text-center hover:bg-blue-200"

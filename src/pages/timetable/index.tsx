@@ -25,9 +25,7 @@ import {
 } from "../../libs/timetable-utils";
 import { ONE_DAY, TABLE_TIME_GAP } from "../../variables";
 import { TableHeader } from "./organisms/table-header";
-import { AnimatePresence, motion } from "framer-motion";
-import { TableNavExpand } from "./organisms/table-nav-expand";
-import { TableNav } from "./organisms/table-nav";
+import { AnimatePresence } from "framer-motion";
 import { TableLabels } from "./organisms/table-labels";
 import { TableSubHeader } from "./organisms/table-sub-header";
 import { TableCols } from "./organisms/table-cols";
@@ -59,8 +57,6 @@ export const TimeTable = () => {
     viewOptions.periodToView === ONE_DAY
       ? weekEvents && [weekEvents[selectedDate.getDay()]]
       : weekEvents;
-
-  let userLength = 0;
 
   const labels = getTimeGaps(
     viewOptions.tableDuration.start.hours,
@@ -94,10 +90,6 @@ export const TimeTable = () => {
   }
 
   useEffect(() => {
-    userLength = getActiveUserLength(selectedClinic?.members);
-  }, [selectedClinic]);
-
-  useEffect(() => {
     if (data?.listReservations.ok && loggedInUser) {
       const { results } = data.listReservations;
       const distributeEvents = distributor(results!);
@@ -128,55 +120,35 @@ export const TimeTable = () => {
     setPrevSelectedDate(selectedDate);
   }, [selectedDate]);
 
-  const tableNavVarients = {
-    ini: (isUp: boolean) => ({ y: isUp ? -40 : 30 }),
-    start: { y: 0, transition: { type: "tween", duration: 0.3 } },
-  };
-
   return (
     <>
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      <TimetableTemplate
-        children={
-          !viewOptions || !optionalWeekEvents || !viewOptions ? (
-            <Loading />
-          ) : (
+      {!viewOptions || !optionalWeekEvents || !viewOptions ? (
+        <Loading />
+      ) : (
+        <TimetableTemplate
+          header={<TableHeader today={today} />}
+          labels={<TableLabels labels={labels} />}
+          body={
             <>
-              <TableHeader today={today} />
-              <AnimatePresence>
-                {viewOptions.navigationExpand ? (
-                  <TableNavExpand varients={tableNavVarients} />
-                ) : (
-                  userLength > 1 && <TableNav varients={tableNavVarients} />
-                )}
-              </AnimatePresence>
               <AnimatePresence>
                 {viewOptions.seeList === false && (
-                  <div className="TABLE_BODY flex h-screen border-t pb-[21px]">
-                    <motion.div
-                      initial={{ y: 300 }}
-                      animate={{ y: 0, transition: { duration: 0.3 } }}
-                      className="TABLE_MAIN table-main overflow-scroll"
-                    >
-                      {/* 시간표의 칸은 table-sub-header, table-cols, table-row 세 곳에서 동일하게 한다 */}
-                      <TableSubHeader />
-                      <TableLabels labels={labels} />
-                      <TableCols
-                        labels={labels}
-                        weekEvents={optionalWeekEvents}
-                      />
-                    </motion.div>
-                    {viewOptions.seeActiveOption && <TableClinicSelector />}
-                  </div>
+                  <>
+                    <TableSubHeader />
+                    <TableCols
+                      labels={labels}
+                      weekEvents={optionalWeekEvents}
+                    />
+                  </>
                 )}
               </AnimatePresence>
               {viewOptions.seeList === true && "준비 중"}
             </>
-          )
-        }
-      />
+          }
+        />
+      )}
       <TableModals refetch={refetch} />
     </>
   );
