@@ -21,7 +21,7 @@ export const NameInSubHeader = ({
     >
       <span
         className="mr-1 inline-block h-1.5 w-1.5 rounded-full"
-        style={{ backgroundColor: USER_COLORS[0][userIndex] }}
+        style={{ backgroundColor: USER_COLORS[userIndex]?.deep }}
       />
       {name}
     </div>

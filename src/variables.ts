@@ -81,5 +81,22 @@ export const STATISTICS_LABEL_COLORS = [
 ];
 
 export const USER_COLORS = [
-  ["#FCA5A5", "#FDBA74", "#FDE047", "#86EFAC", "#93C5FD", "#A5B4FC", "#C4B5FD"],
+  // light : bg-color-100
+  { deep: "#FCA5A5", light: "#FEE2E2" },
+  { deep: "#FDBA74", light: "#FFEDD5" },
+  { deep: "#FDE047", light: "#FEF9C3" },
+  { deep: "#86EFAC", light: "#DCFCE7" },
+  { deep: "#93C5FD", light: "#DBEAFE" },
+  { deep: "#A5B4FC", light: "#E0E7FF" },
+  { deep: "#C4B5FD", light: "#EDE9FE" },
 ];
+// export const USER_COLORS = [
+//   // light : bg-color-50
+//   { deep: "#FCA5A5", light: "#FEF2F2" },
+//   { deep: "#FDBA74", light: "#FFF7ED" },
+//   { deep: "#FDE047", light: "#FEFCE8" },
+//   { deep: "#86EFAC", light: "#F0FDF4" },
+//   { deep: "#93C5FD", light: "#EFF6FF" },
+//   { deep: "#A5B4FC", light: "#EEF2FF" },
+//   { deep: "#C4B5FD", light: "#F5F3FF" },
+// ];

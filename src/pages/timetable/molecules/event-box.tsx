@@ -1,4 +1,6 @@
 import { useReactiveVar } from "@apollo/client";
+import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
 import { ReservationState } from "../../../graphql/generated/graphql";
@@ -69,10 +71,19 @@ export function EventBox({
       style={{
         inset,
         height,
-        borderColor: USER_COLORS[0][userIndex],
+        ...(reservationState === ReservationState.Reserved && {
+          borderColor: USER_COLORS[userIndex]?.deep,
+          backgroundColor: USER_COLORS[userIndex]?.light,
+        }),
       }}
     >
       <div className="h-5 overflow-hidden whitespace-nowrap text-center">
+        {reservationState === ReservationState.NoShow && (
+          <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />
+        )}
+        {reservationState === ReservationState.Canceled && (
+          <FontAwesomeIcon icon={faBan} fontSize={14} />
+        )}
         {patientName}
         {registrationNumber && (
           <span className="ml-0.5 font-extralight">:{registrationNumber}</span>
