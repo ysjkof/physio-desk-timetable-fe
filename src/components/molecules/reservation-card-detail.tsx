@@ -12,7 +12,12 @@ export const ReservationCardDetail = ({
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-[5rem,1fr] items-center">
-        <span className="">예약시각</span>
+        <span className="">담당 치료사</span>
+        <span>{reservation.user.name}</span>
+      </div>
+
+      <div className="grid grid-cols-[5rem,1fr] items-center">
+        <span className="">예약시간</span>
         <span>{getYMD(reservation.startDate, "yyyymmdd", "-")}</span>
         <span className="col-start-2">
           {getHHMM(reservation.startDate, ":")} ~{" "}
@@ -23,25 +28,27 @@ export const ReservationCardDetail = ({
       </div>
 
       <div className="grid grid-cols-[5rem,1fr] items-center">
+        <span className="">처방</span>
+        <span className="space-x-4">
+          {reservation.prescriptions?.map((prescription, i) => (
+            <span key={i}>{prescription.name}</span>
+          ))}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">상태</span>
         <span>{RESERVATION_STATE_KOR[reservation.state]}</span>
       </div>
+
       <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">마지막 수정</span>
         <span>{reservation.lastModifier?.name}</span>
       </div>
 
-      <div className="grid grid-cols-[5rem,1fr] items-center">
-        <span className="">담당 치료사</span>
-        <span>{reservation.user.name}</span>
-      </div>
-      <div className="grid grid-cols-[5rem,1fr] items-center">
-        <span className="">병원</span>
-        <span>{reservation.clinic?.name}</span>
-      </div>
       <div>
         <span className="">메모</span>
-        <p className="pl-4">{reservation.memo && reservation.memo}</p>
+        <p className="pl-4">{reservation.memo}</p>
       </div>
     </div>
   );

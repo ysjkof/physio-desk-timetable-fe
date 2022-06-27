@@ -40,12 +40,12 @@ export const BtnMenu = ({
         : " opacity-50",
       isWidthFull ? " w-full" : "",
       thinFont ? " py-0 text-[0.7rem] font-normal" : "",
-      isCenter ? " mx-auto" : "",
+      isCenter ? " mx-auto text-center" : "",
       onClick ? "" : " cursor-default hover:bg-inherit",
       hasFocus ? " focus:emphasize-ring" : "",
-      label === "부도"
+      label === "부도" && enabled
         ? "text-red-400"
-        : label === "취소"
+        : label === "취소" && enabled
         ? "text-yellow-600"
         : ""
     )}

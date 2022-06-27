@@ -23,6 +23,7 @@ export const DatepickerWithInput = ({
   textColor,
 }: IDatepickerWithInputProps) => {
   const [open, setOpen] = useState(false);
+
   return (
     <div className="datepicker-with-input flex w-full items-center gap-1">
       <Datepicker

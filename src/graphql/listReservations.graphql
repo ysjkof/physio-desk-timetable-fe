@@ -31,6 +31,7 @@ query listReservations($input: ListReservationsInput!) {
         name
       }
       prescriptions {
+        id
         name
         requiredTime
         description

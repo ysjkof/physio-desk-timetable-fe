@@ -99,7 +99,6 @@ export function EventBox({
           memo ? (
             <div className="h-full overflow-hidden break-all font-extralight">
               {memo}
-              메모가 없습니다
             </div>
           ) : null
         ) : null // 칸이 없어서 메모 생략

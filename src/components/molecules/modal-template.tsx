@@ -3,13 +3,14 @@ import { ReactNode } from "react";
 
 interface ModalTemplateProps {
   children: ReactNode;
-  onClick: () => void;
+  closeAction: () => void;
   top?: number;
   left?: number;
 }
+
 export const ModalTemplate = ({
   children,
-  onClick,
+  closeAction,
   top,
   left,
 }: ModalTemplateProps) => {
@@ -27,13 +28,17 @@ export const ModalTemplate = ({
           top ? "bg-transparent opacity-100" : ""
         }`}
         // @ts-ignore
-        onClick={() => onClick(false)}
+        onClick={() => closeAction()}
       />
       <motion.div
         drag
         dragMomentum={false}
         dragElastic={false}
-        className={`${top ? "relative" : "modal-content"}`}
+        className={`${
+          top
+            ? "relative"
+            : "modal-content h-full w-[400px] py-4 sm:h-fit sm:min-h-[600px]"
+        }`}
         style={{ ...(top && { top, left }) }}
       >
         {children}

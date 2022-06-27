@@ -119,7 +119,8 @@ export function TableHeader({ today }: TableNavProps) {
               };
               saveViewOptions(newViewOptions, loggedInUser.id);
             }}
-            enabled={viewOptions.periodToView === ONE_WEEK}
+            firstEnabled={viewOptions.periodToView === ONE_WEEK}
+            secondEnabled={viewOptions.periodToView === ONE_DAY}
             label={["1주일", "하루"]}
           />
           {/* ---------------------- 구분선 ---------------------- */}
