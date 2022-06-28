@@ -11,7 +11,6 @@ import {
   RESERVE_DETAIL,
   RESERVE_EDIT,
   TABLE_CELL_HEIGHT,
-  TABLE_CELL_HEIGHT_IN_ONE_MINUTE,
   USER_COLORS,
 } from "../../../variables";
 interface EventBoxProps {
@@ -23,7 +22,7 @@ interface EventBoxProps {
   numberOfCell: number;
   startDate: Date;
   endDate: Date;
-  registrationNumber?: string | null;
+  registrationNumber: number;
   memo?: string | null;
   prescriptions?: any[];
 }
@@ -55,7 +54,7 @@ export function EventBox({
         isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
       }
       className={cls(
-        "group absolute z-30 cursor-pointer items-center justify-center border bg-white px-1",
+        "group absolute z-30 cursor-pointer items-center justify-center overflow-hidden border bg-white px-1",
         !viewOptions.seeCancel && reservationState === ReservationState.Canceled
           ? "hidden"
           : !viewOptions.seeNoshow &&
@@ -85,19 +84,17 @@ export function EventBox({
           <FontAwesomeIcon icon={faBan} fontSize={14} />
         )}
         {patientName}
-        {registrationNumber && (
-          <span className="ml-0.5 font-extralight">:{registrationNumber}</span>
-        )}
+        <span className="ml-0.5 font-extralight">:{registrationNumber}</span>
       </div>
       {prescriptions && numberOfCell !== 1 && (
-        <div className="h-5 overflow-hidden text-center">
-          {prescriptions.map((prescription) => prescription.name)}
+        <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
+          {prescriptions.map((prescription) => prescription.name + ", ")}
         </div>
       )}
       {
         numberOfCell > 2 ? (
           memo ? (
-            <div className="h-full overflow-hidden break-all font-extralight">
+            <div className="h-full overflow-hidden text-ellipsis break-all font-extralight">
               {memo}
             </div>
           ) : null

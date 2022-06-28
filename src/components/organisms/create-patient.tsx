@@ -46,11 +46,11 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
     if (ok) {
       closeAction();
       selectedPatientVar({
+        id: patient?.id!,
         name: patient?.name!,
         gender: patient?.gender!,
-        registrationNumber: patient?.registrationNumber,
         birthday: patient?.birthday,
-        id: patient?.id!,
+        registrationNumber: patient?.registrationNumber!,
         clinicName: selectedClinic?.name ?? "",
       });
     }
@@ -62,7 +62,7 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
 
   const onSubmit = () => {
     if (!loading) {
-      const { name, gender, registrationNumber, memo } = getValues();
+      const { name, gender, memo } = getValues();
       const { birthdayYear, birthdayMonth, birthdayDate } = birthdayGetValues();
       const birthday = new Date(
         `${birthdayYear}-${birthdayMonth}-${birthdayDate}`
@@ -72,7 +72,6 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
           input: {
             name,
             gender,
-            registrationNumber,
             memo,
             ...(birthday && { birthday }),
             ...(typeof selectedClinic?.id === "number" &&
@@ -141,41 +140,15 @@ export const CreatePatient = ({ closeAction }: TimetableModalProps) => {
                 <label className="flex flex-col gap-2">
                   생년월일
                   <DatepickerWithInput
-                    defaultDate={new Date()}
+                    defaultDate={new Date("0-0-0")}
                     setValue={birthdaySetValue}
                     register={birthdayRegister}
                     formError={birthdayError}
                     dateType="birthday"
                     see="ymd"
                   />
-                  {/* <InputOfDatepicker
-                register={birthdayRegister}
-                formError={birthdayError}
-                prefix="birthday"
-                see="ymd"
-              /> */}
                 </label>
 
-                <Input
-                  label={"등록번호"}
-                  name={"registrationNumber"}
-                  type={"number"}
-                  placeholder={"숫자를 입력하세요"}
-                  required={false}
-                  register={register("registrationNumber", {
-                    maxLength: {
-                      value: 10,
-                      message: "등록번호는 최대 10자리 수입니다",
-                    },
-                  })}
-                  children={
-                    errors.registrationNumber?.message && (
-                      <FormError
-                        errorMessage={errors.registrationNumber.message}
-                      />
-                    )
-                  }
-                />
                 <Input
                   label={"메모"}
                   name={"memo"}

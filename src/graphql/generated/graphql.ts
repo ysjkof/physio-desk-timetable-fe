@@ -34,6 +34,7 @@ export type Clinic = {
   isActivated: Scalars['Boolean'];
   members: Array<Member>;
   name: Scalars['String'];
+  numberOfPatients: Scalars['Int'];
   patient?: Maybe<Array<Patient>>;
   prescriptions: Array<Prescription>;
   reservations?: Maybe<Array<Reservation>>;
@@ -85,7 +86,6 @@ export type CreatePatientInput = {
   gender?: InputMaybe<Scalars['String']>;
   memo?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
-  registrationNumber?: InputMaybe<Scalars['String']>;
 };
 
 export type CreatePatientOutput = {
@@ -163,7 +163,6 @@ export type EditPatientInput = {
   gender?: InputMaybe<Scalars['String']>;
   memo?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
-  registrationNumber?: InputMaybe<Scalars['String']>;
 };
 
 export type EditPatientOutput = {
@@ -523,7 +522,7 @@ export type Patient = {
   isNew?: Maybe<Scalars['Boolean']>;
   memo?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  registrationNumber?: Maybe<Scalars['String']>;
+  registrationNumber: Scalars['Int'];
   reservations: Array<Reservation>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   users: Array<User>;
@@ -775,7 +774,7 @@ export type CreatePatientMutationVariables = Exact<{
 }>;
 
 
-export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null } | null } };
+export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null } | null } };
 
 export type CreatePrescriptionMutationVariables = Exact<{
   input: CreatePrescriptionInput;
@@ -817,7 +816,7 @@ export type FindAllPatientsQueryVariables = Exact<{
 }>;
 
 
-export type FindAllPatientsQuery = { __typename?: 'Query', findAllPatients: { __typename?: 'FindAllPatientsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, clinic?: { __typename?: 'Clinic', name: string } | null }> | null } };
+export type FindAllPatientsQuery = { __typename?: 'Query', findAllPatients: { __typename?: 'FindAllPatientsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, clinic?: { __typename?: 'Clinic', name: string } | null }> | null } };
 
 export type FindAtomPrescriptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -850,7 +849,7 @@ export type GetPatientsQueryVariables = Exact<{
 }>;
 
 
-export type GetPatientsQuery = { __typename?: 'Query', getPatients: { __typename?: 'GetPatientsOutput', ok: boolean, error?: string | null, patients: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null }> } };
+export type GetPatientsQuery = { __typename?: 'Query', getPatients: { __typename?: 'GetPatientsOutput', ok: boolean, error?: string | null, patients: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null }> } };
 
 export type GetStatisticsQueryVariables = Exact<{
   input: GetStatisticsInput;
@@ -878,7 +877,7 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, memo?: string | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -897,7 +896,7 @@ export type SearchPatientQueryVariables = Exact<{
 }>;
 
 
-export type SearchPatientQuery = { __typename?: 'Query', searchPatient: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber?: string | null, birthday?: any | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, users: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
+export type SearchPatientQuery = { __typename?: 'Query', searchPatient: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, users: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
 
 export type SearchUsersQueryVariables = Exact<{
   input: SearchUsersInput;

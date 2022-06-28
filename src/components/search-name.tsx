@@ -5,7 +5,7 @@ interface SearchNameProps {
   id: number;
   gender: string;
   name: string;
-  registrationNumber: string | null | undefined;
+  registrationNumber: number | null | undefined;
   birthday: Date;
   onClick?: any;
   columnCount?: 2 | 3 | 4;

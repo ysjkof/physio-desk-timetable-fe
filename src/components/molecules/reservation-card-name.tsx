@@ -3,7 +3,7 @@ import { getYMD } from "../../libs/timetable-utils";
 interface ReservationCardNameProps {
   gender: string;
   name: string;
-  registrationNumber: string | null | undefined;
+  registrationNumber: number | null | undefined;
   birthday: Date;
 }
 
@@ -33,7 +33,7 @@ export const ReservationCardName = ({
         >
           {gender === "male" ? "남성" : "여성"}
         </span>
-        <span className="">{getYMD(birthday, "yymmdd", "-")}</span>
+        <span className="">{getYMD(birthday, "yyyymmdd", "-")}</span>
       </div>
     </div>
   );
