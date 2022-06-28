@@ -6,7 +6,10 @@ import { ModalTemplate } from "../../../components/molecules/modal-template";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TIMETABLE } from "../../../variables";
 
-export const ReserveCard = ({ closeAction, refetch }: TimetableModalProps) => {
+export const ReserveCardModal = ({
+  closeAction,
+  refetch,
+}: TimetableModalProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 

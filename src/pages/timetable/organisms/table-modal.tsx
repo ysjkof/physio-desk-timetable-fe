@@ -1,9 +1,8 @@
-import { AnimatePresence } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
-import { CreatePatient } from "../../../components/organisms/create-patient";
-import { ReservationCard } from "../../../components/organisms/reservation-card";
-import { ReserveCard } from "./reserve-card";
+import { CreatePatientModal } from "../../../components/templates/create-patient-modal";
+import { ReserveCardModal } from "./reserve-card-modal";
 import { TIMETABLE } from "../../../variables";
+import { ReservationModal } from "../../../components/templates/reservation-card-modal";
 
 interface TableModalsProps {
   refetch: () => void;
@@ -18,19 +17,19 @@ export function TableModals({ refetch }: TableModalsProps) {
   return (
     <>
       {isEdit && (
-        <ReservationCard
+        <ReservationModal
           refetch={refetch}
           closeAction={() => isEdit && navigate(TIMETABLE)}
         />
       )}
       {isReserve && (
-        <ReserveCard
+        <ReserveCardModal
           refetch={refetch}
           closeAction={() => isReserve && navigate(TIMETABLE)}
         />
       )}
       {isCreatePatient && (
-        <CreatePatient
+        <CreatePatientModal
           refetch={refetch}
           closeAction={() => isCreatePatient && navigate(TIMETABLE)}
         />
