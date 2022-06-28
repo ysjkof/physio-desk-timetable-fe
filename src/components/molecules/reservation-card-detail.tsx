@@ -49,7 +49,7 @@ export const ReservationCardDetail = ({
 
       <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">상태</span>
-        <span className="flex justify-between">
+        <span className="flex justify-between pr-1">
           {RESERVATION_STATE_KOR[reservation.state]}
           <div className="space-x-4">
             <FontAwesomeIcon
