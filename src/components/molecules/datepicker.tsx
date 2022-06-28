@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { FieldError, UseFormSetValue } from "react-hook-form";
 import { compareDateMatch } from "../../libs/timetable-utils";
-import { BirthdayInput } from "../organisms/create-patient";
+import { BirthdayInput } from "./create-patient-form";
 import { ModalPortal } from "./modal-portal";
 
 export interface DatepickerForm {
