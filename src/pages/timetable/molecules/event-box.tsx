@@ -54,7 +54,7 @@ export function EventBox({
         isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
       }
       className={cls(
-        "group absolute z-30 cursor-pointer items-center justify-center overflow-hidden border bg-white px-1",
+        "group absolute z-30 cursor-pointer items-center justify-center border bg-white px-1",
         !viewOptions.seeCancel && reservationState === ReservationState.Canceled
           ? "hidden"
           : !viewOptions.seeNoshow &&
@@ -88,13 +88,16 @@ export function EventBox({
       </div>
       {prescriptions && numberOfCell !== 1 && (
         <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
-          {prescriptions.map((prescription) => prescription.name + ", ")}
+          {prescriptions.map((prescription) => prescription.name + " ")}
         </div>
       )}
       {
         numberOfCell > 2 ? (
           memo ? (
-            <div className="h-full overflow-hidden text-ellipsis break-all font-extralight">
+            <div
+              className="overflow-hidden break-all font-extralight leading-5"
+              style={{ height: (numberOfCell - 2) * TABLE_CELL_HEIGHT }}
+            >
               {memo}
             </div>
           ) : null
