@@ -18,6 +18,7 @@ import { BtnMenuToggle } from "../molecules/button-menu-toggle";
 import { BtnMenu } from "../molecules/button-menu";
 import { ModalTemplate } from "../molecules/modal-template";
 import { ReserveForm } from "../../pages/timetable/molecules/reserve-form";
+import { RESERVATION_STATE_KOR } from "../../variables";
 
 export const ReservationCard = ({
   closeAction,
@@ -50,18 +51,16 @@ export const ReservationCard = ({
   });
   const [deleteReservationMutation] = useDeleteReservationMutation({});
 
-  const onClickEditReserve = (stateType: ReservationState) => {
-    const confirmDelete = window.confirm(`예약을 ${stateType}처리합니다.`);
+  const onClickEditReserve = (state: ReservationState) => {
+    const confirmDelete = window.confirm(
+      `예약 상태를 ${RESERVATION_STATE_KOR[state]}(으)로 변경합니다.`
+    );
     if (confirmDelete) {
-      const nextState =
-        reservation?.state === stateType
-          ? ReservationState.Reserved
-          : stateType;
       editReservationMutation({
         variables: {
           input: {
             reservationId,
-            state: nextState,
+            state,
           },
         },
       });
@@ -114,44 +113,16 @@ export const ReservationCard = ({
                     name={reservation.patient.name}
                     registrationNumber={reservation.patient.registrationNumber}
                   />
-                  <div className="reservation-editor flex justify-around py-2">
-                    <BtnMenu
-                      icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
-                      enabled={reservation.state === ReservationState.Canceled}
-                      label={"취소"}
-                      onClick={() =>
-                        onClickEditReserve(ReservationState.Canceled)
-                      }
-                    />
-                    <BtnMenu
-                      icon={
-                        <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />
-                      }
-                      enabled={reservation.state === ReservationState.NoShow}
-                      label={"부도"}
-                      onClick={() =>
-                        onClickEditReserve(ReservationState.NoShow)
-                      }
-                    />
+
+                  <div className="reservation-editor flex justify-around">
                     <BtnMenu
                       icon={<FontAwesomeIcon icon={faTrashCan} fontSize={14} />}
                       enabled
                       label={"삭제"}
                       onClick={onClickDelete}
                     />
-                    <BtnMenu
-                      icon={
-                        <FontAwesomeIcon icon={faPenToSquare} fontSize={14} />
-                      }
-                      enabled
-                      label={"수정"}
-                      onClick={() =>
-                        setSubMenu((prev) =>
-                          prev !== "edit" ? "edit" : "reservation"
-                        )
-                      }
-                    />
                   </div>
+
                   <BtnMenuToggle
                     firstEnabled={subMenu === "reservation"}
                     secondEnabled={subMenu === "patient"}
@@ -163,8 +134,21 @@ export const ReservationCard = ({
                       )
                     }
                   />
+
                   {subMenu === "reservation" ? (
-                    <ReservationCardDetail reservation={reservation} />
+                    <ReservationCardDetail
+                      reservation={reservation}
+                      changeToReserve={() =>
+                        onClickEditReserve(ReservationState.Reserved)
+                      }
+                      changeToEdit={() => setSubMenu("edit")}
+                      changeToNoshow={() =>
+                        onClickEditReserve(ReservationState.NoShow)
+                      }
+                      changeToCancel={() =>
+                        onClickEditReserve(ReservationState.Canceled)
+                      }
+                    />
                   ) : subMenu === "edit" ? (
                     <ReserveForm
                       closeAction={() => setSubMenu("reservation")}

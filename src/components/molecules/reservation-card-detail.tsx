@@ -1,19 +1,38 @@
 import { getHHMM, getTimeLength, getYMD } from "../../libs/timetable-utils";
 import { RESERVATION_STATE_KOR } from "../../variables";
 import { IListReservation } from "../../store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faRegistered } from "@fortawesome/free-regular-svg-icons";
+import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import { cls } from "../../libs/utils";
+import { ReservationState } from "../../graphql/generated/graphql";
 
 interface ReservationCardDetailProps {
   reservation: IListReservation;
+  changeToEdit: () => void;
+  changeToReserve: () => void;
+  changeToNoshow: () => void;
+  changeToCancel: () => void;
 }
 
 export const ReservationCardDetail = ({
   reservation,
+  changeToEdit,
+  changeToReserve,
+  changeToNoshow,
+  changeToCancel,
 }: ReservationCardDetailProps) => {
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-[5rem,1fr] items-center">
+      <div className="relative grid grid-cols-[5rem,1fr] items-center">
         <span className="">담당 치료사</span>
         <span>{reservation.user.name}</span>
+        <FontAwesomeIcon
+          icon={faEdit}
+          fontSize={14}
+          className="absolute right-0 cursor-pointer hover:scale-150"
+          onClick={() => changeToEdit()}
+        />
       </div>
 
       <div className="grid grid-cols-[5rem,1fr] items-center">
@@ -38,7 +57,44 @@ export const ReservationCardDetail = ({
 
       <div className="grid grid-cols-[5rem,1fr] items-center">
         <span className="">상태</span>
-        <span>{RESERVATION_STATE_KOR[reservation.state]}</span>
+        <span className="flex justify-between">
+          {RESERVATION_STATE_KOR[reservation.state]}
+          <div className="space-x-4">
+            <FontAwesomeIcon
+              icon={faRegistered}
+              fontSize={14}
+              onClick={() => changeToReserve()}
+              className={cls(
+                "hover:scale-150",
+                reservation.state === ReservationState.Reserved
+                  ? "scale-125"
+                  : "opacity-50"
+              )}
+            />
+            <FontAwesomeIcon
+              icon={faBan}
+              fontSize={14}
+              onClick={() => changeToCancel()}
+              className={cls(
+                "hover:scale-150",
+                reservation.state === ReservationState.Canceled
+                  ? "scale-125"
+                  : "opacity-50"
+              )}
+            />
+            <FontAwesomeIcon
+              icon={faCommentSlash}
+              fontSize={14}
+              onClick={() => changeToNoshow()}
+              className={cls(
+                "hover:scale-150",
+                reservation.state === ReservationState.NoShow
+                  ? "scale-125"
+                  : "opacity-50"
+              )}
+            />
+          </div>
+        </span>
       </div>
 
       <div className="grid grid-cols-[5rem,1fr] items-center">

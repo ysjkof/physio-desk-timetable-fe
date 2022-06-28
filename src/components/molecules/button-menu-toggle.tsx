@@ -17,7 +17,7 @@ export const BtnMenuToggle = ({
 }: BtnMenuToggleProps) => (
   <button
     className={cls(
-      "btn-menu border-inherit shadow-sm",
+      "btn-menu border-inherit",
       width ? "w-full justify-around space-x-20" : "space-x-2"
     )}
     onClick={onClick}

@@ -428,7 +428,7 @@ export const ReserveForm = ({
           maxLength: { value: 200, message: "최대 200자입니다" },
         })}
         type={"textarea"}
-        rows={1}
+        rows={2}
         // children={
         //   errors.description?.message && (
         //     <FormError errorMessage={errors.description.message} />
