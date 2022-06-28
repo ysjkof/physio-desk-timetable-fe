@@ -328,12 +328,9 @@ export const ReserveForm = ({
   }, [member, reservation]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="mt-5 mb-5 grid w-full gap-4"
-    >
-      <label className="grid grid-cols-[5rem,1fr] items-center">
-        {/* <label className="flex flex-col gap-2"> */}
+    <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-4">
+      {/* <label className="grid grid-cols-[5rem,1fr] items-center"> */}
+      <label className="flex flex-col gap-2">
         담당 치료사
         <SelectUser
           members={selectedClinic?.members ?? []}
@@ -429,11 +426,6 @@ export const ReserveForm = ({
         })}
         type={"textarea"}
         rows={2}
-        // children={
-        //   errors.description?.message && (
-        //     <FormError errorMessage={errors.description.message} />
-        //   )
-        // }
       />
       <Button
         type="submit"

@@ -5,26 +5,43 @@ import {
   CreatePatientInput,
   CreatePatientMutation,
   useCreatePatientMutation,
+  useEditPatientMutation,
 } from "../../graphql/generated/graphql";
 import { Input } from "./input";
 import { selectedClinicVar, selectedPatientVar } from "../../store";
 import { useReactiveVar } from "@apollo/client";
 import { TimetableModalProps } from "../../pages/timetable";
 import { DatepickerWithInput } from "./datepicker-with-input";
+import { useEffect } from "react";
 
 export interface BirthdayInput {
   birthdayYear?: number;
   birthdayMonth?: number;
   birthdayDate?: number;
 }
+interface ICreatePatientForm extends TimetableModalProps {
+  patient?: {
+    __typename?: "Patient" | undefined;
+    id: number;
+    name: string;
+    gender: string;
+    registrationNumber: number;
+    birthday?: any;
+    memo?: string | null | undefined;
+  };
+}
 
-export const CreatePatientForm = ({ closeAction }: TimetableModalProps) => {
+export const CreatePatientForm = ({
+  closeAction,
+  patient,
+}: ICreatePatientForm) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const {
     register,
     getValues,
     formState: { errors, isValid },
     handleSubmit,
+    setValue,
   } = useForm<CreatePatientInput>({
     mode: "onChange",
   });
@@ -57,34 +74,60 @@ export const CreatePatientForm = ({ closeAction }: TimetableModalProps) => {
     createPatientMutation,
     { loading, data: createaPatientMutationResult },
   ] = useCreatePatientMutation({ onCompleted });
+  const [editPatientMutation, { loading: editLoading }] =
+    useEditPatientMutation({});
 
   const onSubmit = () => {
-    if (!loading) {
+    if (!loading && !editLoading) {
       const { name, gender, memo } = getValues();
       const { birthdayYear, birthdayMonth, birthdayDate } = birthdayGetValues();
       const birthday = new Date(
         `${birthdayYear}-${birthdayMonth}-${birthdayDate}`
       );
-      createPatientMutation({
-        variables: {
-          input: {
-            name,
-            gender,
-            memo,
-            ...(birthday && { birthday }),
-            ...(typeof selectedClinic?.id === "number" &&
-              selectedClinic?.id !== 0 && { clinicId: selectedClinic?.id }),
+
+      if (patient) {
+        // eidt
+        editPatientMutation({
+          variables: {
+            input: {
+              id: patient.id,
+              birthday,
+              gender,
+              memo,
+              name,
+            },
           },
-        },
-      });
+        });
+      } else {
+        // create
+        createPatientMutation({
+          variables: {
+            input: {
+              name,
+              gender,
+              memo,
+              ...(birthday && { birthday }),
+              ...(typeof selectedClinic?.id === "number" &&
+                selectedClinic?.id !== 0 && { clinicId: selectedClinic?.id }),
+            },
+          },
+        });
+      }
     }
   };
+  useEffect(() => {
+    if (patient) {
+      setValue("birthday", patient.birthday);
+      setValue("gender", patient.gender);
+      setValue("memo", patient.memo);
+      setValue("name", patient.name);
+    }
+  }, [patient]);
 
+  console.log(isValid, errors, birthdayIsValid);
+  console.log(getValues());
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="mt-5 mb-5 grid w-full gap-6"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">
       <Input
         autoFocus
         label={"이름*"}
@@ -130,7 +173,7 @@ export const CreatePatientForm = ({ closeAction }: TimetableModalProps) => {
       <label className="flex flex-col gap-2">
         생년월일
         <DatepickerWithInput
-          defaultDate={new Date("0-0-0")}
+          defaultDate={new Date(patient ? patient.birthday : "0-0-0")}
           setValue={birthdaySetValue}
           register={birthdayRegister}
           formError={birthdayError}
@@ -143,7 +186,7 @@ export const CreatePatientForm = ({ closeAction }: TimetableModalProps) => {
         label={"메모"}
         name={"memo"}
         type={"textarea"}
-        rows={8}
+        rows={4}
         placeholder={"메모를 입력하세요"}
         required={false}
         register={register("memo", {
@@ -162,8 +205,8 @@ export const CreatePatientForm = ({ closeAction }: TimetableModalProps) => {
       <Button
         type="submit"
         canClick={isValid && birthdayIsValid}
-        loading={loading}
-        textContents={"환자등록"}
+        loading={loading || editLoading}
+        textContents={patient ? "환자수정" : "환자등록"}
       />
       {createaPatientMutationResult?.createPatient.error && (
         <FormError

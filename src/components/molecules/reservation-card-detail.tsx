@@ -2,14 +2,13 @@ import { getHHMM, getTimeLength, getYMD } from "../../libs/timetable-utils";
 import { RESERVATION_STATE_KOR } from "../../variables";
 import { IListReservation } from "../../store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faRegistered } from "@fortawesome/free-regular-svg-icons";
+import { faRegistered } from "@fortawesome/free-regular-svg-icons";
 import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import { cls } from "../../libs/utils";
 import { ReservationState } from "../../graphql/generated/graphql";
 
 interface ReservationCardDetailProps {
   reservation: IListReservation;
-  changeToEdit: () => void;
   changeToReserve: () => void;
   changeToNoshow: () => void;
   changeToCancel: () => void;
@@ -17,7 +16,6 @@ interface ReservationCardDetailProps {
 
 export const ReservationCardDetail = ({
   reservation,
-  changeToEdit,
   changeToReserve,
   changeToNoshow,
   changeToCancel,
@@ -27,12 +25,6 @@ export const ReservationCardDetail = ({
       <div className="relative grid grid-cols-[5rem,1fr] items-center">
         <span className="">담당 치료사</span>
         <span>{reservation.user.name}</span>
-        <FontAwesomeIcon
-          icon={faEdit}
-          fontSize={14}
-          className="absolute right-0 cursor-pointer hover:scale-150"
-          onClick={() => changeToEdit()}
-        />
       </div>
 
       <div className="grid grid-cols-[5rem,1fr] items-center">

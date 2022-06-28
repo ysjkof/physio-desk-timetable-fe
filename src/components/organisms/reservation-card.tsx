@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { ReservationCardName } from "../molecules/reservation-card-name";
 import { ReservationCardPatientDetail } from "../molecules/reservation-card-patient-detail";
 import { TimetableModalProps } from "../../pages/timetable";
@@ -19,6 +18,7 @@ import { BtnMenu } from "../molecules/button-menu";
 import { ModalTemplate } from "../molecules/modal-template";
 import { ReserveForm } from "../../pages/timetable/molecules/reserve-form";
 import { RESERVATION_STATE_KOR } from "../../variables";
+import { CreatePatientForm } from "../molecules/create-patient-form";
 
 export const ReservationCard = ({
   closeAction,
@@ -28,9 +28,10 @@ export const ReservationCard = ({
   const location = useLocation();
   //@ts-ignore
   const reservationId = location.state?.reservationId;
-  const [subMenu, setSubMenu] = useState<"reservation" | "patient" | "edit">(
+  const [subMenu, setSubMenu] = useState<"reservation" | "patient">(
     "reservation"
   );
+  const [isEdit, setIsEdit] = useState(false);
 
   const { data } = useListReservations();
   const reservation = data?.listReservations.results?.find(
@@ -85,6 +86,11 @@ export const ReservationCard = ({
     }
   };
 
+  const changeSubmenu = (menu: typeof subMenu) => {
+    setSubMenu((prev) => (prev === "patient" ? "reservation" : "patient"));
+    setIsEdit(false);
+  };
+
   return reservation ? (
     <ModalTemplate
       closeAction={closeAction}
@@ -121,6 +127,12 @@ export const ReservationCard = ({
                       label={"삭제"}
                       onClick={onClickDelete}
                     />
+                    <BtnMenu
+                      icon={<FontAwesomeIcon icon={faEdit} fontSize={14} />}
+                      enabled={isEdit}
+                      label={"수정"}
+                      onClick={() => setIsEdit((prev) => !prev)}
+                    />
                   </div>
 
                   <BtnMenuToggle
@@ -135,40 +147,51 @@ export const ReservationCard = ({
                     }
                   />
 
-                  {subMenu === "reservation" ? (
-                    <ReservationCardDetail
-                      reservation={reservation}
-                      changeToReserve={() =>
-                        onClickEditReserve(ReservationState.Reserved)
-                      }
-                      changeToEdit={() => setSubMenu("edit")}
-                      changeToNoshow={() =>
-                        onClickEditReserve(ReservationState.NoShow)
-                      }
-                      changeToCancel={() =>
-                        onClickEditReserve(ReservationState.Canceled)
-                      }
-                    />
-                  ) : subMenu === "edit" ? (
-                    <ReserveForm
-                      closeAction={() => setSubMenu("reservation")}
-                      selectedPrescriptionData={reservation.prescriptions?.map(
-                        (prev) => ({ ...prev, isSelect: true })
-                      )}
-                      reservation={reservation}
-                      refetch={() => null}
-                    />
-                  ) : (
-                    <ReservationCardPatientDetail
-                      birthday={reservation.patient.birthday}
-                      gender={reservation.patient.gender}
-                      name={reservation.patient.name}
-                      registrationNumber={
-                        reservation.patient.registrationNumber
-                      }
-                      memo={reservation.patient.memo}
-                    />
-                  )}
+                  <div className="h-full overflow-y-scroll">
+                    {subMenu === "reservation" && !isEdit && (
+                      <ReservationCardDetail
+                        reservation={reservation}
+                        changeToReserve={() =>
+                          onClickEditReserve(ReservationState.Reserved)
+                        }
+                        changeToNoshow={() =>
+                          onClickEditReserve(ReservationState.NoShow)
+                        }
+                        changeToCancel={() =>
+                          onClickEditReserve(ReservationState.Canceled)
+                        }
+                      />
+                    )}
+                    {subMenu === "reservation" && isEdit && (
+                      <ReserveForm
+                        closeAction={() => changeSubmenu("reservation")}
+                        selectedPrescriptionData={reservation.prescriptions?.map(
+                          (prev) => ({ ...prev, isSelect: true })
+                        )}
+                        reservation={reservation}
+                        refetch={() => null}
+                      />
+                    )}
+
+                    {subMenu === "patient" && !isEdit && (
+                      <ReservationCardPatientDetail
+                        birthday={reservation.patient.birthday}
+                        gender={reservation.patient.gender}
+                        name={reservation.patient.name}
+                        registrationNumber={
+                          reservation.patient.registrationNumber
+                        }
+                        memo={reservation.patient.memo}
+                      />
+                    )}
+                    {subMenu === "patient" && isEdit && (
+                      <CreatePatientForm
+                        patient={reservation.patient}
+                        closeAction={() => null}
+                        refetch={() => null}
+                      />
+                    )}
+                  </div>
                 </>
               )}
             </>

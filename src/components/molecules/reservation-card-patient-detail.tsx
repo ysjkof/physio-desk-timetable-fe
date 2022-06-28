@@ -36,14 +36,6 @@ export const ReservationCardPatientDetail = ({
         <span>{2}</span>
       </div>
       <div>
-        <span className="">병력</span>
-        <p className="pl-4">
-          일반사면을 명하려면 국회의 동의를 얻어야 한다. 근로자는 근로조건의
-          향상을 위하여 자주적인 단결권·단체교섭권 및 단체행동권을 가진다.
-          대통령은 취임에 즈음하여 다음의 선서를 한다.
-        </p>
-      </div>
-      <div>
         <span className="">메모</span>
         <p className="pl-4">{memo}</p>
       </div>
