@@ -8,26 +8,22 @@ import {
   faCommentSlash,
   faGear,
   faList,
-  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { getActiveUserLength } from "..";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { BtnMenuToggle } from "../../../components/molecules/button-menu-toggle";
 import { saveViewOptions } from "../../../libs/utils";
 import {
   IViewOption,
   loggedInUserVar,
-  selectedClinicVar,
   selectedDateVar,
   viewOptionsVar,
 } from "../../../store";
 import { NEXT, ONE_DAY, ONE_WEEK, PREV } from "../../../variables";
 import { BtnArrow } from "../molecules/button-arrow";
 import { TableClinicSelector } from "./table-clinic-selector";
-import { TableNav } from "./table-nav";
 import { TableNavExpand } from "./table-nav-expand";
 
 interface TableNavProps {
@@ -42,7 +38,6 @@ const tableNavVarients = {
 export function TableHeader({ today }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
   const selectedDate = useReactiveVar(selectedDateVar);
 
   const navigate = useNavigate();
@@ -170,8 +165,6 @@ export function TableHeader({ today }: TableNavProps) {
       <AnimatePresence>
         {viewOptions.navigationExpand ? (
           <TableNavExpand varients={tableNavVarients} />
-        ) : getActiveUserLength(selectedClinic?.members) > 1 ? (
-          <TableNav varients={tableNavVarients} />
         ) : (
           <>
             <div className="absolute top-[25px] left-0 flex h-[29px] w-[38px] items-center bg-white">

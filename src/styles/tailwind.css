@@ -27,9 +27,6 @@
   .table-header {
     @apply flex w-full justify-between px-2;
   }
-  .table-nav {
-    @apply relative flex bg-white px-2;
-  }
   .table-main {
     @apply relative h-full w-full;
   }
