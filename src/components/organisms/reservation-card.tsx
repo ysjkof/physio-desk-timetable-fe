@@ -4,16 +4,11 @@ import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { ReservationCardName } from "../molecules/reservation-card-name";
 import { ReservationCardPatientDetail } from "../molecules/reservation-card-patient-detail";
 import { TimetableModalProps } from "../../pages/timetable";
-import {
-  ReservationState,
-  useDeleteReservationMutation,
-  useEditReservationMutation,
-} from "../../graphql/generated/graphql";
+import { useDeleteReservationMutation } from "../../graphql/generated/graphql";
 import { ReservationCardDetail } from "../molecules/reservation-card-detail";
 import { BtnMenuToggle } from "../molecules/button-menu-toggle";
 import { BtnMenu } from "../molecules/button-menu";
 import { ReserveForm } from "../../pages/timetable/molecules/reserve-form";
-import { RESERVATION_STATE_KOR } from "../../variables";
 import { CreatePatientForm } from "../molecules/create-patient-form";
 import { IListReservation } from "../../store";
 
@@ -31,35 +26,7 @@ export const ReservationCard = ({
   );
   const [isEdit, setIsEdit] = useState(false);
 
-  const [editReservationMutation] = useEditReservationMutation({
-    update(cache) {
-      if (!reservation) return console.error("reservation이 없습니다");
-      const myReserv = cache.identify(reservation);
-      cache.modify({
-        id: myReserv,
-        fields: {
-          state() {},
-        },
-      });
-    },
-  });
   const [deleteReservationMutation] = useDeleteReservationMutation({});
-
-  const onClickEditReserve = (state: ReservationState) => {
-    const confirmDelete = window.confirm(
-      `예약 상태를 ${RESERVATION_STATE_KOR[state]}(으)로 변경합니다.`
-    );
-    if (confirmDelete) {
-      editReservationMutation({
-        variables: {
-          input: {
-            reservationId: reservation.id,
-            state,
-          },
-        },
-      });
-    }
-  };
 
   const onClickDelete = () => {
     const confirmDelete = window.confirm("예약을 지웁니다.");
@@ -123,14 +90,7 @@ export const ReservationCard = ({
 
       <div className="h-full overflow-y-scroll">
         {subMenu === "reservation" && !isEdit && (
-          <ReservationCardDetail
-            reservation={reservation}
-            changeToReserve={() =>
-              onClickEditReserve(ReservationState.Reserved)
-            }
-            changeToNoshow={() => onClickEditReserve(ReservationState.NoShow)}
-            changeToCancel={() => onClickEditReserve(ReservationState.Canceled)}
-          />
+          <ReservationCardDetail reservation={reservation} />
         )}
         {subMenu === "reservation" && isEdit && (
           <ReserveForm

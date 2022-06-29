@@ -1,24 +1,14 @@
 import { getHHMM, getTimeLength, getYMD } from "../../libs/timetable-utils";
 import { RESERVATION_STATE_KOR } from "../../variables";
 import { IListReservation } from "../../store";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRegistered } from "@fortawesome/free-regular-svg-icons";
-import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
-import { cls } from "../../libs/utils";
-import { ReservationState } from "../../graphql/generated/graphql";
+import { EditReservationState } from "./edit-reservation-state";
 
 interface ReservationCardDetailProps {
   reservation: IListReservation;
-  changeToReserve: () => void;
-  changeToNoshow: () => void;
-  changeToCancel: () => void;
 }
 
 export const ReservationCardDetail = ({
   reservation,
-  changeToReserve,
-  changeToNoshow,
-  changeToCancel,
 }: ReservationCardDetailProps) => {
   return (
     <div className="flex flex-col gap-6">
@@ -52,39 +42,7 @@ export const ReservationCardDetail = ({
         <span className="flex justify-between pr-1">
           {RESERVATION_STATE_KOR[reservation.state]}
           <div className="space-x-4">
-            <FontAwesomeIcon
-              icon={faRegistered}
-              fontSize={14}
-              onClick={() => changeToReserve()}
-              className={cls(
-                "hover:scale-150",
-                reservation.state === ReservationState.Reserved
-                  ? "scale-125"
-                  : "opacity-50"
-              )}
-            />
-            <FontAwesomeIcon
-              icon={faBan}
-              fontSize={14}
-              onClick={() => changeToCancel()}
-              className={cls(
-                "hover:scale-150",
-                reservation.state === ReservationState.Canceled
-                  ? "scale-125"
-                  : "opacity-50"
-              )}
-            />
-            <FontAwesomeIcon
-              icon={faCommentSlash}
-              fontSize={14}
-              onClick={() => changeToNoshow()}
-              className={cls(
-                "hover:scale-150",
-                reservation.state === ReservationState.NoShow
-                  ? "scale-125"
-                  : "opacity-50"
-              )}
-            />
+            <EditReservationState reservation={reservation} />
           </div>
         </span>
       </div>
