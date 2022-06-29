@@ -64,6 +64,7 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
                 {member.events?.map((event) => (
                   <EventBox
                     key={event.id}
+                    event={event}
                     reservationId={event.id}
                     userIndex={userIndex}
                     reservationState={event.state}
