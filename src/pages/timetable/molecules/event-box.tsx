@@ -8,13 +8,18 @@ import { EditReservationState } from "../../../components/molecules/edit-reserva
 import { ReservationState } from "../../../graphql/generated/graphql";
 import { getHHMM } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
-import { IListReservation, viewOptionsVar } from "../../../store";
+import {
+  IListReservation,
+  selectedReservationVar,
+  viewOptionsVar,
+} from "../../../store";
 import {
   RESERVE_DETAIL,
   RESERVE_EDIT,
   TABLE_CELL_HEIGHT,
   USER_COLORS,
 } from "../../../variables";
+
 interface EventBoxProps {
   reservationId: number;
   userIndex: number;
@@ -29,6 +34,7 @@ interface EventBoxProps {
   prescriptions?: any[];
   event: IListReservation;
 }
+
 export function EventBox({
   reservationId,
   userIndex,
@@ -118,7 +124,7 @@ export function EventBox({
               icon={faCopy}
               fontSize={16}
               className="hover:scale-125"
-              onClick={() => "예약 복사"}
+              onClick={() => selectedReservationVar(event)}
             />
           </div>
 
