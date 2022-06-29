@@ -111,10 +111,10 @@
   }
 
   .noshow {
-    @apply border-none bg-gray-100 text-red-400 line-through ring-1 ring-gray-300;
+    @apply border-gray-300 bg-gray-100 text-black line-through;
   }
   .cancel {
-    @apply border-none bg-gray-100 text-yellow-600 line-through ring-1 ring-gray-300;
+    @apply border-gray-300 bg-gray-100 text-red-500 line-through;
   }
 }
 

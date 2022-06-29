@@ -1,8 +1,11 @@
 import { RESERVATION_STATE_KOR } from "../../variables";
 import { IListReservation } from "../../store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRegistered } from "@fortawesome/free-regular-svg-icons";
-import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRotateLeft,
+  faBan,
+  faCommentSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { cls } from "../../libs/utils";
 import {
   ReservationState,
@@ -50,25 +53,14 @@ export const EditReservationState = ({
   return (
     <>
       <FontAwesomeIcon
-        icon={faRegistered}
-        fontSize={14}
-        onClick={() => onClickEditReserve(ReservationState.Reserved)}
-        className={cls(
-          "cursor-pointer rounded-full bg-white hover:scale-125 hover:opacity-100",
-          reservation.state === ReservationState.Reserved
-            ? "text-lg"
-            : "opacity-50"
-        )}
-      />
-      <FontAwesomeIcon
         icon={faBan}
         fontSize={14}
         onClick={() => onClickEditReserve(ReservationState.Canceled)}
         className={cls(
-          "cursor-pointer rounded-full bg-white hover:scale-125 hover:text-yellow-600",
+          "cursor-pointer rounded-full hover:scale-125 hover:text-red-500",
           reservation.state === ReservationState.Canceled
-            ? "text-lg text-yellow-600"
-            : "opacity-50"
+            ? "pointer-events-none text-red-500"
+            : "text-gray-400"
         )}
       />
       <FontAwesomeIcon
@@ -76,10 +68,21 @@ export const EditReservationState = ({
         fontSize={14}
         onClick={() => onClickEditReserve(ReservationState.NoShow)}
         className={cls(
-          "cursor-pointer rounded-full bg-white hover:scale-125 hover:text-red-400",
+          "cursor-pointer rounded-full hover:scale-125 hover:text-black",
           reservation.state === ReservationState.NoShow
-            ? "text-lg text-red-400"
-            : "opacity-50"
+            ? "pointer-events-none text-black"
+            : "text-gray-400"
+        )}
+      />
+      <FontAwesomeIcon
+        icon={faArrowRotateLeft}
+        fontSize={14}
+        onClick={() => onClickEditReserve(ReservationState.Reserved)}
+        className={cls(
+          "cursor-pointer rounded-full",
+          reservation.state === ReservationState.Reserved
+            ? "pointer-events-none text-gray-400"
+            : "text-blue-800 hover:scale-125"
         )}
       />
     </>

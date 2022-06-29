@@ -44,9 +44,9 @@ export const BtnMenu = ({
       onClick ? "" : " cursor-default hover:bg-inherit",
       hasFocus ? " focus:emphasize-ring" : "",
       label === "부도" && enabled
-        ? "text-red-400"
+        ? "text-black"
         : label === "취소" && enabled
-        ? "text-yellow-600"
+        ? "text-red-400"
         : ""
     )}
     onClick={onClick}

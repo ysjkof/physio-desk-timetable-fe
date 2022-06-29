@@ -62,16 +62,10 @@ export function EventBox({
       animate={{ y: 0, opacity: 1 }}
       onHoverStart={() => setIsHover(true)}
       onHoverEnd={() => setIsHover(false)}
-      className={cls(
-        "EVENT_BOX group absolute z-30 cursor-pointer border bg-white"
-      )}
+      className={cls("EVENT_BOX group absolute z-30 cursor-pointer")}
       style={{
         inset,
         height,
-        ...(reservationState === ReservationState.Reserved && {
-          borderColor: USER_COLORS[userIndex]?.deep,
-          backgroundColor: USER_COLORS[userIndex]?.light,
-        }),
       }}
     >
       <div
@@ -79,7 +73,7 @@ export function EventBox({
           isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
         }
         className={cls(
-          "h-full px-1",
+          "relative h-full overflow-hidden border px-1",
           !viewOptions.seeCancel &&
             reservationState === ReservationState.Canceled
             ? "hidden"
@@ -88,15 +82,24 @@ export function EventBox({
             ? "hidden"
             : "",
           reservationState === ReservationState.NoShow
-            ? "noshow"
+            ? "noshow "
             : reservationState === ReservationState.Canceled
-            ? "cancel"
+            ? "cancel "
             : ""
         )}
+        style={{
+          ...(reservationState === ReservationState.Reserved && {
+            borderColor: USER_COLORS[userIndex]?.deep,
+            backgroundColor: USER_COLORS[userIndex]?.light,
+          }),
+        }}
       >
         <div className="h-5 overflow-hidden whitespace-nowrap text-center">
           <span className="ml-0.5 font-extralight">{registrationNumber}:</span>
           {patientName}
+          {memo && (
+            <div className="absolute right-0 top-0 h-[5px] w-[5px] bg-red-500" />
+          )}
         </div>
         {prescriptions && numberOfCell !== 1 && (
           <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
@@ -118,24 +121,41 @@ export function EventBox({
       </div>
       {isHover && (
         <>
-          <div className="absolute left-0 -top-[1.3rem] flex w-full items-baseline justify-around pb-1 text-gray-800">
-            <EditReservationState reservation={event} />
+          <div className="absolute left-0 -top-[1rem] flex w-full items-baseline justify-between px-2 pb-1 text-gray-800">
             <FontAwesomeIcon
               icon={faCopy}
               fontSize={16}
-              className="hover:scale-125"
+              className="text-green-500 hover:scale-125"
               onClick={() => selectedReservationVar(event)}
             />
+            <EditReservationState reservation={event} />
           </div>
 
-          <div className="relative -bottom-2 w-[200px] divide-y rounded-sm bg-black p-1 text-white">
+          <div
+            className={cls(
+              "absolute top-4 left-[90px] w-[150px] rounded border p-1 shadow-cst",
+              reservationState === ReservationState.NoShow
+                ? "noshow "
+                : reservationState === ReservationState.Canceled
+                ? "cancel "
+                : ""
+            )}
+            style={{
+              ...(reservationState === ReservationState.Reserved && {
+                borderColor: USER_COLORS[userIndex]?.deep,
+                backgroundColor: USER_COLORS[userIndex]?.light,
+              }),
+            }}
+          >
             <div className="mb-1 flex no-underline">
               예약시간 :{" "}
               {`${getHHMM(startDate, ":")} ~ ${getHHMM(endDate, ":")}`}
             </div>
-            <div className="flex flex-col pt-1 no-underline">
-              메모 : {event.memo}
-            </div>
+            {event.memo && (
+              <div className="flex flex-col pt-1 no-underline">
+                메모 : {event.memo}
+              </div>
+            )}
           </div>
         </>
       )}
