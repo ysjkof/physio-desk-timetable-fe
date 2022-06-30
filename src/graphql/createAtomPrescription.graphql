@@ -1,0 +1,6 @@
+mutation createAtomPrescription($input: CreateAtomPrescriptionInput!) {
+  createAtomPrescription(input: $input) {
+    ok
+    error
+  }
+}

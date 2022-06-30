@@ -34,7 +34,6 @@ export type Clinic = {
   isActivated: Scalars['Boolean'];
   members: Array<Member>;
   name: Scalars['String'];
-  numberOfPatients: Scalars['Int'];
   patient?: Maybe<Array<Patient>>;
   prescriptions: Array<Prescription>;
   reservations?: Maybe<Array<Reservation>>;
@@ -763,6 +762,13 @@ export type CreateAccountMutationVariables = Exact<{
 
 export type CreateAccountMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'CreateAccountOutput', ok: boolean, error?: string | null } };
 
+export type CreateAtomPrescriptionMutationVariables = Exact<{
+  input: CreateAtomPrescriptionInput;
+}>;
+
+
+export type CreateAtomPrescriptionMutation = { __typename?: 'Mutation', createAtomPrescription: { __typename?: 'CreateAtomPrescriptionOutput', ok: boolean, error?: string | null } };
+
 export type CreateClinicMutationVariables = Exact<{
   input: CreateClinicInput;
 }>;
@@ -1023,6 +1029,40 @@ export function useCreateAccountMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateAccountMutationHookResult = ReturnType<typeof useCreateAccountMutation>;
 export type CreateAccountMutationResult = Apollo.MutationResult<CreateAccountMutation>;
 export type CreateAccountMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutation, CreateAccountMutationVariables>;
+export const CreateAtomPrescriptionDocument = gql`
+    mutation createAtomPrescription($input: CreateAtomPrescriptionInput!) {
+  createAtomPrescription(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type CreateAtomPrescriptionMutationFn = Apollo.MutationFunction<CreateAtomPrescriptionMutation, CreateAtomPrescriptionMutationVariables>;
+
+/**
+ * __useCreateAtomPrescriptionMutation__
+ *
+ * To run a mutation, you first call `useCreateAtomPrescriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAtomPrescriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAtomPrescriptionMutation, { data, loading, error }] = useCreateAtomPrescriptionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAtomPrescriptionMutation(baseOptions?: Apollo.MutationHookOptions<CreateAtomPrescriptionMutation, CreateAtomPrescriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAtomPrescriptionMutation, CreateAtomPrescriptionMutationVariables>(CreateAtomPrescriptionDocument, options);
+      }
+export type CreateAtomPrescriptionMutationHookResult = ReturnType<typeof useCreateAtomPrescriptionMutation>;
+export type CreateAtomPrescriptionMutationResult = Apollo.MutationResult<CreateAtomPrescriptionMutation>;
+export type CreateAtomPrescriptionMutationOptions = Apollo.BaseMutationOptions<CreateAtomPrescriptionMutation, CreateAtomPrescriptionMutationVariables>;
 export const CreateClinicDocument = gql`
     mutation createClinic($input: CreateClinicInput!) {
   createClinic(input: $input) {
