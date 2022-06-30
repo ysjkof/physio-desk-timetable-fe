@@ -1,6 +1,9 @@
 import { useReactiveVar } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { useCreateReservationMutation } from "../../../graphql/generated/graphql";
+import {
+  ListReservationsDocument,
+  useCreateReservationMutation,
+} from "../../../graphql/generated/graphql";
 import { getHHMM } from "../../../libs/timetable-utils";
 import { selectedReservationVar } from "../../../store";
 import { RESERVE_DETAIL } from "../../../variables";
@@ -61,7 +64,12 @@ export const ReserveBtn = ({
                 prescriptionIds,
               },
             },
+            refetchQueries: [
+              { query: ListReservationsDocument },
+              "listReservations",
+            ],
           });
+          selectedReservationVar(null);
         } else {
           navigate(RESERVE_DETAIL, { state: { startDate: label, member } });
         }

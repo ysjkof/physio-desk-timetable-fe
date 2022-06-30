@@ -6,10 +6,7 @@ import { ModalTemplate } from "../../../components/molecules/modal-template";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TIMETABLE } from "../../../variables";
 
-export const ReserveCardModal = ({
-  closeAction,
-  refetch,
-}: TimetableModalProps) => {
+export const ReserveCardModal = ({ closeAction }: TimetableModalProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,7 +30,6 @@ export const ReserveCardModal = ({
               <SearchPatient />
               <ReserveForm
                 closeAction={closeAction}
-                refetch={refetch}
                 startDate={startDate}
                 member={member}
               />

@@ -5,10 +5,7 @@ import { ModalTemplate } from "../molecules/modal-template";
 import { ReservationCard } from "../organisms/reservation-card";
 import { useListReservations } from "../../hooks/useListReservations";
 
-export const ReservationModal = ({
-  closeAction,
-  refetch,
-}: TimetableModalProps) => {
+export const ReservationModal = ({ closeAction }: TimetableModalProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   //@ts-ignore
@@ -40,7 +37,6 @@ export const ReservationModal = ({
               ) : (
                 <ReservationCard
                   closeAction={closeAction}
-                  refetch={refetch}
                   reservation={reservation}
                 />
               )}

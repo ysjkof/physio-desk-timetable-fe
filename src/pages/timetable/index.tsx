@@ -34,7 +34,6 @@ import { Loading } from "../../components/atoms/loading";
 
 export interface TimetableModalProps {
   closeAction: () => void;
-  refetch: () => void;
 }
 
 export const getActiveUserLength = (members?: IMemberWithActivate[]) =>
@@ -50,7 +49,7 @@ export const TimeTable = () => {
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
 
-  const { data, refetch } = useListReservations();
+  const { data } = useListReservations();
 
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
@@ -65,33 +64,33 @@ export const TimeTable = () => {
     TABLE_TIME_GAP
   );
 
-  function distributor(events: IListReservation[]) {
-    if (!loggedInUser) return;
-
-    const userFrame = makeDayWithUsers(
-      spreadClinicMembers(clinicLists, selectedClinic!.id),
-      getWeeks(getSunday(selectedDate))
-    );
-    events?.forEach((event) => {
-      const dateIndex = userFrame.findIndex((day) =>
-        compareDateMatch(day.date, new Date(event.startDate), "ymd")
-      );
-      if (dateIndex !== -1) {
-        const userIndex = userFrame[dateIndex].users.findIndex(
-          (member) => member.user.id === event.user.id
-        );
-        if (userIndex !== -1) {
-          userFrame[dateIndex].users[userIndex].events.push(event);
-        }
-      }
-    });
-    return userFrame;
-  }
-
   useEffect(() => {
-    if (data?.listReservations.ok && loggedInUser) {
+    if (data && loggedInUser && selectedClinic) {
+      function distributor(events: IListReservation[], clinicId: number) {
+        if (!loggedInUser) return;
+
+        const userFrame = makeDayWithUsers(
+          spreadClinicMembers(clinicLists, clinicId),
+          getWeeks(getSunday(selectedDate))
+        );
+        events?.forEach((event) => {
+          const dateIndex = userFrame.findIndex((day) =>
+            compareDateMatch(day.date, new Date(event.startDate), "ymd")
+          );
+          if (dateIndex !== -1) {
+            const userIndex = userFrame[dateIndex].users.findIndex(
+              (member) => member.user.id === event.user.id
+            );
+            if (userIndex !== -1) {
+              userFrame[dateIndex].users[userIndex].events.push(event);
+            }
+          }
+        });
+        return userFrame;
+      }
+
       const { results } = data.listReservations;
-      const distributeEvents = distributor(results!);
+      const distributeEvents = distributor(results!, selectedClinic.id);
       if (distributeEvents) {
         setWeekEvents(distributeEvents);
       } else {
@@ -102,7 +101,11 @@ export const TimeTable = () => {
       }
     } else {
       console.warn(
-        `✅ 시간표 > useEffect 실패; data is:${data?.listReservations.ok}; loggedInUser:${loggedInUser?.id}`
+        `✅ 시간표 > useEffect 실패; data is:${data?.listReservations}; loggedInUser:${loggedInUser?.id};`,
+        "viewOptions : ",
+        !!viewOptions,
+        "optionalWeekEvents : ",
+        !!optionalWeekEvents
       );
     }
   }, [data, clinicLists]);
@@ -124,7 +127,7 @@ export const TimeTable = () => {
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      {!viewOptions || !optionalWeekEvents || !viewOptions ? (
+      {!viewOptions || !optionalWeekEvents ? (
         <Loading />
       ) : (
         <TimetableTemplate
@@ -148,7 +151,7 @@ export const TimeTable = () => {
           }
         />
       )}
-      <TableModals refetch={refetch} />
+      <TableModals />
     </>
   );
 };

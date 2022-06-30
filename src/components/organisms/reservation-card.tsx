@@ -4,7 +4,10 @@ import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { ReservationCardName } from "../molecules/reservation-card-name";
 import { ReservationCardPatientDetail } from "../molecules/reservation-card-patient-detail";
 import { TimetableModalProps } from "../../pages/timetable";
-import { useDeleteReservationMutation } from "../../graphql/generated/graphql";
+import {
+  ListReservationsDocument,
+  useDeleteReservationMutation,
+} from "../../graphql/generated/graphql";
 import { ReservationCardDetail } from "../molecules/reservation-card-detail";
 import { BtnMenuToggle } from "../molecules/button-menu-toggle";
 import { BtnMenu } from "../molecules/button-menu";
@@ -18,7 +21,6 @@ interface ReservationCardProps extends TimetableModalProps {
 
 export const ReservationCard = ({
   closeAction,
-  refetch,
   reservation,
 }: ReservationCardProps) => {
   const [subMenu, setSubMenu] = useState<"reservation" | "patient">(
@@ -38,10 +40,13 @@ export const ReservationCard = ({
             deleteReservation: { ok },
           } = data;
           if (ok) {
-            refetch();
             closeAction();
           }
         },
+        refetchQueries: [
+          { query: ListReservationsDocument },
+          "listReservations",
+        ],
       });
     }
   };
@@ -102,7 +107,6 @@ export const ReservationCard = ({
               })
             )}
             reservation={reservation}
-            refetch={() => null}
           />
         )}
 
@@ -119,7 +123,6 @@ export const ReservationCard = ({
           <CreatePatientForm
             patient={reservation.patient}
             closeAction={() => null}
-            refetch={() => null}
           />
         )}
       </div>

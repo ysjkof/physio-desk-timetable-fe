@@ -11,9 +11,7 @@ export const CreatePatientModal = ({ closeAction }: TimetableModalProps) => {
         <ModalContentsLayout
           title="환자등록"
           closeAction={closeAction}
-          children={
-            <CreatePatientForm closeAction={closeAction} refetch={() => null} />
-          }
+          children={<CreatePatientForm closeAction={closeAction} />}
         />
       }
     />

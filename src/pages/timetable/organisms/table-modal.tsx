@@ -4,11 +4,7 @@ import { ReserveCardModal } from "./reserve-card-modal";
 import { TIMETABLE } from "../../../variables";
 import { ReservationModal } from "../../../components/templates/reservation-card-modal";
 
-interface TableModalsProps {
-  refetch: () => void;
-}
-
-export function TableModals({ refetch }: TableModalsProps) {
+export function TableModals() {
   const navigate = useNavigate();
 
   const isReserve = useMatch("tt/reserve");
@@ -17,20 +13,15 @@ export function TableModals({ refetch }: TableModalsProps) {
   return (
     <>
       {isEdit && (
-        <ReservationModal
-          refetch={refetch}
-          closeAction={() => isEdit && navigate(TIMETABLE)}
-        />
+        <ReservationModal closeAction={() => isEdit && navigate(TIMETABLE)} />
       )}
       {isReserve && (
         <ReserveCardModal
-          refetch={refetch}
           closeAction={() => isReserve && navigate(TIMETABLE)}
         />
       )}
       {isCreatePatient && (
         <CreatePatientModal
-          refetch={refetch}
           closeAction={() => isCreatePatient && navigate(TIMETABLE)}
         />
       )}

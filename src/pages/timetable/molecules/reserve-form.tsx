@@ -8,6 +8,7 @@ import { TimetableModalProps } from "..";
 import {
   CreateReservationMutation,
   EditReservationMutation,
+  ListReservationsDocument,
   useCreateReservationMutation,
   useEditReservationMutation,
   useFindPrescriptionsQuery,
@@ -81,7 +82,6 @@ interface IReservaFromProps extends TimetableModalProps {
 
 export const ReserveForm = ({
   closeAction,
-  refetch,
   startDate,
   member,
   selectedPrescriptionData,
@@ -126,7 +126,6 @@ export const ReserveForm = ({
     if (error) {
       alert(`오류가 발생했습니다; ${error}`);
     }
-    refetch();
     if (ok) closeAction();
   };
   const editOnComplete = (data: EditReservationMutation) => {
@@ -237,6 +236,10 @@ export const ReserveForm = ({
                 prescriptionIds: selectedPrescription.prescriptions,
               },
             },
+            refetchQueries: [
+              { query: ListReservationsDocument },
+              "listReservations",
+            ],
           });
         }
         return;
