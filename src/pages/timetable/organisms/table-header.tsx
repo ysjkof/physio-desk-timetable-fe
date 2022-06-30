@@ -2,6 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import {
   faCalendarAlt,
   faPlusSquare,
+  faRectangleXmark,
 } from "@fortawesome/free-regular-svg-icons";
 import { faGear, faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +15,7 @@ import {
   IViewOption,
   loggedInUserVar,
   selectedDateVar,
+  selectedReservationVar,
   viewOptionsVar,
 } from "../../../store";
 import { NEXT, ONE_DAY, ONE_WEEK, PREV } from "../../../variables";
@@ -34,6 +36,7 @@ export function TableHeader({ today }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const selectedDate = useReactiveVar(selectedDateVar);
+  const selectedReservation = useReactiveVar(selectedReservationVar);
 
   const navigate = useNavigate();
 
@@ -55,7 +58,7 @@ export function TableHeader({ today }: TableNavProps) {
   };
   return (
     <>
-      <div className="flex w-full items-center justify-between pt-1">
+      <div className="flex w-full items-center justify-between py-1">
         <button
           className="min-w-[120px] font-medium hover:font-bold"
           onClick={() => selectedDateVar(today)}
@@ -67,6 +70,24 @@ export function TableHeader({ today }: TableNavProps) {
             weekday: "short",
           })}
         </button>
+        {selectedReservation && (
+          <div className="flex w-full items-center justify-center">
+            <span className="mr-4 flex">
+              <span className="absolute inline-flex h-2.5 w-2.5 animate-ping rounded-full bg-blue-700 opacity-75"></span>
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-blue-800"></span>
+            </span>
+            <span className="mr-2 scale-150 font-bold">
+              {selectedReservation.patient.name}
+            </span>
+            님의 예약을 복사했습니다
+            <FontAwesomeIcon
+              icon={faRectangleXmark}
+              fontSize={14}
+              onClick={() => selectedReservationVar(null)}
+              className="ml-2 cursor-pointer hover:scale-125"
+            />
+          </div>
+        )}
         <div className="flex w-full items-center justify-end gap-x-2">
           <BtnMenu
             icon={
@@ -125,7 +146,15 @@ export function TableHeader({ today }: TableNavProps) {
                 ...viewOptions,
                 seeActiveOption: !viewOptions.seeActiveOption,
               };
-              saveViewOptions(newViewOptions, loggedInUser.id, viewOptions);
+              const localViewOptions = {
+                ...viewOptions,
+                seeActiveOption: false,
+              };
+              saveViewOptions(
+                newViewOptions,
+                loggedInUser.id,
+                localViewOptions
+              );
             }}
           />
           <AnimatePresence>
