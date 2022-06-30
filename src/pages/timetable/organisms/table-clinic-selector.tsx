@@ -1,10 +1,15 @@
 import { useReactiveVar } from "@apollo/client";
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
+import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion, Variants } from "framer-motion";
-import { Fragment } from "react";
 import { BtnMenu } from "../../../components/molecules/button-menu";
-import { cls, saveClinicLists, saveSelectedClinic } from "../../../libs/utils";
+import {
+  cls,
+  saveClinicLists,
+  saveSelectedClinic,
+  saveViewOptions,
+} from "../../../libs/utils";
 import {
   clinicListsVar,
   loggedInUserVar,
@@ -19,7 +24,9 @@ export function TableClinicSelector() {
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
-  console.log("인");
+
+  if (!loggedInUser || !viewOptions) return <></>;
+
   const onClickToggleUser = (clinicId: number, memberId: number) => {
     if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
     const gIndex = clinicLists.findIndex(
@@ -86,9 +93,9 @@ export function TableClinicSelector() {
       initial="init"
       animate="end"
       exit="exit"
-      className="USER_VIEW_CONTROLLER absolute top-10 z-[35] w-[240px] rounded-md bg-white py-2 shadow-cst"
+      className="USER_VIEW_CONTROLLER absolute top-6 z-[35] w-[240px] rounded-md border border-gray-400 bg-white py-2 shadow-cst"
     >
-      <div className="HEADER mb-2 flex items-center justify-between border-b px-3 pb-1">
+      <div className="HEADER flex items-center justify-between border-b px-3 pb-1">
         <span className="group relative z-40 px-1 after:ml-1 after:rounded-full after:border after:px-1 after:content-['?']">
           보기설정
           <p className="bubble-arrow-t-right absolute top-7 right-0 hidden w-48 rounded-md bg-black p-4 text-white group-hover:block">
@@ -97,6 +104,33 @@ export function TableClinicSelector() {
         </span>
         <BtnArrow direction={NEXT} onClick={onClickChangeSeeActiveOption} />
       </div>
+
+      <div className="flex items-center gap-2 border-b py-1 px-3">
+        <BtnMenu
+          icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
+          enabled={viewOptions.seeCancel}
+          label={"취소"}
+          onClick={() => {
+            const newViewOptions = {
+              ...viewOptions,
+              seeCancel: !viewOptions.seeCancel,
+            };
+            saveViewOptions(newViewOptions, loggedInUser.id);
+          }}
+        />
+        <BtnMenu
+          icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
+          enabled={viewOptions.seeNoshow}
+          label={"부도"}
+          onClick={() => {
+            const newViewOptions = {
+              ...viewOptions,
+              seeNoshow: !viewOptions.seeNoshow,
+            };
+            saveViewOptions(newViewOptions, loggedInUser.id);
+          }}
+        />
+      </div>
       <ul className="BODY divide- h-full space-y-1 divide-y overflow-y-scroll px-3">
         {clinicLists === null || clinicLists.length === 0 ? (
           <div className="flex h-full items-center justify-center">
@@ -104,7 +138,7 @@ export function TableClinicSelector() {
           </div>
         ) : (
           clinicLists.map((clinic, i) => (
-            <div key={i} className="CLINIC">
+            <div key={i} className="CLINIC pt-2">
               <BtnMenu
                 label={clinic.name}
                 enabled={clinic.id === selectedClinic.id}

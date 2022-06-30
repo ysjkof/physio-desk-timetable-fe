@@ -71,11 +71,14 @@ export function saveClinicLists(
 }
 export function saveViewOptions(
   newViewOptions: IViewOption,
-  loggedInUserId: number
+  loggedInUserId: number,
+  newViewOptionsForLacal?: IViewOption
 ) {
   localStorage.setItem(
     LOCALSTORAGE_VIEW_OPTION + loggedInUserId,
-    JSON.stringify(newViewOptions)
+    JSON.stringify(
+      newViewOptionsForLacal ? newViewOptionsForLacal : newViewOptions
+    )
   );
   viewOptionsVar(newViewOptions);
 }

@@ -57,9 +57,9 @@ export const EditReservationState = ({
         fontSize={14}
         onClick={() => onClickEditReserve(ReservationState.Canceled)}
         className={cls(
-          "cursor-pointer rounded-full hover:scale-125 hover:text-red-500",
+          "hover:cancel cursor-pointer rounded-full hover:scale-125",
           reservation.state === ReservationState.Canceled
-            ? "pointer-events-none text-red-500"
+            ? "cancel pointer-events-none"
             : "text-gray-400"
         )}
       />
@@ -68,9 +68,9 @@ export const EditReservationState = ({
         fontSize={14}
         onClick={() => onClickEditReserve(ReservationState.NoShow)}
         className={cls(
-          "cursor-pointer rounded-full hover:scale-125 hover:text-black",
+          "hover:noshow cursor-pointer rounded-full hover:scale-125",
           reservation.state === ReservationState.NoShow
-            ? "pointer-events-none text-black"
+            ? "noshow pointer-events-none"
             : "text-gray-400"
         )}
       />

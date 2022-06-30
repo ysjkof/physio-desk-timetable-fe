@@ -3,12 +3,7 @@ import {
   faCalendarAlt,
   faPlusSquare,
 } from "@fortawesome/free-regular-svg-icons";
-import {
-  faBan,
-  faCommentSlash,
-  faGear,
-  faList,
-} from "@fortawesome/free-solid-svg-icons";
+import { faGear, faList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -81,30 +76,6 @@ export function TableHeader({ today }: TableNavProps) {
             label={"환자등록"}
             onClick={() => navigate("create-patient")}
           />
-          <BtnMenu
-            icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
-            enabled={viewOptions.seeCancel}
-            label={"취소"}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions,
-                seeCancel: !viewOptions.seeCancel,
-              };
-              saveViewOptions(newViewOptions, loggedInUser.id);
-            }}
-          />
-          <BtnMenu
-            icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
-            enabled={viewOptions.seeNoshow}
-            label={"부도"}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions,
-                seeNoshow: !viewOptions.seeNoshow,
-              };
-              saveViewOptions(newViewOptions, loggedInUser.id);
-            }}
-          />
           <BtnMenuToggle
             onClick={() => {
               const newViewOptions: IViewOption = {
@@ -154,7 +125,7 @@ export function TableHeader({ today }: TableNavProps) {
                 ...viewOptions,
                 seeActiveOption: !viewOptions.seeActiveOption,
               };
-              viewOptionsVar(newViewOptions);
+              saveViewOptions(newViewOptions, loggedInUser.id, viewOptions);
             }}
           />
           <AnimatePresence>

@@ -42,12 +42,7 @@ export const BtnMenu = ({
       thinFont ? " py-0 text-[0.7rem] font-normal" : "",
       isCenter ? " mx-auto text-center" : "",
       onClick ? "" : " cursor-default hover:bg-inherit",
-      hasFocus ? " focus:emphasize-ring" : "",
-      label === "부도" && enabled
-        ? "text-black"
-        : label === "취소" && enabled
-        ? "text-red-400"
-        : ""
+      hasFocus ? " focus:emphasize-ring" : ""
     )}
     onClick={onClick}
   >

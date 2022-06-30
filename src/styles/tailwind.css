@@ -108,10 +108,13 @@
   }
 
   .noshow {
-    @apply border-gray-300 bg-gray-100 text-black line-through;
+    @apply text-black;
   }
   .cancel {
-    @apply border-gray-300 bg-gray-100 text-red-500 line-through;
+    @apply text-red-500;
+  }
+  .no-reserved {
+    @apply border-gray-300 bg-gray-100;
   }
 }
 

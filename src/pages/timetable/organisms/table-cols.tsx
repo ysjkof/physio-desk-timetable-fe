@@ -65,25 +65,17 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
                   <EventBox
                     key={event.id}
                     event={event}
-                    reservationId={event.id}
                     userIndex={userIndex}
-                    reservationState={event.state}
-                    memo={event.memo}
-                    registrationNumber={event.patient.registrationNumber}
-                    patientName={event.patient.name}
-                    prescriptions={event.prescriptions ?? []}
-                    startDate={event.startDate}
-                    endDate={event.endDate}
-                    inset={`${
-                      labels.findIndex((label) =>
-                        compareDateMatch(label, new Date(event.startDate), "hm")
-                      ) * TABLE_CELL_HEIGHT
-                    }px 0%`}
                     numberOfCell={getTimeLength(
                       event.startDate,
                       event.endDate,
                       "20minute"
                     )}
+                    inset={`${
+                      labels.findIndex((label) =>
+                        compareDateMatch(label, new Date(event.startDate), "hm")
+                      ) * TABLE_CELL_HEIGHT
+                    }px 0%`}
                   />
                 ))}
               </div>
