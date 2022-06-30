@@ -3,7 +3,8 @@ interface WarningProps {
     | "hasNotPermission"
     | "hasNotStatistics"
     | "hasNotPrescription"
-    | "emptyUserIds";
+    | "emptyUserIds"
+    | "emptyData";
 }
 
 export const Worning = ({ type }: WarningProps) => {
@@ -20,6 +21,9 @@ export const Worning = ({ type }: WarningProps) => {
       break;
     case "emptyUserIds":
       message = "사용자를 선택해주세요";
+      break;
+    case "emptyData":
+      message = "데이터가 없습니다";
       break;
   }
   return <h3 className="mt-10 text-center">{message}</h3>;

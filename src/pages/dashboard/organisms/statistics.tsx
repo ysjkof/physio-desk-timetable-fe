@@ -377,8 +377,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       {userStatistics &&
       data &&
       data.getStatistics.prescriptions &&
-      data.getStatistics.dailyReports &&
-      userStatistics ? (
+      data.getStatistics.dailyReports ? (
         <>
           {data.getStatistics.prescriptions.length < 1 ? (
             <Worning type="hasNotPrescription" />
@@ -399,7 +398,8 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       ) : userIds.length === 0 ? (
         <Worning type="emptyUserIds" />
       ) : (
-        <Loading />
+        // <Loading />
+        <Worning type="emptyData" />
       )}
     </>
   );
