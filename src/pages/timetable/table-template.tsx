@@ -53,7 +53,7 @@ export const TimetableTemplate = ({
           <div className="TABLE_LABELS sticky left-0 z-[32] border-r-2 border-black bg-white pt-[47px]">
             {labels}
           </div>
-          <div className="TABLE_MAIN flex h-screen flex-col">{body}</div>
+          <div className="TABLE_MAIN flex flex-col">{body}</div>
         </div>
       )}
     </motion.div>
