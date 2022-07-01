@@ -59,17 +59,16 @@ export function TableSubHeader({}: TableSubHeaderProps) {
               userLength === 1 ? "border-x-inherit" : ""
             )}
           >
-            {day?.users.map((member, userIndex) =>
-              member.isActivate ? (
-                <NameInSubHeader
-                  key={userIndex}
-                  isMe={member.user.name === logInUser?.name}
-                  name={member.user.name}
-                  userIndex={userIndex}
-                />
-              ) : (
-                ""
-              )
+            {day?.users.map(
+              (member, userIndex) =>
+                member.isActivate && (
+                  <NameInSubHeader
+                    key={userIndex}
+                    isMe={member.user.name === logInUser?.name}
+                    name={member.user.name}
+                    userIndex={userIndex}
+                  />
+                )
             )}
           </div>
         ))}

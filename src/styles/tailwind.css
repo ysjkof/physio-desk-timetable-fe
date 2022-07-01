@@ -42,7 +42,7 @@
     @apply ring-2 ring-green-500;
   }
   .time-indicator-bar {
-    @apply pointer-events-none absolute left-0 z-20 flex w-full border-t border-red-500 text-red-500;
+    @apply pointer-events-none absolute left-0 z-[31] flex w-full border-t border-red-500 text-red-500;
   }
 
   .reserve-btn-box {

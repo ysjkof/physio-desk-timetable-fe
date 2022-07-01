@@ -59,6 +59,7 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
                       label,
                       [0, 30]
                     )}
+                    userIndex={userIndex}
                   />
                 ))}
                 {member.events?.map((event) => (
