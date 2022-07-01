@@ -75,7 +75,7 @@ export function EventBox({
         tooltip.current.classList.remove("top-4");
         tooltip.current.style.bottom = "0";
       }
-      console.log("top > userColHeight", top, userColHeight);
+
       if (eventBoxTop === 0) {
         eventController.current.classList.remove("-top-[1.2rem]");
       }
@@ -117,8 +117,8 @@ export function EventBox({
         )}
         style={{
           ...(state === ReservationState.Reserved && {
-            borderColor: USER_COLORS[userIndex]?.deep,
-            backgroundColor: USER_COLORS[userIndex]?.light,
+            borderColor: USER_COLORS[userIndex]?.deep ?? "black",
+            backgroundColor: USER_COLORS[userIndex]?.light ?? "white",
           }),
         }}
       >
@@ -182,8 +182,8 @@ export function EventBox({
             )}
             style={{
               ...(state === ReservationState.Reserved && {
-                borderColor: USER_COLORS[userIndex]?.deep,
-                backgroundColor: USER_COLORS[userIndex]?.light,
+                borderColor: USER_COLORS[userIndex]?.deep ?? "black",
+                backgroundColor: USER_COLORS[userIndex]?.light ?? "white",
               }),
             }}
           >
