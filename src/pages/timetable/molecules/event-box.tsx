@@ -53,19 +53,19 @@ export function EventBox({
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
 
-  let height = numberOfCell * TABLE_CELL_HEIGHT;
-  if (height > maxTableHeight) height = maxTableHeight + TABLE_CELL_HEIGHT;
-
   const isDayOff = state === ReservationState.DayOff;
   const isReserve = state === ReservationState.Reserved;
   const isCancel = state === ReservationState.Canceled;
   const isNoshow = state === ReservationState.NoShow;
 
+  let height = numberOfCell * TABLE_CELL_HEIGHT;
+  if (height > maxTableHeight) height = maxTableHeight;
+
   const matchTableEndtime = compareTableEndtime(
     new Date(event.endDate),
     viewOptions.tableDuration.end
   );
-  if (matchTableEndtime) height = height + TABLE_CELL_HEIGHT;
+  if (matchTableEndtime) height = height;
 
   const eventBox = useRef<HTMLDivElement>(null);
   const eventController = useRef<HTMLDivElement>(null);

@@ -24,7 +24,8 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
   const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const userLength = getActiveUserLength(selectedClinic?.members);
-  const maxTableHeight = labels.length * TABLE_CELL_HEIGHT;
+  const labelMaxLength = labels.length;
+  const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
   return (
     <TableLoopLayout
@@ -34,7 +35,7 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
         <div
           key={i}
           className={cls(
-            "user-cols-divide relative grid",
+            "user-cols-divide relative grid border-b",
             userLength === 1 ? "border-x-inherit" : ""
           )}
           style={{
@@ -51,18 +52,20 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
                 key={member.id}
                 className="USER_COL relative w-full border-r-[0.5px] last:border-r-0 hover:border-transparent hover:bg-gray-200/50"
               >
-                {labels.map((label) => (
-                  <ReserveBtn
-                    key={label.getTime()}
-                    label={combineYMDHM(day.date, label)}
-                    member={{ id: member.user.id, name: member.user.name }}
-                    isActiveBorderTop={compareNumAfterGetMinutes(
-                      label,
-                      [0, 30]
-                    )}
-                    userIndex={userIndex}
-                  />
-                ))}
+                {labels.map((label, idx) =>
+                  idx === labelMaxLength - 1 ? null : (
+                    <ReserveBtn
+                      key={label.getTime()}
+                      label={combineYMDHM(day.date, label)}
+                      member={{ id: member.user.id, name: member.user.name }}
+                      isActiveBorderTop={compareNumAfterGetMinutes(
+                        label,
+                        [0, 30]
+                      )}
+                      userIndex={userIndex}
+                    />
+                  )
+                )}
                 {member.events?.map((event) => {
                   const idx = labels.findIndex((label) =>
                     compareDateMatch(label, new Date(event.startDate), "hm")

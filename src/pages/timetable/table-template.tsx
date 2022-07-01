@@ -50,7 +50,7 @@ export const TimetableTemplate = ({
           className="TABLE_BODY grid h-screen w-full grid-cols-[40px,1fr] overflow-scroll"
           style={{ height: height + "px" }}
         >
-          <div className="TABLE_LABELS sticky left-0 z-[32] border-r-2 border-black bg-white pt-[50px]">
+          <div className="TABLE_LABELS sticky left-0 z-[32] border-r-2 border-black bg-white pt-[47px]">
             {labels}
           </div>
           <div className="TABLE_MAIN flex h-screen flex-col">{body}</div>
