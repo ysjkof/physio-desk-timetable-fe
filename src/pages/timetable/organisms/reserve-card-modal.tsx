@@ -3,35 +3,35 @@ import { TimetableModalProps } from "..";
 import { ModalContentsLayout } from "../../../components/templates/modal-contents-layout";
 import { ReserveForm } from "../molecules/reserve-form";
 import { ModalTemplate } from "../../../components/molecules/modal-template";
-import { useLocation, useNavigate } from "react-router-dom";
-import { TIMETABLE } from "../../../variables";
+import { useLocation } from "react-router-dom";
 
 export const ReserveCardModal = ({ closeAction }: TimetableModalProps) => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const state = location.state as {
     startDate: Date;
     member: { id: number; name: string };
+    isDayOff?: boolean;
   };
-  let startDate = state?.startDate;
-  let member = state?.member;
+  const startDate = state?.startDate;
+  const member = state?.member;
+  const isDayOff = state?.isDayOff;
 
-  if (!startDate || !member) navigate(TIMETABLE);
   return (
     <ModalTemplate
       closeAction={closeAction}
       children={
         <ModalContentsLayout
-          title="예약하기"
+          title={isDayOff ? "예약잠금" : "예약하기"}
           closeAction={closeAction}
           children={
             <>
-              <SearchPatient />
+              {!isDayOff && <SearchPatient />}
               <ReserveForm
                 closeAction={closeAction}
                 startDate={startDate}
                 member={member}
+                isDayoff={isDayOff}
               />
             </>
           }

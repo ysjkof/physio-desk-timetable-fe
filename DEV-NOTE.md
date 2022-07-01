@@ -464,9 +464,9 @@ array.map((label) => <span>{getHHMM(label, ":")}</span>);
 **정리완료**
 reserve-btn : 10
 time-indicator-bar : 31
-event-box : 30 { hover: 31 }
+event-box : 30 { hover: 32, DayOff : 31 }
 table-labels : 32
-table-sub-header : 31
+table-sub-header : 32
 TABLE_HEADER : 34
 modal-portal : 40
 USER_VIEW_CONTROLLER : 35

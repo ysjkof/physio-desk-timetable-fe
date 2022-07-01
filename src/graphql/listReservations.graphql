@@ -25,6 +25,7 @@ query listReservations($input: ListReservationsInput!) {
         id
         email
         name
+        updatedAt
       }
       clinic {
         id

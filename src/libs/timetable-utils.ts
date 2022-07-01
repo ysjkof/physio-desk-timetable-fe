@@ -1,4 +1,3 @@
-import { Reservation } from "../graphql/generated/graphql";
 import { IClinicList, IListReservation, IMember } from "../store";
 
 export const getSunday = (date: Date) => {
@@ -221,4 +220,14 @@ export function getMonthStartEnd(date: Date) {
   endDate.setDate(0);
   endDate.setMinutes(23, 59, 999);
   return [startDate, endDate];
+}
+
+interface duration {
+  hours: number;
+  minutes: number;
+}
+export function compareTableEndtime(date: Date, { hours, minutes }: duration) {
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  return hour === hours && minute === minutes;
 }

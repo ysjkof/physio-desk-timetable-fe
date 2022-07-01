@@ -9,6 +9,7 @@ import {
   CreateReservationMutation,
   EditReservationMutation,
   ListReservationsDocument,
+  ReservationState,
   useCreateReservationMutation,
   useEditReservationMutation,
   useFindPrescriptionsQuery,
@@ -20,13 +21,13 @@ import {
   selectedPatientVar,
 } from "../../../store";
 import { getDateFromYMDHM } from "../../../libs/utils";
-import { TIMETABLE } from "../../../variables";
 import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
 import { Button } from "../../../components/molecules/button";
 import { FormError } from "../../../components/form-error";
 import { DatepickerForm } from "../../../components/molecules/datepicker";
 import { SelectUser } from "./select-user";
 import { Input } from "../../../components/molecules/input";
+import { DayOffForm } from "./day-off-form";
 
 function getOneDayReservationInputDateForTest(
   inputStartDate: Date,
@@ -78,6 +79,7 @@ interface IReservaFromProps extends TimetableModalProps {
   member?: { id: number; name: string };
   selectedPrescriptionData?: PrescriptionWithSelect[];
   reservation?: IListReservation;
+  isDayoff?: boolean;
 }
 
 export const ReserveForm = ({
@@ -86,6 +88,7 @@ export const ReserveForm = ({
   member,
   selectedPrescriptionData,
   reservation,
+  isDayoff,
 }: IReservaFromProps) => {
   const navigate = useNavigate();
   const selectedPatient = useReactiveVar(selectedPatientVar);
@@ -99,6 +102,7 @@ export const ReserveForm = ({
   const [prescriptions, setPrescriptions] = useState<PrescriptionWithSelect[]>(
     []
   );
+  const isDayOff = isDayoff ?? reservation?.state === ReservationState.DayOff;
 
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
     variables: {
@@ -179,8 +183,7 @@ export const ReserveForm = ({
 
   const onSubmit = () => {
     console.log("onSubmit 시작");
-
-    if (!loading && selectedPatient?.id) {
+    if (!loading) {
       console.log("onSubmit if 통과");
       const {
         startDateYear,
@@ -188,52 +191,58 @@ export const ReserveForm = ({
         startDateDate,
         startDateHours,
         startDateMinutes,
+        endDateYear,
+        endDateMonth,
+        endDateDate,
+        endDateHours,
+        endDateMinutes,
         memo,
         userId,
       } = getValues();
-      if (
-        startDateYear !== undefined &&
-        startDateMonth !== undefined &&
-        startDateDate !== undefined &&
-        startDateHours !== undefined &&
-        startDateMinutes !== undefined
-      ) {
-        const startDate = getDateFromYMDHM(
-          startDateYear,
-          startDateMonth,
-          startDateDate,
-          startDateHours,
-          startDateMinutes
+
+      const startDate = getDateFromYMDHM(
+        startDateYear!,
+        startDateMonth!,
+        startDateDate!,
+        startDateHours!,
+        startDateMinutes!
+      );
+      if (!startDate) throw new Error("startDate가 없습니다");
+
+      if (isDayOff) {
+        const endDate = getDateFromYMDHM(
+          endDateYear!,
+          endDateMonth!,
+          endDateDate!,
+          endDateHours!,
+          endDateMinutes!
         );
-        const endDate = new Date(startDate);
-        // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-        endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
         if (reservation) {
-          // reservation이 있으면 edit모드
           callEditReservation({
             variables: {
               input: {
-                startDate: startDate,
+                startDate,
                 endDate,
                 memo,
-                reservationId: reservation.id,
                 userId: +userId!,
-                prescriptionIds: selectedPrescription.prescriptions,
+                reservationId: reservation.id,
               },
             },
+            refetchQueries: [
+              { query: ListReservationsDocument },
+              "listReservations",
+            ],
           });
         } else {
-          // createDummyReserve(userId);
           createReservationMutation({
             variables: {
               input: {
-                startDate: startDate,
+                startDate,
                 endDate,
                 memo,
-                patientId: selectedPatient.id,
+                isDayoff: true,
                 userId: +userId!,
                 clinicId: selectedClinic!.id,
-                prescriptionIds: selectedPrescription.prescriptions,
               },
             },
             refetchQueries: [
@@ -244,7 +253,47 @@ export const ReserveForm = ({
         }
         return;
       }
-      return console.error("timetable > organisms > reserve-card.tsx;");
+      const endDate = new Date(startDate);
+      // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
+      endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
+      if (reservation) {
+        // reservation이 있으면 edit모드
+        callEditReservation({
+          variables: {
+            input: {
+              startDate,
+              endDate,
+              memo,
+              userId: +userId!,
+              reservationId: reservation.id,
+              prescriptionIds: selectedPrescription.prescriptions,
+            },
+          },
+          refetchQueries: [
+            { query: ListReservationsDocument },
+            "listReservations",
+          ],
+        });
+      } else {
+        // createDummyReserve(userId);
+        createReservationMutation({
+          variables: {
+            input: {
+              startDate,
+              endDate,
+              memo,
+              userId: +userId!,
+              clinicId: selectedClinic!.id,
+              patientId: selectedPatient!.id,
+              prescriptionIds: selectedPrescription.prescriptions,
+            },
+          },
+          refetchQueries: [
+            { query: ListReservationsDocument },
+            "listReservations",
+          ],
+        });
+      }
     }
   };
 
@@ -296,9 +345,6 @@ export const ReserveForm = ({
   };
 
   useEffect(() => {
-    if (!reservation) {
-      if (!startDate || !member) navigate(TIMETABLE);
-    }
     return () => {
       selectedPatientVar(null);
     };
@@ -332,46 +378,41 @@ export const ReserveForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-4">
-      {/* <label className="grid grid-cols-[5rem,1fr] items-center"> */}
-      <label className="flex flex-col gap-2">
-        담당 치료사
-        <SelectUser
-          members={selectedClinic?.members ?? []}
-          register={register("userId")}
-        />
-      </label>
-      <label className="flex flex-col gap-2">
-        예약 시간
-        <DatepickerWithInput
-          setValue={setValue}
-          defaultDate={new Date(startDate ?? reservation?.startDate)}
+      {isDayOff && (
+        <DayOffForm
           register={register}
-          see="ymd-hm"
-          dateType="startDate"
-          formError={errors}
+          setValue={setValue}
+          errors={errors}
+          isValid={isValid}
+          loading={loading}
+          reservation={reservation}
         />
-      </label>
-      <label className="flex flex-col gap-2">
-        <span className="flex items-center gap-1">
-          처방
-          <Link
-            to={"/dashboard"}
-            state={{
-              selectedClinicId: selectedClinic?.id,
-              selectedClinicName: selectedClinic?.name,
-              selectedClinicType: selectedClinic?.type,
-              selectedClinicMembers: selectedClinic?.members,
-              selectedMenu: "prescription",
-            }}
-          >
-            <FontAwesomeIcon icon={faLink} fontSize={14} className="btn-menu" />
-          </Link>
-        </span>
-        {prescriptions.length === 0 ? (
-          <div className="flex flex-col items-center px-2 ">
-            <span>등록된 처방이 없습니다.</span>
-            <span>
-              처방을
+      )}
+      {!isDayOff && (
+        <>
+          {/* <label className="grid grid-cols-[5rem,1fr] items-center"> */}
+          <label className="flex flex-col gap-2">
+            담당 치료사
+            <SelectUser
+              members={selectedClinic?.members ?? []}
+              register={register("userId")}
+            />
+          </label>
+          <label className="flex flex-col gap-2">
+            시작 시각
+            <DatepickerWithInput
+              setValue={setValue}
+              defaultDate={new Date(startDate ?? reservation?.startDate)}
+              register={register}
+              see="ymd-hm"
+              dateType="startDate"
+              formError={errors}
+            />
+          </label>
+
+          <label className="flex flex-col gap-2">
+            <span className="flex items-center gap-1">
+              처방
               <Link
                 to={"/dashboard"}
                 state={{
@@ -382,69 +423,93 @@ export const ReserveForm = ({
                   selectedMenu: "prescription",
                 }}
               >
-                <button
-                  type="button"
-                  className="btn-sm btn-border mx-2 w-fit shadow-cst"
-                >
-                  <FontAwesomeIcon icon={faLink} />
-                  등록
-                </button>
-                하세요
+                <FontAwesomeIcon
+                  icon={faLink}
+                  fontSize={14}
+                  className="btn-menu"
+                />
               </Link>
             </span>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <ul className="grid grid-cols-4 gap-x-3 gap-y-1">
-              {prescriptions.map((prescription, index) => (
-                <li
-                  key={index}
-                  value={prescription.id}
-                  onClick={() =>
-                    onClickPrescription(prescription.id, prescriptions)
-                  }
-                  className={`btn-menu overflow-hidden rounded-md border text-center ${
-                    prescription.isSelect
-                      ? "border-green-500 font-semibold"
-                      : "opacity-50"
-                  }`}
-                >
-                  {prescription.name}
-                </li>
-              ))}
-            </ul>
-            <div className="flex justify-around">
-              <span>총가격 : {selectedPrescription.price}원</span>
-              <span>치료시간 : {selectedPrescription.minute}분</span>
-            </div>
-          </div>
-        )}
-      </label>
-      <Input
-        name="memo"
-        label={"메모"}
-        placeholder={"처방에 대한 설명"}
-        register={register("memo", {
-          maxLength: { value: 200, message: "최대 200자입니다" },
-        })}
-        type={"textarea"}
-        rows={2}
-      />
-      <Button
-        type="submit"
-        canClick={
-          selectedPatient &&
-          isValid &&
-          selectedPrescription.prescriptions.length >= 1
-        }
-        loading={loading}
-        textContents={reservation ? "예약수정" : "예약하기"}
-      />
-      {createReservationResult?.createReservation.error && (
-        <FormError
-          errorMessage={createReservationResult.createReservation.error}
-        />
-      )}
+            {prescriptions.length === 0 ? (
+              <div className="flex flex-col items-center px-2 ">
+                <span>등록된 처방이 없습니다.</span>
+                <span>
+                  처방을
+                  <Link
+                    to={"/dashboard"}
+                    state={{
+                      selectedClinicId: selectedClinic?.id,
+                      selectedClinicName: selectedClinic?.name,
+                      selectedClinicType: selectedClinic?.type,
+                      selectedClinicMembers: selectedClinic?.members,
+                      selectedMenu: "prescription",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      className="btn-sm btn-border mx-2 w-fit shadow-cst"
+                    >
+                      <FontAwesomeIcon icon={faLink} />
+                      등록
+                    </button>
+                    하세요
+                  </Link>
+                </span>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <ul className="grid grid-cols-4 gap-x-3 gap-y-1">
+                  {prescriptions.map((prescription, index) => (
+                    <li
+                      key={index}
+                      value={prescription.id}
+                      onClick={() =>
+                        onClickPrescription(prescription.id, prescriptions)
+                      }
+                      className={`btn-menu overflow-hidden rounded-md border text-center ${
+                        prescription.isSelect
+                          ? "border-green-500 font-semibold"
+                          : "opacity-50"
+                      }`}
+                    >
+                      {prescription.name}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex justify-around">
+                  <span>총가격 : {selectedPrescription.price}원</span>
+                  <span>치료시간 : {selectedPrescription.minute}분</span>
+                </div>
+              </div>
+            )}
+          </label>
+          <Input
+            name="memo"
+            label={"메모"}
+            placeholder={"처방에 대한 설명"}
+            register={register("memo", {
+              maxLength: { value: 200, message: "최대 200자입니다" },
+            })}
+            type={"textarea"}
+            rows={2}
+          />
+          <Button
+            type="submit"
+            canClick={
+              selectedPatient &&
+              isValid &&
+              selectedPrescription.prescriptions.length >= 1
+            }
+            loading={loading}
+            textContents={reservation ? "예약수정" : "예약하기"}
+          />
+          {createReservationResult?.createReservation.error && (
+            <FormError
+              errorMessage={createReservationResult.createReservation.error}
+            />
+          )}
+        </>
+      )}{" "}
     </form>
   );
 };

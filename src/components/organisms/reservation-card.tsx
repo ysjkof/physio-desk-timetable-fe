@@ -56,7 +56,7 @@ export const ReservationCard = ({
     setIsEdit(false);
   };
 
-  return (
+  return reservation.patient ? (
     <div className="space-y-4">
       <h4 className="mb-5 text-left font-medium"></h4>
       <ReservationCardName
@@ -127,5 +127,7 @@ export const ReservationCard = ({
         )}
       </div>
     </div>
+  ) : (
+    <></>
   );
 };

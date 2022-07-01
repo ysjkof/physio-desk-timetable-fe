@@ -3,14 +3,15 @@ import {
   faCancel,
   faCommentSlash,
   faCopy,
+  faLock,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { EditReservationState } from "../../../components/molecules/edit-reservation-state";
 import { ReservationState } from "../../../graphql/generated/graphql";
-import { getHHMM } from "../../../libs/timetable-utils";
+import { compareTableEndtime, getHHMM } from "../../../libs/timetable-utils";
 import { cls } from "../../../libs/utils";
 import {
   IListReservation,
@@ -18,7 +19,6 @@ import {
   viewOptionsVar,
 } from "../../../store";
 import {
-  RESERVE_DETAIL,
   RESERVE_EDIT,
   TABLE_CELL_HEIGHT,
   USER_COLORS,
@@ -27,6 +27,7 @@ import {
 interface EventBoxProps {
   userIndex: number;
   inset: string;
+  maxTableHeight: number;
   numberOfCell: number;
   event: IListReservation;
 }
@@ -34,6 +35,7 @@ interface EventBoxProps {
 export function EventBox({
   userIndex,
   inset,
+  maxTableHeight,
   numberOfCell,
   event,
 }: EventBoxProps) {
@@ -44,14 +46,26 @@ export function EventBox({
     state,
     memo,
     prescriptions,
-    patient: { name, registrationNumber },
+    patient,
   } = event;
 
-  const isEdit = useMatch(RESERVE_DETAIL);
   const viewOptions = useReactiveVar(viewOptionsVar);
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
-  const height = numberOfCell * TABLE_CELL_HEIGHT;
+
+  let height = numberOfCell * TABLE_CELL_HEIGHT;
+  if (height > maxTableHeight) height = maxTableHeight + TABLE_CELL_HEIGHT;
+
+  const isDayOff = state === ReservationState.DayOff;
+  const isReserve = state === ReservationState.Reserved;
+  const isCancel = state === ReservationState.Canceled;
+  const isNoshow = state === ReservationState.NoShow;
+
+  const matchTableEndtime = compareTableEndtime(
+    new Date(event.endDate),
+    viewOptions.tableDuration.end
+  );
+  if (matchTableEndtime) height = height + TABLE_CELL_HEIGHT;
 
   const eventBox = useRef<HTMLDivElement>(null);
   const eventController = useRef<HTMLDivElement>(null);
@@ -82,25 +96,30 @@ export function EventBox({
     }
   };
 
+  function onClickBox() {
+    navigate(RESERVE_EDIT, { state: { reservationId } });
+  }
+
   useEffect(() => {
     if (isHover) positioningTooltip();
-  });
+  }, [isHover]);
 
   return (
     <motion.div
       ref={eventBox}
-      whileHover={{ zIndex: 31 }}
+      whileHover={{ zIndex: 32 }}
       initial={{ y: 10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       onHoverStart={() => setIsHover(true)}
       onHoverEnd={() => setIsHover(false)}
       className={cls(
         "EVENT_BOX group absolute z-30 cursor-pointer",
-        !viewOptions.seeCancel && state === ReservationState.Canceled
+        !viewOptions.seeCancel && isCancel
           ? "hidden"
-          : !viewOptions.seeNoshow && state === ReservationState.NoShow
+          : !viewOptions.seeNoshow && isNoshow
           ? "hidden"
-          : ""
+          : "",
+        isDayOff ? "z-[31]" : ""
       )}
       style={{
         inset,
@@ -108,39 +127,39 @@ export function EventBox({
       }}
     >
       <div
-        onClick={() =>
-          isEdit ?? navigate(RESERVE_EDIT, { state: { reservationId } })
-        }
+        onClick={onClickBox}
         className={cls(
           "relative h-full overflow-hidden border px-1",
-          state !== ReservationState.Reserved ? "no-reserved" : ""
+          !isReserve ? "no-reserved" : ""
         )}
         style={{
-          ...(state === ReservationState.Reserved && {
+          ...(isReserve && {
             borderColor: USER_COLORS[userIndex]?.deep ?? "black",
             backgroundColor: USER_COLORS[userIndex]?.light ?? "white",
           }),
         }}
       >
         <div className="flex h-5 items-center justify-between overflow-hidden whitespace-nowrap text-center">
-          {state === ReservationState.Reserved ? null : state ===
-            ReservationState.Canceled ? (
-            <FontAwesomeIcon icon={faCancel} className="cancel" />
-          ) : (
+          {isDayOff && <FontAwesomeIcon icon={faLock} className="cancel" />}
+          {isCancel && <FontAwesomeIcon icon={faCancel} className="cancel" />}
+          {isNoshow && (
             <FontAwesomeIcon icon={faCommentSlash} className="noshow" />
           )}
           <span className="ml-0.5 w-full font-extralight">
-            {registrationNumber}:{name}
+            {isDayOff
+              ? "예약잠금"
+              : patient?.registrationNumber + ":" + patient?.name}
           </span>
           {memo && (
             <div className="absolute right-0 top-0 border-4 border-t-red-500 border-r-red-500 border-l-transparent border-b-transparent" />
           )}
         </div>
-        {prescriptions && numberOfCell !== 1 && (
+        {!isDayOff && prescriptions && numberOfCell !== 1 && (
           <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
             {prescriptions.map((prescription) => prescription.name + " ")}
           </div>
         )}
+
         {
           numberOfCell > 2 ? (
             memo ? (
@@ -154,52 +173,56 @@ export function EventBox({
           ) : null // 칸이 없어서 메모 생략
         }
       </div>
+
       {isHover && (
         <>
-          <motion.div
-            ref={eventController}
-            initial={{ width: 0 }}
-            animate={{
-              width: "100%",
-              transition: { bounce: "twin", duration: 0.2 },
-            }}
-            className="absolute left-0 -top-[1.2rem] flex items-baseline justify-between overflow-hidden bg-gray-100 px-2 pb-[0.2rem] text-gray-800"
-          >
-            <FontAwesomeIcon
-              icon={faCopy}
-              fontSize={16}
-              className="text-green-500 hover:scale-125"
-              onClick={() => selectedReservationVar(event)}
-            />
-            <EditReservationState reservation={event} />
-          </motion.div>
-
+          {!isDayOff && (
+            <motion.div
+              ref={eventController}
+              initial={{ width: 0 }}
+              animate={{
+                width: "100%",
+                transition: { bounce: "twin", duration: 0.2 },
+              }}
+              className="absolute left-0 -top-[1.2rem] flex items-baseline justify-between overflow-hidden bg-gray-100 px-2 pb-[0.2rem] text-gray-800"
+            >
+              <FontAwesomeIcon
+                icon={faCopy}
+                fontSize={16}
+                className="text-green-500 hover:scale-125"
+                onClick={() => selectedReservationVar(event)}
+              />
+              <EditReservationState reservation={event} />
+            </motion.div>
+          )}
           <div
             ref={tooltip}
             className={cls(
               "tooltip absolute top-4 left-[90px] w-[150px] rounded border p-1 shadow-cst",
-              state !== ReservationState.Reserved ? "no-reserved" : ""
+              !isReserve ? "no-reserved" : ""
             )}
             style={{
-              ...(state === ReservationState.Reserved && {
+              ...(isReserve && {
                 borderColor: USER_COLORS[userIndex]?.deep ?? "black",
                 backgroundColor: USER_COLORS[userIndex]?.light ?? "white",
               }),
             }}
           >
             <span className="mb-1 flex">
-              예약시간 : {getHHMM(startDate, ":")} ~ {getHHMM(endDate, ":")}
+              시간 : {getHHMM(startDate, ":")} ~ {getHHMM(endDate, ":")}
             </span>
-            <ul className="mb-1 flex flex-col">
-              처방 :
-              {prescriptions?.map((prescription, i) => (
-                <li key={i} className="flex pl-2">
-                  <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-                    {prescription.name}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            {!isDayOff && (
+              <ul className="mb-1 flex flex-col">
+                처방 :
+                {prescriptions?.map((prescription, i) => (
+                  <li key={i} className="flex pl-2">
+                    <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+                      {prescription.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
             {event.memo && (
               <div className="flex flex-col pt-1">메모 : {event.memo}</div>
             )}

@@ -24,6 +24,7 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
   const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const userLength = getActiveUserLength(selectedClinic?.members);
+  const maxTableHeight = labels.length * TABLE_CELL_HEIGHT;
 
   return (
     <TableLoopLayout
@@ -33,7 +34,7 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
         <div
           key={i}
           className={cls(
-            "user-cols-divide relative grid ",
+            "user-cols-divide relative grid",
             userLength === 1 ? "border-x-inherit" : ""
           )}
           style={{
@@ -62,23 +63,26 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
                     userIndex={userIndex}
                   />
                 ))}
-                {member.events?.map((event) => (
-                  <EventBox
-                    key={event.id}
-                    event={event}
-                    userIndex={userIndex}
-                    numberOfCell={getTimeLength(
-                      event.startDate,
-                      event.endDate,
-                      "20minute"
-                    )}
-                    inset={`${
-                      labels.findIndex((label) =>
-                        compareDateMatch(label, new Date(event.startDate), "hm")
-                      ) * TABLE_CELL_HEIGHT
-                    }px 0%`}
-                  />
-                ))}
+                {member.events?.map((event) => {
+                  const idx = labels.findIndex((label) =>
+                    compareDateMatch(label, new Date(event.startDate), "hm")
+                  );
+                  const numberOfCell = idx === -1 ? 0 : idx;
+                  return (
+                    <EventBox
+                      key={event.id}
+                      event={event}
+                      userIndex={userIndex}
+                      maxTableHeight={maxTableHeight}
+                      numberOfCell={getTimeLength(
+                        event.startDate,
+                        event.endDate,
+                        "20minute"
+                      )}
+                      inset={`${numberOfCell * TABLE_CELL_HEIGHT}px 0%`}
+                    />
+                  );
+                })}
               </div>
             ) : (
               ""

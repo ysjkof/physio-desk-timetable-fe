@@ -51,6 +51,7 @@ export const RESERVATION_STATE_KOR = {
   [ReservationState.Canceled]: "취소",
   [ReservationState.NoShow]: "부도",
   [ReservationState.Reserved]: "예약",
+  [ReservationState.DayOff]: "예약잠금",
 };
 
 // 통계

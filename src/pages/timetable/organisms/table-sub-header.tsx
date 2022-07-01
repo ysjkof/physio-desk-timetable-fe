@@ -28,7 +28,6 @@ export function TableSubHeader({}: TableSubHeaderProps) {
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const [userFrame, setUserFrame] = useState<DayWithUsers[] | null>(null);
   const userLength = userFrame && getActiveUserLength(selectedClinic?.members);
-  const today = useReactiveVar(todayNowVar);
 
   useEffect(() => {
     if (logInUser) {
@@ -42,7 +41,7 @@ export function TableSubHeader({}: TableSubHeaderProps) {
 
   if (!userLength) return <></>;
   return (
-    <div className="TABLE_SUB_HEADER sticky top-0 z-[31] shadow-b">
+    <div className="TABLE_SUB_HEADER sticky top-0 z-[32] shadow-b">
       <TableLoopLayout
         userLength={userLength}
         children={userFrame?.map((day, i) => (
@@ -67,6 +66,9 @@ export function TableSubHeader({}: TableSubHeaderProps) {
                     isMe={member.user.name === logInUser?.name}
                     name={member.user.name}
                     userIndex={userIndex}
+                    clinicId={selectedClinic?.id ?? 0}
+                    userId={member.user.id}
+                    date={day.date}
                   />
                 )
             )}

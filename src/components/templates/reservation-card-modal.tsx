@@ -4,6 +4,8 @@ import { ModalContentsLayout } from "../templates/modal-contents-layout";
 import { ModalTemplate } from "../molecules/modal-template";
 import { ReservationCard } from "../organisms/reservation-card";
 import { useListReservations } from "../../hooks/useListReservations";
+import { ReservationState } from "../../graphql/generated/graphql";
+import { DayOffCard } from "../organisms/day-off-card";
 
 export const ReservationModal = ({ closeAction }: TimetableModalProps) => {
   const navigate = useNavigate();
@@ -15,12 +17,14 @@ export const ReservationModal = ({ closeAction }: TimetableModalProps) => {
     (r) => r.id === reservationId
   )!;
 
+  const isDayOff = reservation?.state === ReservationState.DayOff;
+
   return (
     <ModalTemplate
       closeAction={closeAction}
       children={
         <ModalContentsLayout
-          title="예약 자세히"
+          title={isDayOff ? "예약잠금 설정" : "예약 자세히"}
           closeAction={closeAction}
           children={
             <>
@@ -35,10 +39,20 @@ export const ReservationModal = ({ closeAction }: TimetableModalProps) => {
                   </button>
                 </p>
               ) : (
-                <ReservationCard
-                  closeAction={closeAction}
-                  reservation={reservation}
-                />
+                <>
+                  {isDayOff && (
+                    <DayOffCard
+                      closeAction={closeAction}
+                      reservation={reservation}
+                    />
+                  )}
+                  {!isDayOff && (
+                    <ReservationCard
+                      closeAction={closeAction}
+                      reservation={reservation}
+                    />
+                  )}
+                </>
               )}
             </>
           }

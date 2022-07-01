@@ -78,7 +78,7 @@ export const ReserveBtn = ({
             variables: {
               input: {
                 clinicId: selectedReservation.clinic!.id,
-                patientId: selectedReservation.patient.id,
+                patientId: selectedReservation.patient!.id,
                 memo: selectedReservation.memo,
                 userId: member.id,
                 startDate: label,

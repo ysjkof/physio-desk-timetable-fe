@@ -79,6 +79,21 @@ export type CreateClinicOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type CreateDayOffInput = {
+  clinicId: Scalars['Float'];
+  endDate: Scalars['DateTime'];
+  memo?: InputMaybe<Scalars['String']>;
+  startDate: Scalars['DateTime'];
+  userId: Scalars['Float'];
+};
+
+export type CreateDayOffOutput = {
+  __typename?: 'CreateDayOffOutput';
+  dayOff?: Maybe<Reservation>;
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type CreatePatientInput = {
   birthday?: InputMaybe<Scalars['DateTime']>;
   clinicId?: InputMaybe<Scalars['Int']>;
@@ -112,9 +127,10 @@ export type CreatePrescriptionOutput = {
 export type CreateReservationInput = {
   clinicId: Scalars['Float'];
   endDate: Scalars['DateTime'];
+  isDayoff?: InputMaybe<Scalars['Boolean']>;
   memo?: InputMaybe<Scalars['String']>;
-  patientId: Scalars['Float'];
-  prescriptionIds: Array<Scalars['Float']>;
+  patientId?: InputMaybe<Scalars['Float']>;
+  prescriptionIds?: InputMaybe<Array<Scalars['Float']>>;
   startDate: Scalars['DateTime'];
   userId: Scalars['Float'];
 };
@@ -403,6 +419,7 @@ export type Mutation = {
   createAccount: CreateAccountOutput;
   createAtomPrescription: CreateAtomPrescriptionOutput;
   createClinic: CreateClinicOutput;
+  createDayOff: CreateDayOffOutput;
   createPatient: CreatePatientOutput;
   createPrescription: CreatePrescriptionOutput;
   createReservation: CreateReservationOutput;
@@ -436,6 +453,11 @@ export type MutationCreateAtomPrescriptionArgs = {
 
 export type MutationCreateClinicArgs = {
   input: CreateClinicInput;
+};
+
+
+export type MutationCreateDayOffArgs = {
+  input: CreateDayOffInput;
 };
 
 
@@ -635,14 +657,14 @@ export type QueryUserProfileArgs = {
 
 export type Reservation = {
   __typename?: 'Reservation';
-  clinic?: Maybe<Clinic>;
+  clinic: Clinic;
   createdAt?: Maybe<Scalars['DateTime']>;
   endDate: Scalars['DateTime'];
   id: Scalars['Float'];
   isFirst: Scalars['Boolean'];
-  lastModifier?: Maybe<User>;
+  lastModifier: User;
   memo?: Maybe<Scalars['String']>;
-  patient: Patient;
+  patient?: Maybe<Patient>;
   prescriptions?: Maybe<Array<Prescription>>;
   startDate: Scalars['DateTime'];
   state: ReservationState;
@@ -652,6 +674,7 @@ export type Reservation = {
 
 export enum ReservationState {
   Canceled = 'Canceled',
+  DayOff = 'DayOff',
   NoShow = 'NoShow',
   Reserved = 'Reserved'
 }
@@ -790,6 +813,13 @@ export type CreatePrescriptionMutationVariables = Exact<{
 
 export type CreatePrescriptionMutation = { __typename?: 'Mutation', createPrescription: { __typename?: 'CreatePrescriptionOutput', ok: boolean, error?: string | null } };
 
+export type CreateDayOffMutationVariables = Exact<{
+  input: CreateDayOffInput;
+}>;
+
+
+export type CreateDayOffMutation = { __typename?: 'Mutation', createDayOff: { __typename?: 'CreateDayOffOutput', ok: boolean, error?: string | null } };
+
 export type CreateReservationMutationVariables = Exact<{
   input: CreateReservationInput;
 }>;
@@ -870,7 +900,7 @@ export type GetStatisticsQueryVariables = Exact<{
 }>;
 
 
-export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, visitRates?: Array<{ __typename?: 'VisitRate', patientId: number, visited: Array<boolean> }> | null, dailyReports?: Array<{ __typename?: 'DailyReport', date: any, reservationCount: number, noshow: number, cancel: number, newPatient: number, users: Array<{ __typename?: 'UserInDailyReport', userId: number, reservationCount: number, noshow: number, cancel: number, newPatient: number, visitMoreThanThirty: number, visitMoreThanSixty: number, visitMoreThanNinety: number, prescriptions: Array<{ __typename?: 'getStatisticsOutputPrescription', id: number, name: string, count: number }>, reservations: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, patient: { __typename?: 'Patient', id: number, name: string }, lastModifier?: { __typename?: 'User', id: number, name: string } | null }> }> }> | null } };
+export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, visitRates?: Array<{ __typename?: 'VisitRate', patientId: number, visited: Array<boolean> }> | null, dailyReports?: Array<{ __typename?: 'DailyReport', date: any, reservationCount: number, noshow: number, cancel: number, newPatient: number, users: Array<{ __typename?: 'UserInDailyReport', userId: number, reservationCount: number, noshow: number, cancel: number, newPatient: number, visitMoreThanThirty: number, visitMoreThanSixty: number, visitMoreThanNinety: number, prescriptions: Array<{ __typename?: 'getStatisticsOutputPrescription', id: number, name: string, count: number }>, reservations: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, patient?: { __typename?: 'Patient', id: number, name: string } | null, lastModifier: { __typename?: 'User', id: number, name: string } }> }> }> | null } };
 
 export type InviteClinicMutationVariables = Exact<{
   input: InviteClinicInput;
@@ -891,7 +921,7 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null }, lastModifier?: { __typename?: 'User', id: number, email: string, name: string } | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', id: number, email: string, name: string, updatedAt?: any | null }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -1173,6 +1203,40 @@ export function useCreatePrescriptionMutation(baseOptions?: Apollo.MutationHookO
 export type CreatePrescriptionMutationHookResult = ReturnType<typeof useCreatePrescriptionMutation>;
 export type CreatePrescriptionMutationResult = Apollo.MutationResult<CreatePrescriptionMutation>;
 export type CreatePrescriptionMutationOptions = Apollo.BaseMutationOptions<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>;
+export const CreateDayOffDocument = gql`
+    mutation createDayOff($input: CreateDayOffInput!) {
+  createDayOff(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type CreateDayOffMutationFn = Apollo.MutationFunction<CreateDayOffMutation, CreateDayOffMutationVariables>;
+
+/**
+ * __useCreateDayOffMutation__
+ *
+ * To run a mutation, you first call `useCreateDayOffMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDayOffMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDayOffMutation, { data, loading, error }] = useCreateDayOffMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDayOffMutation(baseOptions?: Apollo.MutationHookOptions<CreateDayOffMutation, CreateDayOffMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDayOffMutation, CreateDayOffMutationVariables>(CreateDayOffDocument, options);
+      }
+export type CreateDayOffMutationHookResult = ReturnType<typeof useCreateDayOffMutation>;
+export type CreateDayOffMutationResult = Apollo.MutationResult<CreateDayOffMutation>;
+export type CreateDayOffMutationOptions = Apollo.BaseMutationOptions<CreateDayOffMutation, CreateDayOffMutationVariables>;
 export const CreateReservationDocument = gql`
     mutation createReservation($input: CreateReservationInput!) {
   createReservation(input: $input) {
@@ -1815,6 +1879,7 @@ export const ListReservationsDocument = gql`
         id
         email
         name
+        updatedAt
       }
       clinic {
         id

@@ -50,7 +50,7 @@ export const Datepicker = ({
   const [minutesUnit, setMinutesUnit] = useState(10); // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
   const [selectedHour, setSelectedHour] = useState(defaultDate.getHours());
   const [selectedMinutes, setSelectedMinutes] = useState(
-    Number(defaultDate.getMinutes().toString().substring(0, 1) + "0")
+    defaultDate.getMinutes()
   );
   const [tableLength, setTableLength] = useState({
     start: { hours: 9, minutes: 0 },
