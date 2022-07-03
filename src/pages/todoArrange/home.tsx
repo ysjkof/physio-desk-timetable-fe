@@ -110,16 +110,11 @@ export function Home() {
     },
   });
 
-  let prescriptions: PrescriptionWithSelect[] = [];
-  useEffect(() => {
-    if (prescriptionsData) {
-      prescriptions =
-        prescriptionsData.findPrescriptions.prescriptions?.map((presc) => ({
-          ...presc,
-          isSelect: false,
-        })) ?? [];
-    }
-  }, [prescriptionsData]);
+  let prescriptions: PrescriptionWithSelect[] =
+    prescriptionsData?.findPrescriptions.prescriptions!.map((presc) => ({
+      ...presc,
+      isSelect: false,
+    })) ?? [];
 
   function createDummyReserve() {
     const firstDate = new Date("2022-7-1");
@@ -132,7 +127,7 @@ export function Home() {
 
       const patients = allPatients?.findAllPatients.results!;
 
-      times.forEach((t) => {
+      times.forEach((time) => {
         const patientRandom = Math.floor(
           Math.random() * (patients?.length! ?? 0)
         );
@@ -141,11 +136,12 @@ export function Home() {
         );
         const patientId = patients[patientRandom].id;
         const userId = selectedClinic?.members[memberRandon].user.id!;
+
         createReservationMutation({
           variables: {
             input: {
-              startDate: t[0],
-              endDate: t[1],
+              startDate: time[0],
+              endDate: time[1],
               patientId,
               userId,
               clinicId: selectedClinic!.id,
