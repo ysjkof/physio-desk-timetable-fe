@@ -162,28 +162,34 @@ export function TableClinicSelector() {
                   clinic.id === selectedClinic.id ? "" : "pointer-events-none"
                 )}
               >
-                {clinic.members.map((member, i) => (
-                  <BtnMenu
-                    key={i}
-                    label={member.user.name}
-                    isWidthFull
-                    enabled={
-                      clinic.id === selectedClinic.id && member.isActivate
-                    }
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        fontSize={16}
-                        className={`${
-                          clinic.id === selectedClinic.id && member.isActivate
-                            ? "text-green-500"
-                            : ""
-                        }`}
-                      />
-                    }
-                    onClick={() => onClickToggleUser(clinic.id, member.id)}
-                  />
-                ))}
+                {clinic.members
+                  .sort((a, b) => {
+                    if (a.user.name > b.user.name) return 1;
+                    if (a.user.name < b.user.name) return -1;
+                    return 0;
+                  })
+                  .map((member, i) => (
+                    <BtnMenu
+                      key={i}
+                      label={member.user.name}
+                      isWidthFull
+                      enabled={
+                        clinic.id === selectedClinic.id && member.isActivate
+                      }
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faCheckCircle}
+                          fontSize={16}
+                          className={`${
+                            clinic.id === selectedClinic.id && member.isActivate
+                              ? "text-green-500"
+                              : ""
+                          }`}
+                        />
+                      }
+                      onClick={() => onClickToggleUser(clinic.id, member.id)}
+                    />
+                  ))}
               </ul>
             </div>
           ))

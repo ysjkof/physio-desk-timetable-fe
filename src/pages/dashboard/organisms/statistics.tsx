@@ -17,7 +17,6 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { getMonthStartEnd } from "../../../libs/timetable-utils";
-import { Loading } from "../../../components/atoms/loading";
 
 type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
 export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
@@ -134,11 +133,17 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
   useEffect(() => {
     setMemberState(
-      selectedClinic?.members?.map((m) => ({
-        userId: m.user.id,
-        name: m.user.name,
-        isSelected: true,
-      }))
+      selectedClinic?.members
+        ?.map((m) => ({
+          userId: m.user.id,
+          name: m.user.name,
+          isSelected: true,
+        }))
+        .sort((a, b) => {
+          if (a.name > b.name) return 1;
+          if (a.name < b.name) return -1;
+          return 0;
+        })
     );
   }, [selectedClinic]);
 
@@ -286,7 +291,11 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         const flatReports = flattening(dailyReports);
         const objReport = combineSameUser(flatReports);
         const arrReport = convertObjToArr(objReport);
-        return arrReport;
+        return arrReport.sort((a, b) => {
+          if (a.name > b.name) return 1;
+          if (a.name < b.name) return -1;
+          return 0;
+        });
       }
 
       const newUserStatistics = combineUserStatistics();

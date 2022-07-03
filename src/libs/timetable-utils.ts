@@ -24,7 +24,11 @@ export const spreadClinicMembers = (
     const newMember = clinic.members.map((member) => member);
     result.push(...newMember);
   }
-  return result;
+  return result.sort((a, b) => {
+    if (a.user.name > b.user.name) return 1;
+    if (a.user.name < b.user.name) return -1;
+    return 0;
+  });
 };
 
 export const compareNumAfterGetMinutes = (
