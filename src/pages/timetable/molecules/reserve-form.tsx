@@ -1,7 +1,7 @@
 import { useReactiveVar } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { TimetableModalProps } from "..";
@@ -28,39 +28,6 @@ import { DatepickerForm } from "../../../components/molecules/datepicker";
 import { SelectUser } from "./select-user";
 import { Input } from "../../../components/molecules/input";
 import { DayOffForm } from "./day-off-form";
-
-function getOneDayReservationInputDateForTest(
-  inputStartDate: Date,
-  inputPresc: { id: number; requiredTime: number; name: string }
-) {
-  const numberOfReservationsPerDay = Math.floor(Math.random() * 8);
-  const startDate = new Date(inputStartDate);
-  const dates: Date[] = [];
-  dates.length = numberOfReservationsPerDay;
-  dates.fill(startDate);
-
-  return dates.map((d) => {
-    const sd = new Date(d);
-    const ed = new Date(d);
-    let th = Math.floor(Math.random() * (19 - 9) + 9);
-    let tm = Math.floor(Math.random() * 6) * 10;
-    while (dates.find((dateInWhile) => dateInWhile.getHours() === th)) {
-      th = Math.floor(Math.random() * (19 - 9) + 9);
-    }
-    tm === 6 ? (tm = 0) : "";
-    sd.setHours(th, tm, 0, 0);
-    ed.setHours(th, tm + inputPresc.requiredTime, 0, 0);
-    return [sd, ed];
-  });
-}
-function selectPrescriptionForTest(inputPresc: PrescriptionWithSelect[]) {
-  const selected = inputPresc[Math.floor(Math.random() * inputPresc.length)];
-  return {
-    id: selected.id,
-    name: selected.name,
-    requiredTime: selected.requiredTime,
-  };
-}
 
 export interface ISelectedPrescription {
   price: number;
@@ -90,7 +57,6 @@ export const ReserveForm = ({
   reservation,
   isDayoff,
 }: IReservaFromProps) => {
-  const navigate = useNavigate();
   const selectedPatient = useReactiveVar(selectedPatientVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const [selectedPrescription, setSelectedPrescription] =
@@ -145,7 +111,7 @@ export const ReserveForm = ({
 
   const [
     createReservationMutation,
-    { loading, data: createReservationResult },
+    { loading: createLoading, data: createReservationResult },
   ] = useCreateReservationMutation({ onCompleted: createOnCompleted });
 
   const [
@@ -153,38 +119,8 @@ export const ReserveForm = ({
     { loading: editLoading, data: editReservationResult },
   ] = useEditReservationMutation({ onCompleted: editOnComplete });
 
-  function createDummyReserve(userId: number | undefined) {
-    const firstDate = new Date("2022-6-1");
-    let countSum = 0;
-    for (let i = 0; i < 30; i++) {
-      console.log(`${i + 1}일`);
-      firstDate.setDate(i + 1);
-      const presc = selectPrescriptionForTest(prescriptions);
-      const times = getOneDayReservationInputDateForTest(firstDate, presc);
-      countSum = countSum + times.length;
-      console.log(times, times.length);
-      times.forEach((t) => {
-        createReservationMutation({
-          variables: {
-            input: {
-              startDate: t[0],
-              endDate: t[1],
-              patientId: selectedPatient!.id,
-              userId: +userId!,
-              clinicId: selectedClinic!.id,
-              prescriptionIds: [presc.id],
-            },
-          },
-        });
-      });
-    }
-    console.log("총 생성된 예약 : ", countSum);
-  }
-
   const onSubmit = () => {
-    console.log("onSubmit 시작");
-    if (!loading) {
-      console.log("onSubmit if 통과");
+    if (!createLoading) {
       const {
         startDateYear,
         startDateMonth,
@@ -207,6 +143,7 @@ export const ReserveForm = ({
         startDateHours!,
         startDateMinutes!
       );
+
       if (!startDate) throw new Error("startDate가 없습니다");
 
       if (isDayOff) {
@@ -218,38 +155,40 @@ export const ReserveForm = ({
           endDateMinutes!
         );
         if (reservation) {
-          callEditReservation({
-            variables: {
-              input: {
-                startDate,
-                endDate,
-                memo,
-                userId: +userId!,
-                reservationId: reservation.id,
+          if (!editLoading)
+            callEditReservation({
+              variables: {
+                input: {
+                  startDate,
+                  endDate,
+                  memo,
+                  userId: +userId!,
+                  reservationId: reservation.id,
+                },
               },
-            },
-            refetchQueries: [
-              { query: ListReservationsDocument },
-              "listReservations",
-            ],
-          });
+              refetchQueries: [
+                { query: ListReservationsDocument },
+                "listReservations",
+              ],
+            });
         } else {
-          createReservationMutation({
-            variables: {
-              input: {
-                startDate,
-                endDate,
-                memo,
-                isDayoff: true,
-                userId: +userId!,
-                clinicId: selectedClinic!.id,
+          if (!createLoading)
+            createReservationMutation({
+              variables: {
+                input: {
+                  startDate,
+                  endDate,
+                  memo,
+                  isDayoff: true,
+                  userId: +userId!,
+                  clinicId: selectedClinic!.id,
+                },
               },
-            },
-            refetchQueries: [
-              { query: ListReservationsDocument },
-              "listReservations",
-            ],
-          });
+              refetchQueries: [
+                { query: ListReservationsDocument },
+                "listReservations",
+              ],
+            });
         }
         return;
       }
@@ -258,41 +197,42 @@ export const ReserveForm = ({
       endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
       if (reservation) {
         // reservation이 있으면 edit모드
-        callEditReservation({
-          variables: {
-            input: {
-              startDate,
-              endDate,
-              memo,
-              userId: +userId!,
-              reservationId: reservation.id,
-              prescriptionIds: selectedPrescription.prescriptions,
+        if (!editLoading)
+          callEditReservation({
+            variables: {
+              input: {
+                startDate,
+                endDate,
+                memo,
+                userId: +userId!,
+                reservationId: reservation.id,
+                prescriptionIds: selectedPrescription.prescriptions,
+              },
             },
-          },
-          refetchQueries: [
-            { query: ListReservationsDocument },
-            "listReservations",
-          ],
-        });
+            refetchQueries: [
+              { query: ListReservationsDocument },
+              "listReservations",
+            ],
+          });
       } else {
-        // createDummyReserve(userId);
-        createReservationMutation({
-          variables: {
-            input: {
-              startDate,
-              endDate,
-              memo,
-              userId: +userId!,
-              clinicId: selectedClinic!.id,
-              patientId: selectedPatient!.id,
-              prescriptionIds: selectedPrescription.prescriptions,
+        if (!createLoading)
+          createReservationMutation({
+            variables: {
+              input: {
+                startDate,
+                endDate,
+                memo,
+                userId: +userId!,
+                clinicId: selectedClinic!.id,
+                patientId: selectedPatient!.id,
+                prescriptionIds: selectedPrescription.prescriptions,
+              },
             },
-          },
-          refetchQueries: [
-            { query: ListReservationsDocument },
-            "listReservations",
-          ],
-        });
+            refetchQueries: [
+              { query: ListReservationsDocument },
+              "listReservations",
+            ],
+          });
       }
     }
   };
@@ -384,7 +324,7 @@ export const ReserveForm = ({
           setValue={setValue}
           errors={errors}
           isValid={isValid}
-          loading={loading}
+          loading={createLoading && editLoading}
           reservation={reservation}
         />
       )}
@@ -500,7 +440,7 @@ export const ReserveForm = ({
               isValid &&
               selectedPrescription.prescriptions.length >= 1
             }
-            loading={loading}
+            loading={createLoading && editLoading}
             textContents={reservation ? "예약수정" : "예약하기"}
           />
           {createReservationResult?.createReservation.error && (
@@ -509,7 +449,7 @@ export const ReserveForm = ({
             />
           )}
         </>
-      )}{" "}
+      )}
     </form>
   );
 };

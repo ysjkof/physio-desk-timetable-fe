@@ -216,6 +216,7 @@ export type EditReservationOutput = {
 };
 
 export type FindAllPatientsInput = {
+  clinicId: Scalars['Int'];
   page?: InputMaybe<Scalars['Int']>;
 };
 
@@ -792,6 +793,13 @@ export type CreateAtomPrescriptionMutationVariables = Exact<{
 
 export type CreateAtomPrescriptionMutation = { __typename?: 'Mutation', createAtomPrescription: { __typename?: 'CreateAtomPrescriptionOutput', ok: boolean, error?: string | null } };
 
+export type CreateDayOffMutationVariables = Exact<{
+  input: CreateDayOffInput;
+}>;
+
+
+export type CreateDayOffMutation = { __typename?: 'Mutation', createDayOff: { __typename?: 'CreateDayOffOutput', ok: boolean, error?: string | null } };
+
 export type CreateClinicMutationVariables = Exact<{
   input: CreateClinicInput;
 }>;
@@ -812,13 +820,6 @@ export type CreatePrescriptionMutationVariables = Exact<{
 
 
 export type CreatePrescriptionMutation = { __typename?: 'Mutation', createPrescription: { __typename?: 'CreatePrescriptionOutput', ok: boolean, error?: string | null } };
-
-export type CreateDayOffMutationVariables = Exact<{
-  input: CreateDayOffInput;
-}>;
-
-
-export type CreateDayOffMutation = { __typename?: 'Mutation', createDayOff: { __typename?: 'CreateDayOffOutput', ok: boolean, error?: string | null } };
 
 export type CreateReservationMutationVariables = Exact<{
   input: CreateReservationInput;
@@ -1093,6 +1094,40 @@ export function useCreateAtomPrescriptionMutation(baseOptions?: Apollo.MutationH
 export type CreateAtomPrescriptionMutationHookResult = ReturnType<typeof useCreateAtomPrescriptionMutation>;
 export type CreateAtomPrescriptionMutationResult = Apollo.MutationResult<CreateAtomPrescriptionMutation>;
 export type CreateAtomPrescriptionMutationOptions = Apollo.BaseMutationOptions<CreateAtomPrescriptionMutation, CreateAtomPrescriptionMutationVariables>;
+export const CreateDayOffDocument = gql`
+    mutation createDayOff($input: CreateDayOffInput!) {
+  createDayOff(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type CreateDayOffMutationFn = Apollo.MutationFunction<CreateDayOffMutation, CreateDayOffMutationVariables>;
+
+/**
+ * __useCreateDayOffMutation__
+ *
+ * To run a mutation, you first call `useCreateDayOffMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDayOffMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDayOffMutation, { data, loading, error }] = useCreateDayOffMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateDayOffMutation(baseOptions?: Apollo.MutationHookOptions<CreateDayOffMutation, CreateDayOffMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDayOffMutation, CreateDayOffMutationVariables>(CreateDayOffDocument, options);
+      }
+export type CreateDayOffMutationHookResult = ReturnType<typeof useCreateDayOffMutation>;
+export type CreateDayOffMutationResult = Apollo.MutationResult<CreateDayOffMutation>;
+export type CreateDayOffMutationOptions = Apollo.BaseMutationOptions<CreateDayOffMutation, CreateDayOffMutationVariables>;
 export const CreateClinicDocument = gql`
     mutation createClinic($input: CreateClinicInput!) {
   createClinic(input: $input) {
@@ -1203,40 +1238,6 @@ export function useCreatePrescriptionMutation(baseOptions?: Apollo.MutationHookO
 export type CreatePrescriptionMutationHookResult = ReturnType<typeof useCreatePrescriptionMutation>;
 export type CreatePrescriptionMutationResult = Apollo.MutationResult<CreatePrescriptionMutation>;
 export type CreatePrescriptionMutationOptions = Apollo.BaseMutationOptions<CreatePrescriptionMutation, CreatePrescriptionMutationVariables>;
-export const CreateDayOffDocument = gql`
-    mutation createDayOff($input: CreateDayOffInput!) {
-  createDayOff(input: $input) {
-    ok
-    error
-  }
-}
-    `;
-export type CreateDayOffMutationFn = Apollo.MutationFunction<CreateDayOffMutation, CreateDayOffMutationVariables>;
-
-/**
- * __useCreateDayOffMutation__
- *
- * To run a mutation, you first call `useCreateDayOffMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDayOffMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDayOffMutation, { data, loading, error }] = useCreateDayOffMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateDayOffMutation(baseOptions?: Apollo.MutationHookOptions<CreateDayOffMutation, CreateDayOffMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateDayOffMutation, CreateDayOffMutationVariables>(CreateDayOffDocument, options);
-      }
-export type CreateDayOffMutationHookResult = ReturnType<typeof useCreateDayOffMutation>;
-export type CreateDayOffMutationResult = Apollo.MutationResult<CreateDayOffMutation>;
-export type CreateDayOffMutationOptions = Apollo.BaseMutationOptions<CreateDayOffMutation, CreateDayOffMutationVariables>;
 export const CreateReservationDocument = gql`
     mutation createReservation($input: CreateReservationInput!) {
   createReservation(input: $input) {
