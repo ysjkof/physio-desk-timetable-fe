@@ -1,6 +1,6 @@
 import React from "react";
 import { DashboardSectionLayout } from "../components/section-layout";
-import { getHowManyDayFromMillisec } from "../../../libs/utils";
+import { getHowManyDayFromMillisec, getRandomColor } from "../../../libs/utils";
 import {
   VictoryAxis,
   VictoryBar,
@@ -208,25 +208,31 @@ const Charts = ({
                     offset={28 / userLength}
                     // style={{ data: { width: 10, strokeWidth: 2 } }}
                   >
-                    {userLengthArr.map((aa, idx) => (
-                      <VictoryBar
-                        key={idx}
-                        // alignment="start"
-                        // barRatio={1}
-                        data={finalDailyReports.map((day) => ({
-                          x: day.date,
-                          y: day.users[idx] ? day.users[idx][label] : 0,
-                        }))}
-                        style={{
-                          data: {
-                            stroke: USER_COLORS[idx]?.deep ?? "",
-                            fill: USER_COLORS[idx]?.light ?? "",
-                          },
-                        }}
-                        labels={({ datum }) => datum.y}
-                        labelComponent={<VictoryTooltip />}
-                      />
-                    ))}
+                    {userLengthArr.map((aa, idx) => {
+                      const randomColor = getRandomColor();
+                      const stroke = USER_COLORS[idx]?.deep ?? randomColor;
+                      const fill = USER_COLORS[idx]?.deep ?? randomColor;
+
+                      return (
+                        <VictoryBar
+                          key={idx}
+                          // alignment="start"
+                          // barRatio={1}
+                          data={finalDailyReports.map((day) => ({
+                            x: day.date,
+                            y: day.users[idx] ? day.users[idx][label] : 0,
+                          }))}
+                          style={{
+                            data: {
+                              stroke,
+                              fill,
+                            },
+                          }}
+                          labels={({ datum }) => datum.y}
+                          labelComponent={<VictoryTooltip />}
+                        />
+                      );
+                    })}
                   </VictoryGroup>
                   <VictoryAxis
                     dependentAxis
