@@ -10,13 +10,15 @@ import { selectedClinicVar, selectedDateVar } from "../../../store";
 import { useReactiveVar } from "@apollo/client";
 import { BtnMenu } from "../../../components/molecules/button-menu";
 import { Worning } from "../../../components/atoms/warning";
-import { Charts } from "../molecules/charts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { getMonthStartEnd } from "../../../libs/timetable-utils";
+import { Loading } from "../../../components/atoms/loading";
+import Charts from "../molecules/charts";
+import { Button } from "../../../components/molecules/button";
 
 type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
 export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
@@ -74,15 +76,10 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   const [endDate, setEndDate] = useState(initialDate[1]);
 
   const [memberState, setMemberState] = useState<MemberState[]>();
+  const [userIds, setUserIds] = useState<number[]>([]);
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);
-
-  const userIds = memberState
-    ? memberState
-        .filter((member) => member.isSelected)
-        .map((member) => member.userId)
-    : [];
 
   const {
     data,
@@ -129,6 +126,16 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       },
     });
     return startDate;
+  }
+
+  function onSubmit() {
+    if (memberState) {
+      setUserIds(
+        memberState
+          .filter((member) => member.isSelected)
+          .map((member) => member.userId)
+      );
+    }
   }
 
   useEffect(() => {
@@ -310,12 +317,6 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         elementName="date-picker"
         children={
           <div className="flex flex-col items-center justify-center gap-x-4 gap-y-1">
-            {/* {userStatistics && (
-              <span className="position-center-x absolute text-blue-700">
-                {startDate.toLocaleDateString()} ~{" "}
-                {endDate.toLocaleDateString()}
-              </span>
-            )} */}
             <div className="flex w-full justify-between gap-4">
               <div className="flex items-center">
                 <BtnMenu
@@ -372,18 +373,28 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     thinFont
                     enabled={m.isSelected}
                     onClick={() => {
+                      if (loadingStatisticsData) return;
                       memberState[i].isSelected = !memberState[i].isSelected;
                       setMemberState([...memberState]);
                     }}
                   />
                 ))}
+                <Button
+                  canClick={!loadingStatisticsData}
+                  loading={loadingStatisticsData}
+                  textContents="조회하기"
+                  type="button"
+                  isSmall
+                  onClick={onSubmit}
+                ></Button>
               </div>
             )}
           </div>
         }
       />
-
-      {userStatistics &&
+      {loadingStatisticsData && <Loading />}
+      {!loadingStatisticsData &&
+      userStatistics &&
       data &&
       data.getStatistics.prescriptions &&
       data.getStatistics.dailyReports ? (
@@ -406,10 +417,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
         </>
       ) : userIds.length === 0 ? (
         <Worning type="emptyUserIds" />
-      ) : (
-        // <Loading />
-        <Worning type="emptyData" />
-      )}
+      ) : null}
     </>
   );
 };
