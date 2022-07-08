@@ -222,7 +222,7 @@ export function getMonthStartEnd(date: Date) {
   startDate.setDate(1);
   endDate.setMonth(endDate.getMonth() + 1);
   endDate.setDate(0);
-  endDate.setMinutes(23, 59, 999);
+  endDate.setHours(23, 59, 59, 999);
   return [startDate, endDate];
 }
 
