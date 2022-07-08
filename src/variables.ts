@@ -55,26 +55,16 @@ export const RESERVATION_STATE_KOR = {
 };
 
 // 통계
-export const STATISTICS_LABEL_KOR = [
-  "예약",
-  "신규",
-  "부도",
-  "취소",
-  "방문한지 30일 경과",
-];
-export const STATISTICS_LABEL_ENG: STATISTICS_LABEL[] = [
-  "reservationCount",
-  "newPatient",
-  "noshow",
-  "cancel",
-  "visitMoreThanThirty",
-];
-export type STATISTICS_LABEL =
-  | "reservationCount"
-  | "newPatient"
-  | "noshow"
-  | "cancel"
-  | "visitMoreThanThirty";
+export const STATISTICS_LABEL = {
+  reservationCount: { kor: "예약", eng: "reservationCount" } as const,
+  newPatient: { kor: "신규", eng: "newPatient" } as const,
+  noshow: { kor: "부도", eng: "noshow" } as const,
+  cancel: { kor: "취소", eng: "cancel" } as const,
+  visitMoreThanThirty: {
+    kor: "방문한지 30일 경과",
+    eng: "visitMoreThanThirty",
+  } as const,
+};
 
 export const STATISTICS_LABEL_COLORS = [
   ["#233d4d", "#fcca46", "#a1c181", "#fe7f2d", "#619b8a"],

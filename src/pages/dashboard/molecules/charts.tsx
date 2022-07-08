@@ -22,8 +22,6 @@ import {
 import {
   STATISTICS_LABEL,
   STATISTICS_LABEL_COLORS,
-  STATISTICS_LABEL_ENG,
-  STATISTICS_LABEL_KOR,
   USER_COLORS,
 } from "../../../variables";
 import { useEffect, useState } from "react";
@@ -37,20 +35,6 @@ interface IChartsProps {
   endDate: Date;
 }
 
-function getCountsLabelsToKor(prescriptionName: STATISTICS_LABEL) {
-  switch (prescriptionName) {
-    case "reservationCount":
-      return "예약";
-    case "newPatient":
-      return "신규";
-    case "noshow":
-      return "부도";
-    case "cancel":
-      return "취소";
-    case "visitMoreThanThirty":
-      return "방문한지 30일 경과";
-  }
-}
 function injectEveryDayToDailyRreports(
   dailyReports: IDailyReport[],
   startD: Date,
@@ -181,7 +165,7 @@ const Charts = ({
         />
       </div>
       <div className="EVERYDAY_COUNTS">
-        {STATISTICS_LABEL_ENG.map((label, i) => (
+        {Object.values(STATISTICS_LABEL).map(({ eng, kor }, i) => (
           <DashboardSectionLayout
             key={i}
             padding
@@ -198,7 +182,7 @@ const Charts = ({
                 >
                   <VictoryLegend
                     x={80}
-                    title={`일별 ${getCountsLabelsToKor(label)}`}
+                    title={`일별 ${kor}`}
                     centerTitle
                     style={{ title: { fontSize: 14 } }}
                     data={[]}
@@ -220,7 +204,7 @@ const Charts = ({
                           // barRatio={1}
                           data={finalDailyReports.map((day) => ({
                             x: day.date,
-                            y: day.users[idx] ? day.users[idx][label] : 0,
+                            y: day.users[idx] ? day.users[idx][eng] : 0,
                           }))}
                           style={{
                             data: {
@@ -278,7 +262,9 @@ const Charts = ({
                 prescriptionInfo={prescriptions}
                 dailyReports={dailyReports}
                 renderIt={"counts"}
-                labelNames={STATISTICS_LABEL_KOR}
+                labelNames={Object.values(STATISTICS_LABEL).map(
+                  ({ kor }) => kor
+                )}
                 hasTotalInRow
               />
             </>
@@ -294,8 +280,8 @@ const Charts = ({
                 height={24}
                 orientation="horizontal"
                 gutter={30}
-                data={STATISTICS_LABEL_KOR.map((label) => ({
-                  name: label,
+                data={Object.values(STATISTICS_LABEL).map(({ kor }) => ({
+                  name: kor,
                 }))}
                 labelComponent={<VictoryLabel style={{ fontSize: 10 }} />}
                 colorScale={STATISTICS_LABEL_COLORS[0]}
