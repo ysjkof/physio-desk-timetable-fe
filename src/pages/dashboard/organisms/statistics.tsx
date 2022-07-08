@@ -67,14 +67,13 @@ export interface MemberState {
 interface ModifiedDatepickerForm extends DatepickerForm {
   userIds?: number[];
 }
-const initialDate = getMonthStartEnd(new Date());
+const [initialStartDate, initailEndDate] = getMonthStartEnd(new Date());
 
 export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const selectedDate = useReactiveVar(selectedDateVar);
-  const [startDate, setStartDate] = useState(initialDate[0]);
-  const [endDate, setEndDate] = useState(initialDate[1]);
-
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endDate, setEndDate] = useState(initailEndDate);
   const [memberState, setMemberState] = useState<MemberState[]>();
   const [userIds, setUserIds] = useState<number[]>([]);
   const [userStatistics, setUserStatistics] = useState<
