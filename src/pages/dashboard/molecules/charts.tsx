@@ -1,11 +1,10 @@
 import React from "react";
 import { DashboardSectionLayout } from "../components/section-layout";
-import { getHowManyDayFromMillisec, getRandomColor } from "../../../libs/utils";
+import { getHowManyDayFromMillisec } from "../../../libs/utils";
 import {
   VictoryAxis,
   VictoryBar,
   VictoryChart,
-  VictoryGroup,
   VictoryLabel,
   VictoryLegend,
   VictoryPie,
@@ -19,11 +18,7 @@ import {
   IDailyReport,
   IUserStatistics,
 } from "../organisms/statistics";
-import {
-  STATISTICS_LABEL,
-  STATISTICS_LABEL_COLORS,
-  USER_COLORS,
-} from "../../../variables";
+import { STATISTICS_LABEL, STATISTICS_LABEL_COLORS } from "../../../variables";
 import { useEffect, useState } from "react";
 import { Loading } from "../../../components/atoms/loading";
 
@@ -187,37 +182,19 @@ const Charts = ({
                     style={{ title: { fontSize: 14 } }}
                     data={[]}
                   />
-                  <VictoryGroup
-                    // offset={10}
-                    offset={28 / userLength}
-                    // style={{ data: { width: 10, strokeWidth: 2 } }}
-                  >
-                    {userLengthArr.map((aa, idx) => {
-                      const randomColor = getRandomColor();
-                      const stroke = USER_COLORS[idx]?.deep ?? randomColor;
-                      const fill = USER_COLORS[idx]?.deep ?? randomColor;
+                  <VictoryBar
+                    // alignment="start"
+                    // barRatio={1}
+                    data={finalDailyReports.map((day) => ({
+                      x: day.date,
+                      y: day.users.reduce((acc, cur) => {
+                        return acc + cur[eng];
+                      }, 0),
+                    }))}
+                    labels={({ datum }) => datum.y}
+                    labelComponent={<VictoryTooltip />}
+                  />
 
-                      return (
-                        <VictoryBar
-                          key={idx}
-                          // alignment="start"
-                          // barRatio={1}
-                          data={finalDailyReports.map((day) => ({
-                            x: day.date,
-                            y: day.users[idx] ? day.users[idx][eng] : 0,
-                          }))}
-                          style={{
-                            data: {
-                              stroke,
-                              fill,
-                            },
-                          }}
-                          labels={({ datum }) => datum.y}
-                          labelComponent={<VictoryTooltip />}
-                        />
-                      );
-                    })}
-                  </VictoryGroup>
                   <VictoryAxis
                     dependentAxis
                     style={{
