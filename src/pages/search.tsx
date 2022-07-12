@@ -1,8 +1,8 @@
 import { Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SearchName } from "../../components/search-name";
-import { useSearchPatientLazyQuery } from "../../graphql/generated/graphql";
+import { SearchName } from "../components/search-name";
+import { useSearchPatientLazyQuery } from "../graphql/generated/graphql";
 
 export const Search = () => {
   const location = useLocation();

@@ -1,7 +1,7 @@
 import { useReactiveVar } from "@apollo/client";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { isLoggedInVar } from "../../apollo";
+import { isLoggedInVar } from "../apollo";
 import {
   useCreateAccountMutation,
   useCreateAtomPrescriptionMutation,
@@ -12,12 +12,12 @@ import {
   useFindAllPatientsQuery,
   useFindPrescriptionsQuery,
   useInviteClinicMutation,
-} from "../../graphql/generated/graphql";
+} from "../graphql/generated/graphql";
 import {
   loggedInUserVar,
   PrescriptionWithSelect,
   selectedClinicVar,
-} from "../../store";
+} from "../store";
 
 const clinicId = 23;
 const makeAccount = (email: string, name: string) => ({

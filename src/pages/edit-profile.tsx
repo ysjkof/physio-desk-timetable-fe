@@ -1,13 +1,13 @@
 import { gql, useApolloClient } from "@apollo/client";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Button } from "../../components/molecules/button";
-import { useMe } from "../../hooks/useMe";
+import { Button } from "../components/molecules/button";
+import { useMe } from "../hooks/useMe";
 import {
   EditProfileInput,
   EditProfileMutation,
   useEditProfileMutation,
-} from "../../graphql/generated/graphql";
+} from "../graphql/generated/graphql";
 
 export const EditProfile = () => {
   const { data: userData } = useMe();

@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import {
   useVerifyEmailMutation,
   VerifyEmailMutation,
-} from "../../graphql/generated/graphql";
-import { useMe } from "../../hooks/useMe";
+} from "../graphql/generated/graphql";
+import { useMe } from "../hooks/useMe";
 
 export const ConfirmEmail = () => {
   const { data: userData } = useMe();

@@ -5,12 +5,12 @@ import {
   LoginInput,
   LoginMutation,
   useLoginMutation,
-} from "../../graphql/generated/graphql";
-import { LOCALSTORAGE_TOKEN, REGEX_EMAIL } from "../../variables";
-import { authTokenVar, isLoggedInVar } from "../../apollo";
-import { FormError } from "../../components/form-error";
-import { Button } from "../../components/molecules/button";
-import { Input } from "../../components/molecules/input";
+} from "../graphql/generated/graphql";
+import { LOCALSTORAGE_TOKEN, REGEX_EMAIL } from "../variables";
+import { authTokenVar, isLoggedInVar } from "../apollo";
+import { FormError } from "../components/form-error";
+import { Button } from "../components/molecules/button";
+import { Input } from "../components/molecules/input";
 
 export const Login = () => {
   const navigate = useNavigate();

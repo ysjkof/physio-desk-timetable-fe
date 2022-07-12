@@ -1,15 +1,15 @@
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../components/molecules/button";
-import { FormError } from "../../components/form-error";
+import { Button } from "../components/molecules/button";
+import { FormError } from "../components/form-error";
 import {
   CreateAccountInput,
   CreateAccountMutation,
   useCreateAccountMutation,
-} from "../../graphql/generated/graphql";
-import { Input } from "../../components/molecules/input";
-import { REGEX_EMAIL } from "../../variables";
+} from "../graphql/generated/graphql";
+import { Input } from "../components/molecules/input";
+import { REGEX_EMAIL } from "../variables";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 
