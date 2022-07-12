@@ -19,6 +19,7 @@ import { getMonthStartEnd } from "../../../libs/timetable-utils";
 import { Loading } from "../../../components/atoms/loading";
 import Charts from "../molecules/charts";
 import { Button } from "../../../components/molecules/button";
+import combineUserStatistics from "../../../libs/useStatistics";
 
 type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
 export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
@@ -26,7 +27,7 @@ export type IUserInDaily = IDailyReport["users"][0];
 
 type IDailyPrescriptions = GetStatisticsQuery["getStatistics"]["prescriptions"];
 export type IDailyPrescription = NonNullable<FlatArray<IDailyPrescriptions, 0>>;
-interface IDailyPrescriptionWithCount extends IDailyPrescription {
+export interface IDailyPrescriptionWithCount extends IDailyPrescription {
   count: number;
 }
 export type IPrescriptionOfUser = IDailyReport["users"][0]["prescriptions"][0];
@@ -163,148 +164,11 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       console.log("visitRates", visitRates);
       console.log("memberState", memberState);
 
-      function combineUserStatistics() {
-        const flattening = (reports: IDailyReport[]) =>
-          reports.map((day) => day.users).flat(1);
-        const combineSameUser = (
-          flatReports: ReturnType<typeof flattening>
-        ) => {
-          const obj: {
-            [key: string]: {
-              reservationCount: number;
-              newPatient: number;
-              noshow: number;
-              cancel: number;
-              visitMoreThanThirty: number;
-              prescriptions: IDailyPrescriptionWithCount[];
-            };
-          } = {};
-
-          flatReports.forEach((user) => {
-            const userKey = user.userId;
-
-            function makePrescriptionList(): IDailyPrescriptionWithCount[] {
-              return prescriptions.map((prescription) => ({
-                id: prescription.id,
-                name: prescription.name,
-                count: 0,
-                price: 0,
-                requiredTime: 0,
-              }));
-            }
-            function combinePrescriptions(
-              prevPrescriptions: IDailyPrescriptionWithCount[],
-              nextPrescriptions: IPrescriptionOfUser[]
-            ) {
-              nextPrescriptions.forEach((prescription) => {
-                const idx = prevPrescriptions.findIndex(
-                  (prevPrescription) => prevPrescription.id === prescription.id
-                );
-                if (idx !== -1) {
-                  prevPrescriptions[idx].count =
-                    prevPrescriptions[idx].count + prescription.count;
-                  prevPrescriptions[idx].price = 0;
-                  prevPrescriptions[idx].requiredTime = 0;
-                }
-              });
-              return prevPrescriptions;
-            }
-
-            const prevPrescriptions = obj[userKey]
-              ? obj[userKey].prescriptions
-              : makePrescriptionList();
-            const nextPrescription = user.prescriptions;
-            const injectedCount = combinePrescriptions(
-              prevPrescriptions,
-              nextPrescription
-            );
-            const injectedOther = injectedCount.map((prescription) => {
-              const selectedPrescription = prescriptions.find(
-                (prescriptionInList) =>
-                  prescriptionInList.id === prescription.id
-              );
-              if (!selectedPrescription)
-                throw new Error("처방을 찾을 수 없습니다");
-              return {
-                ...prescription,
-                price: prescription.count * selectedPrescription.price,
-                requiredTime:
-                  prescription.count * selectedPrescription.requiredTime,
-              };
-            });
-
-            if (obj[userKey]) {
-              obj[userKey] = {
-                reservationCount:
-                  obj[userKey].reservationCount + user.reservationCount,
-                newPatient: obj[userKey].newPatient + user.newPatient,
-                noshow: obj[userKey].noshow + user.noshow,
-                cancel: obj[userKey].cancel + user.cancel,
-                visitMoreThanThirty:
-                  obj[userKey].visitMoreThanThirty + user.visitMoreThanThirty,
-                prescriptions: injectedOther,
-              };
-            } else {
-              obj[userKey] = {
-                reservationCount: user.reservationCount,
-                newPatient: user.newPatient,
-                noshow: user.noshow,
-                cancel: user.cancel,
-                visitMoreThanThirty: user.visitMoreThanThirty,
-                prescriptions: injectedOther,
-              };
-            }
-          });
-          return obj;
-        };
-        const convertObjToArr = (
-          objReport: ReturnType<typeof combineSameUser>
-        ) => {
-          const toArrReport = Object.entries(objReport);
-          const injectUserName = toArrReport.map(([userId, reports]) => {
-            function injectUserName() {
-              const member = memberState?.find(
-                (member) => member.userId === +userId
-              );
-              return member ? member.name : userId;
-            }
-            const {
-              reservationCount,
-              newPatient,
-              noshow,
-              cancel,
-              visitMoreThanThirty,
-              prescriptions,
-            } = reports;
-
-            const counts = {
-              reservationCount,
-              newPatient,
-              noshow,
-              cancel,
-              visitMoreThanThirty,
-            };
-
-            return {
-              name: injectUserName(),
-              counts,
-              prescriptions,
-            };
-          });
-          return injectUserName;
-        };
-
-        const flatReports = flattening(dailyReports);
-        const objReport = combineSameUser(flatReports);
-        const arrReport = convertObjToArr(objReport);
-        return arrReport.sort((a, b) => {
-          if (a.name > b.name) return 1;
-          if (a.name < b.name) return -1;
-          return 0;
-        });
-      }
-
-      const newUserStatistics = combineUserStatistics();
+      const newUserStatistics = combineUserStatistics({
+        dailyReports,
+        memberState,
+        prescriptions,
+      });
 
       setUserStatistics(newUserStatistics);
     }

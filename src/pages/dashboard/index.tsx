@@ -74,31 +74,19 @@ export const Dashboard = () => {
       });
     }
   }, [state, meData]);
+
   useEffect(() => {
     if (!selectedClinic) return;
-
+    if (!selectedClinic.isStayed) {
+      // 초대를 받아 isActivate는 true지만 아직 수락을 누르지 않아 isStayed는 false
+      return setSelectedMenu("member");
+    }
     if (
-      selectedClinic.id === 0 &&
-      (selectedMenu === "member" ||
-        selectedMenu === "invite" ||
-        selectedMenu === "inactivate")
+      !selectedClinic.isManager &&
+      (selectedMenu === "invite" || selectedMenu === "inactivate")
     ) {
-      // 나를 선택했을때
-      setSelectedMenu("prescription");
-    } else {
-      // 병원을 선택했을때
-      if (!selectedClinic.isStayed) {
-        // 초대를 받아 isActivate는 true지만 아직 수락을 누르지 않아 isStayed는 false
-        setSelectedMenu("member");
-      } else {
-        // 초대 받고 수락을 눌러 isActivate와 isStayed가 true
-        if (
-          !selectedClinic.isManager &&
-          (selectedMenu === "invite" || selectedMenu === "inactivate")
-        ) {
-          setSelectedMenu("member");
-        }
-      }
+      // 초대 받고 수락을 눌러 isActivate와 isStayed가 true
+      return setSelectedMenu("member");
     }
   }, [selectedClinic]);
 
