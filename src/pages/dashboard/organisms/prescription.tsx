@@ -116,10 +116,10 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
   return (
     <>
       {selectedClinic?.isStayed ? (
-        <div className="flex h-full w-full">
+        <div className="flex h-full w-full flex-col">
           <DashboardSectionLayout
             width="md"
-            heightFull
+            hasMinHeight
             children={
               <>
                 <div className="grid grid-cols-[1fr_5rem_3.3rem_1.75rem] justify-between gap-3 border-b">
@@ -168,7 +168,6 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
           />
           <DashboardSectionLayout
             width="md"
-            heightFull
             children={
               <details open={selectedClinic.isManager}>
                 <summary>처방 만들기</summary>

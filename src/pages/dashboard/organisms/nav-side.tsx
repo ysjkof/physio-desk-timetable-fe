@@ -59,7 +59,7 @@ export const DashboardSideNav = ({
           <ModalTemplate
             top={top}
             left={left}
-            onClick={() => setOpenClinicSelect}
+            closeAction={() => setOpenClinicSelect}
             children={
               <ul className="w-[250px] divide-y overflow-hidden rounded-md bg-white text-xs font-normal shadow-cst">
                 {onlyMeMemberClinicLists.map((clinic) => (

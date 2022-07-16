@@ -52,7 +52,7 @@
     @apply invisible mx-auto whitespace-nowrap align-middle text-white group-hover:visible;
   }
   .modal-parents {
-    @apply fixed top-0 left-0 z-40 h-screen w-screen;
+    @apply fixed top-0 left-0 z-40 h-screen w-screen cursor-default;
   }
   .modal-background {
     @apply absolute h-full w-full bg-black/50;

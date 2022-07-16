@@ -13,7 +13,8 @@ import { DashboardSectionLayout } from "../components/section-layout";
 export const InactivateClinic = ({ loggedInUser }: InDashboardPageProps) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const [agree, setAgree] = useState(false);
-
+  console.log("loggedInUser", loggedInUser);
+  console.log("selectedClinic", selectedClinic);
   const [mutationInactivateClinic, { loading }] = useInactivateClinicMutation();
 
   const onClick = () => {
@@ -29,8 +30,6 @@ export const InactivateClinic = ({ loggedInUser }: InDashboardPageProps) => {
   };
 
   return selectedClinic?.isStayed && selectedClinic.isManager ? (
-    <Worning type="hasNotPermission" />
-  ) : (
     <DashboardSectionLayout
       title="병원 비활성"
       width="md"
@@ -60,5 +59,7 @@ export const InactivateClinic = ({ loggedInUser }: InDashboardPageProps) => {
         </>
       }
     />
+  ) : (
+    <Worning type="hasNotPermission" />
   );
 };

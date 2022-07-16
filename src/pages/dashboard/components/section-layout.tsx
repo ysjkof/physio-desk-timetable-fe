@@ -1,5 +1,6 @@
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { cls } from "../../../libs/utils";
 
 interface DashboardSectionLayoutProps {
   children: React.ReactNode;
@@ -7,6 +8,7 @@ interface DashboardSectionLayoutProps {
   width?: "md";
   tooltip?: string;
   height?: string;
+  hasMinHeight?: boolean;
   elementName?: string;
   padding?: boolean;
   moreYGap?: boolean;
@@ -19,6 +21,7 @@ export const DashboardSectionLayout = ({
   width,
   tooltip,
   height,
+  hasMinHeight,
   elementName,
   padding,
   moreYGap,
@@ -26,17 +29,20 @@ export const DashboardSectionLayout = ({
 }: DashboardSectionLayoutProps) => {
   return (
     <div
-      className={`${
-        elementName ?? ""
-      } dashboard-section-layout w-full overflow-y-scroll bg-white p-2 shadow-cst ${
-        padding ? " m-2" : ""
-      }${heightFull ? " h-full" : ""}`}
+      className={cls(
+        elementName || "",
+        "dashboard-section-layout w-full overflow-y-scroll bg-white p-2 shadow-cst",
+        hasMinHeight ? "min-h-[6rem]" : "",
+        padding ? " m-2" : "",
+        heightFull ? " h-full" : ""
+      )}
       style={{ ...(height && { height }) }}
     >
       <div
-        className={`${width === "md" ? " mx-auto max-w-md" : " w-full"}${
+        className={cls(
+          width === "md" ? " mx-auto max-w-md" : " w-full",
           moreYGap ? " space-y-6" : " space-y-2"
-        }`}
+        )}
       >
         {tooltip && (
           <h3 className="group relative">
