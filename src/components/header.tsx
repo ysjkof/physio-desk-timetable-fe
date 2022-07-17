@@ -203,7 +203,7 @@ export const Header = () => {
               </div>
               <div className="group relative cursor-pointer">
                 <FontAwesomeIcon fontSize={24} icon={faUser} />
-                <div className="DROPDOWN absolute top-6 right-0 z-50 hidden w-40 flex-col items-center border bg-white py-2 px-4 shadow-cst group-hover:flex">
+                <div className="DROPDOWN absolute top-[1.4rem] right-0 z-50 hidden w-40 flex-col items-center border bg-white py-2 px-4 shadow-cst group-hover:flex">
                   <Link
                     to="/edit-profile"
                     className="w-full text-center hover:bg-blue-200"
