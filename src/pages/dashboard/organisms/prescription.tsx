@@ -116,7 +116,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
   return (
     <>
       {selectedClinic?.isStayed ? (
-        <div className="flex h-full w-full flex-col">
+        <div className="flex h-full w-full flex-col gap-6">
           <DashboardSectionLayout
             width="md"
             hasMinHeight
@@ -166,6 +166,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
               </>
             }
           />
+          <div className="seperate-bar" />
           <DashboardSectionLayout
             width="md"
             children={

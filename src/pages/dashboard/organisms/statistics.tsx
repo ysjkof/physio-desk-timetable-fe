@@ -178,6 +178,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
     <>
       <DashboardSectionLayout
         elementName="date-picker"
+        hasShadow
         children={
           <div className="flex flex-col items-center justify-center gap-x-4 gap-y-1">
             <div className="flex w-full justify-between gap-4">

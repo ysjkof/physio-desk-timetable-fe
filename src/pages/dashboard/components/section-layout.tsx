@@ -9,6 +9,8 @@ interface DashboardSectionLayoutProps {
   tooltip?: string;
   height?: string;
   hasMinHeight?: boolean;
+  hasBorder?: boolean;
+  hasShadow?: boolean;
   elementName?: string;
   padding?: boolean;
   moreYGap?: boolean;
@@ -22,6 +24,8 @@ export const DashboardSectionLayout = ({
   tooltip,
   height,
   hasMinHeight,
+  hasBorder,
+  hasShadow,
   elementName,
   padding,
   moreYGap,
@@ -31,17 +35,19 @@ export const DashboardSectionLayout = ({
     <div
       className={cls(
         elementName || "",
-        "dashboard-section-layout w-full overflow-y-scroll bg-white p-2 shadow-cst",
-        hasMinHeight ? "min-h-[6rem]" : "",
-        padding ? " m-2" : "",
-        heightFull ? " h-full" : ""
+        "dashboard-section-layout w-full overflow-y-scroll bg-white p-2 ",
+        hasShadow ? "shadow" : "",
+        hasBorder ? "border" : "",
+        hasMinHeight ? "min-h-[8rem]" : "",
+        padding ? "m-2" : "",
+        heightFull ? "h-full" : ""
       )}
       style={{ ...(height && { height }) }}
     >
       <div
         className={cls(
-          width === "md" ? " mx-auto max-w-md" : " w-full",
-          moreYGap ? " space-y-6" : " space-y-2"
+          width === "md" ? "mx-auto max-w-md" : "w-full",
+          moreYGap ? "space-y-6" : "space-y-2"
         )}
       >
         {tooltip && (
