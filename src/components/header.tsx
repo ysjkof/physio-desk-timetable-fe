@@ -2,7 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authTokenVar, isLoggedInVar } from "../apollo";
-import { LOCALSTORAGE_TOKEN, ONE_WEEK } from "../variables";
+import { LOCALSTORAGE_TOKEN } from "../variables";
 import { useForm } from "react-hook-form";
 import { useMe } from "../hooks/useMe";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -174,9 +174,6 @@ export const Header = () => {
           <Link to="/">
             {/* <img src={muoolLogo} className="w-36" alt="Muool" /> */}
             <span className="header-title">Muool</span>
-          </Link>
-          <Link to="/community">
-            <span>커뮤니티</span>
           </Link>
         </div>
         <div className="flex w-full items-center justify-end gap-6">
