@@ -9,7 +9,7 @@ function App() {
     <ApolloProvider client={client}>
       <HelmetProvider>
         <BrowserRouter>
-          <Router />;
+          <Router />
         </BrowserRouter>
       </HelmetProvider>
     </ApolloProvider>

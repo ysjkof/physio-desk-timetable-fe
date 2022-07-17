@@ -1,13 +1,16 @@
+import { useReactiveVar } from "@apollo/client";
 import { Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SearchName } from "../components/search-name";
 import { useSearchPatientLazyQuery } from "../graphql/generated/graphql";
+import { selectedClinicVar } from "../store";
 
 export const Search = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [callQuery, { loading, data }] = useSearchPatientLazyQuery();
+  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const onClick = (patientId: number) => {
     navigate("/patient", {
@@ -21,7 +24,13 @@ export const Search = () => {
       return navigate(-1);
     }
     callQuery({
-      variables: { input: { page: 1, query: decodeURI(queryName) } },
+      variables: {
+        input: {
+          page: 1,
+          query: decodeURI(queryName),
+          clinicId: selectedClinic?.id,
+        },
+      },
     });
   }, [location]);
 
