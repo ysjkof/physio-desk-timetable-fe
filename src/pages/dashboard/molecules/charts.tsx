@@ -126,7 +126,7 @@ const Charts = ({
 
   return finalDailyReports && userReports ? (
     <>
-      <div className="PRESCRIPTION_COUNTS flex">
+      <div className="PRESCRIPTION_COUNTS flex flex-col">
         <DashboardSectionLayout
           elementName="TABLE_PRESCRIPTION_COUNTS"
           padding

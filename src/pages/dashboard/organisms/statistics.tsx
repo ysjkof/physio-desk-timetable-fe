@@ -227,7 +227,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
               </div>
             </div>
             {memberState && (
-              <div className="flex w-full justify-end gap-x-4">
+              <div className="flex w-full justify-end gap-x-4 py-1.5">
                 {memberState.map((m, i) => (
                   <BtnMenu
                     key={m.userId}

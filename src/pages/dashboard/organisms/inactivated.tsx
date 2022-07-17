@@ -23,7 +23,7 @@ export const InactivatedClinic = () => {
             <span className="">이름</span>
             <span className="text-center">활성상태</span>
           </div>
-          <ul className="space-y-2 overflow-y-scroll">
+          <ul className="space-y-2">
             {findMyClinicsData?.findMyClinics.clinics?.length === 0 ? (
               <p className="py-10 text-center font-semibold">목록이 없습니다</p>
             ) : (

@@ -35,7 +35,7 @@ export const Members = ({ loggedInUser }: InDashboardPageProps) => {
             <span className=""></span>
             <span className="text-center">상태</span>
           </div>
-          <ul className="space-y-2 overflow-y-scroll">
+          <ul className="space-y-2">
             {selectedClinic?.members?.map((member) => (
               <div
                 key={member.id}

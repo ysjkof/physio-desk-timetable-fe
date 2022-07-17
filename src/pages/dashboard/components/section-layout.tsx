@@ -35,17 +35,18 @@ export const DashboardSectionLayout = ({
     <div
       className={cls(
         elementName || "",
-        "dashboard-section-layout w-full overflow-y-scroll bg-white p-2 ",
+        "dashboard-section-layout w-full bg-white p-2",
         hasShadow ? "shadow" : "",
         hasBorder ? "border" : "",
         hasMinHeight ? "min-h-[8rem]" : "",
-        padding ? "m-2" : "",
+        padding ? "my-2" : "",
         heightFull ? "h-full" : ""
       )}
       style={{ ...(height && { height }) }}
     >
       <div
         className={cls(
+          "overflow-x-scroll",
           width === "md" ? "mx-auto max-w-md" : "w-full",
           moreYGap ? "space-y-6" : "space-y-2"
         )}

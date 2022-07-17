@@ -128,7 +128,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
                   <span className="text-right">소요시간</span>
                   <span className="text-center">활성</span>
                 </div>
-                <ul className="space-y-2 overflow-y-scroll">
+                <ul className="space-y-2">
                   {findPrescriptionsData?.findPrescriptions.prescriptions
                     ?.length === 0 ? (
                     <p className="py-10 text-center font-semibold">
