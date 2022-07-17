@@ -28,9 +28,9 @@ import { TableHeader } from "./organisms/table-header";
 import { AnimatePresence } from "framer-motion";
 import { TableLabels } from "./organisms/table-labels";
 import { TableSubHeader } from "./organisms/table-sub-header";
-import { TableCols } from "./organisms/table-cols";
 import { TableModals } from "./organisms/table-modal";
 import { Loading } from "../../components/atoms/loading";
+import TableCols from "./organisms/table-cols";
 
 export interface TimetableModalProps {
   closeAction: () => void;

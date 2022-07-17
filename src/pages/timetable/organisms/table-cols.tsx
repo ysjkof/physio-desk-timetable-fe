@@ -19,7 +19,7 @@ interface TableColsProps {
   weekEvents: DayWithUsers[];
   labels: Date[];
 }
-export function TableCols({ weekEvents, labels }: TableColsProps) {
+function TableCols({ weekEvents, labels }: TableColsProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
 
@@ -96,3 +96,5 @@ export function TableCols({ weekEvents, labels }: TableColsProps) {
     />
   );
 }
+
+export default TableCols;

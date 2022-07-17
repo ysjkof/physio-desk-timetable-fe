@@ -77,7 +77,7 @@ export function TableHeader({ today }: TableNavProps) {
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-blue-800"></span>
             </span>
             <span className="mr-2 scale-150 font-bold">
-              {selectedReservation.patient.name}
+              {selectedReservation.patient?.name}
             </span>
             님의 예약을 복사했습니다
             <FontAwesomeIcon
