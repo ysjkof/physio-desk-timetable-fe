@@ -35,7 +35,7 @@ export const DashboardSectionLayout = ({
     <div
       className={cls(
         elementName || "",
-        "dashboard-section-layout w-full bg-white p-2",
+        "DASHBOARD-SECTION-LAYOUT w-full bg-white p-2",
         hasShadow ? "shadow" : "",
         hasBorder ? "border" : "",
         hasMinHeight ? "min-h-[8rem]" : "",

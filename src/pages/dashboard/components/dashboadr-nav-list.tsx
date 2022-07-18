@@ -14,22 +14,17 @@ export const DashboardNavList = ({
   type,
 }: DashboardNavListProps) => {
   let textContents = "";
-  let isClinicMenu = false;
+  let isManagerMenu = false;
   switch (type) {
     case "main":
       textContents = "처음";
       break;
     case "member":
       textContents = "구성원";
-      isClinicMenu = true;
       break;
     case "invite":
       textContents = "초대";
-      isClinicMenu = true;
-      break;
-    case "inactivate":
-      textContents = "비활성";
-      isClinicMenu = true;
+      isManagerMenu = true;
       break;
     case "prescription":
       textContents = "처방관리";
@@ -40,8 +35,8 @@ export const DashboardNavList = ({
     case "create":
       textContents = "병원 만들기";
       break;
-    case "inactivated":
-      textContents = "비활성 보기";
+    case "clinics":
+      textContents = "나의 병원";
       break;
   }
 
@@ -50,8 +45,7 @@ export const DashboardNavList = ({
       className={`btn-menu cursor-pointer rounded-none ${
         selectedMenu === type ? "bg-green-100 font-semibold" : ""
       } ${
-        (isClinicMenu && selectedClinic.isManager === false) ||
-        (isClinicMenu && selectedClinic.id === 0)
+        isManagerMenu && selectedClinic.isManager === false
           ? "pointer-events-none opacity-50"
           : ""
       }`}

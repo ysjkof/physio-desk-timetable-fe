@@ -4,11 +4,10 @@ import { ClinicType, MeQuery } from "../../graphql/generated/graphql";
 import { ModifiedLoggedInUser, useMe } from "../../hooks/useMe";
 import { Members } from "./organisms/members";
 import { InviteClinic } from "./organisms/invite";
-import { InactivateClinic } from "./organisms/inactivate";
 import { CreateClinic } from "./organisms/create";
 import { PrescriptionPage } from "./organisms/prescription";
 import { useLocation } from "react-router-dom";
-import { InactivatedClinic } from "./organisms/inactivated";
+import { MyClinics } from "./organisms/myClicnics";
 import { Statistics } from "./organisms/statistics";
 import { DashboardTemplate } from "./dashboard-template";
 import { DashboardSideNav } from "./organisms/nav-side";
@@ -22,8 +21,7 @@ export type SelectedMenuType =
   | "member"
   | "invite"
   | "create"
-  | "inactivate"
-  | "inactivated"
+  | "clinics"
   | "prescription"
   | "statistics";
 
@@ -81,10 +79,7 @@ export const Dashboard = () => {
       // 초대를 받아 isActivate는 true지만 아직 수락을 누르지 않아 isStayed는 false
       return setSelectedMenu("member");
     }
-    if (
-      !selectedClinic.isManager &&
-      (selectedMenu === "invite" || selectedMenu === "inactivate")
-    ) {
+    if (!selectedClinic.isManager && selectedMenu === "invite") {
       // 초대 받고 수락을 눌러 isActivate와 isStayed가 true
       return setSelectedMenu("member");
     }
@@ -121,9 +116,6 @@ export const Dashboard = () => {
                 {selectedMenu === "invite" && (
                   <InviteClinic loggedInUser={meData.me} />
                 )}
-                {selectedMenu === "inactivate" && (
-                  <InactivateClinic loggedInUser={meData.me} />
-                )}
                 {selectedMenu === "prescription" && (
                   <PrescriptionPage loggedInUser={meData.me} />
                 )}
@@ -133,7 +125,9 @@ export const Dashboard = () => {
               </>
             )}
             {selectedMenu === "create" && <CreateClinic />}
-            {selectedMenu === "inactivated" && <InactivatedClinic />}
+            {selectedMenu === "clinics" && (
+              <MyClinics loggedInUser={meData.me} />
+            )}
           </>
         }
       />

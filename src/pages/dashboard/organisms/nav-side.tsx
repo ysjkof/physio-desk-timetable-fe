@@ -105,12 +105,6 @@ export const DashboardSideNav = ({
           selectedMenu={selectedMenu}
           onClick={() => setSelectedMenu("invite")}
         />
-        <DashboardNavList
-          type={"inactivate"}
-          selectedClinic={selectedClinic}
-          selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu("inactivate")}
-        />
         <div className="seperate-bar mb-2 pt-2" />
         <DashboardNavList
           type={"prescription"}
@@ -132,10 +126,10 @@ export const DashboardSideNav = ({
           onClick={() => setSelectedMenu("create")}
         />
         <DashboardNavList
-          type={"inactivated"}
+          type={"clinics"}
           selectedClinic={selectedClinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu("inactivated")}
+          onClick={() => setSelectedMenu("clinics")}
         />
       </ul>
     </nav>
