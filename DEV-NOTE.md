@@ -500,3 +500,93 @@ export const EditReservationState = ({
   });
 };
 ```
+
+# 2022-07-24; 웹소켓 3개로 분리 해야 하는 이유
+
+반환하는 형태와 후 처리가 달라서 분리 해야된다.
+
+업데이트할 때는 바뀐 값과 id만 있으면 자동으로 apollo가 처리해준다.
+새로 생성할 때는 캐시에 모든 값을 넣어줘야 하는데 update는 모든 정보를 갖고 있지 않아서 안된다.
+삭제는 id만 있으면 캐시에서 slice하면 된다.
+
+```ts
+// 수정할 때 반환하는 인터페이스. 예약의 id와 바뀐 값만 있으면 자동으로 처리됨
+export type ListenUpdateReservationSubscription = {
+  __typename?: "Subscription";
+  listenUpdateReservation: {
+    __typename?: "Reservation";
+    id: number;
+    startDate: any;
+    endDate: any;
+    state: ReservationState;
+    memo?: string | null;
+    isFirst: boolean;
+    user: { __typename?: "User"; id: number };
+    patient?: { __typename?: "Patient"; id: number; name: string } | null;
+    lastModifier: {
+      __typename?: "User";
+      id: number;
+      email: string;
+      name: string;
+      updatedAt?: any | null;
+    };
+    clinic: { __typename?: "Clinic"; id: number };
+    prescriptions?: Array<{ __typename?: "Prescription"; id: number }> | null;
+  };
+};
+
+// 생성할 때 넣어줄 listReservation의 인터페이스
+export type ListReservationsQuery = {
+  __typename?: "Query";
+  listReservations: {
+    __typename?: "ListReservationsOutput";
+    ok: boolean;
+    totalCount?: number | null;
+    results?: Array<{
+      __typename?: "Reservation";
+      id: number;
+      startDate: any;
+      endDate: any;
+      state: ReservationState;
+      memo?: string | null;
+      isFirst: boolean;
+      user: { __typename?: "User"; id: number; name: string };
+      patient?: {
+        __typename?: "Patient";
+        id: number;
+        name: string;
+        gender: string;
+        registrationNumber: number;
+        birthday?: any | null;
+        memo?: string | null;
+      } | null;
+      lastModifier: {
+        __typename?: "User";
+        id: number;
+        email: string;
+        name: string;
+        updatedAt?: any | null;
+      };
+      clinic: { __typename?: "Clinic"; id: number; name: string };
+      prescriptions?: Array<{
+        __typename?: "Prescription";
+        id: number;
+        name: string;
+        requiredTime: number;
+        description?: string | null;
+        price: number;
+      }> | null;
+    }> | null;
+  };
+};
+
+// 삭제할 때 반환하는 값. clinicId도 필요 없을듯.
+export type ListenDeleteReservationSubscription = {
+  __typename?: "Subscription";
+  listenDeleteReservation: {
+    __typename?: "ListenDeleteReservationOutput";
+    id: number;
+    clinicId: number;
+  };
+};
+```

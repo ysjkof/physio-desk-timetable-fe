@@ -31,6 +31,14 @@ import { TableSubHeader } from "./organisms/table-sub-header";
 import { TableModals } from "./organisms/table-modal";
 import { Loading } from "../../components/atoms/loading";
 import TableCols from "./organisms/table-cols";
+import {
+  ListenDeleteReservationDocument,
+  ListenDeleteReservationSubscription,
+  ListenUpdateReservationDocument,
+  ListenUpdateReservationSubscription,
+  useListenUpdateReservationSubscription,
+} from "../../graphql/generated/graphql";
+import { removeItemInArrayByIndex } from "../../libs/utils";
 
 export interface TimetableModalProps {
   closeAction: () => void;
@@ -49,7 +57,7 @@ export const TimeTable = () => {
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
 
-  const { data } = useListReservations();
+  const { data, subscribeToMore, updateQuery } = useListReservations();
 
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
@@ -108,6 +116,68 @@ export const TimeTable = () => {
         !!optionalWeekEvents
       );
     }
+    if (data?.listReservations.ok) {
+      subscribeToMore({
+        document: ListenDeleteReservationDocument,
+        variables: { input: { clinicId: selectedClinic?.id } },
+        updateQuery: (
+          prev,
+          {
+            subscriptionData: {
+              data: { listenDeleteReservation },
+            },
+          }: { subscriptionData: { data: ListenDeleteReservationSubscription } }
+        ) => {
+          if (!listenDeleteReservation || !prev.listReservations.results)
+            return prev;
+
+          const idx = prev.listReservations.results.findIndex(
+            (reservation) => reservation.id === listenDeleteReservation.id
+          );
+          if (idx === -1) return prev;
+
+          return {
+            ...prev,
+            listReservations: {
+              ...prev.listReservations,
+              results: removeItemInArrayByIndex(
+                idx,
+                prev.listReservations.results
+              ),
+            },
+          };
+        },
+      });
+
+      // 예약 생성 따로 리스너 만들고 listReservation과 같은 형태의 예약 반환할 것
+      // listReservation의 예약 형태 다듬을 필요 있나 검토할 것
+      // subscribeToMore({
+      //   document: ListenUpdateReservationDocument,
+      //   variables: { input: { clinicId: selectedClinic?.id } },
+      //   updateQuery: (
+      //     prev,
+      //     {
+      //       subscriptionData: {
+      //         data: { listenUpdateReservation },
+      //       },
+      //     }: { subscriptionData: { data: ListenUpdateReservationSubscription } }
+      //   ) => {
+      //     if (!listenUpdateReservation || !prev.listReservations.results)
+      //       return prev;
+
+      //     return {
+      //       ...prev,
+      //       listReservations: {
+      //         ...prev.listReservations,
+      //         results: [
+      //           ...prev.listReservations.results,
+      //           listenUpdateReservation,
+      //         ],
+      //       },
+      //     };
+      //   },
+      // });
+    }
   }, [data, clinicLists]);
 
   useEffect(() => {
@@ -121,6 +191,15 @@ export const TimeTable = () => {
     }
     setPrevSelectedDate(selectedDate);
   }, [selectedDate]);
+
+  const { data: listenUpdateData, error: listenUpdateError } =
+    useListenUpdateReservationSubscription({
+      variables: { input: { clinicId: selectedClinic?.id! } },
+    });
+
+  useEffect(() => {
+    console.log("listenUpdateData", listenUpdateData, listenUpdateError);
+  }, [listenUpdateData]);
 
   return (
     <>

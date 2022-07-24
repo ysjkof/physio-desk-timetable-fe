@@ -113,3 +113,8 @@ export function getHowManyDayFromMillisec(millisecond: number) {
 export function getRandomColor() {
   return "#" + Math.floor(Math.random() * 16777215).toString(16);
 }
+
+export const removeItemInArrayByIndex = (index: number, array: any[]) => [
+  ...array.slice(0, index),
+  ...array.slice(index + 1),
+];

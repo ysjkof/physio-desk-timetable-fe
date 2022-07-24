@@ -46,7 +46,6 @@ export const MyClinics = ({ loggedInUser }: InDashboardPageProps) => {
     setDeactivateClinic({ id, name });
     setHasDeactivate(true);
   };
-  console.log();
 
   return loading ? (
     <Loading />
