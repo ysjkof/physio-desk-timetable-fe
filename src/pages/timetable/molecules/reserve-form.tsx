@@ -166,10 +166,6 @@ export const ReserveForm = ({
                   reservationId: reservation.id,
                 },
               },
-              refetchQueries: [
-                { query: ListReservationsDocument },
-                "listReservations",
-              ],
             });
         } else {
           if (!createLoading)
@@ -184,10 +180,6 @@ export const ReserveForm = ({
                   clinicId: selectedClinic!.id,
                 },
               },
-              refetchQueries: [
-                { query: ListReservationsDocument },
-                "listReservations",
-              ],
             });
         }
         return;
@@ -209,10 +201,6 @@ export const ReserveForm = ({
                 prescriptionIds: selectedPrescription.prescriptions,
               },
             },
-            refetchQueries: [
-              { query: ListReservationsDocument },
-              "listReservations",
-            ],
           });
       } else {
         if (!createLoading)
@@ -228,10 +216,6 @@ export const ReserveForm = ({
                 prescriptionIds: selectedPrescription.prescriptions,
               },
             },
-            refetchQueries: [
-              { query: ListReservationsDocument },
-              "listReservations",
-            ],
           });
       }
     }

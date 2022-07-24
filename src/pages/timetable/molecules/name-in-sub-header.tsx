@@ -53,7 +53,6 @@ export const NameInSubHeader = ({
           userId,
         },
       },
-      refetchQueries: [{ query: ListReservationsDocument }, "listReservations"],
     });
   }
   return (

@@ -33,10 +33,6 @@ export const DayOffCard = ({ closeAction, reservation }: DayOffCardProps) => {
             closeAction();
           }
         },
-        refetchQueries: [
-          { query: ListReservationsDocument },
-          "listReservations",
-        ],
       });
     }
   };

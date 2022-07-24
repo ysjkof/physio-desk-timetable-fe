@@ -86,10 +86,6 @@ export const ReserveBtn = ({
                 prescriptionIds,
               },
             },
-            refetchQueries: [
-              { query: ListReservationsDocument },
-              "listReservations",
-            ],
           });
           // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기
           selectedReservationVar(null);

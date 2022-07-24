@@ -43,10 +43,6 @@ export const ReservationCard = ({
             closeAction();
           }
         },
-        refetchQueries: [
-          { query: ListReservationsDocument },
-          "listReservations",
-        ],
       });
     }
   };
