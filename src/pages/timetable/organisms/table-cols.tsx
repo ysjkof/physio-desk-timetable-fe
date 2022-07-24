@@ -1,5 +1,7 @@
-import { useReactiveVar } from "@apollo/client";
+import { useReactiveVar, useSubscription } from "@apollo/client";
+import { useEffect } from "react";
 import { getActiveUserLength } from "..";
+import { ListenUpdateReservationDocument } from "../../../graphql/generated/graphql";
 import {
   combineYMDHM,
   compareDateMatch,
@@ -26,6 +28,13 @@ function TableCols({ weekEvents, labels }: TableColsProps) {
   const userLength = getActiveUserLength(selectedClinic?.members);
   const labelMaxLength = labels.length;
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
+
+  const { data } = useSubscription(ListenUpdateReservationDocument, {
+    variables: { input: { clinicId: 11 } },
+  });
+  useEffect(() => {
+    console.log("섭스크립션", data);
+  }, [data]);
 
   return (
     <TableLoopLayout

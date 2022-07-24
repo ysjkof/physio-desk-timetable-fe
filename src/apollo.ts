@@ -6,17 +6,18 @@ import {
   split,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { SubscriptionClient } from "subscriptions-transport-ws";
 import { LOCALSTORAGE_TOKEN } from "./variables";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
 
 const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar<string | null>(token);
 
-const wsLink = new WebSocketLink(
-  new SubscriptionClient("ws://localhost:3002/graphql", {
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: "ws://localhost:3002/graphql",
     connectionParams: {
       "x-jwt": authTokenVar() || "",
     },
