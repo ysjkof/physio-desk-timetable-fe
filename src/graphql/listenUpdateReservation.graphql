@@ -1,0 +1,29 @@
+subscription listenUpdateReservation($input: UpdateReservationInput!) {
+  listenUpdateReservation(input: $input) {
+    id
+    startDate
+    endDate
+    state
+    memo
+    isFirst
+    user {
+      id
+    }
+    patient {
+      id
+      name
+    }
+    lastModifier {
+      id
+      email
+      name
+      updatedAt
+    }
+    clinic {
+      id
+    }
+    prescriptions {
+      id
+    }
+  }
+}

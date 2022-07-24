@@ -1,6 +1,15 @@
+import { useSubscription } from "@apollo/client";
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-
+import { ListenUpdateReservationDocument } from "../graphql/generated/graphql";
 export const Test = () => {
+  const { data } = useSubscription(ListenUpdateReservationDocument, {
+    variables: { input: { clinicId: 11 } },
+  });
+  useEffect(() => {
+    console.log("섭스크립션", data);
+  }, [data]);
+
   return (
     <>
       <Helmet>

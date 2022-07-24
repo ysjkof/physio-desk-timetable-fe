@@ -13,7 +13,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any;
 };
 
@@ -681,7 +680,7 @@ export enum ReservationState {
 }
 
 export type SearchPatientInput = {
-  clinicId?: InputMaybe<Scalars['Int']>;
+  clinicId: Scalars['Int'];
   page?: InputMaybe<Scalars['Int']>;
   query: Scalars['String'];
 };
@@ -705,6 +704,20 @@ export type SearchUsersOutput = {
   ok: Scalars['Boolean'];
   results?: Maybe<Array<User>>;
   totalCount?: Maybe<Scalars['Int']>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  listenUpdateReservation: Reservation;
+};
+
+
+export type SubscriptionListenUpdateReservationArgs = {
+  input: UpdateReservationInput;
+};
+
+export type UpdateReservationInput = {
+  clinicId: Scalars['Int'];
 };
 
 export type User = {
@@ -923,6 +936,13 @@ export type ListReservationsQueryVariables = Exact<{
 
 
 export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', id: number, email: string, name: string, updatedAt?: any | null }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
+
+export type ListenUpdateReservationSubscriptionVariables = Exact<{
+  input: UpdateReservationInput;
+}>;
+
+
+export type ListenUpdateReservationSubscription = { __typename?: 'Subscription', listenUpdateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number }, patient?: { __typename?: 'Patient', id: number, name: string } | null, lastModifier: { __typename?: 'User', id: number, email: string, name: string, updatedAt?: any | null }, clinic: { __typename?: 'Clinic', id: number }, prescriptions?: Array<{ __typename?: 'Prescription', id: number }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -1925,6 +1945,60 @@ export function useListReservationsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type ListReservationsQueryHookResult = ReturnType<typeof useListReservationsQuery>;
 export type ListReservationsLazyQueryHookResult = ReturnType<typeof useListReservationsLazyQuery>;
 export type ListReservationsQueryResult = Apollo.QueryResult<ListReservationsQuery, ListReservationsQueryVariables>;
+export const ListenUpdateReservationDocument = gql`
+    subscription listenUpdateReservation($input: UpdateReservationInput!) {
+  listenUpdateReservation(input: $input) {
+    id
+    startDate
+    endDate
+    state
+    memo
+    isFirst
+    user {
+      id
+    }
+    patient {
+      id
+      name
+    }
+    lastModifier {
+      id
+      email
+      name
+      updatedAt
+    }
+    clinic {
+      id
+    }
+    prescriptions {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useListenUpdateReservationSubscription__
+ *
+ * To run a query within a React component, call `useListenUpdateReservationSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useListenUpdateReservationSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListenUpdateReservationSubscription({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useListenUpdateReservationSubscription(baseOptions: Apollo.SubscriptionHookOptions<ListenUpdateReservationSubscription, ListenUpdateReservationSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<ListenUpdateReservationSubscription, ListenUpdateReservationSubscriptionVariables>(ListenUpdateReservationDocument, options);
+      }
+export type ListenUpdateReservationSubscriptionHookResult = ReturnType<typeof useListenUpdateReservationSubscription>;
+export type ListenUpdateReservationSubscriptionResult = Apollo.SubscriptionResult<ListenUpdateReservationSubscription>;
 export const LoginDocument = gql`
     mutation login($input: LoginInput!) {
   login(input: $input) {

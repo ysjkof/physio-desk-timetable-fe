@@ -124,8 +124,6 @@ export const CreatePatientForm = ({
     }
   }, [patient]);
 
-  console.log(isValid, errors, birthdayIsValid);
-  console.log(getValues());
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">
       <Input
