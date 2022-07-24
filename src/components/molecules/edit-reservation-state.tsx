@@ -19,20 +19,8 @@ interface EditReservationStateProps {
 
 export const EditReservationState = ({
   reservation,
-  redirect,
 }: EditReservationStateProps) => {
-  const [editReservationMutation] = useEditReservationMutation({
-    update(cache) {
-      if (!reservation) return console.error("reservation이 없습니다");
-      const myReserv = cache.identify(reservation);
-      cache.modify({
-        id: myReserv,
-        fields: {
-          state() {},
-        },
-      });
-    },
-  });
+  const [editReservationMutation] = useEditReservationMutation();
 
   const onClickEditReserve = (state: ReservationState) => {
     const confirmDelete = window.confirm(

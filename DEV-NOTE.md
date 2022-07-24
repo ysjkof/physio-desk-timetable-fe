@@ -475,3 +475,28 @@ dropdown menu in Header : 50(table-clinic-selector과 겹침)
 **추후확인**
 section-layout(dashboard) 50
 datepicker 50
+
+# 2022-07-24; 잘 작동하는 캐시 코드
+
+웹소켓 적용 후 삭제
+
+```ts
+// edit-reservation-state.tsx
+export const EditReservationState = ({
+  reservation,
+  redirect,
+}: EditReservationStateProps) => {
+  const [editReservationMutation] = useEditReservationMutation({
+    update(cache) {
+      if (!reservation) return console.error("reservation이 없습니다");
+      const myReserv = cache.identify(reservation);
+      cache.modify({
+        id: myReserv,
+        fields: {
+          state() {},
+        },
+      });
+    },
+  });
+};
+```
