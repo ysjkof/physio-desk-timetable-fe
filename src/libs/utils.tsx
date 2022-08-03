@@ -5,15 +5,15 @@ import {
   ISelectedClinic,
   selectedClinicVar,
   viewOptionsVar,
-} from "../store";
+} from '../store';
 import {
   LOCALSTORAGE_SELECTED_CLINIC,
   LOCALSTORAGE_CLINIC_LISTS,
   LOCALSTORAGE_VIEW_OPTION,
-} from "../variables";
+} from '../variables';
 
 export function cls(...classnames: string[]) {
-  return classnames.join(" ");
+  return classnames.join(' ');
 }
 
 export function getDateFromYMDHM(
@@ -23,16 +23,16 @@ export function getDateFromYMDHM(
   startDateHours?: number,
   startDateMinutes?: number
 ) {
-  const MM = String(startDateMonth).padStart(2, "0");
-  const DD = String(startDateDate).padStart(2, "0");
+  const MM = String(startDateMonth).padStart(2, '0');
+  const DD = String(startDateDate).padStart(2, '0');
   const ymd = `${startDateYear}-${MM}-${DD}`;
   let hms = `T00:00:00.000`;
   if (
-    typeof startDateHours === "number" &&
-    typeof startDateMinutes === "number"
+    typeof startDateHours === 'number' &&
+    typeof startDateMinutes === 'number'
   ) {
-    const HH = String(startDateHours).padStart(2, "0");
-    const MM = String(startDateMinutes).padStart(2, "0");
+    const HH = String(startDateHours).padStart(2, '0');
+    const MM = String(startDateMinutes).padStart(2, '0');
     hms = `T${HH}:${MM}:00.000`;
   }
   return new Date(ymd + hms);
@@ -85,9 +85,9 @@ export function saveViewOptions(
 
 export function checkMember(staying: boolean, accepted: boolean) {
   if (!staying) {
-    return accepted ? "탈퇴" : "수락대기";
+    return accepted ? '탈퇴' : '수락대기';
   } else {
-    return accepted ? "직원" : null;
+    return accepted ? '직원' : null;
   }
   // if (staying && accepted) return "직원";
   // if (!staying && !accepted) return "수락대기";
@@ -111,10 +111,14 @@ export function getHowManyDayFromMillisec(millisecond: number) {
 // }
 
 export function getRandomColor() {
-  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+  return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
 export const removeItemInArrayByIndex = (index: number, array: any[]) => [
   ...array.slice(0, index),
   ...array.slice(index + 1),
 ];
+
+export function changeValueInArray<T>(array: T[], value: T, index: number) {
+  return [...array.slice(0, index), value, ...array.slice(index + 1)];
+}

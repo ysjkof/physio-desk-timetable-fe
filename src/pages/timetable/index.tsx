@@ -1,5 +1,5 @@
-import { Helmet } from "react-helmet-async";
-import { useReactiveVar } from "@apollo/client";
+import { Helmet } from 'react-helmet-async';
+import { useReactiveVar } from '@apollo/client';
 import {
   clinicListsVar,
   IListReservation,
@@ -9,10 +9,10 @@ import {
   selectedDateVar,
   todayNowVar,
   viewOptionsVar,
-} from "../../store";
-import { useListReservations } from "../../hooks/useListReservations";
-import { TimetableTemplate } from "./table-template";
-import { useEffect, useState } from "react";
+} from '../../store';
+import { useListReservations } from '../../hooks/useListReservations';
+import { TimetableTemplate } from './table-template';
+import { useEffect, useState } from 'react';
 import {
   compareDateMatch,
   compareSameWeek,
@@ -22,23 +22,22 @@ import {
   getWeeks,
   makeDayWithUsers,
   spreadClinicMembers,
-} from "../../libs/timetable-utils";
-import { ONE_DAY, TABLE_TIME_GAP } from "../../variables";
-import { TableHeader } from "./organisms/table-header";
-import { AnimatePresence } from "framer-motion";
-import { TableLabels } from "./organisms/table-labels";
-import { TableSubHeader } from "./organisms/table-sub-header";
-import { TableModals } from "./organisms/table-modal";
-import { Loading } from "../../components/atoms/loading";
-import TableCols from "./organisms/table-cols";
+} from '../../libs/timetable-utils';
+import { ONE_DAY, TABLE_TIME_GAP } from '../../variables';
+import { TableHeader } from './organisms/table-header';
+import { AnimatePresence } from 'framer-motion';
+import { TableLabels } from './organisms/table-labels';
+import { TableSubHeader } from './organisms/table-sub-header';
+import { TableModals } from './organisms/table-modal';
+import { Loading } from '../../components/atoms/loading';
+import TableCols from './organisms/table-cols';
 import {
   ListenDeleteReservationDocument,
   ListenDeleteReservationSubscription,
   ListenUpdateReservationDocument,
   ListenUpdateReservationSubscription,
-  useListenUpdateReservationSubscription,
-} from "../../graphql/generated/graphql";
-import { removeItemInArrayByIndex } from "../../libs/utils";
+} from '../../graphql/generated/graphql';
+import { changeValueInArray, removeItemInArrayByIndex } from '../../libs/utils';
 
 export interface TimetableModalProps {
   closeAction: () => void;
@@ -57,7 +56,7 @@ export const TimeTable = () => {
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
 
-  const { data, subscribeToMore, updateQuery } = useListReservations();
+  const { data, subscribeToMore } = useListReservations();
 
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
@@ -83,7 +82,7 @@ export const TimeTable = () => {
         );
         events?.forEach((event) => {
           const dateIndex = userFrame.findIndex((day) =>
-            compareDateMatch(day.date, new Date(event.startDate), "ymd")
+            compareDateMatch(day.date, new Date(event.startDate), 'ymd')
           );
           if (dateIndex !== -1) {
             const userIndex = userFrame[dateIndex].users.findIndex(
@@ -103,23 +102,23 @@ export const TimeTable = () => {
         setWeekEvents(distributeEvents);
       } else {
         console.error(
-          "❌ distributeEvents를 알 수 없습니다 : ",
+          '❌ distributeEvents를 알 수 없습니다 : ',
           distributeEvents
         );
       }
     } else {
       console.warn(
         `✅ 시간표 > useEffect 실패; data is:${data?.listReservations}; loggedInUser:${loggedInUser?.id};`,
-        "viewOptions : ",
+        'viewOptions : ',
         !!viewOptions,
-        "optionalWeekEvents : ",
+        'optionalWeekEvents : ',
         !!optionalWeekEvents
       );
     }
-    if (data?.listReservations.ok) {
+    if (data?.listReservations.ok && selectedClinic?.id) {
       subscribeToMore({
         document: ListenDeleteReservationDocument,
-        variables: { input: { clinicId: selectedClinic?.id } },
+        variables: { input: { clinicId: selectedClinic.id } },
         updateQuery: (
           prev,
           {
@@ -149,57 +148,72 @@ export const TimeTable = () => {
         },
       });
 
-      // 예약 생성 따로 리스너 만들고 listReservation과 같은 형태의 예약 반환할 것
-      // listReservation의 예약 형태 다듬을 필요 있나 검토할 것
-      // subscribeToMore({
-      //   document: ListenUpdateReservationDocument,
-      //   variables: { input: { clinicId: selectedClinic?.id } },
-      //   updateQuery: (
-      //     prev,
-      //     {
-      //       subscriptionData: {
-      //         data: { listenUpdateReservation },
-      //       },
-      //     }: { subscriptionData: { data: ListenUpdateReservationSubscription } }
-      //   ) => {
-      //     if (!listenUpdateReservation || !prev.listReservations.results)
-      //       return prev;
+      subscribeToMore({
+        document: ListenUpdateReservationDocument,
+        variables: { input: { clinicId: selectedClinic.id } },
+        // 웹소켓이 받는 updated 데이터와 listReservation의 데이터 형태가 달라 타입에러 발생
+        // 하지만 id로 apollo cache가 필요한 값을 처리한다
+        // 타입에러 해결방법은,
+        // 1. listReservation의 에러필드를 선택적필드로 바꿈
+        // 2. 웹소켓이 listReservation처럼 모든 필드를 보냄
+        // 웹소켓이 보내는 데이터량을 줄이기 위해 ts-ignore하고 문제시 바꾸기로함
+        // @ts-ignore
+        updateQuery: (
+          prev,
+          {
+            subscriptionData: {
+              data: { listenUpdateReservation },
+            },
+          }: { subscriptionData: { data: ListenUpdateReservationSubscription } }
+        ) => {
+          if (!listenUpdateReservation || !prev.listReservations.results)
+            return prev;
 
-      //     return {
-      //       ...prev,
-      //       listReservations: {
-      //         ...prev.listReservations,
-      //         results: [
-      //           ...prev.listReservations.results,
-      //           listenUpdateReservation,
-      //         ],
-      //       },
-      //     };
-      //   },
-      // });
+          let newReservation = null;
+          let results = [
+            ...prev.listReservations.results,
+            listenUpdateReservation,
+          ];
+
+          const reservationIdx = prev.listReservations.results.findIndex(
+            (reservation) => reservation.id === listenUpdateReservation.id
+          );
+
+          if (reservationIdx !== -1) {
+            newReservation = {
+              ...prev.listReservations.results![reservationIdx],
+              ...listenUpdateReservation,
+            };
+            results = changeValueInArray(
+              prev.listReservations.results!,
+              newReservation,
+              reservationIdx
+            );
+          }
+
+          return {
+            ...prev,
+            listReservations: {
+              ...prev.listReservations,
+              results,
+            },
+          };
+        },
+      });
     }
-  }, [data, clinicLists]);
+  }, [data, clinicLists, selectedClinic]);
 
   useEffect(() => {
-    if (!compareDateMatch(selectedDate, prevSelectedDate, "ym")) {
-      console.log("✅ 년월이 다르다");
+    if (!compareDateMatch(selectedDate, prevSelectedDate, 'ym')) {
+      console.log('✅ 년월이 다르다');
     } else if (
-      !compareDateMatch(selectedDate, prevSelectedDate, "d") &&
+      !compareDateMatch(selectedDate, prevSelectedDate, 'd') &&
       !compareSameWeek(selectedDate, prevSelectedDate)
     ) {
-      console.log("✅ 년월이 같고 일과 주가 다르다");
+      console.log('✅ 년월이 같고 일과 주가 다르다');
     }
     setPrevSelectedDate(selectedDate);
   }, [selectedDate]);
-
-  const { data: listenUpdateData, error: listenUpdateError } =
-    useListenUpdateReservationSubscription({
-      variables: { input: { clinicId: selectedClinic?.id! } },
-    });
-
-  useEffect(() => {
-    console.log("listenUpdateData", listenUpdateData, listenUpdateError);
-  }, [listenUpdateData]);
 
   return (
     <>
@@ -225,7 +239,7 @@ export const TimeTable = () => {
                   </>
                 )}
               </AnimatePresence>
-              {viewOptions.seeList === true && "준비 중"}
+              {viewOptions.seeList === true && '준비 중'}
             </>
           }
         />
