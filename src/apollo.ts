@@ -4,12 +4,12 @@ import {
   InMemoryCache,
   makeVar,
   split,
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { getMainDefinition } from "@apollo/client/utilities";
-import { LOCALSTORAGE_TOKEN } from "./variables";
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import { createClient } from "graphql-ws";
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { LOCALSTORAGE_TOKEN } from './variables';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
 
 const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 export const isLoggedInVar = makeVar(Boolean(token));
@@ -17,15 +17,15 @@ export const authTokenVar = makeVar<string | null>(token);
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:3002/graphql",
-    connectionParams: {
-      "x-jwt": authTokenVar() || "",
+    url: 'ws://localhost:3002/graphql',
+    connectionParams: () => {
+      return { 'x-jwt': authTokenVar() };
     },
   })
 );
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:3002/graphql",
+  uri: 'http://localhost:3002/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -33,7 +33,7 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       // 로그인 안했을때도 이 리퀘스트는 계속 요청되니 || "" 추가.
-      "x-jwt": authTokenVar() || "",
+      'x-jwt': authTokenVar(),
     },
   };
 });
@@ -42,8 +42,8 @@ const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
     );
   },
   wsLink,
