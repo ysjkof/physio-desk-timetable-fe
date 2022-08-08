@@ -1,18 +1,18 @@
-import { makeArrFromLength } from "../../../libs/utils";
-import { DashboardLi } from "../components/li";
+import { makeArrFromLength } from '../../../utils/utils';
+import { DashboardLi } from '../components/li';
 import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
-} from "../organisms/statistics";
-import { TableChartCol } from "./table-chart-col";
+} from '../organisms/statistics';
+import { TableChartCol } from './table-chart-col';
 
 interface TableChartColLayoutProps {
   userStatistics: IUserStatistics[];
   dailyReports?: IDailyReport[];
   prescriptionInfo: IDailyPrescription[];
   labelNames?: string[];
-  renderIt: "counts" | "prescriptions";
+  renderIt: 'counts' | 'prescriptions';
   hasTotalInRow?: boolean;
   hasTotalInColumn?: boolean;
   showPrice?: boolean;
@@ -77,9 +77,9 @@ export const TableChartColLayout = ({
               />
             ))}
             {hasTotalInColumn ? (
-              <DashboardLi borderTop textCenter textContents={"합계"} />
+              <DashboardLi borderTop textCenter textContents={'합계'} />
             ) : (
-              ""
+              ''
             )}
           </>
         }
@@ -87,7 +87,7 @@ export const TableChartColLayout = ({
 
       {userStatistics.map((user, idx) => {
         switch (renderIt) {
-          case "counts":
+          case 'counts':
             return (
               <TableChartCol
                 key={idx}
@@ -108,13 +108,13 @@ export const TableChartColLayout = ({
                           .toLocaleString()}
                       />
                     ) : (
-                      ""
+                      ''
                     )}
                   </>
                 }
               />
             );
-          case "prescriptions":
+          case 'prescriptions':
             return (
               <TableChartCol
                 key={idx}
@@ -145,7 +145,7 @@ export const TableChartColLayout = ({
                         }
                       />
                     ) : (
-                      ""
+                      ''
                     )}
                   </>
                 }
@@ -173,7 +173,7 @@ export const TableChartColLayout = ({
                     .toLocaleString()}
                 />
               ) : (
-                ""
+                ''
               )}
             </>
           }

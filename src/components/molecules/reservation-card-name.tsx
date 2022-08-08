@@ -1,4 +1,4 @@
-import { getYMD } from "../../libs/timetable-utils";
+import { getYMD } from '../../services/dateServices';
 
 interface ReservationCardNameProps {
   gender: string;
@@ -22,18 +22,18 @@ export const ReservationCardName = ({
         <span>생년월일</span>
       </div>
       <span
-        className={`py-2 ${registrationNumber ? "text-right" : "text-center"}`}
+        className={`py-2 ${registrationNumber ? 'text-right' : 'text-center'}`}
       >
-        {registrationNumber ? registrationNumber : "-"}
+        {registrationNumber ? registrationNumber : '-'}
       </span>
       <span className="col-span-2 py-2 text-center">{name}</span>
       <div className="col-span-2 flex flex-row items-center justify-between space-x-2 py-2 pr-4">
         <span
-          className={`${gender === "male" ? "text-blue-500" : "text-red-400"}`}
+          className={`${gender === 'male' ? 'text-blue-500' : 'text-red-400'}`}
         >
-          {gender === "male" ? "남성" : "여성"}
+          {gender === 'male' ? '남성' : '여성'}
         </span>
-        <span className="">{getYMD(birthday, "yyyymmdd", "-")}</span>
+        <span className="">{getYMD(birthday, 'yyyymmdd', '-')}</span>
       </div>
     </div>
   );

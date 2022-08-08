@@ -1,13 +1,13 @@
-import { gql, useApolloClient } from "@apollo/client";
-import { Helmet } from "react-helmet-async";
-import { useForm } from "react-hook-form";
-import { Button } from "../components/molecules/button";
-import { useMe } from "../hooks/useMe";
+import { gql, useApolloClient } from '@apollo/client';
+import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { Button } from '../../components/molecules/button';
 import {
   EditProfileInput,
   EditProfileMutation,
   useEditProfileMutation,
-} from "../graphql/generated/graphql";
+} from '../../graphql/generated/graphql';
+import { useMe } from '../../hooks/useMe';
 
 export const EditProfile = () => {
   const { data: userData } = useMe();
@@ -50,7 +50,7 @@ export const EditProfile = () => {
     getValues,
     formState: { isValid },
   } = useForm<EditProfileInput>({
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
       email: userData?.me.email,
     },
@@ -61,8 +61,8 @@ export const EditProfile = () => {
     editProfile({
       variables: {
         input: {
-          ...(email !== "" && { email }),
-          ...(password !== "" && { password }),
+          ...(email !== '' && { email }),
+          ...(password !== '' && { password }),
         },
       },
     });
@@ -80,7 +80,7 @@ export const EditProfile = () => {
           <label>
             <span>Email</span>
             <input
-              {...register("email", {
+              {...register('email', {
                 pattern:
                   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
               })}
@@ -92,7 +92,7 @@ export const EditProfile = () => {
           <label>
             <span>비밀번호</span>
             <input
-              {...register("password")}
+              {...register('password')}
               className="input"
               type="password"
               placeholder="Password"

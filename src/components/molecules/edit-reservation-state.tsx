@@ -1,16 +1,16 @@
-import { RESERVATION_STATE_KOR } from "../../variables";
-import { IListReservation } from "../../store";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RESERVATION_STATE_KOR } from '../../constants/constants';
+import { IListReservation } from '../../store';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRotateLeft,
   faBan,
   faCommentSlash,
-} from "@fortawesome/free-solid-svg-icons";
-import { cls } from "../../libs/utils";
+} from '@fortawesome/free-solid-svg-icons';
+import { cls } from '../../utils/utils';
 import {
   ReservationState,
   useEditReservationMutation,
-} from "../../graphql/generated/graphql";
+} from '../../graphql/generated/graphql';
 
 interface EditReservationStateProps {
   reservation: IListReservation;
@@ -45,10 +45,10 @@ export const EditReservationState = ({
         fontSize={14}
         onClick={() => onClickEditReserve(ReservationState.Canceled)}
         className={cls(
-          "hover:cancel cursor-pointer rounded-full hover:scale-125",
+          'hover:cancel cursor-pointer rounded-full hover:scale-125',
           reservation.state === ReservationState.Canceled
-            ? "cancel pointer-events-none"
-            : "text-gray-400"
+            ? 'cancel pointer-events-none'
+            : 'text-gray-400'
         )}
       />
       <FontAwesomeIcon
@@ -56,10 +56,10 @@ export const EditReservationState = ({
         fontSize={14}
         onClick={() => onClickEditReserve(ReservationState.NoShow)}
         className={cls(
-          "hover:noshow cursor-pointer rounded-full hover:scale-125",
+          'hover:noshow cursor-pointer rounded-full hover:scale-125',
           reservation.state === ReservationState.NoShow
-            ? "noshow pointer-events-none"
-            : "text-gray-400"
+            ? 'noshow pointer-events-none'
+            : 'text-gray-400'
         )}
       />
       <FontAwesomeIcon
@@ -67,10 +67,10 @@ export const EditReservationState = ({
         fontSize={14}
         onClick={() => onClickEditReserve(ReservationState.Reserved)}
         className={cls(
-          "cursor-pointer rounded-full",
+          'cursor-pointer rounded-full',
           reservation.state === ReservationState.Reserved
-            ? "pointer-events-none text-gray-400"
-            : "text-blue-800 hover:scale-125"
+            ? 'pointer-events-none text-gray-400'
+            : 'text-blue-800 hover:scale-125'
         )}
       />
     </>

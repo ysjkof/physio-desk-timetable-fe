@@ -1,45 +1,32 @@
-import { useReactiveVar } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { TimetableModalProps } from "..";
+import { useReactiveVar } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { TimetableModalProps } from '..';
 import {
   CreateReservationMutation,
   EditReservationMutation,
-  ListReservationsDocument,
   ReservationState,
   useCreateReservationMutation,
   useEditReservationMutation,
   useFindPrescriptionsQuery,
-} from "../../../graphql/generated/graphql";
+} from '../../../graphql/generated/graphql';
+import { selectedClinicVar, selectedPatientVar } from '../../../store';
+import { DatepickerWithInput } from '../../../components/molecules/datepicker-with-input';
+import { Button } from '../../../components/molecules/button';
+import { FormError } from '../../../components/form-error';
+import { SelectUser } from './select-user';
+import { Input } from '../../../components/molecules/input';
+import { DayOffForm } from './day-off-form';
 import {
   IListReservation,
+  IReserveForm,
+  ISelectedPrescription,
   PrescriptionWithSelect,
-  selectedClinicVar,
-  selectedPatientVar,
-} from "../../../store";
-import { getDateFromYMDHM } from "../../../libs/utils";
-import { DatepickerWithInput } from "../../../components/molecules/datepicker-with-input";
-import { Button } from "../../../components/molecules/button";
-import { FormError } from "../../../components/form-error";
-import { DatepickerForm } from "../../../components/molecules/datepicker";
-import { SelectUser } from "./select-user";
-import { Input } from "../../../components/molecules/input";
-import { DayOffForm } from "./day-off-form";
-
-export interface ISelectedPrescription {
-  price: number;
-  minute: number;
-  prescriptions: number[];
-}
-
-export interface IReserveForm extends DatepickerForm {
-  memo?: string;
-  userId?: number;
-  description?: string;
-}
+} from '../../../types/type';
+import { getDateFromYMDHM } from '../../../services/dateServices';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
@@ -86,7 +73,7 @@ export const ReserveForm = ({
     handleSubmit,
     setValue,
   } = useForm<IReserveForm>({
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const createOnCompleted = (data: CreateReservationMutation) => {
@@ -144,7 +131,7 @@ export const ReserveForm = ({
         startDateMinutes!
       );
 
-      if (!startDate) throw new Error("startDate가 없습니다");
+      if (!startDate) throw new Error('startDate가 없습니다');
 
       if (isDayOff) {
         const endDate = getDateFromYMDHM(
@@ -222,7 +209,7 @@ export const ReserveForm = ({
   };
 
   function getTotal(
-    getThis: "price" | "requiredTime",
+    getThis: 'price' | 'requiredTime',
     prescriptions: PrescriptionWithSelect[]
   ) {
     return prescriptions
@@ -257,8 +244,8 @@ export const ReserveForm = ({
     }
 
     const newState = {
-      minute: getTotal("requiredTime", newPrescriptions),
-      price: getTotal("price", newPrescriptions),
+      minute: getTotal('requiredTime', newPrescriptions),
+      price: getTotal('price', newPrescriptions),
       prescriptions: newPrescriptions
         .filter((prescription) => prescription.isSelect)
         .map((prescription) => prescription.id),
@@ -291,12 +278,12 @@ export const ReserveForm = ({
 
   useEffect(() => {
     if (reservation) {
-      setValue("memo", reservation.memo!);
-      setValue("userId", reservation.user.id);
+      setValue('memo', reservation.memo!);
+      setValue('userId', reservation.user.id);
       // @ts-ignore 여기서는 patientId만 있으면 된다
       selectedPatientVar(reservation.patient);
     } else if (member) {
-      setValue("userId", member.id);
+      setValue('userId', member.id);
     }
   }, [member, reservation]);
 
@@ -319,7 +306,7 @@ export const ReserveForm = ({
             담당 치료사
             <SelectUser
               members={selectedClinic?.members ?? []}
-              register={register("userId")}
+              register={register('userId')}
             />
           </label>
           <label className="flex flex-col gap-2">
@@ -338,13 +325,13 @@ export const ReserveForm = ({
             <span className="flex items-center gap-1">
               처방
               <Link
-                to={"/dashboard"}
+                to={'/dashboard'}
                 state={{
                   selectedClinicId: selectedClinic?.id,
                   selectedClinicName: selectedClinic?.name,
                   selectedClinicType: selectedClinic?.type,
                   selectedClinicMembers: selectedClinic?.members,
-                  selectedMenu: "prescription",
+                  selectedMenu: 'prescription',
                 }}
               >
                 <FontAwesomeIcon
@@ -360,13 +347,13 @@ export const ReserveForm = ({
                 <span>
                   처방을
                   <Link
-                    to={"/dashboard"}
+                    to={'/dashboard'}
                     state={{
                       selectedClinicId: selectedClinic?.id,
                       selectedClinicName: selectedClinic?.name,
                       selectedClinicType: selectedClinic?.type,
                       selectedClinicMembers: selectedClinic?.members,
-                      selectedMenu: "prescription",
+                      selectedMenu: 'prescription',
                     }}
                   >
                     <button
@@ -392,8 +379,8 @@ export const ReserveForm = ({
                       }
                       className={`btn-menu overflow-hidden rounded-md border text-center ${
                         prescription.isSelect
-                          ? "border-green-500 font-semibold"
-                          : "opacity-50"
+                          ? 'border-green-500 font-semibold'
+                          : 'opacity-50'
                       }`}
                     >
                       {prescription.name}
@@ -409,12 +396,12 @@ export const ReserveForm = ({
           </label>
           <Input
             name="memo"
-            label={"메모"}
-            placeholder={"처방에 대한 설명"}
-            register={register("memo", {
-              maxLength: { value: 200, message: "최대 200자입니다" },
+            label={'메모'}
+            placeholder={'처방에 대한 설명'}
+            register={register('memo', {
+              maxLength: { value: 200, message: '최대 200자입니다' },
             })}
-            type={"textarea"}
+            type={'textarea'}
             rows={2}
           />
           <Button
@@ -425,7 +412,7 @@ export const ReserveForm = ({
               selectedPrescription.prescriptions.length >= 1
             }
             loading={createLoading && editLoading}
-            textContents={reservation ? "예약수정" : "예약하기"}
+            textContents={reservation ? '예약수정' : '예약하기'}
           />
           {createReservationResult?.createReservation.error && (
             <FormError

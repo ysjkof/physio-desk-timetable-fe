@@ -1,13 +1,11 @@
-import {
-  compareNumAfterGetMinutes,
-  getHHMM,
-} from "../../../libs/timetable-utils";
+import { getHHMM } from '../../../services/dateServices';
+import { compareNumAfterGetMinutes } from '../../../services/timetableServices';
 
-interface TableLabelsProps {
+interface TimeLabelsProps {
   labels: Date[];
 }
 
-export function TableLabels({ labels }: TableLabelsProps) {
+export function TimeLabels({ labels }: TimeLabelsProps) {
   return (
     <>
       {labels.map((label, i) => (

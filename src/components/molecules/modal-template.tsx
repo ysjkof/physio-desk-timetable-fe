@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
-import { cls } from '../../libs/utils';
+import { cls } from '../../utils/utils';
 
 interface ModalTemplateProps {
   children: ReactNode;

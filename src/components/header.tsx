@@ -1,32 +1,27 @@
-import { useReactiveVar } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { authTokenVar, isLoggedInVar } from "../apollo";
-import { LOCALSTORAGE_TOKEN } from "../variables";
-import { useForm } from "react-hook-form";
-import { useMe } from "../hooks/useMe";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faUser } from "@fortawesome/free-regular-svg-icons";
+import { useReactiveVar } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { authTokenVar, isLoggedInVar } from '../apollo';
+import { useForm } from 'react-hook-form';
+import { useMe } from '../hooks/useMe';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell, faUser } from '@fortawesome/free-regular-svg-icons';
 import {
   ClinicType,
   useFindMyClinicsQuery,
-} from "../graphql/generated/graphql";
+} from '../graphql/generated/graphql';
 import {
   IClinicList,
   IClinic,
   loggedInUserVar,
   viewOptionsVar,
   ISelectedClinic,
-} from "../store";
-import {
-  LOCALSTORAGE_SELECTED_CLINIC,
-  LOCALSTORAGE_VIEW_OPTION,
-  LOCALSTORAGE_CLINIC_LISTS,
-} from "../variables";
-import { saveClinicLists, saveSelectedClinic } from "../libs/utils";
+} from '../store';
+import { saveClinicLists, saveSelectedClinic } from '../utils/utils';
+import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
 
 interface Notice {
-  __typename?: "Notice" | undefined;
+  __typename?: 'Notice' | undefined;
   message: string;
   read: boolean;
 }
@@ -43,36 +38,36 @@ export const Header = () => {
   const onSubmitSearch = () => {
     const { search } = getValues();
     const searchTrim = search.trim();
-    setValue("search", searchTrim);
+    setValue('search', searchTrim);
     navigate(`/search?name=${searchTrim}`);
   };
   const logoutBtn = () => {
-    localStorage.removeItem(LOCALSTORAGE_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEY.TOKEN);
     authTokenVar(null);
     isLoggedInVar(false);
-    navigate("/");
+    navigate('/');
   };
 
   useEffect(() => {
     if (error) {
-      console.error("Error : User Data,", error);
+      console.error('Error : User Data,', error);
       logoutBtn();
     }
   }, [error]);
 
   useEffect(() => {
-    console.log(1, "시작 Header : in useEffect");
+    console.log(1, '시작 Header : in useEffect');
     if (!meData) return;
     if (meData.me.notice) {
       setNotices(meData.me.notice);
     }
     const localViewOptions = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_VIEW_OPTION + meData.me.id)!
+      localStorage.getItem(LOCAL_STORAGE_KEY.VIEW_OPTION + meData.me.id)!
     );
 
     if (localViewOptions === null) {
       localStorage.setItem(
-        LOCALSTORAGE_VIEW_OPTION + meData.me.id,
+        LOCAL_STORAGE_KEY.VIEW_OPTION + meData.me.id,
         JSON.stringify(viewOptions)
       );
     } else {
@@ -86,7 +81,7 @@ export const Header = () => {
   });
 
   useEffect(() => {
-    console.log(2, "시작 Header : in useEffect");
+    console.log(2, '시작 Header : in useEffect');
     if (!meData) return;
     if (!findMyClinicsData || !findMyClinicsData.findMyClinics.clinics) return;
 
@@ -106,7 +101,7 @@ export const Header = () => {
     const myClinics = injectKeyValue(clinics);
 
     const localClinics: IClinicList[] = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_CLINIC_LISTS + meData.me.id)!
+      localStorage.getItem(LOCAL_STORAGE_KEY.CLINIC_LISTS + meData.me.id)!
     );
     if (localClinics) {
       updatedMyClinics = myClinics.map((clinic) => {
@@ -150,7 +145,7 @@ export const Header = () => {
       };
     }
     const localSelectClinic: ISelectedClinic = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_SELECTED_CLINIC + meData.me.id)!
+      localStorage.getItem(LOCAL_STORAGE_KEY.SELECTED_CLINIC + meData.me.id)!
     );
     const clinic = updatedMyClinics.find((clinic) =>
       localSelectClinic
@@ -179,8 +174,8 @@ export const Header = () => {
         <div className="flex w-full items-center justify-end gap-6">
           <form onSubmit={handleSubmit(onSubmitSearch)}>
             <input
-              {...register("search", { required: true })}
-              type={"search"}
+              {...register('search', { required: true })}
+              type={'search'}
               placeholder="Search..."
               className="header-search w-28 rounded-md"
             />
@@ -195,7 +190,7 @@ export const Header = () => {
                 <FontAwesomeIcon fontSize={24} icon={faBell} />
                 <div className="DROPDOWN absolute top-6 right-0 z-50 hidden h-80 w-60 flex-col items-center overflow-y-scroll border bg-white py-2 px-4 shadow-cst group-hover:flex">
                   {!notices || notices.length === 0
-                    ? "알림이 없습니다."
+                    ? '알림이 없습니다.'
                     : notices.map((notice) => (
                         <span className="break-all">{notice.message}</span>
                       ))}

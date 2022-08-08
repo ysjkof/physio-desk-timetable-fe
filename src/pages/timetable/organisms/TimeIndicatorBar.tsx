@@ -1,7 +1,10 @@
-import { useReactiveVar } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { selectedDateVar } from "../../../store";
-import { TABLE_CELL_HEIGHT, TABLE_TIME_GAP } from "../../../variables";
+import { useReactiveVar } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { selectedDateVar } from '../../../store';
+import {
+  TABLE_CELL_HEIGHT,
+  TABLE_TIME_GAP,
+} from '../../../constants/constants';
 
 interface ITimeIndicatorBarProps {
   labels: Date[];
@@ -34,14 +37,14 @@ export const TimeIndicatorBar = ({
     let id = setInterval(setPosition, 30000);
     return () => clearInterval(id);
   }, []);
-  if (top === 0 || typeof top !== "number") return <></>;
+  if (top === 0 || typeof top !== 'number') return <></>;
   return (
     <div className="time-indicator-bar" style={{ top: `${top}px` }}>
       {isActive && (
         <span className="mx-auto">
-          {selectedDate.toLocaleString("ko-KR", {
-            hour: "2-digit",
-            minute: "2-digit",
+          {selectedDate.toLocaleString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
           })}
         </span>
       )}

@@ -1,25 +1,25 @@
 import {
   faCheckCircle,
   faCircleQuestion,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { DashboardSectionLayout } from "../components/section-layout";
+} from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { DashboardSectionLayout } from '../components/section-layout';
 import {
   CreatePrescriptionInput,
   useCreatePrescriptionMutation,
   useFindAtomPrescriptionsQuery,
   useFindPrescriptionsQuery,
-} from "../../../graphql/generated/graphql";
-import { InDashboardPageProps } from "..";
-import { Button } from "../../../components/molecules/button";
-import { selectedClinicVar } from "../../../store";
-import { useReactiveVar } from "@apollo/client";
-import { Input } from "../../../components/molecules/input";
-import { FormError } from "../../../components/form-error";
-import { REGEX_NUMBER_END_DIGIT_OF_ZERO } from "../../../variables";
-import { BtnMenu } from "../../../components/molecules/button-menu";
+} from '../../../graphql/generated/graphql';
+import { InDashboardPageProps } from '..';
+import { Button } from '../../../components/molecules/button';
+import { selectedClinicVar } from '../../../store';
+import { useReactiveVar } from '@apollo/client';
+import { Input } from '../../../components/molecules/input';
+import { FormError } from '../../../components/form-error';
+import { BtnMenu } from '../../../components/molecules/button-menu';
+import { REGEX } from '../../../constants/regex';
 
 export const PrescriptionPage = ({}: InDashboardPageProps) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
@@ -54,7 +54,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
     getValues,
     setValue,
     formState: { isValid, errors },
-  } = useForm<CreatePrescriptionInput>({ mode: "onChange" });
+  } = useForm<CreatePrescriptionInput>({ mode: 'onChange' });
   const { name, requiredTime, price, prescriptionAtomIds, description } =
     getValues();
 
@@ -95,7 +95,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
     });
 
     setValue(
-      "prescriptionAtomIds",
+      'prescriptionAtomIds',
       newAtomList.filter((atom) => atom.onSelect).map((atom) => atom.id)
     );
     setAtomList(newAtomList);
@@ -150,7 +150,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
                             icon={faCheckCircle}
                             fontSize="large"
                             className={`cursor-pointer" mx-auto ${
-                              presc.activate ? "text-green-500" : ""
+                              presc.activate ? 'text-green-500' : ''
                             }`}
                           />
                           {presc.description && (
@@ -194,14 +194,14 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
                   </div>
                   <Input
                     required
-                    label={"처방이름*"}
+                    label={'처방이름*'}
                     name="name"
-                    placeholder={"도수30, 집중형충격파1, MT20"}
-                    register={register("name", {
-                      required: "처방이름을 입력해주세요",
-                      maxLength: { value: 15, message: "최대 15자 입니다" },
+                    placeholder={'도수30, 집중형충격파1, MT20'}
+                    register={register('name', {
+                      required: '처방이름을 입력해주세요',
+                      maxLength: { value: 15, message: '최대 15자 입니다' },
                     })}
-                    type={"text"}
+                    type={'text'}
                     children={
                       <>
                         <div className="group absolute left-[3.2rem] top-[0.08rem] cursor-pointer">
@@ -223,15 +223,15 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
                     <Input
                       name="requiredTime"
                       required
-                      label={"소요시간(분)*"}
-                      placeholder={"10분 단위, 0 이상의 숫자"}
+                      label={'소요시간(분)*'}
+                      placeholder={'10분 단위, 0 이상의 숫자'}
                       type="number"
                       step={10}
-                      register={register("requiredTime", {
-                        required: "시간을 입력해주세요",
-                        min: { value: 10, message: "최소 10분입니다" },
-                        max: { value: 180, message: "최대 180분입니다" },
-                        pattern: REGEX_NUMBER_END_DIGIT_OF_ZERO,
+                      register={register('requiredTime', {
+                        required: '시간을 입력해주세요',
+                        min: { value: 10, message: '최소 10분입니다' },
+                        max: { value: 180, message: '최대 180분입니다' },
+                        pattern: REGEX.NUMBER_END_DIGIT_OF_ZERO,
                       })}
                       children={
                         <>
@@ -240,8 +240,8 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
                               errorMessage={errors.requiredTime.message}
                             />
                           )}
-                          {errors.requiredTime?.type === "pattern" && (
-                            <FormError errorMessage={"10분 단위로 입력"} />
+                          {errors.requiredTime?.type === 'pattern' && (
+                            <FormError errorMessage={'10분 단위로 입력'} />
                           )}
                         </>
                       }
@@ -249,17 +249,17 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
                     <Input
                       required
                       name="price"
-                      label={"가격(원)*"}
-                      placeholder={"0 이상의 숫자"}
-                      register={register("price", {
-                        required: "가격을 입력해주세요",
-                        min: { value: 0, message: "최소 0입니다" },
+                      label={'가격(원)*'}
+                      placeholder={'0 이상의 숫자'}
+                      register={register('price', {
+                        required: '가격을 입력해주세요',
+                        min: { value: 0, message: '최소 0입니다' },
                         max: {
                           value: 100000000,
-                          message: "더 이상 불가합니다",
+                          message: '더 이상 불가합니다',
                         },
                       })}
-                      type={"number"}
+                      type={'number'}
                       children={
                         errors.price?.message && (
                           <FormError errorMessage={errors.price.message} />
@@ -269,12 +269,12 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
                   </div>
                   <Input
                     name="description"
-                    label={"설명"}
-                    placeholder={"처방에 대한 설명"}
-                    register={register("description", {
-                      maxLength: { value: 200, message: "최대 200자입니다" },
+                    label={'설명'}
+                    placeholder={'처방에 대한 설명'}
+                    register={register('description', {
+                      maxLength: { value: 200, message: '최대 200자입니다' },
                     })}
-                    type={"textarea"}
+                    type={'textarea'}
                     rows={4}
                     children={
                       errors.description?.message && (

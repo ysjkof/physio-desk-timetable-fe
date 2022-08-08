@@ -1,14 +1,14 @@
-import { useReactiveVar } from "@apollo/client";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useReactiveVar } from '@apollo/client';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import {
   compareDateMatch,
   getWeeksOfMonth,
-} from "../../../libs/timetable-utils";
-import { cls } from "../../../libs/utils";
-import { selectedDateVar } from "../../../store";
-import { NEXT, PREV } from "../../../variables";
-import { BtnArrow } from "../molecules/button-arrow";
+} from '../../../services/dateServices';
+import { cls } from '../../../utils/utils';
+import { selectedDateVar } from '../../../store';
+import { NEXT, PREV } from '../../../constants/constants';
+import { BtnArrow } from '../molecules/button-arrow';
 
 interface Calendar {
   selectedMonth: { date: Date }[];
@@ -65,23 +65,23 @@ export function TableNavExpand({ varients }: TableNavExpandProps) {
             key={i}
             onClick={() => selectedDateVar(day.date)}
             className={cls(
-              "btn-menu cursor-pointer py-0.5 text-center",
+              'btn-menu cursor-pointer py-0.5 text-center',
               day.date.getDay() === 0
-                ? "sunday"
+                ? 'sunday'
                 : day.date.getDay() === 6
-                ? "saturday"
-                : "",
-              compareDateMatch(day.date, selectedDate, "ymd")
-                ? "bg-black text-white"
-                : ""
+                ? 'saturday'
+                : '',
+              compareDateMatch(day.date, selectedDate, 'ymd')
+                ? 'bg-black text-white'
+                : ''
             )}
           >
             <span
               className={cls(
-                "font-medium",
-                compareDateMatch(calendar.selectedMonth[7].date, day.date, "ym")
-                  ? ""
-                  : "opacity-50"
+                'font-medium',
+                compareDateMatch(calendar.selectedMonth[7].date, day.date, 'ym')
+                  ? ''
+                  : 'opacity-50'
               )}
             >
               {day.date.getDate()}

@@ -1,16 +1,14 @@
-import { useReactiveVar } from "@apollo/client";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
-import {
-  ListReservationsDocument,
-  useCreateDayOffMutation,
-} from "../../../graphql/generated/graphql";
-import { cls } from "../../../libs/utils";
-import { viewOptionsVar } from "../../../store";
-import { RESERVE_DETAIL, USER_COLORS } from "../../../variables";
+import { useReactiveVar } from '@apollo/client';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
+import { useCreateDayOffMutation } from '../../../graphql/generated/graphql';
+import { cls } from '../../../utils/utils';
+import { viewOptionsVar } from '../../../store';
+import { USER_COLORS } from '../../../constants/constants';
+import { ROUTER } from '../../../constants/router';
 
-interface NameInSubHeaderProps {
+interface UserNameTitleProps {
   isMe: boolean;
   name: string;
   userIndex: number;
@@ -19,20 +17,20 @@ interface NameInSubHeaderProps {
   date: Date;
 }
 
-export const NameInSubHeader = ({
+export const UserNameTitle = ({
   isMe,
   name,
   userIndex,
   clinicId,
   userId,
   date,
-}: NameInSubHeaderProps) => {
+}: UserNameTitleProps) => {
   const [createDayOff, { loading }] = useCreateDayOffMutation();
   const viewOptions = useReactiveVar(viewOptionsVar);
   const navigate = useNavigate();
 
   function onClickBox() {
-    navigate(RESERVE_DETAIL, { state: { isDayOff: true } });
+    navigate(ROUTER.RESERVE_DETAIL, { state: { isDayOff: true } });
   }
 
   function lockTable() {
@@ -58,8 +56,8 @@ export const NameInSubHeader = ({
   return (
     <div
       className={cls(
-        "border-r-[0.5] group flex w-full items-center justify-center py-0.5 last:border-r-0",
-        isMe ? " font-semibold" : ""
+        'border-r-[0.5] group flex w-full items-center justify-center py-0.5 last:border-r-0',
+        isMe ? ' font-semibold' : ''
       )}
     >
       <span

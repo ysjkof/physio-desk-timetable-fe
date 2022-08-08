@@ -1,5 +1,3 @@
-import { IClinicList, IListReservation, IMember } from "../store";
-
 export const getSunday = (date: Date) => {
   const returnDate = new Date(date);
   returnDate.setHours(0, 0, 0, 0);
@@ -14,31 +12,6 @@ export function getAfterDate(startDate: Date, afterDay: number) {
   return returnDate;
 }
 
-export const spreadClinicMembers = (
-  clinics: IClinicList[] | null,
-  clinicId: number
-) => {
-  const result: IMember[] = [];
-  const clinic = clinics?.find((clinic) => clinic.id === clinicId);
-  if (clinic) {
-    const newMember = clinic.members.map((member) => member);
-    result.push(...newMember);
-  }
-  return result.sort((a, b) => {
-    if (a.user.name > b.user.name) return 1;
-    if (a.user.name < b.user.name) return -1;
-    return 0;
-  });
-};
-
-export const compareNumAfterGetMinutes = (
-  date: Date,
-  compareNumbers: number[]
-): boolean => {
-  const minutes = date.getMinutes();
-  return compareNumbers.includes(minutes);
-};
-
 export const getWeeks = (dateOfSunday: Date) => {
   let result: { date: Date }[] = [];
   for (let i = 0; i < 7; i++) {
@@ -49,48 +22,22 @@ export const getWeeks = (dateOfSunday: Date) => {
   return result;
 };
 
-export interface IUserWithEvent extends IMember {
-  events: IListReservation[];
-  isActivate?: boolean;
-}
-export interface DayWithUsers {
-  date: Date;
-  users: IUserWithEvent[];
-}
-
-export const makeDayWithUsers = (
-  members: IMember[],
-  weeks: { date: Date }[]
-) => {
-  const result: DayWithUsers[] = [];
-  function makeNewUsers(): IUserWithEvent[] {
-    return members.map((user) => ({ ...user, events: [] }));
-  }
-  weeks.forEach((day) => {
-    result.push({
-      ...day,
-      users: makeNewUsers(),
-    });
-  });
-  return result;
-};
-
 export const getYMD = (
   inputDate: string | Date,
-  option: "yyyymmdd" | "yymmdd" | "mmdd",
-  separator?: "-" | "/"
+  option: 'yyyymmdd' | 'yymmdd' | 'mmdd',
+  separator?: '-' | '/'
 ) => {
   const localDate = new Date(inputDate);
-  let year = "";
-  const month = String(localDate.getMonth() + 1).padStart(2, "0");
-  const date = String(localDate.getDate()).padStart(2, "0");
+  let year = '';
+  const month = String(localDate.getMonth() + 1).padStart(2, '0');
+  const date = String(localDate.getDate()).padStart(2, '0');
   switch (option) {
-    case "mmdd":
+    case 'mmdd':
       break;
-    case "yymmdd":
+    case 'yymmdd':
       year = String(localDate.getFullYear()).substring(2);
       break;
-    case "yyyymmdd":
+    case 'yyyymmdd':
       year = String(localDate.getFullYear());
       break;
   }
@@ -98,14 +45,14 @@ export const getYMD = (
     return year
       ? `${year}${separator}${month}${separator}${date}`
       : `${month}${separator}${date}`;
-  return year ? `${year ?? ""}${month}${date}` : `${month}${date}`;
+  return year ? `${year ?? ''}${month}${date}` : `${month}${date}`;
 };
 
-export function getHHMM(inputDate: string | Date, seperator?: ":") {
+export function getHHMM(inputDate: string | Date, seperator?: ':') {
   const date = new Date(inputDate);
-  const hh = String(date.getHours()).padStart(2, "0");
-  const mm = String(date.getMinutes()).padStart(2, "0");
-  if (seperator === ":") return `${hh}:${mm}`;
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mm = String(date.getMinutes()).padStart(2, '0');
+  if (seperator === ':') return `${hh}:${mm}`;
   return `${hh}${mm}`;
 }
 
@@ -122,15 +69,15 @@ export function combineYMDHM(YMDDate: Date, HMDate: Date) {
 export const getTimeLength = (
   startDate: Date,
   endDate: Date,
-  unit: "minute" | "20minute"
+  unit: 'minute' | '20minute'
 ) => {
   const sd = new Date(startDate);
   const ed = new Date(endDate);
   let value = 60;
   switch (unit) {
-    case "minute":
+    case 'minute':
       break;
-    case "20minute": // 시간표 한 칸의 최소 높이가 10분 20px이라서 한 번에 구하기 위함
+    case '20minute': // 시간표 한 칸의 최소 높이가 10분 20px이라서 한 번에 구하기 위함
       value = 60 * 10;
       break;
   }
@@ -161,23 +108,23 @@ export const getWeeksOfMonth = (date: Date) => {
 export const compareDateMatch = (
   inputDate: Date,
   comparisonDate: Date,
-  option: "ymd" | "ym" | "d" | "hm"
+  option: 'ymd' | 'ym' | 'd' | 'hm'
 ): boolean => {
   switch (option) {
-    case "ymd":
+    case 'ymd':
       return (
         inputDate.getDate() === comparisonDate.getDate() &&
         inputDate.getMonth() === comparisonDate.getMonth() &&
         inputDate.getFullYear() === comparisonDate.getFullYear()
       );
-    case "ym":
+    case 'ym':
       return (
         inputDate.getMonth() === comparisonDate.getMonth() &&
         inputDate.getFullYear() === comparisonDate.getFullYear()
       );
-    case "d":
+    case 'd':
       return inputDate.getDate() === comparisonDate.getDate();
-    case "hm":
+    case 'hm':
       return (
         inputDate.getMinutes() === comparisonDate.getMinutes() &&
         inputDate.getHours() === comparisonDate.getHours()
@@ -186,7 +133,7 @@ export const compareDateMatch = (
 };
 
 export const compareSameWeek = (date: Date, secondDate: Date): boolean => {
-  return compareDateMatch(getSunday(date), getSunday(secondDate), "ymd");
+  return compareDateMatch(getSunday(date), getSunday(secondDate), 'ymd');
 };
 
 // 시작시각부터 끝시각까지 timeGap의 차이가 나는 Date배열을 만든다
@@ -234,4 +181,31 @@ export function compareTableEndtime(date: Date, { hours, minutes }: duration) {
   const hour = date.getHours();
   const minute = date.getMinutes();
   return hour === hours && minute === minutes;
+}
+
+export function getDateFromYMDHM(
+  startDateYear: number,
+  startDateMonth: number,
+  startDateDate: number,
+  startDateHours?: number,
+  startDateMinutes?: number
+) {
+  const MM = String(startDateMonth).padStart(2, '0');
+  const DD = String(startDateDate).padStart(2, '0');
+  const ymd = `${startDateYear}-${MM}-${DD}`;
+  let hms = `T00:00:00.000`;
+  if (
+    typeof startDateHours === 'number' &&
+    typeof startDateMinutes === 'number'
+  ) {
+    const HH = String(startDateHours).padStart(2, '0');
+    const MM = String(startDateMinutes).padStart(2, '0');
+    hms = `T${HH}:${MM}:00.000`;
+  }
+  return new Date(ymd + hms);
+}
+
+export function getHowManyDayFromMillisec(millisecond: number) {
+  // MILLISECOND_TO_DAY = 1000 / 60 / 60 / 24
+  return millisecond / 1000 / 60 / 60 / 24;
 }

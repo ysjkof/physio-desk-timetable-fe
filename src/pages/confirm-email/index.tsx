@@ -1,20 +1,20 @@
-import { gql, useApolloClient } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
+import { gql, useApolloClient } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import {
   useVerifyEmailMutation,
   VerifyEmailMutation,
-} from "../graphql/generated/graphql";
-import { useMe } from "../hooks/useMe";
+} from '../../graphql/generated/graphql';
+import { useMe } from '../../hooks/useMe';
 
 export const ConfirmEmail = () => {
   const { data: userData } = useMe();
   const navigate = useNavigate();
   if (userData?.me.verified) {
-    navigate("/");
+    navigate('/');
   }
-  const [invalidCode, setInvalidCode] = useState("");
+  const [invalidCode, setInvalidCode] = useState('');
   const client = useApolloClient();
 
   const onCompleted = (data: VerifyEmailMutation) => {
@@ -32,7 +32,7 @@ export const ConfirmEmail = () => {
         }
       };
       const setMessage = setInterval(errorMessage, 1000);
-      setTimeout(navigate, 5000, "/");
+      setTimeout(navigate, 5000, '/');
     } else if (ok && userData?.me.id) {
       // Reading and Writing Data to the cache guide: writeFragment
       // Fragment는 전체 DB에서 수정하고 싶은 일부분이다.
@@ -50,12 +50,12 @@ export const ConfirmEmail = () => {
           verified: true,
         },
       });
-      navigate("/");
+      navigate('/');
     }
   };
   const [verifyEmail] = useVerifyEmailMutation({ onCompleted });
   useEffect(() => {
-    const [_, code] = window.location.href.split("code=");
+    const [_, code] = window.location.href.split('code=');
     verifyEmail({
       variables: {
         input: {
@@ -71,7 +71,7 @@ export const ConfirmEmail = () => {
       </Helmet>
       <h2 className="mb-1  font-medium">Confirming email...</h2>
       <h4 className="">Please wait, don't close this page...</h4>
-      {invalidCode ? <h4 className="text-red-600">{invalidCode}</h4> : ""}
+      {invalidCode ? <h4 className="text-red-600">{invalidCode}</h4> : ''}
     </div>
   );
 };

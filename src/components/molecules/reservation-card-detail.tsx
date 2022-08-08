@@ -1,8 +1,8 @@
-import { getHHMM, getTimeLength, getYMD } from "../../libs/timetable-utils";
-import { RESERVATION_STATE_KOR } from "../../variables";
-import { IListReservation } from "../../store";
-import { EditReservationState } from "./edit-reservation-state";
-import { ReservationState } from "../../graphql/generated/graphql";
+import { getTimeLength } from '../../services/dateServices';
+import { RESERVATION_STATE_KOR } from '../../constants/constants';
+import { IListReservation } from '../../store';
+import { EditReservationState } from './edit-reservation-state';
+import { ReservationState } from '../../graphql/generated/graphql';
 
 interface ReservationCardDetailProps {
   reservation: IListReservation;
@@ -24,7 +24,7 @@ export const ReservationCardDetail = ({
         <span>시간</span>
         <span>{new Date(reservation.startDate).toLocaleString()}</span>
         <span className="col-start-2">
-          {getTimeLength(reservation.startDate, reservation.endDate, "minute")}
+          {getTimeLength(reservation.startDate, reservation.endDate, 'minute')}
           분
         </span>
       </div>

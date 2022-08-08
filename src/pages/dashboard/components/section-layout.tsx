@@ -1,11 +1,11 @@
-import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { cls } from "../../../libs/utils";
+import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { cls } from '../../../utils/utils';
 
 interface DashboardSectionLayoutProps {
   children: React.ReactNode;
   title?: string;
-  width?: "md";
+  width?: 'md';
   tooltip?: string;
   height?: string;
   hasMinHeight?: boolean;
@@ -34,21 +34,21 @@ export const DashboardSectionLayout = ({
   return (
     <div
       className={cls(
-        elementName || "",
-        "DASHBOARD-SECTION-LAYOUT w-full bg-white p-2",
-        hasShadow ? "shadow" : "",
-        hasBorder ? "border" : "",
-        hasMinHeight ? "min-h-[8rem]" : "",
-        padding ? "my-2" : "",
-        heightFull ? "h-full" : ""
+        elementName || '',
+        'DASHBOARD-SECTION-LAYOUT w-full bg-white p-2',
+        hasShadow ? 'shadow' : '',
+        hasBorder ? 'border' : '',
+        hasMinHeight ? 'min-h-[8rem]' : '',
+        padding ? 'my-2' : '',
+        heightFull ? 'h-full' : ''
       )}
       style={{ ...(height && { height }) }}
     >
       <div
         className={cls(
-          "overflow-x-scroll",
-          width === "md" ? "mx-auto max-w-md" : "w-full",
-          moreYGap ? "space-y-6" : "space-y-2"
+          'overflow-x-scroll',
+          width === 'md' ? 'mx-auto max-w-md' : 'w-full',
+          moreYGap ? 'space-y-6' : 'space-y-2'
         )}
       >
         {tooltip && (

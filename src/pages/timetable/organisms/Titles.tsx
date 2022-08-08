@@ -1,27 +1,26 @@
-import { useReactiveVar } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { getActiveUserLength } from "..";
-import {
-  DayWithUsers,
-  getSunday,
-  getWeeks,
-  makeDayWithUsers,
-  spreadClinicMembers,
-} from "../../../libs/timetable-utils";
-import { cls } from "../../../libs/utils";
+import { useReactiveVar } from '@apollo/client';
+import { useEffect, useState } from 'react';
+import { getActiveUserLength } from '..';
+import { getSunday, getWeeks } from '../../../services/dateServices';
+import { cls } from '../../../utils/utils';
 import {
   clinicListsVar,
   loggedInUserVar,
   selectedClinicVar,
   selectedDateVar,
-  todayNowVar,
-} from "../../../store";
-import { NameInSubHeader } from "../molecules/name-in-sub-header";
-import { SubHeaderBtn } from "../molecules/sub-header-btn";
-import { TableLoopLayout } from "./templates/table-loop-layout";
+} from '../../../store';
+import { UserNameTitle } from './UserNameTitle';
+import { DateTitle } from './DateTitle';
+import { TableLoopLayout } from './templates/table-loop-layout';
+import {
+  makeDayWithUsers,
+  spreadClinicMembers,
+} from '../../../services/timetableServices';
+import { DayWithUsers } from '../../../types/type';
 
-interface TableSubHeaderProps {}
-export function TableSubHeader({}: TableSubHeaderProps) {
+interface TitlesProps {}
+
+export function Titles({}: TitlesProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const logInUser = useReactiveVar(loggedInUserVar);
   const clinicLists = useReactiveVar(clinicListsVar);
@@ -45,7 +44,7 @@ export function TableSubHeader({}: TableSubHeaderProps) {
       <TableLoopLayout
         userLength={userLength}
         children={userFrame?.map((day, i) => (
-          <SubHeaderBtn key={i} date={day.date} userLength={userLength} />
+          <DateTitle key={i} date={day.date} userLength={userLength} />
         ))}
       />
       <TableLoopLayout
@@ -54,14 +53,14 @@ export function TableSubHeader({}: TableSubHeaderProps) {
           <div
             key={i}
             className={cls(
-              "user-cols-divide relative flex items-center bg-white",
-              userLength === 1 ? "border-x-inherit" : ""
+              'user-cols-divide relative flex items-center bg-white',
+              userLength === 1 ? 'border-x-inherit' : ''
             )}
           >
             {day?.users.map(
               (member, userIndex) =>
                 member.isActivate && (
-                  <NameInSubHeader
+                  <UserNameTitle
                     key={userIndex}
                     isMe={member.user.name === logInUser?.name}
                     name={member.user.name}

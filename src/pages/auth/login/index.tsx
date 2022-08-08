@@ -1,16 +1,17 @@
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import {
   LoginInput,
   LoginMutation,
   useLoginMutation,
-} from "../graphql/generated/graphql";
-import { LOCALSTORAGE_TOKEN, REGEX_EMAIL } from "../variables";
-import { authTokenVar, isLoggedInVar } from "../apollo";
-import { FormError } from "../components/form-error";
-import { Button } from "../components/molecules/button";
-import { Input } from "../components/molecules/input";
+} from '../../../graphql/generated/graphql';
+import { authTokenVar, isLoggedInVar } from '../../../apollo';
+import { Input } from '../../../components/molecules/input';
+import { FormError } from '../../../components/form-error';
+import { Button } from '../../../components/molecules/button';
+import { REGEX } from '../../../constants/regex';
+import { LOCAL_STORAGE_KEY } from '../../../constants/localStorage';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -19,20 +20,20 @@ export const Login = () => {
     getValues,
     formState: { errors, isValid },
     handleSubmit,
-  } = useForm<LoginInput>({ mode: "onChange" });
+  } = useForm<LoginInput>({ mode: 'onChange' });
 
   const onCompleted = (data: LoginMutation) => {
     const {
       login: { ok, token },
     } = data;
     if (!ok) {
-      alert("로그인이 유효하지 않습니다.");
+      alert('로그인이 유효하지 않습니다.');
     }
     if (ok && token) {
-      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
+      localStorage.setItem(LOCAL_STORAGE_KEY.TOKEN, token);
       authTokenVar(token);
       isLoggedInVar(true);
-      navigate("/");
+      navigate('/');
     }
   };
 
@@ -72,18 +73,18 @@ export const Login = () => {
           type="email"
           placeholder="Email"
           name="email"
-          label={"Email"}
-          register={register("email", {
-            required: "Email을 입력하세요",
-            pattern: REGEX_EMAIL,
+          label={'Email'}
+          register={register('email', {
+            required: 'Email을 입력하세요',
+            pattern: REGEX.EMAIL,
           })}
           children={
             <>
               {errors.email?.message && (
                 <FormError errorMessage={errors.email.message} />
               )}
-              {errors.email?.type === "pattern" && (
-                <FormError errorMessage={"Email형식으로 입력하세요"} />
+              {errors.email?.type === 'pattern' && (
+                <FormError errorMessage={'Email형식으로 입력하세요'} />
               )}
             </>
           }
@@ -93,7 +94,7 @@ export const Login = () => {
           placeholder="Password"
           name="password"
           label="비밀번호"
-          register={register("password", { required: "비밀번호를 입력하세요" })}
+          register={register('password', { required: '비밀번호를 입력하세요' })}
           children={
             errors.password?.message && (
               <FormError errorMessage={errors.password.message} />
@@ -104,7 +105,7 @@ export const Login = () => {
           type="submit"
           canClick={isValid}
           loading={loading}
-          textContents={"로그인"}
+          textContents={'로그인'}
         />
       </form>
     </>

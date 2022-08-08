@@ -1,27 +1,27 @@
-import { useReactiveVar } from "@apollo/client";
+import { useReactiveVar } from '@apollo/client';
 import {
   faCalendarAlt,
   faPlusSquare,
   faRectangleXmark,
-} from "@fortawesome/free-regular-svg-icons";
-import { faGear, faList } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { BtnMenu } from "../../../components/molecules/button-menu";
-import { BtnMenuToggle } from "../../../components/molecules/button-menu-toggle";
-import { saveViewOptions } from "../../../libs/utils";
+} from '@fortawesome/free-regular-svg-icons';
+import { faGear, faList } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { BtnMenu } from '../../../components/molecules/button-menu';
+import { BtnMenuToggle } from '../../../components/molecules/button-menu-toggle';
+import { saveViewOptions } from '../../../utils/utils';
 import {
-  IViewOption,
   loggedInUserVar,
   selectedDateVar,
   selectedReservationVar,
   viewOptionsVar,
-} from "../../../store";
-import { NEXT, ONE_DAY, ONE_WEEK, PREV } from "../../../variables";
-import { BtnArrow } from "../molecules/button-arrow";
-import { TableClinicSelector } from "./table-clinic-selector";
-import { TableNavExpand } from "./table-nav-expand";
+} from '../../../store';
+import { NEXT, ONE_DAY, ONE_WEEK, PREV } from '../../../constants/constants';
+import { BtnArrow } from '../molecules/button-arrow';
+import { TableClinicSelector } from './table-clinic-selector';
+import { TableNavExpand } from './table-nav-expand';
+import { IViewOption } from '../../../types/type';
 
 interface TableNavProps {
   today: Date;
@@ -29,10 +29,10 @@ interface TableNavProps {
 
 const tableNavVarients = {
   ini: (isUp: boolean) => ({ y: isUp ? -40 : 30 }),
-  start: { y: 0, transition: { type: "tween", duration: 0.3 } },
+  start: { y: 0, transition: { type: 'tween', duration: 0.3 } },
 };
 
-export function TableHeader({ today }: TableNavProps) {
+export function TableNav({ today }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const selectedDate = useReactiveVar(selectedDateVar);
@@ -63,11 +63,11 @@ export function TableHeader({ today }: TableNavProps) {
           className="min-w-[120px] font-medium hover:font-bold"
           onClick={() => selectedDateVar(today)}
         >
-          {today.toLocaleString("ko-KR", {
-            year: "2-digit",
-            month: "short",
-            day: "numeric",
-            weekday: "short",
+          {today.toLocaleString('ko-KR', {
+            year: '2-digit',
+            month: 'short',
+            day: 'numeric',
+            weekday: 'short',
           })}
         </button>
         {selectedReservation && (
@@ -94,8 +94,8 @@ export function TableHeader({ today }: TableNavProps) {
               <FontAwesomeIcon icon={faPlusSquare} fontSize={14} className="" />
             }
             enabled
-            label={"환자등록"}
-            onClick={() => navigate("create-patient")}
+            label={'환자등록'}
+            onClick={() => navigate('create-patient')}
           />
           <BtnMenuToggle
             onClick={() => {
@@ -108,14 +108,14 @@ export function TableHeader({ today }: TableNavProps) {
             }}
             firstEnabled={viewOptions.periodToView === ONE_WEEK}
             secondEnabled={viewOptions.periodToView === ONE_DAY}
-            label={["1주일", "하루"]}
+            label={['1주일', '하루']}
           />
           {/* ---------------------- 구분선 ---------------------- */}
 
           <BtnMenu
             icon={<FontAwesomeIcon icon={faCalendarAlt} fontSize={14} />}
             enabled={viewOptions.navigationExpand}
-            label={"달력"}
+            label={'달력'}
             onClick={() => {
               const newViewOptions = {
                 ...viewOptions,
@@ -128,7 +128,7 @@ export function TableHeader({ today }: TableNavProps) {
           <BtnMenu
             icon={<FontAwesomeIcon icon={faList} fontSize={14} />}
             enabled={viewOptions.seeList}
-            label={"목록"}
+            label={'목록'}
             onClick={() => {
               const newViewOptions = {
                 ...viewOptions,
@@ -140,7 +140,7 @@ export function TableHeader({ today }: TableNavProps) {
           <BtnMenu
             icon={<FontAwesomeIcon icon={faGear} fontSize={14} />}
             enabled={viewOptions.seeActiveOption}
-            label={"설정"}
+            label={'설정'}
             onClick={() => {
               const newViewOptions = {
                 ...viewOptions,
@@ -174,7 +174,7 @@ export function TableHeader({ today }: TableNavProps) {
               direction={NEXT}
               onClick={handleDateNavMoveNext}
               className={
-                "absolute top-[25px] right-0 flex h-[29px] items-center"
+                'absolute top-[25px] right-0 flex h-[29px] items-center'
               }
             />
           </>

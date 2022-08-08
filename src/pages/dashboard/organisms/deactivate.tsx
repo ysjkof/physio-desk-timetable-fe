@@ -1,13 +1,13 @@
-import { useReactiveVar } from "@apollo/client";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Worning } from "../../../components/atoms/warning";
-import { Button } from "../../../components/molecules/button";
-import { BtnMenu } from "../../../components/molecules/button-menu";
-import { useInactivateClinicMutation } from "../../../graphql/generated/graphql";
-import { selectedClinicVar } from "../../../store";
-import { DeactivateClinicInfo } from "./myClicnics";
+import { useReactiveVar } from '@apollo/client';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { Worning } from '../../../components/atoms/warning';
+import { Button } from '../../../components/molecules/button';
+import { BtnMenu } from '../../../components/molecules/button-menu';
+import { useInactivateClinicMutation } from '../../../graphql/generated/graphql';
+import { selectedClinicVar } from '../../../store';
+import { DeactivateClinicInfo } from '../../../types/type';
 
 interface DeactivateClinicProps extends DeactivateClinicInfo {}
 

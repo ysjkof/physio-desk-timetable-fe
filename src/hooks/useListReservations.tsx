@@ -1,7 +1,7 @@
-import { useReactiveVar } from "@apollo/client";
-import { useListReservationsQuery } from "../graphql/generated/graphql";
-import { getAfterDate, getSunday } from "../libs/timetable-utils";
-import { clinicListsVar, selectedClinicVar, selectedDateVar } from "../store";
+import { useReactiveVar } from '@apollo/client';
+import { useListReservationsQuery } from '../graphql/generated/graphql';
+import { getAfterDate, getSunday } from '../services/dateServices';
+import { clinicListsVar, selectedClinicVar, selectedDateVar } from '../store';
 
 export const useListReservations = () => {
   const selectedClinic = useReactiveVar(selectedClinicVar);

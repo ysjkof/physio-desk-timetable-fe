@@ -1,10 +1,10 @@
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
-import { FieldError, UseFormSetValue } from "react-hook-form";
-import { compareDateMatch } from "../../libs/timetable-utils";
-import { BirthdayInput } from "./create-patient-form";
-import { ModalPortal } from "./modal-portal";
+import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useRef, useState } from 'react';
+import { FieldError, UseFormSetValue } from 'react-hook-form';
+import { compareDateMatch } from '../../services/dateServices';
+import { BirthdayInput } from '../../types/type';
+import { ModalPortal } from './modal-portal';
 
 export interface DatepickerForm {
   startDateYear?: number;
@@ -28,8 +28,8 @@ export interface IFormErrors extends AddFieldError<IForm> {}
 interface IDatePicker {
   setValue: UseFormSetValue<IForm>;
   defaultDate: Date;
-  see: "ymd-hm" | "ymd";
-  prefix: "startDate" | "endDate" | "birthday";
+  see: 'ymd-hm' | 'ymd';
+  prefix: 'startDate' | 'endDate' | 'birthday';
   openState: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -85,12 +85,12 @@ export const Datepicker = ({
   }
   const listOfMinutes = getMinutes(minutesUnit);
 
-  function getWeeks(value: Date, option?: "sunday") {
+  function getWeeks(value: Date, option?: 'sunday') {
     let result: Date[] = [];
     const date = new Date(value);
     const day = date.getDay();
     const sunday = new Date(date.setDate(date.getDate() - day));
-    if (option === "sunday") {
+    if (option === 'sunday') {
       return result.concat(sunday);
     }
     for (let i = 0; i < 7; i++) {
@@ -127,13 +127,13 @@ export const Datepicker = ({
   }, [nextDate]);
 
   useEffect(() => {
-    if (prefix !== "birthday") {
+    if (prefix !== 'birthday') {
       nextDate.setHours(selectedHour);
       setValue(`${prefix}Hours`, selectedHour);
     }
   }, [selectedHour]);
   useEffect(() => {
-    if (prefix !== "birthday") {
+    if (prefix !== 'birthday') {
       nextDate.setMinutes(selectedMinutes);
       setValue(`${prefix}Minutes`, selectedMinutes);
     }
@@ -212,7 +212,7 @@ export const Datepicker = ({
                 </div>
                 <div className="datepicker-calendar flex divide-x">
                   <div className="datepicker-calendar-col left grid w-full grid-cols-7 pr-1.5 text-center">
-                    {["일", "월", "화", "수", "목", "금", "토"].map(
+                    {['일', '월', '화', '수', '목', '금', '토'].map(
                       (day, i) => (
                         <div key={i}>{day}</div>
                       )
@@ -222,22 +222,22 @@ export const Datepicker = ({
                         key={day.valueOf()}
                         className={`cursor-pointer px-1.5 py-1 ${
                           day.getMonth() !== dateOfMonth[15].getMonth()
-                            ? "opacity-50"
-                            : ""
+                            ? 'opacity-50'
+                            : ''
                         } ${
                           day.getDay() === 0
-                            ? "sunday"
+                            ? 'sunday'
                             : day.getDay() === 6
-                            ? "saturday"
-                            : ""
+                            ? 'saturday'
+                            : ''
                         } ${
-                          compareDateMatch(day, nextDate, "ymd")
-                            ? "rounded-md bg-red-400 text-white"
-                            : ""
+                          compareDateMatch(day, nextDate, 'ymd')
+                            ? 'rounded-md bg-red-400 text-white'
+                            : ''
                         } ${
-                          compareDateMatch(day, defaultDate, "ymd")
-                            ? "rounded-md border border-transparent ring-2 ring-red-500"
-                            : ""
+                          compareDateMatch(day, defaultDate, 'ymd')
+                            ? 'rounded-md border border-transparent ring-2 ring-red-500'
+                            : ''
                         }`}
                         data-date={day}
                         onClick={async (e) => {
@@ -245,14 +245,14 @@ export const Datepicker = ({
                             // @ts-ignore
                             new Date(e.currentTarget.dataset.date)
                           );
-                          if (see === "ymd") setOpen(false);
+                          if (see === 'ymd') setOpen(false);
                         }}
                       >
                         {day.getDate()}
                       </span>
                     ))}
                   </div>
-                  {see === "ymd-hm" && (
+                  {see === 'ymd-hm' && (
                     <div className="datepicker-calendar-col-time-picker flex h-32 space-x-2 pl-2 text-center">
                       <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
                         <span>시</span>
@@ -261,12 +261,12 @@ export const Datepicker = ({
                             key={i}
                             className={`cursor-pointer px-1.5 ${
                               selectedHour === hours
-                                ? "rounded-md bg-blue-500 text-white"
-                                : ""
+                                ? 'rounded-md bg-blue-500 text-white'
+                                : ''
                             }`}
                             onClick={() => setSelectedHour(hours)}
                           >
-                            {String(hours).padStart(2, "0")}
+                            {String(hours).padStart(2, '0')}
                           </span>
                         ))}
                       </div>
@@ -277,14 +277,14 @@ export const Datepicker = ({
                             key={i}
                             className={`cursor-pointer px-1.5 ${
                               +selectedMinutes === minutes
-                                ? "rounded-md bg-blue-500 text-white"
-                                : ""
+                                ? 'rounded-md bg-blue-500 text-white'
+                                : ''
                             }`}
                             onClick={() => {
                               setSelectedMinutes(minutes);
                             }}
                           >
-                            {String(minutes).padStart(2, "0")}
+                            {String(minutes).padStart(2, '0')}
                           </span>
                         ))}
                       </div>

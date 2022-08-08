@@ -2,8 +2,6 @@ import { Helmet } from 'react-helmet-async';
 import { useReactiveVar } from '@apollo/client';
 import {
   clinicListsVar,
-  IListReservation,
-  IMemberWithActivate,
   loggedInUserVar,
   selectedClinicVar,
   selectedDateVar,
@@ -16,28 +14,37 @@ import { useEffect, useState } from 'react';
 import {
   compareDateMatch,
   compareSameWeek,
-  DayWithUsers,
   getSunday,
   getTimeGaps,
   getWeeks,
-  makeDayWithUsers,
-  spreadClinicMembers,
-} from '../../libs/timetable-utils';
-import { ONE_DAY, TABLE_TIME_GAP } from '../../variables';
-import { TableHeader } from './organisms/table-header';
+} from '../../services/dateServices';
+import { ONE_DAY, TABLE_TIME_GAP } from '../../constants/constants';
+import { TableNav } from './organisms/TableNav';
 import { AnimatePresence } from 'framer-motion';
-import { TableLabels } from './organisms/table-labels';
-import { TableSubHeader } from './organisms/table-sub-header';
+import { TimeLabels } from './organisms/TimeLabels';
+import { Titles } from './organisms/Titles';
 import { TableModals } from './organisms/table-modal';
 import { Loading } from '../../components/atoms/loading';
-import TableCols from './organisms/table-cols';
+import Schedules from './organisms/Schedules';
 import {
   ListenDeleteReservationDocument,
   ListenDeleteReservationSubscription,
   ListenUpdateReservationDocument,
   ListenUpdateReservationSubscription,
 } from '../../graphql/generated/graphql';
-import { changeValueInArray, removeItemInArrayByIndex } from '../../libs/utils';
+import {
+  changeValueInArray,
+  removeItemInArrayByIndex,
+} from '../../utils/utils';
+import {
+  makeDayWithUsers,
+  spreadClinicMembers,
+} from '../../services/timetableServices';
+import {
+  DayWithUsers,
+  IListReservation,
+  IMemberWithActivate,
+} from '../../types/type';
 
 export interface TimetableModalProps {
   closeAction: () => void;
@@ -224,15 +231,15 @@ export const TimeTable = () => {
         <Loading />
       ) : (
         <TimetableTemplate
-          header={<TableHeader today={today} />}
-          labels={<TableLabels labels={labels} />}
-          body={
+          nav={<TableNav today={today} />}
+          labels={<TimeLabels labels={labels} />}
+          columns={
             <>
               <AnimatePresence>
                 {viewOptions.seeList === false && (
                   <>
-                    <TableSubHeader />
-                    <TableCols
+                    <Titles />
+                    <Schedules
                       labels={labels}
                       weekEvents={optionalWeekEvents}
                     />

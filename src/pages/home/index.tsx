@@ -1,7 +1,7 @@
-import { useReactiveVar } from "@apollo/client";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { isLoggedInVar } from "../apollo";
+import { useReactiveVar } from '@apollo/client';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { isLoggedInVar } from '../../apollo';
 import {
   useCreateAccountMutation,
   useCreateAtomPrescriptionMutation,
@@ -12,24 +12,24 @@ import {
   useFindAllPatientsQuery,
   useFindPrescriptionsQuery,
   useInviteClinicMutation,
-} from "../graphql/generated/graphql";
+} from '../../graphql/generated/graphql';
 import {
   loggedInUserVar,
   PrescriptionWithSelect,
   selectedClinicVar,
-} from "../store";
+} from '../../store';
 
 const clinicId = 11;
 const makeAccount = (email: string, name: string) => ({
   email,
   name,
-  password: "123",
+  password: '123',
 });
 const makePatient = (name: string) => ({
   name,
   clinicId,
-  gender: Math.ceil(Math.random() * 2) === 1 ? "male" : "female",
-  birthday: new Date("1980-1-1"),
+  gender: Math.ceil(Math.random() * 2) === 1 ? 'male' : 'female',
+  birthday: new Date('1980-1-1'),
 });
 
 const length = 10;
@@ -42,10 +42,10 @@ const accountArr = arr.map((_, idx) =>
 
 const patientArr = arr.map((_, idx) => makePatient(`환자님${idx}`));
 const newPrescriptions = [
-  { name: "MT1", price: 80000, requiredTime: 30, prescriptionAtomIds: [1] },
-  { name: "MT2", price: 130000, requiredTime: 50, prescriptionAtomIds: [1] },
-  { name: "ET1", price: 40000, requiredTime: 10, prescriptionAtomIds: [2] },
-  { name: "ET1", price: 80000, requiredTime: 10, prescriptionAtomIds: [2] },
+  { name: 'MT1', price: 80000, requiredTime: 30, prescriptionAtomIds: [1] },
+  { name: 'MT2', price: 130000, requiredTime: 50, prescriptionAtomIds: [1] },
+  { name: 'ET1', price: 40000, requiredTime: 10, prescriptionAtomIds: [2] },
+  { name: 'ET1', price: 80000, requiredTime: 10, prescriptionAtomIds: [2] },
 ].map(({ name, prescriptionAtomIds, price, requiredTime }) => ({
   name,
   prescriptionAtomIds,
@@ -71,7 +71,7 @@ function getOneDayReservationInputDateForTest(
     while (dates.find((dateInWhile) => dateInWhile.getHours() === th)) {
       th = Math.floor(Math.random() * (19 - 9) + 9);
     }
-    tm === 6 ? (tm = 0) : "";
+    tm === 6 ? (tm = 0) : '';
     sd.setHours(th, tm, 0, 0);
     ed.setHours(th, tm + inputPresc.requiredTime, 0, 0);
     return [sd, ed];
@@ -117,7 +117,7 @@ export function Home() {
     })) ?? [];
 
   function createDummyReserve() {
-    const firstDate = new Date("2022-7-1");
+    const firstDate = new Date('2022-7-1');
     let count = 0;
     for (let i = 0; i < 30; i++) {
       firstDate.setDate(i + 1);
@@ -151,7 +151,7 @@ export function Home() {
         });
       });
     }
-    console.log("총 생성된 예약 : ", count);
+    console.log('총 생성된 예약 : ', count);
   }
 
   return (
@@ -200,7 +200,7 @@ export function Home() {
             createClinic({
               variables: {
                 input: {
-                  name: "테스트정형외과의원",
+                  name: '테스트정형외과의원',
                 },
               },
             })
@@ -244,7 +244,7 @@ export function Home() {
         </button>
         <button
           onClick={() =>
-            ["도수치료", "충격파"].forEach((name) =>
+            ['도수치료', '충격파'].forEach((name) =>
               createAtom({
                 variables: {
                   input: {

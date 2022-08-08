@@ -1,25 +1,25 @@
-import { useReactiveVar } from "@apollo/client";
-import { getActiveUserLength } from "..";
+import { useReactiveVar } from '@apollo/client';
+import { getActiveUserLength } from '..';
 import {
   combineYMDHM,
   compareDateMatch,
-  compareNumAfterGetMinutes,
-  DayWithUsers,
   getTimeLength,
-} from "../../../libs/timetable-utils";
-import { cls } from "../../../libs/utils";
-import { selectedClinicVar, selectedDateVar } from "../../../store";
-import { TABLE_CELL_HEIGHT } from "../../../variables";
-import { EventBox } from "../molecules/event-box";
-import { ReserveBtn } from "../molecules/reserve-btn";
-import { TableLoopLayout } from "./templates/table-loop-layout";
-import { TimeIndicatorBar } from "./time-indicator-bar";
+} from '../../../services/dateServices';
+import { cls } from '../../../utils/utils';
+import { selectedClinicVar, selectedDateVar } from '../../../store';
+import { TABLE_CELL_HEIGHT } from '../../../constants/constants';
+import { EventBox } from '../molecules/event-box';
+import { ReserveBtn } from '../molecules/reserve-btn';
+import { TableLoopLayout } from './templates/table-loop-layout';
+import { TimeIndicatorBar } from './TimeIndicatorBar';
+import { compareNumAfterGetMinutes } from '../../../services/timetableServices';
+import { DayWithUsers } from '../../../types/type';
 
-interface TableColsProps {
+interface SchedulesProps {
   weekEvents: DayWithUsers[];
   labels: Date[];
 }
-function TableCols({ weekEvents, labels }: TableColsProps) {
+function Schedules({ weekEvents, labels }: SchedulesProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
 
@@ -35,15 +35,15 @@ function TableCols({ weekEvents, labels }: TableColsProps) {
         <div
           key={i}
           className={cls(
-            "user-cols-divide relative grid border-b",
-            userLength === 1 ? "border-x-inherit" : ""
+            'user-cols-divide relative grid border-b',
+            userLength === 1 ? 'border-x-inherit' : ''
           )}
           style={{
             gridTemplateColumns: `repeat(${userLength}, 1fr)`,
           }}
         >
           <TimeIndicatorBar
-            isActive={compareDateMatch(day.date, selectedDate, "ymd")}
+            isActive={compareDateMatch(day.date, selectedDate, 'ymd')}
             labels={labels}
           />
           {day.users.map((member, userIndex) =>
@@ -68,7 +68,7 @@ function TableCols({ weekEvents, labels }: TableColsProps) {
                 )}
                 {member.events?.map((event) => {
                   const idx = labels.findIndex((label) =>
-                    compareDateMatch(label, new Date(event.startDate), "hm")
+                    compareDateMatch(label, new Date(event.startDate), 'hm')
                   );
                   const numberOfCell = idx === -1 ? 0 : idx;
                   return (
@@ -80,7 +80,7 @@ function TableCols({ weekEvents, labels }: TableColsProps) {
                       numberOfCell={getTimeLength(
                         event.startDate,
                         event.endDate,
-                        "20minute"
+                        '20minute'
                       )}
                       inset={`${numberOfCell * TABLE_CELL_HEIGHT}px 0%`}
                     />
@@ -88,7 +88,7 @@ function TableCols({ weekEvents, labels }: TableColsProps) {
                 })}
               </div>
             ) : (
-              ""
+              ''
             )
           )}
         </div>
@@ -97,4 +97,4 @@ function TableCols({ weekEvents, labels }: TableColsProps) {
   );
 }
 
-export default TableCols;
+export default Schedules;

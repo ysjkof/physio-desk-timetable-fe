@@ -1,50 +1,23 @@
-import { DashboardSectionLayout } from "../components/section-layout";
-import {
-  GetStatisticsQuery,
-  useGetStatisticsQuery,
-} from "../../../graphql/generated/graphql";
-import { useEffect, useState } from "react";
-import { DatepickerForm } from "../../../components/molecules/datepicker";
-import { InDashboardPageProps } from "..";
-import { selectedClinicVar, selectedDateVar } from "../../../store";
-import { useReactiveVar } from "@apollo/client";
-import { BtnMenu } from "../../../components/molecules/button-menu";
-import { Worning } from "../../../components/atoms/warning";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DashboardSectionLayout } from '../components/section-layout';
+import { useGetStatisticsQuery } from '../../../graphql/generated/graphql';
+import { useEffect, useState } from 'react';
+import { DatepickerForm } from '../../../components/molecules/datepicker';
+import { InDashboardPageProps } from '..';
+import { selectedClinicVar, selectedDateVar } from '../../../store';
+import { useReactiveVar } from '@apollo/client';
+import { BtnMenu } from '../../../components/molecules/button-menu';
+import { Worning } from '../../../components/atoms/warning';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { getMonthStartEnd } from "../../../libs/timetable-utils";
-import { Loading } from "../../../components/atoms/loading";
-import Charts from "../molecules/charts";
-import { Button } from "../../../components/molecules/button";
-import combineUserStatistics from "../../../libs/useStatistics";
-
-type IDailyReports = GetStatisticsQuery["getStatistics"]["dailyReports"];
-export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
-export type IUserInDaily = IDailyReport["users"][0];
-
-type IDailyPrescriptions = GetStatisticsQuery["getStatistics"]["prescriptions"];
-export type IDailyPrescription = NonNullable<FlatArray<IDailyPrescriptions, 0>>;
-export interface IDailyPrescriptionWithCount extends IDailyPrescription {
-  count: number;
-}
-export type IPrescriptionOfUser = IDailyReport["users"][0]["prescriptions"][0];
-
-export type CountLists = {
-  reservationCount: number;
-  newPatient: number;
-  noshow: number;
-  cancel: number;
-  visitMoreThanThirty: number;
-};
-export interface IUserStatistics {
-  name: string;
-  counts: CountLists;
-  prescriptions: IDailyPrescriptionWithCount[];
-}
-
+} from '@fortawesome/free-solid-svg-icons';
+import { getMonthStartEnd } from '../../../services/dateServices';
+import { Loading } from '../../../components/atoms/loading';
+import Charts from '../molecules/charts';
+import { Button } from '../../../components/molecules/button';
+import combineUserStatistics from '../../../services/statisticsServices';
+import { IUserStatistics, MemberState } from '../../../types/type';
 interface IPrescriptionCounts {
   reservedCount: number;
   noshowCount: number;
@@ -60,14 +33,10 @@ interface IPrescription extends IPrescriptionNamePrice, IPrescriptionCounts {
   price: number;
 }
 
-export interface MemberState {
-  userId: number;
-  name: string;
-  isSelected: boolean;
-}
 interface ModifiedDatepickerForm extends DatepickerForm {
   userIds?: number[];
 }
+
 const [initialStartDate, initailEndDate] = getMonthStartEnd(new Date());
 
 export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
@@ -99,16 +68,16 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
   function onClickSetDate(
     date: Date,
     month: number,
-    changeYear?: "prev" | "next"
+    changeYear?: 'prev' | 'next'
   ) {
     const start = new Date(date);
     start.setMonth(month);
 
     switch (changeYear) {
-      case "prev":
+      case 'prev':
         start.setFullYear(start.getFullYear() - 1);
         break;
-      case "next":
+      case 'next':
         start.setFullYear(start.getFullYear() + 1);
         break;
     }
@@ -159,10 +128,10 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
     if (data?.getStatistics.dailyReports && data?.getStatistics.prescriptions) {
       const { dailyReports, prescriptions, visitRates } = data.getStatistics;
 
-      console.log("dailyReports", dailyReports);
-      console.log("prescriptions", prescriptions);
-      console.log("visitRates", visitRates);
-      console.log("memberState", memberState);
+      console.log('dailyReports', dailyReports);
+      console.log('prescriptions', prescriptions);
+      console.log('visitRates', visitRates);
+      console.log('memberState', memberState);
 
       const newUserStatistics = combineUserStatistics({
         dailyReports,
@@ -188,7 +157,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     const newStartDate = onClickSetDate(
                       startDate,
                       selectedDate.getMonth(),
-                      "prev"
+                      'prev'
                     );
                     selectedDateVar(new Date(newStartDate));
                   }}
@@ -196,13 +165,13 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                   enabled
                   hasBorder
                 />
-                <BtnMenu label={selectedDate.getFullYear() + "년 "} enabled />
+                <BtnMenu label={selectedDate.getFullYear() + '년 '} enabled />
                 <BtnMenu
                   onClick={() => {
                     const newStartDate = onClickSetDate(
                       startDate,
                       selectedDate.getMonth(),
-                      "next"
+                      'next'
                     );
                     selectedDateVar(new Date(newStartDate));
                   }}
@@ -217,7 +186,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                     key={idx}
                     hasBorder
                     onClick={() => onClickSetDate(startDate, idx)}
-                    label={idx + 1 + "월"}
+                    label={idx + 1 + '월'}
                     enabled={startDate.getMonth() === idx}
                     hasActiveRing
                     thinFont

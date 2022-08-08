@@ -1,3 +1,4 @@
+import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
 import {
   clinicListsVar,
   IClinicList,
@@ -6,36 +7,9 @@ import {
   selectedClinicVar,
   viewOptionsVar,
 } from '../store';
-import {
-  LOCALSTORAGE_SELECTED_CLINIC,
-  LOCALSTORAGE_CLINIC_LISTS,
-  LOCALSTORAGE_VIEW_OPTION,
-} from '../variables';
 
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
-}
-
-export function getDateFromYMDHM(
-  startDateYear: number,
-  startDateMonth: number,
-  startDateDate: number,
-  startDateHours?: number,
-  startDateMinutes?: number
-) {
-  const MM = String(startDateMonth).padStart(2, '0');
-  const DD = String(startDateDate).padStart(2, '0');
-  const ymd = `${startDateYear}-${MM}-${DD}`;
-  let hms = `T00:00:00.000`;
-  if (
-    typeof startDateHours === 'number' &&
-    typeof startDateMinutes === 'number'
-  ) {
-    const HH = String(startDateHours).padStart(2, '0');
-    const MM = String(startDateMinutes).padStart(2, '0');
-    hms = `T${HH}:${MM}:00.000`;
-  }
-  return new Date(ymd + hms);
 }
 
 export function getPositionRef(
@@ -54,7 +28,7 @@ export function saveSelectedClinic(
   loggedInUserId: number
 ) {
   localStorage.setItem(
-    LOCALSTORAGE_SELECTED_CLINIC + loggedInUserId,
+    LOCAL_STORAGE_KEY.SELECTED_CLINIC + loggedInUserId,
     JSON.stringify(newSelectedClinic)
   );
   selectedClinicVar(newSelectedClinic);
@@ -64,7 +38,7 @@ export function saveClinicLists(
   loginUserId: number
 ) {
   localStorage.setItem(
-    LOCALSTORAGE_CLINIC_LISTS + loginUserId,
+    LOCAL_STORAGE_KEY.CLINIC_LISTS + loginUserId,
     JSON.stringify(clinicList)
   );
   clinicListsVar(clinicList);
@@ -75,7 +49,7 @@ export function saveViewOptions(
   newViewOptionsForLacal?: IViewOption
 ) {
   localStorage.setItem(
-    LOCALSTORAGE_VIEW_OPTION + loggedInUserId,
+    LOCAL_STORAGE_KEY.VIEW_OPTION + loggedInUserId,
     JSON.stringify(
       newViewOptionsForLacal ? newViewOptionsForLacal : newViewOptions
     )
@@ -100,15 +74,6 @@ export function makeArrFromLength(length: number) {
   arr.fill(0);
   return arr;
 }
-
-export function getHowManyDayFromMillisec(millisecond: number) {
-  // MILLISECOND_TO_DAY = 1000 / 60 / 60 / 24
-  return millisecond / 1000 / 60 / 60 / 24;
-}
-// export function makeStartDate(date: Date, howManyDay: number) {
-//   const millisecondToDay = getHowManyDayFromMillisec(date.getTime());
-//   return new Date(millisecondToDay / howManyDay);
-// }
 
 export function getRandomColor() {
   return '#' + Math.floor(Math.random() * 16777215).toString(16);

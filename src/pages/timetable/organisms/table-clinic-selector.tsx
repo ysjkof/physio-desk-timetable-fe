@@ -1,23 +1,23 @@
-import { useReactiveVar } from "@apollo/client";
-import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
-import { faBan, faCommentSlash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { motion, Variants } from "framer-motion";
-import { BtnMenu } from "../../../components/molecules/button-menu";
+import { useReactiveVar } from '@apollo/client';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { motion, Variants } from 'framer-motion';
+import { BtnMenu } from '../../../components/molecules/button-menu';
 import {
   cls,
   saveClinicLists,
   saveSelectedClinic,
   saveViewOptions,
-} from "../../../libs/utils";
+} from '../../../utils/utils';
 import {
   clinicListsVar,
   loggedInUserVar,
   selectedClinicVar,
   viewOptionsVar,
-} from "../../../store";
-import { NEXT } from "../../../variables";
-import { BtnArrow } from "../molecules/button-arrow";
+} from '../../../store';
+import { NEXT } from '../../../constants/constants';
+import { BtnArrow } from '../molecules/button-arrow';
 
 export function TableClinicSelector() {
   const viewOptions = useReactiveVar(viewOptionsVar);
@@ -28,15 +28,15 @@ export function TableClinicSelector() {
   if (!loggedInUser || !viewOptions) return <></>;
 
   const onClickToggleUser = (clinicId: number, memberId: number) => {
-    if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
+    if (!loggedInUser) return console.warn('❌ loggedInUser가 false입니다');
     const gIndex = clinicLists.findIndex(
       (prevClinic) => prevClinic.id === clinicId
     );
-    if (gIndex === -1) return console.warn("❌ group index가 -1입니다");
+    if (gIndex === -1) return console.warn('❌ group index가 -1입니다');
     const mIndex = clinicLists[gIndex].members.findIndex(
       (prevMember) => prevMember.id === memberId
     );
-    if (mIndex === -1) return console.warn("❌ member index가 -1입니다");
+    if (mIndex === -1) return console.warn('❌ member index가 -1입니다');
 
     const activateLength = clinicLists[gIndex].members.filter(
       (member) => member.isActivate
@@ -51,7 +51,7 @@ export function TableClinicSelector() {
   };
 
   const onClickChangeSelectClinic = (id: number, name: string) => {
-    if (!loggedInUser) return console.warn("❌ loggedInUser가 false입니다");
+    if (!loggedInUser) return console.warn('❌ loggedInUser가 false입니다');
     if (selectedClinic?.id !== id) {
       const clinic = clinicLists.find((clinic) => clinic.id === id);
       const me = loggedInUser.members?.find(
@@ -109,7 +109,7 @@ export function TableClinicSelector() {
         <BtnMenu
           icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
           enabled={viewOptions.seeCancel}
-          label={"취소"}
+          label={'취소'}
           onClick={() => {
             const newViewOptions = {
               ...viewOptions,
@@ -121,7 +121,7 @@ export function TableClinicSelector() {
         <BtnMenu
           icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
           enabled={viewOptions.seeNoshow}
-          label={"부도"}
+          label={'부도'}
           onClick={() => {
             const newViewOptions = {
               ...viewOptions,
@@ -148,7 +148,7 @@ export function TableClinicSelector() {
                     icon={faCheckCircle}
                     fontSize={16}
                     className={`${
-                      clinic.id === selectedClinic.id ? "text-green-500" : ""
+                      clinic.id === selectedClinic.id ? 'text-green-500' : ''
                     }`}
                   />
                 }
@@ -158,8 +158,8 @@ export function TableClinicSelector() {
               />
               <ul
                 className={cls(
-                  "USER_OF_CLINIC pl-6",
-                  clinic.id === selectedClinic.id ? "" : "pointer-events-none"
+                  'USER_OF_CLINIC pl-6',
+                  clinic.id === selectedClinic.id ? '' : 'pointer-events-none'
                 )}
               >
                 {clinic.members
@@ -182,8 +182,8 @@ export function TableClinicSelector() {
                           fontSize={16}
                           className={`${
                             clinic.id === selectedClinic.id && member.isActivate
-                              ? "text-green-500"
-                              : ""
+                              ? 'text-green-500'
+                              : ''
                           }`}
                         />
                       }

@@ -1,26 +1,26 @@
-import { Helmet } from "react-helmet-async";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { Button } from "../components/molecules/button";
-import { FormError } from "../components/form-error";
+import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import {
   CreateAccountInput,
   CreateAccountMutation,
   useCreateAccountMutation,
-} from "../graphql/generated/graphql";
-import { Input } from "../components/molecules/input";
-import { REGEX_EMAIL } from "../variables";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+} from '../../../graphql/generated/graphql';
+import { Input } from '../../../components/molecules/input';
+import { FormError } from '../../../components/form-error';
+import { Button } from '../../../components/molecules/button';
+import { REGEX } from '../../../constants/regex';
 
-export const CreateAccount = () => {
+export const SignUp = () => {
   const {
     register,
     getValues,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm<CreateAccountInput>({
-    mode: "onChange",
+    mode: 'onChange',
   });
   const navigate = useNavigate();
   const onCompleted = (data: CreateAccountMutation) => {
@@ -28,8 +28,8 @@ export const CreateAccount = () => {
       createAccount: { ok },
     } = data;
     if (ok) {
-      alert("Account Created! Log in now!");
-      navigate("/");
+      alert('Account Created! Log in now!');
+      navigate('/');
     }
   };
   const [
@@ -57,10 +57,10 @@ export const CreateAccount = () => {
       >
         <Input
           name="name"
-          label={"이름"}
-          register={register("name", {
-            required: "이름을 입력하세요",
-            maxLength: { value: 30, message: "최대 30자 입니다" },
+          label={'이름'}
+          register={register('name', {
+            required: '이름을 입력하세요',
+            maxLength: { value: 30, message: '최대 30자 입니다' },
           })}
           type="text"
           placeholder="Name"
@@ -74,10 +74,10 @@ export const CreateAccount = () => {
           type="email"
           placeholder="Email"
           name="email"
-          label={"Email"}
-          register={register("email", {
-            required: "Email을 입력하세요",
-            pattern: REGEX_EMAIL,
+          label={'Email'}
+          register={register('email', {
+            required: 'Email을 입력하세요',
+            pattern: REGEX.EMAIL,
           })}
           children={
             <>
@@ -90,8 +90,8 @@ export const CreateAccount = () => {
               {errors.email?.message && (
                 <FormError errorMessage={errors.email.message} />
               )}
-              {errors.email?.type === "pattern" && (
-                <FormError errorMessage={"Email형식으로 입력하세요"} />
+              {errors.email?.type === 'pattern' && (
+                <FormError errorMessage={'Email형식으로 입력하세요'} />
               )}
             </>
           }
@@ -101,7 +101,7 @@ export const CreateAccount = () => {
           placeholder="Password"
           name="password"
           label="비밀번호"
-          register={register("password", { required: "비밀번호를 입력하세요" })}
+          register={register('password', { required: '비밀번호를 입력하세요' })}
           children={
             errors.password?.message && (
               <FormError errorMessage={errors.password.message} />
@@ -112,7 +112,7 @@ export const CreateAccount = () => {
           type="submit"
           canClick={isValid}
           loading={loading}
-          textContents={"계정 만들기"}
+          textContents={'계정 만들기'}
         />
         {createaAccountMutationResult?.createAccount.error && (
           <FormError

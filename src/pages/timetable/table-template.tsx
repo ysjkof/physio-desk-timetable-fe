@@ -1,16 +1,16 @@
-import { motion } from "framer-motion";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { motion } from 'framer-motion';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 interface ITimetableProps {
-  header: ReactNode;
+  nav: ReactNode;
   labels: ReactNode;
-  body: ReactNode;
+  columns: ReactNode;
 }
 
 export const TimetableTemplate = ({
-  header,
+  nav,
   labels,
-  body,
+  columns,
 }: ITimetableProps) => {
   const [height, setHeight] = useState<null | number>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -28,8 +28,8 @@ export const TimetableTemplate = ({
         }, 200);
       }
       handleTableHeight();
-      window.addEventListener("resize", handleTableHeight);
-      return () => window.removeEventListener("resize", handleTableHeight);
+      window.addEventListener('resize', handleTableHeight);
+      return () => window.removeEventListener('resize', handleTableHeight);
     }
   }, []);
 
@@ -42,18 +42,18 @@ export const TimetableTemplate = ({
         className="TABLE_HEADER table-header relative z-[34] flex flex-col border-b bg-white"
         ref={headerRef}
       >
-        {header}
+        {nav}
       </div>
 
       {height && (
         <div
           className="TABLE_BODY grid h-screen w-full grid-cols-[40px,1fr] overflow-scroll"
-          style={{ height: height + "px" }}
+          style={{ height: height + 'px' }}
         >
           <div className="TABLE_LABELS sticky left-0 z-[32] border-r-2 border-black bg-white pt-[47px]">
             {labels}
           </div>
-          <div className="TABLE_MAIN flex flex-col">{body}</div>
+          <div className="TABLE_MAIN flex flex-col">{columns}</div>
         </div>
       )}
     </motion.div>

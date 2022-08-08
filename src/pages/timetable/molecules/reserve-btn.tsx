@@ -1,17 +1,11 @@
-import { useReactiveVar } from "@apollo/client";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  ListReservationsDocument,
-  useCreateReservationMutation,
-} from "../../../graphql/generated/graphql";
-import { getHHMM, getTimeLength } from "../../../libs/timetable-utils";
-import { IListReservation, selectedReservationVar } from "../../../store";
-import {
-  RESERVE_DETAIL,
-  TABLE_CELL_HEIGHT,
-  USER_COLORS,
-} from "../../../variables";
+import { useReactiveVar } from '@apollo/client';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCreateReservationMutation } from '../../../graphql/generated/graphql';
+import { getHHMM, getTimeLength } from '../../../services/dateServices';
+import { IListReservation, selectedReservationVar } from '../../../store';
+import { TABLE_CELL_HEIGHT, USER_COLORS } from '../../../constants/constants';
+import { ROUTER } from '../../../constants/router';
 
 interface ReserveBtnProps {
   label: Date;
@@ -57,7 +51,7 @@ export const ReserveBtn = ({
   return (
     <div
       className={`reserve-btn-box group ${
-        isActiveBorderTop ? " border-t border-gray-200 first:border-t-0" : ""
+        isActiveBorderTop ? ' border-t border-gray-200 first:border-t-0' : ''
       }`}
       onMouseOver={(e) => {
         if (selectedReservation) setIsHover(true);
@@ -90,24 +84,26 @@ export const ReserveBtn = ({
           // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기
           selectedReservationVar(null);
         } else {
-          navigate(RESERVE_DETAIL, { state: { startDate: label, member } });
+          navigate(ROUTER.RESERVE_DETAIL, {
+            state: { startDate: label, member },
+          });
         }
       }}
     >
-      <span className="reserve-btn">+ {getHHMM(label, ":")}</span>
+      <span className="reserve-btn">+ {getHHMM(label, ':')}</span>
       {selectedReservation && isHover && (
         <div
           className="absolute top-0 w-full border-2"
           style={{
-            borderColor: USER_COLORS[userIndex]?.deep ?? "black",
+            borderColor: USER_COLORS[userIndex]?.deep ?? 'black',
             height:
               getTimeLength(
                 selectedReservation.startDate,
                 selectedReservation.endDate,
-                "20minute"
+                '20minute'
               ) *
                 TABLE_CELL_HEIGHT +
-              "px",
+              'px',
           }}
         />
       )}

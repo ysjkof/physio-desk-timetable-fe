@@ -1,18 +1,18 @@
-import { useReactiveVar } from "@apollo/client";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRef, useState } from "react";
-import { checkManager, checkStay, SelectedMenuType } from "..";
-import { ModalTemplate } from "../../../components/molecules/modal-template";
-import { MeQuery } from "../../../graphql/generated/graphql";
+import { useReactiveVar } from '@apollo/client';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRef, useState } from 'react';
+import { checkManager, checkStay, SelectedMenuType } from '..';
+import { ModalTemplate } from '../../../components/molecules/modal-template';
+import { MeQuery } from '../../../graphql/generated/graphql';
 import {
   checkMember,
   getPositionRef,
   saveSelectedClinic,
-} from "../../../libs/utils";
-import { clinicListsVar, selectedClinicVar } from "../../../store";
-import { DashboardNavList } from "../components/dashboadr-nav-list";
-import { ClinicName } from "../molecules/clinicName";
+} from '../../../utils/utils';
+import { clinicListsVar, selectedClinicVar } from '../../../store';
+import { DashboardNavList } from '../components/dashboadr-nav-list';
+import { ClinicName } from '../molecules/clinicName';
 
 interface DashboardSideNavProps {
   selectedMenu: SelectedMenuType;
@@ -94,42 +94,42 @@ export const DashboardSideNav = ({
       </div>
       <ul>
         <DashboardNavList
-          type={"member"}
+          type={'member'}
           selectedClinic={selectedClinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu("member")}
+          onClick={() => setSelectedMenu('member')}
         />
         <DashboardNavList
-          type={"invite"}
+          type={'invite'}
           selectedClinic={selectedClinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu("invite")}
-        />
-        <div className="seperate-bar mb-2 pt-2" />
-        <DashboardNavList
-          type={"prescription"}
-          selectedClinic={selectedClinic}
-          selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu("prescription")}
-        />
-        <DashboardNavList
-          type={"statistics"}
-          selectedClinic={selectedClinic}
-          selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu("statistics")}
+          onClick={() => setSelectedMenu('invite')}
         />
         <div className="seperate-bar mb-2 pt-2" />
         <DashboardNavList
-          type={"create"}
+          type={'prescription'}
           selectedClinic={selectedClinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu("create")}
+          onClick={() => setSelectedMenu('prescription')}
         />
         <DashboardNavList
-          type={"clinics"}
+          type={'statistics'}
           selectedClinic={selectedClinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu("clinics")}
+          onClick={() => setSelectedMenu('statistics')}
+        />
+        <div className="seperate-bar mb-2 pt-2" />
+        <DashboardNavList
+          type={'create'}
+          selectedClinic={selectedClinic}
+          selectedMenu={selectedMenu}
+          onClick={() => setSelectedMenu('create')}
+        />
+        <DashboardNavList
+          type={'clinics'}
+          selectedClinic={selectedClinic}
+          selectedMenu={selectedMenu}
+          onClick={() => setSelectedMenu('clinics')}
         />
       </ul>
     </nav>

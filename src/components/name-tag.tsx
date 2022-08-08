@@ -1,7 +1,8 @@
-import { faFemale, faMale } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getYMD } from "../libs/timetable-utils";
-import { SelectedPatient, selectedPatientVar } from "../store";
+import { faFemale, faMale } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getYMD } from '../services/dateServices';
+import { selectedPatientVar } from '../store';
+import { SelectedPatient } from '../types/type';
 
 export interface INameTagProps extends SelectedPatient {
   canClick?: boolean;
@@ -31,11 +32,11 @@ export const NameTag = ({
     <div
       onClick={canClick ? onClick : undefined}
       className={`grid w-full cursor-pointer grid-cols-3 ${
-        canClick ? "" : "pointer-events-none"
+        canClick ? '' : 'pointer-events-none'
       }`}
     >
       <div>
-        {gender === "male" ? (
+        {gender === 'male' ? (
           <FontAwesomeIcon icon={faMale} className="text-blue-500" />
         ) : (
           <FontAwesomeIcon icon={faFemale} className="text-pink-500" />
@@ -44,8 +45,8 @@ export const NameTag = ({
           {name!.length > 8 ? `${name!.substring(0, 8)}...` : name}
         </span>
       </div>
-      <span>R.No : {registrationNumber ? registrationNumber : "미등록"}</span>
-      <span>B : {birthday ? getYMD(birthday, "yymmdd") : "미등록"}</span>
+      <span>R.No : {registrationNumber ? registrationNumber : '미등록'}</span>
+      <span>B : {birthday ? getYMD(birthday, 'yymmdd') : '미등록'}</span>
       <span className="pl-3">{user?.name}</span>
       {clinicName && <span className="col-span-2">{clinicName}</span>}
     </div>

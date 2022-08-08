@@ -1,4 +1,4 @@
-import { cls } from "../../../libs/utils";
+import { cls } from '../../../utils/utils';
 
 interface IBtnDatecheck {
   text: string;
@@ -19,13 +19,13 @@ export const BtnDatecheck = ({
 }: IBtnDatecheck) => (
   <button
     className={cls(
-      "btn-menu relative mx-auto rounded-none px-1 transition-transform",
-      selectedDay ? "border-b-black" : "",
-      day === 0 ? "sunday" : day === 6 ? "saturday" : "",
-      selectedMonth ? "" : "opacity-50",
+      'btn-menu relative mx-auto rounded-none px-1 transition-transform',
+      selectedDay ? 'border-b-black' : '',
+      day === 0 ? 'sunday' : day === 6 ? 'saturday' : '',
+      selectedMonth ? '' : 'opacity-50',
       isSubheader
-        ? "pointer-events-none border-0"
-        : "emphasize-border border-b-[3px]"
+        ? 'pointer-events-none border-0'
+        : 'emphasize-border border-b-[3px]'
     )}
     onClick={onClick}
   >

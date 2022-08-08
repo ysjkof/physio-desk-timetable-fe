@@ -1,18 +1,18 @@
-import { useReactiveVar } from "@apollo/client";
-import { faSearch, faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useForm } from "react-hook-form";
-import { InDashboardPageProps } from "..";
-import { Loading } from "../../../components/atoms/loading";
-import { Worning } from "../../../components/atoms/warning";
+import { useReactiveVar } from '@apollo/client';
+import { faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useForm } from 'react-hook-form';
+import { InDashboardPageProps } from '..';
+import { Loading } from '../../../components/atoms/loading';
+import { Worning } from '../../../components/atoms/warning';
 import {
   SearchUsersInput,
   useInviteClinicMutation,
   useSearchUsersLazyQuery,
-} from "../../../graphql/generated/graphql";
-import { cls } from "../../../libs/utils";
-import { selectedClinicVar } from "../../../store";
-import { DashboardSectionLayout } from "../components/section-layout";
+} from '../../../graphql/generated/graphql';
+import { cls } from '../../../utils/utils';
+import { selectedClinicVar } from '../../../store';
+import { DashboardSectionLayout } from '../components/section-layout';
 
 export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
@@ -21,7 +21,7 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
   //   return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
   // }
   const { register, handleSubmit, getValues } = useForm<SearchUsersInput>({
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const [inviteClinicMutation, { loading: inviteClinicLoading }] =
@@ -71,14 +71,14 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
             <form onSubmit={handleSubmit(onSubmitSearchUsers)}>
               <div className="relative flex items-center shadow-sm">
                 <input
-                  {...register("name", {
-                    required: "Username is required",
+                  {...register('name', {
+                    required: 'Username is required',
                   })}
                   id="search-user"
                   required
                   type="text"
                   placeholder="사용자 검색"
-                  className={cls("input py-1")}
+                  className={cls('input py-1')}
                   autoComplete="off"
                 />
                 <label
@@ -88,7 +88,7 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
                   <input
                     id="icon-search"
                     type="submit"
-                    value={""}
+                    value={''}
                     tabIndex={-1}
                     className="absolute"
                   />
@@ -103,7 +103,7 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
               </div>
               <ul
                 className={cls(
-                  inviteClinicLoading ? "pointer-events-none" : ""
+                  inviteClinicLoading ? 'pointer-events-none' : ''
                 )}
               >
                 {searchUserResults ? (

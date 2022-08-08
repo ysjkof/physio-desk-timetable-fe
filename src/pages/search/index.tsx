@@ -1,10 +1,10 @@
-import { useReactiveVar } from "@apollo/client";
-import { Fragment, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
-import { useLocation, useNavigate } from "react-router-dom";
-import { SearchName } from "../components/search-name";
-import { useSearchPatientLazyQuery } from "../graphql/generated/graphql";
-import { selectedClinicVar } from "../store";
+import { useReactiveVar } from '@apollo/client';
+import { Fragment, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { SearchName } from '../../components/search-name';
+import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
+import { selectedClinicVar } from '../../store';
 
 export const Search = () => {
   const location = useLocation();
@@ -13,13 +13,13 @@ export const Search = () => {
   const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const onClick = (patientId: number) => {
-    navigate("/patient", {
-      state: { todo: "viewPatientInfoDetail", patientId },
+    navigate('/patient', {
+      state: { todo: 'viewPatientInfoDetail', patientId },
     });
   };
   useEffect(() => {
     const { search } = location;
-    const [_, queryName] = search.split("?name=");
+    const [_, queryName] = search.split('?name=');
     if (!queryName) {
       return navigate(-1);
     }
@@ -57,7 +57,7 @@ export const Search = () => {
                 birthday={patient.birthday}
                 onClick={() => onClick(patient.id)}
               />
-              {patient.clinic ? patient.clinic.name : "---"}
+              {patient.clinic ? patient.clinic.name : '---'}
             </Fragment>
           ))}
         </div>

@@ -1,8 +1,8 @@
-import { useReactiveVar } from "@apollo/client";
-import { ReactNode } from "react";
-import { cls } from "../../../../libs/utils";
-import { viewOptionsVar } from "../../../../store";
-import { ONE_DAY } from "../../../../variables";
+import { useReactiveVar } from '@apollo/client';
+import { ReactNode } from 'react';
+import { cls } from '../../../../utils/utils';
+import { viewOptionsVar } from '../../../../store';
+import { ONE_DAY } from '../../../../constants/constants';
 
 interface TableLoopLayoutProps {
   userLength: number;
@@ -21,7 +21,7 @@ export function TableLoopLayout({
 
   return (
     <div
-      className={cls(elementName ? elementName : "", "grid w-full")}
+      className={cls(elementName ? elementName : '', 'grid w-full')}
       style={
         viewOptions.periodToView === ONE_DAY
           ? {

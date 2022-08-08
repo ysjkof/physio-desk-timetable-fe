@@ -1,6 +1,5 @@
-import React from "react";
-import { DashboardSectionLayout } from "../components/section-layout";
-import { getHowManyDayFromMillisec } from "../../../libs/utils";
+import React from 'react';
+import { DashboardSectionLayout } from '../components/section-layout';
 import {
   VictoryAxis,
   VictoryBar,
@@ -10,17 +9,24 @@ import {
   VictoryPie,
   VictoryTheme,
   VictoryTooltip,
-} from "victory";
-import { compareDateMatch, getYMD } from "../../../libs/timetable-utils";
-import { TableChartColLayout } from "./table-chart-col-layout";
+} from 'victory';
+import {
+  compareDateMatch,
+  getHowManyDayFromMillisec,
+  getYMD,
+} from '../../../services/dateServices';
+import { TableChartColLayout } from './table-chart-col-layout';
 import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
-} from "../organisms/statistics";
-import { STATISTICS_LABEL, STATISTICS_LABEL_COLORS } from "../../../variables";
-import { useEffect, useState } from "react";
-import { Loading } from "../../../components/atoms/loading";
+} from '../organisms/statistics';
+import {
+  STATISTICS_LABEL,
+  STATISTICS_LABEL_COLORS,
+} from '../../../constants/constants';
+import { useEffect, useState } from 'react';
+import { Loading } from '../../../components/atoms/loading';
 
 interface IChartsProps {
   userStatistics: IUserStatistics[];
@@ -64,7 +70,7 @@ function injectEveryDayToDailyRreports(
   dailyReports.forEach((day, i) => {
     const dateObj = new Date(day.date);
     const idx = everyDay.findIndex((everyDate) =>
-      compareDateMatch(dateObj, everyDate, "ymd")
+      compareDateMatch(dateObj, everyDate, 'ymd')
     );
     if (idx !== -1) frame[idx] = { ...day, date: dateObj };
     // 날짜를 전부 주입했기 때문에 idx가 -1인 경우는 없다
@@ -111,7 +117,7 @@ const Charts = ({
   }, [dailyReports, userStatistics]);
 
   const a = finalDailyReports?.map((a) =>
-    a.users.map((b) => [a.date.getDate() + "일", b.reservationCount])
+    a.users.map((b) => [a.date.getDate() + '일', b.reservationCount])
   );
 
   // if (a) {
@@ -122,7 +128,7 @@ const Charts = ({
   //   console.log(a[a.length - 2].flat(1));
   //   console.log(a[a.length - 1].flat(1));
   // }
-  console.log("userLength", userLength);
+  console.log('userLength', userLength);
 
   return finalDailyReports && userReports ? (
     <>
@@ -135,7 +141,7 @@ const Charts = ({
               <TableChartColLayout
                 userStatistics={userStatistics}
                 prescriptionInfo={prescriptions}
-                renderIt={"prescriptions"}
+                renderIt={'prescriptions'}
                 hasTotalInRow
                 hasTotalInColumn
               />
@@ -150,7 +156,7 @@ const Charts = ({
               <TableChartColLayout
                 userStatistics={userStatistics}
                 prescriptionInfo={prescriptions}
-                renderIt={"prescriptions"}
+                renderIt={'prescriptions'}
                 hasTotalInRow
                 hasTotalInColumn
                 showPrice
@@ -202,7 +208,7 @@ const Charts = ({
                         fontSize: 12,
                       },
                     }}
-                    tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : "")}
+                    tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : '')}
                   />
                   <VictoryAxis
                     style={{
@@ -215,7 +221,7 @@ const Charts = ({
                     }}
                     tickValues={finalDailyReports.map((day) => day.date)}
                     tickFormat={(tick) => {
-                      return getYMD(tick, "mmdd", "-");
+                      return getYMD(tick, 'mmdd', '-');
                     }}
                     tickLabelComponent={<VictoryLabel dy={-5.5} />}
                     label="(월/일)"
@@ -238,7 +244,7 @@ const Charts = ({
                 userStatistics={userStatistics}
                 prescriptionInfo={prescriptions}
                 dailyReports={dailyReports}
-                renderIt={"counts"}
+                renderIt={'counts'}
                 labelNames={Object.values(STATISTICS_LABEL).map(
                   ({ kor }) => kor
                 )}
@@ -270,7 +276,7 @@ const Charts = ({
                     data={user}
                     padding={70}
                     style={{ labels: { fontSize: 16 } }}
-                    labels={({ datum }) => (datum.y === 0 ? "" : datum.y)}
+                    labels={({ datum }) => (datum.y === 0 ? '' : datum.y)}
                     colorScale={STATISTICS_LABEL_COLORS[0]}
                   />
                 ))}

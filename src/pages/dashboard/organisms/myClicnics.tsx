@@ -1,20 +1,16 @@
-import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { InDashboardPageProps } from "..";
-import { Loading } from "../../../components/atoms/loading";
-import { ModalTemplate } from "../../../components/molecules/modal-template";
-import { ModalContentsLayout } from "../../../components/templates/modal-contents-layout";
-import { useFindMyClinicsQuery } from "../../../graphql/generated/graphql";
-import { cls } from "../../../libs/utils";
-import { DashboardSectionLayout } from "../components/section-layout";
-import { DeactivateClinic } from "./deactivate";
-
-export interface DeactivateClinicInfo {
-  id: number;
-  name: string;
-}
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { InDashboardPageProps } from '..';
+import { Loading } from '../../../components/atoms/loading';
+import { ModalTemplate } from '../../../components/molecules/modal-template';
+import { ModalContentsLayout } from '../../../components/templates/modal-contents-layout';
+import { useFindMyClinicsQuery } from '../../../graphql/generated/graphql';
+import { DeactivateClinicInfo } from '../../../types/type';
+import { cls } from '../../../utils/utils';
+import { DashboardSectionLayout } from '../components/section-layout';
+import { DeactivateClinic } from './deactivate';
 
 const isPersonalClinic = (
   compareMemberId: number,
@@ -26,7 +22,7 @@ export const MyClinics = ({ loggedInUser }: InDashboardPageProps) => {
   const [deactivateClinic, setDeactivateClinic] =
     useState<DeactivateClinicInfo>({
       id: 0,
-      name: "",
+      name: '',
     });
 
   const { data: findMyClinicsData, loading } = useFindMyClinicsQuery({
@@ -34,7 +30,7 @@ export const MyClinics = ({ loggedInUser }: InDashboardPageProps) => {
   });
 
   const personalClinic = findMyClinicsData?.findMyClinics.clinics?.find(
-    (clinic) => clinic.type === "Personal"
+    (clinic) => clinic.type === 'Personal'
   )!;
 
   const myMembership = findMyClinicsData?.findMyClinics.clinics
@@ -79,12 +75,12 @@ export const MyClinics = ({ loggedInUser }: InDashboardPageProps) => {
                       icon={faCheckCircle}
                       fontSize="large"
                       className={cls(
-                        "mx-auto",
+                        'mx-auto',
                         findMyClinicsData?.findMyClinics.clinics?.find(
                           (clinic) => clinic.id === member.clinic.id
                         )?.isActivated
-                          ? "text-green-500"
-                          : ""
+                          ? 'text-green-500'
+                          : ''
                       )}
                     />
                     {isPersonalClinic(
@@ -101,10 +97,10 @@ export const MyClinics = ({ loggedInUser }: InDashboardPageProps) => {
                           })
                         }
                         className={cls(
-                          "mx-auto cursor-pointer",
+                          'mx-auto cursor-pointer',
                           member.manager
-                            ? "text-red-500"
-                            : "pointer-events-none opacity-50"
+                            ? 'text-red-500'
+                            : 'pointer-events-none opacity-50'
                         )}
                       />
                     )}

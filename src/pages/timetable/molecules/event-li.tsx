@@ -1,6 +1,6 @@
-import { ReservationState } from "../../../graphql/generated/graphql";
-import { cls } from "../../../libs/utils";
-import { IViewOption } from "../../../store";
+import { ReservationState } from '../../../graphql/generated/graphql';
+import { cls } from '../../../utils/utils';
+import { IViewOption } from '../../../store';
 
 interface EventLiProps {
   viewOptions: IViewOption;
@@ -22,21 +22,21 @@ export function EventLi({
     <div
       onClick={() => onClick()}
       className={cls(
-        "cursor-pointer space-x-4 rounded-md border border-sky-300 bg-sky-100",
+        'cursor-pointer space-x-4 rounded-md border border-sky-300 bg-sky-100',
         !viewOptions.seeCancel && reservationState === ReservationState.Canceled
-          ? "hidden"
+          ? 'hidden'
           : !viewOptions.seeNoshow &&
             reservationState === ReservationState.NoShow
-          ? "hidden"
+          ? 'hidden'
           : reservationState === ReservationState.NoShow ||
             reservationState === ReservationState.Canceled
-          ? "opacity-50"
-          : "",
+          ? 'opacity-50'
+          : '',
         reservationState === ReservationState.NoShow
-          ? "noshow"
+          ? 'noshow'
           : reservationState === ReservationState.Canceled
-          ? "cancel"
-          : ""
+          ? 'cancel'
+          : ''
       )}
     >
       <span>{startDate}</span>

@@ -1,27 +1,23 @@
-import { useForm } from "react-hook-form";
-import { FormError } from "../form-error";
-import { Button } from "./button";
+import { useForm } from 'react-hook-form';
+import { FormError } from '../form-error';
+import { Button } from './button';
 import {
   CreatePatientInput,
   CreatePatientMutation,
   useCreatePatientMutation,
   useEditPatientMutation,
-} from "../../graphql/generated/graphql";
-import { Input } from "./input";
-import { selectedClinicVar, selectedPatientVar } from "../../store";
-import { useReactiveVar } from "@apollo/client";
-import { TimetableModalProps } from "../../pages/timetable";
-import { DatepickerWithInput } from "./datepicker-with-input";
-import { useEffect } from "react";
+} from '../../graphql/generated/graphql';
+import { Input } from './input';
+import { selectedClinicVar, selectedPatientVar } from '../../store';
+import { useReactiveVar } from '@apollo/client';
+import { TimetableModalProps } from '../../pages/timetable';
+import { DatepickerWithInput } from './datepicker-with-input';
+import { useEffect } from 'react';
+import { BirthdayInput } from '../../types/type';
 
-export interface BirthdayInput {
-  birthdayYear?: number;
-  birthdayMonth?: number;
-  birthdayDate?: number;
-}
 interface ICreatePatientForm extends TimetableModalProps {
   patient?: {
-    __typename?: "Patient" | undefined;
+    __typename?: 'Patient' | undefined;
     id: number;
     name: string;
     gender: string;
@@ -43,7 +39,7 @@ export const CreatePatientForm = ({
     handleSubmit,
     setValue,
   } = useForm<CreatePatientInput>({
-    mode: "onChange",
+    mode: 'onChange',
   });
   const {
     register: birthdayRegister,
@@ -51,7 +47,7 @@ export const CreatePatientForm = ({
     setValue: birthdaySetValue,
     formState: { errors: birthdayError, isValid: birthdayIsValid },
   } = useForm<BirthdayInput>({
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const onCompleted = (data: CreatePatientMutation) => {
@@ -66,7 +62,7 @@ export const CreatePatientForm = ({
         gender: patient?.gender!,
         birthday: patient?.birthday,
         registrationNumber: patient?.registrationNumber!,
-        clinicName: selectedClinic?.name ?? "",
+        clinicName: selectedClinic?.name ?? '',
       });
     }
   };
@@ -107,7 +103,7 @@ export const CreatePatientForm = ({
               gender,
               memo,
               ...(birthday && { birthday }),
-              ...(typeof selectedClinic?.id === "number" &&
+              ...(typeof selectedClinic?.id === 'number' &&
                 selectedClinic?.id !== 0 && { clinicId: selectedClinic?.id }),
             },
           },
@@ -117,10 +113,10 @@ export const CreatePatientForm = ({
   };
   useEffect(() => {
     if (patient) {
-      setValue("birthday", patient.birthday);
-      setValue("gender", patient.gender);
-      setValue("memo", patient.memo);
-      setValue("name", patient.name);
+      setValue('birthday', patient.birthday);
+      setValue('gender', patient.gender);
+      setValue('memo', patient.memo);
+      setValue('name', patient.name);
     }
   }, [patient]);
 
@@ -128,14 +124,14 @@ export const CreatePatientForm = ({
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">
       <Input
         autoFocus
-        label={"이름*"}
-        name={"name"}
-        type={"text"}
-        placeholder={"이름을 입력하세요"}
+        label={'이름*'}
+        name={'name'}
+        type={'text'}
+        placeholder={'이름을 입력하세요'}
         required={true}
-        register={register("name", {
-          required: "이름을 입력하세요",
-          maxLength: { value: 30, message: "최대 30자 입니다" },
+        register={register('name', {
+          required: '이름을 입력하세요',
+          maxLength: { value: 30, message: '최대 30자 입니다' },
         })}
         children={
           errors.name?.message && (
@@ -149,7 +145,7 @@ export const CreatePatientForm = ({
             남성
           </label>
           <input
-            {...register("gender", { required: "성별을 선택하세요" })}
+            {...register('gender', { required: '성별을 선택하세요' })}
             type="radio"
             value="male"
             id="gender-male"
@@ -160,7 +156,7 @@ export const CreatePatientForm = ({
             여성
           </label>
           <input
-            {...register("gender", { required: "성별을 선택하세요" })}
+            {...register('gender', { required: '성별을 선택하세요' })}
             type="radio"
             value="female"
             id="gender-female"
@@ -171,7 +167,7 @@ export const CreatePatientForm = ({
       <label className="flex flex-col gap-2">
         생년월일
         <DatepickerWithInput
-          defaultDate={new Date(patient ? patient.birthday : "0-0-0")}
+          defaultDate={new Date(patient ? patient.birthday : '0-0-0')}
           setValue={birthdaySetValue}
           register={birthdayRegister}
           formError={birthdayError}
@@ -181,16 +177,16 @@ export const CreatePatientForm = ({
       </label>
 
       <Input
-        label={"메모"}
-        name={"memo"}
-        type={"textarea"}
+        label={'메모'}
+        name={'memo'}
+        type={'textarea'}
         rows={4}
-        placeholder={"메모를 입력하세요"}
+        placeholder={'메모를 입력하세요'}
         required={false}
-        register={register("memo", {
+        register={register('memo', {
           maxLength: {
             value: 300,
-            message: "메모는 최대 300자 입니다",
+            message: '메모는 최대 300자 입니다',
           },
         })}
         children={
@@ -204,7 +200,7 @@ export const CreatePatientForm = ({
         type="submit"
         canClick={isValid && birthdayIsValid}
         loading={loading || editLoading}
-        textContents={patient ? "환자수정" : "환자등록"}
+        textContents={patient ? '환자수정' : '환자등록'}
       />
       {createaPatientMutationResult?.createPatient.error && (
         <FormError

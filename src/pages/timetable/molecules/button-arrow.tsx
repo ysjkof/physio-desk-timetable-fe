@@ -1,7 +1,7 @@
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { cls } from "../../../libs/utils";
-import { NEXT, PREV } from "../../../variables";
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { cls } from '../../../utils/utils';
+import { NEXT, PREV } from '../../../constants/constants';
 
 interface BtnArrowProps {
   direction: typeof PREV | typeof NEXT;
@@ -11,7 +11,7 @@ interface BtnArrowProps {
 
 export const BtnArrow = ({ direction, onClick, className }: BtnArrowProps) => (
   <button
-    className={cls("btn-menu rounded-md border bg-white p-1", className ?? "")}
+    className={cls('btn-menu rounded-md border bg-white p-1', className ?? '')}
     onClick={onClick}
   >
     {direction === PREV ? (
