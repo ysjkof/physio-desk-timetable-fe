@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 interface DashboardTemplateProps {
   breadcrumb: ReactNode;
@@ -16,7 +16,7 @@ export const DashboardTemplate = ({
   useEffect(() => {
     let timer: NodeJS.Timeout | false = false;
     function handleTableHeight() {
-      const headerElement = document.getElementById("header");
+      const headerElement = document.getElementById('header');
       const headlessHeight = window.innerHeight - headerElement?.offsetHeight!;
       const breadcrumbHight = ref.current?.offsetHeight!;
       const dashboardMainHeight = headlessHeight - breadcrumbHight;
@@ -27,14 +27,14 @@ export const DashboardTemplate = ({
       }, 200);
     }
     handleTableHeight();
-    window.addEventListener("resize", handleTableHeight);
-    return () => window.removeEventListener("resize", handleTableHeight);
+    window.addEventListener('resize', handleTableHeight);
+    return () => window.removeEventListener('resize', handleTableHeight);
   }, []);
 
   return (
     <div className="grid grid-cols-[150px,1fr] grid-rows-[2rem,1fr]">
       <div className="col-start-1 row-span-2 row-start-1">{nav}</div>
-      <div className="col-start-2 border-b border-l" ref={ref}>
+      <div className="col-start-2 border-b border-l p-2" ref={ref}>
         {breadcrumb}
       </div>
       <div
