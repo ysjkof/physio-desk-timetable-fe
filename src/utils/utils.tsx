@@ -1,12 +1,6 @@
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
-import {
-  clinicListsVar,
-  IClinicList,
-  IViewOption,
-  ISelectedClinic,
-  selectedClinicVar,
-  viewOptionsVar,
-} from '../store';
+import { clinicListsVar, selectedClinicVar, viewOptionsVar } from '../store';
+import { IClinicList, ISelectedClinic, IViewOption } from '../types/type';
 
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
@@ -31,6 +25,8 @@ export function saveSelectedClinic(
     LOCAL_STORAGE_KEY.SELECTED_CLINIC + loggedInUserId,
     JSON.stringify(newSelectedClinic)
   );
+  // const { setSelectedInfo } = useStore();
+  // setSelectedInfo('clinic', newSelectedClinic);
   selectedClinicVar(newSelectedClinic);
 }
 export function saveClinicLists(

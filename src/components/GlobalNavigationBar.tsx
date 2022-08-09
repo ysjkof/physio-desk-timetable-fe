@@ -15,6 +15,7 @@ import { saveClinicLists, saveSelectedClinic } from '../utils/utils';
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
 import { IClinic, IClinicList, ISelectedClinic } from '../types/type';
 import { ROUTER } from '../router/routerConstants';
+import useStore from '../hooks/useStore';
 
 interface Notice {
   __typename?: 'Notice' | undefined;
@@ -75,7 +76,7 @@ export const GlobalNavigationBar = () => {
   const { data: findMyClinicsData } = useFindMyClinicsQuery({
     variables: { input: { includeInactivate: true } },
   });
-
+  const { setSelectedInfo } = useStore();
   useEffect(() => {
     console.log(2, '시작 Header : in useEffect');
     if (!meData) return;
@@ -150,7 +151,8 @@ export const GlobalNavigationBar = () => {
     );
     if (!clinic) return;
     const newSelectedClinic = makeSelectedClinic(clinic, meData.me.id);
-    saveSelectedClinic(newSelectedClinic, meData.me.id);
+    setSelectedInfo('clinic', newSelectedClinic);
+    // saveSelectedClinic(newSelectedClinic, meData.me.id);
   }, [findMyClinicsData]);
 
   return (

@@ -17,27 +17,29 @@ import {
 } from '../../../services/timetableServices';
 import { DayWithUsers } from '../../../types/type';
 import { useMe } from '../../../hooks/useMe';
+import useStore from '../../../hooks/useStore';
 
 interface TitlesProps {}
 
 export function Titles({}: TitlesProps) {
+  const { selectedInfo } = useStore();
   const selectedDate = useReactiveVar(selectedDateVar);
   const clinicLists = useReactiveVar(clinicListsVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
   const [userFrame, setUserFrame] = useState<DayWithUsers[] | null>(null);
-  const userLength = userFrame && getActiveUserLength(selectedClinic?.members);
+  const userLength =
+    userFrame && getActiveUserLength(selectedInfo.clinic?.members);
 
   const { data: loggedInUser } = useMe();
 
   useEffect(() => {
     if (loggedInUser) {
       const userFrame = makeUsersInDay(
-        spreadClinicMembers(clinicLists, selectedClinic!.id),
+        spreadClinicMembers(clinicLists, selectedInfo.clinic!.id),
         getWeeks(getSunday(selectedDate))
       );
       setUserFrame(userFrame);
     }
-  }, [clinicLists, selectedDate, selectedClinic]);
+  }, [clinicLists, selectedDate, selectedInfo.clinic]);
 
   if (!userLength) return <></>;
   return (
@@ -66,7 +68,7 @@ export function Titles({}: TitlesProps) {
                     isMe={member.user.name === loggedInUser?.me.name}
                     name={member.user.name}
                     userIndex={userIndex}
-                    clinicId={selectedClinic?.id ?? 0}
+                    clinicId={selectedInfo.clinic?.id ?? 0}
                     userId={member.user.id}
                     date={day.date}
                   />

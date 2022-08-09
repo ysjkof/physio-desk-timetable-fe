@@ -6,7 +6,7 @@ import {
   getTimeLength,
 } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
-import { selectedClinicVar, selectedDateVar } from '../../../store';
+import { selectedDateVar } from '../../../store';
 import { TABLE_CELL_HEIGHT } from '../../../constants/constants';
 import { EventBox } from '../molecules/EventBox';
 import { ReserveButton } from '../molecules/ReserveButton';
@@ -14,6 +14,7 @@ import { TableLoopTemplate } from '../templates/TableLoopTemplate';
 import { TimeIndicatorBar } from './TimeIndicatorBar';
 import { compareNumAfterGetMinutes } from '../../../services/timetableServices';
 import { DayWithUsers } from '../../../types/type';
+import useStore from '../../../hooks/useStore';
 
 interface SchedulesProps {
   weekEvents: DayWithUsers[];
@@ -21,9 +22,9 @@ interface SchedulesProps {
 }
 function Schedules({ weekEvents, labels }: SchedulesProps) {
   const selectedDate = useReactiveVar(selectedDateVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const { selectedInfo } = useStore();
 
-  const userLength = getActiveUserLength(selectedClinic?.members);
+  const userLength = getActiveUserLength(selectedInfo.clinic?.members);
   const labelMaxLength = labels.length;
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 

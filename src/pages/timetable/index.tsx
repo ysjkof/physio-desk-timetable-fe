@@ -1,12 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { useReactiveVar } from '@apollo/client';
-import {
-  clinicListsVar,
-  selectedClinicVar,
-  selectedDateVar,
-  todayNowVar,
-  viewOptionsVar,
-} from '../../store';
 import { useListReservations } from '../../hooks/useListReservations';
 import { TableTemplate } from './templates/TableTemplate';
 import { useEffect, useState } from 'react';
@@ -42,6 +34,7 @@ import {
 import { DayWithUsers, IMemberWithActivate } from '../../types/type';
 import { useMe } from '../../hooks/useMe';
 import useViewoptions from '../../hooks/useViewOption';
+import useStore from '../../hooks/useStore';
 
 export interface TimetableModalProps {
   closeAction: () => void;
@@ -51,44 +44,40 @@ export const getActiveUserLength = (members?: IMemberWithActivate[]) =>
   members?.filter((user) => user.isActivate).length ?? 0;
 
 export const TimeTable = () => {
-  const today = useReactiveVar(todayNowVar);
-  const viewOptions = useReactiveVar(viewOptionsVar);
-  const clinicLists = useReactiveVar(clinicListsVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
-  const selectedDate = useReactiveVar(selectedDateVar);
+  const { labels } = useViewoptions();
+  const { data: loggedInUser } = useMe();
+  const { data: reservationData, subscribeToMore } = useListReservations();
+  const { selectedInfo, today, viewOptions, clinicLists } = useStore();
+
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
 
-  const { data: loggedInUser } = useMe();
-  const { data: reservationData, subscribeToMore } = useListReservations();
-  const { labels } = useViewoptions();
-
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
-      ? weekEvents && [weekEvents[selectedDate.getDay()]]
+      ? weekEvents && [weekEvents[selectedInfo.date.getDay()]]
       : weekEvents;
 
   useEffect(() => {
     if (
       reservationData?.listReservations.results &&
       loggedInUser &&
-      selectedClinic
+      selectedInfo.clinic
     ) {
       setWeekEvents(
         distributeReservation({
           events: reservationData.listReservations.results,
           dataForm: makeUsersInDay(
-            spreadClinicMembers(clinicLists, selectedClinic.id),
-            getWeeks(getSunday(selectedDate))
+            spreadClinicMembers(clinicLists, selectedInfo.clinic.id),
+            getWeeks(getSunday(selectedInfo.date))
           ),
         })
       );
     }
 
-    if (reservationData?.listReservations.ok && selectedClinic?.id) {
+    if (reservationData?.listReservations.ok && selectedInfo.clinic?.id) {
       subscribeToMore({
         document: ListenDeleteReservationDocument,
-        variables: { input: { clinicId: selectedClinic.id } },
+        variables: { input: { clinicId: selectedInfo.clinic.id } },
         updateQuery: (
           prev,
           {
@@ -120,7 +109,7 @@ export const TimeTable = () => {
 
       subscribeToMore({
         document: ListenUpdateReservationDocument,
-        variables: { input: { clinicId: selectedClinic.id } },
+        variables: { input: { clinicId: selectedInfo.clinic.id } },
         // 웹소켓이 받는 updated 데이터와 listReservation의 데이터 형태가 달라 타입에러 발생
         // 하지만 id로 apollo cache가 필요한 값을 처리한다
         // 타입에러 해결방법은,
@@ -171,19 +160,19 @@ export const TimeTable = () => {
         },
       });
     }
-  }, [reservationData, clinicLists, selectedClinic]);
+  }, [reservationData, clinicLists, selectedInfo.clinic]);
 
   useEffect(() => {
-    if (!compareDateMatch(selectedDate, prevSelectedDate, 'ym')) {
+    if (!compareDateMatch(selectedInfo.date, prevSelectedDate, 'ym')) {
       console.log('✅ 년월이 다르다');
     } else if (
-      !compareDateMatch(selectedDate, prevSelectedDate, 'd') &&
-      !compareSameWeek(selectedDate, prevSelectedDate)
+      !compareDateMatch(selectedInfo.date, prevSelectedDate, 'd') &&
+      !compareSameWeek(selectedInfo.date, prevSelectedDate)
     ) {
       console.log('✅ 년월이 같고 일과 주가 다르다');
     }
-    setPrevSelectedDate(selectedDate);
-  }, [selectedDate]);
+    setPrevSelectedDate(selectedInfo.date);
+  }, [selectedInfo.date]);
 
   return (
     <>

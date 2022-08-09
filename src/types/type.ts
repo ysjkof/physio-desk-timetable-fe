@@ -139,3 +139,13 @@ export interface DayWithUsers {
   date: Date;
   users: IUserWithEvent[];
 }
+
+export interface SelectedInfo {
+  date: Date;
+  clinic: ISelectedClinic | null;
+  patient: SelectedPatient | null;
+  reservation: IListReservation | null;
+}
+
+export type SetSelectedInfoKey = keyof SelectedInfo;
+export type SetSelectedInfoValue = SelectedInfo[SetSelectedInfoKey];

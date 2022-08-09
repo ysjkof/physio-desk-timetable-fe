@@ -6,6 +6,7 @@ import {
   IListReservation,
   ISelectedClinic,
   IViewOption,
+  SelectedInfo,
   SelectedPatient,
 } from './types/type';
 
@@ -37,3 +38,10 @@ export const selectedClinicVar = makeVar<ISelectedClinic | null>(null);
 export const selectedPatientVar = makeVar<null | SelectedPatient>(null);
 
 export const selectedReservationVar = makeVar<null | IListReservation>(null);
+
+export const selectedInfoVar = makeVar<SelectedInfo>({
+  date: new Date(),
+  clinic: null,
+  patient: null,
+  reservation: null,
+});
