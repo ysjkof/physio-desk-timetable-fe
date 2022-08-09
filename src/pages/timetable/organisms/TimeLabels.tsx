@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { getHHMM } from '../../../services/dateServices';
 import { compareNumAfterGetMinutes } from '../../../services/timetableServices';
 
@@ -5,7 +6,7 @@ interface TimeLabelsProps {
   labels: Date[];
 }
 
-export function TimeLabels({ labels }: TimeLabelsProps) {
+function TimeLabels({ labels }: TimeLabelsProps) {
   return (
     <>
       {labels.map((label, i) => (
@@ -18,3 +19,5 @@ export function TimeLabels({ labels }: TimeLabelsProps) {
     </>
   );
 }
+
+export default memo(TimeLabels);

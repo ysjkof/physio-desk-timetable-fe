@@ -209,3 +209,9 @@ export function getHowManyDayFromMillisec(millisecond: number) {
   // MILLISECOND_TO_DAY = 1000 / 60 / 60 / 24
   return millisecond / 1000 / 60 / 60 / 24;
 }
+
+export function newDateFromHoursAndMinute(hour: number, minute: number) {
+  const date = new Date();
+  date.setHours(hour, minute, 0, 0);
+  return date;
+}

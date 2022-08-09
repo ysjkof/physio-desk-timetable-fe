@@ -14,13 +14,12 @@ import {
   compareDateMatch,
   compareSameWeek,
   getSunday,
-  getTimeGaps,
   getWeeks,
 } from '../../services/dateServices';
-import { ONE_DAY, TABLE_TIME_GAP } from '../../constants/constants';
+import { ONE_DAY } from '../../constants/constants';
 import { TableNav } from './organisms/TableNav';
 import { AnimatePresence } from 'framer-motion';
-import { TimeLabels } from './organisms/TimeLabels';
+import TimeLabels from './organisms/TimeLabels';
 import { Titles } from './organisms/Titles';
 import { TableModals } from './molecules/TableModals';
 import { Loading } from '../../components/atoms/Loading';
@@ -36,15 +35,13 @@ import {
   removeItemInArrayByIndex,
 } from '../../utils/utils';
 import {
-  makeDayWithUsers,
+  distributeReservation,
+  makeUsersInDay,
   spreadClinicMembers,
 } from '../../services/timetableServices';
-import {
-  DayWithUsers,
-  IListReservation,
-  IMemberWithActivate,
-} from '../../types/type';
+import { DayWithUsers, IMemberWithActivate } from '../../types/type';
 import { useMe } from '../../hooks/useMe';
+import useViewoptions from '../../hooks/useViewOption';
 
 export interface TimetableModalProps {
   closeAction: () => void;
@@ -63,66 +60,32 @@ export const TimeTable = () => {
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
 
   const { data: loggedInUser } = useMe();
-  const { data, subscribeToMore } = useListReservations();
+  const { data: reservationData, subscribeToMore } = useListReservations();
+  const { labels } = useViewoptions();
 
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
       ? weekEvents && [weekEvents[selectedDate.getDay()]]
       : weekEvents;
 
-  const labels = getTimeGaps(
-    viewOptions.tableDuration.start.hours,
-    viewOptions.tableDuration.start.minutes,
-    viewOptions.tableDuration.end.hours,
-    viewOptions.tableDuration.end.minutes,
-    TABLE_TIME_GAP
-  );
-
   useEffect(() => {
-    if (data && loggedInUser && selectedClinic) {
-      function distributor(events: IListReservation[], clinicId: number) {
-        if (!loggedInUser) return;
-
-        const userFrame = makeDayWithUsers(
-          spreadClinicMembers(clinicLists, clinicId),
-          getWeeks(getSunday(selectedDate))
-        );
-        events?.forEach((event) => {
-          const dateIndex = userFrame.findIndex((day) =>
-            compareDateMatch(day.date, new Date(event.startDate), 'ymd')
-          );
-          if (dateIndex !== -1) {
-            const userIndex = userFrame[dateIndex].users.findIndex(
-              (member) => member.user.id === event.user.id
-            );
-            if (userIndex !== -1) {
-              userFrame[dateIndex].users[userIndex].events.push(event);
-            }
-          }
-        });
-        return userFrame;
-      }
-
-      const { results } = data.listReservations;
-      const distributeEvents = distributor(results!, selectedClinic.id);
-      if (distributeEvents) {
-        setWeekEvents(distributeEvents);
-      } else {
-        console.error(
-          '❌ distributeEvents를 알 수 없습니다 : ',
-          distributeEvents
-        );
-      }
-    } else {
-      console.warn(
-        `✅ 시간표 > useEffect 실패; data is:${data?.listReservations}; loggedInUser:${loggedInUser?.me.id};`,
-        'viewOptions : ',
-        !!viewOptions,
-        'optionalWeekEvents : ',
-        !!optionalWeekEvents
+    if (
+      reservationData?.listReservations.results &&
+      loggedInUser &&
+      selectedClinic
+    ) {
+      setWeekEvents(
+        distributeReservation({
+          events: reservationData.listReservations.results,
+          dataForm: makeUsersInDay(
+            spreadClinicMembers(clinicLists, selectedClinic.id),
+            getWeeks(getSunday(selectedDate))
+          ),
+        })
       );
     }
-    if (data?.listReservations.ok && selectedClinic?.id) {
+
+    if (reservationData?.listReservations.ok && selectedClinic?.id) {
       subscribeToMore({
         document: ListenDeleteReservationDocument,
         variables: { input: { clinicId: selectedClinic.id } },
@@ -208,7 +171,7 @@ export const TimeTable = () => {
         },
       });
     }
-  }, [data, clinicLists, selectedClinic]);
+  }, [reservationData, clinicLists, selectedClinic]);
 
   useEffect(() => {
     if (!compareDateMatch(selectedDate, prevSelectedDate, 'ym')) {

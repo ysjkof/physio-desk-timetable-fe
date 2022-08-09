@@ -1,9 +1,11 @@
 import {
   DayWithUsers,
   IClinicList,
+  IListReservation,
   IMember,
   IUserWithEvent,
 } from '../types/type';
+import { compareDateMatch } from './dateServices';
 
 export const spreadClinicMembers = (
   clinics: IClinicList[] | null,
@@ -30,10 +32,7 @@ export const compareNumAfterGetMinutes = (
   return compareNumbers.includes(minutes);
 };
 
-export const makeDayWithUsers = (
-  members: IMember[],
-  weeks: { date: Date }[]
-) => {
+export const makeUsersInDay = (members: IMember[], weeks: { date: Date }[]) => {
   const result: DayWithUsers[] = [];
   function makeNewUsers(): IUserWithEvent[] {
     return members.map((user) => ({ ...user, events: [] }));
@@ -45,4 +44,30 @@ export const makeDayWithUsers = (
     });
   });
   return result;
+};
+
+type UsersInDay = ReturnType<typeof makeUsersInDay>;
+interface DistributeReservationInput {
+  events: IListReservation[];
+  dataForm: UsersInDay;
+}
+
+export const distributeReservation = ({
+  events,
+  dataForm,
+}: DistributeReservationInput) => {
+  events.forEach((event) => {
+    const dateIndex = dataForm.findIndex((day) =>
+      compareDateMatch(day.date, new Date(event.startDate), 'ymd')
+    );
+    if (dateIndex !== -1) {
+      const userIndex = dataForm[dateIndex].users.findIndex(
+        (member) => member.user.id === event.user.id
+      );
+      if (userIndex !== -1) {
+        dataForm[dateIndex].users[userIndex].events.push(event);
+      }
+    }
+  });
+  return dataForm;
 };

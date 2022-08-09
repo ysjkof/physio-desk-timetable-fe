@@ -17,7 +17,7 @@ import { Loading } from '../../../components/atoms/Loading';
 import { Button } from '../../../components/molecules/Button';
 import combineUserStatistics from '../../../services/statisticsServices';
 import { IUserStatistics, MemberState } from '../../../types/type';
-import Charts from '../molecules/charts';
+import Charts from '../molecules/Charts';
 interface IPrescriptionCounts {
   reservedCount: number;
   noshowCount: number;

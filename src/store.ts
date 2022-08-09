@@ -6,7 +6,6 @@ import {
   IListReservation,
   ISelectedClinic,
   IViewOption,
-  ModifiedLoggedInUser,
   SelectedPatient,
 } from './types/type';
 

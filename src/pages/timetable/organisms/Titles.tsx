@@ -12,7 +12,7 @@ import { UserNameTitle } from '../molecules/UserNameTitle';
 import { DateTitle } from '../molecules/DateTitle';
 import { TableLoopTemplate } from '../templates/TableLoopTemplate';
 import {
-  makeDayWithUsers,
+  makeUsersInDay,
   spreadClinicMembers,
 } from '../../../services/timetableServices';
 import { DayWithUsers } from '../../../types/type';
@@ -31,7 +31,7 @@ export function Titles({}: TitlesProps) {
 
   useEffect(() => {
     if (loggedInUser) {
-      const userFrame = makeDayWithUsers(
+      const userFrame = makeUsersInDay(
         spreadClinicMembers(clinicLists, selectedClinic!.id),
         getWeeks(getSunday(selectedDate))
       );
