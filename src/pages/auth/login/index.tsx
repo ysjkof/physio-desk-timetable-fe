@@ -7,9 +7,9 @@ import {
   useLoginMutation,
 } from '../../../graphql/generated/graphql';
 import { authTokenVar, isLoggedInVar } from '../../../apollo';
-import { Input } from '../../../components/molecules/input';
-import { FormError } from '../../../components/form-error';
-import { Button } from '../../../components/molecules/button';
+import { Input } from '../../../components/molecules/Input';
+import { FormError } from '../../../components/atoms/FormError';
+import { Button } from '../../../components/molecules/Button';
 import { REGEX } from '../../../constants/regex';
 import { LOCAL_STORAGE_KEY } from '../../../constants/localStorage';
 

@@ -9,9 +9,9 @@ import {
   selectedClinicVar,
   selectedDateVar,
 } from '../../../store';
-import { UserNameTitle } from './UserNameTitle';
-import { DateTitle } from './DateTitle';
-import { TableLoopLayout } from './templates/table-loop-layout';
+import { UserNameTitle } from '../molecules/UserNameTitle';
+import { DateTitle } from '../molecules/DateTitle';
+import { TableLoopTemplate } from '../templates/TableLoopTemplate';
 import {
   makeDayWithUsers,
   spreadClinicMembers,
@@ -41,13 +41,13 @@ export function Titles({}: TitlesProps) {
   if (!userLength) return <></>;
   return (
     <div className="TABLE_SUB_HEADER sticky top-0 z-[32] shadow-b">
-      <TableLoopLayout
+      <TableLoopTemplate
         userLength={userLength}
         children={userFrame?.map((day, i) => (
           <DateTitle key={i} date={day.date} userLength={userLength} />
         ))}
       />
-      <TableLoopLayout
+      <TableLoopTemplate
         userLength={userLength}
         children={userFrame?.map((day, i) => (
           <div

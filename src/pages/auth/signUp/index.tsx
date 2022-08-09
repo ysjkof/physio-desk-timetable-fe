@@ -8,9 +8,9 @@ import {
   CreateAccountMutation,
   useCreateAccountMutation,
 } from '../../../graphql/generated/graphql';
-import { Input } from '../../../components/molecules/input';
-import { FormError } from '../../../components/form-error';
-import { Button } from '../../../components/molecules/button';
+import { Input } from '../../../components/molecules/Input';
+import { FormError } from '../../../components/atoms/FormError';
+import { Button } from '../../../components/molecules/Button';
 import { REGEX } from '../../../constants/regex';
 
 export const SignUp = () => {

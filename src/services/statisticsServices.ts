@@ -4,7 +4,7 @@ import {
   IDailyReport,
   IPrescriptionOfUser,
   MemberState,
-} from "../pages/dashboard/organisms/statistics";
+} from '../pages/dashboard/organisms/Statistics';
 
 interface CombineUserStatistics {
   dailyReports: IDailyReport[];
@@ -81,7 +81,7 @@ function combineUserStatistics({
         const selectedPrescription = prescriptions.find(
           (prescriptionInList) => prescriptionInList.id === prescription.id
         );
-        if (!selectedPrescription) throw new Error("처방을 찾을 수 없습니다");
+        if (!selectedPrescription) throw new Error('처방을 찾을 수 없습니다');
         return {
           ...prescription,
           price: prescription.count * selectedPrescription.price,

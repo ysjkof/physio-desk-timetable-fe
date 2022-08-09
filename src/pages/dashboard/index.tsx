@@ -1,29 +1,30 @@
-import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
-import { ClinicType, MeQuery } from "../../graphql/generated/graphql";
-import { ModifiedLoggedInUser, useMe } from "../../hooks/useMe";
-import { Members } from "./organisms/members";
-import { InviteClinic } from "./organisms/invite";
-import { CreateClinic } from "./organisms/create";
-import { PrescriptionPage } from "./organisms/prescription";
-import { useLocation } from "react-router-dom";
-import { MyClinics } from "./organisms/myClicnics";
-import { Statistics } from "./organisms/statistics";
-import { DashboardTemplate } from "./dashboard-template";
-import { DashboardSideNav } from "./organisms/nav-side";
-import { DashboardTitle } from "./components/title";
-import { IMemberWithActivate, selectedClinicVar } from "../../store";
-import { useReactiveVar } from "@apollo/client";
-import { Loading } from "../../components/atoms/loading";
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { ClinicType, MeQuery } from '../../graphql/generated/graphql';
+import { useMe } from '../../hooks/useMe';
+import { Members } from './organisms/Members';
+import { InviteClinic } from './organisms/InviteClinic';
+import { CreateClinic } from './organisms/CreateClinic';
+import { PrescriptionPage } from './organisms/PrescriptionPage';
+import { useLocation } from 'react-router-dom';
+import { MyClinics } from './organisms/MyClinics';
+import { Statistics } from './organisms/Statistics';
+import { DashboardTemplate } from './DashboardTemplate';
+import { DashboardSideNav } from './organisms/DashboardSideNav';
+import { DashboardTitle } from './components/DashboardTitle';
+import { selectedClinicVar } from '../../store';
+import { useReactiveVar } from '@apollo/client';
+import { Loading } from '../../components/atoms/Loading';
+import { IMemberWithActivate, ModifiedLoggedInUser } from '../../types/type';
 
 export type SelectedMenuType =
-  | "main"
-  | "member"
-  | "invite"
-  | "create"
-  | "clinics"
-  | "prescription"
-  | "statistics";
+  | 'main'
+  | 'member'
+  | 'invite'
+  | 'create'
+  | 'clinics'
+  | 'prescription'
+  | 'statistics';
 
 export interface InDashboardPageProps {
   loggedInUser: ModifiedLoggedInUser;
@@ -47,7 +48,7 @@ export function checkStay(clinicId: number, meData: MeQuery) {
 
 export const Dashboard = () => {
   const [selectedMenu, setSelectedMenu] =
-    useState<SelectedMenuType>("prescription");
+    useState<SelectedMenuType>('prescription');
   const location = useLocation();
   const state = location.state as {
     selectedClinicId: number;
@@ -77,11 +78,11 @@ export const Dashboard = () => {
     if (!selectedClinic) return;
     if (!selectedClinic.isStayed) {
       // 초대를 받아 isActivate는 true지만 아직 수락을 누르지 않아 isStayed는 false
-      return setSelectedMenu("member");
+      return setSelectedMenu('member');
     }
-    if (!selectedClinic.isManager && selectedMenu === "invite") {
+    if (!selectedClinic.isManager && selectedMenu === 'invite') {
       // 초대 받고 수락을 눌러 isActivate와 isStayed가 true
-      return setSelectedMenu("member");
+      return setSelectedMenu('member');
     }
   }, [selectedClinic]);
 
@@ -109,23 +110,23 @@ export const Dashboard = () => {
           <>
             {selectedClinic && (
               <>
-                {selectedMenu === "main" && "메뉴를 선택하세요"}
-                {selectedMenu === "member" && (
+                {selectedMenu === 'main' && '메뉴를 선택하세요'}
+                {selectedMenu === 'member' && (
                   <Members loggedInUser={meData.me} />
                 )}
-                {selectedMenu === "invite" && (
+                {selectedMenu === 'invite' && (
                   <InviteClinic loggedInUser={meData.me} />
                 )}
-                {selectedMenu === "prescription" && (
+                {selectedMenu === 'prescription' && (
                   <PrescriptionPage loggedInUser={meData.me} />
                 )}
-                {selectedMenu === "statistics" && (
+                {selectedMenu === 'statistics' && (
                   <Statistics loggedInUser={meData.me} />
                 )}
               </>
             )}
-            {selectedMenu === "create" && <CreateClinic />}
-            {selectedMenu === "clinics" && (
+            {selectedMenu === 'create' && <CreateClinic />}
+            {selectedMenu === 'clinics' && (
               <MyClinics loggedInUser={meData.me} />
             )}
           </>

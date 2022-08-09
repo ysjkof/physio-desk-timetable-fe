@@ -2,7 +2,7 @@ import { useReactiveVar } from '@apollo/client';
 import { Fragment, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { SearchName } from '../../components/search-name';
+import { SearchName } from '../../components/SearchName';
 import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
 import { selectedClinicVar } from '../../store';
 

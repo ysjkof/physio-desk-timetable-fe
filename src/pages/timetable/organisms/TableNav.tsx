@@ -8,8 +8,8 @@ import { faGear, faList } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { BtnMenu } from '../../../components/molecules/button-menu';
-import { BtnMenuToggle } from '../../../components/molecules/button-menu-toggle';
+import { MenuButton } from '../../../components/molecules/MenuButton';
+import { BtnMenuToggle } from '../../../components/molecules/MenuToggleButton';
 import { saveViewOptions } from '../../../utils/utils';
 import {
   loggedInUserVar,
@@ -18,9 +18,9 @@ import {
   viewOptionsVar,
 } from '../../../store';
 import { NEXT, ONE_DAY, ONE_WEEK, PREV } from '../../../constants/constants';
-import { BtnArrow } from '../molecules/button-arrow';
-import { TableClinicSelector } from './table-clinic-selector';
-import { TableNavExpand } from './table-nav-expand';
+import { BtnArrow } from '../../../components/atoms/ButtonArrow';
+import { TableOptionSelector } from '../molecules/TableOptionSelector';
+import { NavDatepicker } from '../molecules/NavDatepicker';
 import { IViewOption } from '../../../types/type';
 
 interface TableNavProps {
@@ -89,7 +89,7 @@ export function TableNav({ today }: TableNavProps) {
           </div>
         )}
         <div className="flex w-full items-center justify-end gap-x-2">
-          <BtnMenu
+          <MenuButton
             icon={
               <FontAwesomeIcon icon={faPlusSquare} fontSize={14} className="" />
             }
@@ -112,7 +112,7 @@ export function TableNav({ today }: TableNavProps) {
           />
           {/* ---------------------- 구분선 ---------------------- */}
 
-          <BtnMenu
+          <MenuButton
             icon={<FontAwesomeIcon icon={faCalendarAlt} fontSize={14} />}
             enabled={viewOptions.navigationExpand}
             label={'달력'}
@@ -125,7 +125,7 @@ export function TableNav({ today }: TableNavProps) {
             }}
           />
 
-          <BtnMenu
+          <MenuButton
             icon={<FontAwesomeIcon icon={faList} fontSize={14} />}
             enabled={viewOptions.seeList}
             label={'목록'}
@@ -137,7 +137,7 @@ export function TableNav({ today }: TableNavProps) {
               saveViewOptions(newViewOptions, loggedInUser.id);
             }}
           />
-          <BtnMenu
+          <MenuButton
             icon={<FontAwesomeIcon icon={faGear} fontSize={14} />}
             enabled={viewOptions.seeActiveOption}
             label={'설정'}
@@ -158,13 +158,13 @@ export function TableNav({ today }: TableNavProps) {
             }}
           />
           <AnimatePresence>
-            {viewOptions.seeActiveOption && <TableClinicSelector />}
+            {viewOptions.seeActiveOption && <TableOptionSelector />}
           </AnimatePresence>
         </div>
       </div>
       <AnimatePresence>
         {viewOptions.navigationExpand ? (
-          <TableNavExpand varients={tableNavVarients} />
+          <NavDatepicker varients={tableNavVarients} />
         ) : (
           <>
             <div className="absolute top-[25px] left-0 flex h-[29px] w-[38px] items-center bg-white">

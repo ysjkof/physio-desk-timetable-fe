@@ -8,9 +8,9 @@ import {
 import { cls } from '../../../utils/utils';
 import { selectedClinicVar, selectedDateVar } from '../../../store';
 import { TABLE_CELL_HEIGHT } from '../../../constants/constants';
-import { EventBox } from '../molecules/event-box';
-import { ReserveBtn } from '../molecules/reserve-btn';
-import { TableLoopLayout } from './templates/table-loop-layout';
+import { EventBox } from '../molecules/EventBox';
+import { ReserveButton } from '../molecules/ReserveButton';
+import { TableLoopTemplate } from '../templates/TableLoopTemplate';
 import { TimeIndicatorBar } from './TimeIndicatorBar';
 import { compareNumAfterGetMinutes } from '../../../services/timetableServices';
 import { DayWithUsers } from '../../../types/type';
@@ -28,7 +28,7 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
   return (
-    <TableLoopLayout
+    <TableLoopTemplate
       elementName="TABLE_COLS"
       userLength={userLength}
       children={weekEvents.map((day, i) => (
@@ -54,7 +54,7 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
               >
                 {labels.map((label, idx) =>
                   idx === labelMaxLength - 1 ? null : (
-                    <ReserveBtn
+                    <ReserveButton
                       key={label.getTime()}
                       label={combineYMDHM(day.date, label)}
                       member={{ id: member.user.id, name: member.user.name }}

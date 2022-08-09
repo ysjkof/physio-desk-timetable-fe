@@ -1,7 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { Route, Routes } from 'react-router-dom';
 import { isLoggedInVar } from '../apollo';
-import { Layout } from '../components/templates/layout';
+import { GlobalLayout } from '../components/templates/GlobalLayout';
 import { Dashboard } from '../pages/dashboard';
 import { Home } from '../pages/home';
 import { TimeTable } from '../pages/timetable';
@@ -11,16 +11,16 @@ import { Search } from '../pages/search';
 import { ConfirmEmail } from '../pages/confirm-email';
 import { EditProfile } from '../pages/edit-profile';
 import { Login } from '../pages/auth/login';
-import { Test } from '../components/test';
+import { TestPage } from '../components/TestPage';
 import { SignUp } from '../pages/auth/signUp';
-import { ROUTER } from '../constants/router';
+import { ROUTER } from './routerConstants';
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={<GlobalLayout />}>
         <Route index element={<Home />} />
         {isLoggedIn ? (
           <>
@@ -36,7 +36,7 @@ function Router() {
             </Route>
             <Route path={ROUTER.SEARCH} element={<Search />} />
             <Route path={ROUTER.DASHBOARD} element={<Dashboard />} />
-            <Route path="test" element={<Test />} />
+            <Route path="test" element={<TestPage />} />
           </>
         ) : (
           <>

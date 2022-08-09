@@ -1,4 +1,4 @@
-import { DatepickerForm } from '../components/molecules/datepicker';
+import { DatepickerForm } from '../components/molecules/Datepicker';
 import { ONE_DAY, ONE_WEEK } from '../constants/constants';
 import {
   Clinic,

@@ -1,7 +1,7 @@
 import { gql, useApolloClient } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { Button } from '../../components/molecules/button';
+import { Button } from '../../components/molecules/Button';
 import {
   EditProfileInput,
   EditProfileMutation,
