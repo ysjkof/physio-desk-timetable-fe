@@ -29,7 +29,6 @@ export const queryResultVar = makeVar<ListReservationsQuery | undefined>(
 );
 
 export const todayNowVar = makeVar<Date>(new Date());
-export const loggedInUserVar = makeVar<ModifiedLoggedInUser | null>(null);
 
 export const viewOptionsVar = makeVar<IViewOption>(defaultViewOptions);
 export const clinicListsVar = makeVar<IClinicList[]>([]); // member의 activated key를 저장하기 위해서 필요함.

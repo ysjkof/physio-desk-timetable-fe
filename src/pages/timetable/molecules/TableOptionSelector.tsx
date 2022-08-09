@@ -12,20 +12,21 @@ import {
 } from '../../../utils/utils';
 import {
   clinicListsVar,
-  loggedInUserVar,
   selectedClinicVar,
   viewOptionsVar,
 } from '../../../store';
 import { NEXT } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
+import { useMe } from '../../../hooks/useMe';
 
 export function TableOptionSelector() {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
-  const loggedInUser = useReactiveVar(loggedInUserVar);
 
-  if (!loggedInUser || !viewOptions) return <></>;
+  const { data: loggedInUser } = useMe();
+
+  // if (!loggedInUser || !viewOptions) return <></>;
 
   const onClickToggleUser = (clinicId: number, memberId: number) => {
     if (!loggedInUser) return console.warn('❌ loggedInUser가 false입니다');
@@ -47,14 +48,14 @@ export function TableOptionSelector() {
       return;
     }
     clinicLists[gIndex].members[mIndex].isActivate = !isActivate;
-    saveClinicLists([...clinicLists], loggedInUser.id);
+    saveClinicLists([...clinicLists], loggedInUser.me.id);
   };
 
   const onClickChangeSelectClinic = (id: number, name: string) => {
     if (!loggedInUser) return console.warn('❌ loggedInUser가 false입니다');
     if (selectedClinic?.id !== id) {
       const clinic = clinicLists.find((clinic) => clinic.id === id);
-      const me = loggedInUser.members?.find(
+      const me = loggedInUser.me.members?.find(
         (member) => member.clinic.id === id
       );
       if (clinic && me) {
@@ -66,7 +67,7 @@ export function TableOptionSelector() {
           isStayed: me.staying,
           members: clinic.members,
         };
-        saveSelectedClinic(newSelectedClinic, loggedInUser.id);
+        saveSelectedClinic(newSelectedClinic, loggedInUser.me.id);
       }
     }
   };
@@ -115,7 +116,7 @@ export function TableOptionSelector() {
               ...viewOptions,
               seeCancel: !viewOptions.seeCancel,
             };
-            saveViewOptions(newViewOptions, loggedInUser.id);
+            saveViewOptions(newViewOptions, loggedInUser!.me.id);
           }}
         />
         <MenuButton
@@ -127,7 +128,7 @@ export function TableOptionSelector() {
               ...viewOptions,
               seeNoshow: !viewOptions.seeNoshow,
             };
-            saveViewOptions(newViewOptions, loggedInUser.id);
+            saveViewOptions(newViewOptions, loggedInUser!.me.id);
           }}
         />
       </div>

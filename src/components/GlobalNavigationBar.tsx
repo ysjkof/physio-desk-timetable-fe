@@ -10,7 +10,7 @@ import {
   ClinicType,
   useFindMyClinicsQuery,
 } from '../graphql/generated/graphql';
-import { loggedInUserVar, viewOptionsVar } from '../store';
+import { viewOptionsVar } from '../store';
 import { saveClinicLists, saveSelectedClinic } from '../utils/utils';
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
 import { IClinic, IClinicList, ISelectedClinic } from '../types/type';
@@ -70,7 +70,6 @@ export const GlobalNavigationBar = () => {
     } else {
       viewOptionsVar(localViewOptions);
     }
-    loggedInUserVar(meData.me);
   }, [meData]);
 
   const { data: findMyClinicsData } = useFindMyClinicsQuery({

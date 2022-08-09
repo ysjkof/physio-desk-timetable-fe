@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet-async';
 import { useReactiveVar } from '@apollo/client';
 import {
   clinicListsVar,
-  loggedInUserVar,
   selectedClinicVar,
   selectedDateVar,
   todayNowVar,
@@ -45,6 +44,7 @@ import {
   IListReservation,
   IMemberWithActivate,
 } from '../../types/type';
+import { useMe } from '../../hooks/useMe';
 
 export interface TimetableModalProps {
   closeAction: () => void;
@@ -59,10 +59,10 @@ export const TimeTable = () => {
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedClinic = useReactiveVar(selectedClinicVar);
   const selectedDate = useReactiveVar(selectedDateVar);
-  const loggedInUser = useReactiveVar(loggedInUserVar);
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
 
+  const { data: loggedInUser } = useMe();
   const { data, subscribeToMore } = useListReservations();
 
   const optionalWeekEvents =
@@ -115,7 +115,7 @@ export const TimeTable = () => {
       }
     } else {
       console.warn(
-        `✅ 시간표 > useEffect 실패; data is:${data?.listReservations}; loggedInUser:${loggedInUser?.id};`,
+        `✅ 시간표 > useEffect 실패; data is:${data?.listReservations}; loggedInUser:${loggedInUser?.me.id};`,
         'viewOptions : ',
         !!viewOptions,
         'optionalWeekEvents : ',

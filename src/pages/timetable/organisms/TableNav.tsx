@@ -12,7 +12,6 @@ import { MenuButton } from '../../../components/molecules/MenuButton';
 import { BtnMenuToggle } from '../../../components/molecules/MenuToggleButton';
 import { saveViewOptions } from '../../../utils/utils';
 import {
-  loggedInUserVar,
   selectedDateVar,
   selectedReservationVar,
   viewOptionsVar,
@@ -22,6 +21,7 @@ import { BtnArrow } from '../../../components/atoms/ButtonArrow';
 import { TableOptionSelector } from '../molecules/TableOptionSelector';
 import { NavDatepicker } from '../molecules/NavDatepicker';
 import { IViewOption } from '../../../types/type';
+import { useMe } from '../../../hooks/useMe';
 
 interface TableNavProps {
   today: Date;
@@ -34,13 +34,14 @@ const tableNavVarients = {
 
 export function TableNav({ today }: TableNavProps) {
   const viewOptions = useReactiveVar(viewOptionsVar);
-  const loggedInUser = useReactiveVar(loggedInUserVar);
   const selectedDate = useReactiveVar(selectedDateVar);
   const selectedReservation = useReactiveVar(selectedReservationVar);
 
+  const { data: loggedInUser } = useMe();
+
   const navigate = useNavigate();
 
-  if (!loggedInUser || !viewOptions) return <></>;
+  // if (!loggedInUser || !viewOptions) return <></>;
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
@@ -104,7 +105,7 @@ export function TableNav({ today }: TableNavProps) {
                 periodToView:
                   viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
               };
-              saveViewOptions(newViewOptions, loggedInUser.id);
+              saveViewOptions(newViewOptions, loggedInUser!.me.id);
             }}
             firstEnabled={viewOptions.periodToView === ONE_WEEK}
             secondEnabled={viewOptions.periodToView === ONE_DAY}
@@ -121,7 +122,7 @@ export function TableNav({ today }: TableNavProps) {
                 ...viewOptions,
                 navigationExpand: !viewOptions.navigationExpand,
               };
-              saveViewOptions(newViewOptions, loggedInUser.id);
+              saveViewOptions(newViewOptions, loggedInUser!.me.id);
             }}
           />
 
@@ -134,7 +135,7 @@ export function TableNav({ today }: TableNavProps) {
                 ...viewOptions,
                 seeList: !viewOptions.seeList,
               };
-              saveViewOptions(newViewOptions, loggedInUser.id);
+              saveViewOptions(newViewOptions, loggedInUser!.me.id);
             }}
           />
           <MenuButton
@@ -152,7 +153,7 @@ export function TableNav({ today }: TableNavProps) {
               };
               saveViewOptions(
                 newViewOptions,
-                loggedInUser.id,
+                loggedInUser!.me.id,
                 localViewOptions
               );
             }}
