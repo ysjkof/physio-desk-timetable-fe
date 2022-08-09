@@ -83,3 +83,13 @@ export const removeItemInArrayByIndex = (index: number, array: any[]) => [
 export function changeValueInArray<T>(array: T[], value: T, index: number) {
   return [...array.slice(0, index), value, ...array.slice(index + 1)];
 }
+
+type LocalStorageKey = keyof typeof LOCAL_STORAGE_KEY;
+export function getLocalStorageItem<T>(
+  storageKey: LocalStorageKey,
+  userId: number
+): T | null {
+  const item = localStorage.getItem(LOCAL_STORAGE_KEY[storageKey] + userId)!;
+  if (!item) return null;
+  return JSON.parse(item);
+}

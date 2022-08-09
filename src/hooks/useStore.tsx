@@ -6,8 +6,25 @@ import {
   todayNowVar,
   viewOptionsVar,
 } from '../store';
-import { SetSelectedInfoKey, SetSelectedInfoValue } from '../types/type';
+import {
+  IClinicList,
+  SetSelectedInfoKey,
+  SetSelectedInfoValue,
+} from '../types/type';
 import { useMe } from './useMe';
+
+export function makeSelectedClinic(clinic: IClinicList, userId: number) {
+  return {
+    id: clinic.id,
+    name: clinic.name,
+    type: clinic.type,
+    isManager: !!clinic.members.find((member) => member.user.id === userId)
+      ?.manager,
+    isStayed: !!clinic.members.find((member) => member.user.id === userId)
+      ?.staying,
+    members: clinic.members,
+  };
+}
 
 export default function useStore() {
   const { data } = useMe();

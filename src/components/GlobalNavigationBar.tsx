@@ -11,11 +11,16 @@ import {
   useFindMyClinicsQuery,
 } from '../graphql/generated/graphql';
 import { viewOptionsVar } from '../store';
-import { saveClinicLists, saveSelectedClinic } from '../utils/utils';
+import { getLocalStorageItem, saveClinicLists } from '../utils/utils';
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
-import { IClinic, IClinicList, ISelectedClinic } from '../types/type';
+import {
+  IClinic,
+  IClinicList,
+  ISelectedClinic,
+  IViewOption,
+} from '../types/type';
 import { ROUTER } from '../router/routerConstants';
-import useStore from '../hooks/useStore';
+import useStore, { makeSelectedClinic } from '../hooks/useStore';
 
 interface Notice {
   __typename?: 'Notice' | undefined;
@@ -24,14 +29,18 @@ interface Notice {
 }
 
 export const GlobalNavigationBar = () => {
+  const navigate = useNavigate();
+  const { register, handleSubmit, getValues, setValue } = useForm();
+
+  const { setSelectedInfo, viewOptions } = useStore();
   const { data: meData, error } = useMe();
+  const { data: findMyClinicsData } = useFindMyClinicsQuery({
+    variables: { input: { includeInactivate: true } },
+  });
+
   const [notices, setNotices] = useState<Notice[] | null>(null);
   const isLoggedIn = useReactiveVar(isLoggedInVar);
-  const viewOptions = useReactiveVar(viewOptionsVar);
 
-  const navigate = useNavigate();
-
-  const { register, handleSubmit, getValues, setValue } = useForm();
   const onSubmitSearch = () => {
     const { search } = getValues();
     const searchTrim = search.trim();
@@ -54,13 +63,13 @@ export const GlobalNavigationBar = () => {
   }, [error]);
 
   useEffect(() => {
-    console.log(1, '시작 Header : in useEffect');
     if (!meData) return;
     if (meData.me.notice) {
       setNotices(meData.me.notice);
     }
-    const localViewOptions = JSON.parse(
-      localStorage.getItem(LOCAL_STORAGE_KEY.VIEW_OPTION + meData.me.id)!
+    const localViewOptions = getLocalStorageItem<IViewOption>(
+      'VIEW_OPTION',
+      meData.me.id
     );
 
     if (localViewOptions === null) {
@@ -73,12 +82,7 @@ export const GlobalNavigationBar = () => {
     }
   }, [meData]);
 
-  const { data: findMyClinicsData } = useFindMyClinicsQuery({
-    variables: { input: { includeInactivate: true } },
-  });
-  const { setSelectedInfo } = useStore();
   useEffect(() => {
-    console.log(2, '시작 Header : in useEffect');
     if (!meData) return;
     if (!findMyClinicsData || !findMyClinicsData.findMyClinics.clinics) return;
 
@@ -97,8 +101,9 @@ export const GlobalNavigationBar = () => {
 
     const myClinics = injectKeyValue(clinics);
 
-    const localClinics: IClinicList[] = JSON.parse(
-      localStorage.getItem(LOCAL_STORAGE_KEY.CLINIC_LISTS + meData.me.id)!
+    const localClinics = getLocalStorageItem<IClinicList[]>(
+      'CLINIC_LISTS',
+      meData.me.id
     );
     if (localClinics) {
       updatedMyClinics = myClinics.map((clinic) => {
@@ -129,20 +134,9 @@ export const GlobalNavigationBar = () => {
 
     saveClinicLists(updatedMyClinics, meData.me.id);
 
-    function makeSelectedClinic(clinic: IClinicList, userId: number) {
-      return {
-        id: clinic.id,
-        name: clinic.name,
-        type: clinic.type,
-        isManager: !!clinic.members.find((member) => member.user.id === userId)
-          ?.manager,
-        isStayed: !!clinic.members.find((member) => member.user.id === userId)
-          ?.staying,
-        members: clinic.members,
-      };
-    }
-    const localSelectClinic: ISelectedClinic = JSON.parse(
-      localStorage.getItem(LOCAL_STORAGE_KEY.SELECTED_CLINIC + meData.me.id)!
+    const localSelectClinic = getLocalStorageItem<ISelectedClinic>(
+      'SELECTED_CLINIC',
+      meData.me.id
     );
     const clinic = updatedMyClinics.find((clinic) =>
       localSelectClinic
@@ -152,7 +146,6 @@ export const GlobalNavigationBar = () => {
     if (!clinic) return;
     const newSelectedClinic = makeSelectedClinic(clinic, meData.me.id);
     setSelectedInfo('clinic', newSelectedClinic);
-    // saveSelectedClinic(newSelectedClinic, meData.me.id);
   }, [findMyClinicsData]);
 
   return (
