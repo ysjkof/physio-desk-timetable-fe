@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import {
@@ -6,9 +5,9 @@ import {
   getWeeksOfMonth,
 } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
-import { selectedDateVar } from '../../../store';
 import { NEXT, PREV } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
+import useStore from '../../../hooks/useStore';
 
 interface Calendar {
   selectedMonth: { date: Date }[];
@@ -20,10 +19,10 @@ interface NavDatepickerProps {
 }
 
 export function NavDatepicker({ varients }: NavDatepickerProps) {
-  const selectedDate = useReactiveVar(selectedDateVar);
+  const { selectedInfo, setSelectedInfo } = useStore();
   const [calendar, setCalendar] = useState<Calendar>({
-    selectedMonth: getWeeksOfMonth(selectedDate),
-    threeMonth: getThreeMonth(selectedDate),
+    selectedMonth: getWeeksOfMonth(selectedInfo.date),
+    threeMonth: getThreeMonth(selectedInfo.date),
   });
 
   function getThreeMonth(date: Date) {
@@ -43,10 +42,10 @@ export function NavDatepicker({ varients }: NavDatepickerProps) {
 
   useEffect(() => {
     setCalendar({
-      selectedMonth: getWeeksOfMonth(selectedDate),
-      threeMonth: getThreeMonth(selectedDate),
+      selectedMonth: getWeeksOfMonth(selectedInfo.date),
+      threeMonth: getThreeMonth(selectedInfo.date),
     });
-  }, [selectedDate]);
+  }, [selectedInfo.date]);
   return (
     <motion.div
       className="TABLE_NAV relative flex bg-white px-2 pt-6"
@@ -63,7 +62,7 @@ export function NavDatepicker({ varients }: NavDatepickerProps) {
         {calendar.selectedMonth.map((day, i) => (
           <div
             key={i}
-            onClick={() => selectedDateVar(day.date)}
+            onClick={() => setSelectedInfo('date', day.date)}
             className={cls(
               'btn-menu cursor-pointer py-0.5 text-center',
               day.date.getDay() === 0
@@ -71,7 +70,7 @@ export function NavDatepicker({ varients }: NavDatepickerProps) {
                 : day.date.getDay() === 6
                 ? 'saturday'
                 : '',
-              compareDateMatch(day.date, selectedDate, 'ymd')
+              compareDateMatch(day.date, selectedInfo.date, 'ymd')
                 ? 'bg-black text-white'
                 : ''
             )}

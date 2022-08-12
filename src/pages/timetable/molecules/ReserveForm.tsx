@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -13,7 +12,6 @@ import {
   useEditReservationMutation,
   useFindPrescriptionsQuery,
 } from '../../../graphql/generated/graphql';
-import { selectedClinicVar, selectedPatientVar } from '../../../store';
 import { DatepickerWithInput } from '../../../components/molecules/DatepickerWithInput';
 import { Button } from '../../../components/molecules/Button';
 import { FormError } from '../../../components/atoms/FormError';
@@ -27,6 +25,7 @@ import {
   PrescriptionWithSelect,
 } from '../../../types/type';
 import { getDateFromYMDHM } from '../../../services/dateServices';
+import useStore from '../../../hooks/useStore';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
@@ -44,8 +43,8 @@ export const ReserveForm = ({
   reservation,
   isDayoff,
 }: IReservaFromProps) => {
-  const selectedPatient = useReactiveVar(selectedPatientVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const { selectedInfo, setSelectedInfo } = useStore();
+
   const [selectedPrescription, setSelectedPrescription] =
     useState<ISelectedPrescription>({
       price: 0,
@@ -60,7 +59,7 @@ export const ReserveForm = ({
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
     variables: {
       input: {
-        clinicId: selectedClinic?.id ?? 0,
+        clinicId: selectedInfo.clinic?.id ?? 0,
         onlyLookUpActive: false,
       },
     },
@@ -164,7 +163,7 @@ export const ReserveForm = ({
                   memo,
                   isDayoff: true,
                   userId: +userId!,
-                  clinicId: selectedClinic!.id,
+                  clinicId: selectedInfo.clinic!.id,
                 },
               },
             });
@@ -198,8 +197,8 @@ export const ReserveForm = ({
                 endDate,
                 memo,
                 userId: +userId!,
-                clinicId: selectedClinic!.id,
-                patientId: selectedPatient!.id,
+                clinicId: selectedInfo.clinic!.id,
+                patientId: selectedInfo.patient!.id,
                 prescriptionIds: selectedPrescription.prescriptions,
               },
             },
@@ -257,7 +256,7 @@ export const ReserveForm = ({
 
   useEffect(() => {
     return () => {
-      selectedPatientVar(null);
+      setSelectedInfo('patient', null);
     };
   }, []);
 
@@ -281,7 +280,7 @@ export const ReserveForm = ({
       setValue('memo', reservation.memo!);
       setValue('userId', reservation.user.id);
       // @ts-ignore 여기서는 patientId만 있으면 된다
-      selectedPatientVar(reservation.patient);
+      setSelectedInfo('patient', reservation.patient);
     } else if (member) {
       setValue('userId', member.id);
     }
@@ -305,7 +304,7 @@ export const ReserveForm = ({
           <label className="flex flex-col gap-2">
             담당 치료사
             <SelectUser
-              members={selectedClinic?.members ?? []}
+              members={selectedInfo.clinic?.members ?? []}
               register={register('userId')}
             />
           </label>
@@ -327,10 +326,10 @@ export const ReserveForm = ({
               <Link
                 to={'/dashboard'}
                 state={{
-                  selectedClinicId: selectedClinic?.id,
-                  selectedClinicName: selectedClinic?.name,
-                  selectedClinicType: selectedClinic?.type,
-                  selectedClinicMembers: selectedClinic?.members,
+                  selectedClinicId: selectedInfo.clinic?.id,
+                  selectedClinicName: selectedInfo.clinic?.name,
+                  selectedClinicType: selectedInfo.clinic?.type,
+                  selectedClinicMembers: selectedInfo.clinic?.members,
                   selectedMenu: 'prescription',
                 }}
               >
@@ -349,10 +348,10 @@ export const ReserveForm = ({
                   <Link
                     to={'/dashboard'}
                     state={{
-                      selectedClinicId: selectedClinic?.id,
-                      selectedClinicName: selectedClinic?.name,
-                      selectedClinicType: selectedClinic?.type,
-                      selectedClinicMembers: selectedClinic?.members,
+                      selectedClinicId: selectedInfo.clinic?.id,
+                      selectedClinicName: selectedInfo.clinic?.name,
+                      selectedClinicType: selectedInfo.clinic?.type,
+                      selectedClinicMembers: selectedInfo.clinic?.members,
                       selectedMenu: 'prescription',
                     }}
                   >
@@ -407,7 +406,7 @@ export const ReserveForm = ({
           <Button
             type="submit"
             canClick={
-              selectedPatient &&
+              selectedInfo.patient &&
               isValid &&
               selectedPrescription.prescriptions.length >= 1
             }

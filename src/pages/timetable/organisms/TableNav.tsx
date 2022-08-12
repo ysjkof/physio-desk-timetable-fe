@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import {
   faCalendarAlt,
   faPlusSquare,
@@ -11,17 +10,13 @@ import { useNavigate } from 'react-router-dom';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { BtnMenuToggle } from '../../../components/molecules/MenuToggleButton';
 import { saveViewOptions } from '../../../utils/utils';
-import {
-  selectedDateVar,
-  selectedReservationVar,
-  viewOptionsVar,
-} from '../../../store';
 import { NEXT, ONE_DAY, ONE_WEEK, PREV } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
 import { TableOptionSelector } from '../molecules/TableOptionSelector';
 import { NavDatepicker } from '../molecules/NavDatepicker';
 import { IViewOption } from '../../../types/type';
 import { useMe } from '../../../hooks/useMe';
+import useStore from '../../../hooks/useStore';
 
 interface TableNavProps {
   today: Date;
@@ -33,36 +28,34 @@ const tableNavVarients = {
 };
 
 export function TableNav({ today }: TableNavProps) {
-  const viewOptions = useReactiveVar(viewOptionsVar);
-  const selectedDate = useReactiveVar(selectedDateVar);
-  const selectedReservation = useReactiveVar(selectedReservationVar);
-
-  const { data: loggedInUser } = useMe();
-
   const navigate = useNavigate();
+
+  const { setSelectedInfo, selectedInfo, viewOptions } = useStore();
+  const { data: loggedInUser } = useMe();
 
   // if (!loggedInUser || !viewOptions) return <></>;
 
   const handleDateNavMovePrev = () => {
-    const date = new Date(selectedDate);
+    const date = new Date(selectedInfo.date);
     viewOptions.navigationExpand
       ? date.setMonth(date.getMonth() - 1)
       : date.setDate(date.getDate() - 7);
-    selectedDateVar(date);
+    setSelectedInfo('date', date);
   };
   const handleDateNavMoveNext = () => {
-    const date = new Date(selectedDate);
+    const date = new Date(selectedInfo.date);
     viewOptions.navigationExpand
       ? date.setMonth(date.getMonth() + 1)
       : date.setDate(date.getDate() + 7);
-    selectedDateVar(date);
+    setSelectedInfo('date', date);
   };
+
   return (
     <>
       <div className="flex w-full items-center justify-between py-1">
         <button
           className="min-w-[120px] font-medium hover:font-bold"
-          onClick={() => selectedDateVar(today)}
+          onClick={() => setSelectedInfo('date', today)}
         >
           {today.toLocaleString('ko-KR', {
             year: '2-digit',
@@ -71,20 +64,20 @@ export function TableNav({ today }: TableNavProps) {
             weekday: 'short',
           })}
         </button>
-        {selectedReservation && (
+        {selectedInfo.reservation && (
           <div className="flex w-full items-center justify-center">
             <span className="mr-4 flex">
               <span className="absolute inline-flex h-2.5 w-2.5 animate-ping rounded-full bg-blue-700 opacity-75"></span>
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-blue-800"></span>
             </span>
             <span className="mr-2 scale-150 font-bold">
-              {selectedReservation.patient?.name}
+              {selectedInfo.reservation.patient?.name}
             </span>
             님의 예약을 복사했습니다
             <FontAwesomeIcon
               icon={faRectangleXmark}
               fontSize={14}
-              onClick={() => selectedReservationVar(null)}
+              onClick={() => setSelectedInfo('reservation', null)}
               className="ml-2 cursor-pointer hover:scale-125"
             />
           </div>

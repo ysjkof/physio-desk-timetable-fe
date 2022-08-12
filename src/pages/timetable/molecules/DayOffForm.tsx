@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import { selectedClinicVar } from '../../../store';
+import { selectedInfoVar } from '../../../store';
 import { DatepickerWithInput } from '../../../components/molecules/DatepickerWithInput';
 import { Button } from '../../../components/molecules/Button';
 import { SelectUser } from './SelectUser';
@@ -25,14 +25,14 @@ export const DayOffForm = ({
   loading,
   reservation,
 }: DayOffFormProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const selectedInfo = useReactiveVar(selectedInfoVar);
 
   return (
     <>
       <label className="flex flex-col gap-2">
         담당 치료사
         <SelectUser
-          members={selectedClinic?.members ?? []}
+          members={selectedInfo.clinic?.members ?? []}
           register={register('userId')}
         />
       </label>

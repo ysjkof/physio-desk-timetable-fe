@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCreateReservationMutation } from '../../../graphql/generated/graphql';
 import { getHHMM, getTimeLength } from '../../../services/dateServices';
-import { selectedReservationVar } from '../../../store';
+import { selectedInfoVar } from '../../../store';
 import { TABLE_CELL_HEIGHT, USER_COLORS } from '../../../constants/constants';
 import { ROUTER } from '../../../router/routerConstants';
 import { IListReservation } from '../../../types/type';
@@ -42,29 +42,33 @@ export const ReserveButton = ({
   userIndex,
   isActiveBorderTop = false,
 }: ReserveBtnProps) => {
-  const selectedReservation = useReactiveVar(selectedReservationVar);
+  const selectedInfo = useReactiveVar(selectedInfoVar);
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
 
   const [createReservationMutation, { loading }] =
     useCreateReservationMutation();
 
+  const clearSelectedReservation = () => {
+    selectedInfoVar({ ...selectedInfo, reservation: null });
+  };
   return (
     <div
       className={`reserve-btn-box group ${
         isActiveBorderTop ? ' border-t border-gray-200 first:border-t-0' : ''
       }`}
       onMouseOver={(e) => {
-        if (selectedReservation) setIsHover(true);
+        if (selectedInfo.reservation) setIsHover(true);
       }}
       onMouseLeave={(e) => {
-        if (selectedReservation) setIsHover(false);
+        if (selectedInfo.reservation) setIsHover(false);
       }}
       onClick={() => {
-        if (selectedReservation) {
+        if (selectedInfo.reservation) {
           if (loading) return;
-          const { prescriptionIds, requiredTime } =
-            getPrescriptionInfo(selectedReservation);
+          const { prescriptionIds, requiredTime } = getPrescriptionInfo(
+            selectedInfo.reservation
+          );
 
           const endDate = new Date(label);
           endDate.setMinutes(endDate.getMinutes() + requiredTime);
@@ -72,9 +76,9 @@ export const ReserveButton = ({
           createReservationMutation({
             variables: {
               input: {
-                clinicId: selectedReservation.clinic!.id,
-                patientId: selectedReservation.patient!.id,
-                memo: selectedReservation.memo,
+                clinicId: selectedInfo.reservation.clinic!.id,
+                patientId: selectedInfo.reservation.patient!.id,
+                memo: selectedInfo.reservation.memo,
                 userId: member.id,
                 startDate: label,
                 endDate,
@@ -83,7 +87,7 @@ export const ReserveButton = ({
             },
           });
           // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기
-          selectedReservationVar(null);
+          clearSelectedReservation();
         } else {
           navigate(ROUTER.RESERVE, {
             state: { startDate: label, member },
@@ -92,15 +96,15 @@ export const ReserveButton = ({
       }}
     >
       <span className="reserve-btn">+ {getHHMM(label, ':')}</span>
-      {selectedReservation && isHover && (
+      {selectedInfo.reservation && isHover && (
         <div
           className="absolute top-0 w-full border-2"
           style={{
             borderColor: USER_COLORS[userIndex]?.deep ?? 'black',
             height:
               getTimeLength(
-                selectedReservation.startDate,
-                selectedReservation.endDate,
+                selectedInfo.reservation.startDate,
+                selectedInfo.reservation.endDate,
                 '20minute'
               ) *
                 TABLE_CELL_HEIGHT +

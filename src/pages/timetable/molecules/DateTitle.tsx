@@ -1,22 +1,20 @@
-import { useReactiveVar } from '@apollo/client';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { compareDateMatch } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
-import { selectedDateVar, todayNowVar } from '../../../store';
 import { SCROLL_ADRESS } from '../../../constants/constants';
 import { BtnDatecheck } from '../../../components/atoms/ButtonDatecheck';
+import useStore from '../../../hooks/useStore';
 
 interface DateTitleProps {
   date: Date;
   userLength: number;
 }
 export function DateTitle({ date, userLength }: DateTitleProps) {
-  const today = useReactiveVar(todayNowVar);
-  const selectedDate = useReactiveVar(selectedDateVar);
-  const selectedMonth = compareDateMatch(selectedDate, date, 'ym');
-  const selectedDay = compareDateMatch(selectedDate, date, 'ymd');
+  const { selectedInfo, setSelectedInfo, today } = useStore();
+  const selectedMonth = compareDateMatch(selectedInfo.date, date, 'ym');
+  const selectedDay = compareDateMatch(selectedInfo.date, date, 'ymd');
   const isToday = compareDateMatch(today, date, 'ymd');
 
   return (
@@ -34,7 +32,7 @@ export function DateTitle({ date, userLength }: DateTitleProps) {
           inline: 'center',
           behavior: 'smooth',
         });
-        selectedDateVar(date);
+        setSelectedInfo('date', date);
       }}
     >
       <div className="mx-auto">

@@ -1,7 +1,7 @@
 import { faFemale, faMale } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useStore from '../hooks/useStore';
 import { getYMD } from '../services/dateServices';
-import { selectedPatientVar } from '../store';
 import { SelectedPatient } from '../types/type';
 
 export interface INameTagProps extends SelectedPatient {
@@ -18,8 +18,9 @@ export const NameTag = ({
   canClick = false,
   user,
 }: INameTagProps) => {
+  const { setSelectedInfo } = useStore();
   const onClick = () =>
-    selectedPatientVar({
+    setSelectedInfo('patient', {
       id,
       gender,
       name,
@@ -28,6 +29,7 @@ export const NameTag = ({
       clinicName,
       user,
     });
+
   return (
     <div
       onClick={canClick ? onClick : undefined}

@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import { faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
@@ -11,11 +10,11 @@ import {
   useSearchUsersLazyQuery,
 } from '../../../graphql/generated/graphql';
 import { cls } from '../../../utils/utils';
-import { selectedClinicVar } from '../../../store';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
+import useStore from '../../../hooks/useStore';
 
 export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const { selectedInfo } = useStore();
 
   // if (!isStayed || !isManager) {
   //   return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
@@ -59,9 +58,9 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
     }
   };
   const searchUserResults = searchUsersData?.searchUsers.results;
-  console.log(selectedClinic);
-  return selectedClinic ? (
-    selectedClinic?.isStayed && selectedClinic?.isManager ? (
+
+  return selectedInfo.clinic ? (
+    selectedInfo.clinic.isStayed && selectedInfo.clinic.isManager ? (
       <DashboardSectionLayout
         width="md"
         title="병원에 초대"
@@ -119,8 +118,8 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
                         onClick={() =>
                           onClickInviteToClinic(
                             user,
-                            selectedClinic.name,
-                            selectedClinic.id
+                            selectedInfo.clinic!.name,
+                            selectedInfo.clinic!.id
                           )
                         }
                       >

@@ -12,7 +12,7 @@ import {
   useFindPrescriptionsQuery,
   useInviteClinicMutation,
 } from '../../graphql/generated/graphql';
-import { selectedClinicVar } from '../../store';
+import { selectedInfoVar } from '../../store';
 import { PrescriptionWithSelect } from '../../types/type';
 
 const clinicId = 11;
@@ -84,7 +84,7 @@ function selectPrescriptionForTest(inputPresc: PrescriptionWithSelect[]) {
 
 export function Home() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const selectedInfo = useReactiveVar(selectedInfoVar);
 
   const [createAccount] = useCreateAccountMutation();
   const [createClinic] = useCreateClinicMutation();
@@ -94,13 +94,13 @@ export function Home() {
   const [createPrescription] = useCreatePrescriptionMutation();
   const [createReservationMutation] = useCreateReservationMutation();
   const { data: allPatients } = useFindAllPatientsQuery({
-    variables: { input: { clinicId: selectedClinic?.id ?? 0 } },
+    variables: { input: { clinicId: selectedInfo.clinic?.id ?? 0 } },
   });
 
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
     variables: {
       input: {
-        clinicId: selectedClinic?.id ?? 0,
+        clinicId: selectedInfo.clinic?.id ?? 0,
         onlyLookUpActive: false,
       },
     },
@@ -128,10 +128,10 @@ export function Home() {
           Math.random() * (patients?.length! ?? 0)
         );
         const memberRandon = Math.floor(
-          Math.random() * (selectedClinic?.members.length ?? 0)
+          Math.random() * (selectedInfo.clinic?.members.length ?? 0)
         );
         const patientId = patients[patientRandom].id;
-        const userId = selectedClinic?.members[memberRandon].user.id!;
+        const userId = selectedInfo.clinic?.members[memberRandon].user.id!;
 
         createReservationMutation({
           variables: {
@@ -140,7 +140,7 @@ export function Home() {
               endDate: time[1],
               patientId,
               userId,
-              clinicId: selectedClinic!.id,
+              clinicId: selectedInfo.clinic!.id,
               prescriptionIds: [presc.id],
             },
           },

@@ -4,16 +4,15 @@ import {
   useListReservationsQuery,
 } from '../graphql/generated/graphql';
 import { getAfterDate, getSunday } from '../services/dateServices';
-import { clinicListsVar, selectedDateVar } from '../store';
+import { clinicListsVar } from '../store';
 import { useMe } from './useMe';
 import useStore from './useStore';
 
 export const useListReservations = () => {
   const { data } = useMe();
   const { selectedInfo } = useStore();
-  const selectedDate = useReactiveVar(selectedDateVar);
   const clinicLists = useReactiveVar(clinicListsVar);
-  const sunday = getSunday(selectedDate);
+  const sunday = getSunday(selectedInfo.date);
 
   return useListReservationsQuery({
     variables: {

@@ -1,12 +1,11 @@
-import { useReactiveVar } from '@apollo/client';
 import { InDashboardPageProps } from '..';
 import { useAcceptInvitationMutation } from '../../../graphql/generated/graphql';
 import { cls } from '../../../utils/utils';
-import { selectedClinicVar } from '../../../store';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
+import useStore from '../../../hooks/useStore';
 
 export const Members = ({ loggedInUser }: InDashboardPageProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const { selectedInfo } = useStore();
 
   const [acceptInvitation] = useAcceptInvitationMutation();
 
@@ -15,13 +14,13 @@ export const Members = ({ loggedInUser }: InDashboardPageProps) => {
       acceptInvitation({
         variables: {
           input: {
-            clinicId: selectedClinic?.id ?? 0,
+            clinicId: selectedInfo.clinic?.id ?? 0,
           },
         },
       });
     }
   }
-  console.log(selectedClinic?.members);
+  console.log(selectedInfo.clinic?.members);
   return (
     <DashboardSectionLayout
       title="구성원"
@@ -36,7 +35,7 @@ export const Members = ({ loggedInUser }: InDashboardPageProps) => {
             <span className="text-center">상태</span>
           </div>
           <ul className="space-y-2">
-            {selectedClinic?.members?.map((member) => (
+            {selectedInfo.clinic?.members?.map((member) => (
               <div
                 key={member.id}
                 className="grid grid-cols-[2.4rem_1fr_4.2rem_4rem] items-center gap-3 "

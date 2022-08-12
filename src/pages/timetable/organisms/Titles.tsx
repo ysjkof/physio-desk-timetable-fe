@@ -1,13 +1,7 @@
-import { useReactiveVar } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { getActiveUserLength } from '..';
 import { getSunday, getWeeks } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
-import {
-  clinicListsVar,
-  selectedClinicVar,
-  selectedDateVar,
-} from '../../../store';
 import { UserNameTitle } from '../molecules/UserNameTitle';
 import { DateTitle } from '../molecules/DateTitle';
 import { TableLoopTemplate } from '../templates/TableLoopTemplate';
@@ -22,9 +16,8 @@ import useStore from '../../../hooks/useStore';
 interface TitlesProps {}
 
 export function Titles({}: TitlesProps) {
-  const { selectedInfo } = useStore();
-  const selectedDate = useReactiveVar(selectedDateVar);
-  const clinicLists = useReactiveVar(clinicListsVar);
+  const { selectedInfo, clinicLists } = useStore();
+
   const [userFrame, setUserFrame] = useState<DayWithUsers[] | null>(null);
   const userLength =
     userFrame && getActiveUserLength(selectedInfo.clinic?.members);
@@ -35,11 +28,11 @@ export function Titles({}: TitlesProps) {
     if (loggedInUser) {
       const userFrame = makeUsersInDay(
         spreadClinicMembers(clinicLists, selectedInfo.clinic!.id),
-        getWeeks(getSunday(selectedDate))
+        getWeeks(getSunday(selectedInfo.date))
       );
       setUserFrame(userFrame);
     }
-  }, [clinicLists, selectedDate, selectedInfo.clinic]);
+  }, [clinicLists, selectedInfo.date, selectedInfo.clinic]);
 
   if (!userLength) return <></>;
   return (

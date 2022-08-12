@@ -14,15 +14,14 @@ import {
 } from '../../../graphql/generated/graphql';
 import { InDashboardPageProps } from '..';
 import { Button } from '../../../components/molecules/Button';
-import { selectedClinicVar } from '../../../store';
-import { useReactiveVar } from '@apollo/client';
 import { Input } from '../../../components/molecules/Input';
 import { FormError } from '../../../components/atoms/FormError';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { REGEX } from '../../../constants/regex';
+import useStore from '../../../hooks/useStore';
 
 export const PrescriptionPage = ({}: InDashboardPageProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const { selectedInfo } = useStore();
 
   const [atomList, setAtomList] = useState<
     { id: number; name: string; onSelect: boolean }[]
@@ -34,7 +33,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
     useFindPrescriptionsQuery({
       variables: {
         input: {
-          clinicId: selectedClinic ? selectedClinic.id : 0,
+          clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,
           onlyLookUpActive: false,
         },
       },
@@ -75,7 +74,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
             price: +price,
             description,
             prescriptionAtomIds,
-            clinicId: selectedClinic ? selectedClinic.id : 0,
+            clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,
           },
         },
       });
@@ -115,7 +114,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
 
   return (
     <>
-      {selectedClinic?.isStayed ? (
+      {selectedInfo.clinic?.isStayed ? (
         <div className="flex h-full w-full flex-col gap-6">
           <DashboardSectionLayout
             width="md"
@@ -170,7 +169,7 @@ export const PrescriptionPage = ({}: InDashboardPageProps) => {
           <DashboardSectionLayout
             width="md"
             children={
-              <details open={selectedClinic.isManager}>
+              <details open={selectedInfo.clinic.isManager}>
                 <summary>처방 만들기</summary>
                 <form
                   onSubmit={handleSubmit(onSubmitCreatePresciption)}

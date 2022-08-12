@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
@@ -8,11 +7,11 @@ import { MeQuery } from '../../../graphql/generated/graphql';
 import {
   checkMember,
   getPositionRef,
-  saveSelectedClinic,
+  setLocalStorage,
 } from '../../../utils/utils';
-import { clinicListsVar, selectedClinicVar } from '../../../store';
 import { DashboardNavList } from '../components/DashboardNavList';
 import { ClinicName } from '../molecules/ClinicName';
+import useStore from '../../../hooks/useStore';
 
 interface DashboardSideNavProps {
   selectedMenu: SelectedMenuType;
@@ -25,8 +24,8 @@ export const DashboardSideNav = ({
   setSelectedMenu,
   meData,
 }: DashboardSideNavProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
-  const clinicLists = useReactiveVar(clinicListsVar);
+  const { selectedInfo, clinicLists, setSelectedInfo } = useStore();
+
   const [openClinicSelect, setOpenClinicSelect] = useState(false);
   const onlyMeMemberClinicLists = clinicLists.map((clinic) => {
     const idx = clinic.members.findIndex(
@@ -44,7 +43,7 @@ export const DashboardSideNav = ({
   const ref = useRef<HTMLDivElement>(null);
   const [top, left] = getPositionRef(ref, 0);
 
-  return selectedClinic ? (
+  return selectedInfo.clinic ? (
     <nav className="dashboard-side-nav h-full space-y-2">
       <div
         className="btn-menu flex h-8 cursor-pointer items-center justify-between gap-2 rounded-none border-b px-2 py-2 text-sm font-semibold"
@@ -52,7 +51,7 @@ export const DashboardSideNav = ({
         ref={ref}
       >
         <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-          {selectedClinic.name}
+          {selectedInfo.clinic.name}
         </span>
         <FontAwesomeIcon icon={faChevronDown} fontSize={14} />
         {openClinicSelect && (
@@ -66,7 +65,7 @@ export const DashboardSideNav = ({
                   <ClinicName
                     key={clinic.id}
                     clinicName={clinic.name}
-                    isSelected={selectedClinic.id === clinic.id}
+                    isSelected={selectedInfo.clinic?.id === clinic.id}
                     memberState={checkMember(
                       clinic.member.staying,
                       clinic.member.accepted
@@ -83,7 +82,13 @@ export const DashboardSideNav = ({
                         isManager: checkManager(clinic.id, meData),
                         isStayed: checkStay(clinic.id, meData),
                       };
-                      saveSelectedClinic(newSelectedClinic, meData.me.id);
+                      setSelectedInfo('clinic', newSelectedClinic, () =>
+                        setLocalStorage({
+                          key: 'SELECTED_CLINIC',
+                          userId: meData.me.id,
+                          value: newSelectedClinic,
+                        })
+                      );
                     }}
                   />
                 ))}
@@ -95,39 +100,39 @@ export const DashboardSideNav = ({
       <ul>
         <DashboardNavList
           type={'member'}
-          selectedClinic={selectedClinic}
+          selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
           onClick={() => setSelectedMenu('member')}
         />
         <DashboardNavList
           type={'invite'}
-          selectedClinic={selectedClinic}
+          selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
           onClick={() => setSelectedMenu('invite')}
         />
         <div className="seperate-bar mb-2 pt-2" />
         <DashboardNavList
           type={'prescription'}
-          selectedClinic={selectedClinic}
+          selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
           onClick={() => setSelectedMenu('prescription')}
         />
         <DashboardNavList
           type={'statistics'}
-          selectedClinic={selectedClinic}
+          selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
           onClick={() => setSelectedMenu('statistics')}
         />
         <div className="seperate-bar mb-2 pt-2" />
         <DashboardNavList
           type={'create'}
-          selectedClinic={selectedClinic}
+          selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
           onClick={() => setSelectedMenu('create')}
         />
         <DashboardNavList
           type={'clinics'}
-          selectedClinic={selectedClinic}
+          selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
           onClick={() => setSelectedMenu('clinics')}
         />

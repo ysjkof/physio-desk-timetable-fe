@@ -4,13 +4,13 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SearchName } from '../../components/SearchName';
 import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
-import { selectedClinicVar } from '../../store';
+import { selectedInfoVar } from '../../store';
 
 export const Search = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [callQuery, { loading, data }] = useSearchPatientLazyQuery();
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const selectedInfo = useReactiveVar(selectedInfoVar);
 
   const onClick = (patientId: number) => {
     navigate('/patient', {
@@ -28,7 +28,7 @@ export const Search = () => {
         input: {
           page: 1,
           query: decodeURI(queryName),
-          clinicId: selectedClinic?.id,
+          clinicId: selectedInfo.clinic!.id,
         },
       },
     });

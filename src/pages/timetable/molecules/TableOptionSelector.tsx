@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,22 +6,18 @@ import { MenuButton } from '../../../components/molecules/MenuButton';
 import {
   cls,
   saveClinicLists,
-  saveSelectedClinic,
   saveViewOptions,
+  setLocalStorage,
 } from '../../../utils/utils';
-import {
-  clinicListsVar,
-  selectedClinicVar,
-  viewOptionsVar,
-} from '../../../store';
+import { viewOptionsVar } from '../../../store';
 import { NEXT } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
 import { useMe } from '../../../hooks/useMe';
+import useStore from '../../../hooks/useStore';
 
 export function TableOptionSelector() {
-  const viewOptions = useReactiveVar(viewOptionsVar);
-  const clinicLists = useReactiveVar(clinicListsVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const { setSelectedInfo, viewOptions, clinicLists, selectedInfo } =
+    useStore();
 
   const { data: loggedInUser } = useMe();
 
@@ -51,23 +46,30 @@ export function TableOptionSelector() {
     saveClinicLists([...clinicLists], loggedInUser.me.id);
   };
 
-  const onClickChangeSelectClinic = (id: number, name: string) => {
+  const onClickChangeSelectClinic = (clinicId: number) => {
     if (!loggedInUser) return console.warn('❌ loggedInUser가 false입니다');
-    if (selectedClinic?.id !== id) {
-      const clinic = clinicLists.find((clinic) => clinic.id === id);
+    if (selectedInfo.clinic?.id !== clinicId) {
+      const clinic = clinicLists.find((clinic) => clinic.id === clinicId);
       const me = loggedInUser.me.members?.find(
-        (member) => member.clinic.id === id
+        (member) => member.clinic.id === clinicId
       );
       if (clinic && me) {
         const newSelectedClinic = {
-          id,
+          id: clinicId,
           name: clinic.name,
           type: clinic.type,
           isManager: me.manager,
           isStayed: me.staying,
           members: clinic.members,
         };
-        saveSelectedClinic(newSelectedClinic, loggedInUser.me.id);
+
+        setSelectedInfo('clinic', newSelectedClinic, () =>
+          setLocalStorage({
+            key: 'SELECTED_CLINIC',
+            userId: loggedInUser.me.id,
+            value: newSelectedClinic,
+          })
+        );
       }
     }
   };
@@ -88,7 +90,7 @@ export function TableOptionSelector() {
     exit: { x: 300, transition: { duration: 0.3 } },
   };
 
-  return selectedClinic ? (
+  return selectedInfo.clinic ? (
     <motion.div
       variants={variants}
       initial="init"
@@ -142,25 +144,27 @@ export function TableOptionSelector() {
             <div key={i} className="CLINIC pt-2">
               <MenuButton
                 label={clinic.name}
-                enabled={clinic.id === selectedClinic.id}
+                enabled={clinic.id === selectedInfo.clinic?.id}
                 isWidthFull
                 icon={
                   <FontAwesomeIcon
                     icon={faCheckCircle}
                     fontSize={16}
                     className={`${
-                      clinic.id === selectedClinic.id ? 'text-green-500' : ''
+                      clinic.id === selectedInfo.clinic?.id
+                        ? 'text-green-500'
+                        : ''
                     }`}
                   />
                 }
-                onClick={() =>
-                  onClickChangeSelectClinic(clinic.id, clinic.name)
-                }
+                onClick={() => onClickChangeSelectClinic(clinic.id)}
               />
               <ul
                 className={cls(
                   'USER_OF_CLINIC pl-6',
-                  clinic.id === selectedClinic.id ? '' : 'pointer-events-none'
+                  clinic.id === selectedInfo.clinic?.id
+                    ? ''
+                    : 'pointer-events-none'
                 )}
               >
                 {clinic.members
@@ -175,14 +179,16 @@ export function TableOptionSelector() {
                       label={member.user.name}
                       isWidthFull
                       enabled={
-                        clinic.id === selectedClinic.id && member.isActivate
+                        clinic.id === selectedInfo.clinic?.id &&
+                        member.isActivate
                       }
                       icon={
                         <FontAwesomeIcon
                           icon={faCheckCircle}
                           fontSize={16}
                           className={`${
-                            clinic.id === selectedClinic.id && member.isActivate
+                            clinic.id === selectedInfo.clinic?.id &&
+                            member.isActivate
                               ? 'text-green-500'
                               : ''
                           }`}

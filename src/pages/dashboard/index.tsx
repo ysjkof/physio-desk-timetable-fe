@@ -12,10 +12,9 @@ import { Statistics } from './organisms/Statistics';
 import { DashboardTemplate } from './DashboardTemplate';
 import { DashboardSideNav } from './organisms/DashboardSideNav';
 import { DashboardTitle } from './components/DashboardTitle';
-import { selectedClinicVar } from '../../store';
-import { useReactiveVar } from '@apollo/client';
 import { Loading } from '../../components/atoms/Loading';
 import { IMemberWithActivate, ModifiedLoggedInUser } from '../../types/type';
+import useStore from '../../hooks/useStore';
 
 export type SelectedMenuType =
   | 'main'
@@ -47,6 +46,7 @@ export function checkStay(clinicId: number, meData: MeQuery) {
 }
 
 export const Dashboard = () => {
+  const { selectedInfo, setSelectedInfo } = useStore();
   const [selectedMenu, setSelectedMenu] =
     useState<SelectedMenuType>('prescription');
   const location = useLocation();
@@ -57,13 +57,12 @@ export const Dashboard = () => {
     selectedMenu: SelectedMenuType;
     selectedClinicMembers: IMemberWithActivate[];
   };
-  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const { data: meData, loading: meLoading } = useMe();
 
   useEffect(() => {
     if (meData && state) {
-      selectedClinicVar({
+      setSelectedInfo('clinic', {
         id: state.selectedClinicId,
         name: state.selectedClinicName,
         type: state.selectedClinicType,
@@ -75,18 +74,18 @@ export const Dashboard = () => {
   }, [state, meData]);
 
   useEffect(() => {
-    if (!selectedClinic) return;
-    if (!selectedClinic.isStayed) {
+    if (!selectedInfo.clinic) return;
+    if (!selectedInfo.clinic.isStayed) {
       // 초대를 받아 isActivate는 true지만 아직 수락을 누르지 않아 isStayed는 false
       return setSelectedMenu('member');
     }
-    if (!selectedClinic.isManager && selectedMenu === 'invite') {
+    if (!selectedInfo.clinic.isManager && selectedMenu === 'invite') {
       // 초대 받고 수락을 눌러 isActivate와 isStayed가 true
       return setSelectedMenu('member');
     }
-  }, [selectedClinic]);
+  }, [selectedInfo.clinic]);
 
-  return meData && selectedClinic ? (
+  return meData && selectedInfo.clinic ? (
     <>
       <Helmet>
         <title>대시보드| Muool</title>
@@ -102,13 +101,13 @@ export const Dashboard = () => {
         }
         breadcrumb={
           <DashboardTitle
-            clinicName={selectedClinic.name}
+            clinicName={selectedInfo.clinic.name}
             type={selectedMenu}
           />
         }
         main={
           <>
-            {selectedClinic && (
+            {selectedInfo.clinic && (
               <>
                 {selectedMenu === 'main' && '메뉴를 선택하세요'}
                 {selectedMenu === 'member' && (

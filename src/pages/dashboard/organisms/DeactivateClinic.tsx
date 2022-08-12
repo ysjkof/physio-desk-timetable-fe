@@ -6,13 +6,13 @@ import { Worning } from '../../../components/atoms/Warning';
 import { Button } from '../../../components/molecules/Button';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { useInactivateClinicMutation } from '../../../graphql/generated/graphql';
-import { selectedClinicVar } from '../../../store';
+import { selectedInfoVar } from '../../../store';
 import { DeactivateClinicInfo } from '../../../types/type';
 
 interface DeactivateClinicProps extends DeactivateClinicInfo {}
 
 export const DeactivateClinic = ({ id, name }: DeactivateClinicProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const selectedInfo = useReactiveVar(selectedInfoVar);
   const [agree, setAgree] = useState(false);
 
   const [mutationInactivateClinic, { loading }] = useInactivateClinicMutation();
@@ -29,7 +29,7 @@ export const DeactivateClinic = ({ id, name }: DeactivateClinicProps) => {
     }
   };
 
-  return selectedClinic?.isStayed && selectedClinic.isManager ? (
+  return selectedInfo.clinic?.isStayed && selectedInfo.clinic.isManager ? (
     <>
       <p>
         병원을 더 이상 사용하지 않기 때문에 비활성합니다. 비활성하면 정보의

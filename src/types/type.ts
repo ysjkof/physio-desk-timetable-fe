@@ -1,5 +1,6 @@
 import { DatepickerForm } from '../components/molecules/Datepicker';
 import { ONE_DAY, ONE_WEEK } from '../constants/constants';
+import { LocalStorageKey, LocalStorageValue } from '../constants/localStorage';
 import {
   Clinic,
   FindMyClinicsQuery,
@@ -149,3 +150,20 @@ export interface SelectedInfo {
 
 export type SetSelectedInfoKey = keyof SelectedInfo;
 export type SetSelectedInfoValue = SelectedInfo[SetSelectedInfoKey];
+
+// utils
+
+export interface CreateLocalStorageKey {
+  key: LocalStorageValue;
+  userId: number;
+}
+export interface GetLocalStorage {
+  key: LocalStorageKey;
+  userId: number;
+}
+
+export interface SetLocalStorage {
+  key: LocalStorageKey;
+  userId: number;
+  value: any;
+}

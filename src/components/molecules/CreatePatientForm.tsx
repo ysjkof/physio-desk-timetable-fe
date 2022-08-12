@@ -8,12 +8,11 @@ import {
   useEditPatientMutation,
 } from '../../graphql/generated/graphql';
 import { Input } from './Input';
-import { selectedClinicVar, selectedPatientVar } from '../../store';
-import { useReactiveVar } from '@apollo/client';
 import { TimetableModalProps } from '../../pages/timetable';
 import { DatepickerWithInput } from './DatepickerWithInput';
 import { useEffect } from 'react';
 import { BirthdayInput } from '../../types/type';
+import useStore from '../../hooks/useStore';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -31,7 +30,8 @@ export const CreatePatientForm = ({
   closeAction,
   patient,
 }: CreatePatientFormProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const { selectedInfo, setSelectedInfo } = useStore();
+
   const {
     register,
     getValues,
@@ -56,13 +56,13 @@ export const CreatePatientForm = ({
     } = data;
     if (ok) {
       closeAction();
-      selectedPatientVar({
+      setSelectedInfo('patient', {
         id: patient?.id!,
         name: patient?.name!,
         gender: patient?.gender!,
         birthday: patient?.birthday,
         registrationNumber: patient?.registrationNumber!,
-        clinicName: selectedClinic?.name ?? '',
+        clinicName: selectedInfo.clinic?.name ?? '',
       });
     }
   };
@@ -103,8 +103,10 @@ export const CreatePatientForm = ({
               gender,
               memo,
               ...(birthday && { birthday }),
-              ...(typeof selectedClinic?.id === 'number' &&
-                selectedClinic?.id !== 0 && { clinicId: selectedClinic?.id }),
+              ...(typeof selectedInfo.clinic?.id === 'number' &&
+                selectedInfo.clinic?.id !== 0 && {
+                  clinicId: selectedInfo.clinic?.id,
+                }),
             },
           },
         });

@@ -1,10 +1,7 @@
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import { useGetStatisticsQuery } from '../../../graphql/generated/graphql';
 import { useEffect, useState } from 'react';
-import { DatepickerForm } from '../../../components/molecules/Datepicker';
 import { InDashboardPageProps } from '..';
-import { selectedClinicVar, selectedDateVar } from '../../../store';
-import { useReactiveVar } from '@apollo/client';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { Worning } from '../../../components/atoms/Warning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,31 +14,13 @@ import { Loading } from '../../../components/atoms/Loading';
 import { Button } from '../../../components/molecules/Button';
 import combineUserStatistics from '../../../services/statisticsServices';
 import { IUserStatistics, MemberState } from '../../../types/type';
-import Charts from '../molecules/Charts';
-interface IPrescriptionCounts {
-  reservedCount: number;
-  noshowCount: number;
-  cancelCount: number;
-  firstReservationCount: number;
-}
-interface IPrescriptionNamePrice {
-  name: string;
-  price: number;
-}
-interface IPrescription extends IPrescriptionNamePrice, IPrescriptionCounts {
-  name: string;
-  price: number;
-}
-
-interface ModifiedDatepickerForm extends DatepickerForm {
-  userIds?: number[];
-}
+import useStore from '../../../hooks/useStore';
 
 const [initialStartDate, initailEndDate] = getMonthStartEnd(new Date());
 
 export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
-  const selectedDate = useReactiveVar(selectedDateVar);
+  const { selectedInfo, setSelectedInfo } = useStore();
+
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initailEndDate);
   const [memberState, setMemberState] = useState<MemberState[]>();
@@ -59,7 +38,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       input: {
         startDate,
         endDate,
-        clinicId: selectedClinic?.id ?? 0,
+        clinicId: selectedInfo.clinic?.id ?? 0,
         userIds,
       },
     },
@@ -90,7 +69,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
       input: {
         startDate,
         endDate,
-        clinicId: selectedClinic?.id ?? 0,
+        clinicId: selectedInfo.clinic?.id ?? 0,
         userIds,
       },
     });
@@ -109,7 +88,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
 
   useEffect(() => {
     setMemberState(
-      selectedClinic?.members
+      selectedInfo.clinic?.members
         ?.map((m) => ({
           userId: m.user.id,
           name: m.user.name,
@@ -121,7 +100,7 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
           return 0;
         })
     );
-  }, [selectedClinic]);
+  }, [selectedInfo.clinic]);
 
   useEffect(() => {
     if (loadingStatisticsData) return;
@@ -156,27 +135,27 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                   onClick={() => {
                     const newStartDate = onClickSetDate(
                       startDate,
-                      selectedDate.getMonth(),
+                      selectedInfo.date.getMonth(),
                       'prev'
                     );
-                    selectedDateVar(new Date(newStartDate));
+                    setSelectedInfo('date', new Date(newStartDate));
                   }}
                   icon={<FontAwesomeIcon icon={faChevronLeft} fontSize={14} />}
                   enabled
                   hasBorder
                 />
                 <MenuButton
-                  label={selectedDate.getFullYear() + '년 '}
+                  label={selectedInfo.date.getFullYear() + '년 '}
                   enabled
                 />
                 <MenuButton
                   onClick={() => {
                     const newStartDate = onClickSetDate(
                       startDate,
-                      selectedDate.getMonth(),
+                      selectedInfo.date.getMonth(),
                       'next'
                     );
-                    selectedDateVar(new Date(newStartDate));
+                    setSelectedInfo('date', new Date(newStartDate));
                   }}
                   enabled
                   icon={<FontAwesomeIcon icon={faChevronRight} fontSize={14} />}

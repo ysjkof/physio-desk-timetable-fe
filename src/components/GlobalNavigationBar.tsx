@@ -67,10 +67,10 @@ export const GlobalNavigationBar = () => {
     if (meData.me.notice) {
       setNotices(meData.me.notice);
     }
-    const localViewOptions = getLocalStorageItem<IViewOption>(
-      'VIEW_OPTION',
-      meData.me.id
-    );
+    const localViewOptions = getLocalStorageItem<IViewOption>({
+      key: 'VIEW_OPTION',
+      userId: meData.me.id,
+    });
 
     if (localViewOptions === null) {
       localStorage.setItem(
@@ -101,10 +101,11 @@ export const GlobalNavigationBar = () => {
 
     const myClinics = injectKeyValue(clinics);
 
-    const localClinics = getLocalStorageItem<IClinicList[]>(
-      'CLINIC_LISTS',
-      meData.me.id
-    );
+    const localClinics = getLocalStorageItem<IClinicList[]>({
+      key: 'CLINIC_LISTS',
+      userId: meData.me.id,
+    });
+
     if (localClinics) {
       updatedMyClinics = myClinics.map((clinic) => {
         const localClinic = localClinics.find(
@@ -134,17 +135,20 @@ export const GlobalNavigationBar = () => {
 
     saveClinicLists(updatedMyClinics, meData.me.id);
 
-    const localSelectClinic = getLocalStorageItem<ISelectedClinic>(
-      'SELECTED_CLINIC',
-      meData.me.id
-    );
+    const localSelectClinic = getLocalStorageItem<ISelectedClinic>({
+      key: 'SELECTED_CLINIC',
+      userId: meData.me.id,
+    });
+
     const clinic = updatedMyClinics.find((clinic) =>
       localSelectClinic
         ? clinic.id === localSelectClinic.id
         : clinic.type === ClinicType.Personal
     );
     if (!clinic) return;
+
     const newSelectedClinic = makeSelectedClinic(clinic, meData.me.id);
+
     setSelectedInfo('clinic', newSelectedClinic);
   }, [findMyClinicsData]);
 

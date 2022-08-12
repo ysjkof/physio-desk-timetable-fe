@@ -1,9 +1,9 @@
-import { useReactiveVar } from "@apollo/client";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ReactNode } from "react";
-import { Helmet } from "react-helmet-async";
-import { selectedClinicVar } from "../../store";
+import { useReactiveVar } from '@apollo/client';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactNode } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { selectedInfoVar } from '../../store';
 
 interface ModalContentLayoutProps {
   title: string;
@@ -16,7 +16,7 @@ export const ModalContentsLayout = ({
   children,
   closeAction,
 }: ModalContentLayoutProps) => {
-  const selectedClinic = useReactiveVar(selectedClinicVar);
+  const selectedInfo = useReactiveVar(selectedInfoVar);
 
   return (
     <>
@@ -28,8 +28,8 @@ export const ModalContentsLayout = ({
       </button>
       <div className="w-full text-base font-semibold">
         {title}
-        {selectedClinic?.name && (
-          <span className="ml-3 text-xs">{selectedClinic.name}</span>
+        {selectedInfo.clinic?.name && (
+          <span className="ml-3 text-xs">{selectedInfo.clinic.name}</span>
         )}
       </div>
       {children}

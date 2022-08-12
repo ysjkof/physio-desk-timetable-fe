@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import { getActiveUserLength } from '..';
 import {
   combineYMDHM,
@@ -6,7 +5,6 @@ import {
   getTimeLength,
 } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
-import { selectedDateVar } from '../../../store';
 import { TABLE_CELL_HEIGHT } from '../../../constants/constants';
 import { EventBox } from '../molecules/EventBox';
 import { ReserveButton } from '../molecules/ReserveButton';
@@ -21,7 +19,6 @@ interface SchedulesProps {
   labels: Date[];
 }
 function Schedules({ weekEvents, labels }: SchedulesProps) {
-  const selectedDate = useReactiveVar(selectedDateVar);
   const { selectedInfo } = useStore();
 
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
@@ -44,7 +41,7 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
           }}
         >
           <TimeIndicatorBar
-            isActive={compareDateMatch(day.date, selectedDate, 'ymd')}
+            isActive={compareDateMatch(day.date, selectedInfo.date, 'ymd')}
             labels={labels}
           />
           {day.users.map((member, userIndex) =>

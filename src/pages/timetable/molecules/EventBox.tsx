@@ -13,7 +13,7 @@ import { EditReservationState } from '../../../components/molecules/EditReservat
 import { ReservationState } from '../../../graphql/generated/graphql';
 import { compareTableEndtime, getHHMM } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
-import { selectedReservationVar, viewOptionsVar } from '../../../store';
+import { selectedInfoVar, viewOptionsVar } from '../../../store';
 import { TABLE_CELL_HEIGHT, USER_COLORS } from '../../../constants/constants';
 import { ROUTER } from '../../../router/routerConstants';
 import { IListReservation } from '../../../types/type';
@@ -42,7 +42,7 @@ export function EventBox({
     prescriptions,
     patient,
   } = event;
-
+  const selectedInfo = useReactiveVar(selectedInfoVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
@@ -93,6 +93,9 @@ export function EventBox({
   function onClickBox() {
     navigate(ROUTER.EDIT_RESERVE, { state: { reservationId } });
   }
+  const setSelectedReservation = () => {
+    selectedInfoVar({ ...selectedInfo, reservation: event });
+  };
 
   useEffect(() => {
     if (isHover) positioningTooltip();
@@ -184,7 +187,7 @@ export function EventBox({
                 icon={faCopy}
                 fontSize={16}
                 className="text-green-500 hover:scale-125"
-                onClick={() => selectedReservationVar(event)}
+                onClick={setSelectedReservation}
               />
               <EditReservationState reservation={event} />
             </motion.div>

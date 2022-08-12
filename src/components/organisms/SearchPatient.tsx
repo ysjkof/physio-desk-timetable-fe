@@ -1,21 +1,20 @@
-import { useReactiveVar } from '@apollo/client';
 import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
-import { selectedClinicVar, selectedPatientVar } from '../../store';
+import useStore from '../../hooks/useStore';
 import { MenuButton } from '../molecules/MenuButton';
 import { NameTag } from '../NameTag';
 interface SearchPatientProps {}
 
 export const SearchPatient = ({}: SearchPatientProps) => {
+  const { selectedInfo, setSelectedInfo } = useStore();
+
   const { register, getValues, handleSubmit } = useForm({
     mode: 'onChange',
   });
   const [queryPageNumber, setQueryPageNumber] = useState(1);
-  const selectedPatient = useReactiveVar(selectedPatientVar);
-  const selectedClinic = useReactiveVar(selectedClinicVar);
 
   const [callQuery, { loading, data: searchPatientResult }] =
     useSearchPatientLazyQuery();
@@ -28,7 +27,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
           input: {
             page: queryPageNumber,
             query: patientNameTrim,
-            clinicId: selectedClinic?.id,
+            clinicId: selectedInfo.clinic!.id,
           },
         },
       });
@@ -41,6 +40,9 @@ export const SearchPatient = ({}: SearchPatientProps) => {
       if (i > 100) break;
     }
     return arr;
+  };
+  const removeSelectedPatient = () => {
+    setSelectedInfo('patient', null);
   };
 
   return (
@@ -56,7 +58,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
           placeholder="이름을 입력하세요"
           className="input"
           autoComplete="off"
-          onFocus={() => selectedPatientVar(null)}
+          onFocus={removeSelectedPatient}
           autoFocus
         />
         <label
@@ -75,10 +77,10 @@ export const SearchPatient = ({}: SearchPatientProps) => {
       </div>
       <div
         className={`search-list mt-4 h-36 divide-y overflow-y-scroll border ${
-          selectedPatient ? 'border-none' : ''
+          selectedInfo.patient ? 'border-none' : ''
         }`}
       >
-        {!selectedPatient &&
+        {!selectedInfo.patient &&
           searchPatientResult?.searchPatient.patients?.map((patient, index) => (
             <div key={index} className="btn-menu rounded-none">
               <NameTag
@@ -93,7 +95,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
               />
             </div>
           ))}
-        {!selectedPatient && !searchPatientResult ? (
+        {!selectedInfo.patient && !searchPatientResult ? (
           <p className="text-center">
             환자 목록
             <br />
@@ -104,19 +106,19 @@ export const SearchPatient = ({}: SearchPatientProps) => {
             <p className="text-center ">검색결과가 없습니다.</p>
           )
         )}
-        {selectedPatient && (
+        {selectedInfo.patient && (
           <div className="mx-auto flex h-5/6 items-center justify-between rounded-md border border-green-500 px-2 shadow-cst">
             <NameTag
-              id={selectedPatient.id}
-              gender={selectedPatient.gender}
-              name={selectedPatient.name}
-              registrationNumber={selectedPatient.registrationNumber}
-              birthday={selectedPatient.birthday}
-              clinicName={selectedPatient.clinicName}
-              user={selectedPatient.user}
+              id={selectedInfo.patient.id}
+              gender={selectedInfo.patient.gender}
+              name={selectedInfo.patient.name}
+              registrationNumber={selectedInfo.patient.registrationNumber}
+              birthday={selectedInfo.patient.birthday}
+              clinicName={selectedInfo.patient.clinicName}
+              user={selectedInfo.patient.user}
             />
             <MenuButton
-              onClick={() => selectedPatientVar(null)}
+              onClick={removeSelectedPatient}
               enabled
               icon={<FontAwesomeIcon icon={faXmark} fontSize={14} />}
             />
@@ -135,7 +137,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
                       : ''
                   }`}
                   onClick={() => {
-                    selectedPatientVar(null);
+                    removeSelectedPatient();
                     setQueryPageNumber(pageNumber + 1);
                   }}
                 >

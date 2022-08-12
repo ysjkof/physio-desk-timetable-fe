@@ -1,6 +1,12 @@
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
-import { clinicListsVar, selectedClinicVar, viewOptionsVar } from '../store';
-import { IClinicList, ISelectedClinic, IViewOption } from '../types/type';
+import { clinicListsVar, viewOptionsVar } from '../store';
+import {
+  CreateLocalStorageKey,
+  GetLocalStorage,
+  IClinicList,
+  IViewOption,
+  SetLocalStorage,
+} from '../types/type';
 
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
@@ -17,18 +23,6 @@ export function getPositionRef(
   return [top, left];
 }
 
-export function saveSelectedClinic(
-  newSelectedClinic: ISelectedClinic,
-  loggedInUserId: number
-) {
-  localStorage.setItem(
-    LOCAL_STORAGE_KEY.SELECTED_CLINIC + loggedInUserId,
-    JSON.stringify(newSelectedClinic)
-  );
-  // const { setSelectedInfo } = useStore();
-  // setSelectedInfo('clinic', newSelectedClinic);
-  selectedClinicVar(newSelectedClinic);
-}
 export function saveClinicLists(
   clinicList: IClinicList[],
   loginUserId: number
@@ -84,12 +78,30 @@ export function changeValueInArray<T>(array: T[], value: T, index: number) {
   return [...array.slice(0, index), value, ...array.slice(index + 1)];
 }
 
-type LocalStorageKey = keyof typeof LOCAL_STORAGE_KEY;
-export function getLocalStorageItem<T>(
-  storageKey: LocalStorageKey,
-  userId: number
-): T | null {
-  const item = localStorage.getItem(LOCAL_STORAGE_KEY[storageKey] + userId)!;
+export const createLocalStorageKey = ({
+  key,
+  userId,
+}: CreateLocalStorageKey) => {
+  return key + userId;
+};
+
+export function getLocalStorageItem<T>({
+  key,
+  userId,
+}: GetLocalStorage): T | null {
+  const storageKey = createLocalStorageKey({
+    key: LOCAL_STORAGE_KEY[key],
+    userId,
+  });
+  const item = localStorage.getItem(storageKey)!;
   if (!item) return null;
   return JSON.parse(item);
 }
+
+export const setLocalStorage = ({ key, userId, value }: SetLocalStorage) => {
+  const storageKey = createLocalStorageKey({
+    key: LOCAL_STORAGE_KEY[key],
+    userId,
+  });
+  localStorage.setItem(storageKey, JSON.stringify(value));
+};
