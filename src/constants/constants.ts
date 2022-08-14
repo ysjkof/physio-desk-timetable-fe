@@ -3,12 +3,13 @@ import { ReservationState } from '../graphql/generated/graphql';
 // 한국 표준시(韓國標準時, KST, Korea Standard Time) = UTC+09:00
 export const UTC_OPTION_KST = '+0900';
 
-export const ONE_DAY = 1;
-export const ONE_WEEK = 7;
-export const TWO_WEEKS = 14;
-export const THREE_WEEKS = 21;
-// 할 일; 4주는 이번 달 보기로 수정예정.
-export const FOUR_WEEKS = 28;
+export const VIEW_PERIOD = {
+  ONE_DAY: 1,
+  ONE_WEEK: 7,
+  TWO_WEEKS: 14,
+  THREE_WEEKS: 21,
+  FOUR_WEEKS: 28, // 할일; 4주는 이번 달 보기로 수정예정.
+} as const;
 
 export const TABLE_MAIN_COMPONENT_LAYOUT_PADDING_TOP = 50; // px
 export const TABLE_CELL_HEIGHT = 20; // px

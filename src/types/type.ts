@@ -1,5 +1,5 @@
 import { DatepickerForm } from '../components/molecules/Datepicker';
-import { ONE_DAY, ONE_WEEK } from '../constants/constants';
+import { VIEW_PERIOD } from '../constants/constants';
 import { LocalStorageKey, LocalStorageValue } from '../constants/localStorage';
 import {
   Clinic,
@@ -19,9 +19,10 @@ export interface SelectedPatient
   clinicName: string;
   user?: { id: number; name: string };
 }
-
+type ViewPeriodKey = keyof typeof VIEW_PERIOD;
+type ViewPeriod = typeof VIEW_PERIOD[ViewPeriodKey];
 export interface IViewOption {
-  periodToView: typeof ONE_DAY | typeof ONE_WEEK;
+  viewPeriod: ViewPeriod;
   seeCancel: boolean;
   seeNoshow: boolean;
   seeList: boolean;

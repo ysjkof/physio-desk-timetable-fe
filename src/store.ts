@@ -1,9 +1,9 @@
 import { makeVar } from '@apollo/client';
-import { ONE_WEEK } from './constants/constants';
+import { VIEW_PERIOD } from './constants/constants';
 import { IClinicList, IViewOption, SelectedInfo } from './types/type';
 
 const defaultViewOptions: IViewOption = {
-  periodToView: ONE_WEEK,
+  viewPeriod: VIEW_PERIOD.ONE_WEEK,
   seeCancel: true,
   seeNoshow: true,
   seeList: false,

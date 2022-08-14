@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { BtnMenuToggle } from '../../../components/molecules/MenuToggleButton';
 import { saveViewOptions } from '../../../utils/utils';
-import { NEXT, ONE_DAY, ONE_WEEK, PREV } from '../../../constants/constants';
+import { NEXT, PREV, VIEW_PERIOD } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
 import { TableOptionSelector } from '../molecules/TableOptionSelector';
 import { NavDatepicker } from '../molecules/NavDatepicker';
@@ -93,13 +93,15 @@ export function TableNav({}: TableNavProps) {
             onClick={() => {
               const newViewOptions: IViewOption = {
                 ...viewOptions,
-                periodToView:
-                  viewOptions.periodToView === ONE_DAY ? ONE_WEEK : ONE_DAY,
+                viewPeriod:
+                  viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY
+                    ? VIEW_PERIOD.ONE_WEEK
+                    : VIEW_PERIOD.ONE_DAY,
               };
               saveViewOptions(newViewOptions, loggedInUser!.me.id);
             }}
-            firstEnabled={viewOptions.periodToView === ONE_WEEK}
-            secondEnabled={viewOptions.periodToView === ONE_DAY}
+            firstEnabled={viewOptions.viewPeriod === VIEW_PERIOD.ONE_WEEK}
+            secondEnabled={viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY}
             label={['1주일', '하루']}
           />
           {/* ---------------------- 구분선 ---------------------- */}
