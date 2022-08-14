@@ -10,12 +10,12 @@ export const ReserveCardModal = ({ closeAction }: TimetableModalProps) => {
 
   const state = location.state as {
     startDate: Date;
-    member: { id: number; name: string };
+    userId: number;
     isDayOff?: boolean;
   };
-  const startDate = state?.startDate;
-  const member = state?.member;
-  const isDayOff = state?.isDayOff;
+  const startDate = state.startDate;
+  const userId = state.userId;
+  const isDayOff = state.isDayOff;
 
   return (
     <ModalTemplate
@@ -30,7 +30,7 @@ export const ReserveCardModal = ({ closeAction }: TimetableModalProps) => {
               <ReserveForm
                 closeAction={closeAction}
                 startDate={startDate}
-                member={member}
+                userId={userId}
                 isDayoff={isDayOff}
               />
             </>

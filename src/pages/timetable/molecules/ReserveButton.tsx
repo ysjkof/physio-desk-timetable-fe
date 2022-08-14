@@ -9,8 +9,8 @@ import { ROUTER } from '../../../router/routerConstants';
 import { IListReservation } from '../../../types/type';
 
 interface ReserveBtnProps {
-  label: Date;
-  member: { id: number; name: string };
+  label: string;
+  userId: number;
   userIndex: number;
   isActiveBorderTop?: boolean;
 }
@@ -36,12 +36,12 @@ function getPrescriptionInfo(reservation: IListReservation) {
   return { prescriptionIds, requiredTime };
 }
 
-export const ReserveButton = ({
+function ReserveButton({
   label,
-  member,
+  userId,
   userIndex,
   isActiveBorderTop = false,
-}: ReserveBtnProps) => {
+}: ReserveBtnProps) {
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
@@ -52,6 +52,50 @@ export const ReserveButton = ({
   const clearSelectedReservation = () => {
     selectedInfoVar({ ...selectedInfo, reservation: null });
   };
+
+  const invokeQuickCreateReservation = () => {
+    if (loading) return;
+    if (!selectedInfo.reservation)
+      throw new Error('복사할 예약이 선택되지 않았습니다');
+
+    const { prescriptionIds, requiredTime } = getPrescriptionInfo(
+      selectedInfo.reservation
+    );
+
+    const endDate = new Date(label);
+    endDate.setMinutes(endDate.getMinutes() + requiredTime);
+
+    createReservationMutation({
+      variables: {
+        input: {
+          clinicId: selectedInfo.reservation.clinic!.id,
+          patientId: selectedInfo.reservation.patient!.id,
+          memo: selectedInfo.reservation.memo,
+          userId,
+          startDate: label,
+          endDate,
+          prescriptionIds,
+        },
+      },
+    });
+    // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기
+    clearSelectedReservation();
+  };
+
+  const openReserveModal = () => {
+    navigate(ROUTER.RESERVE, {
+      state: { startDate: label, userId },
+    });
+  };
+
+  const handleClickButton = () => {
+    if (selectedInfo.reservation) {
+      invokeQuickCreateReservation();
+    } else {
+      openReserveModal();
+    }
+  };
+
   return (
     <div
       className={`reserve-btn-box group ${
@@ -63,37 +107,7 @@ export const ReserveButton = ({
       onMouseLeave={(e) => {
         if (selectedInfo.reservation) setIsHover(false);
       }}
-      onClick={() => {
-        if (selectedInfo.reservation) {
-          if (loading) return;
-          const { prescriptionIds, requiredTime } = getPrescriptionInfo(
-            selectedInfo.reservation
-          );
-
-          const endDate = new Date(label);
-          endDate.setMinutes(endDate.getMinutes() + requiredTime);
-
-          createReservationMutation({
-            variables: {
-              input: {
-                clinicId: selectedInfo.reservation.clinic!.id,
-                patientId: selectedInfo.reservation.patient!.id,
-                memo: selectedInfo.reservation.memo,
-                userId: member.id,
-                startDate: label,
-                endDate,
-                prescriptionIds,
-              },
-            },
-          });
-          // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기
-          clearSelectedReservation();
-        } else {
-          navigate(ROUTER.RESERVE, {
-            state: { startDate: label, member },
-          });
-        }
-      }}
+      onClick={handleClickButton}
     >
       <span className="reserve-btn">+ {getHHMM(label, ':')}</span>
       {selectedInfo.reservation && isHover && (
@@ -114,4 +128,6 @@ export const ReserveButton = ({
       )}
     </div>
   );
-};
+}
+
+export default ReserveButton;

@@ -29,7 +29,7 @@ import useStore from '../../../hooks/useStore';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
-  member?: { id: number; name: string };
+  userId: number;
   selectedPrescriptionData?: PrescriptionWithSelect[];
   reservation?: IListReservation;
   isDayoff?: boolean;
@@ -38,7 +38,7 @@ interface IReservaFromProps extends TimetableModalProps {
 export const ReserveForm = ({
   closeAction,
   startDate,
-  member,
+  userId,
   selectedPrescriptionData,
   reservation,
   isDayoff,
@@ -281,10 +281,10 @@ export const ReserveForm = ({
       setValue('userId', reservation.user.id);
       // @ts-ignore 여기서는 patientId만 있으면 된다
       setSelectedInfo('patient', reservation.patient);
-    } else if (member) {
-      setValue('userId', member.id);
+    } else if (userId) {
+      setValue('userId', userId);
     }
-  }, [member, reservation]);
+  }, [userId, reservation]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-4">
