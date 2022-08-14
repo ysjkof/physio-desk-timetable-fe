@@ -16,8 +16,6 @@ const defaultViewOptions: IViewOption = {
 };
 
 // global state
-export const todayNowVar = makeVar<Date>(new Date());
-
 export const viewOptionsVar = makeVar<IViewOption>(defaultViewOptions);
 export const clinicListsVar = makeVar<IClinicList[]>([]); // member의 activated key를 저장하기 위해서 필요함.
 

@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { getActiveUserLength } from '..';
-import { getSunday, getWeeks } from '../../../services/dateServices';
+import {
+  compareDateMatch,
+  getSunday,
+  getWeeks,
+} from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
 import { UserNameTitle } from '../molecules/UserNameTitle';
 import { DateTitle } from '../molecules/DateTitle';
@@ -16,11 +20,12 @@ import useStore from '../../../hooks/useStore';
 interface TitlesProps {}
 
 export function Titles({}: TitlesProps) {
+  const today = new Date();
   const { selectedInfo, clinicLists } = useStore();
 
   const [userFrame, setUserFrame] = useState<DayWithUsers[] | null>(null);
-  const userLength =
-    userFrame && getActiveUserLength(selectedInfo.clinic?.members);
+
+  const userLength = getActiveUserLength(selectedInfo.clinic?.members);
 
   const { data: loggedInUser } = useMe();
 
@@ -40,7 +45,12 @@ export function Titles({}: TitlesProps) {
       <TableLoopTemplate
         userLength={userLength}
         children={userFrame?.map((day, i) => (
-          <DateTitle key={i} date={day.date} userLength={userLength} />
+          <DateTitle
+            key={i}
+            date={day.date}
+            isToday={compareDateMatch(today, day.date, 'ymd')}
+            userLength={userLength}
+          />
         ))}
       />
       <TableLoopTemplate

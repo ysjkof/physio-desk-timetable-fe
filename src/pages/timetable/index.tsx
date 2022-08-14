@@ -41,16 +41,18 @@ export interface TimetableModalProps {
 }
 
 export const getActiveUserLength = (members?: IMemberWithActivate[]) =>
-  members?.filter((user) => user.isActivate).length ?? 0;
+  members?.filter((user) => user.isActivate).length || 0;
 
 export const TimeTable = () => {
   const { labels } = useViewoptions();
   const { data: loggedInUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
-  const { selectedInfo, today, viewOptions, clinicLists } = useStore();
+  const { selectedInfo, viewOptions, clinicLists } = useStore();
 
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
-  const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(today);
+  const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(
+    () => new Date()
+  );
 
   const optionalWeekEvents =
     viewOptions.periodToView === ONE_DAY
@@ -183,7 +185,7 @@ export const TimeTable = () => {
         <Loading />
       ) : (
         <TableTemplate
-          nav={<TableNav today={today} />}
+          nav={<TableNav />}
           labels={<TimeLabels labels={labels} />}
           columns={
             <>

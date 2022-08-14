@@ -18,18 +18,16 @@ import { IViewOption } from '../../../types/type';
 import { useMe } from '../../../hooks/useMe';
 import useStore from '../../../hooks/useStore';
 
-interface TableNavProps {
-  today: Date;
-}
+interface TableNavProps {}
 
 const tableNavVarients = {
   ini: (isUp: boolean) => ({ y: isUp ? -40 : 30 }),
   start: { y: 0, transition: { type: 'tween', duration: 0.3 } },
 };
 
-export function TableNav({ today }: TableNavProps) {
+export function TableNav({}: TableNavProps) {
   const navigate = useNavigate();
-
+  const today = new Date();
   const { setSelectedInfo, selectedInfo, viewOptions } = useStore();
   const { data: loggedInUser } = useMe();
 

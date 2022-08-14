@@ -10,12 +10,12 @@ import useStore from '../../../hooks/useStore';
 interface DateTitleProps {
   date: Date;
   userLength: number;
+  isToday: boolean;
 }
-export function DateTitle({ date, userLength }: DateTitleProps) {
-  const { selectedInfo, setSelectedInfo, today } = useStore();
+export function DateTitle({ date, isToday, userLength }: DateTitleProps) {
+  const { selectedInfo, setSelectedInfo } = useStore();
   const selectedMonth = compareDateMatch(selectedInfo.date, date, 'ym');
   const selectedDay = compareDateMatch(selectedInfo.date, date, 'ymd');
-  const isToday = compareDateMatch(today, date, 'ymd');
 
   return (
     <div
