@@ -24,12 +24,13 @@ export const spreadClinicMembers = (
   });
 };
 
-export const compareNumAfterGetMinutes = (
-  date: Date,
-  compareNumbers: number[]
+export const checkMatchMinute = (
+  date: Date | string,
+  minutes: number[]
 ): boolean => {
-  const minutes = date.getMinutes();
-  return compareNumbers.includes(minutes);
+  const targetDate = typeof date === 'string' ? new Date(date) : date;
+  const targetMinute = targetDate.getMinutes();
+  return minutes.includes(targetMinute);
 };
 
 export const makeUsersInDay = (members: IMember[], weeks: { date: Date }[]) => {

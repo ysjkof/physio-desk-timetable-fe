@@ -1,5 +1,4 @@
 import { makeVar } from '@apollo/client';
-import { ListReservationsQuery } from './graphql/generated/graphql';
 import { ONE_WEEK } from './constants/constants';
 import { IClinicList, IViewOption, SelectedInfo } from './types/type';
 

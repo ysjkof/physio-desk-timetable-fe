@@ -56,14 +56,14 @@ export function getHHMM(inputDate: string | Date, seperator?: ':') {
   return `${hh}${mm}`;
 }
 
-export function combineYMDHM(YMDDate: Date, HMDate: Date) {
-  const year = YMDDate.getFullYear();
-  const month = YMDDate.getMonth();
-  const date = YMDDate.getDate();
-  const h = HMDate.getHours();
-  const m = HMDate.getMinutes();
+export function addHourToDate(fromDate: Date, hours: Date) {
+  const year = fromDate.getFullYear();
+  const month = fromDate.getMonth();
+  const date = fromDate.getDate();
+  const hour = hours.getHours();
+  const minute = hours.getMinutes();
 
-  return new Date(year, month, date, h, m);
+  return new Date(year, month, date, hour, minute);
 }
 
 export const getTimeLength = (
