@@ -1,18 +1,15 @@
 import { getActiveUserLength } from '..';
 import {
-  combineYMDHM,
+  addHourToDate,
   compareDateMatch,
-  getTimeLength,
 } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
-import { TABLE_CELL_HEIGHT } from '../../../constants/constants';
-import { EventBox } from '../molecules/EventBox';
-import { ReserveButton } from '../molecules/ReserveButton';
 import { TableLoopTemplate } from '../templates/TableLoopTemplate';
 import { TimeIndicatorBar } from './TimeIndicatorBar';
-import { compareNumAfterGetMinutes } from '../../../services/timetableServices';
 import { DayWithUsers } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
+import ReservationButtons from '../molecules/ReservationButtons';
+import ScheduleInUserInDay from '../molecules/ScheduleInUserInDay';
 
 interface SchedulesProps {
   weekEvents: DayWithUsers[];
@@ -23,7 +20,6 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
 
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
   const labelMaxLength = labels.length;
-  const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
   return (
     <TableLoopTemplate
@@ -44,51 +40,34 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
             isActive={compareDateMatch(day.date, selectedInfo.date, 'ymd')}
             labels={labels}
           />
-          {day.users.map((member, userIndex) =>
-            member.isActivate ? (
+          {day.users.map((member, userIndex) => {
+            // 유저마다 내부의 버튼과 이벤트에서 combineDateAndHours를 한다면 user 수만큼 반복 작업을 함.
+            // 그래서 여기로 뺌
+            const dayLabels = labels.map((label) =>
+              addHourToDate(day.date, label).toISOString()
+            );
+            return member.isActivate ? (
               <div
                 key={member.id}
                 className="USER_COL relative w-full border-r-[0.5px] last:border-r-0 hover:border-transparent hover:bg-gray-200/50"
               >
-                {labels.map((label, idx) =>
-                  idx === labelMaxLength - 1 ? null : (
-                    <ReserveButton
-                      key={label.getTime()}
-                      label={combineYMDHM(day.date, label)}
-                      member={{ id: member.user.id, name: member.user.name }}
-                      isActiveBorderTop={compareNumAfterGetMinutes(
-                        label,
-                        [0, 30]
-                      )}
-                      userIndex={userIndex}
-                    />
-                  )
-                )}
-                {member.events?.map((event) => {
-                  const idx = labels.findIndex((label) =>
-                    compareDateMatch(label, new Date(event.startDate), 'hm')
-                  );
-                  const numberOfCell = idx === -1 ? 0 : idx;
-                  return (
-                    <EventBox
-                      key={event.id}
-                      event={event}
-                      userIndex={userIndex}
-                      maxTableHeight={maxTableHeight}
-                      numberOfCell={getTimeLength(
-                        event.startDate,
-                        event.endDate,
-                        '20minute'
-                      )}
-                      inset={`${numberOfCell * TABLE_CELL_HEIGHT}px 0%`}
-                    />
-                  );
-                })}
+                <ReservationButtons
+                  labelMaxLength={labelMaxLength}
+                  labels={dayLabels}
+                  userId={member.user.id}
+                  userIndex={userIndex}
+                />
+                <ScheduleInUserInDay
+                  labelMaxLength={labelMaxLength}
+                  labels={dayLabels}
+                  events={member.events}
+                  userIndex={userIndex}
+                />
               </div>
             ) : (
               ''
-            )
-          )}
+            );
+          })}
         </div>
       ))}
     />
