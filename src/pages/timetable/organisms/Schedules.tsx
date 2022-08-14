@@ -10,22 +10,28 @@ import { DayWithUsers } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
 import ReservationButtons from '../molecules/ReservationButtons';
 import ScheduleInUserInDay from '../molecules/ScheduleInUserInDay';
+import { VIEW_PERIOD } from '../../../constants/constants';
 
 interface SchedulesProps {
   weekEvents: DayWithUsers[];
   labels: Date[];
 }
 function Schedules({ weekEvents, labels }: SchedulesProps) {
-  const { selectedInfo } = useStore();
+  const { selectedInfo, viewOptions } = useStore();
 
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
   const labelMaxLength = labels.length;
+
+  const schedules =
+    viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY
+      ? weekEvents && [weekEvents[selectedInfo.date.getDay()]]
+      : weekEvents;
 
   return (
     <TableLoopTemplate
       elementName="TABLE_COLS"
       userLength={userLength}
-      children={weekEvents.map((day, i) => (
+      children={schedules.map((day, i) => (
         <div
           key={i}
           className={cls(

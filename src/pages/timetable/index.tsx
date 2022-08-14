@@ -8,7 +8,6 @@ import {
   getSunday,
   getWeeks,
 } from '../../services/dateServices';
-import { ONE_DAY } from '../../constants/constants';
 import { TableNav } from './organisms/TableNav';
 import { AnimatePresence } from 'framer-motion';
 import TimeLabels from './organisms/TimeLabels';
@@ -53,11 +52,6 @@ export const TimeTable = () => {
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(
     () => new Date()
   );
-
-  const optionalWeekEvents =
-    viewOptions.periodToView === ONE_DAY
-      ? weekEvents && [weekEvents[selectedInfo.date.getDay()]]
-      : weekEvents;
 
   useEffect(() => {
     if (
@@ -181,7 +175,7 @@ export const TimeTable = () => {
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      {!viewOptions || !optionalWeekEvents ? (
+      {!viewOptions || !weekEvents ? (
         <Loading />
       ) : (
         <TableTemplate
@@ -193,10 +187,7 @@ export const TimeTable = () => {
                 {viewOptions.seeList === false && (
                   <>
                     <Titles />
-                    <Schedules
-                      labels={labels}
-                      weekEvents={optionalWeekEvents}
-                    />
+                    <Schedules labels={labels} weekEvents={weekEvents} />
                   </>
                 )}
               </AnimatePresence>

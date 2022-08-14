@@ -15,35 +15,40 @@ import { DayWithUsers } from '../../../types/type';
 import { useMe } from '../../../hooks/useMe';
 import useStore from '../../../hooks/useStore';
 import UserNameTitles from '../molecules/UserNameTitles';
+import { VIEW_PERIOD } from '../../../constants/constants';
 
 interface TitlesProps {}
 
 export function Titles({}: TitlesProps) {
   const today = new Date();
-  const { selectedInfo, clinicLists } = useStore();
+  const { selectedInfo, clinicLists, viewOptions } = useStore();
+  const { data: loggedInUser } = useMe();
 
-  const [userFrame, setUserFrame] = useState<DayWithUsers[] | null>(null);
-
+  const [userFrameForWeek, setUserFrameForWeek] = useState<DayWithUsers[]>([]);
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
 
-  const { data: loggedInUser } = useMe();
+  const userFrame =
+    viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY
+      ? userFrameForWeek && [userFrameForWeek[selectedInfo.date.getDay()]]
+      : userFrameForWeek;
 
   useEffect(() => {
     if (loggedInUser) {
-      const userFrame = makeUsersInDay(
-        spreadClinicMembers(clinicLists, selectedInfo.clinic!.id),
-        getWeeks(getSunday(selectedInfo.date))
+      setUserFrameForWeek(
+        makeUsersInDay(
+          spreadClinicMembers(clinicLists, selectedInfo.clinic!.id),
+          getWeeks(getSunday(selectedInfo.date))
+        )
       );
-      setUserFrame(userFrame);
     }
   }, [clinicLists, selectedInfo.date, selectedInfo.clinic]);
 
-  if (!userLength) return <></>;
+  if (userLength === 0) throw new Error('사용자 수가 0입니다');
   return (
     <div className="TABLE_SUB_HEADER sticky top-0 z-[32] shadow-b">
       <TableLoopTemplate
         userLength={userLength}
-        children={userFrame?.map((day, i) => (
+        children={userFrameForWeek?.map((day, i) => (
           <DateTitle
             key={i}
             date={day.date}
@@ -54,7 +59,7 @@ export function Titles({}: TitlesProps) {
       />
       <TableLoopTemplate
         userLength={userLength}
-        children={userFrame?.map((day, i) => (
+        children={userFrame.map((day, i) => (
           <UserNameTitles
             key={i}
             userLength={userLength}
