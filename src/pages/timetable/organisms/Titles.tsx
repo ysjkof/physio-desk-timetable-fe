@@ -5,9 +5,7 @@ import {
   getSunday,
   getWeeks,
 } from '../../../services/dateServices';
-import { cls } from '../../../utils/utils';
-import { UserNameTitle } from '../molecules/UserNameTitle';
-import { DateTitle } from '../molecules/DateTitle';
+import DateTitle from '../molecules/DateTitle';
 import { TableLoopTemplate } from '../templates/TableLoopTemplate';
 import {
   makeUsersInDay,
@@ -16,6 +14,7 @@ import {
 import { DayWithUsers } from '../../../types/type';
 import { useMe } from '../../../hooks/useMe';
 import useStore from '../../../hooks/useStore';
+import UserNameTitles from '../molecules/UserNameTitles';
 
 interface TitlesProps {}
 
@@ -56,28 +55,14 @@ export function Titles({}: TitlesProps) {
       <TableLoopTemplate
         userLength={userLength}
         children={userFrame?.map((day, i) => (
-          <div
+          <UserNameTitles
             key={i}
-            className={cls(
-              'user-cols-divide relative flex items-center bg-white',
-              userLength === 1 ? 'border-x-inherit' : ''
-            )}
-          >
-            {day?.users.map(
-              (member, userIndex) =>
-                member.isActivate && (
-                  <UserNameTitle
-                    key={userIndex}
-                    isMe={member.user.name === loggedInUser?.me.name}
-                    name={member.user.name}
-                    userIndex={userIndex}
-                    clinicId={selectedInfo.clinic?.id ?? 0}
-                    userId={member.user.id}
-                    date={day.date}
-                  />
-                )
-            )}
-          </div>
+            userLength={userLength}
+            users={day.users}
+            loggedInUserId={loggedInUser!.me.id}
+            clinicId={selectedInfo.clinic!.id}
+            date={day.date}
+          />
         ))}
       />
     </div>

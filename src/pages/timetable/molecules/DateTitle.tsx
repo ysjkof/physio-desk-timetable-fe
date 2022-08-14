@@ -6,13 +6,14 @@ import { cls } from '../../../utils/utils';
 import { SCROLL_ADRESS } from '../../../constants/constants';
 import { BtnDatecheck } from '../../../components/atoms/ButtonDatecheck';
 import useStore from '../../../hooks/useStore';
+import { memo } from 'react';
 
 interface DateTitleProps {
   date: Date;
   userLength: number;
   isToday: boolean;
 }
-export function DateTitle({ date, isToday, userLength }: DateTitleProps) {
+function DateTitle({ date, isToday, userLength }: DateTitleProps) {
   const { selectedInfo, setSelectedInfo } = useStore();
   const selectedMonth = compareDateMatch(selectedInfo.date, date, 'ym');
   const selectedDay = compareDateMatch(selectedInfo.date, date, 'ymd');
@@ -51,8 +52,7 @@ export function DateTitle({ date, isToday, userLength }: DateTitleProps) {
           <FontAwesomeIcon
             icon={faSun}
             fontSize={14}
-            // className="absolute left-5 top-0.5 pr-1 text-red-500"
-            className=" pr-1 text-red-500"
+            className="pr-1 text-red-500"
           />
         )}
         {selectedDay && (
@@ -60,10 +60,17 @@ export function DateTitle({ date, isToday, userLength }: DateTitleProps) {
             icon={faCheckCircle}
             fontSize={14}
             className="pl-1 text-green-500"
-            // className="absolute left-8 top-0.5 pl-1 text-green-500"
           />
         )}
       </div>
     </div>
   );
 }
+
+export default memo(DateTitle, (prevProps, nextProps) => {
+  return (
+    compareDateMatch(prevProps.date, nextProps.date, 'ymd') &&
+    prevProps.isToday === nextProps.isToday &&
+    prevProps.userLength === nextProps.userLength
+  );
+});
