@@ -17,10 +17,6 @@ const defaultViewOptions: IViewOption = {
 };
 
 // global state
-export const queryResultVar = makeVar<ListReservationsQuery | undefined>(
-  undefined
-);
-
 export const todayNowVar = makeVar<Date>(new Date());
 
 export const viewOptionsVar = makeVar<IViewOption>(defaultViewOptions);

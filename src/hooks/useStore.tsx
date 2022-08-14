@@ -1,7 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
 import {
   clinicListsVar,
-  queryResultVar,
   selectedInfoVar,
   todayNowVar,
   viewOptionsVar,
@@ -28,7 +27,6 @@ export function makeSelectedClinic(clinic: IClinicList, userId: number) {
 export default function useStore() {
   // console.log('store');
 
-  const queryResult = useReactiveVar(queryResultVar);
   const today = useReactiveVar(todayNowVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
   const clinicLists = useReactiveVar(clinicListsVar);
@@ -46,7 +44,6 @@ export default function useStore() {
 
   return {
     setSelectedInfo,
-    queryResult,
     today,
     viewOptions,
     clinicLists,
