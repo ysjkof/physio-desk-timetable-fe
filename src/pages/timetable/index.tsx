@@ -4,7 +4,6 @@ import { TableTemplate } from './templates/TableTemplate';
 import { useEffect, useRef, useState } from 'react';
 import {
   compareDateMatch,
-  compareSameWeek,
   getSunday,
   getWeeks,
 } from '../../services/dateServices';
@@ -49,9 +48,6 @@ export const TimeTable = () => {
   const { selectedInfo, viewOptions, clinicLists, selectedDate } = useStore();
 
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
-  const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(
-    () => new Date()
-  );
 
   const [userFrameForWeek, setUserFrameForWeek] = useState<DayWithUsers[]>([]);
   let prevSelectedClinicId = useRef(0).current;
@@ -174,18 +170,6 @@ export const TimeTable = () => {
       });
     }
   }, [reservationData, clinicLists, selectedInfo.clinic]);
-
-  useEffect(() => {
-    if (!compareDateMatch(selectedDate, prevSelectedDate, 'ym')) {
-      console.log('✅ 년월이 다르다');
-    } else if (
-      !compareDateMatch(selectedDate, prevSelectedDate, 'd') &&
-      !compareSameWeek(selectedDate, prevSelectedDate)
-    ) {
-      console.log('✅ 년월이 같고 일과 주가 다르다');
-    }
-    setPrevSelectedDate(selectedDate);
-  }, [selectedDate]);
 
   return (
     <>
