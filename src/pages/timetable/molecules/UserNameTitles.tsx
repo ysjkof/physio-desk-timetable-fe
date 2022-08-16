@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import { IUserWithEvent } from '../../../types/type';
+import { compareDateMatch } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
 import { UserNameTitle } from './UserNameTitle';
 
 interface UserNameTitlesProps {
   userLength: number;
-  users: IUserWithEvent[];
+  users: { id: number; name: string; isActivate: boolean }[];
   clinicId: number;
   loggedInUserId: number;
   date: Date;
@@ -29,11 +29,11 @@ function UserNameTitles({
           member.isActivate && (
             <UserNameTitle
               key={userIndex}
-              isMe={member.user.id === loggedInUserId}
-              name={member.user.name}
+              isMe={member.id === loggedInUserId}
+              name={member.name}
               userIndex={userIndex}
               clinicId={clinicId}
-              userId={member.user.id}
+              userId={member.id}
               date={date}
             />
           )
@@ -42,4 +42,23 @@ function UserNameTitles({
   );
 }
 
-export default memo(UserNameTitles);
+export default memo(UserNameTitles, (prevProps, nextProps) => {
+  if (
+    !(prevProps.userLength === nextProps.userLength) ||
+    !(prevProps.clinicId === nextProps.clinicId)
+  )
+    return false;
+
+  const prevUsersLength = prevProps.users.length;
+  if (!(prevUsersLength === nextProps.users.length)) return false;
+
+  const matchUsersLength = prevProps.users.filter((prevUser) =>
+    nextProps.users.find((nextUser) => nextUser.id === prevUser.id)
+  ).length;
+
+  if (!(prevUsersLength === matchUsersLength)) return false;
+
+  if (!compareDateMatch(prevProps.date, nextProps.date, 'ymd')) return false;
+
+  return true;
+});

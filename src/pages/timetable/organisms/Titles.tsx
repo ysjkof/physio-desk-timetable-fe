@@ -59,16 +59,25 @@ export function Titles({}: TitlesProps) {
       />
       <TableLoopTemplate
         userLength={userLength}
-        children={userFrame.map((day, i) => (
-          <UserNameTitles
-            key={i}
-            userLength={userLength}
-            users={day.users}
-            loggedInUserId={loggedInUser!.me.id}
-            clinicId={selectedInfo.clinic!.id}
-            date={day.date}
-          />
-        ))}
+        children={userFrame.map((day, i) => {
+          const users = day.users.map((member) => {
+            return {
+              id: member.user.id,
+              name: member.user.name,
+              isActivate: member.isActivate || false,
+            };
+          });
+          return (
+            <UserNameTitles
+              key={i}
+              userLength={userLength}
+              users={users}
+              loggedInUserId={loggedInUser!.me.id}
+              clinicId={selectedInfo.clinic!.id}
+              date={day.date}
+            />
+          );
+        })}
       />
     </div>
   );
