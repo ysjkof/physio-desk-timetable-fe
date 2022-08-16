@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useListReservations } from '../../hooks/useListReservations';
 import { TableTemplate } from './templates/TableTemplate';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   compareDateMatch,
   compareSameWeek,
@@ -46,12 +46,15 @@ export const TimeTable = () => {
   const { labels } = useViewoptions();
   const { data: loggedInUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
-  const { selectedInfo, viewOptions, clinicLists } = useStore();
+  const { selectedInfo, viewOptions, clinicLists, selectedDate } = useStore();
 
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
   const [prevSelectedDate, setPrevSelectedDate] = useState<Date>(
     () => new Date()
   );
+
+  const [userFrameForWeek, setUserFrameForWeek] = useState<DayWithUsers[]>([]);
+  let prevSelectedClinicId = useRef(0).current;
 
   useEffect(() => {
     if (
@@ -59,13 +62,27 @@ export const TimeTable = () => {
       loggedInUser &&
       selectedInfo.clinic
     ) {
+      const selectedSunday = getSunday(selectedDate);
+      const clinicId = selectedInfo.clinic.id;
+
+      if (
+        clinicId === prevSelectedClinicId &&
+        userFrameForWeek[0] &&
+        compareDateMatch(userFrameForWeek[0].date, selectedSunday, 'ymd')
+      )
+        return;
+
+      prevSelectedClinicId = clinicId;
+
+      const newUserFrameForWeek = makeUsersInDay(
+        spreadClinicMembers(clinicLists, selectedInfo.clinic.id),
+        getWeeks(selectedSunday)
+      );
+      setUserFrameForWeek(newUserFrameForWeek);
       setWeekEvents(
         distributeReservation({
           events: reservationData.listReservations.results,
-          dataForm: makeUsersInDay(
-            spreadClinicMembers(clinicLists, selectedInfo.clinic.id),
-            getWeeks(getSunday(selectedInfo.date))
-          ),
+          dataForm: newUserFrameForWeek,
         })
       );
     }
@@ -159,16 +176,16 @@ export const TimeTable = () => {
   }, [reservationData, clinicLists, selectedInfo.clinic]);
 
   useEffect(() => {
-    if (!compareDateMatch(selectedInfo.date, prevSelectedDate, 'ym')) {
+    if (!compareDateMatch(selectedDate, prevSelectedDate, 'ym')) {
       console.log('✅ 년월이 다르다');
     } else if (
-      !compareDateMatch(selectedInfo.date, prevSelectedDate, 'd') &&
-      !compareSameWeek(selectedInfo.date, prevSelectedDate)
+      !compareDateMatch(selectedDate, prevSelectedDate, 'd') &&
+      !compareSameWeek(selectedDate, prevSelectedDate)
     ) {
       console.log('✅ 년월이 같고 일과 주가 다르다');
     }
-    setPrevSelectedDate(selectedInfo.date);
-  }, [selectedInfo.date]);
+    setPrevSelectedDate(selectedDate);
+  }, [selectedDate]);
 
   return (
     <>
@@ -186,7 +203,7 @@ export const TimeTable = () => {
               <AnimatePresence>
                 {viewOptions.seeList === false && (
                   <>
-                    <Titles />
+                    <Titles userFrameForWeek={userFrameForWeek} />
                     <Schedules labels={labels} weekEvents={weekEvents} />
                   </>
                 )}

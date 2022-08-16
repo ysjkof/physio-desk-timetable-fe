@@ -52,9 +52,20 @@ export default memo(UserNameTitles, (prevProps, nextProps) => {
   const prevUsersLength = prevProps.users.length;
   if (!(prevUsersLength === nextProps.users.length)) return false;
 
-  const matchUsersLength = prevProps.users.filter((prevUser) =>
-    nextProps.users.find((nextUser) => nextUser.id === prevUser.id)
-  ).length;
+  const isSameActivate = (
+    firstState: boolean | undefined,
+    secondState: boolean | undefined
+  ) => firstState === secondState;
+
+  const matchUsersLength = prevProps.users.filter((prevUser) => {
+    const updatedUser = nextProps.users.find(
+      (nextUser) => nextUser.id === prevUser.id
+    );
+    return (
+      isSameActivate(prevUser.isActivate, updatedUser?.isActivate) &&
+      updatedUser
+    );
+  }).length;
 
   if (!(prevUsersLength === matchUsersLength)) return false;
 

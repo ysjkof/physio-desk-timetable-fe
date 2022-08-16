@@ -17,14 +17,14 @@ interface SchedulesProps {
   labels: Date[];
 }
 function Schedules({ weekEvents, labels }: SchedulesProps) {
-  const { selectedInfo, viewOptions } = useStore();
+  const { selectedInfo, viewOptions, selectedDate } = useStore();
 
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
   const labelMaxLength = labels.length;
 
   const schedules =
     viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY
-      ? weekEvents && [weekEvents[selectedInfo.date.getDay()]]
+      ? weekEvents && [weekEvents[selectedDate.getDay()]]
       : weekEvents;
 
   return (
@@ -43,7 +43,7 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
           }}
         >
           <TimeIndicatorBar
-            isActive={compareDateMatch(day.date, selectedInfo.date, 'ymd')}
+            isActive={compareDateMatch(day.date, selectedDate, 'ymd')}
             labels={labels}
           />
           {day.users.map((member, userIndex) => {

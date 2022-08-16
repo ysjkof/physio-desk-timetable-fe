@@ -17,6 +17,7 @@ import { NavDatepicker } from '../molecules/NavDatepicker';
 import { IViewOption } from '../../../types/type';
 import { useMe } from '../../../hooks/useMe';
 import useStore from '../../../hooks/useStore';
+import { selectedDateVar } from '../../../store';
 
 interface TableNavProps {}
 
@@ -28,24 +29,25 @@ const tableNavVarients = {
 export function TableNav({}: TableNavProps) {
   const navigate = useNavigate();
   const today = new Date();
-  const { setSelectedInfo, selectedInfo, viewOptions } = useStore();
+  const { setSelectedInfo, selectedInfo, selectedDate, viewOptions } =
+    useStore();
   const { data: loggedInUser } = useMe();
 
   // if (!loggedInUser || !viewOptions) return <></>;
 
   const handleDateNavMovePrev = () => {
-    const date = new Date(selectedInfo.date);
+    const date = new Date(selectedDate);
     viewOptions.navigationExpand
       ? date.setMonth(date.getMonth() - 1)
       : date.setDate(date.getDate() - 7);
-    setSelectedInfo('date', date);
+    selectedDateVar(date);
   };
   const handleDateNavMoveNext = () => {
-    const date = new Date(selectedInfo.date);
+    const date = new Date(selectedDate);
     viewOptions.navigationExpand
       ? date.setMonth(date.getMonth() + 1)
       : date.setDate(date.getDate() + 7);
-    setSelectedInfo('date', date);
+    selectedDateVar(date);
   };
 
   return (
@@ -53,7 +55,7 @@ export function TableNav({}: TableNavProps) {
       <div className="flex w-full items-center justify-between py-1">
         <button
           className="min-w-[120px] font-medium hover:font-bold"
-          onClick={() => setSelectedInfo('date', today)}
+          onClick={() => selectedDateVar(today)}
         >
           {today.toLocaleString('ko-KR', {
             year: '2-digit',

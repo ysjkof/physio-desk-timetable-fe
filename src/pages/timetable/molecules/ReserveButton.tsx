@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCreateReservationMutation } from '../../../graphql/generated/graphql';
 import { getHHMM, getTimeLength } from '../../../services/dateServices';
@@ -68,7 +68,7 @@ function ReserveButton({
     createReservationMutation({
       variables: {
         input: {
-          clinicId: selectedInfo.reservation.clinic!.id,
+          clinicId: selectedInfo.reservation.clinic.id,
           patientId: selectedInfo.reservation.patient!.id,
           memo: selectedInfo.reservation.memo,
           userId,
@@ -131,3 +131,4 @@ function ReserveButton({
 }
 
 export default ReserveButton;
+// export default memo(ReserveButton);

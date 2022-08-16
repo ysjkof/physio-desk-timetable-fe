@@ -7,6 +7,7 @@ import { SCROLL_ADRESS } from '../../../constants/constants';
 import { BtnDatecheck } from '../../../components/atoms/ButtonDatecheck';
 import useStore from '../../../hooks/useStore';
 import { memo } from 'react';
+import { selectedDateVar } from '../../../store';
 
 interface DateTitleProps {
   date: Date;
@@ -14,9 +15,9 @@ interface DateTitleProps {
   isToday: boolean;
 }
 function DateTitle({ date, isToday, userLength }: DateTitleProps) {
-  const { selectedInfo, setSelectedInfo } = useStore();
-  const selectedMonth = compareDateMatch(selectedInfo.date, date, 'ym');
-  const selectedDay = compareDateMatch(selectedInfo.date, date, 'ymd');
+  const { selectedInfo, selectedDate, setSelectedInfo } = useStore();
+  const selectedMonth = compareDateMatch(selectedDate, date, 'ym');
+  const selectedDay = compareDateMatch(selectedDate, date, 'ymd');
 
   return (
     <div
@@ -33,7 +34,7 @@ function DateTitle({ date, isToday, userLength }: DateTitleProps) {
           inline: 'center',
           behavior: 'smooth',
         });
-        setSelectedInfo('date', date);
+        selectedDateVar(date);
       }}
     >
       <div className="mx-auto">

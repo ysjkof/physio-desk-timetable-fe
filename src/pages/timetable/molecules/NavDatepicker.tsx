@@ -8,6 +8,7 @@ import { cls } from '../../../utils/utils';
 import { NEXT, PREV } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
 import useStore from '../../../hooks/useStore';
+import { selectedDateVar } from '../../../store';
 
 interface Calendar {
   selectedMonth: { date: Date }[];
@@ -19,10 +20,10 @@ interface NavDatepickerProps {
 }
 
 export function NavDatepicker({ varients }: NavDatepickerProps) {
-  const { selectedInfo, setSelectedInfo } = useStore();
+  const { selectedDate } = useStore();
   const [calendar, setCalendar] = useState<Calendar>({
-    selectedMonth: getWeeksOfMonth(selectedInfo.date),
-    threeMonth: getThreeMonth(selectedInfo.date),
+    selectedMonth: getWeeksOfMonth(selectedDate),
+    threeMonth: getThreeMonth(selectedDate),
   });
 
   function getThreeMonth(date: Date) {
@@ -42,10 +43,10 @@ export function NavDatepicker({ varients }: NavDatepickerProps) {
 
   useEffect(() => {
     setCalendar({
-      selectedMonth: getWeeksOfMonth(selectedInfo.date),
-      threeMonth: getThreeMonth(selectedInfo.date),
+      selectedMonth: getWeeksOfMonth(selectedDate),
+      threeMonth: getThreeMonth(selectedDate),
     });
-  }, [selectedInfo.date]);
+  }, [selectedDate]);
   return (
     <motion.div
       className="TABLE_NAV relative flex bg-white px-2 pt-6"
@@ -62,7 +63,7 @@ export function NavDatepicker({ varients }: NavDatepickerProps) {
         {calendar.selectedMonth.map((day, i) => (
           <div
             key={i}
-            onClick={() => setSelectedInfo('date', day.date)}
+            onClick={() => selectedDateVar(day.date)}
             className={cls(
               'btn-menu cursor-pointer py-0.5 text-center',
               day.date.getDay() === 0
@@ -70,7 +71,7 @@ export function NavDatepicker({ varients }: NavDatepickerProps) {
                 : day.date.getDay() === 6
                 ? 'saturday'
                 : '',
-              compareDateMatch(day.date, selectedInfo.date, 'ymd')
+              compareDateMatch(day.date, selectedDate, 'ymd')
                 ? 'bg-black text-white'
                 : ''
             )}

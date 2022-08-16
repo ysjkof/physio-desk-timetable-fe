@@ -1,5 +1,10 @@
 import { useReactiveVar } from '@apollo/client';
-import { clinicListsVar, selectedInfoVar, viewOptionsVar } from '../store';
+import {
+  clinicListsVar,
+  selectedDateVar,
+  selectedInfoVar,
+  viewOptionsVar,
+} from '../store';
 import {
   IClinicList,
   SetSelectedInfoKey,
@@ -25,6 +30,7 @@ export default function useStore() {
   const viewOptions = useReactiveVar(viewOptionsVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedInfo = useReactiveVar(selectedInfoVar);
+  const selectedDate = useReactiveVar(selectedDateVar);
 
   const setSelectedInfo = (
     key: SetSelectedInfoKey,
@@ -41,5 +47,6 @@ export default function useStore() {
     viewOptions,
     clinicLists,
     selectedInfo,
+    selectedDate,
   };
 }

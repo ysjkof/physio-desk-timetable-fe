@@ -14,7 +14,7 @@ export const TimeIndicatorBar = ({
   labels,
   isActive,
 }: ITimeIndicatorBarProps) => {
-  const { selectedInfo } = useStore();
+  const { selectedDate } = useStore();
   const [top, setTop] = useState<number>();
   const startTime = labels[0].getTime() / 1000 / 60;
   const endTime = labels[labels.length - 1].getTime() / 1000 / 60;
@@ -41,7 +41,7 @@ export const TimeIndicatorBar = ({
     <div className="time-indicator-bar" style={{ top: `${top}px` }}>
       {isActive && (
         <span className="mx-auto">
-          {selectedInfo.date.toLocaleString('ko-KR', {
+          {selectedDate.toLocaleString('ko-KR', {
             hour: '2-digit',
             minute: '2-digit',
           })}

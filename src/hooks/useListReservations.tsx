@@ -3,9 +3,9 @@ import { getAfterDate, getSunday } from '../services/dateServices';
 import useStore from './useStore';
 
 export const useListReservations = () => {
-  const { selectedInfo, clinicLists } = useStore();
+  const { selectedInfo, selectedDate, clinicLists } = useStore();
 
-  const startDate = getSunday(selectedInfo.date);
+  const startDate = getSunday(selectedDate);
   const selectedClinic = clinicLists.find(
     (clinic) => clinic.id === selectedInfo.clinic?.id
   );

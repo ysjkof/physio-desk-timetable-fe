@@ -143,7 +143,6 @@ export interface DayWithUsers {
 }
 
 export interface SelectedInfo {
-  date: Date;
   clinic: ISelectedClinic | null;
   patient: SelectedPatient | null;
   reservation: IListReservation | null;

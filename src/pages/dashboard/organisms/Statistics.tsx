@@ -15,11 +15,13 @@ import { Button } from '../../../components/molecules/Button';
 import combineUserStatistics from '../../../services/statisticsServices';
 import { IUserStatistics, MemberState } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
+import { selectedDateVar } from '../../../store';
+import Charts from '../molecules/charts';
 
 const [initialStartDate, initailEndDate] = getMonthStartEnd(new Date());
 
 export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
-  const { selectedInfo, setSelectedInfo } = useStore();
+  const { selectedInfo, selectedDate } = useStore();
 
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initailEndDate);
@@ -135,27 +137,27 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                   onClick={() => {
                     const newStartDate = onClickSetDate(
                       startDate,
-                      selectedInfo.date.getMonth(),
+                      selectedDate.getMonth(),
                       'prev'
                     );
-                    setSelectedInfo('date', new Date(newStartDate));
+                    selectedDateVar(new Date(newStartDate));
                   }}
                   icon={<FontAwesomeIcon icon={faChevronLeft} fontSize={14} />}
                   enabled
                   hasBorder
                 />
                 <MenuButton
-                  label={selectedInfo.date.getFullYear() + '년 '}
+                  label={selectedDate.getFullYear() + '년 '}
                   enabled
                 />
                 <MenuButton
                   onClick={() => {
                     const newStartDate = onClickSetDate(
                       startDate,
-                      selectedInfo.date.getMonth(),
+                      selectedDate.getMonth(),
                       'next'
                     );
-                    setSelectedInfo('date', new Date(newStartDate));
+                    selectedDateVar(new Date(newStartDate));
                   }}
                   enabled
                   icon={<FontAwesomeIcon icon={faChevronRight} fontSize={14} />}
