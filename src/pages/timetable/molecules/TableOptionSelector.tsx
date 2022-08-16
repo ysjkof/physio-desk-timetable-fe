@@ -24,30 +24,30 @@ export function TableOptionSelector() {
   // if (!loggedInUser || !viewOptions) return <></>;
 
   const onClickToggleUser = (clinicId: number, memberId: number) => {
-    if (!loggedInUser) return console.warn('❌ loggedInUser가 false입니다');
-    const gIndex = clinicLists.findIndex(
+    if (!loggedInUser) throw new Error('❌ loggedInUser가 false입니다');
+    const clinicIdx = clinicLists.findIndex(
       (prevClinic) => prevClinic.id === clinicId
     );
-    if (gIndex === -1) return console.warn('❌ group index가 -1입니다');
-    const mIndex = clinicLists[gIndex].members.findIndex(
+    if (clinicIdx === -1) throw new Error('❌ group index가 -1입니다');
+    const memberIdx = clinicLists[clinicIdx].members.findIndex(
       (prevMember) => prevMember.id === memberId
     );
-    if (mIndex === -1) return console.warn('❌ member index가 -1입니다');
+    if (memberIdx === -1) throw new Error('❌ member index가 -1입니다');
 
-    const activateLength = clinicLists[gIndex].members.filter(
+    const activateLength = clinicLists[clinicIdx].members.filter(
       (member) => member.isActivate
     ).length;
-    let isActivate = clinicLists[gIndex].members[mIndex].isActivate;
+    let isActivate = clinicLists[clinicIdx].members[memberIdx].isActivate;
 
     if (isActivate && activateLength === 1) {
       return;
     }
-    clinicLists[gIndex].members[mIndex].isActivate = !isActivate;
+    clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
     saveClinicLists([...clinicLists], loggedInUser.me.id);
   };
 
   const onClickChangeSelectClinic = (clinicId: number) => {
-    if (!loggedInUser) return console.warn('❌ loggedInUser가 false입니다');
+    if (!loggedInUser) throw new Error('❌ loggedInUser가 false입니다');
     if (selectedInfo.clinic?.id !== clinicId) {
       const clinic = clinicLists.find((clinic) => clinic.id === clinicId);
       const me = loggedInUser.me.members?.find(
