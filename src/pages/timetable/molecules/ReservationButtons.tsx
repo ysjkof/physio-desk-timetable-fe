@@ -39,11 +39,10 @@ export default memo(ReservationButtons, (prevProps, nextProps) => {
   //   prevProps.userId === nextProps.userId,
   //   prevProps.userIndex === nextProps.userIndex
   // );
-
   return (
     prevProps.labels[0] === nextProps.labels[0] &&
     prevProps.labels[1] === nextProps.labels[1] &&
-    prevProps.labels[prevProps.labels.length] ===
-      nextProps.labels[nextProps.labels.length]
+    prevProps.labels[prevProps.labels.length - 1] ===
+      nextProps.labels[nextProps.labels.length - 1]
   );
 });
