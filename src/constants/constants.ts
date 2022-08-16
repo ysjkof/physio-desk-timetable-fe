@@ -1,7 +1,10 @@
 import { ReservationState } from '../graphql/generated/graphql';
 
 // 한국 표준시(韓國標準時, KST, Korea Standard Time) = UTC+09:00
-export const UTC_OPTION_KST = '+0900';
+export const UTC_OPTION_KST = { string: '+0900', hour: 9, minute: 0 };
+export const UTC_OPTION = {
+  kor: UTC_OPTION_KST,
+};
 
 export const VIEW_PERIOD = {
   ONE_DAY: 1,
