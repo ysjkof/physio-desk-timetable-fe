@@ -3,8 +3,8 @@
 ## Router
 
 ```js
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Login, CreateAccount } from "../pages";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Login, CreateAccount } from '../pages';
 
 export const LoggedOutRouter = () => {
   return (
@@ -21,8 +21,8 @@ export const LoggedOutRouter = () => {
   );
 };
 // 아래로 바뀜.
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Login, CreateAccount } from "../pages";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Login, CreateAccount } from '../pages';
 
 export const LoggedOutRouter = () => {
   return (
@@ -41,13 +41,13 @@ export const LoggedOutRouter = () => {
 [참조]("https://stackoverflow.com/questions/62861269/attempted-import-error-usehistory-is-not-exported-from-react-router-dom")
 
 ```js
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 const history = useHistory();
-history.push("/");
+history.push('/');
 // 아래로 바뀜.
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 const navigate = useNavigate();
-navigate("/home");
+navigate('/home');
 ```
 
 # 2022-01-03; 예약하기 만드는 중
@@ -134,12 +134,12 @@ const { data } = useQuery(QUERY, {
 
 ```js
 // 원한 결과는 이렇게 네 줄이다
-if (hhmm[2] === "6") handleOverMinute();
-if (hhmm[2] === "7") handleOverMinute();
+if (hhmm[2] === '6') handleOverMinute();
+if (hhmm[2] === '7') handleOverMinute();
 // 줄여서 쓰려고 이렇게 했고 원한 동작이 안나온다
-if (hhmm[2] === "6" || "7") handleOverMinute();
+if (hhmm[2] === '6' || '7') handleOverMinute();
 // 그건 이렇게 했어야 했다.
-if (hhmm[2] === "6" || hhmm[2] === "7") handleOverMinute();
+if (hhmm[2] === '6' || hhmm[2] === '7') handleOverMinute();
 ```
 
 그냥 "7"이라고 문자열만 써 놓으니 문자열은 true고 그래서 작동이 이상하게 됨
@@ -401,7 +401,7 @@ HelmetProvider와 Helmet의 타입을 아래로 바꾸면 해결
 
 ```ts
 interface Prescription {
-  type: "도수치료" | "충격파" | "운동치료";
+  type: '도수치료' | '충격파' | '운동치료';
 }
 
 interface PrescriptionOption {
@@ -440,23 +440,23 @@ array.length = 1680;
 // 매우 느린 코드
 array.map((label) => (
   <span>
-    {label.toLocaleString("ko-KR", { hour: "2-digit", minute: "2-digit" })}
+    {label.toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
   </span>
 ));
 
 // 안느림
-array.map((label) => <span>{label.toLocaleString("ko-KR")}</span>);
+array.map((label) => <span>{label.toLocaleString('ko-KR')}</span>);
 
 // 안느림
-function getHHMM(inputDate: string | Date, seperator?: ":") {
+function getHHMM(inputDate: string | Date, seperator?: ':') {
   const date = new Date(inputDate);
-  const hh = String(date.getHours()).padStart(2, "0");
-  const mm = String(date.getMinutes()).padStart(2, "0");
-  if (seperator === ":") return `${hh}:${mm}`;
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mm = String(date.getMinutes()).padStart(2, '0');
+  if (seperator === ':') return `${hh}:${mm}`;
   return `${hh}${mm}`;
 }
 
-array.map((label) => <span>{getHHMM(label, ":")}</span>);
+array.map((label) => <span>{getHHMM(label, ':')}</span>);
 ```
 
 # 2022-5-28; 요소별 z-index
@@ -488,7 +488,7 @@ export const EditReservationState = ({
 }: EditReservationStateProps) => {
   const [editReservationMutation] = useEditReservationMutation({
     update(cache) {
-      if (!reservation) return console.error("reservation이 없습니다");
+      if (!reservation) return console.error('reservation이 없습니다');
       const myReserv = cache.identify(reservation);
       cache.modify({
         id: myReserv,
@@ -512,47 +512,47 @@ export const EditReservationState = ({
 ```ts
 // 수정할 때 반환하는 인터페이스. 예약의 id와 바뀐 값만 있으면 자동으로 처리됨
 export type ListenUpdateReservationSubscription = {
-  __typename?: "Subscription";
+  __typename?: 'Subscription';
   listenUpdateReservation: {
-    __typename?: "Reservation";
+    __typename?: 'Reservation';
     id: number;
     startDate: any;
     endDate: any;
     state: ReservationState;
     memo?: string | null;
     isFirst: boolean;
-    user: { __typename?: "User"; id: number };
-    patient?: { __typename?: "Patient"; id: number; name: string } | null;
+    user: { __typename?: 'User'; id: number };
+    patient?: { __typename?: 'Patient'; id: number; name: string } | null;
     lastModifier: {
-      __typename?: "User";
+      __typename?: 'User';
       id: number;
       email: string;
       name: string;
       updatedAt?: any | null;
     };
-    clinic: { __typename?: "Clinic"; id: number };
-    prescriptions?: Array<{ __typename?: "Prescription"; id: number }> | null;
+    clinic: { __typename?: 'Clinic'; id: number };
+    prescriptions?: Array<{ __typename?: 'Prescription'; id: number }> | null;
   };
 };
 
 // 생성할 때 넣어줄 listReservation의 인터페이스
 export type ListReservationsQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   listReservations: {
-    __typename?: "ListReservationsOutput";
+    __typename?: 'ListReservationsOutput';
     ok: boolean;
     totalCount?: number | null;
     results?: Array<{
-      __typename?: "Reservation";
+      __typename?: 'Reservation';
       id: number;
       startDate: any;
       endDate: any;
       state: ReservationState;
       memo?: string | null;
       isFirst: boolean;
-      user: { __typename?: "User"; id: number; name: string };
+      user: { __typename?: 'User'; id: number; name: string };
       patient?: {
-        __typename?: "Patient";
+        __typename?: 'Patient';
         id: number;
         name: string;
         gender: string;
@@ -561,15 +561,15 @@ export type ListReservationsQuery = {
         memo?: string | null;
       } | null;
       lastModifier: {
-        __typename?: "User";
+        __typename?: 'User';
         id: number;
         email: string;
         name: string;
         updatedAt?: any | null;
       };
-      clinic: { __typename?: "Clinic"; id: number; name: string };
+      clinic: { __typename?: 'Clinic'; id: number; name: string };
       prescriptions?: Array<{
-        __typename?: "Prescription";
+        __typename?: 'Prescription';
         id: number;
         name: string;
         requiredTime: number;
@@ -582,11 +582,38 @@ export type ListReservationsQuery = {
 
 // 삭제할 때 반환하는 값. clinicId도 필요 없을듯.
 export type ListenDeleteReservationSubscription = {
-  __typename?: "Subscription";
+  __typename?: 'Subscription';
   listenDeleteReservation: {
-    __typename?: "ListenDeleteReservationOutput";
+    __typename?: 'ListenDeleteReservationOutput';
     id: number;
     clinicId: number;
   };
 };
 ```
+
+# 2022-08-15; 예약 복사할때 렌더링이 많이 되는 문제
+
+전역 상태라 렌더링이 많이됨. 고려할것
+ReserveButton에 예약을 안주고 하는 방법으로 고려.
+
+# 2022-08-16; 420\*n개의 예약 버튼 렌더링 방지
+
+- 예약 버튼은 Date객체를 받아 텍스트를 표시하고 클릭하면 모달에 Date를 넘겨주고 있다
+- 캘린더를 다음주로 바꾸거나 날짜를 눌러서 포커스하면 예약버튼이 모두 리렌더링된다
+  - 그때마다 **최소 420개**(설정에 따라 변경됨)에서 설정에 따라 \*n개만큼 예약버튼이 렌더링된다
+    - 5명(2100개)부터 느리게 느껴지고 리액트 개발 도구에서 Render durations 평균 **210ms**
+    - 10명(4200개)일 경우 평균 **400ms**
+
+## 주가 바뀌지 않은 상황에서 리렌더링 될 때 해결
+
+- 예약 버튼을 Memoization한다
+- Date객체를 비교해야 되는데 react memo의 기본설정은 얕은 비교라서 수정 필요
+- 시간만 표시하면 되기 때문에 전달되는 props를 **"11:30"** 처럼 문자열로 변경하고 memoization함
+  - Render durations이 **10ms**로 빨라짐
+
+## 주가 바뀔 때 리렌더링 해결
+
+- 하지만 주를 바꾸면 여전히 전체 렌더링됨
+  - 빠른 예약하기 기능이 바뀌는 Date를 계속 갱신하기 떄문
+  - 여러가지 방법을 써봤지만 전역 상태나 상위컴포넌트에서 바뀐 Date를 받아서 요청을 하기 때문에 방법이 없음
+  - **windowing** 도입 계획
