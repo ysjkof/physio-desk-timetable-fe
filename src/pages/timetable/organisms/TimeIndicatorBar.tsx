@@ -4,24 +4,23 @@ import {
   TABLE_TIME_GAP,
 } from '../../../constants/constants';
 import useStore from '../../../hooks/useStore';
+import useViewoptions from '../../../hooks/useViewOption';
 
 interface ITimeIndicatorBarProps {
-  labels: Date[];
   isActive: boolean;
 }
 
-export const TimeIndicatorBar = ({
-  labels,
-  isActive,
-}: ITimeIndicatorBarProps) => {
+export const TimeIndicatorBar = ({ isActive }: ITimeIndicatorBarProps) => {
   const { selectedDate } = useStore();
+  const {
+    indicatorTimes: { firstTime, lastTime },
+  } = useViewoptions();
+
   const [top, setTop] = useState<number>();
-  const startTime = labels[0].getTime() / 1000 / 60;
-  const endTime = labels[labels.length - 1].getTime() / 1000 / 60;
   const setPosition = () => {
     const nowMinute = Date.now() / 1000 / 60; // 현재 시각을 분으로 변환
-    const nowTime = nowMinute - startTime;
-    const maxTime = endTime - startTime;
+    const nowTime = nowMinute - firstTime;
+    const maxTime = lastTime - firstTime;
     if (nowTime > maxTime) {
       //  시간표의 1칸은 10분을 나타내고 높이 20px이다.
       //  1분은 2px기 때문에 *2 한다.
