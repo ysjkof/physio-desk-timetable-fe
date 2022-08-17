@@ -1,8 +1,5 @@
 import { getActiveUserLength } from '..';
-import {
-  addHourToDate,
-  compareDateMatch,
-} from '../../../services/dateServices';
+import { compareDateMatch } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
 import { TableLoopTemplate } from '../templates/TableLoopTemplate';
 import { TimeIndicatorBar } from './TimeIndicatorBar';
@@ -14,7 +11,7 @@ import { VIEW_PERIOD } from '../../../constants/constants';
 
 interface SchedulesProps {
   weekEvents: DayWithUsers[];
-  labels: Date[];
+  labels: string[];
 }
 function Schedules({ weekEvents, labels }: SchedulesProps) {
   const { selectedInfo, viewOptions, selectedDate } = useStore();
@@ -44,14 +41,8 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
         >
           <TimeIndicatorBar
             isActive={compareDateMatch(day.date, selectedDate, 'ymd')}
-            labels={labels}
           />
           {day.users.map((member, userIndex) => {
-            // 유저마다 내부의 버튼과 이벤트에서 combineDateAndHours를 한다면 user 수만큼 반복 작업을 함.
-            // 그래서 여기로 뺌
-            const dayLabels = labels.map((label) =>
-              addHourToDate(day.date, label).toISOString()
-            );
             return member.isActivate ? (
               <div
                 key={member.id}
@@ -59,13 +50,14 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
               >
                 <ReservationButtons
                   labelMaxLength={labelMaxLength}
-                  labels={dayLabels}
+                  date={day.date}
+                  labels={labels}
                   userId={member.user.id}
                   userIndex={userIndex}
                 />
                 <ScheduleInUserInDay
                   labelMaxLength={labelMaxLength}
-                  labels={dayLabels}
+                  labels={labels}
                   events={member.events}
                   userIndex={userIndex}
                 />

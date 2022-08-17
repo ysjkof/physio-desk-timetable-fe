@@ -1,3 +1,5 @@
+import { UTC_OPTION } from '../constants/constants';
+
 export const getSunday = (date: Date) => {
   const returnDate = new Date(date);
   returnDate.setHours(0, 0, 0, 0);
@@ -136,6 +138,19 @@ export const compareSameWeek = (date: Date, secondDate: Date): boolean => {
   return compareDateMatch(getSunday(date), getSunday(secondDate), 'ymd');
 };
 
+export const newDateSetHourAndMinute = ({
+  hour,
+  minute,
+  fromDate,
+}: {
+  hour: number;
+  minute: number;
+  fromDate?: Date;
+}) => {
+  const date = fromDate ? fromDate : new Date();
+  date.setHours(hour, minute, 0, 0);
+  return date;
+};
 // 시작시각부터 끝시각까지 timeGap의 차이가 나는 Date배열을 만든다
 export function getTimeGaps(
   startHours: number,
@@ -145,10 +160,12 @@ export function getTimeGaps(
   timeGap: number
 ): Date[] {
   const labels = [];
-  const start = new Date();
-  const end = new Date(start);
-  start.setHours(startHours, startMinutes, 0, 0);
-  end.setHours(endHours, endMinutes, 0, 0);
+  const start = newDateSetHourAndMinute({
+    hour: startHours,
+    minute: startMinutes,
+  });
+  const end = newDateSetHourAndMinute({ hour: endHours, minute: endMinutes });
+
   let i = 0;
   while (i < 1500) {
     const date = new Date(start);
@@ -161,6 +178,31 @@ export function getTimeGaps(
   }
   return labels;
 }
+
+export const get4DigitHour = (date: Date | string) => {
+  return typeof date === 'string'
+    ? date.substring(11, 16)
+    : date.toISOString().substring(11, 16);
+};
+
+export const getFrom4DigitTime = (time: string, what: 'hour' | 'minute') =>
+  what === 'hour' ? time.substring(0, 2) : time.substring(3, 5);
+
+export const injectUTCTime = ({
+  hour,
+  minute,
+  UTC,
+}: {
+  hour: string | number;
+  minute: string | number;
+  UTC: 'kor';
+}) => {
+  return `${(+hour + UTC_OPTION[UTC].hour + '').padStart(2, '0')}:${(
+    +minute +
+    UTC_OPTION[UTC].minute +
+    ''
+  ).padStart(2, '0')}`;
+};
 
 export function getMonthStartEnd(date: Date) {
   const startDate = new Date(date);
@@ -215,3 +257,10 @@ export function newDateFromHoursAndMinute(hour: number, minute: number) {
   date.setHours(hour, minute, 0, 0);
   return date;
 }
+
+export const createDateFromDay = (date: Date, dayIdx: number) => {
+  const newDate = new Date(date);
+  const dayGap = dayIdx - newDate.getDay();
+  newDate.setDate(newDate.getDate() + dayGap);
+  return newDate;
+};

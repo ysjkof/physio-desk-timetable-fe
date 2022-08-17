@@ -4,16 +4,33 @@ import { ModalContentsLayout } from '../../../components/templates/ModalContents
 import { ReserveForm } from './ReserveForm';
 import { ModalTemplate } from '../../../components/molecules/ModalTemplate';
 import { useLocation } from 'react-router-dom';
+import {
+  createDateFromDay,
+  newDateSetHourAndMinute,
+} from '../../../services/dateServices';
+import { useReactiveVar } from '@apollo/client';
+import { selectedDateVar } from '../../../store';
 
 export const ReserveCardModal = ({ closeAction }: TimetableModalProps) => {
   const location = useLocation();
+  const selectedDate = useReactiveVar(selectedDateVar);
 
   const state = location.state as {
-    startDate: Date;
+    startDate: {
+      hour: number;
+      minute: number;
+      dayIndex: number;
+    };
     userId: number;
     isDayOff?: boolean;
   };
-  const startDate = state.startDate;
+
+  const startDate = newDateSetHourAndMinute({
+    hour: state.startDate.hour,
+    minute: state.startDate.minute,
+    fromDate: createDateFromDay(selectedDate, state.startDate.dayIndex),
+  });
+
   const userId = state.userId;
   const isDayOff = state.isDayOff;
 
