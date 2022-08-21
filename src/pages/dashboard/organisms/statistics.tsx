@@ -16,7 +16,7 @@ import combineUserStatistics from '../../../services/statisticsServices';
 import { IUserStatistics, MemberState } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
 import { selectedDateVar } from '../../../store';
-import Charts from '../molecules/charts';
+import Charts from '../molecules/Charts';
 
 const [initialStartDate, initailEndDate] = getMonthStartEnd(new Date());
 

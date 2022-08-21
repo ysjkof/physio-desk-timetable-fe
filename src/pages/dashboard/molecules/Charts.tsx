@@ -209,6 +209,7 @@ const Charts = ({
                         fontSize: 12,
                       },
                     }}
+                    //@ts-ignore
                     tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : '')}
                   />
                   <VictoryAxis
@@ -221,6 +222,7 @@ const Charts = ({
                       axisLabel: { padding: 39 },
                     }}
                     tickValues={finalDailyReports.map((day) => day.date)}
+                    //@ts-ignore
                     tickFormat={(tick) => {
                       return getYMD(tick, 'mmdd', '-');
                     }}

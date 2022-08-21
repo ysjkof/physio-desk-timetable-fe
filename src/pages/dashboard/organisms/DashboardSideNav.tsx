@@ -10,8 +10,8 @@ import {
   setLocalStorage,
 } from '../../../utils/utils';
 import { DashboardNavList } from '../components/DashboardNavList';
-import { ClinicName } from '../molecules/ClinicName';
 import useStore from '../../../hooks/useStore';
+import { ClinicName } from '../molecules/clinicName';
 
 interface DashboardSideNavProps {
   selectedMenu: SelectedMenuType;
