@@ -15,7 +15,7 @@ interface DateTitleProps {
   isToday: boolean;
 }
 function DateTitle({ date, isToday, userLength }: DateTitleProps) {
-  const { selectedInfo, selectedDate, setSelectedInfo } = useStore();
+  const { selectedDate } = useStore();
   const selectedMonth = compareDateMatch(selectedDate, date, 'ym');
   const selectedDay = compareDateMatch(selectedDate, date, 'ymd');
 

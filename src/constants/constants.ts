@@ -9,9 +9,6 @@ export const UTC_OPTION = {
 export const VIEW_PERIOD = {
   ONE_DAY: 1,
   ONE_WEEK: 7,
-  TWO_WEEKS: 14,
-  THREE_WEEKS: 21,
-  FOUR_WEEKS: 28, // 할일; 4주는 이번 달 보기로 수정예정.
 } as const;
 
 export const TABLE_MAIN_COMPONENT_LAYOUT_PADDING_TOP = 50; // px

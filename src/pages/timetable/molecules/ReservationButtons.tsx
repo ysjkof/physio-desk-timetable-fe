@@ -7,7 +7,7 @@ import {
   getFrom4DigitTime,
   newDateSetHourAndMinute,
 } from '../../../services/dateServices';
-import { checkMatchMinute } from '../../../services/timetableServices';
+import { checkMatchMinute } from '../services/timetableServices';
 import { selectedInfoVar } from '../../../store';
 import { IListReservation } from '../../../types/type';
 import ReserveButton from './ReserveButton';

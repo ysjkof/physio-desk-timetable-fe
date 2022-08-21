@@ -3,9 +3,10 @@ import {
   IClinicList,
   IListReservation,
   IMember,
+  IMemberWithActivate,
   IUserWithEvent,
-} from '../types/type';
-import { compareDateMatch } from './dateServices';
+} from '../../../types/type';
+import { compareDateMatch } from '../../../services/dateServices';
 
 export const spreadClinicMembers = (
   clinics: IClinicList[] | null,
@@ -71,4 +72,17 @@ export const distributeReservation = ({
     }
   });
   return dataForm;
+};
+
+export const getActiveUserLength = (members?: IMemberWithActivate[]) =>
+  members?.filter((user) => user.isActivate).length || 0;
+
+export const getTableCellWidth = (userLength: number) => {
+  const widthValue = 6;
+  return userLength * widthValue;
+};
+export const getGridTemplateColumns = (repeat: number, minWidth?: number) => {
+  return minWidth
+    ? `repeat(${repeat}, minmax(${minWidth}rem, 1fr))`
+    : `repeat(${repeat}, 1fr)`;
 };

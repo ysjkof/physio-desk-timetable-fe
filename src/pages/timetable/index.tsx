@@ -26,9 +26,10 @@ import {
 } from '../../utils/utils';
 import {
   distributeReservation,
+  getActiveUserLength,
   makeUsersInDay,
   spreadClinicMembers,
-} from '../../services/timetableServices';
+} from './services/timetableServices';
 import { DayWithUsers, IMemberWithActivate } from '../../types/type';
 import { useMe } from '../../hooks/useMe';
 import useViewoptions from '../../hooks/useViewOption';
@@ -38,17 +39,14 @@ export interface TimetableModalProps {
   closeAction: () => void;
 }
 
-export const getActiveUserLength = (members?: IMemberWithActivate[]) =>
-  members?.filter((user) => user.isActivate).length || 0;
-
 export const TimeTable = () => {
   const { labels } = useViewoptions();
   const { data: loggedInUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
   const { selectedInfo, viewOptions, clinicLists, selectedDate } = useStore();
+  const userLength = getActiveUserLength(selectedInfo.clinic?.members);
 
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
-
   const [userFrameForWeek, setUserFrameForWeek] = useState<DayWithUsers[]>([]);
   let prevSelectedClinicId = useRef(0).current;
 
@@ -187,8 +185,15 @@ export const TimeTable = () => {
               <AnimatePresence>
                 {viewOptions.seeList === false && (
                   <>
-                    <Titles userFrameForWeek={userFrameForWeek} />
-                    <Schedules labels={labels} weekEvents={weekEvents} />
+                    <Titles
+                      userLength={userLength}
+                      userFrameForWeek={userFrameForWeek}
+                    />
+                    <Schedules
+                      userLength={userLength}
+                      labels={labels}
+                      weekEvents={weekEvents}
+                    />
                   </>
                 )}
               </AnimatePresence>

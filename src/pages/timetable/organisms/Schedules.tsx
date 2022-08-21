@@ -1,22 +1,21 @@
-import { getActiveUserLength } from '..';
 import { compareDateMatch } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
-import { TableLoopTemplate } from '../templates/TableLoopTemplate';
 import { TimeIndicatorBar } from './TimeIndicatorBar';
 import { DayWithUsers } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
 import ReservationButtons from '../molecules/ReservationButtons';
 import ScheduleInUserInDay from '../molecules/ScheduleInUserInDay';
 import { VIEW_PERIOD } from '../../../constants/constants';
+import { getGridTemplateColumns } from '../services/timetableServices';
 
 interface SchedulesProps {
   weekEvents: DayWithUsers[];
   labels: string[];
+  userLength: number;
 }
-function Schedules({ weekEvents, labels }: SchedulesProps) {
-  const { selectedInfo, viewOptions, selectedDate } = useStore();
+function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
+  const { viewOptions, selectedDate } = useStore();
 
-  const userLength = getActiveUserLength(selectedInfo.clinic?.members);
   const labelMaxLength = labels.length;
 
   const schedules =
@@ -24,51 +23,68 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
       ? weekEvents && [weekEvents[selectedDate.getDay()]]
       : weekEvents;
 
+  const userGridCol = getGridTemplateColumns(userLength);
+  const viewPeriodStyle = {
+    [VIEW_PERIOD.ONE_DAY]: {
+      template: {},
+      userColumn: {
+        gridTemplateColumns: userGridCol,
+      },
+    },
+    [VIEW_PERIOD.ONE_WEEK]: {
+      template: {
+        gridTemplateColumns: getGridTemplateColumns(7, userLength * 6),
+      },
+      userColumn: {
+        gridTemplateColumns: userGridCol,
+      },
+    },
+  };
+
   return (
-    <TableLoopTemplate
-      elementName="TABLE_COLS"
-      userLength={userLength}
-      children={schedules.map((day, i) => (
+    <div
+      className="SCHEDULES grid w-full"
+      style={viewPeriodStyle[viewOptions.viewPeriod].template}
+    >
+      {schedules.map((day, i) => (
         <div
           key={i}
           className={cls(
-            'user-cols-divide relative grid border-b',
+            'USER_COLS relative grid border-b',
             userLength === 1 ? 'border-x-inherit' : ''
           )}
-          style={{
-            gridTemplateColumns: `repeat(${userLength}, 1fr)`,
-          }}
+          style={viewPeriodStyle[viewOptions.viewPeriod].userColumn}
         >
           <TimeIndicatorBar
             isActive={compareDateMatch(day.date, selectedDate, 'ymd')}
           />
           {day.users.map((member, userIndex) => {
-            return member.isActivate ? (
-              <div
-                key={member.id}
-                className="USER_COL relative w-full border-r-[0.5px] last:border-r-0 hover:border-transparent hover:bg-gray-200/50"
-              >
-                <ReservationButtons
-                  labelMaxLength={labelMaxLength}
-                  date={day.date}
-                  labels={labels}
-                  userId={member.user.id}
-                  userIndex={userIndex}
-                />
-                <ScheduleInUserInDay
-                  labelMaxLength={labelMaxLength}
-                  labels={labels}
-                  events={member.events}
-                  userIndex={userIndex}
-                />
-              </div>
-            ) : (
-              ''
+            return (
+              member.isActivate && (
+                <div
+                  key={member.id}
+                  className="USER_COL relative w-full border-r-[0.5px] last:border-r-0 hover:border-transparent hover:bg-gray-200/50"
+                >
+                  <ReservationButtons
+                    labelMaxLength={labelMaxLength}
+                    date={day.date}
+                    labels={labels}
+                    userId={member.user.id}
+                    userIndex={userIndex}
+                  />
+                  <ScheduleInUserInDay
+                    labelMaxLength={labelMaxLength}
+                    labels={labels}
+                    events={member.events}
+                    userIndex={userIndex}
+                  />
+                </div>
+              )
             );
           })}
         </div>
       ))}
-    />
+    </div>
   );
 }
 
