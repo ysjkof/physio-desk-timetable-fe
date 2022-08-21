@@ -6,7 +6,6 @@ interface SwitchProps {
   onClick: any;
 }
 
-// FC = Functional Component
 export default function Switch({ enabled, label, onClick }: SwitchProps) {
   return (
     <div className="flex cursor-pointer items-center" onClick={onClick}>
