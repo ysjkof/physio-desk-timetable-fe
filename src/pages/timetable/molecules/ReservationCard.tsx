@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { ReservationCardName } from '../molecules/ReservationCardName';
-import { ReservationCardPatientDetail } from '../molecules/ReservationCardPatientDetail';
-import { TimetableModalProps } from '../../pages/timetable';
-import { useDeleteReservationMutation } from '../../graphql/generated/graphql';
-import { ReservationCardDetail } from '../molecules/ReservationCardDetail';
-import { BtnMenuToggle } from '../molecules/MenuToggleButton';
-import { MenuButton } from '../molecules/MenuButton';
-import { ReserveForm } from '../../pages/timetable/molecules/ReserveForm';
-import { CreatePatientForm } from '../molecules/CreatePatientForm';
-import { IListReservation } from '../../types/type';
+import { ReservationCardName } from '../../../components/molecules/ReservationCardName';
+import { ReservationCardPatientDetail } from '../../../components/molecules/ReservationCardPatientDetail';
+import { TimetableModalProps } from '..';
+import { useDeleteReservationMutation } from '../../../graphql/generated/graphql';
+import { ReservationCardDetail } from '../../../components/molecules/ReservationCardDetail';
+import { BtnMenuToggle } from '../../../components/molecules/MenuToggleButton';
+import { MenuButton } from '../../../components/molecules/MenuButton';
+import { ReserveForm } from './ReserveForm';
+import { CreatePatientForm } from '../../../components/molecules/CreatePatientForm';
+import { IListReservation } from '../../../types/type';
 
 interface ReservationCardProps extends TimetableModalProps {
   reservation: IListReservation;
@@ -92,6 +92,7 @@ export const ReservationCard = ({
         )}
         {subMenu === 'reservation' && isEdit && (
           <ReserveForm
+            userId={reservation.user.id}
             closeAction={() => changeSubmenu('reservation')}
             selectedPrescriptionData={reservation.prescriptions?.map(
               (prev) => ({

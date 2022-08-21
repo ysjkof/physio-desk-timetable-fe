@@ -11,7 +11,7 @@ import { TableNav } from './organisms/TableNav';
 import { AnimatePresence } from 'framer-motion';
 import TimeLabels from './organisms/TimeLabels';
 import { Titles } from './organisms/Titles';
-import { TableModals } from './molecules/TableModals';
+import { TableModals } from './templates/TableModals';
 import { Loading } from '../../components/atoms/Loading';
 import Schedules from './organisms/Schedules';
 import {

@@ -288,7 +288,7 @@ export const ReserveForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-4">
-      {isDayOff && (
+      {isDayOff ? (
         <DayOffForm
           register={register}
           setValue={setValue}
@@ -297,8 +297,7 @@ export const ReserveForm = ({
           loading={createLoading && editLoading}
           reservation={reservation}
         />
-      )}
-      {!isDayOff && (
+      ) : (
         <>
           {/* <label className="grid grid-cols-[5rem,1fr] items-center"> */}
           <label className="flex flex-col gap-2">

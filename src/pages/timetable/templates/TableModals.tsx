@@ -1,7 +1,7 @@
 import { useMatch, useNavigate } from 'react-router-dom';
-import { CreatePatientModal } from '../../../components/templates/CreatePatientModal';
-import { ReserveCardModal } from './ReserveCardModal';
-import { ReservationModal } from '../../../components/templates/ReservationCardModal';
+import { CreatePatientModal } from '../organisms/CreatePatientModal';
+import { ReserveModal } from '../organisms/ReserveModal';
+import { ReservationModal } from '../organisms/ReservationModal';
 import { ROUTER } from '../../../router/routerConstants';
 
 export function TableModals() {
@@ -12,20 +12,20 @@ export function TableModals() {
   const isCreatePatient = useMatch(ROUTER.CREATE_PATIENT);
   return (
     <>
-      {isEdit && (
+      {isEdit ? (
         <ReservationModal
           closeAction={() => isEdit && navigate(ROUTER.TIMETABLE)}
         />
-      )}
-      {isReserve && (
-        <ReserveCardModal
+      ) : isReserve ? (
+        <ReserveModal
           closeAction={() => isReserve && navigate(ROUTER.TIMETABLE)}
         />
-      )}
-      {isCreatePatient && (
-        <CreatePatientModal
-          closeAction={() => isCreatePatient && navigate(ROUTER.TIMETABLE)}
-        />
+      ) : (
+        isCreatePatient && (
+          <CreatePatientModal
+            closeAction={() => isCreatePatient && navigate(ROUTER.TIMETABLE)}
+          />
+        )
       )}
     </>
   );

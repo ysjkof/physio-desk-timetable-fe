@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { TimetableModalProps } from '../../pages/timetable';
-import { ModalContentsLayout } from './ModalContentsLayout';
-import { ModalTemplate } from '../molecules/ModalTemplate';
-import { ReservationCard } from '../organisms/ReservationCard';
-import { useListReservations } from '../../hooks/useListReservations';
-import { ReservationState } from '../../graphql/generated/graphql';
-import { DayOffCard } from '../organisms/DayOffCard';
+import { TimetableModalProps } from '..';
+import { ModalContentsLayout } from '../../../components/templates/ModalContentsLayout';
+import { ModalTemplate } from '../../../components/molecules/ModalTemplate';
+import { ReservationCard } from '../molecules/ReservationCard';
+import { useListReservations } from '../../../hooks/useListReservations';
+import { ReservationState } from '../../../graphql/generated/graphql';
+import { DayOffCard } from '../molecules/DayOffCard';
 
 export const ReservationModal = ({ closeAction }: TimetableModalProps) => {
   const navigate = useNavigate();
@@ -40,13 +40,12 @@ export const ReservationModal = ({ closeAction }: TimetableModalProps) => {
                 </p>
               ) : (
                 <>
-                  {isDayOff && (
+                  {isDayOff ? (
                     <DayOffCard
                       closeAction={closeAction}
                       reservation={reservation}
                     />
-                  )}
-                  {!isDayOff && (
+                  ) : (
                     <ReservationCard
                       closeAction={closeAction}
                       reservation={reservation}

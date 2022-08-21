@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { TimetableModalProps } from '../../pages/timetable';
-import { useDeleteReservationMutation } from '../../graphql/generated/graphql';
-import { MenuButton } from '../molecules/MenuButton';
-import { ReserveForm } from '../../pages/timetable/molecules/ReserveForm';
-import { ReservationCardDetail } from '../molecules/ReservationCardDetail';
-import { IListReservation } from '../../types/type';
+import { TimetableModalProps } from '..';
+import { useDeleteReservationMutation } from '../../../graphql/generated/graphql';
+import { MenuButton } from '../../../components/molecules/MenuButton';
+import { ReserveForm } from './ReserveForm';
+import { ReservationCardDetail } from '../../../components/molecules/ReservationCardDetail';
+import { IListReservation } from '../../../types/type';
 
 interface DayOffCardProps extends TimetableModalProps {
   reservation: IListReservation;
@@ -56,7 +56,11 @@ export const DayOffCard = ({ closeAction, reservation }: DayOffCardProps) => {
       <div className="h-full overflow-y-scroll">
         {!isEdit && <ReservationCardDetail reservation={reservation} />}
         {isEdit && (
-          <ReserveForm closeAction={closeAction} reservation={reservation} />
+          <ReserveForm
+            userId={reservation.user.id}
+            closeAction={closeAction}
+            reservation={reservation}
+          />
         )}
       </div>
     </div>
