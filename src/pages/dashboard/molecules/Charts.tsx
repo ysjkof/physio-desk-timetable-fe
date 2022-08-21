@@ -257,7 +257,7 @@ const Charts = ({
           }
         />
 
-        <DashboardSectionLayout
+        {/* <DashboardSectionLayout
           elementName="GRAPH_EACH_USER_TOTAL_COUNTS_CIRCLES"
           padding
           children={
@@ -286,7 +286,7 @@ const Charts = ({
               </div>
             </div>
           }
-        />
+        /> */}
       </div>
     </>
   ) : (
