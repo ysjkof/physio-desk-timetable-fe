@@ -87,25 +87,24 @@ export const GlobalNavigationBar = () => {
     if (!findMyClinicsData || !findMyClinicsData.findMyClinics.clinics) return;
 
     const { clinics } = findMyClinicsData.findMyClinics;
-    let updatedMyClinics: IClinicList[] = [];
 
     function injectKeyValue(clinics: IClinic[]): IClinicList[] {
       return clinics.map((clinic) => {
         const members = clinic.members.map((member) => ({
           ...member,
-          isActivate: true,
+          isActivate: member.staying,
         }));
         return { ...clinic, members };
       });
     }
 
     const myClinics = injectKeyValue(clinics);
+    let updatedMyClinics: IClinicList[] = myClinics;
 
     const localClinics = getLocalStorageItem<IClinicList[]>({
       key: 'CLINIC_LISTS',
       userId: meData.me.id,
     });
-
     if (localClinics) {
       updatedMyClinics = myClinics.map((clinic) => {
         const localClinic = localClinics.find(
@@ -121,7 +120,7 @@ export const GlobalNavigationBar = () => {
           type: clinic.type,
           members: clinic.members.map((member) => {
             const sameMember = localClinic.members.find(
-              (lgm) => lgm.id === member.id
+              (localMember) => localMember.id === member.id
             );
             return {
               ...member,
@@ -131,7 +130,6 @@ export const GlobalNavigationBar = () => {
         };
       });
     }
-    if (!localClinics) updatedMyClinics = myClinics;
 
     saveClinicLists(updatedMyClinics, meData.me.id);
 
