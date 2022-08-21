@@ -90,9 +90,10 @@ export const Statistics = () => {
   useEffect(() => {
     setMemberState(
       selectedInfo.clinic?.members
-        ?.map((m) => ({
-          userId: m.user.id,
-          name: m.user.name,
+        ?.filter((member) => member.accepted)
+        ?.map((member) => ({
+          userId: member.user.id,
+          name: member.user.name,
           isSelected: true,
         }))
         .sort((a, b) => {
