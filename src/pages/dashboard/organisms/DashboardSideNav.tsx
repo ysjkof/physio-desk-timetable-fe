@@ -11,7 +11,7 @@ import {
 } from '../../../utils/utils';
 import { DashboardNavList } from '../components/DashboardNavList';
 import useStore from '../../../hooks/useStore';
-import { ClinicName } from '../molecules/clinicName';
+import { ClinicName } from '../molecules/ClinicName';
 
 interface DashboardSideNavProps {
   selectedMenu: SelectedMenuType;

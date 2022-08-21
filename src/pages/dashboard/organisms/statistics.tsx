@@ -1,7 +1,6 @@
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import { useGetStatisticsQuery } from '../../../graphql/generated/graphql';
 import { useEffect, useState } from 'react';
-import { InDashboardPageProps } from '..';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { Worning } from '../../../components/atoms/Warning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +11,7 @@ import {
 import { getMonthStartEnd } from '../../../services/dateServices';
 import { Loading } from '../../../components/atoms/Loading';
 import { Button } from '../../../components/molecules/Button';
-import combineUserStatistics from '../../../services/statisticsServices';
+import combineUserStatistics from '../services/statisticsServices';
 import { IUserStatistics, MemberState } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
 import { selectedDateVar } from '../../../store';
@@ -20,7 +19,7 @@ import Charts from '../molecules/Charts';
 
 const [initialStartDate, initailEndDate] = getMonthStartEnd(new Date());
 
-export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
+export const Statistics = () => {
   const { selectedInfo, selectedDate } = useStore();
 
   const [startDate, setStartDate] = useState(initialStartDate);
@@ -165,12 +164,12 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
                 />
               </div>
               <div className="flex items-center gap-x-1.5">
-                {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, idx) => (
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, idx) => (
                   <MenuButton
-                    key={idx}
+                    key={month}
                     hasBorder
                     onClick={() => onClickSetDate(startDate, idx)}
-                    label={idx + 1 + '월'}
+                    label={month + '월'}
                     enabled={startDate.getMonth() === idx}
                     hasActiveRing
                     thinFont
@@ -181,17 +180,18 @@ export const Statistics = ({ loggedInUser }: InDashboardPageProps) => {
             </div>
             {memberState && (
               <div className="flex w-full justify-end gap-x-4 py-1.5">
-                {memberState.map((m, i) => (
+                {memberState.map((member, idx) => (
                   <MenuButton
-                    key={m.userId}
-                    label={m.name}
+                    key={idx}
+                    label={member.name}
                     hasBorder
                     hasActiveRing
                     thinFont
-                    enabled={m.isSelected}
+                    enabled={member.isSelected}
                     onClick={() => {
                       if (loadingStatisticsData) return;
-                      memberState[i].isSelected = !memberState[i].isSelected;
+                      memberState[idx].isSelected =
+                        !memberState[idx].isSelected;
                       setMemberState([...memberState]);
                     }}
                   />

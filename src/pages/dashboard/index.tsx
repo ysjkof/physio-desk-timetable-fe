@@ -9,7 +9,7 @@ import { PrescriptionPage } from './organisms/PrescriptionPage';
 import { useLocation } from 'react-router-dom';
 import { MyClinics } from './organisms/MyClinics';
 import { Statistics } from './organisms/Statistics';
-import { DashboardTemplate } from './DashboardTemplate';
+import { DashboardTemplate } from './template/DashboardTemplate';
 import { DashboardSideNav } from './organisms/DashboardSideNav';
 import { DashboardTitle } from './components/DashboardTitle';
 import { Loading } from '../../components/atoms/Loading';
@@ -113,15 +113,9 @@ export const Dashboard = () => {
                 {selectedMenu === 'member' && (
                   <Members loggedInUser={meData.me} />
                 )}
-                {selectedMenu === 'invite' && (
-                  <InviteClinic loggedInUser={meData.me} />
-                )}
-                {selectedMenu === 'prescription' && (
-                  <PrescriptionPage loggedInUser={meData.me} />
-                )}
-                {selectedMenu === 'statistics' && (
-                  <Statistics loggedInUser={meData.me} />
-                )}
+                {selectedMenu === 'invite' && <InviteClinic />}
+                {selectedMenu === 'prescription' && <PrescriptionPage />}
+                {selectedMenu === 'statistics' && <Statistics />}
               </>
             )}
             {selectedMenu === 'create' && <CreateClinic />}

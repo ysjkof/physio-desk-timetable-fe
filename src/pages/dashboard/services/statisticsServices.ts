@@ -4,7 +4,7 @@ import {
   IDailyReport,
   IPrescriptionOfUser,
   MemberState,
-} from '../pages/dashboard/organisms/Statistics';
+} from '../../../types/type';
 
 interface CombineUserStatistics {
   dailyReports: IDailyReport[];

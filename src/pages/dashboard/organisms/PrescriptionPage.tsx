@@ -12,7 +12,6 @@ import {
   useFindAtomPrescriptionsQuery,
   useFindPrescriptionsQuery,
 } from '../../../graphql/generated/graphql';
-import { InDashboardPageProps } from '..';
 import { Button } from '../../../components/molecules/Button';
 import { Input } from '../../../components/molecules/Input';
 import { FormError } from '../../../components/atoms/FormError';
@@ -20,7 +19,7 @@ import { MenuButton } from '../../../components/molecules/MenuButton';
 import { REGEX } from '../../../constants/regex';
 import useStore from '../../../hooks/useStore';
 
-export const PrescriptionPage = ({}: InDashboardPageProps) => {
+export const PrescriptionPage = () => {
   const { selectedInfo } = useStore();
 
   const [atomList, setAtomList] = useState<
