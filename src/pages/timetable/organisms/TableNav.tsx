@@ -107,7 +107,6 @@ export function TableNav({}: TableNavProps) {
             label={['1주일', '하루']}
           />
           {/* ---------------------- 구분선 ---------------------- */}
-
           <MenuButton
             icon={<FontAwesomeIcon icon={faCalendarAlt} fontSize={14} />}
             enabled={viewOptions.navigationExpand}
@@ -120,8 +119,7 @@ export function TableNav({}: TableNavProps) {
               saveViewOptions(newViewOptions, loggedInUser!.me.id);
             }}
           />
-
-          <MenuButton
+          {/* <MenuButton
             icon={<FontAwesomeIcon icon={faList} fontSize={14} />}
             enabled={viewOptions.seeList}
             label={'목록'}
@@ -132,7 +130,7 @@ export function TableNav({}: TableNavProps) {
               };
               saveViewOptions(newViewOptions, loggedInUser!.me.id);
             }}
-          />
+          /> */}
           <MenuButton
             icon={<FontAwesomeIcon icon={faGear} fontSize={14} />}
             enabled={viewOptions.seeActiveOption}
