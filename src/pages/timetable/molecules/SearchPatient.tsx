@@ -2,10 +2,11 @@ import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
-import useStore from '../../hooks/useStore';
-import { MenuButton } from '../molecules/MenuButton';
-import { NameTag } from '../NameTag';
+import { useSearchPatientLazyQuery } from '../../../graphql/generated/graphql';
+import useStore from '../../../hooks/useStore';
+import { Worning } from '../../../components/atoms/Warning';
+import { MenuButton } from '../../../components/molecules/MenuButton';
+import { NameTag } from '../../../components/NameTag';
 interface SearchPatientProps {}
 
 export const SearchPatient = ({}: SearchPatientProps) => {
@@ -18,8 +19,9 @@ export const SearchPatient = ({}: SearchPatientProps) => {
 
   const [callQuery, { loading, data: searchPatientResult }] =
     useSearchPatientLazyQuery();
+
   const onSubmit = () => {
-    if (!loading) {
+    if (!loading && selectedInfo.clinic) {
       const { patientName } = getValues();
       const patientNameTrim = patientName.trim();
       callQuery({
@@ -27,7 +29,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
           input: {
             page: queryPageNumber,
             query: patientNameTrim,
-            clinicId: selectedInfo.clinic!.id,
+            clinicId: selectedInfo.clinic.id,
           },
         },
       });
@@ -103,7 +105,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
           </p>
         ) : (
           searchPatientResult?.searchPatient.patients?.length === 0 && (
-            <p className="text-center ">검색결과가 없습니다.</p>
+            <Worning type="emptySearch" />
           )
         )}
         {selectedInfo.patient && (
@@ -126,26 +128,25 @@ export const SearchPatient = ({}: SearchPatientProps) => {
         )}
       </div>
       <div className="page-list mt-1 h-1 space-x-4 text-center">
-        {searchPatientResult
-          ? pageNumbers(searchPatientResult.searchPatient.totalPages ?? 0).map(
-              (pageNumber) => (
-                <button
-                  key={pageNumber}
-                  className={`appearance-none px-1 focus:rounded-sm focus:outline-none focus:ring-1 focus:ring-green-500 ${
-                    queryPageNumber === pageNumber + 1
-                      ? 'font-bold text-red-500'
-                      : ''
-                  }`}
-                  onClick={() => {
-                    removeSelectedPatient();
-                    setQueryPageNumber(pageNumber + 1);
-                  }}
-                >
-                  {pageNumber + 1}
-                </button>
-              )
+        {searchPatientResult &&
+          pageNumbers(searchPatientResult.searchPatient.totalPages ?? 0).map(
+            (pageNumber) => (
+              <button
+                key={pageNumber}
+                className={`appearance-none px-1 focus:rounded-sm focus:outline-none focus:ring-1 focus:ring-green-500 ${
+                  queryPageNumber === pageNumber + 1
+                    ? 'font-bold text-red-500'
+                    : ''
+                }`}
+                onClick={() => {
+                  removeSelectedPatient();
+                  setQueryPageNumber(pageNumber + 1);
+                }}
+              >
+                {pageNumber + 1}
+              </button>
             )
-          : ''}
+          )}
       </div>
     </form>
   );

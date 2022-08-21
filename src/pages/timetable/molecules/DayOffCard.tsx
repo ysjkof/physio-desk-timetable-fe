@@ -5,7 +5,7 @@ import { TimetableModalProps } from '..';
 import { useDeleteReservationMutation } from '../../../graphql/generated/graphql';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { ReserveForm } from './ReserveForm';
-import { ReservationCardDetail } from '../../../components/molecules/ReservationCardDetail';
+import { ReservationCardDetail } from './ReservationCardDetail';
 import { IListReservation } from '../../../types/type';
 
 interface DayOffCardProps extends TimetableModalProps {

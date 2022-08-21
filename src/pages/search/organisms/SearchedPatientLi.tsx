@@ -1,25 +1,25 @@
-import { getYMD } from '../services/dateServices';
-import { cls } from '../utils/utils';
+import { getYMD } from '../../../services/dateServices';
+import { cls } from '../../../utils/utils';
 
-interface SearchNameProps {
+interface SearchedPatientLiProps {
   id: number;
   gender: string;
   name: string;
   registrationNumber: number | null | undefined;
   birthday: Date;
-  onClick?: any;
   columnCount?: 2 | 3 | 4;
 }
 
-export const SearchName = ({
+export const SearchedPatientLi = ({
   id,
   gender,
   name,
   registrationNumber,
   birthday,
-  onClick,
   columnCount = 4,
-}: SearchNameProps) => {
+}: SearchedPatientLiProps) => {
+  const seeDetail = () => {};
+  const seeReservations = () => {};
   return (
     <div
       className={cls(
@@ -71,12 +71,12 @@ export const SearchName = ({
         ''
       ) : (
         <>
-          <div onClick={onClick}>
+          <div onClick={seeDetail}>
             <button className="rounded-full bg-gray-50 px-3 font-medium ">
               자세히
             </button>
           </div>
-          <div className="">
+          <div onClick={seeReservations}>
             <button className="rounded-full bg-blue-50 px-3 font-medium text-blue-400">
               예약
             </button>

@@ -1,29 +1,33 @@
 interface WarningProps {
   type:
-    | "hasNotPermission"
-    | "hasNotStatistics"
-    | "hasNotPrescription"
-    | "emptyUserIds"
-    | "emptyData";
+    | 'hasNotPermission'
+    | 'hasNotStatistics'
+    | 'hasNotPrescription'
+    | 'emptyUserIds'
+    | 'emptyData'
+    | 'emptySearch';
 }
 
 export const Worning = ({ type }: WarningProps) => {
-  let message = "";
+  let message = '';
   switch (type) {
-    case "hasNotPermission":
-      message = "권한이 없습니다";
+    case 'hasNotPermission':
+      message = '권한이 없습니다';
       break;
-    case "hasNotStatistics":
-      message = "통계 내역이 없습니다";
+    case 'hasNotStatistics':
+      message = '통계 내역이 없습니다';
       break;
-    case "hasNotPrescription":
-      message = "처방 내역이 없습니다";
+    case 'hasNotPrescription':
+      message = '처방 내역이 없습니다';
       break;
-    case "emptyUserIds":
-      message = "사용자를 선택해주세요";
+    case 'emptyUserIds':
+      message = '사용자를 선택해주세요';
       break;
-    case "emptyData":
-      message = "데이터가 없습니다";
+    case 'emptyData':
+      message = '데이터가 없습니다';
+      break;
+    case 'emptySearch':
+      message = '검색결과가 없습니다';
       break;
   }
   return <h3 className="mt-10 text-center">{message}</h3>;

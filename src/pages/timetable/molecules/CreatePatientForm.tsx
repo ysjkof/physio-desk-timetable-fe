@@ -1,18 +1,18 @@
 import { useForm } from 'react-hook-form';
-import { FormError } from '../atoms/FormError';
-import { Button } from './Button';
+import { FormError } from '../../../components/atoms/FormError';
+import { Button } from '../../../components/molecules/Button';
 import {
   CreatePatientInput,
   CreatePatientMutation,
   useCreatePatientMutation,
   useEditPatientMutation,
-} from '../../graphql/generated/graphql';
-import { Input } from './Input';
-import { TimetableModalProps } from '../../pages/timetable';
-import { DatepickerWithInput } from './DatepickerWithInput';
+} from '../../../graphql/generated/graphql';
+import { Input } from '../../../components/molecules/Input';
+import { TimetableModalProps } from '..';
+import { DatepickerWithInput } from '../../../components/molecules/DatepickerWithInput';
 import { useEffect } from 'react';
-import { BirthdayInput } from '../../types/type';
-import useStore from '../../hooks/useStore';
+import { BirthdayInput } from '../../../types/type';
+import useStore from '../../../hooks/useStore';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {

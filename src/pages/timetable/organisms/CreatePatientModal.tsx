@@ -1,7 +1,7 @@
 import { ModalContentsLayout } from '../../../components/templates/ModalContentsLayout';
 import { TimetableModalProps } from '..';
-import { ModalTemplate } from '../../../components/molecules/ModalTemplate';
-import { CreatePatientForm } from '../../../components/molecules/CreatePatientForm';
+import { ModalTemplate } from '../../../components/templates/ModalTemplate';
+import { CreatePatientForm } from '../molecules/CreatePatientForm';
 
 export const CreatePatientModal = ({ closeAction }: TimetableModalProps) => {
   return (

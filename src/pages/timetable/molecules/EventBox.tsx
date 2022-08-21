@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { EditReservationState } from '../../../components/molecules/EditReservationState';
+import { EditReservationState } from './EditReservationState';
 import { ReservationState } from '../../../graphql/generated/graphql';
 import { compareTableEndtime, getHHMM } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';

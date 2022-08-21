@@ -165,17 +165,16 @@ export const GlobalNavigationBar = () => {
           </Link>
         </div>
         <div className="flex w-full items-center justify-end gap-6">
-          <form onSubmit={handleSubmit(onSubmitSearch)}>
-            <input
-              {...register('search', { required: true })}
-              type={'search'}
-              placeholder="Search..."
-              className="header-search w-28 rounded-md"
-            />
-          </form>
-
           {isLoggedIn ? (
             <>
+              <form onSubmit={handleSubmit(onSubmitSearch)}>
+                <input
+                  {...register('search', { required: true })}
+                  type={'search'}
+                  placeholder="Search..."
+                  className="header-search w-28 rounded-md"
+                />
+              </form>
               <Link to="/tt">
                 <span className="whitespace-nowrap  ">시간표</span>
               </Link>

@@ -1,8 +1,8 @@
-import { SearchPatient } from '../../../components/organisms/SearchPatient';
+import { SearchPatient } from '../molecules/SearchPatient';
 import { TimetableModalProps } from '..';
 import { ModalContentsLayout } from '../../../components/templates/ModalContentsLayout';
 import { ReserveForm } from '../molecules/ReserveForm';
-import { ModalTemplate } from '../../../components/molecules/ModalTemplate';
+import { ModalTemplate } from '../../../components/templates/ModalTemplate';
 import { useLocation } from 'react-router-dom';
 import {
   createDateFromDay,

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { InDashboardPageProps } from '..';
 import { Loading } from '../../../components/atoms/Loading';
-import { ModalTemplate } from '../../../components/molecules/ModalTemplate';
+import { ModalTemplate } from '../../../components/templates/ModalTemplate';
 import { ModalContentsLayout } from '../../../components/templates/ModalContentsLayout';
 import { useFindMyClinicsQuery } from '../../../graphql/generated/graphql';
 import { DeactivateClinicInfo } from '../../../types/type';

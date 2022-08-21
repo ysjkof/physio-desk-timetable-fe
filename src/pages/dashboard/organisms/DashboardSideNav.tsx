@@ -2,7 +2,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 import { checkManager, checkStay, SelectedMenuType } from '..';
-import { ModalTemplate } from '../../../components/molecules/ModalTemplate';
+import { ModalTemplate } from '../../../components/templates/ModalTemplate';
 import { MeQuery } from '../../../graphql/generated/graphql';
 import {
   checkMember,

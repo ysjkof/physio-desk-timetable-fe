@@ -1,4 +1,4 @@
-import { getYMD } from '../../services/dateServices';
+import { getYMD } from '../../../services/dateServices';
 
 interface ReservationCardNameProps {
   gender: string;

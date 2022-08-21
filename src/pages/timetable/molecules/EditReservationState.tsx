@@ -1,16 +1,16 @@
-import { RESERVATION_STATE_KOR } from '../../constants/constants';
+import { RESERVATION_STATE_KOR } from '../../../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRotateLeft,
   faBan,
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { cls } from '../../utils/utils';
+import { cls } from '../../../utils/utils';
 import {
   ReservationState,
   useEditReservationMutation,
-} from '../../graphql/generated/graphql';
-import { IListReservation } from '../../types/type';
+} from '../../../graphql/generated/graphql';
+import { IListReservation } from '../../../types/type';
 
 interface EditReservationStateProps {
   reservation: IListReservation;

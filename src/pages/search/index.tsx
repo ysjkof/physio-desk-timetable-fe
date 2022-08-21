@@ -1,8 +1,9 @@
 import { useReactiveVar } from '@apollo/client';
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { SearchName } from '../../components/SearchName';
+import { Worning } from '../../components/atoms/Warning';
+import { SearchedPatientLi } from './organisms/SearchedPatientLi';
 import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
 import { selectedInfoVar } from '../../store';
 
@@ -41,24 +42,19 @@ export const Search = () => {
       </Helmet>
       {loading && <p>loading ...</p>}
       {!loading && data?.searchPatient.patients?.length === 0 ? (
-        <div className="container py-20 px-10">
-          <p>검색결과가 없습니다</p>
-        </div>
+        <Worning type="emptySearch" />
       ) : (
         <div className="container mx-auto divide-y">
           <h1 className="font-bold">검색 결과</h1>
           {data?.searchPatient.patients?.map((patient) => (
-            <Fragment key={patient.id}>
-              <SearchName
-                id={patient.id}
-                gender={patient.gender}
-                name={patient.name}
-                registrationNumber={patient.registrationNumber}
-                birthday={patient.birthday}
-                onClick={() => onClick(patient.id)}
-              />
-              {patient.clinic ? patient.clinic.name : '---'}
-            </Fragment>
+            <SearchedPatientLi
+              key={patient.id}
+              id={patient.id}
+              gender={patient.gender}
+              name={patient.name}
+              registrationNumber={patient.registrationNumber}
+              birthday={patient.birthday}
+            />
           ))}
         </div>
       )}
