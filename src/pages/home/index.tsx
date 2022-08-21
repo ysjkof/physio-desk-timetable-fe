@@ -10,7 +10,6 @@ import {
   useCreateReservationMutation,
   useFindAllPatientsQuery,
   useFindPrescriptionsQuery,
-  useInviteClinicMutation,
 } from '../../graphql/generated/graphql';
 import { selectedInfoVar } from '../../store';
 import { PrescriptionWithSelect } from '../../types/type';
@@ -89,7 +88,6 @@ export function Home() {
   const [createAccount] = useCreateAccountMutation();
   const [createClinic] = useCreateClinicMutation();
   const [createPatient] = useCreatePatientMutation();
-  const [inviteClinic] = useInviteClinicMutation();
   const [createAtom] = useCreateAtomPrescriptionMutation();
   const [createPrescription] = useCreatePrescriptionMutation();
   const [createReservationMutation] = useCreateReservationMutation();
@@ -224,20 +222,7 @@ export function Home() {
         >
           환자생성
         </button>
-        <button
-          onClick={() =>
-            inviteClinic({
-              variables: {
-                input: {
-                  clinicId,
-                  userIds: [2, 3, 4, 5, 6, 7, 8, 9, 10],
-                },
-              },
-            })
-          }
-        >
-          치료사 초대
-        </button>
+        <button onClick={() => {}}>치료사 초대</button>
         <button
           onClick={() =>
             ['도수치료', '충격파'].forEach((name) =>

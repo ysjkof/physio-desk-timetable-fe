@@ -1,63 +1,38 @@
-import { faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import { InDashboardPageProps } from '..';
 import { Loading } from '../../../components/atoms/Loading';
 import { Worning } from '../../../components/atoms/Warning';
 import {
   SearchUsersInput,
-  useInviteClinicMutation,
-  useSearchUsersLazyQuery,
+  useInviteUserMutation,
 } from '../../../graphql/generated/graphql';
 import { cls } from '../../../utils/utils';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import useStore from '../../../hooks/useStore';
 
-export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
+export const InviteClinic = () => {
   const { selectedInfo } = useStore();
 
-  // if (!isStayed || !isManager) {
-  //   return <h3 className="mt-10 text-center">권한이 없습니다</h3>;
-  // }
   const { register, handleSubmit, getValues } = useForm<SearchUsersInput>({
     mode: 'onChange',
   });
 
-  const [inviteClinicMutation, { loading: inviteClinicLoading }] =
-    useInviteClinicMutation();
+  const [inviteUserMutation, { loading: inviteUserLoading, data }] =
+    useInviteUserMutation();
 
-  function onClickInviteToClinic(
-    user: {
-      id: number;
-      name: string;
-      email: string;
-    },
-    clinicName: string,
-    clinicId: number
-  ) {
-    if (confirm(`${clinicName}에 ${user.name}을(를) 그룹에 초대합니까?`)) {
-      inviteClinicMutation({
-        variables: { input: { clinicId, userIds: [user.id] } },
-      });
-    }
-  }
+  const inviteUser = () => {
+    if (inviteUserLoading) return;
+    if (!selectedInfo.clinic) throw new Error('병원이 선택되지 않았습니다');
 
-  const [
-    searchUsers,
-    { data: searchUsersData, loading: searchUserByNameLoading },
-  ] = useSearchUsersLazyQuery();
+    const { name } = getValues();
 
-  const onSubmitSearchUsers = () => {
-    if (!searchUserByNameLoading) {
-      const { name } = getValues();
-      searchUsers({
-        variables: {
-          input: { name },
-        },
+    if (confirm(`${name}을(를) 그룹에 초대합니까?`)) {
+      inviteUserMutation({
+        variables: { input: { clinicId: selectedInfo.clinic.id, name } },
       });
     }
   };
-  const searchUserResults = searchUsersData?.searchUsers.results;
 
   return selectedInfo.clinic ? (
     selectedInfo.clinic.isStayed && selectedInfo.clinic.isManager ? (
@@ -67,7 +42,7 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
         heightFull
         children={
           <>
-            <form onSubmit={handleSubmit(onSubmitSearchUsers)}>
+            <form onSubmit={handleSubmit(inviteUser)}>
               <div className="relative flex items-center shadow-sm">
                 <input
                   {...register('name', {
@@ -95,46 +70,11 @@ export const InviteClinic = ({ loggedInUser }: InDashboardPageProps) => {
                 </label>
               </div>
             </form>
-            <div className="mx-auto w-full space-y-2">
-              <div className="flex items-center justify-between border-b">
-                <span>이름</span>
-                <span>초대하기</span>
-              </div>
-              <ul
-                className={cls(
-                  inviteClinicLoading ? 'pointer-events-none' : ''
-                )}
-              >
-                {searchUserResults ? (
-                  searchUserResults.length === 0 ? (
-                    <p className="py-10 text-center font-semibold">
-                      검색결과가 없습니다
-                    </p>
-                  ) : (
-                    searchUserResults.map((user) => (
-                      <li
-                        key={user.id}
-                        className="my-2 flex cursor-pointer items-center justify-between px-3 hover:bg-gray-100"
-                        onClick={() =>
-                          onClickInviteToClinic(
-                            user,
-                            selectedInfo.clinic!.name,
-                            selectedInfo.clinic!.id
-                          )
-                        }
-                      >
-                        <span>{user.name}</span>
-                        <FontAwesomeIcon icon={faUserPlus} />
-                      </li>
-                    ))
-                  )
-                ) : (
-                  <p className="py-10 text-center font-semibold">
-                    이름으로 검색해주세요
-                  </p>
-                )}
-              </ul>
-            </div>
+            {data?.inviteUser.error && (
+              <p className="py-10 text-center font-semibold">
+                {data?.inviteUser.error}
+              </p>
+            )}
           </>
         }
       />

@@ -1,6 +1,0 @@
-mutation inviteClinic($input: InviteClinicInput!) {
-  inviteClinic(input: $input) {
-    ok
-    error
-  }
-}
