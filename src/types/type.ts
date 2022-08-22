@@ -153,17 +153,17 @@ export type SetSelectedInfoValue = SelectedInfo[SetSelectedInfoKey];
 
 // utils
 
-export interface CreateLocalStorageKey {
-  key: LocalStorageValue;
+interface UserIdAndName {
   userId: number;
+  userName: string;
 }
-export interface GetLocalStorage {
+export interface CreateLocalStorageKey extends UserIdAndName {
+  key: LocalStorageValue;
+}
+export interface GetLocalStorage extends UserIdAndName {
   key: LocalStorageKey;
-  userId: number;
 }
 
-export interface SetLocalStorage {
-  key: LocalStorageKey;
-  userId: number;
+export interface SetLocalStorage extends GetLocalStorage {
   value: any;
 }

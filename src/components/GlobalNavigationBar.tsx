@@ -56,7 +56,7 @@ export const GlobalNavigationBar = () => {
 
   useEffect(() => {
     if (error) {
-      console.warn('meData:', meData);
+      console.warn('meData:', meData?.me);
       // console.error('Error : User Data,', error);
       logoutBtn();
     }
@@ -70,6 +70,7 @@ export const GlobalNavigationBar = () => {
     const localViewOptions = getLocalStorageItem<IViewOption>({
       key: 'VIEW_OPTION',
       userId: meData.me.id,
+      userName: meData.me.name,
     });
 
     if (localViewOptions === null) {
@@ -104,7 +105,9 @@ export const GlobalNavigationBar = () => {
     const localClinics = getLocalStorageItem<IClinicList[]>({
       key: 'CLINIC_LISTS',
       userId: meData.me.id,
+      userName: meData.me.name,
     });
+
     if (localClinics) {
       updatedMyClinics = myClinics.map((clinic) => {
         const localClinic = localClinics.find(
@@ -136,8 +139,8 @@ export const GlobalNavigationBar = () => {
     const localSelectClinic = getLocalStorageItem<ISelectedClinic>({
       key: 'SELECTED_CLINIC',
       userId: meData.me.id,
+      userName: meData.me.name,
     });
-
     const clinic = updatedMyClinics.find((clinic) =>
       localSelectClinic
         ? clinic.id === localSelectClinic.id
