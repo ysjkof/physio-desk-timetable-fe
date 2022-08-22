@@ -121,6 +121,7 @@ export const CreatePatientForm = ({
       setValue('name', patient.name);
     }
   }, [patient]);
+  console.log(';patient', patient);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">
@@ -169,7 +170,7 @@ export const CreatePatientForm = ({
       <label className="flex flex-col gap-2">
         생년월일
         <DatepickerWithInput
-          defaultDate={new Date(patient ? patient.birthday : '0-0-0')}
+          defaultDate={patient ? new Date(patient.birthday) : new Date()}
           setValue={birthdaySetValue}
           register={birthdayRegister}
           formError={birthdayError}
