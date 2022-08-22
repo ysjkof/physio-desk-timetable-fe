@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import type { UseFormSetValue } from 'react-hook-form';
-import { Datepicker, IForm } from './Datepicker';
+import { useEffect, useState } from 'react';
+import { Datepicker } from './Datepicker';
 import { DatepickerInput } from './DatepickerInput';
 
 export interface HasDateOption {
@@ -24,15 +23,14 @@ export interface DatepickerInputState {
 }
 
 interface IDatepickerWithInputProps extends HasDateOption {
-  setValue: UseFormSetValue<IForm>;
-  dateType: 'startDate' | 'endDate' | 'birthday';
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   defaultDate?: Date;
   textColor?: string;
 }
 
 export const DatepickerWithInput = ({
+  setSelectedDate,
   defaultDate,
-  dateType,
   textColor,
   hasHour = false,
 }: IDatepickerWithInputProps) => {
@@ -57,6 +55,13 @@ export const DatepickerWithInput = ({
         }
   );
 
+  useEffect(() => {
+    const { year, month, day, hour, minute } = inputDate;
+    setSelectedDate(
+      new Date(`${year}-${month}-${day} ${hour || 0}:${minute || 0}`)
+    );
+  }, [inputDate]);
+
   return (
     <div className="datepicker-with-input flex w-full items-center gap-1">
       <Datepicker
@@ -69,7 +74,6 @@ export const DatepickerWithInput = ({
       <DatepickerInput
         inputDate={inputDate}
         setInputDate={setInputDate}
-        prefix={dateType}
         setOpen={setOpen}
         textColor={textColor}
         hasHour={hasHour}

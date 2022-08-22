@@ -1,4 +1,3 @@
-import { DatepickerForm } from '../components/molecules/Datepicker';
 import { VIEW_PERIOD } from '../constants/constants';
 import { LocalStorageKey, LocalStorageValue } from '../constants/localStorage';
 import {
@@ -56,12 +55,6 @@ export interface ISelectedClinic extends Pick<Clinic, 'id' | 'name' | 'type'> {
   isManager: IMember['manager'];
   isStayed: IMember['staying'];
   members: IMemberWithActivate[];
-}
-
-export interface BirthdayInput {
-  birthdayYear?: number;
-  birthdayMonth?: number;
-  birthdayDate?: number;
 }
 
 // me
@@ -125,7 +118,17 @@ export interface ISelectedPrescription {
   prescriptions: number[];
 }
 
-export interface IReserveForm extends DatepickerForm {
+export interface IReserveForm {
+  // startDateYear: number;
+  // startDateMonth: number;
+  // startDateDate: number;
+  // startDateHours: number;
+  // startDateMinutes: number;
+  // endDateYear?: number;
+  // endDateMonth?: number;
+  // endDateDate?: number;
+  // endDateHours?: number;
+  // endDateMinutes?: number;
   memo?: string;
   userId?: number;
   description?: string;

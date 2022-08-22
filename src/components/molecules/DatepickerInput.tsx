@@ -1,4 +1,3 @@
-import { IFormErrors } from './Datepicker';
 import { FormError } from '../atoms/FormError';
 import {
   DatepickerErrorState,
@@ -13,9 +12,7 @@ interface InputInDatepickerProps
   extends HasDateOption,
     DatepickerInputState,
     DatepickerErrorState {
-  prefix: 'startDate' | 'endDate' | 'birthday';
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  formError?: IFormErrors;
   textColor?: string;
 }
 
@@ -39,7 +36,6 @@ export const DatepickerInput = ({
   const validate = (value: string, regExp: RegExp) => {
     return new RegExp(regExp).test(value);
   };
-  console.log('error', error);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();

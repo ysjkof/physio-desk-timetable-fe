@@ -1,32 +1,11 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useReducer, useRef, useState } from 'react';
-import { FieldError } from 'react-hook-form';
 import useStore from '../../hooks/useStore';
 import { compareDateMatch } from '../../services/dateServices';
-import { BirthdayInput } from '../../types/type';
 import { cls } from '../../utils/utils';
 import { ModalPortal } from '../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './DatepickerWithInput';
-
-export interface DatepickerForm {
-  startDateYear?: number;
-  startDateMonth?: number;
-  startDateDate?: number;
-  startDateHours?: number;
-  startDateMinutes?: number;
-  endDateYear?: number;
-  endDateMonth?: number;
-  endDateDate?: number;
-  endDateHours?: number;
-  endDateMinutes?: number;
-}
-
-type AddFieldError<T> = {
-  [P in keyof T]?: FieldError;
-};
-export interface IForm extends DatepickerForm, BirthdayInput {}
-export interface IFormErrors extends AddFieldError<IForm> {}
 
 interface DatePickerInterface extends HasDateOption, DatepickerInputState {
   isOpen: boolean;
@@ -139,13 +118,13 @@ export const Datepicker = ({
     const { year, month, day } = inputDate;
     const isSame =
       +year === date.getFullYear() &&
-      +month === date.getMonth() &&
+      +month === date.getMonth() + 1 &&
       +day === date.getDate();
     if (isSame) return;
     setInputDate((prevState) => ({
       ...prevState,
       year: '' + date.getFullYear(),
-      month: '' + date.getMonth(),
+      month: '' + (date.getMonth() + 1),
       day: '' + date.getDate(),
     }));
     setSelectedDate(date);
@@ -167,6 +146,7 @@ export const Datepicker = ({
   const displayedYearMonth = `${showMonthCalendar[15].getFullYear()}년 ${
     showMonthCalendar[15].getMonth() + 1
   }월`;
+
   return (
     <div className="datepicker-icon relative">
       <div

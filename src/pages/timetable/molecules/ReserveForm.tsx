@@ -24,7 +24,6 @@ import {
   ISelectedPrescription,
   PrescriptionWithSelect,
 } from '../../../types/type';
-import { getDateFromYMDHM } from '../../../services/dateServices';
 import useStore from '../../../hooks/useStore';
 
 interface IReservaFromProps extends TimetableModalProps {
@@ -44,7 +43,6 @@ export const ReserveForm = ({
   isDayoff,
 }: IReservaFromProps) => {
   const { selectedInfo, setSelectedInfo } = useStore();
-
   const [selectedPrescription, setSelectedPrescription] =
     useState<ISelectedPrescription>({
       price: 0,
@@ -54,6 +52,12 @@ export const ReserveForm = ({
   const [prescriptions, setPrescriptions] = useState<PrescriptionWithSelect[]>(
     []
   );
+  const [selectedStartDateState, setSelectedStartDateState] =
+    useState<Date | null>(new Date());
+  const [selectedEndDateState, setSelectedEndDateState] = useState<Date | null>(
+    new Date()
+  );
+
   const isDayOff = isDayoff ?? reservation?.state === ReservationState.DayOff;
 
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
@@ -107,39 +111,14 @@ export const ReserveForm = ({
 
   const onSubmit = () => {
     if (!createLoading) {
-      const {
-        startDateYear,
-        startDateMonth,
-        startDateDate,
-        startDateHours,
-        startDateMinutes,
-        endDateYear,
-        endDateMonth,
-        endDateDate,
-        endDateHours,
-        endDateMinutes,
-        memo,
-        userId,
-      } = getValues();
-
-      const startDate = getDateFromYMDHM(
-        startDateYear!,
-        startDateMonth!,
-        startDateDate!,
-        startDateHours!,
-        startDateMinutes!
-      );
+      const { memo, userId } = getValues();
+      let startDate = new Date(selectedStartDateState || '');
 
       if (!startDate) throw new Error('startDate가 없습니다');
 
       if (isDayOff) {
-        const endDate = getDateFromYMDHM(
-          endDateYear!,
-          endDateMonth!,
-          endDateDate!,
-          endDateHours!,
-          endDateMinutes!
-        );
+        if (!selectedEndDateState) throw new Error('endDate가 없습니다.');
+        let endDate = new Date(selectedEndDateState);
         if (reservation) {
           if (!editLoading)
             callEditReservation({
@@ -171,6 +150,7 @@ export const ReserveForm = ({
         return;
       }
       const endDate = new Date(startDate);
+
       // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
       endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
       if (reservation) {
@@ -291,8 +271,8 @@ export const ReserveForm = ({
       {isDayOff ? (
         <DayOffForm
           register={register}
-          setValue={setValue}
-          errors={errors}
+          setSelectedStartDateState={setSelectedStartDateState}
+          setSelectedEndDateState={setSelectedEndDateState}
           isValid={isValid}
           loading={createLoading && editLoading}
           reservation={reservation}
@@ -310,12 +290,9 @@ export const ReserveForm = ({
           <label className="flex flex-col gap-2">
             시작 시각
             <DatepickerWithInput
-              setValue={setValue}
+              setSelectedDate={setSelectedStartDateState}
+              hasHour
               defaultDate={new Date(startDate ?? reservation?.startDate)}
-              register={register}
-              see="ymd-hm"
-              dateType="startDate"
-              formError={errors}
             />
           </label>
 

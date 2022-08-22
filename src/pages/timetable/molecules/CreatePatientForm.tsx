@@ -10,8 +10,7 @@ import {
 import { Input } from '../../../components/molecules/Input';
 import { TimetableModalProps } from '..';
 import { DatepickerWithInput } from '../../../components/molecules/DatepickerWithInput';
-import { useEffect } from 'react';
-import { BirthdayInput } from '../../../types/type';
+import { useEffect, useState } from 'react';
 import useStore from '../../../hooks/useStore';
 
 interface CreatePatientFormProps extends TimetableModalProps {
@@ -41,14 +40,6 @@ export const CreatePatientForm = ({
   } = useForm<CreatePatientInput>({
     mode: 'onChange',
   });
-  const {
-    register: birthdayRegister,
-    getValues: birthdayGetValues,
-    setValue: birthdaySetValue,
-    formState: { errors: birthdayError, isValid: birthdayIsValid },
-  } = useForm<BirthdayInput>({
-    mode: 'onChange',
-  });
 
   const onCompleted = (data: CreatePatientMutation) => {
     const {
@@ -73,13 +64,11 @@ export const CreatePatientForm = ({
   const [editPatientMutation, { loading: editLoading }] =
     useEditPatientMutation({});
 
+  const [birthday, setBirthday] = useState<Date | null>(null);
+
   const onSubmit = () => {
     if (!loading && !editLoading) {
       const { name, gender, memo } = getValues();
-      const { birthdayYear, birthdayMonth, birthdayDate } = birthdayGetValues();
-      const birthday = new Date(
-        `${birthdayYear}-${birthdayMonth}-${birthdayDate}`
-      );
 
       if (patient) {
         // eidt
@@ -115,7 +104,7 @@ export const CreatePatientForm = ({
   };
   useEffect(() => {
     if (patient) {
-      setValue('birthday', patient.birthday);
+      setBirthday(patient.birthday);
       setValue('gender', patient.gender);
       setValue('memo', patient.memo);
       setValue('name', patient.name);
@@ -169,9 +158,8 @@ export const CreatePatientForm = ({
       <label className="flex flex-col gap-2">
         생년월일
         <DatepickerWithInput
+          setSelectedDate={setBirthday}
           defaultDate={patient ? new Date(patient.birthday) : new Date()}
-          setValue={birthdaySetValue}
-          dateType="birthday"
         />
       </label>
 
@@ -197,7 +185,7 @@ export const CreatePatientForm = ({
 
       <Button
         type="submit"
-        canClick={isValid && birthdayIsValid}
+        canClick={birthday && isValid}
         loading={loading || editLoading}
         textContents={patient ? '환자수정' : '환자등록'}
       />

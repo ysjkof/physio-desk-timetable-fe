@@ -4,25 +4,24 @@ import { DatepickerWithInput } from '../../../components/molecules/DatepickerWit
 import { Button } from '../../../components/molecules/Button';
 import { SelectUser } from './SelectUser';
 import { Input } from '../../../components/molecules/Input';
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import { IFormErrors } from '../../../components/molecules/Datepicker';
+import { UseFormRegister } from 'react-hook-form';
 import { IListReservation, IReserveForm } from '../../../types/type';
 
 interface DayOffFormProps {
   register: UseFormRegister<IReserveForm>;
-  setValue: UseFormSetValue<IReserveForm>;
-  errors: IFormErrors;
   isValid: boolean;
   loading: boolean;
+  setSelectedStartDateState: React.Dispatch<React.SetStateAction<Date | null>>;
+  setSelectedEndDateState: React.Dispatch<React.SetStateAction<Date | null>>;
   reservation?: IListReservation;
 }
 
 export const DayOffForm = ({
   register,
-  setValue,
-  errors,
   isValid,
   loading,
+  setSelectedStartDateState,
+  setSelectedEndDateState,
   reservation,
 }: DayOffFormProps) => {
   const selectedInfo = useReactiveVar(selectedInfoVar);
@@ -39,27 +38,19 @@ export const DayOffForm = ({
       <label className="flex flex-col gap-2">
         시작 시각
         <DatepickerWithInput
-          setValue={setValue}
+          setSelectedDate={setSelectedStartDateState}
           defaultDate={
             reservation ? new Date(reservation.startDate) : new Date()
           }
-          register={register}
-          see="ymd-hm"
-          dateType="startDate"
-          formError={errors}
         />
       </label>
       <label className="flex flex-col gap-2">
         종료 시각
         <DatepickerWithInput
-          setValue={setValue}
+          setSelectedDate={setSelectedEndDateState}
           defaultDate={
             reservation ? new Date(reservation.startDate) : new Date()
           }
-          register={register}
-          see="ymd-hm"
-          dateType="endDate"
-          formError={errors}
         />
       </label>
 
