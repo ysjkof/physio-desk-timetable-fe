@@ -81,27 +81,36 @@ export function changeValueInArray<T>(array: T[], value: T, index: number) {
 export const createLocalStorageKey = ({
   key,
   userId,
+  userName,
 }: CreateLocalStorageKey) => {
-  return key + userId;
+  return key + userId + userName;
 };
 
 export function getLocalStorageItem<T>({
   key,
   userId,
+  userName,
 }: GetLocalStorage): T | null {
   const storageKey = createLocalStorageKey({
     key: LOCAL_STORAGE_KEY[key],
     userId,
+    userName,
   });
   const item = localStorage.getItem(storageKey)!;
   if (!item) return null;
   return JSON.parse(item);
 }
 
-export const setLocalStorage = ({ key, userId, value }: SetLocalStorage) => {
+export const setLocalStorage = ({
+  key,
+  userId,
+  userName,
+  value,
+}: SetLocalStorage) => {
   const storageKey = createLocalStorageKey({
     key: LOCAL_STORAGE_KEY[key],
     userId,
+    userName,
   });
   localStorage.setItem(storageKey, JSON.stringify(value));
 };
