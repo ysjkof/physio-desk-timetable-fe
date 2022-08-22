@@ -16,7 +16,7 @@ import { Button } from '../../../components/molecules/Button';
 import { Input } from '../../../components/molecules/Input';
 import { FormError } from '../../../components/atoms/FormError';
 import { MenuButton } from '../../../components/molecules/MenuButton';
-import { REGEX } from '../../../constants/regex';
+import { REG_EXP } from '../../../constants/regex';
 import useStore from '../../../hooks/useStore';
 
 export const PrescriptionPage = () => {
@@ -229,7 +229,7 @@ export const PrescriptionPage = () => {
                         required: '시간을 입력해주세요',
                         min: { value: 10, message: '최소 10분입니다' },
                         max: { value: 180, message: '최대 180분입니다' },
-                        pattern: REGEX.NUMBER_END_DIGIT_OF_ZERO,
+                        pattern: REG_EXP.NUMBER_END_DIGIT_OF_ZERO,
                       })}
                       children={
                         <>

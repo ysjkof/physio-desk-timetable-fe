@@ -121,7 +121,6 @@ export const CreatePatientForm = ({
       setValue('name', patient.name);
     }
   }, [patient]);
-  console.log(';patient', patient);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">
@@ -172,10 +171,7 @@ export const CreatePatientForm = ({
         <DatepickerWithInput
           defaultDate={patient ? new Date(patient.birthday) : new Date()}
           setValue={birthdaySetValue}
-          register={birthdayRegister}
-          formError={birthdayError}
           dateType="birthday"
-          see="ymd"
         />
       </label>
 

@@ -10,7 +10,7 @@ import { authTokenVar, isLoggedInVar } from '../../../apollo';
 import { Input } from '../../../components/molecules/Input';
 import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
-import { REGEX } from '../../../constants/regex';
+import { REG_EXP } from '../../../constants/regex';
 import { LOCAL_STORAGE_KEY } from '../../../constants/localStorage';
 
 export const Login = () => {
@@ -76,7 +76,7 @@ export const Login = () => {
           label={'Email'}
           register={register('email', {
             required: 'Email을 입력하세요',
-            pattern: REGEX.EMAIL,
+            pattern: REG_EXP.EMAIL,
           })}
           children={
             <>

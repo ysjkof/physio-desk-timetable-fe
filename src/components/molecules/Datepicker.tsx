@@ -1,10 +1,13 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
-import { FieldError, UseFormSetValue } from 'react-hook-form';
+import { useReducer, useRef, useState } from 'react';
+import { FieldError } from 'react-hook-form';
+import useStore from '../../hooks/useStore';
 import { compareDateMatch } from '../../services/dateServices';
 import { BirthdayInput } from '../../types/type';
+import { cls } from '../../utils/utils';
 import { ModalPortal } from '../templates/ModalPortal';
+import { DatepickerInputState, HasDateOption } from './DatepickerWithInput';
 
 export interface DatepickerForm {
   startDateYear?: number;
@@ -25,65 +28,52 @@ type AddFieldError<T> = {
 export interface IForm extends DatepickerForm, BirthdayInput {}
 export interface IFormErrors extends AddFieldError<IForm> {}
 
-interface IDatePicker {
-  setValue: UseFormSetValue<IForm>;
-  defaultDate: Date;
-  see: 'ymd-hm' | 'ymd';
-  prefix: 'startDate' | 'endDate' | 'birthday';
-  openState: {
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+interface DatePickerInterface extends HasDateOption, DatepickerInputState {
+  isOpen: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Datepicker = ({
-  setValue,
-  defaultDate,
-  see,
-  prefix,
-  openState: { open, setOpen },
-}: IDatePicker) => {
-  // const [open, setOpen] = useState(false);
-  const [prevDate, setPrevDate] = useState(defaultDate);
-  const [nextDate, setNextDate] = useState(defaultDate);
-  const [dateOfMonth, setDateOfMonth] = useState(getWeeksOfMonth(defaultDate));
-  const [minutesUnit, setMinutesUnit] = useState(10); // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
-  const [selectedHour, setSelectedHour] = useState(defaultDate.getHours());
-  const [selectedMinutes, setSelectedMinutes] = useState(
-    defaultDate.getMinutes()
+  inputDate,
+  setInputDate,
+  isOpen,
+  setOpen,
+  hasHour,
+}: DatePickerInterface) => {
+  const { viewOptions } = useStore();
+  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState(today);
+
+  const changeShowMonthReducer = (
+    state: Date[],
+    action: 'increment' | 'decrement' | 'thisMonth'
+  ) => {
+    const newDate = new Date(state[15]);
+    switch (action) {
+      case 'increment':
+        newDate.setMonth(newDate.getMonth() + 1);
+        return getWeeksOfMonth(newDate);
+      case 'decrement':
+        newDate.setMonth(newDate.getMonth() - 1);
+        return getWeeksOfMonth(newDate);
+      case 'thisMonth':
+        return getWeeksOfMonth(new Date());
+
+      default:
+        throw new Error('일어날 수 없는 일 입니다');
+    }
+  };
+
+  const [showMonthCalendar, changeShowMonth] = useReducer(
+    changeShowMonthReducer,
+    getWeeksOfMonth(new Date())
   );
-  const [tableLength, setTableLength] = useState({
-    start: { hours: 9, minutes: 0 },
-    end: { hours: 19, minutes: 0 },
-  });
 
   const modalGap = 2;
   const ref = useRef<HTMLDivElement>(null);
   const height = ref.current?.getBoundingClientRect().height;
   const top = ref.current?.getBoundingClientRect().top! + height! + modalGap;
   const left = ref.current?.getBoundingClientRect().left;
-
-  function getHours(start: number, end: number) {
-    const hours = [];
-    let i = start;
-    while (i < end) {
-      hours.push(i);
-      i++;
-    }
-    return hours;
-  }
-  const listOfHours = getHours(tableLength.start.hours, tableLength.end.hours);
-
-  function getMinutes(minutesUnit: number) {
-    const minutes = [];
-    let i = 0;
-    while (i < 60) {
-      minutes.push(i);
-      i = i + minutesUnit;
-    }
-    return minutes;
-  }
-  const listOfMinutes = getMinutes(minutesUnit);
 
   function getWeeks(value: Date, option?: 'sunday') {
     let result: Date[] = [];
@@ -100,6 +90,7 @@ export const Datepicker = ({
     }
     return result;
   }
+
   function getWeeksOfMonth(value: Date) {
     let result = [];
     const firstDate = new Date(value);
@@ -116,29 +107,66 @@ export const Datepicker = ({
     return result;
   }
 
-  useEffect(() => {
-    if (nextDate.getMonth() !== prevDate.getMonth()) {
-      setPrevDate(nextDate);
-      setDateOfMonth(getWeeksOfMonth(nextDate));
+  function getHours(start: number, end: number) {
+    const hours = [];
+    let i = start;
+    while (i < end) {
+      hours.push(i);
+      i++;
     }
-    setValue(`${prefix}Year`, nextDate.getFullYear());
-    setValue(`${prefix}Month`, nextDate.getMonth() + 1);
-    setValue(`${prefix}Date`, nextDate.getDate());
-  }, [nextDate]);
+    return hours;
+  }
 
-  useEffect(() => {
-    if (prefix !== 'birthday') {
-      nextDate.setHours(selectedHour);
-      setValue(`${prefix}Hours`, selectedHour);
+  function getMinutes(minutesUnit: number) {
+    const minutes = [];
+    let i = 0;
+    while (i < 60) {
+      minutes.push(i);
+      i = i + minutesUnit;
     }
-  }, [selectedHour]);
-  useEffect(() => {
-    if (prefix !== 'birthday') {
-      nextDate.setMinutes(selectedMinutes);
-      setValue(`${prefix}Minutes`, selectedMinutes);
-    }
-  }, [selectedMinutes]);
+    return minutes;
+  }
 
+  const listOfHours = getHours(
+    viewOptions.tableDuration.start.hours,
+    viewOptions.tableDuration.end.hours
+  );
+
+  const minutesUnit = 10; // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
+  const listOfMinutes = getMinutes(minutesUnit);
+
+  const selectDay = (date: Date) => {
+    const { year, month, day } = inputDate;
+    const isSame =
+      +year === date.getFullYear() &&
+      +month === date.getMonth() &&
+      +day === date.getDate();
+    if (isSame) return;
+    setInputDate((prevState) => ({
+      ...prevState,
+      year: '' + date.getFullYear(),
+      month: '' + date.getMonth(),
+      day: '' + date.getDate(),
+    }));
+    setSelectedDate(date);
+  };
+
+  const invokeSelectHour = (hour: string) => {
+    if (inputDate.hour === hour) return;
+    setInputDate((prevDate) => {
+      return { ...prevDate, hour };
+    });
+  };
+  const invokeSelectMinute = (minute: string) => {
+    if (inputDate.minute === minute) return;
+    setInputDate((prevDate) => {
+      return { ...prevDate, minute };
+    });
+  };
+
+  const displayedYearMonth = `${showMonthCalendar[15].getFullYear()}년 ${
+    showMonthCalendar[15].getMonth() + 1
+  }월`;
   return (
     <div className="datepicker-icon relative">
       <div
@@ -161,7 +189,7 @@ export const Datepicker = ({
           />
         </svg>
       </div>
-      {open && (
+      {isOpen && (
         <ModalPortal
           left={left}
           top={top}
@@ -170,16 +198,11 @@ export const Datepicker = ({
             <div className="absolute bottom-0 z-50 w-[440px]">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
                 <div className="datepicker-navigation mb-1 flex justify-between border-b pb-2">
-                  <div>{`${dateOfMonth[15].getFullYear()}년 ${
-                    dateOfMonth[15].getMonth() + 1
-                  }월`}</div>
+                  <div>{displayedYearMonth}</div>
                   <div className="space-x-6">
                     <span
                       onClick={() => {
-                        const date = new Date(prevDate);
-                        date.setMonth(date.getMonth() - 1);
-                        setPrevDate(date);
-                        setDateOfMonth(getWeeksOfMonth(date));
+                        changeShowMonth('decrement');
                       }}
                       className="cursor-pointer"
                     >
@@ -187,10 +210,7 @@ export const Datepicker = ({
                     </span>
                     <span
                       onClick={() => {
-                        const date = new Date(prevDate);
-                        date.setMonth(date.getMonth() + 1);
-                        setPrevDate(date);
-                        setDateOfMonth(getWeeksOfMonth(date));
+                        changeShowMonth('increment');
                       }}
                       className="cursor-pointer"
                     >
@@ -198,7 +218,9 @@ export const Datepicker = ({
                     </span>
                     <span
                       className="cursor-pointer"
-                      onClick={() => setNextDate(new Date())}
+                      onClick={() => {
+                        changeShowMonth('thisMonth');
+                      }}
                     >
                       오늘
                     </span>
@@ -217,42 +239,33 @@ export const Datepicker = ({
                         <div key={i}>{day}</div>
                       )
                     )}
-                    {dateOfMonth.map((day) => (
+                    {showMonthCalendar.map((day) => (
                       <span
                         key={day.valueOf()}
-                        className={`cursor-pointer px-1.5 py-1 ${
-                          day.getMonth() !== dateOfMonth[15].getMonth()
+                        className={cls(
+                          'cursor-pointer px-1.5 py-1',
+                          day.getMonth() !== showMonthCalendar[15].getMonth()
                             ? 'opacity-50'
-                            : ''
-                        } ${
+                            : '',
                           day.getDay() === 0
                             ? 'sunday'
                             : day.getDay() === 6
                             ? 'saturday'
-                            : ''
-                        } ${
-                          compareDateMatch(day, nextDate, 'ymd')
+                            : '',
+                          compareDateMatch(day, today, 'ymd')
+                            ? 'rounded-md border border-transparent ring-2 ring-red-500'
+                            : '',
+                          compareDateMatch(day, selectedDate, 'ymd')
                             ? 'rounded-md bg-red-400 text-white'
                             : ''
-                        } ${
-                          compareDateMatch(day, defaultDate, 'ymd')
-                            ? 'rounded-md border border-transparent ring-2 ring-red-500'
-                            : ''
-                        }`}
-                        data-date={day}
-                        onClick={async (e) => {
-                          await setNextDate(
-                            // @ts-ignore
-                            new Date(e.currentTarget.dataset.date)
-                          );
-                          if (see === 'ymd') setOpen(false);
-                        }}
+                        )}
+                        onClick={() => selectDay(day)}
                       >
                         {day.getDate()}
                       </span>
                     ))}
                   </div>
-                  {see === 'ymd-hm' && (
+                  {hasHour && (
                     <div className="datepicker-calendar-col-time-picker flex h-32 space-x-2 pl-2 text-center">
                       <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
                         <span>시</span>
@@ -260,31 +273,29 @@ export const Datepicker = ({
                           <span
                             key={i}
                             className={`cursor-pointer px-1.5 ${
-                              selectedHour === hours
+                              +inputDate.hour === hours
                                 ? 'rounded-md bg-blue-500 text-white'
                                 : ''
                             }`}
-                            onClick={() => setSelectedHour(hours)}
+                            onClick={() => invokeSelectHour('' + hours)}
                           >
-                            {String(hours).padStart(2, '0')}
+                            {('' + hours).padStart(2, '0')}
                           </span>
                         ))}
                       </div>
-                      <div className="minutes-picker hidden-scrollbar flex flex-col overflow-y-scroll">
+                      <div className="MINUTE_PICKER hidden-scrollbar flex flex-col overflow-y-scroll">
                         <span>분</span>
-                        {listOfMinutes.map((minutes, i) => (
+                        {listOfMinutes.map((minute, i) => (
                           <span
                             key={i}
                             className={`cursor-pointer px-1.5 ${
-                              +selectedMinutes === minutes
+                              +inputDate.minute === minute
                                 ? 'rounded-md bg-blue-500 text-white'
                                 : ''
                             }`}
-                            onClick={() => {
-                              setSelectedMinutes(minutes);
-                            }}
+                            onClick={() => invokeSelectMinute('' + minute)}
                           >
-                            {String(minutes).padStart(2, '0')}
+                            {('' + minute).padStart(2, '0')}
                           </span>
                         ))}
                       </div>

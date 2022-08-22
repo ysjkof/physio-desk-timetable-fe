@@ -1,4 +1,4 @@
-export const REGEX = {
+export const REG_EXP = {
   // console.log(pattern.test("2020-10-31")); 결과 : true
   // console.log(pattern.test("20201030")); 결과 : false
   // console.log(pattern.test("2020-10-32"));결과 : false
@@ -14,4 +14,18 @@ export const REGEX = {
   NUMBER_END_DIGIT_OF_ZERO: /^[0-9]*0$/,
   EMAIL:
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+};
+
+const year = /^(19|20)\d{2}$/;
+const month = /^(0[1-9]|1[012])$/;
+const day = /^([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])$/;
+const hour = /^(0[0-9]|1[0-9]|2[0-3])$/;
+const minute = /^([1-5][0])$/;
+
+export const REG_EXP_DATEPICKER = {
+  year,
+  month,
+  day,
+  hour,
+  minute,
 };

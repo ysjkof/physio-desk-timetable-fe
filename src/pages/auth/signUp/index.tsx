@@ -11,7 +11,7 @@ import {
 import { Input } from '../../../components/molecules/Input';
 import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
-import { REGEX } from '../../../constants/regex';
+import { REG_EXP } from '../../../constants/regex';
 
 export const SignUp = () => {
   const {
@@ -77,7 +77,7 @@ export const SignUp = () => {
           label={'Email'}
           register={register('email', {
             required: 'Email을 입력하세요',
-            pattern: REGEX.EMAIL,
+            pattern: REG_EXP.EMAIL,
           })}
           children={
             <>

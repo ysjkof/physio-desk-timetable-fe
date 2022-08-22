@@ -1,77 +1,135 @@
-import type { UseFormRegister } from 'react-hook-form';
-import { IForm, IFormErrors } from './Datepicker';
+import { IFormErrors } from './Datepicker';
 import { FormError } from '../atoms/FormError';
+import {
+  DatepickerErrorState,
+  DatepickerInputState,
+  HasDateOption,
+} from './DatepickerWithInput';
+import { cls } from '../../utils/utils';
+import { ChangeEvent } from 'react';
+import { REG_EXP_DATEPICKER } from '../../constants/regex';
 
-interface InputInDatepickerProps {
-  register: UseFormRegister<IForm>;
-  see: 'ymd-hm' | 'ymd';
+interface InputInDatepickerProps
+  extends HasDateOption,
+    DatepickerInputState,
+    DatepickerErrorState {
   prefix: 'startDate' | 'endDate' | 'birthday';
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   formError?: IFormErrors;
   textColor?: string;
 }
 
+const DATEPICKER_ERROR = {
+  year: '년은 1900년~2099년까지 입력할 수 있습니다',
+  month: '월은 01~12까지 입력할 수 있습니다',
+  day: '날짜는 01~31까지 입력할 수 있습니다',
+  hour: '시각은 00~23까지 입력할 수 있습니다',
+  minute: '분은 00~50분까지 입력할 수 있습니다',
+};
+
 export const DatepickerInput = ({
-  register,
-  see,
-  prefix,
+  inputDate,
+  setInputDate,
+  error,
+  setError,
   setOpen,
-  formError,
   textColor,
+  hasHour,
 }: InputInDatepickerProps) => {
+  const validate = (value: string, regExp: RegExp) => {
+    return new RegExp(regExp).test(value);
+  };
+  console.log('error', error);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const { value, name } = event.currentTarget as {
+      value: string;
+      name: 'year' | 'month' | 'day' | 'hour' | 'minute';
+    };
+    let newValue = event.currentTarget.value;
+    let isValidate = false;
+
+    switch (name) {
+      case 'year':
+        if (value.length > 4) {
+          newValue = value.substring(value.length - 4);
+        }
+        isValidate = validate(newValue, REG_EXP_DATEPICKER[name]);
+        isValidate ? setError('') : setError(DATEPICKER_ERROR[name]);
+        setInputDate((prevState) => ({
+          ...prevState,
+          [name]: newValue,
+        }));
+        return;
+      case 'month':
+        if (value.length > 2) {
+          newValue = value.substring(value.length - 2);
+        }
+        isValidate = validate(newValue, REG_EXP_DATEPICKER[name]);
+        isValidate ? setError('') : setError(DATEPICKER_ERROR[name]);
+        setInputDate((prevState) => ({
+          ...prevState,
+          [name]: newValue,
+        }));
+        return;
+      case 'day':
+        if (value.length > 2) {
+          newValue = value.substring(value.length - 2);
+        }
+        isValidate = validate(newValue, REG_EXP_DATEPICKER[name]);
+        console.log('isValidate', isValidate);
+
+        isValidate ? setError('') : setError(DATEPICKER_ERROR[name]);
+        setInputDate((prevState) => ({
+          ...prevState,
+          [name]: newValue,
+        }));
+        return;
+      case 'hour':
+        if (value.length > 2) {
+          newValue = value.substring(value.length - 2);
+        }
+        isValidate = validate(newValue, REG_EXP_DATEPICKER[name]);
+        isValidate ? setError('') : setError(DATEPICKER_ERROR[name]);
+        setInputDate((prevState) => ({
+          ...prevState,
+          [name]: newValue,
+        }));
+        return;
+      case 'minute':
+        if (value.length > 2) {
+          newValue = value.substring(value.length - 2);
+        }
+        isValidate = validate(newValue, REG_EXP_DATEPICKER[name]);
+        isValidate ? setError('') : setError(DATEPICKER_ERROR[name]);
+        setInputDate((prevState) => ({
+          ...prevState,
+          [name]: newValue,
+        }));
+        return;
+      default:
+        throw new Error('있을 수 없는 접근입니다');
+    }
+  };
   return (
     <div
-      className={`relative grid w-full gap-1 ${
-        see === 'ymd-hm' ? 'grid-cols-[1fr_repeat(4,_0.7fr)]' : ''
-      } ${see === 'ymd' ? 'grid-cols-[1fr_repeat(2,_0.7fr)]' : ''}`}
+      className={cls(
+        'relative grid w-full gap-1',
+        hasHour
+          ? 'grid-cols-[1fr_repeat(4,_0.7fr)]'
+          : 'grid-cols-[1fr_repeat(2,_0.7fr)]'
+      )}
       onFocus={() => (setOpen ? setOpen(true) : undefined)}
       style={{ ...(textColor && { color: textColor }) }}
     >
-      {prefix === 'birthday' && formError?.birthdayYear?.message ? (
-        <FormError errorMessage={formError.birthdayYear.message} isHighter />
-      ) : formError?.birthdayMonth?.message ? (
-        <FormError errorMessage={formError.birthdayMonth.message} isHighter />
-      ) : formError?.birthdayDate?.message ? (
-        <FormError errorMessage={formError.birthdayDate.message} isHighter />
-      ) : null}
-      {prefix === 'startDate' && formError?.startDateYear?.message ? (
-        <FormError errorMessage={formError.startDateYear.message} isHighter />
-      ) : formError?.startDateMonth?.message ? (
-        <FormError errorMessage={formError.startDateMonth.message} isHighter />
-      ) : formError?.startDateDate?.message ? (
-        <FormError errorMessage={formError.startDateDate.message} isHighter />
-      ) : formError?.startDateHours?.message ? (
-        <FormError errorMessage={formError.startDateHours.message} isHighter />
-      ) : formError?.startDateMinutes?.message ? (
-        <FormError
-          errorMessage={formError.startDateMinutes.message}
-          isHighter
-        />
-      ) : null}
-      {prefix === 'endDate' && formError?.endDateYear?.message ? (
-        <FormError errorMessage={formError.endDateYear.message} isHighter />
-      ) : formError?.endDateMonth?.message ? (
-        <FormError errorMessage={formError.endDateMonth.message} isHighter />
-      ) : formError?.endDateDate?.message ? (
-        <FormError errorMessage={formError.endDateDate.message} isHighter />
-      ) : formError?.endDateHours?.message ? (
-        <FormError errorMessage={formError.endDateHours.message} isHighter />
-      ) : formError?.endDateMinutes?.message ? (
-        <FormError errorMessage={formError.endDateMinutes.message} isHighter />
-      ) : null}
+      {error && <FormError errorMessage={error} isHighter />}
       <label className="relative flex flex-col">
         <span className="position-center-y absolute right-2">년</span>
         <input
-          {...register(`${prefix}Year`, {
-            required: '연도를 입력해주세요',
-            minLength: { value: 4, message: '연도는 네 자릿수입니다' },
-            maxLength: { value: 4, message: '연도는 네 자릿수입니다' },
-            min: { value: 1920, message: '연도는 최소 1920년입니다' },
-            max: {
-              value: 2100,
-              message: '연도는 최대 2100년입니다',
-            },
-          })}
+          name="year"
+          value={inputDate.year}
+          onChange={handleInputChange}
           type="number"
           className="remove-number-arrow input-datepicker"
           placeholder="YYYY"
@@ -80,19 +138,9 @@ export const DatepickerInput = ({
       <label className="relative flex flex-col">
         <span className="position-center-y absolute right-2">월</span>
         <input
-          {...register(`${prefix}Month`, {
-            required: '월을 입력해주세요',
-            minLength: {
-              value: 1,
-              message: '월은 한 자리수에서 두 자리수입니다',
-            },
-            maxLength: {
-              value: 2,
-              message: '월은 한 자리수에서 두 자리수입니다',
-            },
-            min: { value: 1, message: '월의 최소값은 1입니다' },
-            max: { value: 12, message: '월의 최대값은 12입니다' },
-          })}
+          name="month"
+          value={inputDate.month}
+          onChange={handleInputChange}
           type="number"
           className="remove-number-arrow input-datepicker"
           placeholder="MM"
@@ -101,42 +149,22 @@ export const DatepickerInput = ({
       <label className="relative flex flex-col">
         <span className="position-center-y absolute right-2">일</span>
         <input
-          {...register(`${prefix}Date`, {
-            required: '날짜를 입력해주세요',
-            minLength: {
-              value: 1,
-              message: '날짜는 한 자리수나 두 자리수입니다',
-            },
-            maxLength: {
-              value: 2,
-              message: '날짜는 한 자리수나 두 자리수입니다',
-            },
-            min: { value: 1, message: '날짜는 1부터 31입니다' },
-            max: { value: 31, message: '날짜는 1부터 31입니다' },
-          })}
+          name="day"
+          value={inputDate.day}
+          onChange={handleInputChange}
           type="number"
           className="remove-number-arrow input-datepicker"
           placeholder="DD"
         />
       </label>
-      {see === 'ymd-hm' && prefix !== 'birthday' && (
+      {hasHour && (
         <>
           <label className="relative flex flex-col">
             <span className="position-center-y absolute right-2">시</span>
             <input
-              {...register(`${prefix}Hours`, {
-                required: '시간을 입력해주세요',
-                minLength: {
-                  value: 1,
-                  message: '시간은 한 자리수나 두 자리수입니다',
-                },
-                maxLength: {
-                  value: 2,
-                  message: '시간은 한 자리수나 두 자리수입니다',
-                },
-                min: { value: 1, message: '시간은 1부터 23입니다' },
-                max: { value: 23, message: '시간은 1부터 23입니다' },
-              })}
+              name="hour"
+              value={inputDate.hour}
+              onChange={handleInputChange}
               type="number"
               className="remove-number-arrow input-datepicker"
               placeholder="HH"
@@ -145,19 +173,9 @@ export const DatepickerInput = ({
           <label className="relative flex flex-col">
             <span className="position-center-y absolute right-2">분</span>
             <input
-              {...register(`${prefix}Minutes`, {
-                required: '분을 입력해주세요',
-                minLength: {
-                  value: 1,
-                  message: '분은 한 자리수나 두 자리수입니다',
-                },
-                maxLength: {
-                  value: 2,
-                  message: '분은 한 자리수나 두 자리수입니다',
-                },
-                min: { value: 0, message: '분은 0부터 59입니다' },
-                max: { value: 59, message: '분은 0부터 59입니다' },
-              })}
+              name="minute"
+              value={inputDate.minute}
+              onChange={handleInputChange}
               type="number"
               className="remove-number-arrow input-datepicker"
               placeholder="mm"
