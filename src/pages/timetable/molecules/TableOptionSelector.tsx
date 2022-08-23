@@ -67,6 +67,7 @@ export function TableOptionSelector() {
           setLocalStorage({
             key: 'SELECTED_CLINIC',
             userId: loggedInUser.me.id,
+            userName: loggedInUser.me.name,
             value: newSelectedClinic,
           })
         );

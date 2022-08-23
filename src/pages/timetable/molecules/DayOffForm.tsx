@@ -4,29 +4,34 @@ import { DatepickerWithInput } from '../../../components/molecules/DatepickerWit
 import { Button } from '../../../components/molecules/Button';
 import { SelectUser } from './SelectUser';
 import { Input } from '../../../components/molecules/Input';
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import { IFormErrors } from '../../../components/molecules/Datepicker';
-import { IListReservation, IReserveForm } from '../../../types/type';
+import { UseFormRegister } from 'react-hook-form';
+import { IReserveForm } from '../../../types/type';
 
 interface DayOffFormProps {
   register: UseFormRegister<IReserveForm>;
-  setValue: UseFormSetValue<IReserveForm>;
-  errors: IFormErrors;
   isValid: boolean;
   loading: boolean;
-  reservation?: IListReservation;
+  setSelectedStartDateState: React.Dispatch<React.SetStateAction<Date | null>>;
+  setSelectedEndDateState: React.Dispatch<React.SetStateAction<Date | null>>;
+  startDate?: Date;
 }
 
 export const DayOffForm = ({
   register,
-  setValue,
-  errors,
   isValid,
   loading,
-  reservation,
+  setSelectedStartDateState,
+  setSelectedEndDateState,
+  startDate,
 }: DayOffFormProps) => {
   const selectedInfo = useReactiveVar(selectedInfoVar);
+  const createDefaultEndDate = () => {
+    if (!startDate) return;
 
+    const endDate = new Date(startDate);
+    endDate.setHours(endDate.getHours() + 4);
+    return endDate;
+  };
   return (
     <>
       <label className="flex flex-col gap-2">
@@ -39,27 +44,17 @@ export const DayOffForm = ({
       <label className="flex flex-col gap-2">
         시작 시각
         <DatepickerWithInput
-          setValue={setValue}
-          defaultDate={
-            reservation ? new Date(reservation.startDate) : new Date()
-          }
-          register={register}
-          see="ymd-hm"
-          dateType="startDate"
-          formError={errors}
+          setSelectedDate={setSelectedStartDateState}
+          hasHour
+          defaultDate={startDate && new Date(startDate)}
         />
       </label>
       <label className="flex flex-col gap-2">
         종료 시각
         <DatepickerWithInput
-          setValue={setValue}
-          defaultDate={
-            reservation ? new Date(reservation.startDate) : new Date()
-          }
-          register={register}
-          see="ymd-hm"
-          dateType="endDate"
-          formError={errors}
+          setSelectedDate={setSelectedEndDateState}
+          hasHour
+          defaultDate={createDefaultEndDate()}
         />
       </label>
 

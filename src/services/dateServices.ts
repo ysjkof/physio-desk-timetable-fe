@@ -1,4 +1,4 @@
-import { UTC_OPTION } from '../constants/constants';
+import { UTC_OPTION, UTC_OPTION_KST } from '../constants/constants';
 
 export const getSunday = (date: Date) => {
   const returnDate = new Date(date);
@@ -180,29 +180,18 @@ export function getTimeGaps(
 }
 
 export const get4DigitHour = (date: Date | string) => {
-  return typeof date === 'string'
-    ? date.substring(11, 16)
-    : date.toISOString().substring(11, 16);
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+  return (
+    (date.getHours() + '').padStart(2, '0') +
+    ':' +
+    (date.getMinutes() + '').padStart(2, '0')
+  );
 };
 
 export const getFrom4DigitTime = (time: string, what: 'hour' | 'minute') =>
-  what === 'hour' ? time.substring(0, 2) : time.substring(3, 5);
-
-export const injectUTCTime = ({
-  hour,
-  minute,
-  UTC,
-}: {
-  hour: string | number;
-  minute: string | number;
-  UTC: 'kor';
-}) => {
-  return `${(+hour + UTC_OPTION[UTC].hour + '').padStart(2, '0')}:${(
-    +minute +
-    UTC_OPTION[UTC].minute +
-    ''
-  ).padStart(2, '0')}`;
-};
+  what === 'hour' ? +time.substring(0, 2) : time.substring(3, 5);
 
 export function getMonthStartEnd(date: Date) {
   const startDate = new Date(date);
@@ -258,9 +247,30 @@ export function newDateFromHoursAndMinute(hour: number, minute: number) {
   return date;
 }
 
+/** date가 속한 주의 요일 인덱스에 맞는 날짜를 반환*/
 export const createDateFromDay = (date: Date, dayIdx: number) => {
   const newDate = new Date(date);
   const dayGap = dayIdx - newDate.getDay();
   newDate.setDate(newDate.getDate() + dayGap);
+  return newDate;
+};
+
+/** 새 날짜를 생성하면서 시, 분, 초, 밀리초를 초기화 한다. 초와 밀리초는 무조건 0이다. */
+export const createDate = (
+  date: string | Date,
+  option?: { hour?: number; minute?: number }
+) => {
+  const newDate = date ? new Date(date) : new Date();
+  if (option) {
+    const { hour, minute } = option;
+    if (hour && minute) {
+      newDate.setHours(hour, minute);
+    } else if (minute) {
+      newDate.setMinutes(minute);
+    }
+    newDate.setSeconds(0, 0);
+  } else {
+    newDate.setMinutes(0, 0, 0);
+  }
   return newDate;
 };

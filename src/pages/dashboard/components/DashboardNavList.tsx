@@ -1,5 +1,5 @@
-import { SelectedMenuType } from "..";
-import { ISelectedClinic } from "../../../store";
+import { SelectedMenuType } from '..';
+import { ISelectedClinic } from '../../../types/type';
 
 interface DashboardNavListProps {
   selectedMenu: SelectedMenuType;
@@ -13,41 +13,41 @@ export const DashboardNavList = ({
   onClick,
   type,
 }: DashboardNavListProps) => {
-  let textContents = "";
+  let textContents = '';
   let isManagerMenu = false;
   switch (type) {
-    case "main":
-      textContents = "처음";
+    case 'main':
+      textContents = '처음';
       break;
-    case "member":
-      textContents = "구성원";
+    case 'member':
+      textContents = '구성원';
       break;
-    case "invite":
-      textContents = "초대";
+    case 'invite':
+      textContents = '초대';
       isManagerMenu = true;
       break;
-    case "prescription":
-      textContents = "처방관리";
+    case 'prescription':
+      textContents = '처방관리';
       break;
-    case "statistics":
-      textContents = "통계";
+    case 'statistics':
+      textContents = '통계';
       break;
-    case "create":
-      textContents = "병원 만들기";
+    case 'create':
+      textContents = '병원 만들기';
       break;
-    case "clinics":
-      textContents = "나의 병원";
+    case 'clinics':
+      textContents = '나의 병원';
       break;
   }
 
   return (
     <li
       className={`btn-menu cursor-pointer rounded-none ${
-        selectedMenu === type ? "bg-green-100 font-semibold" : ""
+        selectedMenu === type ? 'bg-green-100 font-semibold' : ''
       } ${
         isManagerMenu && selectedClinic.isManager === false
-          ? "pointer-events-none opacity-50"
-          : ""
+          ? 'pointer-events-none opacity-50'
+          : ''
       }`}
       onClick={() => onClick()}
     >

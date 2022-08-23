@@ -30,7 +30,7 @@ import {
   makeUsersInDay,
   spreadClinicMembers,
 } from './services/timetableServices';
-import { DayWithUsers, IMemberWithActivate } from '../../types/type';
+import { DayWithUsers } from '../../types/type';
 import { useMe } from '../../hooks/useMe';
 import useViewoptions from '../../hooks/useViewOption';
 import useStore from '../../hooks/useStore';

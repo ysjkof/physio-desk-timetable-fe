@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCreateDayOffMutation } from '../../../graphql/generated/graphql';
 import { cls } from '../../../utils/utils';
 import { viewOptionsVar } from '../../../store';
-import { USER_COLORS } from '../../../constants/constants';
+import { USER_COLORS, UTC_OPTION_KST } from '../../../constants/constants';
 import { ROUTER } from '../../../router/routerConstants';
 
 interface UserNameTitleProps {
@@ -30,7 +30,16 @@ export const UserNameTitle = ({
   const navigate = useNavigate();
 
   function onClickBox() {
-    navigate(ROUTER.RESERVE, { state: { isDayOff: true } });
+    navigate(ROUTER.RESERVE, {
+      state: {
+        isDayOff: true,
+        startDate: {
+          hour: date.getHours() + UTC_OPTION_KST.hour,
+          minute: date.getMinutes() + UTC_OPTION_KST.minute,
+          dayIndex: date.getDay(),
+        },
+      },
+    });
   }
 
   function lockTable() {
