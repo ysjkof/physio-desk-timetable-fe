@@ -15,12 +15,12 @@ export function cls(...classnames: string[]) {
 export function getPositionRef(
   ref: React.RefObject<HTMLDivElement>,
   modalGap: number
-): [top: number, left: number] {
+) {
   const height = ref.current?.getBoundingClientRect().height ?? 0;
   const top =
     ref.current?.getBoundingClientRect().top! + height + modalGap ?? 0;
   const left = ref.current?.getBoundingClientRect().left ?? 0;
-  return [top, left];
+  return { top, left };
 }
 
 export function saveClinicLists(

@@ -41,7 +41,7 @@ export const DashboardSideNav = ({
   });
 
   const ref = useRef<HTMLDivElement>(null);
-  const [top, left] = getPositionRef(ref, 0);
+  const { top, left } = getPositionRef(ref, 0);
 
   return selectedInfo.clinic ? (
     <nav className="dashboard-side-nav h-full space-y-2">

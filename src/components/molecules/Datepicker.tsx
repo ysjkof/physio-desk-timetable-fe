@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useReducer, useRef, useState } from 'react';
 import useStore from '../../hooks/useStore';
 import { compareDateMatch } from '../../services/dateServices';
-import { cls } from '../../utils/utils';
+import { cls, getPositionRef } from '../../utils/utils';
 import { ModalPortal } from '../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './DatepickerWithInput';
 
@@ -48,11 +48,8 @@ export const Datepicker = ({
     getWeeksOfMonth(new Date())
   );
 
-  const modalGap = 2;
   const ref = useRef<HTMLDivElement>(null);
-  const height = ref.current?.getBoundingClientRect().height;
-  const top = ref.current?.getBoundingClientRect().top! + height! + modalGap;
-  const left = ref.current?.getBoundingClientRect().left;
+  const { top, left } = getPositionRef(ref, 2);
 
   function getWeeks(value: Date, option?: 'sunday') {
     let result: Date[] = [];
