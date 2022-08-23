@@ -272,7 +272,5 @@ export const createDate = (
   } else {
     newDate.setMinutes(0, 0, 0);
   }
-  console.log('newDate', newDate);
-
   return newDate;
 };

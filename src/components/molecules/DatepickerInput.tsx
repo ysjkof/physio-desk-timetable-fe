@@ -74,8 +74,6 @@ export const DatepickerInput = ({
           newValue = value.substring(value.length - 2);
         }
         isValidate = validate(newValue, REG_EXP_DATEPICKER[name]);
-        console.log('isValidate', isValidate);
-
         isValidate ? setError('') : setError(DATEPICKER_ERROR[name]);
         setInputDate((prevState) => ({
           ...prevState,

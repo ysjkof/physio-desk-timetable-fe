@@ -34,7 +34,6 @@ export const ReserveModal = ({ closeAction }: TimetableModalProps) => {
     });
 
   const { userId, isDayOff } = state;
-  console.log('isDayOff', isDayOff, state.startDate, startDate);
 
   return (
     <ModalTemplate
