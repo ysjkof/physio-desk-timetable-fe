@@ -180,31 +180,18 @@ export function getTimeGaps(
 }
 
 export const get4DigitHour = (date: Date | string) => {
-  return typeof date === 'string'
-    ? date.substring(11, 16)
-    : date.toISOString().substring(11, 16);
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+  return (
+    (date.getHours() + '').padStart(2, '0') +
+    ':' +
+    (date.getMinutes() + '').padStart(2, '0')
+  );
 };
 
 export const getFrom4DigitTime = (time: string, what: 'hour' | 'minute') =>
-  what === 'hour'
-    ? +time.substring(0, 2) + UTC_OPTION_KST.hour
-    : time.substring(3, 5);
-
-export const injectUTCTime = ({
-  hour,
-  minute,
-  UTC,
-}: {
-  hour: string | number;
-  minute: string | number;
-  UTC: 'kor';
-}) => {
-  return `${(+hour + UTC_OPTION[UTC].hour + '').padStart(2, '0')}:${(
-    +minute +
-    UTC_OPTION[UTC].minute +
-    ''
-  ).padStart(2, '0')}`;
-};
+  what === 'hour' ? +time.substring(0, 2) : time.substring(3, 5);
 
 export function getMonthStartEnd(date: Date) {
   const startDate = new Date(date);
