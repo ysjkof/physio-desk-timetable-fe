@@ -170,7 +170,7 @@ export const Datepicker = ({
         <ModalPortal
           left={left}
           top={top}
-          closeAction={setOpen}
+          closeAction={() => setOpen}
           children={
             <div className="absolute bottom-0 z-50 w-[440px]">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
