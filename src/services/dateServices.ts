@@ -1,4 +1,4 @@
-import { UTC_OPTION } from '../constants/constants';
+import { UTC_OPTION, UTC_OPTION_KST } from '../constants/constants';
 
 export const getSunday = (date: Date) => {
   const returnDate = new Date(date);
@@ -186,7 +186,9 @@ export const get4DigitHour = (date: Date | string) => {
 };
 
 export const getFrom4DigitTime = (time: string, what: 'hour' | 'minute') =>
-  what === 'hour' ? time.substring(0, 2) : time.substring(3, 5);
+  what === 'hour'
+    ? +time.substring(0, 2) + UTC_OPTION_KST.hour
+    : time.substring(3, 5);
 
 export const injectUTCTime = ({
   hour,
