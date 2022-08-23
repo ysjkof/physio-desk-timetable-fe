@@ -54,7 +54,9 @@ export const DayOffCard = ({ closeAction, reservation }: DayOffCardProps) => {
       </div>
 
       <div className="h-full overflow-y-scroll">
-        {!isEdit && <ReservationCardDetail reservation={reservation} />}
+        {!isEdit && (
+          <ReservationCardDetail reservation={reservation} hasEndDate />
+        )}
         {isEdit && (
           <ReserveForm
             userId={reservation.user.id}

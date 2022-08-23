@@ -14,7 +14,6 @@ interface DayOffFormProps {
   setSelectedStartDateState: React.Dispatch<React.SetStateAction<Date | null>>;
   setSelectedEndDateState: React.Dispatch<React.SetStateAction<Date | null>>;
   startDate?: Date;
-  endDate?: Date;
 }
 
 export const DayOffForm = ({
@@ -24,10 +23,15 @@ export const DayOffForm = ({
   setSelectedStartDateState,
   setSelectedEndDateState,
   startDate,
-  endDate,
 }: DayOffFormProps) => {
   const selectedInfo = useReactiveVar(selectedInfoVar);
+  const createDefaultEndDate = () => {
+    if (!startDate) return;
 
+    const endDate = new Date(startDate);
+    endDate.setHours(endDate.getHours() + 4);
+    return endDate;
+  };
   return (
     <>
       <label className="flex flex-col gap-2">
@@ -50,7 +54,7 @@ export const DayOffForm = ({
         <DatepickerWithInput
           setSelectedDate={setSelectedEndDateState}
           hasHour
-          defaultDate={endDate && new Date(endDate)}
+          defaultDate={createDefaultEndDate()}
         />
       </label>
 

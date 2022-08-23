@@ -25,7 +25,6 @@ import {
   PrescriptionWithSelect,
 } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
-import { createDate } from '../../../services/dateServices';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
@@ -279,7 +278,6 @@ export const ReserveForm = ({
           isValid={isValid}
           loading={createLoading && editLoading}
           startDate={reservation?.startDate || selectedStartDateState}
-          endDate={reservation?.startDate || selectedEndDateState}
         />
       ) : (
         <>

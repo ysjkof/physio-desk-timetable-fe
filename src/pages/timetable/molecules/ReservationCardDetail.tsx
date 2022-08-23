@@ -6,10 +6,12 @@ import { IListReservation } from '../../../types/type';
 
 interface ReservationCardDetailProps {
   reservation: IListReservation;
+  hasEndDate?: boolean;
 }
 
 export const ReservationCardDetail = ({
   reservation,
+  hasEndDate,
 }: ReservationCardDetailProps) => {
   const isDayOff = reservation.state === ReservationState.DayOff;
 
@@ -22,8 +24,14 @@ export const ReservationCardDetail = ({
 
       <div className="grid grid-cols-[5rem,1fr] items-center">
         <span>시간</span>
-        <span>{new Date(reservation.startDate).toLocaleString()}</span>
+        <span>시작 : {new Date(reservation.startDate).toLocaleString()}</span>
+        {hasEndDate && (
+          <span className="col-start-2">
+            종료 : {new Date(reservation.endDate).toLocaleString()}
+          </span>
+        )}
         <span className="col-start-2">
+          전부{' '}
           {getTimeLength(reservation.startDate, reservation.endDate, 'minute')}
           분
         </span>
