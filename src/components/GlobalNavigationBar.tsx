@@ -21,6 +21,7 @@ import {
 } from '../types/type';
 import { ROUTER } from '../router/routerConstants';
 import useStore, { makeSelectedClinic } from '../hooks/useStore';
+import Dropdown from './organisms/Dropdown';
 
 interface Notice {
   __typename?: 'Notice' | undefined;
@@ -191,31 +192,19 @@ export const GlobalNavigationBar = () => {
                       ))}
                 </div>
               </div>
-              <div className="group relative cursor-pointer">
-                <FontAwesomeIcon fontSize={24} icon={faUser} />
-                <div className="DROPDOWN absolute top-[1.4rem] right-0 z-50 hidden w-40 flex-col items-center border bg-white py-2 px-4 shadow-cst group-hover:flex">
-                  <Link
-                    to="/edit-profile"
-                    className="w-full text-center hover:bg-blue-200"
-                  >
-                    프로필
-                  </Link>
-                  <div className="seperate-bar"></div>
-                  <Link
-                    to={ROUTER.DASHBOARD}
-                    className="w-full text-center hover:bg-blue-200"
-                  >
-                    대시보드
-                  </Link>
-                  <div className="seperate-bar"></div>
-                  <button
-                    className="w-full text-center hover:bg-blue-200"
-                    onClick={logoutBtn}
-                  >
-                    로그아웃
-                  </button>
-                </div>
-              </div>
+              <Dropdown title={meData?.me.name}>
+                <Dropdown.Container width={'12rem'}>
+                  <Dropdown.Ul>
+                    <Dropdown.Li to="/edit-profile">프로필</Dropdown.Li>
+                    <Dropdown.Li to={ROUTER.DASHBOARD}>대시보드</Dropdown.Li>
+                  </Dropdown.Ul>
+                  <Dropdown.Ul>
+                    <Dropdown.Button onClick={logoutBtn}>
+                      로그아웃
+                    </Dropdown.Button>
+                  </Dropdown.Ul>
+                </Dropdown.Container>
+              </Dropdown>
             </>
           ) : (
             <Link to={ROUTER.LOGIN}>
