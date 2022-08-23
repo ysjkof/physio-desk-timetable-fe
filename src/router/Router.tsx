@@ -5,13 +5,13 @@ import { GlobalLayout } from '../components/templates/GlobalLayout';
 import { Dashboard } from '../pages/dashboard';
 import { Home } from '../pages/home';
 import { TimeTable } from '../pages/timetable';
-import { NotFound } from '../components/404';
+import { NotFound } from '../components/organisms/404';
 import { Account } from '../pages/auth';
 import { Search } from '../pages/search';
 import { ConfirmEmail } from '../pages/confirm-email';
 import { EditProfile } from '../pages/edit-profile';
 import { Login } from '../pages/auth/login';
-import { TestPage } from '../components/TestPage';
+import { TestPage } from '../pages/TestPage';
 import { SignUp } from '../pages/auth/signUp';
 import { ROUTER } from './routerConstants';
 

@@ -1,27 +1,27 @@
 import { useReactiveVar } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { authTokenVar, isLoggedInVar } from '../apollo';
+import { authTokenVar, isLoggedInVar } from '../../apollo';
 import { useForm } from 'react-hook-form';
-import { useMe } from '../hooks/useMe';
+import { useMe } from '../../hooks/useMe';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faUser } from '@fortawesome/free-regular-svg-icons';
 import {
   ClinicType,
   useFindMyClinicsQuery,
-} from '../graphql/generated/graphql';
-import { viewOptionsVar } from '../store';
-import { getLocalStorageItem, saveClinicLists } from '../utils/utils';
-import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
+} from '../../graphql/generated/graphql';
+import { viewOptionsVar } from '../../store';
+import { getLocalStorageItem, saveClinicLists } from '../../utils/utils';
+import { LOCAL_STORAGE_KEY } from '../../constants/localStorage';
 import {
   IClinic,
   IClinicList,
   ISelectedClinic,
   IViewOption,
-} from '../types/type';
-import { ROUTER } from '../router/routerConstants';
-import useStore, { makeSelectedClinic } from '../hooks/useStore';
-import Dropdown from './organisms/Dropdown';
+} from '../../types/type';
+import { ROUTER } from '../../router/routerConstants';
+import useStore, { makeSelectedClinic } from '../../hooks/useStore';
+import Dropdown from './Dropdown';
 
 interface Notice {
   __typename?: 'Notice' | undefined;

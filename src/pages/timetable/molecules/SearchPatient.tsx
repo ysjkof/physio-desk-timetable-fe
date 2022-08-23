@@ -6,7 +6,7 @@ import { useSearchPatientLazyQuery } from '../../../graphql/generated/graphql';
 import useStore from '../../../hooks/useStore';
 import { Worning } from '../../../components/atoms/Warning';
 import { MenuButton } from '../../../components/molecules/MenuButton';
-import { NameTag } from '../../../components/NameTag';
+import { NameTag } from '../../../components/molecules/NameTag';
 interface SearchPatientProps {}
 
 export const SearchPatient = ({}: SearchPatientProps) => {

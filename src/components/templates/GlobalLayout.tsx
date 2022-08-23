@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { GlobalNavigationBar } from '../GlobalNavigationBar';
+import { GlobalNavigationBar } from '../organisms/GlobalNavigationBar';
 
 export const GlobalLayout = () => {
   return (

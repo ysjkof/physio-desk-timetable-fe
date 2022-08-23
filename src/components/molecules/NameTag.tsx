@@ -1,8 +1,8 @@
 import { faFemale, faMale } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useStore from '../hooks/useStore';
-import { getYMD } from '../services/dateServices';
-import { SelectedPatient } from '../types/type';
+import useStore from '../../hooks/useStore';
+import { getYMD } from '../../services/dateServices';
+import { SelectedPatient } from '../../types/type';
 
 export interface INameTagProps extends SelectedPatient {
   canClick?: boolean;
