@@ -25,6 +25,7 @@ import {
   PrescriptionWithSelect,
 } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
+import { createDate } from '../../../services/dateServices';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
@@ -53,9 +54,9 @@ export const ReserveForm = ({
     []
   );
   const [selectedStartDateState, setSelectedStartDateState] =
-    useState<Date | null>(new Date());
+    useState<Date | null>(startDate || new Date());
   const [selectedEndDateState, setSelectedEndDateState] = useState<Date | null>(
-    new Date()
+    null
   );
 
   const isDayOff = isDayoff ?? reservation?.state === ReservationState.DayOff;
@@ -110,51 +111,18 @@ export const ReserveForm = ({
   ] = useEditReservationMutation({ onCompleted: editOnComplete });
 
   const onSubmit = () => {
-    if (!createLoading) {
-      const { memo, userId } = getValues();
-      let startDate = new Date(selectedStartDateState || '');
+    if (createLoading) return;
 
-      if (!startDate) throw new Error('startDate가 없습니다');
+    let startDate = new Date(selectedStartDateState || '');
+    if (!startDate) throw new Error('startDate가 없습니다');
 
-      if (isDayOff) {
-        if (!selectedEndDateState) throw new Error('endDate가 없습니다.');
-        let endDate = new Date(selectedEndDateState);
-        if (reservation) {
-          if (!editLoading)
-            callEditReservation({
-              variables: {
-                input: {
-                  startDate,
-                  endDate,
-                  memo,
-                  userId: +userId!,
-                  reservationId: reservation.id,
-                },
-              },
-            });
-        } else {
-          if (!createLoading)
-            createReservationMutation({
-              variables: {
-                input: {
-                  startDate,
-                  endDate,
-                  memo,
-                  isDayoff: true,
-                  userId: +userId!,
-                  clinicId: selectedInfo.clinic!.id,
-                },
-              },
-            });
-        }
-        return;
-      }
-      const endDate = new Date(startDate);
+    const { memo, userId } = getValues();
 
-      // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
-      endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
+    if (isDayOff) {
+      if (!selectedEndDateState) throw new Error('endDate가 없습니다.');
+      let endDate = new Date(selectedEndDateState);
+
       if (reservation) {
-        // reservation이 있으면 edit모드
         if (!editLoading)
           callEditReservation({
             variables: {
@@ -164,7 +132,6 @@ export const ReserveForm = ({
                 memo,
                 userId: +userId!,
                 reservationId: reservation.id,
-                prescriptionIds: selectedPrescription.prescriptions,
               },
             },
           });
@@ -176,14 +143,50 @@ export const ReserveForm = ({
                 startDate,
                 endDate,
                 memo,
+                isDayoff: true,
                 userId: +userId!,
                 clinicId: selectedInfo.clinic!.id,
-                patientId: selectedInfo.patient!.id,
-                prescriptionIds: selectedPrescription.prescriptions,
               },
             },
           });
       }
+      return;
+    }
+    const endDate = new Date(startDate);
+
+    // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
+    endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
+    if (reservation) {
+      // reservation이 있으면 edit모드
+
+      if (!editLoading)
+        callEditReservation({
+          variables: {
+            input: {
+              startDate,
+              endDate,
+              memo,
+              userId: +userId!,
+              reservationId: reservation.id,
+              prescriptionIds: selectedPrescription.prescriptions,
+            },
+          },
+        });
+    } else {
+      if (!createLoading)
+        createReservationMutation({
+          variables: {
+            input: {
+              startDate,
+              endDate,
+              memo,
+              userId: +userId!,
+              clinicId: selectedInfo.clinic!.id,
+              patientId: selectedInfo.patient!.id,
+              prescriptionIds: selectedPrescription.prescriptions,
+            },
+          },
+        });
     }
   };
 
@@ -275,7 +278,8 @@ export const ReserveForm = ({
           setSelectedEndDateState={setSelectedEndDateState}
           isValid={isValid}
           loading={createLoading && editLoading}
-          reservation={reservation}
+          startDate={reservation?.startDate || selectedStartDateState}
+          endDate={reservation?.startDate || selectedEndDateState}
         />
       ) : (
         <>

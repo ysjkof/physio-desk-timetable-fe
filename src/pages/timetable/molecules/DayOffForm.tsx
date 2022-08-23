@@ -5,7 +5,7 @@ import { Button } from '../../../components/molecules/Button';
 import { SelectUser } from './SelectUser';
 import { Input } from '../../../components/molecules/Input';
 import { UseFormRegister } from 'react-hook-form';
-import { IListReservation, IReserveForm } from '../../../types/type';
+import { IReserveForm } from '../../../types/type';
 
 interface DayOffFormProps {
   register: UseFormRegister<IReserveForm>;
@@ -13,7 +13,8 @@ interface DayOffFormProps {
   loading: boolean;
   setSelectedStartDateState: React.Dispatch<React.SetStateAction<Date | null>>;
   setSelectedEndDateState: React.Dispatch<React.SetStateAction<Date | null>>;
-  reservation?: IListReservation;
+  startDate?: Date;
+  endDate?: Date;
 }
 
 export const DayOffForm = ({
@@ -22,7 +23,8 @@ export const DayOffForm = ({
   loading,
   setSelectedStartDateState,
   setSelectedEndDateState,
-  reservation,
+  startDate,
+  endDate,
 }: DayOffFormProps) => {
   const selectedInfo = useReactiveVar(selectedInfoVar);
 
@@ -39,18 +41,16 @@ export const DayOffForm = ({
         시작 시각
         <DatepickerWithInput
           setSelectedDate={setSelectedStartDateState}
-          defaultDate={
-            reservation ? new Date(reservation.startDate) : new Date()
-          }
+          hasHour
+          defaultDate={startDate && new Date(startDate)}
         />
       </label>
       <label className="flex flex-col gap-2">
         종료 시각
         <DatepickerWithInput
           setSelectedDate={setSelectedEndDateState}
-          defaultDate={
-            reservation ? new Date(reservation.startDate) : new Date()
-          }
+          hasHour
+          defaultDate={endDate && new Date(endDate)}
         />
       </label>
 

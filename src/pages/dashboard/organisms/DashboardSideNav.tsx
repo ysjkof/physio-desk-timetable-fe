@@ -86,6 +86,7 @@ export const DashboardSideNav = ({
                         setLocalStorage({
                           key: 'SELECTED_CLINIC',
                           userId: meData.me.id,
+                          userName: meData.me.name,
                           value: newSelectedClinic,
                         })
                       );

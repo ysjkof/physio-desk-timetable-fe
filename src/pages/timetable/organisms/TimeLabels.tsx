@@ -11,7 +11,7 @@ interface TimeLabelsProps {
 function TimeLabels({ labels }: TimeLabelsProps) {
   const checkMatchString = (date: string, minutes: string[]): boolean => {
     const targetMinute = getFrom4DigitTime(date, 'minute');
-    return minutes.includes(targetMinute);
+    return minutes.includes('' + targetMinute);
   };
 
   return (
