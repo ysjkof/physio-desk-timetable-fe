@@ -15,13 +15,11 @@ import { ClinicName } from '../molecules/ClinicName';
 
 interface DashboardSideNavProps {
   selectedMenu: SelectedMenuType;
-  setSelectedMenu: React.Dispatch<React.SetStateAction<SelectedMenuType>>;
   meData: MeQuery;
 }
 
 export const DashboardSideNav = ({
   selectedMenu,
-  setSelectedMenu,
   meData,
 }: DashboardSideNavProps) => {
   const { selectedInfo, clinicLists, setSelectedInfo } = useStore();
@@ -103,39 +101,39 @@ export const DashboardSideNav = ({
           type={'member'}
           selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu('member')}
+          to="member"
         />
         <DashboardNavList
           type={'invite'}
           selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu('invite')}
+          to="invite"
         />
         <div className="seperate-bar mb-2 pt-2" />
         <DashboardNavList
           type={'prescription'}
           selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu('prescription')}
+          to="prescription"
         />
         <DashboardNavList
           type={'statistics'}
           selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu('statistics')}
+          to="statistics"
         />
         <div className="seperate-bar mb-2 pt-2" />
         <DashboardNavList
           type={'create'}
           selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu('create')}
+          to="create"
         />
         <DashboardNavList
           type={'clinics'}
           selectedClinic={selectedInfo.clinic}
           selectedMenu={selectedMenu}
-          onClick={() => setSelectedMenu('clinics')}
+          to="clinics"
         />
       </ul>
     </nav>

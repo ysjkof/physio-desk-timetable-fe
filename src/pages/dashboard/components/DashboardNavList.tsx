@@ -1,17 +1,19 @@
+import { Link } from 'react-router-dom';
 import { SelectedMenuType } from '..';
 import { ISelectedClinic } from '../../../types/type';
+import { cls } from '../../../utils/utils';
 
 interface DashboardNavListProps {
   selectedMenu: SelectedMenuType;
   selectedClinic: ISelectedClinic;
   type: string;
-  onClick: () => void;
+  to: string;
 }
 export const DashboardNavList = ({
   selectedMenu,
   selectedClinic,
-  onClick,
   type,
+  to,
 }: DashboardNavListProps) => {
   let textContents = '';
   let isManagerMenu = false;
@@ -42,16 +44,17 @@ export const DashboardNavList = ({
 
   return (
     <li
-      className={`btn-menu cursor-pointer rounded-none ${
-        selectedMenu === type ? 'bg-green-100 font-semibold' : ''
-      } ${
+      className={cls(
+        'btn-menu w-full cursor-pointer rounded-none',
+        selectedMenu === type ? 'bg-green-100 font-semibold' : '',
         isManagerMenu && selectedClinic.isManager === false
           ? 'pointer-events-none opacity-50'
           : ''
-      }`}
-      onClick={() => onClick()}
+      )}
     >
-      {textContents}
+      <Link to={to} className="block w-full">
+        {textContents}
+      </Link>
     </li>
   );
 };

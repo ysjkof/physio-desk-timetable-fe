@@ -2,7 +2,6 @@ import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { InDashboardPageProps } from '..';
 import { Loading } from '../../../components/atoms/Loading';
 import { ModalTemplate } from '../../../components/templates/ModalTemplate';
 import { ModalContentsLayout } from '../../../components/templates/ModalContentsLayout';
@@ -11,13 +10,15 @@ import { DeactivateClinicInfo } from '../../../types/type';
 import { cls } from '../../../utils/utils';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import { DeactivateClinic } from './DeactivateClinic';
+import { useMe } from '../../../hooks/useMe';
 
 const isPersonalClinic = (
   compareMemberId: number,
   psersonalClinicMemberId: number
 ) => compareMemberId === psersonalClinicMemberId;
 
-export const MyClinics = ({ loggedInUser }: InDashboardPageProps) => {
+export const MyClinics = () => {
+  const { data } = useMe();
   const [hasDeactivate, setHasDeactivate] = useState(false);
   const [deactivateClinic, setDeactivateClinic] =
     useState<DeactivateClinicInfo>({
@@ -36,7 +37,7 @@ export const MyClinics = ({ loggedInUser }: InDashboardPageProps) => {
   const myMembership = findMyClinicsData?.findMyClinics.clinics
     ?.map((clinic) => clinic.members.flat(1))
     .flat(1)
-    .filter((member) => member.user.id === loggedInUser.id);
+    .filter((member) => member.user.id === data?.me.id);
 
   const openDeactivate = ({ id, name }: DeactivateClinicInfo) => {
     setDeactivateClinic({ id, name });

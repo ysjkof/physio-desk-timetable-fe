@@ -30,7 +30,7 @@ export const UserNameTitle = ({
   const navigate = useNavigate();
 
   function onClickBox() {
-    navigate(ROUTER.RESERVE, {
+    navigate(ROUTER.reserve, {
       state: {
         isDayOff: true,
         startDate: {

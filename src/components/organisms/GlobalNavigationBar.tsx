@@ -196,7 +196,7 @@ export const GlobalNavigationBar = () => {
                 <Dropdown.Container width={'12rem'}>
                   <Dropdown.Ul>
                     <Dropdown.Li to="/edit-profile">프로필</Dropdown.Li>
-                    <Dropdown.Li to={ROUTER.DASHBOARD}>대시보드</Dropdown.Li>
+                    <Dropdown.Li to={ROUTER.dashboard}>대시보드</Dropdown.Li>
                   </Dropdown.Ul>
                   <Dropdown.Ul>
                     <Dropdown.Button onClick={logoutBtn}>
@@ -207,7 +207,7 @@ export const GlobalNavigationBar = () => {
               </Dropdown>
             </>
           ) : (
-            <Link to={ROUTER.LOGIN}>
+            <Link to={ROUTER.login}>
               <span className="whitespace-nowrap">로그인/회원가입</span>
             </Link>
           )}

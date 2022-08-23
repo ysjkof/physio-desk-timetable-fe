@@ -10,7 +10,6 @@ import {
 } from '../../../services/dateServices';
 import { useReactiveVar } from '@apollo/client';
 import { selectedDateVar } from '../../../store';
-import { ModalPortal } from '../../../components/templates/ModalPortal';
 
 export const ReserveModal = ({ closeAction }: TimetableModalProps) => {
   const location = useLocation();

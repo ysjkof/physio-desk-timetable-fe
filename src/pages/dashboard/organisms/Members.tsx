@@ -1,12 +1,12 @@
-import { InDashboardPageProps } from '..';
 import { useAcceptInvitationMutation } from '../../../graphql/generated/graphql';
 import { cls } from '../../../utils/utils';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import useStore from '../../../hooks/useStore';
+import { useMe } from '../../../hooks/useMe';
 
-export const Members = ({ loggedInUser }: InDashboardPageProps) => {
+export const Members = () => {
+  const { data } = useMe();
   const { selectedInfo } = useStore();
-
   const [acceptInvitation] = useAcceptInvitationMutation();
 
   function onClick() {
@@ -20,7 +20,7 @@ export const Members = ({ loggedInUser }: InDashboardPageProps) => {
       });
     }
   }
-  console.log(selectedInfo.clinic?.members);
+
   return (
     <DashboardSectionLayout
       title="구성원"
@@ -46,7 +46,7 @@ export const Members = ({ loggedInUser }: InDashboardPageProps) => {
                 <span
                   className={cls(
                     'py-1',
-                    loggedInUser.id === member.user.id ? 'font-bold' : ''
+                    data?.me.id === member.user.id ? 'font-bold' : ''
                   )}
                 >
                   {member.user.name}
@@ -54,7 +54,7 @@ export const Members = ({ loggedInUser }: InDashboardPageProps) => {
                 <div className="mx-auto">
                   {!member.staying &&
                     !member.accepted &&
-                    loggedInUser.id === member.user.id && (
+                    data?.me.id === member.user.id && (
                       <button
                         className="btn rounded-md bg-blue-500/90 py-1 px-2 text-white hover:bg-blue-800"
                         type="button"

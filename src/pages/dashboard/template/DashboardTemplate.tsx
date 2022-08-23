@@ -3,12 +3,12 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 interface DashboardTemplateProps {
   breadcrumb: ReactNode;
   nav: ReactNode;
-  main: ReactNode;
+  children: ReactNode;
 }
 export const DashboardTemplate = ({
   breadcrumb,
   nav,
-  main,
+  children,
 }: DashboardTemplateProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | null>(null);
@@ -41,7 +41,7 @@ export const DashboardTemplate = ({
         className="dashboard-contents relative col-start-2 row-start-2 overflow-y-scroll border-l"
         style={{ ...(height && { height }) }}
       >
-        {main}
+        {children}
       </div>
     </div>
   );

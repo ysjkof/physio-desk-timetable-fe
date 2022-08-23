@@ -2,18 +2,12 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ClinicType, MeQuery } from '../../graphql/generated/graphql';
 import { useMe } from '../../hooks/useMe';
-import { Members } from './organisms/Members';
-import { InviteClinic } from './organisms/InviteClinic';
-import { CreateClinic } from './organisms/CreateClinic';
-import { PrescriptionPage } from './organisms/PrescriptionPage';
-import { useLocation } from 'react-router-dom';
-import { MyClinics } from './organisms/MyClinics';
-import { Statistics } from './organisms/Statistics';
+import { Outlet, useLocation } from 'react-router-dom';
 import { DashboardTemplate } from './template/DashboardTemplate';
 import { DashboardSideNav } from './organisms/DashboardSideNav';
 import { DashboardTitle } from './components/DashboardTitle';
 import { Loading } from '../../components/atoms/Loading';
-import { IMemberWithActivate, ModifiedLoggedInUser } from '../../types/type';
+import { IMemberWithActivate } from '../../types/type';
 import useStore from '../../hooks/useStore';
 
 export type SelectedMenuType =
@@ -24,10 +18,6 @@ export type SelectedMenuType =
   | 'clinics'
   | 'prescription'
   | 'statistics';
-
-export interface InDashboardPageProps {
-  loggedInUser: ModifiedLoggedInUser;
-}
 
 export function checkManager(clinicId: number, meData: MeQuery) {
   return Boolean(
@@ -92,39 +82,16 @@ export const Dashboard = () => {
       </Helmet>
 
       <DashboardTemplate
-        nav={
-          <DashboardSideNav
-            selectedMenu={selectedMenu}
-            setSelectedMenu={setSelectedMenu}
-            meData={meData}
-          />
-        }
+        nav={<DashboardSideNav selectedMenu={selectedMenu} meData={meData} />}
         breadcrumb={
           <DashboardTitle
             clinicName={selectedInfo.clinic.name}
             type={selectedMenu}
           />
         }
-        main={
-          <>
-            {selectedInfo.clinic && (
-              <>
-                {selectedMenu === 'main' && '메뉴를 선택하세요'}
-                {selectedMenu === 'member' && (
-                  <Members loggedInUser={meData.me} />
-                )}
-                {selectedMenu === 'invite' && <InviteClinic />}
-                {selectedMenu === 'prescription' && <PrescriptionPage />}
-                {selectedMenu === 'statistics' && <Statistics />}
-              </>
-            )}
-            {selectedMenu === 'create' && <CreateClinic />}
-            {selectedMenu === 'clinics' && (
-              <MyClinics loggedInUser={meData.me} />
-            )}
-          </>
-        }
-      />
+      >
+        <Outlet />
+      </DashboardTemplate>
     </>
   ) : (
     <Loading />

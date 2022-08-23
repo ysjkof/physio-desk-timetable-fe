@@ -31,7 +31,7 @@ function ReserveButton({
   const [isHover, setIsHover] = useState(false);
 
   const openReserveModal = () => {
-    navigate(ROUTER.RESERVE, {
+    navigate(ROUTER.reserve, {
       state: {
         startDate: {
           hour: +getFrom4DigitTime(label, 'hour'),

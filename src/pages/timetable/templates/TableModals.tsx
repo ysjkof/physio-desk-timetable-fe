@@ -7,23 +7,23 @@ import { ROUTER } from '../../../router/routerConstants';
 export function TableModals() {
   const navigate = useNavigate();
 
-  const isReserve = useMatch(ROUTER.RESERVE);
-  const isEdit = useMatch(ROUTER.EDIT_RESERVE);
-  const isCreatePatient = useMatch(ROUTER.CREATE_PATIENT);
+  const isReserve = useMatch(ROUTER.reserve);
+  const isEdit = useMatch(ROUTER.edit_reservation);
+  const isCreatePatient = useMatch(ROUTER.create_patient);
   return (
     <>
       {isEdit ? (
         <ReservationModal
-          closeAction={() => isEdit && navigate(ROUTER.TIMETABLE)}
+          closeAction={() => isEdit && navigate(ROUTER.timetable)}
         />
       ) : isReserve ? (
         <ReserveModal
-          closeAction={() => isReserve && navigate(ROUTER.TIMETABLE)}
+          closeAction={() => isReserve && navigate(ROUTER.timetable)}
         />
       ) : (
         isCreatePatient && (
           <CreatePatientModal
-            closeAction={() => isCreatePatient && navigate(ROUTER.TIMETABLE)}
+            closeAction={() => isCreatePatient && navigate(ROUTER.timetable)}
           />
         )
       )}

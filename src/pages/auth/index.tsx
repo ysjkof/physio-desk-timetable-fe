@@ -13,7 +13,7 @@ export const Account = () => {
         <Outlet />
 
         <NavLink
-          to={ROUTER.ENDPOINT.SIGN_UP}
+          to={ROUTER.endpoint.SIGN_UP}
           className={
             location.pathname === '/create-account'
               ? 'font-bold text-sky-500 hover:underline'
@@ -25,7 +25,7 @@ export const Account = () => {
         </NavLink>
 
         <NavLink
-          to={ROUTER.ENDPOINT.LOGIN}
+          to={ROUTER.endpoint.LOGIN}
           className={
             location.pathname === '/'
               ? 'font-bold text-sky-500 hover:underline'
