@@ -21,5 +21,6 @@ export const useListReservations = () => {
         clinicId,
       },
     },
+    fetchPolicy: 'cache-and-network',
   });
 };
