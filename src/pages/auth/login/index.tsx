@@ -6,12 +6,11 @@ import {
   LoginMutation,
   useLoginMutation,
 } from '../../../graphql/generated/graphql';
-import { authTokenVar, isLoggedInVar } from '../../../apollo';
 import { Input } from '../../../components/molecules/Input';
 import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
-import { LOCAL_STORAGE_KEY } from '../../../constants/localStorage';
+import { login } from '../authServices';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -29,11 +28,9 @@ export const Login = () => {
     if (!ok) {
       alert('로그인이 유효하지 않습니다.');
     }
+
     if (ok && token) {
-      localStorage.setItem(LOCAL_STORAGE_KEY.TOKEN, token);
-      authTokenVar(token);
-      isLoggedInVar(true);
-      navigate('/');
+      login(token, () => navigate('/'));
     }
   };
 
@@ -41,6 +38,7 @@ export const Login = () => {
     useLoginMutation({
       onCompleted,
     });
+
   const onSubmit = () => {
     if (!loading) {
       const { email, password } = getValues();

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { authTokenVar, isLoggedInVar } from '../../apollo';
 import { useForm } from 'react-hook-form';
 import { useMe } from '../../hooks/useMe';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,6 +20,7 @@ import {
 import { ROUTES } from '../../router/routes';
 import useStore, { makeSelectedClinic } from '../../hooks/useStore';
 import Dropdown from './Dropdown';
+import { logout } from '../../pages/auth/authServices';
 
 interface Notice {
   __typename?: 'Notice' | undefined;
@@ -46,11 +46,8 @@ export const LoggedInGlobalNavigationBar = () => {
     setValue('search', searchTrim);
     navigate(`/search?name=${searchTrim}`);
   };
-  const logoutBtn = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY.TOKEN);
-    authTokenVar(null);
-    isLoggedInVar(false);
-    navigate('/');
+  const invokeLogout = () => {
+    logout(() => navigate('/'));
   };
 
   useEffect(() => {
@@ -187,7 +184,9 @@ export const LoggedInGlobalNavigationBar = () => {
                 <Dropdown.Li to={ROUTES.dashboard}>대시보드</Dropdown.Li>
               </Dropdown.Ul>
               <Dropdown.Ul>
-                <Dropdown.Button onClick={logoutBtn}>로그아웃</Dropdown.Button>
+                <Dropdown.Button onClick={invokeLogout}>
+                  로그아웃
+                </Dropdown.Button>
               </Dropdown.Ul>
             </Dropdown.Container>
           </Dropdown>
