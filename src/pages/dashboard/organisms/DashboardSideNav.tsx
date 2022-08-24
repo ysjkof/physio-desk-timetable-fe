@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { checkManager, checkStay, SelectedMenuType } from '..';
 import { ClinicType, MeQuery } from '../../../graphql/generated/graphql';
-import { checkMember, setLocalStorage } from '../../../utils/utils';
+import {
+  checkMember,
+  removeItemInArrayByIndex,
+  setLocalStorage,
+} from '../../../utils/utils';
 import useStore from '../../../hooks/useStore';
 import Sidebar from '../../../components/organisms/Sidebar';
 import Selectbox from '../../../components/organisms/Selectbox';
@@ -10,6 +14,7 @@ import { useLocation } from 'react-router-dom';
 interface SelectedOption {
   id: number;
   value: string;
+  type: ClinicType;
 }
 interface DashboardSideNavProps {
   selectedMenu: SelectedMenuType;
@@ -22,7 +27,7 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
   const isMatch = (endpoint: string) => pathname.includes(endpoint);
 
   const { clinicLists, setSelectedInfo } = useStore();
-  const onlyMeMemberClinicLists = clinicLists.map((clinic) => {
+  const clinicListsSelectMeMember = clinicLists.map((clinic) => {
     const idx = clinic.members.findIndex(
       (member) => member.user.id === meData.me.id
     );
@@ -35,14 +40,15 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
   });
 
   const [selectedOption, setSelectedOption] = useState<SelectedOption>({
-    id: onlyMeMemberClinicLists[0].id,
-    value: onlyMeMemberClinicLists[0].name,
+    id: clinicListsSelectMeMember[0].id,
+    value: clinicListsSelectMeMember[0].name,
+    type: clinicListsSelectMeMember[0].type,
   });
   const selectOption = (selectedOption: SelectedOption) => {
     setSelectedOption(selectedOption);
   };
   const handleClickOption = (id: number, name: string, type: ClinicType) => {
-    selectOption({ id, value: name });
+    selectOption({ id, value: name, type });
     const newSelectedClinic = {
       id,
       name,
@@ -63,11 +69,25 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
     );
   };
 
+  const removePersonalClinicNumber = (name: string) => {
+    const splitted = name.split(':');
+    return removeItemInArrayByIndex(splitted.length - 1, splitted);
+  };
+  const renameBaseOnType = (name: string, type: ClinicType) => {
+    return type === ClinicType.Personal
+      ? removePersonalClinicNumber(name) + ' : 기본'
+      : name;
+  };
   return (
     <nav className="dashboard-side-nav h-full">
-      <Selectbox selectedValue={selectedOption.value}>
+      <Selectbox
+        selectedValue={renameBaseOnType(
+          selectedOption.value,
+          selectedOption.type
+        )}
+      >
         <Selectbox.Options>
-          {onlyMeMemberClinicLists.map((clinic) => (
+          {clinicListsSelectMeMember.map((clinic) => (
             <Selectbox.Option
               key={clinic.id}
               selected={clinic.id === selectedOption.id}
@@ -81,7 +101,7 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
                   : ''
               }
             >
-              {clinic.name}
+              {renameBaseOnType(clinic.name, clinic.type)}
             </Selectbox.Option>
           ))}
         </Selectbox.Options>
