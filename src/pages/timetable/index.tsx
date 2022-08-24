@@ -41,7 +41,7 @@ export interface TimetableModalProps {
 
 export const TimeTable = () => {
   const { labels } = useViewoptions();
-  const { data: loggedInUser } = useMe();
+  const { data: loginUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
   const { selectedInfo, viewOptions, clinicLists, selectedDate } = useStore();
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
@@ -53,7 +53,7 @@ export const TimeTable = () => {
   useEffect(() => {
     if (
       reservationData?.listReservations.results &&
-      loggedInUser &&
+      loginUser &&
       selectedInfo.clinic
     ) {
       const selectedSunday = getSunday(selectedDate);

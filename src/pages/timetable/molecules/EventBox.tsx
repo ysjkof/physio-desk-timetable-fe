@@ -15,7 +15,7 @@ import { compareTableEndtime, getHHMM } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
 import { selectedInfoVar, viewOptionsVar } from '../../../store';
 import { TABLE_CELL_HEIGHT, USER_COLORS } from '../../../constants/constants';
-import { ROUTER } from '../../../router/routerConstants';
+import { ROUTES } from '../../../router/routes';
 import { IListReservation } from '../../../types/type';
 
 interface EventBoxProps {
@@ -91,7 +91,7 @@ export function EventBox({
   };
 
   function onClickBox() {
-    navigate(ROUTER.editReservation, { state: { reservationId } });
+    navigate(ROUTES.editReservation, { state: { reservationId } });
   }
   const setSelectedReservation = () => {
     selectedInfoVar({ ...selectedInfo, reservation: event });

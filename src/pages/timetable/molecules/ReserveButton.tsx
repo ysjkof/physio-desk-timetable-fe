@@ -5,7 +5,7 @@ import {
   getTimeLength,
 } from '../../../services/dateServices';
 import { TABLE_CELL_HEIGHT, USER_COLORS } from '../../../constants/constants';
-import { ROUTER } from '../../../router/routerConstants';
+import { ROUTES } from '../../../router/routes';
 import { IListReservation } from '../../../types/type';
 
 interface ReserveBtnProps {
@@ -31,7 +31,7 @@ function ReserveButton({
   const [isHover, setIsHover] = useState(false);
 
   const openReserveModal = () => {
-    navigate(ROUTER.reserve, {
+    navigate(ROUTES.reserve, {
       state: {
         startDate: {
           hour: +getFrom4DigitTime(label, 'hour'),

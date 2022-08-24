@@ -64,7 +64,7 @@ interface ModifiedClinicMemberWithClinic
   clinic: Pick<Clinic, 'id' | 'name' | 'isActivated'>;
 }
 interface ModifiedNotice extends Pick<Notice, 'message' | 'read'> {}
-export interface ModifiedLoggedInUser
+export interface ModifiedLoginUser
   extends Pick<User, 'id' | 'name' | 'email' | 'role' | 'verified'> {
   members?: ModifiedClinicMemberWithClinic[] | null;
   notice?: ModifiedNotice[] | null;

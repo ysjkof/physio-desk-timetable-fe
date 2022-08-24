@@ -35,11 +35,11 @@ export function saveClinicLists(
 }
 export function saveViewOptions(
   newViewOptions: IViewOption,
-  loggedInUserId: number,
+  loginUserId: number,
   newViewOptionsForLacal?: IViewOption
 ) {
   localStorage.setItem(
-    LOCAL_STORAGE_KEY.VIEW_OPTION + loggedInUserId,
+    LOCAL_STORAGE_KEY.VIEW_OPTION + loginUserId,
     JSON.stringify(
       newViewOptionsForLacal ? newViewOptionsForLacal : newViewOptions
     )

@@ -7,14 +7,14 @@ interface UserNameTitlesProps {
   userLength: number;
   users: { id: number; name: string; isActivate: boolean }[];
   clinicId: number;
-  loggedInUserId: number;
+  loginUser: number;
   date: Date;
 }
 function UserNameTitles({
   userLength,
   users,
   clinicId,
-  loggedInUserId,
+  loginUser,
   date,
 }: UserNameTitlesProps) {
   return (
@@ -29,7 +29,7 @@ function UserNameTitles({
           member.isActivate && (
             <UserNameTitle
               key={userIndex}
-              isMe={member.id === loggedInUserId}
+              isMe={member.id === loginUser}
               name={member.name}
               userIndex={userIndex}
               clinicId={clinicId}

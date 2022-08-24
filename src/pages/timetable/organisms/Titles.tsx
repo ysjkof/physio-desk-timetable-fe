@@ -18,7 +18,7 @@ interface TitlesProps {
 export function Titles({ userFrameForWeek, userLength }: TitlesProps) {
   const today = new Date();
   const { selectedInfo, viewOptions, selectedDate } = useStore();
-  const { data: loggedInUser } = useMe();
+  const { data: loginUser } = useMe();
 
   const userFrame =
     viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY
@@ -73,7 +73,7 @@ export function Titles({ userFrameForWeek, userLength }: TitlesProps) {
               key={i}
               userLength={userLength}
               users={users}
-              loggedInUserId={loggedInUser!.me.id}
+              loginUser={loginUser!.me.id}
               clinicId={selectedInfo.clinic!.id}
               date={day.date}
             />

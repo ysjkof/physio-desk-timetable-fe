@@ -6,7 +6,7 @@ import { useCreateDayOffMutation } from '../../../graphql/generated/graphql';
 import { cls } from '../../../utils/utils';
 import { viewOptionsVar } from '../../../store';
 import { USER_COLORS, UTC_OPTION_KST } from '../../../constants/constants';
-import { ROUTER } from '../../../router/routerConstants';
+import { ROUTES } from '../../../router/routes';
 
 interface UserNameTitleProps {
   isMe: boolean;
@@ -30,7 +30,7 @@ export const UserNameTitle = ({
   const navigate = useNavigate();
 
   function onClickBox() {
-    navigate(ROUTER.reserve, {
+    navigate(ROUTES.reserve, {
       state: {
         isDayOff: true,
         startDate: {

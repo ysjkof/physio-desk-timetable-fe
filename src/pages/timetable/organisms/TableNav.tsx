@@ -3,7 +3,7 @@ import {
   faPlusSquare,
   faRectangleXmark,
 } from '@fortawesome/free-regular-svg-icons';
-import { faGear, faList } from '@fortawesome/free-solid-svg-icons';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -31,9 +31,7 @@ export function TableNav({}: TableNavProps) {
   const today = new Date();
   const { setSelectedInfo, selectedInfo, selectedDate, viewOptions } =
     useStore();
-  const { data: loggedInUser } = useMe();
-
-  // if (!loggedInUser || !viewOptions) return <></>;
+  const { data: loginUser } = useMe();
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
@@ -100,7 +98,7 @@ export function TableNav({}: TableNavProps) {
                     ? VIEW_PERIOD.ONE_WEEK
                     : VIEW_PERIOD.ONE_DAY,
               };
-              saveViewOptions(newViewOptions, loggedInUser!.me.id);
+              saveViewOptions(newViewOptions, loginUser!.me.id);
             }}
             firstEnabled={viewOptions.viewPeriod === VIEW_PERIOD.ONE_WEEK}
             secondEnabled={viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY}
@@ -116,7 +114,7 @@ export function TableNav({}: TableNavProps) {
                 ...viewOptions,
                 navigationExpand: !viewOptions.navigationExpand,
               };
-              saveViewOptions(newViewOptions, loggedInUser!.me.id);
+              saveViewOptions(newViewOptions, loginUser!.me.id);
             }}
           />
           {/* <MenuButton
@@ -128,7 +126,7 @@ export function TableNav({}: TableNavProps) {
                 ...viewOptions,
                 seeList: !viewOptions.seeList,
               };
-              saveViewOptions(newViewOptions, loggedInUser!.me.id);
+              saveViewOptions(newViewOptions, loginUser!.me.id);
             }}
           /> */}
           <MenuButton
@@ -146,7 +144,7 @@ export function TableNav({}: TableNavProps) {
               };
               saveViewOptions(
                 newViewOptions,
-                loggedInUser!.me.id,
+                loginUser!.me.id,
                 localViewOptions
               );
             }}
