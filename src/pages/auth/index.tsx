@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { ROUTER } from '../../router/routerConstants';
+import { ENDPOINT } from '../../router/routerConstants';
 
 export const Account = () => {
   const location = useLocation();
@@ -13,7 +13,7 @@ export const Account = () => {
         <Outlet />
 
         <NavLink
-          to={ROUTER.endpoint.SIGN_UP}
+          to={ENDPOINT.signUp}
           className={
             location.pathname === '/create-account'
               ? 'font-bold text-sky-500 hover:underline'
@@ -25,7 +25,7 @@ export const Account = () => {
         </NavLink>
 
         <NavLink
-          to={ROUTER.endpoint.LOGIN}
+          to={ENDPOINT.signIn}
           className={
             location.pathname === '/'
               ? 'font-bold text-sky-500 hover:underline'

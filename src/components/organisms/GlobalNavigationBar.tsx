@@ -207,7 +207,7 @@ export const GlobalNavigationBar = () => {
               </Dropdown>
             </>
           ) : (
-            <Link to={ROUTER.login}>
+            <Link to={ROUTER.signIn}>
               <span className="whitespace-nowrap">로그인/회원가입</span>
             </Link>
           )}

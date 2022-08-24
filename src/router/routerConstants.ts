@@ -3,28 +3,28 @@ const auth = 'auth';
 const reserve = 'reserve';
 const edit = 'edit';
 const create_patient = 'create-patient';
-const login = 'login';
-const sign_up = 'sign-up';
+const signIn = 'sing-in';
+const signUp = 'sign-up';
 
 export const ROUTER = {
-  confirm_email: 'confirm',
-  edit_profile: 'edit-profile',
+  confirmEmail: 'confirm',
+  editProfile: 'edit-profile',
   search: 'search',
   dashboard: 'dashboard',
   auth,
   timetable,
   reserve: `${timetable}/${reserve}`,
-  create_patient: `${timetable}/${create_patient}`,
-  edit_reservation: `${timetable}/${edit}`,
-  login: `${auth}/${login}`,
-  sign_up: `${auth}/${sign_up}`,
+  createPatient: `${timetable}/${create_patient}`,
+  editReservation: `${timetable}/${edit}`,
+  signIn: `${auth}/${signIn}`,
+  signUp: `${auth}/${signUp}`,
 };
 export const ENDPOINT = {
   reserve,
   edit,
   create_patient,
-  login,
-  sign_up,
+  signIn,
+  signUp,
   DASHBOARD: {
     member: 'member',
     invite: 'invite',
