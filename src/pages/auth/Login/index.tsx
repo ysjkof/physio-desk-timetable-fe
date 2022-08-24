@@ -19,11 +19,12 @@ export const Login = () => {
     getValues,
     formState: { errors, isValid },
     handleSubmit,
+    setError,
   } = useForm<LoginInput>({ mode: 'onChange' });
 
   const onCompleted = (data: LoginMutation) => {
     const {
-      login: { ok, token },
+      login: { ok, token, error },
     } = data;
     if (!ok) {
       alert('로그인이 유효하지 않습니다.');
@@ -31,6 +32,8 @@ export const Login = () => {
 
     if (ok && token) {
       login(token, () => navigate('/'));
+    } else if (error) {
+      setError('email', { message: error });
     }
   };
 

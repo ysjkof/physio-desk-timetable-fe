@@ -19,17 +19,21 @@ export const SignUp = () => {
     getValues,
     formState: { errors, isValid },
     handleSubmit,
+    setError,
   } = useForm<CreateAccountInput>({
     mode: 'onChange',
   });
   const navigate = useNavigate();
   const onCompleted = (data: CreateAccountMutation) => {
     const {
-      createAccount: { ok },
+      createAccount: { ok, error },
     } = data;
+
     if (ok) {
       alert('Account Created! Log in now!');
       navigate('/');
+    } else if (error) {
+      setError('name', { message: error });
     }
   };
   const [
