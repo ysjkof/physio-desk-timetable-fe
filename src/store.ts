@@ -1,6 +1,11 @@
 import { makeVar } from '@apollo/client';
 import { VIEW_PERIOD } from './constants/constants';
-import { IClinicList, IViewOption, SelectedInfo } from './types/type';
+import {
+  IClinicList,
+  IViewOption,
+  LoggedInUser,
+  SelectedInfo,
+} from './types/type';
 
 const defaultViewOptions: IViewOption = {
   viewPeriod: VIEW_PERIOD.ONE_WEEK,
@@ -16,6 +21,7 @@ const defaultViewOptions: IViewOption = {
 };
 
 // global state
+export const loggedInUserVar = makeVar<LoggedInUser>(undefined);
 export const viewOptionsVar = makeVar<IViewOption>(defaultViewOptions);
 export const clinicListsVar = makeVar<IClinicList[]>([]); // member의 activated key를 저장하기 위해서 필요함.
 

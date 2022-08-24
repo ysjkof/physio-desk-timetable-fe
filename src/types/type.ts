@@ -6,6 +6,7 @@ import {
   GetStatisticsQuery,
   ListReservationsQuery,
   Member,
+  MeQuery,
   Notice,
   Patient,
   Prescription,
@@ -170,3 +171,5 @@ export interface GetLocalStorage extends UserIdAndName {
 export interface SetLocalStorage extends GetLocalStorage {
   value: any;
 }
+
+export type LoggedInUser = MeQuery['me'] | undefined;

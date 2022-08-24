@@ -12,6 +12,7 @@ import { Statistics } from '../pages/dashboard/organisms/Statistics';
 import { EditProfile } from '../pages/edit-profile';
 import { Search } from '../pages/search';
 import { TimeTable } from '../pages/timetable';
+import { loggedInUserVar } from '../store';
 import ProtectRoute from './ProtectRoute';
 import { ENDPOINT, ROUTES } from './routes';
 
@@ -20,6 +21,8 @@ export interface LoginRouteProps {
 }
 function LoginRoute({ CommonRoute }: LoginRouteProps) {
   const { data } = useMe();
+  loggedInUserVar(data?.me);
+
   const timetableRoute = [
     {
       protectRoute: false,
