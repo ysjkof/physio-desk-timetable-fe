@@ -145,7 +145,9 @@ export const LoggedInGlobalNavigationBar = () => {
     <>
       {(meData && meData.me.verified) || (
         <div className="bg-red-500 p-3 text-center">
-          <span>Please verify your email.</span>
+          <span className="text-base font-bold text-white">
+            EMAIL 인증을 하면 모든 기능을 사용할 수 있습니다
+          </span>
         </div>
       )}
       <header className="HEADER header" id="header">

@@ -15,7 +15,7 @@ function Li({ to, children, selectedLi }: LiProps) {
   return (
     <li
       className={cls(
-        'h-full w-full cursor-pointer rounded-none hover:bg-red-200',
+        'h-full w-full cursor-pointer rounded-none hover:bg-gray-100',
         selectedLi ? 'bg-green-100 font-semibold' : ''
         // isManagerMenu && selectedClinic.isManager === false
         //   ? 'pointer-events-none opacity-50'

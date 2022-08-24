@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Worning } from '../components/atoms/Warning';
 import { NotFound } from '../components/organisms/404';
 import { GlobalLayout } from '../components/templates/GlobalLayout';
+import { useMe } from '../hooks/useMe';
 import { ConfirmEmail } from '../pages/confirm-email';
 import { Dashboard } from '../pages/dashboard';
 import { CreateClinic } from '../pages/dashboard/organisms/CreateClinic';
@@ -15,23 +16,61 @@ import { Home } from '../pages/home';
 import { Search } from '../pages/search';
 import { TestPage } from '../pages/TestPage';
 import { TimeTable } from '../pages/timetable';
+import ProtectRoute from './ProtectRoute';
 import { ENDPOINT, ROUTES } from './routes';
 
-const timetableRoute = [
-  { path: ENDPOINT.reserve, element: <TimeTable /> },
-  { path: ENDPOINT.edit, element: <TimeTable /> },
-  { path: ENDPOINT.create_patient, element: <TimeTable /> },
-];
-const dashboardRoute = [
-  { path: ENDPOINT.DASHBOARD.clinics, element: <MyClinics /> },
-  { path: ENDPOINT.DASHBOARD.create, element: <CreateClinic /> },
-  { path: ENDPOINT.DASHBOARD.invite, element: <InviteClinic /> },
-  { path: ENDPOINT.DASHBOARD.member, element: <Members /> },
-  { path: ENDPOINT.DASHBOARD.prescription, element: <PrescriptionPage /> },
-  { path: ENDPOINT.DASHBOARD.statistics, element: <Statistics /> },
-];
-
 function LoginRoute() {
+  const { data } = useMe();
+  const timetableRoute = [
+    {
+      protectRoute: false,
+      path: ENDPOINT.reserve,
+      element: <TimeTable />,
+    },
+    {
+      protectRoute: false,
+      path: ENDPOINT.edit,
+      element: <TimeTable />,
+    },
+    {
+      protectRoute: false,
+      path: ENDPOINT.create_patient,
+      element: <TimeTable />,
+    },
+  ];
+  const dashboardRoute = [
+    {
+      protectRoute: { protect: false, isPass: null },
+      path: ENDPOINT.DASHBOARD.clinics,
+      element: <MyClinics />,
+    },
+    {
+      protectRoute: { protect: true, isPass: data?.me.verified },
+      path: ENDPOINT.DASHBOARD.create,
+      element: <CreateClinic />,
+    },
+    {
+      protectRoute: { protect: true, isPass: data?.me.verified },
+      path: ENDPOINT.DASHBOARD.invite,
+      element: <InviteClinic />,
+    },
+    {
+      protectRoute: { protect: false, isPass: null },
+      path: ENDPOINT.DASHBOARD.member,
+      element: <Members />,
+    },
+    {
+      protectRoute: { protect: false, isPass: null },
+      path: ENDPOINT.DASHBOARD.prescription,
+      element: <PrescriptionPage />,
+    },
+    {
+      protectRoute: { protect: true, isPass: data?.me.verified },
+      path: ENDPOINT.DASHBOARD.statistics,
+      element: <Statistics />,
+    },
+  ];
+
   return (
     <Routes>
       <Route path="/" element={<GlobalLayout isLoggedIn />}>
@@ -42,7 +81,14 @@ function LoginRoute() {
         <Route
           key="TimetableRoute"
           path={ROUTES.timetable}
-          element={<TimeTable />}
+          element={
+            <ProtectRoute
+              failElement={<Worning type="verifyEmail" />}
+              isPass={data?.me.verified}
+            >
+              <TimeTable />
+            </ProtectRoute>
+          }
         >
           {timetableRoute.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
@@ -54,9 +100,22 @@ function LoginRoute() {
           element={<Dashboard />}
         >
           <Route index element={<Worning type="selectMenu" />} />
-          {dashboardRoute.map((route) => (
-            <Route key={route.path} path={route.path} element={route.element} />
-          ))}
+          {dashboardRoute.map((route) => {
+            const element = route.protectRoute.protect ? (
+              <ProtectRoute
+                failElement={<Worning type="verifyEmail" />}
+                isPass={!!route.protectRoute.isPass}
+              >
+                {route.element}
+              </ProtectRoute>
+            ) : (
+              route.element
+            );
+
+            return (
+              <Route key={route.path} path={route.path} element={element} />
+            );
+          })}
         </Route>
       </Route>
       <Route path="test" element={<TestPage />} />

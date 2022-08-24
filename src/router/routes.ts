@@ -4,10 +4,12 @@ const edit = 'edit';
 const create_patient = 'create-patient';
 const login = 'login';
 const signUp = 'sign-up';
+const confirmEmail = 'confirm-email';
+const editProfile = 'edit-profile';
 
 export const ROUTES = {
-  confirmEmail: 'confirm',
-  editProfile: 'edit-profile',
+  confirmEmail: `/${confirmEmail}`,
+  editProfile: `/${editProfile}`,
   search: 'search',
   dashboard: 'dashboard',
   timetable,
@@ -23,6 +25,8 @@ export const ENDPOINT = {
   create_patient,
   login,
   signUp,
+  confirmEmail,
+  editProfile,
   DASHBOARD: {
     member: 'member',
     invite: 'invite',

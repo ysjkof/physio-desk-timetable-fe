@@ -6,7 +6,8 @@ interface WarningProps {
     | 'emptyUserIds'
     | 'emptyData'
     | 'emptySearch'
-    | 'selectMenu';
+    | 'selectMenu'
+    | 'verifyEmail';
 }
 
 export const Worning = ({ type }: WarningProps) => {
@@ -32,6 +33,9 @@ export const Worning = ({ type }: WarningProps) => {
       break;
     case 'selectMenu':
       message = '메뉴를 선택하세요';
+      break;
+    case 'verifyEmail':
+      message = '이메일을 인증하면 모든 기능을 사용할 수 있습니다';
       break;
   }
   return <h3 className="mt-10 text-center">{message}</h3>;
