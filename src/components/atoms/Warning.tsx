@@ -5,7 +5,8 @@ interface WarningProps {
     | 'hasNotPrescription'
     | 'emptyUserIds'
     | 'emptyData'
-    | 'emptySearch';
+    | 'emptySearch'
+    | 'selectMenu';
 }
 
 export const Worning = ({ type }: WarningProps) => {
@@ -28,6 +29,9 @@ export const Worning = ({ type }: WarningProps) => {
       break;
     case 'emptySearch':
       message = '검색결과가 없습니다';
+      break;
+    case 'selectMenu':
+      message = '메뉴를 선택하세요';
       break;
   }
   return <h3 className="mt-10 text-center">{message}</h3>;

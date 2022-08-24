@@ -1,7 +1,7 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { ENDPOINT } from '../../router/routerConstants';
+import { NavLink, useLocation } from 'react-router-dom';
+import { ROUTES } from '../../router/routes';
 
-export const Account = () => {
+export const Account = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   return (
@@ -10,10 +10,10 @@ export const Account = () => {
         {/* <Link to="/">
      <img alt="Muool" src={muoolLogo} className="mb-5 w-80" />
     </Link> */}
-        <Outlet />
+        {children}
 
         <NavLink
-          to={ENDPOINT.signUp}
+          to={ROUTES.signUp}
           className={
             location.pathname === '/create-account'
               ? 'font-bold text-sky-500 hover:underline'
@@ -25,7 +25,7 @@ export const Account = () => {
         </NavLink>
 
         <NavLink
-          to={ENDPOINT.signIn}
+          to={ROUTES.login}
           className={
             location.pathname === '/'
               ? 'font-bold text-sky-500 hover:underline'
