@@ -1,9 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { Worning } from '../components/atoms/Warning';
-import { NotFound } from '../components/organisms/404';
 import { GlobalLayout } from '../components/templates/GlobalLayout';
 import { useMe } from '../hooks/useMe';
-import { ConfirmEmail } from '../pages/confirm-email';
 import { Dashboard } from '../pages/dashboard';
 import { CreateClinic } from '../pages/dashboard/organisms/CreateClinic';
 import { InviteClinic } from '../pages/dashboard/organisms/InviteClinic';
@@ -12,14 +10,15 @@ import { MyClinics } from '../pages/dashboard/organisms/MyClinics';
 import { PrescriptionPage } from '../pages/dashboard/organisms/PrescriptionPage';
 import { Statistics } from '../pages/dashboard/organisms/Statistics';
 import { EditProfile } from '../pages/edit-profile';
-import { Home } from '../pages/home';
 import { Search } from '../pages/search';
-import { TestPage } from '../pages/TestPage';
 import { TimeTable } from '../pages/timetable';
 import ProtectRoute from './ProtectRoute';
 import { ENDPOINT, ROUTES } from './routes';
 
-function LoginRoute() {
+export interface LoginRouteProps {
+  CommonRoute: JSX.Element[];
+}
+function LoginRoute({ CommonRoute }: LoginRouteProps) {
   const { data } = useMe();
   const timetableRoute = [
     {
@@ -74,8 +73,6 @@ function LoginRoute() {
   return (
     <Routes>
       <Route path="/" element={<GlobalLayout isLoggedIn />}>
-        <Route index element={<Home />} />
-        <Route path={ROUTES.confirmEmail} element={<ConfirmEmail />} />
         <Route path={ROUTES.editProfile} element={<EditProfile />} />
         <Route path={ROUTES.search} element={<Search />} />
         <Route
@@ -117,9 +114,8 @@ function LoginRoute() {
             );
           })}
         </Route>
+        {CommonRoute}
       </Route>
-      <Route path="test" element={<TestPage />} />
-      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
