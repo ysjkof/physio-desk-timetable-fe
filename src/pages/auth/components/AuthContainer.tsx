@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { ROUTES } from '../../router/routes';
+import { ROUTES } from '../../../router/routes';
 
-export const Account = ({ children }: { children: React.ReactNode }) => {
+export const AuthContainer = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   return (

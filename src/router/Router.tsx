@@ -2,7 +2,7 @@ import { useReactiveVar } from '@apollo/client';
 import { Route } from 'react-router-dom';
 import { isLoggedInVar } from '../apollo';
 import { NotFound } from '../components/organisms/404';
-import { ConfirmEmail } from '../pages/confirm-email';
+import { ConfirmEmail } from '../pages/auth/ConfirmEmail';
 import { Home } from '../pages/home';
 import { TestPage } from '../pages/TestPage';
 import LoginRoute from './LoginRoute';

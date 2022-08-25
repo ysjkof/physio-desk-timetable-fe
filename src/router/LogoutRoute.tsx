@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { GlobalLayout } from '../components/templates/GlobalLayout';
-import { Account } from '../pages/auth';
+import { AuthContainer } from '../pages/auth/components/AuthContainer';
 import { Login } from '../pages/auth/Login';
 import { SignUp } from '../pages/auth/SignUp';
 import { LoginRouteProps } from './LoginRoute';
@@ -13,17 +13,17 @@ function LogoutRoute({ CommonRoute }: LoginRouteProps) {
         <Route
           path={ENDPOINT.login}
           element={
-            <Account>
+            <AuthContainer>
               <Login />
-            </Account>
+            </AuthContainer>
           }
         />
         <Route
           path={ENDPOINT.signUp}
           element={
-            <Account>
+            <AuthContainer>
               <SignUp />
-            </Account>
+            </AuthContainer>
           }
         />
         {CommonRoute}

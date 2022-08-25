@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   useVerifyEmailMutation,
   VerifyEmailMutation,
-} from '../../graphql/generated/graphql';
-import { loggedInUserVar } from '../../store';
+} from '../../../graphql/generated/graphql';
+import { loggedInUserVar } from '../../../store';
 
 export const ConfirmEmail = () => {
   const client = useApolloClient();

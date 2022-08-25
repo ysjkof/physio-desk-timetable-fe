@@ -10,7 +10,7 @@ import { Members } from '../pages/dashboard/organisms/Members';
 import { MyClinics } from '../pages/dashboard/organisms/MyClinics';
 import { PrescriptionPage } from '../pages/dashboard/organisms/PrescriptionPage';
 import { Statistics } from '../pages/dashboard/organisms/Statistics';
-import { EditProfile } from '../pages/edit-profile';
+import { EditProfile } from '../pages/auth/EditProfile';
 import { Search } from '../pages/search';
 import { TimeTable } from '../pages/timetable';
 import { loggedInUserVar } from '../store';
@@ -41,7 +41,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
     },
     {
       protectRoute: false,
-      path: ENDPOINT.edit,
+      path: ENDPOINT.editReservation,
       element: <TimeTable />,
     },
     {

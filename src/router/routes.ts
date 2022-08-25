@@ -1,27 +1,29 @@
 const timetable = '/tt';
-const reserve = 'reserve';
-const edit = 'edit';
 const create_patient = 'create-patient';
+const reserve = 'reserve';
+const editReservation = 'edit';
+
+const auth = 'auth';
 const login = 'login';
 const signUp = 'sign-up';
 const confirmEmail = 'confirm-email';
-const editProfile = 'edit-profile';
+const editProfile = 'edit';
 
 export const ROUTES = {
-  confirmEmail: `/${confirmEmail}`,
-  editProfile: `/${editProfile}`,
+  confirmEmail: `/${auth}/${confirmEmail}`,
+  editProfile: `/${auth}/${editProfile}`,
   search: 'search',
   dashboard: 'dashboard',
   timetable,
   reserve: `${timetable}/${reserve}`,
   createPatient: `${timetable}/${create_patient}`,
-  editReservation: `${timetable}/${edit}`,
-  login: `/${login}`,
-  signUp: `/${signUp}`,
+  editReservation: `${timetable}/${editReservation}`,
+  login: `/${auth}/${login}`,
+  signUp: `/${auth}/${signUp}`,
 };
 export const ENDPOINT = {
   reserve,
-  edit,
+  editReservation,
   create_patient,
   login,
   signUp,
