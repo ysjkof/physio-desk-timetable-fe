@@ -17,7 +17,10 @@ export const authTokenVar = makeVar<string | null>(token);
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: 'ws://localhost:3002/graphql',
+    url:
+      process.env.NODE_ENV === 'production'
+        ? 'wss://muool.herokuapp.com/graphql'
+        : 'ws://localhost:3002/graphql',
     connectionParams: () => {
       return { 'x-jwt': authTokenVar() };
     },
@@ -25,7 +28,10 @@ const wsLink = new GraphQLWsLink(
 );
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3002/graphql',
+  uri:
+    process.env.NODE_ENV === 'production'
+      ? 'https://muool.herokuapp.com/graphql'
+      : 'http://localhost:3002/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
