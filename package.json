@@ -5,8 +5,9 @@
   "scripts": {
     "codegen": "graphql-codegen --config codegen.yml",
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build && npm run copy:redirects",
+    "preview": "vite preview",
+    "copy:redirects": "cp _redirects ./dist/_redirects"
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",
