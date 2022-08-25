@@ -49,6 +49,10 @@ export const ReservationCard = ({
     setIsEdit(false);
   };
 
+  const toggleMenu = () => {
+    setSubMenu((prev) => (prev === 'reservation' ? 'patient' : 'reservation'));
+    setIsEdit(false);
+  };
   return reservation.patient ? (
     <div className="space-y-4">
       <h4 className="mb-5 text-left font-medium"></h4>
@@ -59,12 +63,22 @@ export const ReservationCard = ({
         registrationNumber={reservation.patient.registrationNumber}
       />
 
+      <BtnMenuToggle
+        firstEnabled={subMenu === 'reservation'}
+        secondEnabled={subMenu === 'patient'}
+        label={['예약', '환자정보']}
+        width={'full'}
+        onClick={toggleMenu}
+      />
+
       <div className="reservation-editor flex justify-around">
         <MenuButton
           icon={<FontAwesomeIcon icon={faTrashCan} fontSize={14} />}
-          enabled
+          enabled={!isEdit && subMenu === 'reservation'}
           label={'삭제'}
-          onClick={onClickDelete}
+          onClick={
+            !isEdit && subMenu === 'reservation' ? onClickDelete : undefined
+          }
         />
         <MenuButton
           icon={<FontAwesomeIcon icon={faEdit} fontSize={14} />}
@@ -73,18 +87,6 @@ export const ReservationCard = ({
           onClick={() => setIsEdit((prev) => !prev)}
         />
       </div>
-
-      <BtnMenuToggle
-        firstEnabled={subMenu === 'reservation'}
-        secondEnabled={subMenu === 'patient'}
-        label={['예약', '환자정보']}
-        width={'full'}
-        onClick={() =>
-          setSubMenu((prev) =>
-            prev === 'reservation' ? 'patient' : 'reservation'
-          )
-        }
-      />
 
       <div className="h-full overflow-y-scroll">
         {subMenu === 'reservation' && !isEdit && (

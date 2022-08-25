@@ -261,7 +261,7 @@ export const ReserveForm = ({
     if (reservation) {
       setValue('memo', reservation.memo!);
       setValue('userId', reservation.user.id);
-      // @ts-ignore 여기서는 patientId만 있으면 된다
+      // @ts-ignore
       setSelectedInfo('patient', reservation.patient);
     } else if (userId) {
       setValue('userId', userId);

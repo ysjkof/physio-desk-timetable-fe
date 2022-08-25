@@ -37,7 +37,7 @@ export default function useStore() {
     value: SetSelectedInfoValue,
     callback?: () => void
   ) => {
-    if (selectedInfo[key] === value) return;
+    if (selectedInfo[key] && selectedInfo[key] === value) return;
     selectedInfoVar({ ...selectedInfo, [key]: value });
     if (callback) callback();
   };
