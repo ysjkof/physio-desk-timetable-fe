@@ -181,7 +181,7 @@ export const LoggedInGlobalNavigationBar = () => {
           <Dropdown title={meData?.me.name}>
             <Dropdown.Container width={'12rem'}>
               <Dropdown.Ul>
-                <Dropdown.Li to="/edit-profile">프로필</Dropdown.Li>
+                <Dropdown.Li to={ROUTES.editProfile}>프로필</Dropdown.Li>
                 <Dropdown.Li to={ROUTES.dashboard}>대시보드</Dropdown.Li>
               </Dropdown.Ul>
               <Dropdown.Ul>
