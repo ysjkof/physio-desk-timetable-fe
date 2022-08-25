@@ -4,14 +4,14 @@ import { AuthContainer } from '../pages/auth/components/AuthContainer';
 import { Login } from '../pages/auth/Login';
 import { SignUp } from '../pages/auth/SignUp';
 import { LoginRouteProps } from './LoginRoute';
-import { ENDPOINT } from './routes';
+import { ENDPOINT, ROUTES } from './routes';
 
 function LogoutRoute({ CommonRoute }: LoginRouteProps) {
   return (
     <Routes>
       <Route path="/" element={<GlobalLayout />}>
         <Route
-          path={ENDPOINT.login}
+          path={ROUTES.login}
           element={
             <AuthContainer>
               <Login />
@@ -19,7 +19,7 @@ function LogoutRoute({ CommonRoute }: LoginRouteProps) {
           }
         />
         <Route
-          path={ENDPOINT.signUp}
+          path={ROUTES.signUp}
           element={
             <AuthContainer>
               <SignUp />
