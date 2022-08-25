@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Worning } from '../components/atoms/Warning';
 import { GlobalLayout } from '../components/templates/GlobalLayout';
@@ -21,7 +22,16 @@ export interface LoginRouteProps {
 }
 function LoginRoute({ CommonRoute }: LoginRouteProps) {
   const { data } = useMe();
-  loggedInUserVar(data?.me);
+
+  useEffect(() => {
+    if (data) {
+      loggedInUserVar(data.me);
+      return;
+    }
+    return () => {
+      loggedInUserVar(undefined);
+    };
+  }, [data]);
 
   const timetableRoute = [
     {
