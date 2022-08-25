@@ -60,21 +60,6 @@ export const SignUp = () => {
         className="mt-5 mb-5 grid w-full gap-3"
       >
         <Input
-          name="name"
-          label={'이름'}
-          register={register('name', {
-            required: '이름을 입력하세요',
-            maxLength: { value: 30, message: '최대 30자 입니다' },
-          })}
-          type="text"
-          placeholder="Name"
-          children={
-            errors.name?.message && (
-              <FormError errorMessage={errors.name.message} />
-            )
-          }
-        />
-        <Input
           type="email"
           placeholder="Email"
           name="email"
@@ -83,7 +68,8 @@ export const SignUp = () => {
             required: 'Email을 입력하세요',
             pattern: REG_EXP.EMAIL,
           })}
-          children={
+        >
+          {
             <>
               <div className="group absolute left-[2.5rem] top-[0.08rem] cursor-pointer">
                 <FontAwesomeIcon icon={faCircleQuestion} fontSize={14} />
@@ -99,24 +85,37 @@ export const SignUp = () => {
               )}
             </>
           }
-        />
+        </Input>
+        <Input
+          name="name"
+          label={'이름'}
+          register={register('name', {
+            required: '이름을 입력하세요',
+            maxLength: { value: 30, message: '최대 30자 입니다' },
+          })}
+          type="text"
+          placeholder="Name"
+        >
+          {errors.name?.message && (
+            <FormError errorMessage={errors.name.message} />
+          )}
+        </Input>
         <Input
           type="password"
           placeholder="Password"
           name="password"
           label="비밀번호"
           register={register('password', { required: '비밀번호를 입력하세요' })}
-          children={
-            errors.password?.message && (
-              <FormError errorMessage={errors.password.message} />
-            )
-          }
-        />
+        >
+          {errors.password?.message && (
+            <FormError errorMessage={errors.password.message} />
+          )}
+        </Input>
         <Button
           type="submit"
           canClick={isValid}
           loading={loading}
-          textContents={'계정 만들기'}
+          textContents="계정 만들기"
         />
         {createaAccountMutationResult?.createAccount.error && (
           <FormError

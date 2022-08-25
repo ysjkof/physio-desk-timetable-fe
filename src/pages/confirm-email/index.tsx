@@ -37,7 +37,7 @@ export const ConfirmEmail = () => {
     } = data;
 
     if (error) {
-      setMessage(error);
+      return setMessage(error);
     }
     if (ok && loggedInUser?.id) {
       // Reading and Writing Data to the cache guide: writeFragment
@@ -56,8 +56,9 @@ export const ConfirmEmail = () => {
           verified: true,
         },
       });
-      navigate('/');
     }
+    alert('이메일 인증됐습니다');
+    navigate('/');
   };
 
   const [verifyEmail] = useVerifyEmailMutation({ onCompleted });
@@ -87,7 +88,7 @@ export const ConfirmEmail = () => {
         <title>Verify Email | Muool</title>
       </Helmet>
       <h2 className="mb-1  font-medium">Confirming email...</h2>
-      <h4 className="text-red-600">
+      <h4 className="text-base font-medium text-red-600">
         {message ? message : "Please wait, don't close this page..."}
       </h4>
     </div>

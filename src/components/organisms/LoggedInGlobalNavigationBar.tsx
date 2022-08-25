@@ -31,7 +31,6 @@ interface Notice {
 export const LoggedInGlobalNavigationBar = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues, setValue } = useForm();
-
   const { setSelectedInfo, viewOptions } = useStore();
   const { data: meData } = useMe();
   const { data: findMyClinicsData } = useFindMyClinicsQuery({
@@ -143,7 +142,7 @@ export const LoggedInGlobalNavigationBar = () => {
 
   return (
     <>
-      {(meData && meData.me.verified) || (
+      {meData && !meData.me.verified && (
         <div className="bg-red-500 p-3 text-center">
           <span className="text-base font-bold text-white">
             EMAIL 인증을 하면 모든 기능을 사용할 수 있습니다
