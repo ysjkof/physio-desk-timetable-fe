@@ -1,8 +1,14 @@
-import { useAcceptInvitationMutation } from '../../../graphql/generated/graphql';
+import {
+  FindMyClinicsDocument,
+  useAcceptInvitationMutation,
+  useCancelInvitationMutation,
+} from '../../../graphql/generated/graphql';
 import { cls } from '../../../utils/utils';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import useStore from '../../../hooks/useStore';
 import { useMe } from '../../../hooks/useMe';
+import { Button } from '../../../components/molecules/Button';
+import { client } from '../../../apollo';
 
 export const Members = () => {
   const { data } = useMe();
@@ -20,7 +26,28 @@ export const Members = () => {
       });
     }
   }
-
+  console.log('selectedInfo', selectedInfo.clinic);
+  const [cancelInvitation] = useCancelInvitationMutation();
+  const invokeCancelInvitation = (id: number) => {
+    if (confirm('정말 초대를 취소 하겠습니까?')) {
+      cancelInvitation({
+        variables: {
+          input: {
+            id,
+          },
+        },
+        onCompleted(data) {
+          if (data.cancelInvitation.ok) {
+            alert('삭제 완료');
+            // 할일: 리페치 없애고 캐시로 목표만 수정
+            client.refetchQueries({ include: [FindMyClinicsDocument] });
+            return;
+          }
+          alert('삭제 실패');
+        },
+      });
+    }
+  };
   return (
     <DashboardSectionLayout
       title="구성원"
@@ -38,7 +65,7 @@ export const Members = () => {
             {selectedInfo.clinic?.members?.map((member) => (
               <div
                 key={member.id}
-                className="grid grid-cols-[2.4rem_1fr_4.2rem_4rem] items-center gap-3 "
+                className="grid grid-cols-[2.4rem_1fr_4.2rem_4rem_4rem] items-center gap-3 "
               >
                 <span className="inline-block w-10 ">
                   {member.manager ? '관리자' : '회원'}
@@ -65,10 +92,24 @@ export const Members = () => {
                     )}
                 </div>
                 {!member.staying && !member.accepted && (
-                  <span className="text-center text-red-500">승인대기</span>
+                  <>
+                    <Button
+                      textContents="초대 취소"
+                      canClick
+                      loading={false}
+                      isSmall
+                      onClick={() => invokeCancelInvitation(member.id)}
+                    ></Button>
+                    <span className="text-center text-red-500">승인대기</span>
+                  </>
                 )}
                 {member.staying && member.accepted && ''}
-                {!member.staying && member.accepted && '떠난 회원'}
+                {!member.staying && member.accepted && (
+                  <>
+                    <span></span>
+                    <span className="text-center text-red-500">떠난 회원</span>
+                  </>
+                )}
               </div>
             ))}
           </ul>

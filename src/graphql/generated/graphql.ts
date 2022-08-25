@@ -26,6 +26,10 @@ export type AcceptInvitationOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type CancelInvitationInput = {
+  id: Scalars['Int'];
+};
+
 export type Clinic = {
   __typename?: 'Clinic';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -426,6 +430,7 @@ export type Member = {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptInvitation: AcceptInvitationOutput;
+  cancelInvitation: InviteUserOutput;
   createAccount: CreateAccountOutput;
   createAtomPrescription: CreateAtomPrescriptionOutput;
   createClinic: CreateClinicOutput;
@@ -448,6 +453,11 @@ export type Mutation = {
 
 export type MutationAcceptInvitationArgs = {
   input: AcceptInvitationInput;
+};
+
+
+export type MutationCancelInvitationArgs = {
+  input: CancelInvitationInput;
 };
 
 
@@ -801,6 +811,13 @@ export type AcceptInvitationMutationVariables = Exact<{
 
 export type AcceptInvitationMutation = { __typename?: 'Mutation', acceptInvitation: { __typename?: 'AcceptInvitationOutput', ok: boolean, error?: string | null } };
 
+export type CancelInvitationMutationVariables = Exact<{
+  input: CancelInvitationInput;
+}>;
+
+
+export type CancelInvitationMutation = { __typename?: 'Mutation', cancelInvitation: { __typename?: 'InviteUserOutput', ok: boolean, error?: string | null } };
+
 export type InactivateClinicMutationVariables = Exact<{
   input: InactivateClinicInput;
 }>;
@@ -1035,6 +1052,40 @@ export function useAcceptInvitationMutation(baseOptions?: Apollo.MutationHookOpt
 export type AcceptInvitationMutationHookResult = ReturnType<typeof useAcceptInvitationMutation>;
 export type AcceptInvitationMutationResult = Apollo.MutationResult<AcceptInvitationMutation>;
 export type AcceptInvitationMutationOptions = Apollo.BaseMutationOptions<AcceptInvitationMutation, AcceptInvitationMutationVariables>;
+export const CancelInvitationDocument = gql`
+    mutation cancelInvitation($input: CancelInvitationInput!) {
+  cancelInvitation(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type CancelInvitationMutationFn = Apollo.MutationFunction<CancelInvitationMutation, CancelInvitationMutationVariables>;
+
+/**
+ * __useCancelInvitationMutation__
+ *
+ * To run a mutation, you first call `useCancelInvitationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelInvitationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelInvitationMutation, { data, loading, error }] = useCancelInvitationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCancelInvitationMutation(baseOptions?: Apollo.MutationHookOptions<CancelInvitationMutation, CancelInvitationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelInvitationMutation, CancelInvitationMutationVariables>(CancelInvitationDocument, options);
+      }
+export type CancelInvitationMutationHookResult = ReturnType<typeof useCancelInvitationMutation>;
+export type CancelInvitationMutationResult = Apollo.MutationResult<CancelInvitationMutation>;
+export type CancelInvitationMutationOptions = Apollo.BaseMutationOptions<CancelInvitationMutation, CancelInvitationMutationVariables>;
 export const InactivateClinicDocument = gql`
     mutation inactivateClinic($input: InactivateClinicInput!) {
   inactivateClinic(input: $input) {
