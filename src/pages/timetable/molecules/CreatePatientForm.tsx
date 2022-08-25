@@ -39,6 +39,13 @@ export const CreatePatientForm = ({
     setValue,
   } = useForm<CreatePatientInput>({
     mode: 'onChange',
+    defaultValues: {
+      ...(patient && {
+        gender: patient.gender,
+        memo: patient.memo,
+        name: patient.name,
+      }),
+    },
   });
 
   const onCompleted = (data: CreatePatientMutation) => {
@@ -85,17 +92,16 @@ export const CreatePatientForm = ({
         });
       } else {
         // create
+        if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
+
         createPatientMutation({
           variables: {
             input: {
               name,
               gender,
               memo,
+              clinicId: selectedInfo.clinic.id,
               ...(birthday && { birthday }),
-              ...(typeof selectedInfo.clinic?.id === 'number' &&
-                selectedInfo.clinic?.id !== 0 && {
-                  clinicId: selectedInfo.clinic?.id,
-                }),
             },
           },
         });
@@ -105,13 +111,8 @@ export const CreatePatientForm = ({
   useEffect(() => {
     if (patient) {
       setBirthday(patient.birthday);
-      setValue('gender', patient.gender);
-      setValue('memo', patient.memo);
-      setValue('name', patient.name);
     }
   }, [patient]);
-
-  console.log(birthday, isValid);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">

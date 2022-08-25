@@ -24,6 +24,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
     if (!loading && selectedInfo.clinic) {
       const { patientName } = getValues();
       const patientNameTrim = patientName.trim();
+
       callQuery({
         variables: {
           input: {
