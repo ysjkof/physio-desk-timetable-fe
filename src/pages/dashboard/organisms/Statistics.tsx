@@ -11,7 +11,7 @@ import {
 import { getMonthStartEnd } from '../../../services/dateServices';
 import { Loading } from '../../../components/atoms/Loading';
 import { Button } from '../../../components/molecules/Button';
-import combineUserStatistics from '../services/statisticsServices';
+import combineUserStatistics from '../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
 import { selectedDateVar } from '../../../store';

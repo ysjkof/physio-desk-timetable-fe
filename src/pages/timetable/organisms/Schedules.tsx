@@ -6,7 +6,7 @@ import useStore from '../../../hooks/useStore';
 import ReservationButtons from '../molecules/ReservationButtons';
 import ScheduleInUserInDay from '../molecules/ScheduleInUserInDay';
 import { VIEW_PERIOD } from '../../../constants/constants';
-import { getGridTemplateColumns } from '../services/timetableServices';
+import { getGridTemplateColumns } from '../../timetableServices';
 
 interface SchedulesProps {
   weekEvents: DayWithUsers[];

@@ -29,7 +29,7 @@ import {
   getActiveUserLength,
   makeUsersInDay,
   spreadClinicMembers,
-} from './services/timetableServices';
+} from '../timetableServices';
 import { DayWithUsers } from '../../types/type';
 import { useMe } from '../../hooks/useMe';
 import useViewoptions from '../../hooks/useViewOption';

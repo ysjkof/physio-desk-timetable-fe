@@ -5,8 +5,8 @@ import {
   IMember,
   IMemberWithActivate,
   IUserWithEvent,
-} from '../../../types/type';
-import { compareDateMatch } from '../../../services/dateServices';
+} from '../types/type';
+import { compareDateMatch } from '../services/dateServices';
 
 export const spreadClinicMembers = (
   clinics: IClinicList[] | null,

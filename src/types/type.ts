@@ -172,4 +172,4 @@ export interface SetLocalStorage extends GetLocalStorage {
   value: any;
 }
 
-export type LoggedInUser = MeQuery['me'] | undefined;
+export type LoggedInUser = MeQuery['me'] | undefined | null;

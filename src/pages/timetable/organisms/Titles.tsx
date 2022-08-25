@@ -8,7 +8,7 @@ import { VIEW_PERIOD } from '../../../constants/constants';
 import {
   getGridTemplateColumns,
   getTableCellWidth,
-} from '../services/timetableServices';
+} from '../../timetableServices';
 
 interface TitlesProps {
   userFrameForWeek: DayWithUsers[];
