@@ -62,7 +62,9 @@ function Options({ children }: OptionsProps) {
 }
 
 function Selectbox({ children, selectedValue, width }: SelectboxProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(
+    process.env.NODE_ENV === 'product' ? true : false
+  );
   const toggleMenu = () => {
     setIsOpen((prevState) => !prevState);
   };
