@@ -229,7 +229,7 @@ export const PrescriptionPage = () => {
                         required: '시간을 입력해주세요',
                         min: { value: 10, message: '최소 10분입니다' },
                         max: { value: 180, message: '최대 180분입니다' },
-                        pattern: REG_EXP.NUMBER_END_DIGIT_OF_ZERO,
+                        pattern: REG_EXP.numberEnd0,
                       })}
                       children={
                         <>

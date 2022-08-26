@@ -77,7 +77,7 @@ export const Login = () => {
           label={'Email'}
           register={register('email', {
             required: 'Email을 입력하세요',
-            pattern: REG_EXP.EMAIL,
+            pattern: REG_EXP.email,
           })}
           children={
             <>
@@ -95,13 +95,22 @@ export const Login = () => {
           placeholder="Password"
           name="password"
           label="비밀번호"
-          register={register('password', { required: '비밀번호를 입력하세요' })}
-          children={
-            errors.password?.message && (
-              <FormError errorMessage={errors.password.message} />
+          register={register('password', {
+            required: '비밀번호를 입력하세요',
+            pattern:
+              process.env.NODE_ENV === 'production'
+                ? REG_EXP.password.pattern
+                : undefined,
+          })}
+        >
+          {errors.password?.message ? (
+            <FormError errorMessage={errors.password.message} />
+          ) : (
+            errors.password?.type === 'pattern' && (
+              <FormError errorMessage={REG_EXP.password.condition} />
             )
-          }
-        />
+          )}
+        </Input>
         <Button
           type="submit"
           canClick={isValid}

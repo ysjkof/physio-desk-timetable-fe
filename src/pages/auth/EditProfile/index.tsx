@@ -104,7 +104,7 @@ export const EditProfile = () => {
             label={'Email'}
             register={register('email', {
               required: 'Email을 입력하세요',
-              pattern: REG_EXP.EMAIL,
+              pattern: REG_EXP.email,
             })}
           >
             {errors.email?.message && (
@@ -135,10 +135,18 @@ export const EditProfile = () => {
             label="비밀번호"
             register={register('password', {
               required: '비밀번호를 입력하세요',
+              pattern:
+                process.env.NODE_ENV === 'production'
+                  ? REG_EXP.password.pattern
+                  : undefined,
             })}
           >
-            {errors.password?.message && (
+            {errors.password?.message ? (
               <FormError errorMessage={errors.password.message} />
+            ) : (
+              errors.password?.type === 'pattern' && (
+                <FormError errorMessage={REG_EXP.password.condition} />
+              )
             )}
           </Input>
           <Button
