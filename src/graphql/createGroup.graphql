@@ -2,5 +2,21 @@ mutation createClinic($input: CreateClinicInput!) {
   createClinic(input: $input) {
     ok
     error
+    clinic {
+      id
+      name
+      type
+      isActivated
+      members {
+        id
+        staying
+        manager
+        accepted
+        user {
+          id
+          name
+        }
+      }
+    }
   }
 }

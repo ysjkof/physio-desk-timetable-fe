@@ -78,6 +78,7 @@ export type CreateClinicInput = {
 
 export type CreateClinicOutput = {
   __typename?: 'CreateClinicOutput';
+  clinic: Clinic;
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
 };
@@ -851,7 +852,7 @@ export type CreateClinicMutationVariables = Exact<{
 }>;
 
 
-export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null } };
+export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string } }> } } };
 
 export type CreatePatientMutationVariables = Exact<{
   input: CreatePatientInput;
@@ -1227,6 +1228,22 @@ export const CreateClinicDocument = gql`
   createClinic(input: $input) {
     ok
     error
+    clinic {
+      id
+      name
+      type
+      isActivated
+      members {
+        id
+        staying
+        manager
+        accepted
+        user {
+          id
+          name
+        }
+      }
+    }
   }
 }
     `;

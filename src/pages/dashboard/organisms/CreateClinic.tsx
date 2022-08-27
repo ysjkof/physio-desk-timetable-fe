@@ -1,14 +1,19 @@
+import { useReactiveVar } from '@apollo/client';
 import { useForm } from 'react-hook-form';
+import { client } from '../../../apollo';
 import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
 import { Input } from '../../../components/molecules/Input';
 import {
   CreateClinicInput,
+  FindMyClinicsDocument,
   useCreateClinicMutation,
 } from '../../../graphql/generated/graphql';
+import { selectedInfoVar } from '../../../store';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 
 export const CreateClinic = () => {
+  const selectedInfo = useReactiveVar(selectedInfoVar);
   const {
     register,
     handleSubmit,
@@ -23,6 +28,35 @@ export const CreateClinic = () => {
       const { name } = getValues();
       createClinicMutation({
         variables: { input: { name } },
+        onCompleted(data) {
+          if (data.createClinic.ok) {
+            if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
+
+            const query = FindMyClinicsDocument;
+            const variables = { input: { includeInactivate: true } };
+            const findMyClinicsData = client.readQuery({
+              query,
+              variables,
+            });
+            client.writeQuery({
+              variables,
+              query,
+              data: {
+                ...findMyClinicsData,
+                findMyClinics: {
+                  ...findMyClinicsData.findMyClinics,
+                  clinics: [
+                    ...findMyClinicsData.findMyClinics.clinics,
+                    {
+                      ...data.createClinic.clinic,
+                      members: [...data.createClinic.clinic.members],
+                    },
+                  ],
+                },
+              },
+            });
+          }
+        },
       });
     }
   };
