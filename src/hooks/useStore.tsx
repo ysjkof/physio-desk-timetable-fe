@@ -25,8 +25,6 @@ export function makeSelectedClinic(clinic: IClinicList, userId: number) {
 }
 
 export default function useStore() {
-  // console.log('store');
-
   const viewOptions = useReactiveVar(viewOptionsVar);
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedInfo = useReactiveVar(selectedInfoVar);
@@ -46,6 +44,7 @@ export default function useStore() {
     setSelectedInfo,
     viewOptions,
     clinicLists,
+    clinicListsVar,
     selectedInfo,
     selectedDate,
   };

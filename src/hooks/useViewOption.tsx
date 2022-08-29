@@ -12,6 +12,7 @@ import { viewOptionsVar } from '../store';
 
 export default function useViewoptions() {
   const viewOptions = useReactiveVar(viewOptionsVar);
+
   const [firstTime] = useState(() => {
     return newDateSetHourAndMinute({
       hour: viewOptions.tableDuration.start.hours,

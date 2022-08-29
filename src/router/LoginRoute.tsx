@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Worning } from '../components/atoms/Warning';
 import { GlobalLayout } from '../components/templates/GlobalLayout';
@@ -13,7 +12,6 @@ import { Statistics } from '../pages/dashboard/organisms/Statistics';
 import { EditProfile } from '../pages/auth/EditProfile';
 import { Search } from '../pages/search';
 import { TimeTable } from '../pages/timetable';
-import { loggedInUserVar } from '../store';
 import ProtectRoute from './ProtectRoute';
 import { ENDPOINT, ROUTES } from './routes';
 
@@ -22,16 +20,6 @@ export interface LoginRouteProps {
 }
 function LoginRoute({ CommonRoute }: LoginRouteProps) {
   const { data } = useMe();
-
-  useEffect(() => {
-    if (data) {
-      loggedInUserVar(data.me);
-      return;
-    }
-    return () => {
-      loggedInUserVar(undefined);
-    };
-  }, [data]);
 
   const timetableRoute = [
     {

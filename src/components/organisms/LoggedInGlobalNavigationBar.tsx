@@ -1,24 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMe } from '../../hooks/useMe';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
-import {
-  ClinicType,
-  useFindMyClinicsQuery,
-} from '../../graphql/generated/graphql';
-import { viewOptionsVar } from '../../store';
-import { getLocalStorageItem, saveClinicLists } from '../../utils/utils';
-import { LOCAL_STORAGE_KEY } from '../../constants/localStorage';
-import {
-  IClinic,
-  IClinicList,
-  ISelectedClinic,
-  IViewOption,
-} from '../../types/type';
 import { ROUTES } from '../../router/routes';
-import useStore, { makeSelectedClinic } from '../../hooks/useStore';
 import Dropdown from './Dropdown';
 import { logout } from '../../pages/auth/authServices';
 
@@ -31,13 +16,7 @@ interface Notice {
 export const LoggedInGlobalNavigationBar = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues, setValue } = useForm();
-  const { setSelectedInfo, viewOptions } = useStore();
   const { data: meData } = useMe();
-  const { data: findMyClinicsData } = useFindMyClinicsQuery({
-    variables: { input: { includeInactivate: true } },
-  });
-
-  const [notices, setNotices] = useState<Notice[] | null>(null);
 
   const onSubmitSearch = () => {
     const { search } = getValues();
@@ -48,97 +27,6 @@ export const LoggedInGlobalNavigationBar = () => {
   const invokeLogout = () => {
     logout(() => navigate('/'));
   };
-
-  useEffect(() => {
-    if (!meData) return;
-    if (meData.me.notice) {
-      setNotices(meData.me.notice);
-    }
-    const localViewOptions = getLocalStorageItem<IViewOption>({
-      key: 'VIEW_OPTION',
-      userId: meData.me.id,
-      userName: meData.me.name,
-    });
-
-    if (localViewOptions === null) {
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY.VIEW_OPTION + meData.me.id,
-        JSON.stringify(viewOptions)
-      );
-    } else {
-      viewOptionsVar(localViewOptions);
-    }
-  }, [meData]);
-
-  useEffect(() => {
-    if (!meData) return;
-    if (!findMyClinicsData || !findMyClinicsData.findMyClinics.clinics) return;
-
-    const { clinics } = findMyClinicsData.findMyClinics;
-
-    function injectKeyValue(clinics: IClinic[]): IClinicList[] {
-      return clinics.map((clinic) => {
-        const members = clinic.members.map((member) => ({
-          ...member,
-          isActivate: member.staying,
-        }));
-        return { ...clinic, members };
-      });
-    }
-
-    const myClinics = injectKeyValue(clinics);
-    let updatedMyClinics: IClinicList[] = myClinics;
-
-    const localClinics = getLocalStorageItem<IClinicList[]>({
-      key: 'CLINIC_LISTS',
-      userId: meData.me.id,
-      userName: meData.me.name,
-    });
-
-    if (localClinics) {
-      updatedMyClinics = myClinics.map((clinic) => {
-        const localClinic = localClinics.find(
-          (localClinic) => localClinic.id === clinic.id
-        );
-
-        if (!localClinic) return clinic;
-
-        return {
-          ...localClinic,
-          id: clinic.id,
-          name: clinic.name,
-          type: clinic.type,
-          members: clinic.members.map((member) => {
-            const sameMember = localClinic.members.find(
-              (localMember) => localMember.id === member.id
-            );
-            return {
-              ...member,
-              ...(sameMember && { isActivate: sameMember.isActivate }),
-            };
-          }),
-        };
-      });
-    }
-
-    saveClinicLists(updatedMyClinics, meData.me.id);
-
-    const localSelectClinic = getLocalStorageItem<ISelectedClinic>({
-      key: 'SELECTED_CLINIC',
-      userId: meData.me.id,
-      userName: meData.me.name,
-    });
-    const clinic = updatedMyClinics.find((clinic) =>
-      localSelectClinic
-        ? clinic.id === localSelectClinic.id
-        : clinic.type === ClinicType.Personal
-    );
-    if (!clinic) return;
-
-    const newSelectedClinic = makeSelectedClinic(clinic, meData.me.id);
-
-    setSelectedInfo('clinic', newSelectedClinic);
-  }, [findMyClinicsData]);
 
   return (
     <>
@@ -171,9 +59,9 @@ export const LoggedInGlobalNavigationBar = () => {
           <div className="group relative cursor-pointer">
             <FontAwesomeIcon fontSize={24} icon={faBell} />
             <div className="DROPDOWN absolute top-6 right-0 z-50 hidden h-80 w-60 flex-col items-center overflow-y-scroll border bg-white py-2 px-4 shadow-cst group-hover:flex">
-              {!notices || notices.length === 0
+              {meData?.me.notice && meData.me.notice.length === 0
                 ? '알림이 없습니다.'
-                : notices.map((notice) => (
+                : meData?.me.notice?.map((notice) => (
                     <span className="break-all">{notice.message}</span>
                   ))}
             </div>
