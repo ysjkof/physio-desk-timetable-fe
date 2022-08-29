@@ -3,12 +3,7 @@ import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
 import { MenuButton } from '../../../components/molecules/MenuButton';
-import {
-  cls,
-  saveClinicLists,
-  saveViewOptions,
-  setLocalStorage,
-} from '../../../utils/utils';
+import { cls, saveViewOptions, setLocalStorage } from '../../../utils/utils';
 import { viewOptionsVar } from '../../../store';
 import { NEXT } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
@@ -16,8 +11,13 @@ import { useMe } from '../../../hooks/useMe';
 import useStore from '../../../hooks/useStore';
 
 export function TableOptionSelector() {
-  const { setSelectedInfo, viewOptions, clinicLists, selectedInfo } =
-    useStore();
+  const {
+    setSelectedInfo,
+    viewOptions,
+    clinicLists,
+    clinicListsVar,
+    selectedInfo,
+  } = useStore();
 
   const { data: loginUser } = useMe();
 
@@ -41,7 +41,13 @@ export function TableOptionSelector() {
       return;
     }
     clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
-    saveClinicLists([...clinicLists], loginUser.me.id);
+    setLocalStorage({
+      key: 'CLINIC_LISTS',
+      userId: loginUser.me.id,
+      userName: loginUser.me.name,
+      value: [...clinicLists],
+    });
+    clinicListsVar([...clinicLists]);
   };
 
   const onClickChangeSelectClinic = (clinicId: number) => {

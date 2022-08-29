@@ -161,15 +161,27 @@ interface UserIdAndName {
   userId: number;
   userName: string;
 }
-export interface CreateLocalStorageKey extends UserIdAndName {
+
+export interface CreateLocalStorageKey extends Partial<UserIdAndName> {
   key: LocalStorageValue;
 }
 export interface GetLocalStorage extends UserIdAndName {
   key: LocalStorageKey;
 }
-
 export interface SetLocalStorage extends GetLocalStorage {
   value: any;
+}
+
+export interface GetTokenLocalStorage extends Partial<UserIdAndName> {
+  key: 'TOKEN';
+}
+export interface SetTokenLocalStorage
+  extends Pick<SetLocalStorage, 'value'>,
+    Partial<UserIdAndName> {
+  key: 'TOKEN';
+}
+export interface RemoveTokenLocalStorage extends Partial<UserIdAndName> {
+  key: 'TOKEN';
 }
 
 export type LoggedInUser = MeQuery['me'] | undefined | null;

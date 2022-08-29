@@ -9,9 +9,9 @@ import { setContext } from '@apollo/client/link/context';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
-import { LOCAL_STORAGE_KEY } from './constants/localStorage';
+import { getLocalStorageItem } from './utils/utils';
 
-const token = localStorage.getItem(LOCAL_STORAGE_KEY.TOKEN);
+const token = getLocalStorageItem<string>({ key: 'TOKEN' });
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar<string | null>(token);
 

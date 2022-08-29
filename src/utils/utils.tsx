@@ -1,11 +1,13 @@
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
-import { clinicListsVar, viewOptionsVar } from '../store';
+import { viewOptionsVar } from '../store';
 import {
   CreateLocalStorageKey,
   GetLocalStorage,
-  IClinicList,
+  GetTokenLocalStorage,
   IViewOption,
+  RemoveTokenLocalStorage,
   SetLocalStorage,
+  SetTokenLocalStorage,
 } from '../types/type';
 
 export function cls(...classnames: string[]) {
@@ -23,16 +25,6 @@ export function getPositionRef(
   return { top, left };
 }
 
-export function saveClinicLists(
-  clinicList: IClinicList[],
-  loginUserId: number
-) {
-  localStorage.setItem(
-    LOCAL_STORAGE_KEY.CLINIC_LISTS + loginUserId,
-    JSON.stringify(clinicList)
-  );
-  clinicListsVar(clinicList);
-}
 export function saveViewOptions(
   newViewOptions: IViewOption,
   loginUserId: number,
@@ -83,14 +75,17 @@ export const createLocalStorageKey = ({
   userId,
   userName,
 }: CreateLocalStorageKey) => {
-  return key + userId + userName;
+  if (userId && userName) {
+    return key + userId + userName;
+  }
+  return key;
 };
 
 export function getLocalStorageItem<T>({
   key,
   userId,
   userName,
-}: GetLocalStorage): T | null {
+}: GetLocalStorage | GetTokenLocalStorage): T | null {
   const storageKey = createLocalStorageKey({
     key: LOCAL_STORAGE_KEY[key],
     userId,
@@ -101,12 +96,25 @@ export function getLocalStorageItem<T>({
   return JSON.parse(item);
 }
 
+export function removeLocalStorageItem<T>({
+  key,
+  userId,
+  userName,
+}: GetLocalStorage | RemoveTokenLocalStorage) {
+  const storageKey = createLocalStorageKey({
+    key: LOCAL_STORAGE_KEY[key],
+    userId,
+    userName,
+  });
+  localStorage.removeItem(storageKey)!;
+}
+
 export const setLocalStorage = ({
   key,
   userId,
   userName,
   value,
-}: SetLocalStorage) => {
+}: SetLocalStorage | SetTokenLocalStorage) => {
   const storageKey = createLocalStorageKey({
     key: LOCAL_STORAGE_KEY[key],
     userId,
