@@ -39,7 +39,6 @@ export const Members = () => {
         onCompleted(data) {
           if (data.cancelInvitation.ok) {
             alert('삭제 완료');
-            // 할일: 리페치 없애고 캐시로 목표만 수정
             client.refetchQueries({ include: [FindMyClinicsDocument] });
             return;
           }

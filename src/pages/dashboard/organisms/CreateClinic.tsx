@@ -32,29 +32,25 @@ export const CreateClinic = () => {
           if (data.createClinic.ok) {
             if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
 
-            const query = FindMyClinicsDocument;
-            const variables = { input: { includeInactivate: true } };
-            const findMyClinicsData = client.readQuery({
-              query,
-              variables,
-            });
-            client.writeQuery({
-              variables,
-              query,
-              data: {
-                ...findMyClinicsData,
-                findMyClinics: {
-                  ...findMyClinicsData.findMyClinics,
-                  clinics: [
-                    ...findMyClinicsData.findMyClinics.clinics,
-                    {
-                      ...data.createClinic.clinic,
-                      members: [...data.createClinic.clinic.members],
-                    },
-                  ],
-                },
+            client.cache.updateQuery(
+              {
+                query: FindMyClinicsDocument,
+                variables: { input: { includeInactivate: true } },
+                broadcast: false,
               },
-            });
+              (cacheData) => {
+                return {
+                  ...cacheData,
+                  findMyClinics: {
+                    ...cacheData.findMyClinics,
+                    clinics: [
+                      ...cacheData.findMyClinics.clinics,
+                      data.createClinic.clinic,
+                    ],
+                  },
+                };
+              }
+            );
           }
         },
       });

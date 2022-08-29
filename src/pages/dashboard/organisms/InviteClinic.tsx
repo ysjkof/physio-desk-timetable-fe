@@ -37,7 +37,6 @@ export const InviteClinic = () => {
         onCompleted(data) {
           if (data.inviteUser.ok) {
             setOkMessage('초대 완료');
-            // 할일: 리페치 없애고 캐시로 목표만 수정
             client.refetchQueries({ include: [FindMyClinicsDocument] });
           }
         },
