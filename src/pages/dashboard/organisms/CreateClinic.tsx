@@ -7,6 +7,7 @@ import { Input } from '../../../components/molecules/Input';
 import {
   CreateClinicInput,
   FindMyClinicsDocument,
+  MeDocument,
   useCreateClinicMutation,
 } from '../../../graphql/generated/graphql';
 import { selectedInfoVar } from '../../../store';
@@ -46,6 +47,24 @@ export const CreateClinic = () => {
                     clinics: [
                       ...cacheData.findMyClinics.clinics,
                       data.createClinic.clinic,
+                    ],
+                  },
+                };
+              }
+            );
+
+            client.cache.updateQuery(
+              {
+                query: MeDocument,
+                broadcast: false,
+              },
+              (cacheData) => {
+                return {
+                  me: {
+                    ...cacheData.me,
+                    members: [
+                      ...cacheData.me.members,
+                      data.createClinic.clinic?.members,
                     ],
                   },
                 };
