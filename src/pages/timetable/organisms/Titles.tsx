@@ -21,7 +21,7 @@ export function Titles({ userFrameForWeek, userLength }: TitlesProps) {
   const { data: loginUser } = useMe();
 
   const userFrame =
-    viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY
+    viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY
       ? userFrameForWeek && [userFrameForWeek[selectedDate.getDay()]]
       : userFrameForWeek;
 
@@ -45,7 +45,7 @@ export function Titles({ userFrameForWeek, userLength }: TitlesProps) {
     <div className="TITLES sticky top-0 z-[32] shadow-b">
       <div
         className="DATE_TITLE grid w-full"
-        style={viewPeriodStyle[viewOptions.viewPeriod].dateTitle}
+        style={viewPeriodStyle[viewOptions.get.viewPeriod].dateTitle}
       >
         {userFrameForWeek?.map((day, i) => (
           <DateTitle
@@ -58,7 +58,7 @@ export function Titles({ userFrameForWeek, userLength }: TitlesProps) {
       </div>
       <div
         className="USER_NAME_TITLE grid w-full"
-        style={viewPeriodStyle[viewOptions.viewPeriod].userNameTitle}
+        style={viewPeriodStyle[viewOptions.get.viewPeriod].userNameTitle}
       >
         {userFrame.map((day, i) => {
           const users = day.users.map((member) => {

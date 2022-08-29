@@ -7,6 +7,7 @@ import {
 } from '../store';
 import {
   IClinicList,
+  IViewOption,
   SetSelectedInfoKey,
   SetSelectedInfoValue,
 } from '../types/type';
@@ -25,7 +26,10 @@ export function makeSelectedClinic(clinic: IClinicList, userId: number) {
 }
 
 export default function useStore() {
-  const viewOptions = useReactiveVar(viewOptionsVar);
+  const viewOptions = {
+    get: useReactiveVar(viewOptionsVar),
+    set: viewOptionsVar,
+  };
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const selectedDate = useReactiveVar(selectedDateVar);

@@ -174,7 +174,7 @@ export const TimeTable = () => {
       <Helmet>
         <title>시간표 | Muool</title>
       </Helmet>
-      {!viewOptions || !weekEvents ? (
+      {!viewOptions.get || !weekEvents ? (
         <Loading />
       ) : (
         <TableTemplate
@@ -183,7 +183,7 @@ export const TimeTable = () => {
           columns={
             <>
               <AnimatePresence>
-                {viewOptions.seeList === false && (
+                {viewOptions.get.seeList === false && (
                   <>
                     <Titles
                       userLength={userLength}
@@ -197,7 +197,7 @@ export const TimeTable = () => {
                   </>
                 )}
               </AnimatePresence>
-              {viewOptions.seeList === true && '준비 중'}
+              {viewOptions.get.seeList === true && '준비 중'}
             </>
           }
         />

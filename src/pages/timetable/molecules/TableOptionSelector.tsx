@@ -3,12 +3,12 @@ import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
 import { MenuButton } from '../../../components/molecules/MenuButton';
-import { cls, saveViewOptions, setLocalStorage } from '../../../utils/utils';
-import { viewOptionsVar } from '../../../store';
+import { cls, setLocalStorage } from '../../../utils/utils';
+import { loggedInUserVar } from '../../../store';
 import { NEXT } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
-import { useMe } from '../../../hooks/useMe';
 import useStore from '../../../hooks/useStore';
+import { useReactiveVar } from '@apollo/client';
 
 export function TableOptionSelector() {
   const {
@@ -19,10 +19,10 @@ export function TableOptionSelector() {
     selectedInfo,
   } = useStore();
 
-  const { data: loginUser } = useMe();
+  const loggedInUser = useReactiveVar(loggedInUserVar);
 
   const onClickToggleUser = (clinicId: number, memberId: number) => {
-    if (!loginUser) throw new Error('❌ loginUser가 false입니다');
+    if (!loggedInUser) throw new Error('❌ loginUser가 false입니다');
     const clinicIdx = clinicLists.findIndex(
       (prevClinic) => prevClinic.id === clinicId
     );
@@ -43,18 +43,18 @@ export function TableOptionSelector() {
     clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
     setLocalStorage({
       key: 'CLINIC_LISTS',
-      userId: loginUser.me.id,
-      userName: loginUser.me.name,
+      userId: loggedInUser.id,
+      userName: loggedInUser.name,
       value: [...clinicLists],
     });
     clinicListsVar([...clinicLists]);
   };
 
   const onClickChangeSelectClinic = (clinicId: number) => {
-    if (!loginUser) throw new Error('❌ loginUser가 false입니다');
+    if (!loggedInUser) throw new Error('❌ loginUser가 false입니다');
     if (selectedInfo.clinic?.id !== clinicId) {
       const clinic = clinicLists.find((clinic) => clinic.id === clinicId);
-      const me = loginUser.me.members?.find(
+      const me = loggedInUser.members?.find(
         (member) => member.clinic.id === clinicId
       );
       if (clinic && me) {
@@ -70,8 +70,8 @@ export function TableOptionSelector() {
         setSelectedInfo('clinic', newSelectedClinic, () =>
           setLocalStorage({
             key: 'SELECTED_CLINIC',
-            userId: loginUser.me.id,
-            userName: loginUser.me.name,
+            userId: loggedInUser.id,
+            userName: loggedInUser.name,
             value: newSelectedClinic,
           })
         );
@@ -80,15 +80,25 @@ export function TableOptionSelector() {
   };
 
   const onClickChangeSeeActiveOption = () => {
-    if (viewOptions) {
+    if (viewOptions.get) {
       const newViewOptions = {
-        ...viewOptions,
-        seeActiveOption: !viewOptions.seeActiveOption,
+        ...viewOptions.get,
+        seeActiveOption: !viewOptions.get.seeActiveOption,
       };
-      viewOptionsVar(newViewOptions);
+      viewOptions.set(newViewOptions);
     }
   };
 
+  const invokeSaveViewOptions = (value: any) => {
+    if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
+    viewOptions.set(value);
+    setLocalStorage({
+      key: 'VIEW_OPTION',
+      userId: loggedInUser.id,
+      userName: loggedInUser.name,
+      value,
+    });
+  };
   const variants: Variants = {
     init: { x: 300 },
     end: { x: 0, transition: { duration: 0.3 } },
@@ -116,26 +126,26 @@ export function TableOptionSelector() {
       <div className="flex items-center gap-2 border-b py-1 px-3">
         <MenuButton
           icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
-          enabled={viewOptions.seeCancel}
+          enabled={viewOptions.get.seeCancel}
           label={'취소'}
           onClick={() => {
             const newViewOptions = {
-              ...viewOptions,
-              seeCancel: !viewOptions.seeCancel,
+              ...viewOptions.get,
+              seeCancel: !viewOptions.get.seeCancel,
             };
-            saveViewOptions(newViewOptions, loginUser!.me.id);
+            invokeSaveViewOptions(newViewOptions);
           }}
         />
         <MenuButton
           icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
-          enabled={viewOptions.seeNoshow}
+          enabled={viewOptions.get.seeNoshow}
           label={'부도'}
           onClick={() => {
             const newViewOptions = {
-              ...viewOptions,
-              seeNoshow: !viewOptions.seeNoshow,
+              ...viewOptions.get,
+              seeNoshow: !viewOptions.get.seeNoshow,
             };
-            saveViewOptions(newViewOptions, loginUser!.me.id);
+            invokeSaveViewOptions(newViewOptions);
           }}
         />
       </div>

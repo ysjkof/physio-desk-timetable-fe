@@ -19,7 +19,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
   const labelMaxLength = labels.length;
 
   const schedules =
-    viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY
+    viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY
       ? weekEvents && [weekEvents[selectedDate.getDay()]]
       : weekEvents;
 
@@ -44,7 +44,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
   return (
     <div
       className="SCHEDULES grid w-full"
-      style={viewPeriodStyle[viewOptions.viewPeriod].template}
+      style={viewPeriodStyle[viewOptions.get.viewPeriod].template}
     >
       {schedules.map((day, i) => (
         <div
@@ -53,7 +53,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
             'USER_COLS relative grid border-b',
             userLength === 1 ? 'border-x-inherit' : ''
           )}
-          style={viewPeriodStyle[viewOptions.viewPeriod].userColumn}
+          style={viewPeriodStyle[viewOptions.get.viewPeriod].userColumn}
         >
           <TimeIndicatorBar
             isActive={compareDateMatch(day.date, selectedDate, 'ymd')}

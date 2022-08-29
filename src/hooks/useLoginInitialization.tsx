@@ -36,7 +36,7 @@ function useLoginInitialization() {
         key: 'VIEW_OPTION',
         userId: meData.id,
         userName: meData.name,
-        value: viewOptions,
+        value: viewOptions.get,
       });
     } else {
       viewOptionsVar(localViewOptions);

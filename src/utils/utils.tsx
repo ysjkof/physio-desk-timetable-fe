@@ -1,10 +1,8 @@
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
-import { viewOptionsVar } from '../store';
 import {
   CreateLocalStorageKey,
   GetLocalStorage,
   GetTokenLocalStorage,
-  IViewOption,
   RemoveTokenLocalStorage,
   SetLocalStorage,
   SetTokenLocalStorage,
@@ -23,20 +21,6 @@ export function getPositionRef(
     ref.current?.getBoundingClientRect().top! + height + modalGap ?? 0;
   const left = ref.current?.getBoundingClientRect().left ?? 0;
   return { top, left };
-}
-
-export function saveViewOptions(
-  newViewOptions: IViewOption,
-  loginUserId: number,
-  newViewOptionsForLacal?: IViewOption
-) {
-  localStorage.setItem(
-    LOCAL_STORAGE_KEY.VIEW_OPTION + loginUserId,
-    JSON.stringify(
-      newViewOptionsForLacal ? newViewOptionsForLacal : newViewOptions
-    )
-  );
-  viewOptionsVar(newViewOptions);
 }
 
 export function checkMember(staying: boolean, accepted: boolean) {

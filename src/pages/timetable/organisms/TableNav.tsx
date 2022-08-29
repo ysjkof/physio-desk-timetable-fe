@@ -9,15 +9,15 @@ import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { BtnMenuToggle } from '../../../components/molecules/MenuToggleButton';
-import { saveViewOptions } from '../../../utils/utils';
 import { NEXT, PREV, VIEW_PERIOD } from '../../../constants/constants';
 import { BtnArrow } from '../../../components/atoms/ButtonArrow';
 import { TableOptionSelector } from '../molecules/TableOptionSelector';
 import { NavDatepicker } from '../molecules/NavDatepicker';
 import { IViewOption } from '../../../types/type';
-import { useMe } from '../../../hooks/useMe';
 import useStore from '../../../hooks/useStore';
-import { selectedDateVar } from '../../../store';
+import { loggedInUserVar, selectedDateVar } from '../../../store';
+import { useReactiveVar } from '@apollo/client';
+import { setLocalStorage } from '../../../utils/utils';
 
 interface TableNavProps {}
 
@@ -31,21 +31,32 @@ export function TableNav({}: TableNavProps) {
   const today = new Date();
   const { setSelectedInfo, selectedInfo, selectedDate, viewOptions } =
     useStore();
-  const { data: loginUser } = useMe();
+  const loggedInUser = useReactiveVar(loggedInUserVar);
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
-    viewOptions.navigationExpand
+    viewOptions.get.navigationExpand
       ? date.setMonth(date.getMonth() - 1)
       : date.setDate(date.getDate() - 7);
     selectedDateVar(date);
   };
   const handleDateNavMoveNext = () => {
     const date = new Date(selectedDate);
-    viewOptions.navigationExpand
+    viewOptions.get.navigationExpand
       ? date.setMonth(date.getMonth() + 1)
       : date.setDate(date.getDate() + 7);
     selectedDateVar(date);
+  };
+
+  const invokeSaveViewOptions = (value: any) => {
+    if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
+
+    setLocalStorage({
+      key: 'VIEW_OPTION',
+      userId: loggedInUser.id,
+      userName: loggedInUser.name,
+      value,
+    });
   };
 
   return (
@@ -92,70 +103,66 @@ export function TableNav({}: TableNavProps) {
           <BtnMenuToggle
             onClick={() => {
               const newViewOptions: IViewOption = {
-                ...viewOptions,
+                ...viewOptions.get,
                 viewPeriod:
-                  viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY
+                  viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY
                     ? VIEW_PERIOD.ONE_WEEK
                     : VIEW_PERIOD.ONE_DAY,
               };
-              saveViewOptions(newViewOptions, loginUser!.me.id);
+              viewOptions.set(newViewOptions);
+              invokeSaveViewOptions(newViewOptions);
             }}
-            firstEnabled={viewOptions.viewPeriod === VIEW_PERIOD.ONE_WEEK}
-            secondEnabled={viewOptions.viewPeriod === VIEW_PERIOD.ONE_DAY}
+            firstEnabled={viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_WEEK}
+            secondEnabled={viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY}
             label={['1주일', '하루']}
           />
           {/* ---------------------- 구분선 ---------------------- */}
           <MenuButton
             icon={<FontAwesomeIcon icon={faCalendarAlt} fontSize={14} />}
-            enabled={viewOptions.navigationExpand}
+            enabled={viewOptions.get.navigationExpand}
             label={'달력'}
             onClick={() => {
               const newViewOptions = {
-                ...viewOptions,
-                navigationExpand: !viewOptions.navigationExpand,
+                ...viewOptions.get,
+                navigationExpand: !viewOptions.get.navigationExpand,
               };
-              saveViewOptions(newViewOptions, loginUser!.me.id);
+              viewOptions.set(newViewOptions);
+              invokeSaveViewOptions(newViewOptions);
             }}
           />
           {/* <MenuButton
             icon={<FontAwesomeIcon icon={faList} fontSize={14} />}
-            enabled={viewOptions.seeList}
+            enabled={viewOptions.get.seeList}
             label={'목록'}
             onClick={() => {
               const newViewOptions = {
-                ...viewOptions,
-                seeList: !viewOptions.seeList,
+                ...viewOptions.get,
+                seeList: !viewOptions.get.seeList,
               };
-              saveViewOptions(newViewOptions, loginUser!.me.id);
+              viewOptions.set(newViewOptions);
+              invokeSaveViewOptions(newViewOptions);
             }}
           /> */}
           <MenuButton
             icon={<FontAwesomeIcon icon={faGear} fontSize={14} />}
-            enabled={viewOptions.seeActiveOption}
+            enabled={viewOptions.get.seeActiveOption}
             label={'설정'}
             onClick={() => {
               const newViewOptions = {
-                ...viewOptions,
-                seeActiveOption: !viewOptions.seeActiveOption,
+                ...viewOptions.get,
+                seeActiveOption: !viewOptions.get.seeActiveOption,
               };
-              const localViewOptions = {
-                ...viewOptions,
-                seeActiveOption: false,
-              };
-              saveViewOptions(
-                newViewOptions,
-                loginUser!.me.id,
-                localViewOptions
-              );
+              viewOptions.set(newViewOptions);
+              // seeActiveOption은 로컬스토리지에 저장할 필요 없다
             }}
           />
           <AnimatePresence>
-            {viewOptions.seeActiveOption && <TableOptionSelector />}
+            {viewOptions.get.seeActiveOption && <TableOptionSelector />}
           </AnimatePresence>
         </div>
       </div>
       <AnimatePresence>
-        {viewOptions.navigationExpand ? (
+        {viewOptions.get.navigationExpand ? (
           <NavDatepicker varients={tableNavVarients} />
         ) : (
           <>
