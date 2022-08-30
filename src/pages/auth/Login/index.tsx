@@ -20,7 +20,6 @@ export const Login = () => {
     getValues,
     formState: { errors, isValid },
     handleSubmit,
-    setError,
   } = useForm<LoginInput>({ mode: 'onChange' });
 
   const onCompleted = (data: LoginMutation) => {
@@ -34,7 +33,7 @@ export const Login = () => {
     if (ok && token) {
       login(token, () => navigate('/'));
     } else if (error) {
-      toastVar({ message: `에러 발생; ${error}` });
+      toastVar({ message: error });
     }
   };
 

@@ -37,7 +37,7 @@ export const SignUp = () => {
       navigate('/');
     } else if (error) {
       toastVar({
-        message: `에러 발생; ${error}`,
+        message: error,
       });
     }
   };
