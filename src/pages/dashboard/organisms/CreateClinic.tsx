@@ -36,11 +36,25 @@ export const CreateClinic = () => {
           if (data.createClinic.ok) {
             if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
             toastVar({ message: `병원 "${name}"을 만들었습니다` });
+
+            const newClinic = {
+              ...data.createClinic.clinic?.members[0],
+              clinic: {
+                id: data.createClinic.clinic?.id,
+                name: data.createClinic.clinic?.name,
+              },
+            };
+            const newMember = { ...newClinic };
+            // @ts-ignore
+            newMember.clinic.isActivated =
+              data.createClinic.clinic?.isActivated;
+            // @ts-ignore
+            newMember.clinic.type = data.createClinic.clinic?.type;
+
             client.cache.updateQuery(
               {
                 query: FindMyClinicsDocument,
                 variables: { input: { includeInactivate: true } },
-                broadcast: false,
               },
               (cacheData) => {
                 return {
@@ -49,7 +63,10 @@ export const CreateClinic = () => {
                     ...cacheData.findMyClinics,
                     clinics: [
                       ...cacheData.findMyClinics.clinics,
-                      data.createClinic.clinic,
+                      {
+                        ...data.createClinic.clinic,
+                        members: [newClinic],
+                      },
                     ],
                   },
                 };
@@ -59,16 +76,12 @@ export const CreateClinic = () => {
             client.cache.updateQuery(
               {
                 query: MeDocument,
-                broadcast: false,
               },
               (cacheData) => {
                 return {
                   me: {
                     ...cacheData.me,
-                    members: [
-                      ...cacheData.me.members,
-                      data.createClinic.clinic?.members,
-                    ],
+                    members: [...cacheData.me.members, newMember],
                   },
                 };
               }
