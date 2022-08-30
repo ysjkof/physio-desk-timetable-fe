@@ -39,7 +39,6 @@ export const CreatePatientForm = ({
     getValues,
     formState: { errors, isValid },
     handleSubmit,
-    setValue,
   } = useForm<CreatePatientInput>({
     mode: 'onChange',
     defaultValues: {
@@ -133,11 +132,12 @@ export const CreatePatientForm = ({
           pattern: REG_EXP.personName.pattern,
         })}
       >
-        {errors.name?.message && (
+        {errors.name?.message ? (
           <FormError errorMessage={errors.name.message} />
-        )}
-        {errors.name?.type === 'pattern' && (
-          <FormError errorMessage={REG_EXP.personName.condition} />
+        ) : (
+          errors.name?.type === 'pattern' && (
+            <FormError errorMessage={REG_EXP.personName.condition} />
+          )
         )}
       </Input>
       <div className="gender-radio flex justify-around">

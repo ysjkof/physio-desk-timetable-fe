@@ -11,7 +11,7 @@ import {
   MeDocument,
   useCreateClinicMutation,
 } from '../../../graphql/generated/graphql';
-import { selectedInfoVar } from '../../../store';
+import { selectedInfoVar, toastVar } from '../../../store';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 
 export const CreateClinic = () => {
@@ -20,20 +20,22 @@ export const CreateClinic = () => {
     register,
     handleSubmit,
     getValues,
+    clearErrors,
     formState: { errors, isValid },
-  } = useForm<CreateClinicInput>({ mode: 'onChange' });
+  } = useForm<Pick<CreateClinicInput, 'name'>>({ mode: 'onChange' });
 
   const [createClinicMutation, { loading, data }] = useCreateClinicMutation();
 
   const onSubmitCreateClinic = () => {
     if (!loading) {
-      const { name } = getValues();
+      let { name } = getValues();
+      name = name.trim();
       createClinicMutation({
         variables: { input: { name } },
         onCompleted(data) {
           if (data.createClinic.ok) {
             if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
-
+            toastVar({ message: `병원 "${name}"을 만들었습니다` });
             client.cache.updateQuery(
               {
                 query: FindMyClinicsDocument,
@@ -76,7 +78,10 @@ export const CreateClinic = () => {
       });
     }
   };
-
+  const invokeClearErrors = () => {
+    if (errors.name && !errors.name.message && !errors.name.type) return;
+    clearErrors('name');
+  };
   return (
     <DashboardSectionLayout
       title="병원 만들기"
@@ -93,19 +98,20 @@ export const CreateClinic = () => {
             label={'이름*'}
             placeholder={'병원 이름'}
             type="text"
+            onChange={invokeClearErrors}
             register={register('name', {
               required: '이름을 입력하세요',
               pattern: REG_EXP.clinicName.pattern,
             })}
           >
-            {errors.name?.message && (
+            {errors.name?.message ? (
               <FormError errorMessage={errors.name.message} />
-            )}
-            {data?.createClinic.error && (
-              <FormError errorMessage={data.createClinic.error} />
-            )}
-            {errors.name?.type === 'pattern' && (
+            ) : errors.name?.type === 'pattern' ? (
               <FormError errorMessage={REG_EXP.clinicName.condition} />
+            ) : (
+              data?.createClinic.error && (
+                <FormError errorMessage={data.createClinic.error} />
+              )
             )}
           </Input>
           <Button

@@ -16,6 +16,7 @@ import { client } from '../../../apollo';
 import { useState } from 'react';
 import { REG_EXP } from '../../../constants/regex';
 import { FormError } from '../../../components/atoms/FormError';
+import { toastVar } from '../../../store';
 
 export const InviteClinic = () => {
   const { selectedInfo } = useStore();
@@ -44,7 +45,11 @@ export const InviteClinic = () => {
         variables: { input: { clinicId: selectedInfo.clinic.id, name } },
         onCompleted(data) {
           if (data.inviteUser.ok) {
-            setOkMessage('초대 완료');
+            setOkMessage(
+              `"${
+                selectedInfo.clinic?.name || '병원'
+              }"에 "${name}"님을 초대했습니다`
+            );
             client.refetchQueries({ include: [FindMyClinicsDocument] });
           }
         },
@@ -74,14 +79,15 @@ export const InviteClinic = () => {
               type="text"
               register={register('name', {
                 required: '이름을 입력하세요',
-                pattern: REG_EXP.clinicName.pattern,
+                pattern: REG_EXP.personName.pattern,
               })}
             >
-              {errors.name?.message && (
+              {errors.name?.message ? (
                 <FormError errorMessage={errors.name.message} />
-              )}
-              {errors.name?.type === 'pattern' && (
-                <FormError errorMessage={REG_EXP.clinicName.condition} />
+              ) : (
+                errors.name?.type === 'pattern' && (
+                  <FormError errorMessage={REG_EXP.personName.condition} />
+                )
               )}
               <button className="absolute bottom-2.5 right-2" tabIndex={-1}>
                 <FontAwesomeIcon icon={faSearch} />

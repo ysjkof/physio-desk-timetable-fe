@@ -26,6 +26,7 @@ import {
 } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
 import { Textarea } from '../../../components/molecules/Textarea';
+import { toastVar } from '../../../store';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
@@ -85,7 +86,7 @@ export const ReserveForm = ({
       createReservation: { ok, error },
     } = data;
     if (error) {
-      alert(`오류가 발생했습니다; ${error}`);
+      toastVar({ message: `오류가 발생했습니다; ${error}` });
     }
     if (ok) closeAction();
   };
@@ -94,7 +95,7 @@ export const ReserveForm = ({
       editReservation: { ok, error },
     } = data;
     if (error) {
-      alert(`오류가 발생했습니다; ${error}`);
+      toastVar({ message: `오류가 발생했습니다; ${error}` });
     }
     // 할일: 캐시작업
     if (ok) closeAction();

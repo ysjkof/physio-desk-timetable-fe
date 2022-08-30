@@ -12,6 +12,7 @@ import { Input } from '../../../components/molecules/Input';
 import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
+import { toastVar } from '../../../store';
 
 export const SignUp = () => {
   const {
@@ -19,7 +20,6 @@ export const SignUp = () => {
     getValues,
     formState: { errors, isValid },
     handleSubmit,
-    setError,
   } = useForm<CreateAccountInput>({
     mode: 'onChange',
   });
@@ -30,10 +30,15 @@ export const SignUp = () => {
     } = data;
 
     if (ok) {
-      alert('Account Created! Log in now!');
+      toastVar({
+        message:
+          '계정을 만들었습니다. 이메일 인증을 하면 모든 기능을 사용할 수 있습니다.',
+      });
       navigate('/');
     } else if (error) {
-      setError('name', { message: error });
+      toastVar({
+        message: `에러 발생; ${error}`,
+      });
     }
   };
   const [
@@ -77,11 +82,12 @@ export const SignUp = () => {
                   Email은 로그인에 사용됩니다
                 </p>
               </div>
-              {errors.email?.message && (
+              {errors.email?.message ? (
                 <FormError errorMessage={errors.email.message} />
-              )}
-              {errors.email?.type === 'pattern' && (
-                <FormError errorMessage={REG_EXP.email.condition} />
+              ) : (
+                errors.email?.type === 'pattern' && (
+                  <FormError errorMessage={REG_EXP.email.condition} />
+                )
               )}
             </>
           }
@@ -96,11 +102,12 @@ export const SignUp = () => {
           type="text"
           placeholder="Name"
         >
-          {errors.name?.message && (
+          {errors.name?.message ? (
             <FormError errorMessage={errors.name.message} />
-          )}
-          {errors.name?.type === 'pattern' && (
-            <FormError errorMessage={REG_EXP.personName.condition} />
+          ) : (
+            errors.name?.type === 'pattern' && (
+              <FormError errorMessage={REG_EXP.personName.condition} />
+            )
           )}
         </Input>
         <Input

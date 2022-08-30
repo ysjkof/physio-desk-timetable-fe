@@ -11,6 +11,7 @@ import {
   useEditProfileMutation,
 } from '../../../graphql/generated/graphql';
 import { useMe } from '../../../hooks/useMe';
+import { toastVar } from '../../../store';
 
 export const EditProfile = () => {
   const { data: userData } = useMe();
@@ -27,6 +28,8 @@ export const EditProfile = () => {
 
       const { name, email } = getValues();
       if (prevName === name && prevEmail === email) return;
+
+      toastVar({ message: '사용자 정보 수정완료', fade: true });
 
       client.writeFragment({
         id: `User:${id}`,
@@ -80,8 +83,8 @@ export const EditProfile = () => {
     editProfile({
       variables: {
         input: {
-          ...(prevEmail !== email && { email }),
-          ...(prevName !== name && { name }),
+          ...(email && prevEmail !== email && { email }),
+          ...(name && prevName !== name && { name: name.trim() }),
           ...(password !== '' && { password }),
         },
       },
@@ -137,7 +140,6 @@ export const EditProfile = () => {
             id="password"
             label="비밀번호"
             register={register('password', {
-              required: '비밀번호를 입력하세요',
               pattern:
                 process.env.NODE_ENV === 'production'
                   ? REG_EXP.password.pattern

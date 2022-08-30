@@ -11,6 +11,7 @@ import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { login } from '../authServices';
+import { toastVar } from '../../../store';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -27,20 +28,19 @@ export const Login = () => {
       login: { ok, token, error },
     } = data;
     if (!ok) {
-      alert('로그인이 유효하지 않습니다.');
+      toastVar({ message: '로그인이 유효하지 않습니다.' });
     }
 
     if (ok && token) {
       login(token, () => navigate('/'));
     } else if (error) {
-      setError('email', { message: error });
+      toastVar({ message: `에러 발생; ${error}` });
     }
   };
 
-  const [loginMutation, { data: loginMutationResult, loading }] =
-    useLoginMutation({
-      onCompleted,
-    });
+  const [loginMutation, { loading }] = useLoginMutation({
+    onCompleted,
+  });
 
   const onSubmit = () => {
     if (!loading) {
@@ -71,29 +71,30 @@ export const Login = () => {
         className="mt-5 mb-5 grid w-full gap-3"
       >
         <Input
+          id="email"
           type="email"
           placeholder="Email"
-          name="email"
           label={'Email'}
           register={register('email', {
             required: 'Email을 입력하세요',
-            pattern: REG_EXP.email,
+            pattern: REG_EXP.email.pattern,
           })}
           children={
             <>
-              {errors.email?.message && (
+              {errors.email?.message ? (
                 <FormError errorMessage={errors.email.message} />
-              )}
-              {errors.email?.type === 'pattern' && (
-                <FormError errorMessage={'Email형식으로 입력하세요'} />
+              ) : (
+                errors.email?.type === 'pattern' && (
+                  <FormError errorMessage={REG_EXP.email.condition} />
+                )
               )}
             </>
           }
         />
         <Input
+          id="password"
           type="password"
           placeholder="Password"
-          name="password"
           label="비밀번호"
           register={register('password', {
             required: '비밀번호를 입력하세요',

@@ -208,11 +208,12 @@ export const PrescriptionPage = () => {
                     사용하기 원하는 처방의 이름을 입력합니다.
                   </p>
                 </div>
-                {errors.name?.message && (
+                {errors.name?.message ? (
                   <FormError errorMessage={errors.name.message} />
-                )}
-                {errors.name?.type === 'pattern' && (
-                  <FormError errorMessage={REG_EXP.prescription.condition} />
+                ) : (
+                  errors.name?.type === 'pattern' && (
+                    <FormError errorMessage={REG_EXP.prescription.condition} />
+                  )
                 )}
               </Input>
               <div className="flex justify-between gap-6">
@@ -230,11 +231,12 @@ export const PrescriptionPage = () => {
                     pattern: REG_EXP.numberEnd0.pattern,
                   })}
                 >
-                  {errors.requiredTime?.message && (
+                  {errors.requiredTime?.message ? (
                     <FormError errorMessage={errors.requiredTime.message} />
-                  )}
-                  {errors.requiredTime?.type === 'pattern' && (
-                    <FormError errorMessage={REG_EXP.numberEnd0.condition} />
+                  ) : (
+                    errors.requiredTime?.type === 'pattern' && (
+                      <FormError errorMessage={REG_EXP.numberEnd0.condition} />
+                    )
                   )}
                 </Input>
                 <Input
