@@ -1,33 +1,34 @@
-import { InputHTMLAttributes, ReactNode } from 'react';
+import { ReactNode, TextareaHTMLAttributes } from 'react';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label: string | null;
   id: string;
   register: UseFormRegisterReturn;
-  label?: string | null;
   value?: any;
   children?: ReactNode;
+  rows?: number;
 }
 
-export const Input = ({
+export const Textarea = ({
   label,
   id,
   placeholder,
   register,
   value,
   children,
+  rows,
   ...args
-}: InputProps) => {
+}: TextareaProps) => {
   return (
     <label className="relative flex w-full flex-col gap-2" htmlFor={id}>
       {label}
-      <input
+      <textarea
         id={id}
+        className="input"
         value={value}
-        autoComplete="off"
         {...args}
         {...register}
-        className="input"
       />
       {children}
     </label>
