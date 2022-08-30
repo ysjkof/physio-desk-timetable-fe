@@ -3,7 +3,7 @@ import { LoggedInGlobalNavigationBar } from '../organisms/LoggedInGlobalNavigati
 import { GlobalNavigationBar } from '../organisms/GlobalNavigationBar';
 import useLoginInitialization from '../../hooks/useLoginInitialization';
 import { Loading } from '../atoms/Loading';
-import Toast from '../atoms/Toast';
+import Toast from '../molecules/Toast';
 
 export const GlobalLayout = ({ isLoggedIn }: { isLoggedIn?: boolean }) => {
   const { loading } = useLoginInitialization();
