@@ -4,6 +4,7 @@ import { client } from '../../../apollo';
 import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
 import { Input } from '../../../components/molecules/Input';
+import { REG_EXP } from '../../../constants/regex';
 import {
   CreateClinicInput,
   FindMyClinicsDocument,
@@ -88,25 +89,25 @@ export const CreateClinic = () => {
           className="space-y-6"
         >
           <Input
-            name="name"
+            id="name"
             label={'이름*'}
             placeholder={'병원 이름'}
             type="text"
             register={register('name', {
               required: '이름을 입력하세요',
-              maxLength: { value: 30, message: '최대 30자 입니다' },
+              pattern: REG_EXP.clinicName.pattern,
             })}
-            children={
-              <>
-                {errors.name?.message && (
-                  <FormError errorMessage={errors.name.message} />
-                )}
-                {data?.createClinic.error && (
-                  <FormError errorMessage={data.createClinic.error} />
-                )}
-              </>
-            }
-          />
+          >
+            {errors.name?.message && (
+              <FormError errorMessage={errors.name.message} />
+            )}
+            {data?.createClinic.error && (
+              <FormError errorMessage={data.createClinic.error} />
+            )}
+            {errors.name?.type === 'pattern' && (
+              <FormError errorMessage={REG_EXP.clinicName.condition} />
+            )}
+          </Input>
           <Button
             isWidthFull
             type="submit"

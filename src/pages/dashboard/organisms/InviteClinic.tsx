@@ -3,22 +3,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
 import { Loading } from '../../../components/atoms/Loading';
 import { Worning } from '../../../components/atoms/Warning';
+import { Input } from '../../../components/molecules/Input';
 import {
+  ClinicType,
   FindMyClinicsDocument,
   SearchUsersInput,
   useInviteUserMutation,
 } from '../../../graphql/generated/graphql';
-import { cls } from '../../../utils/utils';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import useStore from '../../../hooks/useStore';
 import { client } from '../../../apollo';
 import { useState } from 'react';
+import { REG_EXP } from '../../../constants/regex';
+import { FormError } from '../../../components/atoms/FormError';
 
 export const InviteClinic = () => {
   const { selectedInfo } = useStore();
   const [okMessage, setOkMessage] = useState('');
 
-  const { register, handleSubmit, getValues } = useForm<SearchUsersInput>({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<SearchUsersInput>({
     mode: 'onChange',
   });
 
@@ -44,47 +52,48 @@ export const InviteClinic = () => {
     }
   };
 
-  return selectedInfo.clinic ? (
-    selectedInfo.clinic.isStayed && selectedInfo.clinic.isManager ? (
-      <>
-        <DashboardSectionLayout width="md" title="병원에 초대" heightFull>
-          <form onSubmit={handleSubmit(inviteUser)}>
-            <div className="relative flex items-center shadow-sm">
-              <input
-                {...register('name', {
-                  required: 'Username is required',
-                })}
-                id="search-user"
-                required
-                type="text"
-                placeholder="사용자 검색"
-                className={cls('input py-1')}
-                autoComplete="off"
-              />
-              <label
-                htmlFor="icon-search"
-                className="absolute right-0 mr-4 cursor-pointer"
-              >
-                <input
-                  id="icon-search"
-                  type="submit"
-                  value={''}
-                  tabIndex={-1}
-                  className="absolute"
-                />
+  if (!selectedInfo.clinic) return <Loading />;
+  if (selectedInfo.clinic && selectedInfo.clinic.type === ClinicType.Personal)
+    return (
+      <Worning>
+        {
+          '개인용 병원에는 사용자를 초대할 수 없습니다. 왼쪽 위쪽에 화살표 버튼으로 다른 병원을 선택하세요'
+        }
+      </Worning>
+    );
+  if (selectedInfo.clinic.isStayed && selectedInfo.clinic.isManager)
+    return (
+      <DashboardSectionLayout width="md" title="병원에 초대" heightFull>
+        <form onSubmit={handleSubmit(inviteUser)}>
+          <div className="relative flex items-center shadow-sm">
+            <Input
+              id="search-user"
+              label={'이름*'}
+              required
+              placeholder="사용자 검색"
+              type="text"
+              register={register('name', {
+                required: '이름을 입력하세요',
+                pattern: REG_EXP.clinicName.pattern,
+              })}
+            >
+              {errors.name?.message && (
+                <FormError errorMessage={errors.name.message} />
+              )}
+              {errors.name?.type === 'pattern' && (
+                <FormError errorMessage={REG_EXP.clinicName.condition} />
+              )}
+              <button className="absolute bottom-2.5 right-2" tabIndex={-1}>
                 <FontAwesomeIcon icon={faSearch} />
-              </label>
-            </div>
-            {(data?.inviteUser.error || okMessage) && (
-              <Worning>{data?.inviteUser.error || okMessage}</Worning>
-            )}
-          </form>
-        </DashboardSectionLayout>
-      </>
-    ) : (
-      <Worning type="hasNotPermission" />
-    )
-  ) : (
-    <Loading />
-  );
+              </button>
+            </Input>
+          </div>
+          {(data?.inviteUser.error || okMessage) && (
+            <Worning>{data?.inviteUser.error || okMessage}</Worning>
+          )}
+        </form>
+      </DashboardSectionLayout>
+    );
+
+  return <Worning type="hasNotPermission" />;
 };

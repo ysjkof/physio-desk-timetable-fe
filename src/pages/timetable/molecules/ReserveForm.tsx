@@ -25,6 +25,7 @@ import {
   PrescriptionWithSelect,
 } from '../../../types/type';
 import useStore from '../../../hooks/useStore';
+import { Textarea } from '../../../components/molecules/Textarea';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
@@ -371,14 +372,13 @@ export const ReserveForm = ({
               </div>
             )}
           </label>
-          <Input
-            name="memo"
+          <Textarea
+            id="memo"
             label={'메모'}
             placeholder={'처방에 대한 설명'}
             register={register('memo', {
               maxLength: { value: 200, message: '최대 200자입니다' },
             })}
-            type={'textarea'}
             rows={2}
           />
           <Button

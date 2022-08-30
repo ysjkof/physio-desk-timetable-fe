@@ -13,6 +13,8 @@ import { DatepickerWithInput } from '../../../components/molecules/DatepickerWit
 import { useEffect, useState } from 'react';
 import useStore from '../../../hooks/useStore';
 import { toastVar } from '../../../store';
+import { REG_EXP } from '../../../constants/regex';
+import { Textarea } from '../../../components/molecules/Textarea';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -120,22 +122,24 @@ export const CreatePatientForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">
       <Input
-        autoFocus
+        id={'name'}
         label={'이름*'}
-        name={'name'}
         type={'text'}
         placeholder={'이름을 입력하세요'}
         required={true}
+        autoFocus
         register={register('name', {
           required: '이름을 입력하세요',
-          maxLength: { value: 30, message: '최대 30자 입니다' },
+          pattern: REG_EXP.personName.pattern,
         })}
-        children={
-          errors.name?.message && (
-            <FormError errorMessage={errors.name.message} />
-          )
-        }
-      />
+      >
+        {errors.name?.message && (
+          <FormError errorMessage={errors.name.message} />
+        )}
+        {errors.name?.type === 'pattern' && (
+          <FormError errorMessage={REG_EXP.personName.condition} />
+        )}
+      </Input>
       <div className="gender-radio flex justify-around">
         <div className="flex items-center">
           <label htmlFor="gender-male" className="px-3">
@@ -169,10 +173,9 @@ export const CreatePatientForm = ({
         />
       </label>
 
-      <Input
+      <Textarea
+        id={'memo'}
         label={'메모'}
-        name={'memo'}
-        type={'textarea'}
         rows={4}
         placeholder={'메모를 입력하세요'}
         required={false}
@@ -182,12 +185,11 @@ export const CreatePatientForm = ({
             message: '메모는 최대 300자 입니다',
           },
         })}
-        children={
-          errors.memo?.message && (
-            <FormError errorMessage={errors.memo.message} />
-          )
-        }
-      />
+      >
+        {errors.memo?.message && (
+          <FormError errorMessage={errors.memo.message} />
+        )}
+      </Textarea>
 
       <Button
         type="submit"

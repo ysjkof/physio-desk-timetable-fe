@@ -60,13 +60,13 @@ export const SignUp = () => {
         className="mt-5 mb-5 grid w-full gap-3"
       >
         <Input
+          id="email"
           type="email"
           placeholder="Email"
-          name="email"
           label={'Email'}
           register={register('email', {
             required: 'Email을 입력하세요',
-            pattern: REG_EXP.email,
+            pattern: REG_EXP.email.pattern,
           })}
         >
           {
@@ -81,17 +81,17 @@ export const SignUp = () => {
                 <FormError errorMessage={errors.email.message} />
               )}
               {errors.email?.type === 'pattern' && (
-                <FormError errorMessage={'Email형식으로 입력하세요'} />
+                <FormError errorMessage={REG_EXP.email.condition} />
               )}
             </>
           }
         </Input>
         <Input
-          name="name"
+          id="name"
           label={'이름'}
           register={register('name', {
             required: '이름을 입력하세요',
-            maxLength: { value: 30, message: '최대 30자 입니다' },
+            pattern: REG_EXP.personName.pattern,
           })}
           type="text"
           placeholder="Name"
@@ -99,11 +99,14 @@ export const SignUp = () => {
           {errors.name?.message && (
             <FormError errorMessage={errors.name.message} />
           )}
+          {errors.name?.type === 'pattern' && (
+            <FormError errorMessage={REG_EXP.personName.condition} />
+          )}
         </Input>
         <Input
+          id="password"
           type="password"
           placeholder="Password"
-          name="password"
           label="비밀번호"
           register={register('password', {
             required: '비밀번호를 입력하세요',
