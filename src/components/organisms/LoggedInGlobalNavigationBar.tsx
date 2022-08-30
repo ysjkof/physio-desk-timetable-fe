@@ -1,8 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMe } from '../../hooks/useMe';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { ROUTES } from '../../router/routes';
 import Dropdown from './Dropdown';
 import { logout } from '../../pages/auth/authServices';
@@ -56,16 +54,6 @@ export const LoggedInGlobalNavigationBar = () => {
           <Link to="/tt">
             <span className="whitespace-nowrap  ">시간표</span>
           </Link>
-          <div className="group relative cursor-pointer">
-            <FontAwesomeIcon fontSize={24} icon={faBell} />
-            <div className="DROPDOWN absolute top-6 right-0 z-50 hidden h-80 w-60 flex-col items-center overflow-y-scroll border bg-white py-2 px-4 shadow-cst group-hover:flex">
-              {meData?.me.notice && meData.me.notice.length === 0
-                ? '알림이 없습니다.'
-                : meData?.me.notice?.map((notice) => (
-                    <span className="break-all">{notice.message}</span>
-                  ))}
-            </div>
-          </div>
           <Dropdown title={meData?.me.name}>
             <Dropdown.Container width={'12rem'}>
               <Dropdown.Ul>
