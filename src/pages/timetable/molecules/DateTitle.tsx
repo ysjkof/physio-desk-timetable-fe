@@ -22,7 +22,7 @@ function DateTitle({ date, isToday, userLength }: DateTitleProps) {
   return (
     <div
       className={cls(
-        'user-cols-divide relative flex cursor-pointer items-center border-b bg-white py-1 hover:bg-gray-200',
+        'DateTitle user-cols-divide relative flex cursor-pointer items-center border-b bg-white py-1 hover:bg-gray-200',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
       id={`${SCROLL_ADRESS + date}`}
@@ -37,7 +37,7 @@ function DateTitle({ date, isToday, userLength }: DateTitleProps) {
         selectedDateVar(date);
       }}
     >
-      <div className="mx-auto">
+      <div className="mx-auto whitespace-nowrap">
         <BtnDatecheck
           text={date.toLocaleDateString('ko-KR', {
             month: 'short',
@@ -52,15 +52,15 @@ function DateTitle({ date, isToday, userLength }: DateTitleProps) {
         {isToday && (
           <FontAwesomeIcon
             icon={faSun}
-            fontSize={14}
-            className="pr-1 text-red-500"
+            fontSize={12}
+            className="text-red-500"
           />
         )}
         {selectedDay && (
           <FontAwesomeIcon
             icon={faCheckCircle}
-            fontSize={14}
-            className="pl-1 text-green-500"
+            fontSize={12}
+            className="pl-0.5 text-green-500"
           />
         )}
       </div>

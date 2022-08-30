@@ -50,7 +50,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
         <div
           key={i}
           className={cls(
-            'USER_COLS relative grid border-b',
+            'USER_COLS user-cols-divide relative grid border-b',
             userLength === 1 ? 'border-x-inherit' : ''
           )}
           style={viewPeriodStyle[viewOptions.get.viewPeriod].userColumn}
