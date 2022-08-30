@@ -12,6 +12,7 @@ import { TimetableModalProps } from '..';
 import { DatepickerWithInput } from '../../../components/molecules/DatepickerWithInput';
 import { useEffect, useState } from 'react';
 import useStore from '../../../hooks/useStore';
+import { toastVar } from '../../../store';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -54,6 +55,7 @@ export const CreatePatientForm = ({
     } = data;
     if (ok) {
       closeAction();
+      toastVar({ message: `"${patient?.name}"님을 등록했습니다` });
       setSelectedInfo('patient', {
         id: patient?.id!,
         name: patient?.name!,
@@ -68,6 +70,7 @@ export const CreatePatientForm = ({
     createPatientMutation,
     { loading, data: createaPatientMutationResult },
   ] = useCreatePatientMutation({ onCompleted });
+
   const [editPatientMutation, { loading: editLoading }] =
     useEditPatientMutation({});
 
@@ -162,7 +165,7 @@ export const CreatePatientForm = ({
         생년월일
         <DatepickerWithInput
           setSelectedDate={setBirthday}
-          defaultDate={patient ? new Date(patient.birthday) : new Date()}
+          defaultDate={patient && new Date(patient.birthday)}
         />
       </label>
 

@@ -8,11 +8,9 @@ export const CreatePatientModal = ({ closeAction }: TimetableModalProps) => {
     <ModalTemplate
       closeAction={closeAction}
       children={
-        <ModalContentsLayout
-          title="환자등록"
-          closeAction={closeAction}
-          children={<CreatePatientForm closeAction={closeAction} />}
-        />
+        <ModalContentsLayout title="환자등록" closeAction={closeAction}>
+          <CreatePatientForm closeAction={closeAction} />
+        </ModalContentsLayout>
       }
     />
   );
