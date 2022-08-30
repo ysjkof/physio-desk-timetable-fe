@@ -5,6 +5,7 @@ import {
   IViewOption,
   LoggedInUser,
   SelectedInfo,
+  ToastState,
 } from './types/type';
 
 const defaultViewOptions: IViewOption = {
@@ -30,4 +31,9 @@ export const selectedInfoVar = makeVar<SelectedInfo>({
   clinic: null,
   patient: null,
   reservation: null,
+});
+
+export const toastVar = makeVar<ToastState>({
+  message: undefined,
+  fade: false,
 });
