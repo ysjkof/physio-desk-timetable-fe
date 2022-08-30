@@ -1,4 +1,4 @@
-import { authTokenVar, isLoggedInVar } from '../../apollo';
+import { authTokenVar, client, isLoggedInVar } from '../../apollo';
 import { loggedInUserVar } from '../../store';
 import { removeLocalStorageItem, setLocalStorage } from '../../utils/utils';
 
@@ -15,6 +15,7 @@ export const logout = (callback?: () => void) => {
   authTokenVar(null);
   isLoggedInVar(false);
   loggedInUserVar(null);
+  client.clearStore();
 
   if (callback) callback();
 };
