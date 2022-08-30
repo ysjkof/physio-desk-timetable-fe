@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { compareDateMatch } from '../../../services/dateServices';
 import { cls } from '../../../utils/utils';
+import { getGridTemplateColumns } from '../../timetableServices';
 import { UserNameTitle } from './UserNameTitle';
 
 interface UserNameTitlesProps {
@@ -20,9 +21,12 @@ function UserNameTitles({
   return (
     <div
       className={cls(
-        'user-cols-divide relative flex items-center bg-white',
+        'UserNameTitles user-cols-divide relative grid items-center bg-white',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
+      style={{
+        gridTemplateColumns: getGridTemplateColumns(userLength),
+      }}
     >
       {users.map(
         (member, userIndex) =>
@@ -43,11 +47,7 @@ function UserNameTitles({
 }
 
 export default memo(UserNameTitles, (prevProps, nextProps) => {
-  if (
-    !(prevProps.userLength === nextProps.userLength) ||
-    !(prevProps.clinicId === nextProps.clinicId)
-  )
-    return false;
+  if (!(prevProps.clinicId === nextProps.clinicId)) return false;
 
   const prevUsersLength = prevProps.users.length;
   if (!(prevUsersLength === nextProps.users.length)) return false;
