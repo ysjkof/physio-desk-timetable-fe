@@ -18,21 +18,27 @@ export default function Toast() {
   return (
     <>
       {message && (
-        <div
-          className={cls(
-            'position-center fixed z-50 flex flex-col gap-4 rounded-md bg-slate-600 px-6 py-4 text-xl font-semibold text-white',
-            fade ? 'animate-fadeout' : ''
-          )}
-        >
-          {message}
-          <button
-            onClick={closeToast}
-            autoFocus
-            className="rounded-md border-2 border-white px-1 font-normal outline-none focus:ring focus:ring-blue-400"
+        <>
+          <div
+            className={cls(
+              'position-center fixed z-50 flex flex-col gap-4 rounded-md bg-slate-600 px-6 py-4 text-xl font-semibold text-white',
+              fade ? 'animate-fadeout' : ''
+            )}
           >
-            닫기
-          </button>
-        </div>
+            {message}
+            <button
+              onClick={closeToast}
+              autoFocus
+              className="rounded-md border-2 border-white px-1 font-normal outline-none focus:ring focus:ring-blue-400"
+            >
+              닫기
+            </button>
+          </div>
+          <div
+            className="fixed top-0 left-0 z-40 h-screen w-screen bg-black/50"
+            onClick={closeToast}
+          />
+        </>
       )}
     </>
   );
