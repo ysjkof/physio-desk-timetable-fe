@@ -60,7 +60,7 @@ export const createLocalStorageKey = ({
   userName,
 }: CreateLocalStorageKey) => {
   if (userId && userName) {
-    return key + userId + userName;
+    return key + userId + '-' + userName;
   }
   return key;
 };
