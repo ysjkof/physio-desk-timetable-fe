@@ -26,14 +26,14 @@ function useLoginInitialization() {
 
   const setViewOption = (meData: NonNullable<LoggedInUser>) => {
     const localViewOptions = getLocalStorageItem<IViewOption>({
-      key: 'VIEW_OPTION',
+      key: 'viewOption',
       userId: meData.id,
       userName: meData.name,
     });
 
     if (localViewOptions === null) {
       setLocalStorage({
-        key: 'VIEW_OPTION',
+        key: 'viewOption',
         userId: meData.id,
         userName: meData.name,
         value: viewOptions.get,
@@ -58,7 +58,7 @@ function useLoginInitialization() {
     let updatedMyClinics: IClinicList[] = myClinics;
 
     const localClinics = getLocalStorageItem<IClinicList[]>({
-      key: 'CLINIC_LISTS',
+      key: 'clinicLists',
       userId: meData.me.id,
       userName: meData.me.name,
     });
@@ -90,7 +90,7 @@ function useLoginInitialization() {
     }
 
     setLocalStorage({
-      key: 'CLINIC_LISTS',
+      key: 'clinicLists',
       userId: meData.me.id,
       userName: meData.me.name,
       value: updatedMyClinics,
@@ -104,7 +104,7 @@ function useLoginInitialization() {
     if (!meData) return console.error('loggedInUser가 없습니다');
 
     const localSelectClinic = getLocalStorageItem<ISelectedClinic>({
-      key: 'SELECTED_CLINIC',
+      key: 'selectedClinic',
       userId: meData.me.id,
       userName: meData.me.name,
     });

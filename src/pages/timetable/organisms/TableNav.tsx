@@ -52,7 +52,7 @@ export function TableNav({}: TableNavProps) {
     if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
 
     setLocalStorage({
-      key: 'VIEW_OPTION',
+      key: 'viewOption',
       userId: loggedInUser.id,
       userName: loggedInUser.name,
       value,

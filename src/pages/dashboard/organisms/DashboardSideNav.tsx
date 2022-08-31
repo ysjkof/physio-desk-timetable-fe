@@ -61,7 +61,7 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
     };
     setSelectedInfo('clinic', newSelectedClinic, () =>
       setLocalStorage({
-        key: 'SELECTED_CLINIC',
+        key: 'selectedClinic',
         userId: meData.me.id,
         userName: meData.me.name,
         value: newSelectedClinic,

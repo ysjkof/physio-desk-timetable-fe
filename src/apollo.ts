@@ -11,7 +11,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { getLocalStorageItem } from './utils/utils';
 
-const token = getLocalStorageItem<string>({ key: 'TOKEN' });
+const token = getLocalStorageItem<string>({ key: 'token' });
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar<string | null>(token);
 

@@ -42,7 +42,7 @@ export function TableOptionSelector() {
     }
     clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
     setLocalStorage({
-      key: 'CLINIC_LISTS',
+      key: 'clinicLists',
       userId: loggedInUser.id,
       userName: loggedInUser.name,
       value: [...clinicLists],
@@ -69,7 +69,7 @@ export function TableOptionSelector() {
 
         setSelectedInfo('clinic', newSelectedClinic, () =>
           setLocalStorage({
-            key: 'SELECTED_CLINIC',
+            key: 'selectedClinic',
             userId: loggedInUser.id,
             userName: loggedInUser.name,
             value: newSelectedClinic,
@@ -93,7 +93,7 @@ export function TableOptionSelector() {
     if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
     viewOptions.set(value);
     setLocalStorage({
-      key: 'VIEW_OPTION',
+      key: 'viewOption',
       userId: loggedInUser.id,
       userName: loggedInUser.name,
       value,

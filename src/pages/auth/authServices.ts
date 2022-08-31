@@ -3,7 +3,7 @@ import { loggedInUserVar } from '../../store';
 import { removeLocalStorageItem, setLocalStorage } from '../../utils/utils';
 
 export const login = (token: string, callback?: () => void) => {
-  setLocalStorage({ key: 'TOKEN', value: token });
+  setLocalStorage({ key: 'token', value: token });
   authTokenVar(token);
   isLoggedInVar(true);
 
@@ -11,7 +11,7 @@ export const login = (token: string, callback?: () => void) => {
 };
 
 export const logout = (callback?: () => void) => {
-  removeLocalStorageItem({ key: 'TOKEN' });
+  removeLocalStorageItem({ key: 'token' });
   authTokenVar(null);
   isLoggedInVar(false);
   loggedInUserVar(null);
