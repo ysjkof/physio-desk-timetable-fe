@@ -1,5 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
+import { cls } from '../../utils/utils';
 
 interface IModalPortal {
   closeAction: () => void;
@@ -21,13 +22,14 @@ export const ModalPortal = ({
   return createPortal(
     <div className="modal-parents">
       <div
-        className={`modal-background ${
+        className={cls(
+          'modal-background',
           top ? 'bg-transparent opacity-100' : ''
-        }`}
+        )}
         onClick={closeAction}
       />
       <div
-        className={`${top ? 'absolute' : 'modal-content'}`}
+        className={top ? 'absolute' : 'modal-content'}
         style={{
           ...(top && { top }),
           ...(left && { left }),

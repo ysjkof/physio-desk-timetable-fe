@@ -1,19 +1,19 @@
 import { Helmet } from 'react-helmet-async';
 import { useListReservations } from '../../hooks/useListReservations';
-import { TableTemplate } from './templates/TableTemplate';
+import { TableTemplate } from './components/templates/TableTemplate';
 import { useEffect, useRef, useState } from 'react';
 import {
   compareDateMatch,
   getSunday,
   getWeeks,
 } from '../../services/dateServices';
-import { TableNav } from './organisms/TableNav';
+import { TableNav } from './components/organisms/TableNav';
 import { AnimatePresence } from 'framer-motion';
-import TimeLabels from './organisms/TimeLabels';
-import { Titles } from './organisms/Titles';
-import { TableModals } from './templates/TableModals';
+import TimeLabels from './components/organisms/TimeLabels';
+import { Titles } from './components/organisms/Titles';
+import { TableModals } from './components/templates/TableModals';
 import { Loading } from '../../components/atoms/Loading';
-import Schedules from './organisms/Schedules';
+import Schedules from './components/organisms/Schedules';
 import {
   ListenDeleteReservationDocument,
   ListenDeleteReservationSubscription,

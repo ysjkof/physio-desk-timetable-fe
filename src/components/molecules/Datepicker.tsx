@@ -249,11 +249,12 @@ export const Datepicker = ({
                         {listOfHours.map((hours, i) => (
                           <span
                             key={i}
-                            className={`cursor-pointer px-1.5 ${
+                            className={cls(
+                              'cursor-pointer px-1.5',
                               +inputDate.hour === hours
                                 ? 'rounded-md bg-blue-500 text-white'
                                 : ''
-                            }`}
+                            )}
                             onClick={() => invokeSelectHour('' + hours)}
                           >
                             {('' + hours).padStart(2, '0')}
@@ -265,11 +266,12 @@ export const Datepicker = ({
                         {listOfMinutes.map((minute, i) => (
                           <span
                             key={i}
-                            className={`cursor-pointer px-1.5 ${
+                            className={cls(
+                              'cursor-pointer px-1.5',
                               +inputDate.minute === minute
                                 ? 'rounded-md bg-blue-500 text-white'
                                 : ''
-                            }`}
+                            )}
                             onClick={() => invokeSelectMinute('' + minute)}
                           >
                             {('' + minute).padStart(2, '0')}

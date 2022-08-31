@@ -28,10 +28,10 @@ export const ModalTemplate = ({
       )}
     >
       <div
-        className={`modal-background ${
+        className={cls(
+          'modal-background',
           top ? 'bg-transparent opacity-100' : ''
-        }`}
-        // @ts-ignore
+        )}
         onClick={() => closeAction()}
       />
       <motion.div
