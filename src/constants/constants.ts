@@ -40,6 +40,16 @@ export const STATISTICS_LABEL = {
   } as const,
 };
 
+export const DASHBOARD_MENU_KR = {
+  dashboard: '처음',
+  member: '구성원',
+  invite: '초대',
+  prescription: '처방관리',
+  statistics: '통계',
+  create: '병원 만들기',
+  clinics: '나의 병원',
+};
+
 export const STATISTICS_LABEL_COLORS = [
   ['#233d4d', '#fcca46', '#a1c181', '#fe7f2d', '#619b8a'],
   ['#0d3b66', '#f4d35e', '#faf0ca', '#f95738', '#ee964b'],

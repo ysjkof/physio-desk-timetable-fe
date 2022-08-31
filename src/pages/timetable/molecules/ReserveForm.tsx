@@ -26,6 +26,7 @@ import {
 import useStore from '../../../hooks/useStore';
 import { Textarea } from '../../../components/molecules/Textarea';
 import { toastVar } from '../../../store';
+import { ROUTES } from '../../../router/routes';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
@@ -73,7 +74,7 @@ export const ReserveForm = ({
   const {
     register,
     getValues,
-    formState: { errors, isValid },
+    formState: { isValid },
     handleSubmit,
     setValue,
   } = useForm<IReserveForm>({
@@ -302,16 +303,7 @@ export const ReserveForm = ({
           <label className="flex flex-col gap-2">
             <span className="flex items-center gap-1">
               처방
-              <Link
-                to={'/dashboard'}
-                state={{
-                  selectedClinicId: selectedInfo.clinic?.id,
-                  selectedClinicName: selectedInfo.clinic?.name,
-                  selectedClinicType: selectedInfo.clinic?.type,
-                  selectedClinicMembers: selectedInfo.clinic?.members,
-                  selectedMenu: 'prescription',
-                }}
-              >
+              <Link to={ROUTES.prescription}>
                 <FontAwesomeIcon
                   icon={faLink}
                   fontSize={14}
@@ -324,16 +316,7 @@ export const ReserveForm = ({
                 <span>등록된 처방이 없습니다.</span>
                 <span>
                   처방을
-                  <Link
-                    to={'/dashboard'}
-                    state={{
-                      selectedClinicId: selectedInfo.clinic?.id,
-                      selectedClinicName: selectedInfo.clinic?.name,
-                      selectedClinicType: selectedInfo.clinic?.type,
-                      selectedClinicMembers: selectedInfo.clinic?.members,
-                      selectedMenu: 'prescription',
-                    }}
-                  >
+                  <Link to={ROUTES.prescription}>
                     <button
                       type="button"
                       className="btn-sm btn-border mx-2 w-fit shadow-cst"

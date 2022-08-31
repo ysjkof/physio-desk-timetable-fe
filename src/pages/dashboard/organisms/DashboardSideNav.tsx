@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { checkManager, checkStay, SelectedMenuType } from '..';
+import { checkManager, checkStay } from '..';
 import { ClinicType, MeQuery } from '../../../graphql/generated/graphql';
 import {
   checkMember,
@@ -9,7 +9,7 @@ import {
 import useStore from '../../../hooks/useStore';
 import Sidebar from '../../../components/organisms/Sidebar';
 import Selectbox from '../../../components/organisms/Selectbox';
-import { useLocation } from 'react-router-dom';
+import { DashboardEndpoint } from '../../../router/routes';
 
 interface SelectedOption {
   id: number;
@@ -17,15 +17,14 @@ interface SelectedOption {
   type: ClinicType;
 }
 interface DashboardSideNavProps {
-  selectedMenu: SelectedMenuType;
   meData: MeQuery;
+  endpoint: DashboardEndpoint;
 }
 
-export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
-  const location = useLocation();
-  const pathname = location.pathname;
-  const isMatch = (endpoint: string) => pathname.includes(endpoint);
-
+export const DashboardSideNav = ({
+  meData,
+  endpoint,
+}: DashboardSideNavProps) => {
   const { clinicLists, setSelectedInfo } = useStore();
   const clinicListsSelectMeMember = clinicLists.map((clinic) => {
     const idx = clinic.members.findIndex(
@@ -102,7 +101,7 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
             <Sidebar.Li
               key={idx}
               to={menu.route}
-              selectedLi={isMatch(menu.route)}
+              selectedLi={endpoint === menu.route}
             >
               {menu.name}
             </Sidebar.Li>
@@ -116,7 +115,7 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
             <Sidebar.Li
               key={idx}
               to={menu.route}
-              selectedLi={isMatch(menu.route)}
+              selectedLi={endpoint === menu.route}
             >
               {menu.name}
             </Sidebar.Li>
@@ -130,7 +129,7 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
             <Sidebar.Li
               key={idx}
               to={menu.route}
-              selectedLi={isMatch(menu.route)}
+              selectedLi={endpoint === menu.route}
             >
               {menu.name}
             </Sidebar.Li>
