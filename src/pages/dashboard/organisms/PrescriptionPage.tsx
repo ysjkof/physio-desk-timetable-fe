@@ -3,7 +3,6 @@ import {
   faCircleQuestion,
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import {
@@ -26,14 +25,9 @@ import { Checkbox } from '../../../components/molecules/Checkbox';
 
 export const PrescriptionPage = () => {
   const { selectedInfo } = useStore();
-
-  const [atomList, setAtomList] = useState<
-    { id: number; name: string; onSelect: boolean }[]
-  >([]);
-
-  const { data: findAtomPrescriptions, loading: loadingAtomPrescriptions } =
+  const { data: findAtomPrescriptions, loading: loadingAtom } =
     useFindAtomPrescriptionsQuery();
-  const { data: findPrescriptionsData, loading: loadingPrescriptionsData } =
+  const { data: findPrescriptionsData, loading: loadingPrescriptions } =
     useFindPrescriptionsQuery({
       variables: {
         input: {
@@ -42,6 +36,7 @@ export const PrescriptionPage = () => {
         },
       },
     });
+
   const [createPrescription, { loading: loadingCreatePrescriptionOption }] =
     useCreatePrescriptionMutation({
       onCompleted: (data) => {
@@ -78,23 +73,13 @@ export const PrescriptionPage = () => {
     register,
     handleSubmit,
     getValues,
-    setValue,
-    watch,
     formState: { isValid, errors },
   } = useForm<CreatePrescriptionInput>({ mode: 'onChange' });
   const { name, requiredTime, price, prescriptionAtomIds, description } =
     getValues();
-  console.log(watch('prescriptionAtomIds'));
 
   const onSubmitCreatePresciption = () => {
     if (!loadingCreatePrescriptionOption) {
-      let prescriptionOptionIds: number[] = [];
-      atomList.forEach((option) => {
-        if (option.onSelect === true) {
-          prescriptionOptionIds.push(option.id);
-        }
-      });
-
       createPrescription({
         variables: {
           input: {
@@ -102,7 +87,7 @@ export const PrescriptionPage = () => {
             requiredTime: +requiredTime,
             price: +price,
             description,
-            prescriptionAtomIds,
+            prescriptionAtomIds: prescriptionAtomIds.map((id) => +id),
             clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,
           },
         },
@@ -110,40 +95,8 @@ export const PrescriptionPage = () => {
     }
   };
 
-  function onClickAtom(atomId: number) {
-    const newAtomList = atomList.map((prev) => {
-      if (prev.id === atomId) {
-        return {
-          ...prev,
-          onSelect: !prev.onSelect,
-        };
-      } else {
-        return prev;
-      }
-    });
-
-    setValue(
-      'prescriptionAtomIds',
-      newAtomList.filter((atom) => atom.onSelect).map((atom) => atom.id)
-    );
-    setAtomList(newAtomList);
-  }
-
-  useEffect(() => {
-    if (!loadingAtomPrescriptions) {
-      setAtomList(
-        findAtomPrescriptions?.findAtomPrescriptions.results?.map((atom) => ({
-          id: atom.id,
-          name: atom.name,
-          onSelect: false,
-        })) ?? []
-      );
-    }
-  }, [findAtomPrescriptions]);
-
   if (!selectedInfo.clinic?.isStayed)
     return <Worning type="hasNotPermission" />;
-  console.log();
 
   return (
     <div className="flex h-full w-full flex-col gap-6">
@@ -207,17 +160,20 @@ export const PrescriptionPage = () => {
               <div className="prescription-selector flex items-center">
                 <h4 className="mr-4 w-9">처방*</h4>
                 <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
-                  {atomList.map((option) => (
-                    <Checkbox
-                      id={option.name}
-                      label={option.name}
-                      type="checkbox"
-                      value={option.name}
-                      register={register('prescriptionAtomIds', {
-                        required: true,
-                      })}
-                    />
-                  ))}
+                  {findAtomPrescriptions?.findAtomPrescriptions.results?.map(
+                    (option) => (
+                      <Checkbox
+                        key={option.id}
+                        id={option.name}
+                        label={option.name}
+                        type="checkbox"
+                        value={option.id}
+                        register={register('prescriptionAtomIds', {
+                          required: true,
+                        })}
+                      />
+                    )
+                  )}
                 </div>
               </div>
               <Input
