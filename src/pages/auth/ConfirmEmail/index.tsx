@@ -6,7 +6,7 @@ import {
   useVerifyEmailMutation,
   VerifyEmailMutation,
 } from '../../../graphql/generated/graphql';
-import { loggedInUserVar } from '../../../store';
+import { loggedInUserVar, toastVar } from '../../../store';
 
 export const ConfirmEmail = () => {
   const client = useApolloClient();
@@ -57,7 +57,11 @@ export const ConfirmEmail = () => {
         },
       });
     }
-    alert('이메일 인증됐습니다');
+    toastVar({
+      message: '이메일 인증됐습니다',
+      fade: true,
+      milliseconds: 2000,
+    });
     navigate('/');
   };
 

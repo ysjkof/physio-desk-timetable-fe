@@ -9,7 +9,7 @@ module.exports = {
       },
       keyframes: {
         fadeout: {
-          '0%, 50%': { opacity: 1 },
+          '0%, 40%': { opacity: 1 },
           '100%': { opacity: 0 },
         },
       },

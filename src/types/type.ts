@@ -189,4 +189,5 @@ export type LoggedInUser = MeQuery['me'] | undefined | null;
 export interface ToastState {
   message?: string;
   fade?: boolean;
+  milliseconds?: number;
 }

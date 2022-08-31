@@ -33,7 +33,4 @@ export const selectedInfoVar = makeVar<SelectedInfo>({
   reservation: null,
 });
 
-export const toastVar = makeVar<ToastState>({
-  message: undefined,
-  fade: false,
-});
+export const toastVar = makeVar<ToastState>({});
