@@ -7,6 +7,7 @@ import useStore from '../../../hooks/useStore';
 import { Worning } from '../../../components/atoms/Warning';
 import { MenuButton } from '../../../components/molecules/MenuButton';
 import { NameTag } from '../../../components/molecules/NameTag';
+import { cls, renameUseSplit } from '../../../utils/utils';
 interface SearchPatientProps {}
 
 export const SearchPatient = ({}: SearchPatientProps) => {
@@ -79,9 +80,10 @@ export const SearchPatient = ({}: SearchPatientProps) => {
         </label>
       </div>
       <div
-        className={`search-list mt-4 h-36 divide-y overflow-y-scroll border ${
+        className={cls(
+          'search-list mt-4 h-36 divide-y overflow-y-scroll border',
           selectedInfo.patient ? 'border-none' : ''
-        }`}
+        )}
       >
         {!selectedInfo.patient &&
           searchPatientResult?.searchPatient.patients?.map((patient, index) => (
@@ -93,7 +95,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
                 registrationNumber={patient.registrationNumber}
                 birthday={patient.birthday}
                 canClick
-                clinicName={patient.clinic?.name ?? ''}
+                clinicName={renameUseSplit(patient.clinic?.name || '')}
                 user={patient.users[patient.users.length - 1]}
               />
             </div>
@@ -117,7 +119,7 @@ export const SearchPatient = ({}: SearchPatientProps) => {
               name={selectedInfo.patient.name}
               registrationNumber={selectedInfo.patient.registrationNumber}
               birthday={selectedInfo.patient.birthday}
-              clinicName={selectedInfo.patient.clinicName}
+              clinicName={renameUseSplit(selectedInfo.patient.clinicName)}
               user={selectedInfo.patient.user}
             />
             <MenuButton

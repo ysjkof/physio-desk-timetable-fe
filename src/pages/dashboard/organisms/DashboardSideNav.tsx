@@ -3,7 +3,7 @@ import { checkManager, checkStay, SelectedMenuType } from '..';
 import { ClinicType, MeQuery } from '../../../graphql/generated/graphql';
 import {
   checkMember,
-  removeItemInArrayByIndex,
+  renameBaseOnType,
   setLocalStorage,
 } from '../../../utils/utils';
 import useStore from '../../../hooks/useStore';
@@ -69,15 +69,6 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
     );
   };
 
-  const removePersonalClinicNumber = (name: string) => {
-    const splitted = name.split(':');
-    return removeItemInArrayByIndex(splitted.length - 1, splitted);
-  };
-  const renameBaseOnType = (name: string, type: ClinicType) => {
-    return type === ClinicType.Personal
-      ? removePersonalClinicNumber(name) + ' : 기본'
-      : name;
-  };
   return (
     <nav className="dashboard-side-nav h-full">
       <Selectbox

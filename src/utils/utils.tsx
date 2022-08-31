@@ -1,4 +1,5 @@
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
+import { ClinicType } from '../graphql/generated/graphql';
 import {
   CreateLocalStorageKey,
   GetLocalStorage,
@@ -105,4 +106,16 @@ export const setLocalStorage = ({
     userName,
   });
   localStorage.setItem(storageKey, JSON.stringify(value));
+};
+
+const removePersonalClinicNumber = (name: string) => {
+  const [splittedName] = name.split(':');
+  return splittedName;
+};
+export const renameBaseOnType = (name: string, type: ClinicType) => {
+  return type === ClinicType.Personal ? renameUseSplit(name) : name;
+};
+
+export const renameUseSplit = (name: string) => {
+  return removePersonalClinicNumber(name) + ' : 개인';
 };
