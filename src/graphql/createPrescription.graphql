@@ -2,5 +2,17 @@ mutation createPrescription($input: CreatePrescriptionInput!) {
   createPrescription(input: $input) {
     ok
     error
+    prescription {
+      id
+      name
+      requiredTime
+      description
+      price
+      activate
+      prescriptionAtoms {
+        id
+        name
+      }
+    }
   }
 }

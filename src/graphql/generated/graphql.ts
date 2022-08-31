@@ -126,6 +126,7 @@ export type CreatePrescriptionOutput = {
   __typename?: 'CreatePrescriptionOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
+  prescription?: Maybe<Prescription>;
 };
 
 export type CreateReservationInput = {
@@ -866,7 +867,7 @@ export type CreatePrescriptionMutationVariables = Exact<{
 }>;
 
 
-export type CreatePrescriptionMutation = { __typename?: 'Mutation', createPrescription: { __typename?: 'CreatePrescriptionOutput', ok: boolean, error?: string | null } };
+export type CreatePrescriptionMutation = { __typename?: 'Mutation', createPrescription: { __typename?: 'CreatePrescriptionOutput', ok: boolean, error?: string | null, prescription?: { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null } | null } };
 
 export type CreateReservationMutationVariables = Exact<{
   input: CreateReservationInput;
@@ -1320,6 +1321,18 @@ export const CreatePrescriptionDocument = gql`
   createPrescription(input: $input) {
     ok
     error
+    prescription {
+      id
+      name
+      requiredTime
+      description
+      price
+      activate
+      prescriptionAtoms {
+        id
+        name
+      }
+    }
   }
 }
     `;

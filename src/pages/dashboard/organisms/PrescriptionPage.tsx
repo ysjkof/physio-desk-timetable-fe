@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { DashboardSectionLayout } from '../components/DashboardSectionLayout';
 import {
   CreatePrescriptionInput,
+  FindPrescriptionsDocument,
   useCreatePrescriptionMutation,
   useFindAtomPrescriptionsQuery,
   useFindPrescriptionsQuery,
@@ -20,6 +21,8 @@ import { REG_EXP } from '../../../constants/regex';
 import useStore from '../../../hooks/useStore';
 import { Textarea } from '../../../components/molecules/Textarea';
 import { Worning } from '../../../components/atoms/Warning';
+import { toastVar } from '../../../store';
+import { client } from '../../../apollo';
 
 export const PrescriptionPage = () => {
   const { selectedInfo } = useStore();
@@ -43,8 +46,31 @@ export const PrescriptionPage = () => {
     useCreatePrescriptionMutation({
       onCompleted: (data) => {
         if (!data.createPrescription.ok) {
-          alert(data.createPrescription.error);
+          if (data.createPrescription.error) {
+            toastVar({ message: data.createPrescription.error });
+          }
+          return;
         }
+
+        client.writeQuery({
+          query: FindPrescriptionsDocument,
+          variables: {
+            input: {
+              clinicId: selectedInfo.clinic?.id,
+              onlyLookUpActive: false,
+            },
+          },
+          data: {
+            ...findPrescriptionsData,
+            findPrescriptions: {
+              ...findPrescriptionsData?.findPrescriptions,
+              prescriptions: [
+                ...findPrescriptionsData?.findPrescriptions.prescriptions!,
+                data.createPrescription.prescription,
+              ],
+            },
+          },
+        });
       },
     });
 
@@ -275,7 +301,7 @@ export const PrescriptionPage = () => {
               <Button
                 type="submit"
                 textContents="만들기"
-                canClick={isValid && prescriptionAtomIds?.length !== 0}
+                canClick={isValid && prescriptionAtomIds?.length >= 1}
                 isWidthFull
                 loading={loadingCreatePrescriptionOption}
               />
