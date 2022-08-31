@@ -16,13 +16,13 @@ import {
 import { Button } from '../../../components/molecules/Button';
 import { Input } from '../../../components/molecules/Input';
 import { FormError } from '../../../components/atoms/FormError';
-import { MenuButton } from '../../../components/molecules/MenuButton';
 import { REG_EXP } from '../../../constants/regex';
 import useStore from '../../../hooks/useStore';
 import { Textarea } from '../../../components/molecules/Textarea';
 import { Worning } from '../../../components/atoms/Warning';
 import { toastVar } from '../../../store';
 import { client } from '../../../apollo';
+import { Checkbox } from '../../../components/molecules/Checkbox';
 
 export const PrescriptionPage = () => {
   const { selectedInfo } = useStore();
@@ -79,10 +79,12 @@ export const PrescriptionPage = () => {
     handleSubmit,
     getValues,
     setValue,
+    watch,
     formState: { isValid, errors },
   } = useForm<CreatePrescriptionInput>({ mode: 'onChange' });
   const { name, requiredTime, price, prescriptionAtomIds, description } =
     getValues();
+  console.log(watch('prescriptionAtomIds'));
 
   const onSubmitCreatePresciption = () => {
     if (!loadingCreatePrescriptionOption) {
@@ -141,6 +143,7 @@ export const PrescriptionPage = () => {
 
   if (!selectedInfo.clinic?.isStayed)
     return <Worning type="hasNotPermission" />;
+  console.log();
 
   return (
     <div className="flex h-full w-full flex-col gap-6">
@@ -205,14 +208,14 @@ export const PrescriptionPage = () => {
                 <h4 className="mr-4 w-9">처방*</h4>
                 <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
                   {atomList.map((option) => (
-                    <MenuButton
-                      key={option.id}
+                    <Checkbox
+                      id={option.name}
                       label={option.name}
-                      hasBorder
-                      hasActiveRing
-                      thinFont
-                      enabled={option.onSelect}
-                      onClick={() => onClickAtom(option.id)}
+                      type="checkbox"
+                      value={option.name}
+                      register={register('prescriptionAtomIds', {
+                        required: true,
+                      })}
                     />
                   ))}
                 </div>
@@ -300,11 +303,12 @@ export const PrescriptionPage = () => {
               </Textarea>
               <Button
                 type="submit"
-                textContents="만들기"
                 canClick={isValid && prescriptionAtomIds?.length >= 1}
                 isWidthFull
                 loading={loadingCreatePrescriptionOption}
-              />
+              >
+                만들기
+              </Button>
             </form>
           </details>
         }

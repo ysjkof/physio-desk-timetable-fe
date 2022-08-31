@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-  input:checked + label {
-    @apply rounded-md bg-white font-semibold text-blue-800;
+  label:has(> input:checked) {
+    @apply font-bold;
   }
 }
 

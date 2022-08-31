@@ -15,6 +15,7 @@ import useStore from '../../../hooks/useStore';
 import { toastVar } from '../../../store';
 import { REG_EXP } from '../../../constants/regex';
 import { Textarea } from '../../../components/molecules/Textarea';
+import { Checkbox } from '../../../components/molecules/Checkbox';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -141,29 +142,18 @@ export const CreatePatientForm = ({
         )}
       </Input>
       <div className="gender-radio flex justify-around">
-        <div className="flex items-center">
-          <label htmlFor="gender-male" className="px-3">
-            남성
-          </label>
-          <input
-            {...register('gender', { required: '성별을 선택하세요' })}
+        {[
+          { label: '남성', value: 'male' },
+          { label: '여성', value: 'female' },
+        ].map((gender) => (
+          <Checkbox
+            id={'gender_' + gender.value}
+            label={gender.label}
             type="radio"
-            value="male"
-            id="gender-male"
+            value={gender.value}
+            register={register('gender', { required: '성별을 선택하세요' })}
           />
-        </div>
-        <div className="flex items-center">
-          <label htmlFor="gender-female" className="px-3">
-            여성
-          </label>
-          <input
-            {...register('gender', { required: '성별을 선택하세요' })}
-            type="radio"
-            value="female"
-            id="gender-female"
-            defaultChecked
-          />
-        </div>
+        ))}
       </div>
       <label className="flex flex-col gap-2">
         생년월일
@@ -195,7 +185,7 @@ export const CreatePatientForm = ({
         type="submit"
         canClick={birthday && isValid}
         loading={loading || editLoading}
-        textContents={patient ? '환자수정' : '환자등록'}
+        children={patient ? '환자수정' : '환자등록'}
       />
       {createaPatientMutationResult?.createPatient.error && (
         <FormError
