@@ -389,8 +389,10 @@ export const ReserveForm = ({
               selectedPrescription.prescriptions.length >= 1
             }
             loading={createLoading && editLoading}
-            textContents={reservation ? '예약수정' : '예약하기'}
-          />
+          >
+            {reservation ? '예약수정' : '예약하기'}
+          </Button>
+
           {createReservationResult?.createReservation.error && (
             <FormError
               errorMessage={createReservationResult.createReservation.error}

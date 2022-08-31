@@ -135,10 +135,10 @@ export const EditProfile = () => {
             )}
           </Input>
           <Input
-            type="password"
-            placeholder="Password"
             id="password"
             label="비밀번호"
+            type="password"
+            placeholder="Password"
             register={register('password', {
               pattern:
                 process.env.NODE_ENV === 'production'
@@ -154,12 +154,9 @@ export const EditProfile = () => {
               )
             )}
           </Input>
-          <Button
-            type="submit"
-            canClick={isValid}
-            loading={loading}
-            textContents="저장하기"
-          />
+          <Button type="submit" canClick={isValid} loading={loading}>
+            저장하기
+          </Button>
         </form>
       </div>
     </>

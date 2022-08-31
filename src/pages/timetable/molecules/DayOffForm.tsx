@@ -67,12 +67,9 @@ export const DayOffForm = ({
         })}
         type={'textarea'}
       />
-      <Button
-        type="submit"
-        canClick={isValid}
-        loading={loading}
-        textContents="잠금 수정"
-      />
+      <Button type="submit" canClick={isValid} loading={loading}>
+        잠금 수정
+      </Button>
     </>
   );
 };

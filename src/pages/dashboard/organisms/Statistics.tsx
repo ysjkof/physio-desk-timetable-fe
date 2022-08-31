@@ -198,13 +198,14 @@ export const Statistics = () => {
                   />
                 ))}
                 <Button
-                  canClick={!loadingStatisticsData}
-                  loading={loadingStatisticsData}
-                  textContents="조회하기"
                   type="button"
                   isSmall
+                  canClick={!loadingStatisticsData}
+                  loading={loadingStatisticsData}
                   onClick={onSubmit}
-                ></Button>
+                >
+                  조회하기
+                </Button>
               </div>
             )}
           </div>

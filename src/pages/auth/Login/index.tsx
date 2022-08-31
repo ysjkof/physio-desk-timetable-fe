@@ -92,9 +92,9 @@ export const Login = () => {
         />
         <Input
           id="password"
+          label="비밀번호"
           type="password"
           placeholder="Password"
-          label="비밀번호"
           register={register('password', {
             required: '비밀번호를 입력하세요',
             pattern:
@@ -111,12 +111,9 @@ export const Login = () => {
             )
           )}
         </Input>
-        <Button
-          type="submit"
-          canClick={isValid}
-          loading={loading}
-          textContents={'로그인'}
-        />
+        <Button type="submit" canClick={isValid} loading={loading}>
+          로그인
+        </Button>
       </form>
     </>
   );

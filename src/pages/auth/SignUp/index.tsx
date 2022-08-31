@@ -66,9 +66,9 @@ export const SignUp = () => {
       >
         <Input
           id="email"
+          label="Email"
           type="email"
           placeholder="Email"
-          label={'Email'}
           register={register('email', {
             required: 'Email을 입력하세요',
             pattern: REG_EXP.email.pattern,
@@ -94,13 +94,13 @@ export const SignUp = () => {
         </Input>
         <Input
           id="name"
-          label={'이름'}
+          label="이름"
+          type="text"
+          placeholder="Name"
           register={register('name', {
             required: '이름을 입력하세요',
             pattern: REG_EXP.personName.pattern,
           })}
-          type="text"
-          placeholder="Name"
         >
           {errors.name?.message ? (
             <FormError errorMessage={errors.name.message} />
@@ -112,9 +112,9 @@ export const SignUp = () => {
         </Input>
         <Input
           id="password"
+          label="비밀번호"
           type="password"
           placeholder="Password"
-          label="비밀번호"
           register={register('password', {
             required: '비밀번호를 입력하세요',
             pattern:
@@ -131,12 +131,9 @@ export const SignUp = () => {
             )
           )}
         </Input>
-        <Button
-          type="submit"
-          canClick={isValid}
-          loading={loading}
-          textContents="계정 만들기"
-        />
+        <Button type="submit" canClick={isValid} loading={loading}>
+          계정 만들기
+        </Button>
         {createaAccountMutationResult?.createAccount.error && (
           <FormError
             errorMessage={createaAccountMutationResult.createAccount.error}

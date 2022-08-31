@@ -26,7 +26,7 @@ export const Members = () => {
       });
     }
   }
-  console.log('selectedInfo', selectedInfo.clinic);
+
   const [cancelInvitation] = useCancelInvitationMutation();
   const invokeCancelInvitation = (id: number) => {
     if (confirm('정말 초대를 취소 하겠습니까?')) {
@@ -93,19 +93,20 @@ export const Members = () => {
                 {!member.staying && !member.accepted && (
                   <>
                     <Button
-                      textContents="초대 취소"
-                      canClick
                       loading={false}
+                      canClick
                       isSmall
                       onClick={() => invokeCancelInvitation(member.id)}
-                    ></Button>
+                    >
+                      초대 취소
+                    </Button>
                     <span className="text-center text-red-500">승인대기</span>
                   </>
                 )}
                 {member.staying && member.accepted && ''}
                 {!member.staying && member.accepted && (
                   <>
-                    <span></span>
+                    <span />
                     <span className="text-center text-red-500">떠난 회원</span>
                   </>
                 )}

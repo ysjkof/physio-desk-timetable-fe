@@ -108,9 +108,9 @@ export const CreateClinic = () => {
         >
           <Input
             id="name"
+            type="text"
             label={'이름*'}
             placeholder={'병원 이름'}
-            type="text"
             onChange={invokeClearErrors}
             register={register('name', {
               required: '이름을 입력하세요',
@@ -128,12 +128,13 @@ export const CreateClinic = () => {
             )}
           </Input>
           <Button
-            isWidthFull
             type="submit"
-            textContents={'만들기'}
             canClick={isValid}
             loading={loading}
-          />
+            isWidthFull
+          >
+            만들기
+          </Button>
         </form>
       }
     />

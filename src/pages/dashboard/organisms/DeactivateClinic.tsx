@@ -37,19 +37,15 @@ export const DeactivateClinic = ({ id, name }: DeactivateClinicProps) => {
       </p>
       <MenuButton
         label="동의"
-        enabled={agree}
+        isCenter
         hasActiveRing
+        enabled={agree}
         icon={<FontAwesomeIcon icon={faCheck} fontSize={14} />}
         onClick={() => setAgree((prev) => !prev)}
-        isCenter
       />
-      <Button
-        canClick={agree}
-        loading={loading}
-        textContents="비활성하기"
-        onClick={onClick}
-        isWidthFull
-      />
+      <Button canClick={agree} loading={loading} onClick={onClick} isWidthFull>
+        비활성하기
+      </Button>
     </>
   ) : (
     <Worning type="hasNotPermission" />
