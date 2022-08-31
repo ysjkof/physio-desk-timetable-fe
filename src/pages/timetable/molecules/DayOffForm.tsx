@@ -59,14 +59,13 @@ export const DayOffForm = ({
       </label>
 
       <Input
-        name="memo"
+        id="memo"
         label={'메모'}
         placeholder={'간단한 남길 말'}
         register={register('memo', {
           maxLength: { value: 200, message: '최대 200자입니다' },
         })}
         type={'textarea'}
-        rows={2}
       />
       <Button
         type="submit"
