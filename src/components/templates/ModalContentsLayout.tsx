@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { selectedInfoVar } from '../../store';
+import { renameUseSplit } from '../../utils/utils';
 
 interface ModalContentLayoutProps {
   title: string;
@@ -29,7 +30,9 @@ export const ModalContentsLayout = ({
       <div className="w-full text-base font-semibold">
         {title}
         {selectedInfo.clinic?.name && (
-          <span className="ml-3 text-xs">{selectedInfo.clinic.name}</span>
+          <span className="ml-3 text-xs">
+            {renameUseSplit(selectedInfo.clinic.name)}
+          </span>
         )}
       </div>
       {children}

@@ -9,6 +9,7 @@ import { DashboardTitle } from './components/DashboardTitle';
 import { Loading } from '../../components/atoms/Loading';
 import { IMemberWithActivate } from '../../types/type';
 import useStore from '../../hooks/useStore';
+import { renameUseSplit } from '../../utils/utils';
 
 export type SelectedMenuType =
   | 'main'
@@ -85,7 +86,7 @@ export const Dashboard = () => {
         nav={<DashboardSideNav selectedMenu={selectedMenu} meData={meData} />}
         breadcrumb={
           <DashboardTitle
-            clinicName={selectedInfo.clinic.name}
+            clinicName={renameUseSplit(selectedInfo.clinic.name)}
             type={selectedMenu}
           />
         }

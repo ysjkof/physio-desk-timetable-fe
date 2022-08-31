@@ -1,8 +1,9 @@
 import { faFemale, faMale } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useStore from '../../hooks/useStore';
-import { getYMD } from '../../services/dateServices';
-import { SelectedPatient } from '../../types/type';
+import useStore from '../../../hooks/useStore';
+import { getYMD } from '../../../services/dateServices';
+import { SelectedPatient } from '../../../types/type';
+import { cls } from '../../../utils/utils';
 
 export interface INameTagProps extends SelectedPatient {
   canClick?: boolean;
@@ -33,9 +34,10 @@ export const NameTag = ({
   return (
     <div
       onClick={canClick ? onClick : undefined}
-      className={`grid w-full cursor-pointer grid-cols-3 ${
+      className={cls(
+        'grid w-full cursor-pointer grid-cols-3',
         canClick ? '' : 'pointer-events-none'
-      }`}
+      )}
     >
       <div>
         {gender === 'male' ? (

@@ -3,7 +3,7 @@ import { checkManager, checkStay, SelectedMenuType } from '..';
 import { ClinicType, MeQuery } from '../../../graphql/generated/graphql';
 import {
   checkMember,
-  renameBaseOnType,
+  renameUseSplit,
   setLocalStorage,
 } from '../../../utils/utils';
 import useStore from '../../../hooks/useStore';
@@ -71,12 +71,7 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
 
   return (
     <nav className="dashboard-side-nav h-full">
-      <Selectbox
-        selectedValue={renameBaseOnType(
-          selectedOption.value,
-          selectedOption.type
-        )}
-      >
+      <Selectbox selectedValue={renameUseSplit(selectedOption.value)}>
         <Selectbox.Options>
           {clinicListsSelectMeMember.map((clinic) => (
             <Selectbox.Option
@@ -92,7 +87,7 @@ export const DashboardSideNav = ({ meData }: DashboardSideNavProps) => {
                   : ''
               }
             >
-              {renameBaseOnType(clinic.name, clinic.type)}
+              {renameUseSplit(clinic.name)}
             </Selectbox.Option>
           ))}
         </Selectbox.Options>
