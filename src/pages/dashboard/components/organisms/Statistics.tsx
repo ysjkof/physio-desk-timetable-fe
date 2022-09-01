@@ -1,5 +1,5 @@
 import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
-import { useGetStatisticsQuery } from '../../../../graphql/generated/graphql';
+import { useGetStatisticsLazyQuery } from '../../../../graphql/generated/graphql';
 import { useEffect, useState } from 'react';
 import { MenuButton } from '../../../../components/molecules/MenuButton';
 import { Worning } from '../../../../components/atoms/Warning';
@@ -14,114 +14,106 @@ import { Button } from '../../../../components/molecules/Button';
 import combineUserStatistics from '../../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../../types/type';
 import useStore from '../../../../hooks/useStore';
-import { selectedDateVar } from '../../../../store';
 import Charts from '../molecules/Charts';
-
-const [initialStartDate, initailEndDate] = getMonthStartEnd(new Date());
+import { Checkbox } from '../../../../components/molecules/Checkbox';
+import { useForm } from 'react-hook-form';
 
 export const Statistics = () => {
   const { selectedInfo, selectedDate } = useStore();
-
-  const [startDate, setStartDate] = useState(initialStartDate);
-  const [endDate, setEndDate] = useState(initailEndDate);
-  const [memberState, setMemberState] = useState<MemberState[]>();
-  const [userIds, setUserIds] = useState<number[]>([]);
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);
 
   const {
-    data,
-    loading: loadingStatisticsData,
-    refetch,
-  } = useGetStatisticsQuery({
-    variables: {
-      input: {
-        startDate,
-        endDate,
-        clinicId: selectedInfo.clinic?.id ?? 0,
-        userIds,
-      },
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    formState: { isValid },
+  } = useForm<{
+    userIds: number[];
+    year: number;
+    month: string;
+  }>({
+    mode: 'onChange',
+    defaultValues: {
+      year: selectedDate.getFullYear(),
+      month: selectedDate.getMonth() + 1 + '',
     },
   });
 
-  function onClickSetDate(
-    date: Date,
-    month: number,
-    changeYear?: 'prev' | 'next'
-  ) {
-    const start = new Date(date);
-    start.setMonth(month);
+  const acceptedMember: MemberState[] | undefined = selectedInfo.clinic?.members
+    .filter((member) => member.accepted)
+    .map((member) => ({
+      userId: member.user.id,
+      name: member.user.name,
+      isSelected: true,
+    }))
+    .sort((a, b) => {
+      if (a.name > b.name) return 1;
+      if (a.name < b.name) return -1;
+      return 0;
+    });
 
-    switch (changeYear) {
-      case 'prev':
-        start.setFullYear(start.getFullYear() - 1);
-        break;
-      case 'next':
-        start.setFullYear(start.getFullYear() + 1);
-        break;
-    }
+  const [getStatisticsLazyQuery, { data, loading: loadingStatisticsData }] =
+    useGetStatisticsLazyQuery();
 
-    const [startDate, endDate] = getMonthStartEnd(start);
-    setStartDate(startDate);
-    setEndDate(endDate);
+  const onSubmit = () => {
+    const { userIds, year, month } = getValues();
+    const [startDate, endDate] = getMonthStartEnd(
+      new Date(`${year}-${month}-1`)
+    );
 
-    refetch({
-      input: {
-        startDate,
-        endDate,
-        clinicId: selectedInfo.clinic?.id ?? 0,
-        userIds,
+    getStatisticsLazyQuery({
+      variables: {
+        input: {
+          startDate,
+          endDate,
+          clinicId: selectedInfo.clinic!.id,
+          userIds: userIds.map((id) => +id),
+        },
       },
     });
-    return startDate;
-  }
+  };
 
-  function onSubmit() {
-    if (memberState) {
-      setUserIds(
-        memberState
-          .filter((member) => member.isSelected)
-          .map((member) => member.userId)
-      );
+  const getMonthStartDate = () => {
+    const { year, month } = getValues();
+    return new Date(`${year}-${month}-1`);
+  };
+  const getMonthEndDate = () => {
+    const { year, month } = getValues();
+    return getMonthStartEnd(new Date(`${year}-${month}-1`))[1];
+  };
+
+  const changeYear = (action: 'plus' | 'minus') => {
+    const { year } = getValues();
+    if (action === 'plus') {
+      return setValue('year', +year + 1);
     }
-  }
+    return setValue('year', +year - 1);
+  };
+
+  const resetYear = () => {
+    setValue('year', selectedDate.getFullYear());
+    setValue('month', selectedDate.getMonth() + 1 + '');
+  };
 
   useEffect(() => {
-    setMemberState(
-      selectedInfo.clinic?.members
-        ?.filter((member) => member.accepted)
-        ?.map((member) => ({
-          userId: member.user.id,
-          name: member.user.name,
-          isSelected: true,
-        }))
-        .sort((a, b) => {
-          if (a.name > b.name) return 1;
-          if (a.name < b.name) return -1;
-          return 0;
-        })
-    );
-  }, [selectedInfo.clinic]);
+    if (
+      loadingStatisticsData ||
+      !data?.getStatistics.dailyReports ||
+      !data?.getStatistics.prescriptions
+    )
+      return;
 
-  useEffect(() => {
-    if (loadingStatisticsData) return;
-    if (data?.getStatistics.dailyReports && data?.getStatistics.prescriptions) {
-      const { dailyReports, prescriptions, visitRates } = data.getStatistics;
+    const { dailyReports, prescriptions, visitRates } = data.getStatistics;
 
-      console.log('dailyReports', dailyReports);
-      console.log('prescriptions', prescriptions);
-      console.log('visitRates', visitRates);
-      console.log('memberState', memberState);
-
-      const newUserStatistics = combineUserStatistics({
-        dailyReports,
-        memberState,
-        prescriptions,
-      });
-
-      setUserStatistics(newUserStatistics);
-    }
+    const newUserStatistics = combineUserStatistics({
+      dailyReports,
+      memberState: acceptedMember,
+      prescriptions,
+    });
+    setUserStatistics(newUserStatistics);
   }, [data]);
 
   return (
@@ -134,31 +126,19 @@ export const Statistics = () => {
             <div className="flex w-full justify-between gap-4">
               <div className="flex items-center">
                 <MenuButton
-                  onClick={() => {
-                    const newStartDate = onClickSetDate(
-                      startDate,
-                      selectedDate.getMonth(),
-                      'prev'
-                    );
-                    selectedDateVar(new Date(newStartDate));
-                  }}
+                  onClick={() => changeYear('minus')}
                   icon={<FontAwesomeIcon icon={faChevronLeft} fontSize={14} />}
                   enabled
                   hasBorder
                 />
-                <MenuButton
-                  label={selectedDate.getFullYear() + '년 '}
-                  enabled
+                <input
+                  type="number"
+                  {...register('year', { required: true })}
+                  className="pointer-events-none w-10 appearance-none text-center"
+                  onClick={resetYear}
                 />
                 <MenuButton
-                  onClick={() => {
-                    const newStartDate = onClickSetDate(
-                      startDate,
-                      selectedDate.getMonth(),
-                      'next'
-                    );
-                    selectedDateVar(new Date(newStartDate));
-                  }}
+                  onClick={() => changeYear('plus')}
                   enabled
                   icon={<FontAwesomeIcon icon={faChevronRight} fontSize={14} />}
                   hasBorder
@@ -166,77 +146,70 @@ export const Statistics = () => {
               </div>
               <div className="flex items-center gap-x-1.5">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, idx) => (
-                  <MenuButton
+                  <Checkbox
                     key={month}
-                    hasBorder
-                    onClick={() => onClickSetDate(startDate, idx)}
+                    id={month + ''}
                     label={month + '월'}
-                    enabled={startDate.getMonth() === idx}
-                    hasActiveRing
-                    thinFont
-                    hasFocus
+                    type="radio"
+                    value={month}
+                    register={register('month', {
+                      required: true,
+                    })}
                   />
                 ))}
               </div>
             </div>
-            {memberState && (
-              <div className="flex w-full justify-end gap-x-4 py-1.5">
-                {memberState.map((member, idx) => (
-                  <MenuButton
-                    key={idx}
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
+                {acceptedMember?.map((member) => (
+                  <Checkbox
+                    key={member.userId}
+                    id={member.name}
                     label={member.name}
-                    hasBorder
-                    hasActiveRing
-                    thinFont
-                    enabled={member.isSelected}
-                    onClick={() => {
-                      if (loadingStatisticsData) return;
-                      memberState[idx].isSelected =
-                        !memberState[idx].isSelected;
-                      setMemberState([...memberState]);
-                    }}
+                    type="checkbox"
+                    value={member.userId}
+                    register={register('userIds', {
+                      required: true,
+                    })}
                   />
                 ))}
                 <Button
-                  type="button"
-                  isSmall
-                  canClick={!loadingStatisticsData}
+                  type="submit"
+                  canClick={isValid}
                   loading={loadingStatisticsData}
-                  onClick={onSubmit}
+                  isSmall
                 >
                   조회하기
                 </Button>
               </div>
-            )}
+            </form>
           </div>
         }
       />
       {loadingStatisticsData && <Loading />}
       {!loadingStatisticsData &&
-      userStatistics &&
-      data &&
-      data.getStatistics.prescriptions &&
-      data.getStatistics.dailyReports ? (
-        <>
-          {data.getStatistics.prescriptions.length < 1 ? (
-            <Worning type="hasNotPrescription" />
-          ) : data.getStatistics.dailyReports.length < 1 ? (
-            <Worning type="hasNotStatistics" />
-          ) : (
-            userStatistics.length > 0 && (
-              <Charts
-                userStatistics={userStatistics}
-                prescriptions={data.getStatistics.prescriptions}
-                dailyReports={data.getStatistics.dailyReports}
-                startDate={startDate}
-                endDate={endDate}
-              />
-            )
-          )}
-        </>
-      ) : userIds.length === 0 ? (
-        <Worning type="emptyUserIds" />
-      ) : null}
+        userStatistics &&
+        data &&
+        data.getStatistics.prescriptions &&
+        data.getStatistics.dailyReports && (
+          <>
+            {data.getStatistics.prescriptions.length < 1 ? (
+              <Worning type="hasNotPrescription" />
+            ) : data.getStatistics.dailyReports.length < 1 ? (
+              <Worning type="hasNotStatistics" />
+            ) : (
+              userStatistics.length > 0 && (
+                <Charts
+                  userStatistics={userStatistics}
+                  prescriptions={data.getStatistics.prescriptions}
+                  dailyReports={data.getStatistics.dailyReports}
+                  startDate={getMonthStartDate()}
+                  endDate={getMonthEndDate()}
+                />
+              )
+            )}
+          </>
+        )}
     </>
   );
 };
