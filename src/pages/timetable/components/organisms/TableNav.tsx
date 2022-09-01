@@ -18,6 +18,7 @@ import useStore from '../../../../hooks/useStore';
 import { loggedInUserVar, selectedDateVar } from '../../../../store';
 import { useReactiveVar } from '@apollo/client';
 import { setLocalStorage } from '../../../../utils/utils';
+import { ROUTES } from '../../../../router/routes';
 
 interface TableNavProps {}
 
@@ -98,7 +99,7 @@ export function TableNav({}: TableNavProps) {
             }
             enabled
             label={'환자등록'}
-            onClick={() => navigate('create-patient')}
+            onClick={() => navigate(ROUTES.create_patient)}
           />
           <BtnMenuToggle
             onClick={() => {
