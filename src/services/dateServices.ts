@@ -193,7 +193,12 @@ export const get4DigitHour = (date: Date | string) => {
 export const getFrom4DigitTime = (time: string, what: 'hour' | 'minute') =>
   what === 'hour' ? +time.substring(0, 2) : time.substring(3, 5);
 
-export function getMonthStartEnd(date: Date) {
+/**
+ * Date를 받고 그 달의 첫날짜와 끝날짜를 반환한다
+ * @param {Date} date
+ * @returns [startDate, endDate]
+ */
+export function getMonthStartEnd(date: Date): [Date, Date] {
   const startDate = new Date(date);
   startDate.setHours(0, 0, 0, 0);
   const endDate = new Date(startDate);

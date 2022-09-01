@@ -76,6 +76,7 @@ export const PrescriptionPage = () => {
     getValues,
     formState: { isValid, errors },
   } = useForm<CreatePrescriptionInput>({ mode: 'onChange' });
+
   const { name, requiredTime, price, prescriptionAtomIds, description } =
     getValues();
 
@@ -261,9 +262,9 @@ export const PrescriptionPage = () => {
               </Textarea>
               <Button
                 type="submit"
-                canClick={isValid && prescriptionAtomIds?.length >= 1}
-                isWidthFull
+                canClick={isValid}
                 loading={loadingCreatePrescriptionOption}
+                isWidthFull
               >
                 만들기
               </Button>
