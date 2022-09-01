@@ -29,7 +29,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
     },
     {
       protectRoute: false,
-      path: ENDPOINT.editReservation,
+      path: ENDPOINT.edit_reservation,
       element: <TimeTable />,
     },
     {
@@ -69,12 +69,16 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
       path: ENDPOINT.DASHBOARD.statistics,
       element: <Statistics />,
     },
+    {
+      protectRoute: { protect: false, isPass: null },
+      path: ENDPOINT.DASHBOARD.edit_profile,
+      element: <EditProfile />,
+    },
   ];
 
   return (
     <Routes>
       <Route path="/" element={<GlobalLayout isLoggedIn />}>
-        <Route path={ROUTES.editProfile} element={<EditProfile />} />
         <Route path={ROUTES.search} element={<Search />} />
         <Route
           key="TimetableRoute"

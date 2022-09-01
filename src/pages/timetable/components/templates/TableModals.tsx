@@ -8,8 +8,8 @@ export function TableModals() {
   const navigate = useNavigate();
 
   const isReserve = useMatch(ROUTES.reserve);
-  const isEdit = useMatch(ROUTES.editReservation);
-  const isCreatePatient = useMatch(ROUTES.createPatient);
+  const isEdit = useMatch(ROUTES.edit_reservation);
+  const isCreatePatient = useMatch(ROUTES.create_patient);
   return (
     <>
       {isEdit ? (

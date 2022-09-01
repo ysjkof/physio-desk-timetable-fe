@@ -9,7 +9,12 @@ import {
 import useStore from '../../../../hooks/useStore';
 import Sidebar from '../../../../components/organisms/Sidebar';
 import Selectbox from '../../../../components/organisms/Selectbox';
-import { DashboardEndpoint } from '../../../../router/routes';
+import {
+  clinicMenu,
+  DashboardEndpoint,
+  ENDPOINT,
+  personalMenu,
+} from '../../../../router/routes';
 
 interface SelectedOption {
   id: number;
@@ -94,10 +99,7 @@ export const DashboardSideNav = ({
 
       <Sidebar>
         <Sidebar.Ul>
-          {[
-            { route: 'member', name: '구성원' },
-            { route: 'invite', name: '초대' },
-          ].map((menu, idx) => (
+          {clinicMenu.map((menu, idx) => (
             <Sidebar.Li
               key={idx}
               to={menu.route}
@@ -107,25 +109,9 @@ export const DashboardSideNav = ({
             </Sidebar.Li>
           ))}
         </Sidebar.Ul>
+
         <Sidebar.Ul>
-          {[
-            { route: 'prescription', name: '처방관리' },
-            { route: 'statistics', name: '통계' },
-          ].map((menu, idx) => (
-            <Sidebar.Li
-              key={idx}
-              to={menu.route}
-              selectedLi={endpoint === menu.route}
-            >
-              {menu.name}
-            </Sidebar.Li>
-          ))}
-        </Sidebar.Ul>
-        <Sidebar.Ul>
-          {[
-            { route: 'create', name: '병원 만들기' },
-            { route: 'clinics', name: '나의 병원' },
-          ].map((menu, idx) => (
+          {personalMenu.map((menu, idx) => (
             <Sidebar.Li
               key={idx}
               to={menu.route}

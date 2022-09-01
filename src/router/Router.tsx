@@ -30,8 +30,8 @@ function Router() {
     />,
     <Route key="notFound" path="*" element={<NotFound />} />,
     <Route
-      key={ROUTES.confirmEmail}
-      path={ROUTES.confirmEmail}
+      key={ROUTES.confirm_email}
+      path={ROUTES.confirm_email}
       element={<ConfirmEmail />}
     />,
   ];

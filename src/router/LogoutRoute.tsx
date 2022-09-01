@@ -19,7 +19,7 @@ function LogoutRoute({ CommonRoute }: LoginRouteProps) {
           }
         />
         <Route
-          path={ROUTES.signUp}
+          path={ROUTES.sign_up}
           element={
             <AuthContainer>
               <SignUp />

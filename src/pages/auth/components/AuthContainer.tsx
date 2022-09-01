@@ -13,7 +13,7 @@ export const AuthContainer = ({ children }: { children: React.ReactNode }) => {
         {children}
 
         <NavLink
-          to={ROUTES.signUp}
+          to={ROUTES.sign_up}
           className={
             location.pathname === '/create-account'
               ? 'font-bold text-sky-500 hover:underline'

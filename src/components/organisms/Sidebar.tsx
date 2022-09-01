@@ -17,9 +17,6 @@ function Li({ to, children, selectedLi }: LiProps) {
       className={cls(
         'h-full w-full cursor-pointer rounded-none hover:bg-gray-100',
         selectedLi ? 'bg-green-100 font-semibold' : ''
-        // isManagerMenu && selectedClinic.isManager === false
-        //   ? 'pointer-events-none opacity-50'
-        //   : ''
       )}
     >
       <Link to={to} className="block h-full w-full py-1.5 px-2">

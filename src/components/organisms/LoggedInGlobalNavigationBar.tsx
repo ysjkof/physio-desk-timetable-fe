@@ -1,7 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMe } from '../../hooks/useMe';
-import { ROUTES } from '../../router/routes';
+import {
+  clinicMenu,
+  ENDPOINT,
+  personalMenu,
+  ROUTES,
+} from '../../router/routes';
 import Dropdown from './Dropdown';
 import { logout } from '../../pages/auth/authServices';
 
@@ -57,8 +62,18 @@ export const LoggedInGlobalNavigationBar = () => {
           <Dropdown title={meData?.me.name}>
             <Dropdown.Container width={'12rem'}>
               <Dropdown.Ul>
-                <Dropdown.Li to={ROUTES.editProfile}>프로필</Dropdown.Li>
-                <Dropdown.Li to={ROUTES.dashboard}>대시보드</Dropdown.Li>
+                {clinicMenu.map((menu, idx) => (
+                  <Dropdown.Li key={idx} to={ROUTES[menu.route]}>
+                    {menu.name}
+                  </Dropdown.Li>
+                ))}
+              </Dropdown.Ul>
+              <Dropdown.Ul>
+                {personalMenu.map((menu, idx) => (
+                  <Dropdown.Li key={idx} to={ROUTES[menu.route]}>
+                    {menu.name}
+                  </Dropdown.Li>
+                ))}
               </Dropdown.Ul>
               <Dropdown.Ul>
                 <Dropdown.Button onClick={invokeLogout}>

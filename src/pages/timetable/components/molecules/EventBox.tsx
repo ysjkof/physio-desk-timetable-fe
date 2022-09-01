@@ -97,7 +97,7 @@ export function EventBox({
   };
 
   function onClickBox() {
-    navigate(ROUTES.editReservation, { state: { reservationId } });
+    navigate(ROUTES.edit_reservation, { state: { reservationId } });
   }
   const setSelectedReservation = () => {
     selectedInfoVar({ ...selectedInfo, reservation: event });
