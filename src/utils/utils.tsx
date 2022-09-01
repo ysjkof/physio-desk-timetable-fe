@@ -109,9 +109,10 @@ export const setLocalStorage = ({
 };
 
 const removePersonalClinicNumber = (name: string) => {
-  const [splittedName] = name.split(':');
-  return splittedName;
+  const splitted = name.split(':');
+  return splitted.length < 2 ? null : splitted[0];
 };
 export const renameUseSplit = (name: string) => {
-  return removePersonalClinicNumber(name) + ' : 개인';
+  const isSplit = removePersonalClinicNumber(name);
+  return isSplit ? isSplit + ' : 개인' : name;
 };
