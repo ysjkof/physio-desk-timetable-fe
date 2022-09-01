@@ -125,7 +125,7 @@ export const DatepickerInput = ({
           value={inputDate.year}
           onChange={handleInputChange}
           type="number"
-          className="remove-number-arrow input-datepicker"
+          className=" input-datepicker"
           placeholder="YYYY"
         />
       </label>
@@ -136,7 +136,7 @@ export const DatepickerInput = ({
           value={inputDate.month}
           onChange={handleInputChange}
           type="number"
-          className="remove-number-arrow input-datepicker"
+          className=" input-datepicker"
           placeholder="MM"
         />
       </label>
@@ -147,7 +147,7 @@ export const DatepickerInput = ({
           value={inputDate.day}
           onChange={handleInputChange}
           type="number"
-          className="remove-number-arrow input-datepicker"
+          className=" input-datepicker"
           placeholder="DD"
         />
       </label>
@@ -160,7 +160,7 @@ export const DatepickerInput = ({
               value={inputDate.hour}
               onChange={handleInputChange}
               type="number"
-              className="remove-number-arrow input-datepicker"
+              className=" input-datepicker"
               placeholder="HH"
             />
           </label>
@@ -171,7 +171,7 @@ export const DatepickerInput = ({
               value={inputDate.minute}
               onChange={handleInputChange}
               type="number"
-              className="remove-number-arrow input-datepicker"
+              className=" input-datepicker"
               placeholder="mm"
               minLength={1}
               maxLength={2}

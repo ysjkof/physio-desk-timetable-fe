@@ -37,13 +37,3 @@
 .hidden-scrollbar::-webkit-scrollbar {
   width: 0px;
 }
-
-/* input type number에 증가, 감소 화살표 제거 */
-.remove-number-arrow {
-  -moz-appearance: textfield;
-}
-.remove-number-arrow::-webkit-outer-spin-button,
-.remove-number-arrow::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
