@@ -30,6 +30,12 @@ export type CancelInvitationInput = {
   id: Scalars['Int'];
 };
 
+export type CheckAdminOutput = {
+  __typename?: 'CheckAdminOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type Clinic = {
   __typename?: 'Clinic';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -595,6 +601,7 @@ export type PrescriptionAtom = {
 
 export type Query = {
   __typename?: 'Query';
+  checkAdmin: CheckAdminOutput;
   findAllPatients: FindAllPatientsOutput;
   findAtomPrescriptions: FindAtomPrescriptionsOutput;
   findMyClinics: FindMyClinicsOutput;
@@ -610,6 +617,11 @@ export type Query = {
   searchPatient: SearchPatientOutput;
   searchUsers: SearchUsersOutput;
   userProfile: GetUserOutput;
+};
+
+
+export type QueryCheckAdminArgs = {
+  code: Scalars['String'];
 };
 
 
@@ -819,6 +831,13 @@ export type CancelInvitationMutationVariables = Exact<{
 
 
 export type CancelInvitationMutation = { __typename?: 'Mutation', cancelInvitation: { __typename?: 'InviteUserOutput', ok: boolean, error?: string | null } };
+
+export type CheckAdminQueryVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type CheckAdminQuery = { __typename?: 'Query', checkAdmin: { __typename?: 'CheckAdminOutput', ok: boolean, error?: string | null } };
 
 export type InactivateClinicMutationVariables = Exact<{
   input: InactivateClinicInput;
@@ -1088,6 +1107,42 @@ export function useCancelInvitationMutation(baseOptions?: Apollo.MutationHookOpt
 export type CancelInvitationMutationHookResult = ReturnType<typeof useCancelInvitationMutation>;
 export type CancelInvitationMutationResult = Apollo.MutationResult<CancelInvitationMutation>;
 export type CancelInvitationMutationOptions = Apollo.BaseMutationOptions<CancelInvitationMutation, CancelInvitationMutationVariables>;
+export const CheckAdminDocument = gql`
+    query checkAdmin($code: String!) {
+  checkAdmin(code: $code) {
+    ok
+    error
+  }
+}
+    `;
+
+/**
+ * __useCheckAdminQuery__
+ *
+ * To run a query within a React component, call `useCheckAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckAdminQuery({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useCheckAdminQuery(baseOptions: Apollo.QueryHookOptions<CheckAdminQuery, CheckAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckAdminQuery, CheckAdminQueryVariables>(CheckAdminDocument, options);
+      }
+export function useCheckAdminLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckAdminQuery, CheckAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckAdminQuery, CheckAdminQueryVariables>(CheckAdminDocument, options);
+        }
+export type CheckAdminQueryHookResult = ReturnType<typeof useCheckAdminQuery>;
+export type CheckAdminLazyQueryHookResult = ReturnType<typeof useCheckAdminLazyQuery>;
+export type CheckAdminQueryResult = Apollo.QueryResult<CheckAdminQuery, CheckAdminQueryVariables>;
 export const InactivateClinicDocument = gql`
     mutation inactivateClinic($input: InactivateClinicInput!) {
   inactivateClinic(input: $input) {
