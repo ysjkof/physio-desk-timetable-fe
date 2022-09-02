@@ -9,6 +9,7 @@ import { Loading } from '../../components/atoms/Loading';
 import useStore from '../../hooks/useStore';
 import { renameUseSplit } from '../../utils/utils';
 import { DashboardEndpoint } from '../../router/routes';
+import AcceptInvitation from './components/organisms/AcceptInvitation';
 
 export function checkManager(clinicId: number, meData: MeQuery) {
   return Boolean(
@@ -28,12 +29,16 @@ export function checkStay(clinicId: number, meData: MeQuery) {
 
 export const Dashboard = () => {
   const { data: meData, loading } = useMe();
-  const { selectedInfo, setSelectedInfo } = useStore();
+  const { selectedInfo } = useStore();
   const location = useLocation();
   const pathname = location.pathname.split('/');
   const endpoint = pathname[pathname.length - 1] as DashboardEndpoint;
 
   if (!meData || !selectedInfo.clinic || loading) return <Loading />;
+
+  const isAccepted = meData.me.members?.find(
+    (member) => member.clinic.id === selectedInfo.clinic?.id
+  )?.accepted;
 
   return (
     <>
@@ -42,7 +47,13 @@ export const Dashboard = () => {
       </Helmet>
 
       <DashboardTemplate
-        nav={<DashboardSideNav meData={meData} endpoint={endpoint} />}
+        nav={
+          <DashboardSideNav
+            meData={meData}
+            endpoint={endpoint}
+            isAccepted={isAccepted}
+          />
+        }
         breadcrumb={
           <DashboardTitle
             clinicName={renameUseSplit(selectedInfo.clinic.name)}
@@ -50,7 +61,14 @@ export const Dashboard = () => {
           />
         }
       >
-        <Outlet />
+        {isAccepted ? (
+          <Outlet />
+        ) : (
+          <AcceptInvitation
+            selectedClinic={selectedInfo.clinic}
+            loggedInUserId={meData.me.id}
+          />
+        )}
       </DashboardTemplate>
     </>
   );

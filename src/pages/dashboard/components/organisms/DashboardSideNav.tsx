@@ -1,10 +1,6 @@
 import { checkManager, checkStay } from '../..';
 import { ClinicType, MeQuery } from '../../../../graphql/generated/graphql';
-import {
-  checkMember,
-  renameUseSplit,
-  setLocalStorage,
-} from '../../../../utils/utils';
+import { renameUseSplit, setLocalStorage } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
 import Sidebar from '../../../../components/organisms/Sidebar';
 import Selectbox from '../../../../components/organisms/Selectbox';
@@ -17,11 +13,13 @@ import {
 interface DashboardSideNavProps {
   meData: MeQuery;
   endpoint: DashboardEndpoint;
+  isAccepted: boolean | undefined;
 }
 
 export const DashboardSideNav = ({
   meData,
   endpoint,
+  isAccepted,
 }: DashboardSideNavProps) => {
   const { clinicLists, setSelectedInfo, selectedInfo } = useStore();
   const clinicListsSelectMeMember = clinicLists.map((clinic) => {
@@ -57,9 +55,20 @@ export const DashboardSideNav = ({
     );
   };
 
+  const changeName = (name: string, isAccepted?: boolean) => {
+    let prefix = '';
+    if (!isAccepted) {
+      prefix = '수락대기 : ';
+    }
+
+    return prefix + renameUseSplit(name);
+  };
+
   return (
     <nav className="dashboard-side-nav h-full">
-      <Selectbox selectedValue={renameUseSplit(selectedInfo.clinic!.name)}>
+      <Selectbox
+        selectedValue={changeName(selectedInfo.clinic!.name, isAccepted)}
+      >
         <Selectbox.Options>
           {clinicListsSelectMeMember.map((clinic) => (
             <Selectbox.Option
@@ -68,14 +77,8 @@ export const DashboardSideNav = ({
               onClick={() =>
                 changeSelectedClinic(clinic.id, clinic.name, clinic.type)
               }
-              suffix={
-                checkMember(clinic.member.staying, clinic.member.accepted) ===
-                '수락대기'
-                  ? '수락대기'
-                  : ''
-              }
             >
-              {renameUseSplit(clinic.name)}
+              {changeName(clinic.name, clinic.member.accepted)}
             </Selectbox.Option>
           ))}
         </Selectbox.Options>
