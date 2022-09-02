@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { checkManager, checkStay } from '../..';
 import { ClinicType, MeQuery } from '../../../../graphql/generated/graphql';
 import {
@@ -12,15 +11,9 @@ import Selectbox from '../../../../components/organisms/Selectbox';
 import {
   clinicMenu,
   DashboardEndpoint,
-  ENDPOINT,
   personalMenu,
 } from '../../../../router/routes';
 
-interface SelectedOption {
-  id: number;
-  value: string;
-  type: ClinicType;
-}
 interface DashboardSideNavProps {
   meData: MeQuery;
   endpoint: DashboardEndpoint;
@@ -30,7 +23,7 @@ export const DashboardSideNav = ({
   meData,
   endpoint,
 }: DashboardSideNavProps) => {
-  const { clinicLists, setSelectedInfo } = useStore();
+  const { clinicLists, setSelectedInfo, selectedInfo } = useStore();
   const clinicListsSelectMeMember = clinicLists.map((clinic) => {
     const idx = clinic.members.findIndex(
       (member) => member.user.id === meData.me.id
@@ -43,16 +36,7 @@ export const DashboardSideNav = ({
     };
   });
 
-  const [selectedOption, setSelectedOption] = useState<SelectedOption>({
-    id: clinicListsSelectMeMember[0].id,
-    value: clinicListsSelectMeMember[0].name,
-    type: clinicListsSelectMeMember[0].type,
-  });
-  const selectOption = (selectedOption: SelectedOption) => {
-    setSelectedOption(selectedOption);
-  };
-  const handleClickOption = (id: number, name: string, type: ClinicType) => {
-    selectOption({ id, value: name, type });
+  const changeSelectedClinic = (id: number, name: string, type: ClinicType) => {
     const newSelectedClinic = {
       id,
       name,
@@ -75,14 +59,14 @@ export const DashboardSideNav = ({
 
   return (
     <nav className="dashboard-side-nav h-full">
-      <Selectbox selectedValue={renameUseSplit(selectedOption.value)}>
+      <Selectbox selectedValue={renameUseSplit(selectedInfo.clinic!.name)}>
         <Selectbox.Options>
           {clinicListsSelectMeMember.map((clinic) => (
             <Selectbox.Option
               key={clinic.id}
-              selected={clinic.id === selectedOption.id}
+              selected={clinic.id === selectedInfo.clinic?.id}
               onClick={() =>
-                handleClickOption(clinic.id, clinic.name, clinic.type)
+                changeSelectedClinic(clinic.id, clinic.name, clinic.type)
               }
               suffix={
                 checkMember(clinic.member.staying, clinic.member.accepted) ===
