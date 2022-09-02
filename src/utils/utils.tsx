@@ -114,5 +114,5 @@ const removePersonalClinicNumber = (name: string) => {
 };
 export const renameUseSplit = (name: string) => {
   const isSplit = removePersonalClinicNumber(name);
-  return isSplit ? isSplit + ' : 개인' : name;
+  return isSplit ? '개인 : ' + isSplit : name;
 };

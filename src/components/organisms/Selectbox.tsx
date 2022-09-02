@@ -63,17 +63,12 @@ function Options({ children }: OptionsProps) {
 
 function Selectbox({ children, selectedValue, width }: SelectboxProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const toggleMenu = () => {
-    setIsOpen((prevState) => !prevState);
-  };
+  const toggleMenu = () => setIsOpen((prevState) => !prevState);
+  const closeMenu = () => setIsOpen(false);
 
   useEffect(() => {
-    toggleMenu();
+    closeMenu();
   }, [selectedValue]);
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, []);
 
   return (
     <div className="relative h-8 cursor-pointer border-b" style={{ width }}>
@@ -83,7 +78,7 @@ function Selectbox({ children, selectedValue, width }: SelectboxProps) {
           {children}
           <div
             className="fixed top-0 z-40 h-screen w-screen"
-            onClick={toggleMenu}
+            onClick={closeMenu}
           />
         </>
       )}
