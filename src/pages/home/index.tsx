@@ -1,10 +1,4 @@
-import { useReactiveVar } from '@apollo/client';
-import { Link } from 'react-router-dom';
-import { isLoggedInVar } from '../../apollo';
-
 export function Home() {
-  const isLoggedIn = useReactiveVar(isLoggedInVar);
-
   return (
     <div className="px-4 ">
       <h1 className="font-bold">무울 Muool</h1>
@@ -15,17 +9,6 @@ export function Home() {
         전자차트 프로그램. 일정한 틀이 없고, 통계 확인이 불가능한 환자 차트. 이
         문제점을 해결하려고 만듭니다.
       </p>
-
-      {isLoggedIn && (
-        <div className="mt-2 space-x-4">
-          <Link
-            className="rounded-lg border px-2 py-1 text-sky-400"
-            to="/list-patient"
-          >
-            환자 목록
-          </Link>
-        </div>
-      )}
     </div>
   );
 }
