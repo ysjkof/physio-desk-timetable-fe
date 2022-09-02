@@ -37,7 +37,7 @@ export default function Toast() {
               autoFocus
               className="rounded-md border-2 border-white px-1 font-normal outline-none focus:ring focus:ring-blue-400"
             >
-              닫기
+              확인
             </button>
           </div>
           <div

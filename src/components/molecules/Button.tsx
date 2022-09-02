@@ -25,10 +25,10 @@ export const Button = ({
   <button
     type={type}
     className={cls(
-      'flex items-center justify-center rounded-md bg-green-600 py-1 tracking-widest text-white transition-colors focus:outline-none',
-      isSmall ? ' px-2 text-xs' : ' text-base',
-      isWidthFull ? ' w-full' : '',
-      canClick ? ' bg-green-600' : ' pointer-events-none opacity-50'
+      'flex items-center justify-center rounded-md bg-green-600 py-1 px-2 tracking-widest text-white transition-colors focus:outline-none',
+      isSmall ? 'text-xs' : 'text-base',
+      isWidthFull ? 'w-full' : '',
+      canClick ? 'bg-green-600' : 'pointer-events-none opacity-50'
     )}
     onClick={onClick}
   >
@@ -42,7 +42,7 @@ export const Button = ({
       ''
     )}
     <span
-      className={cls('whitespace-nowrap', loading ? ' text-transparent' : '')}
+      className={cls('whitespace-nowrap', loading ? 'text-transparent' : '')}
     >
       {children}
     </span>
