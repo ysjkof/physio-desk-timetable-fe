@@ -45,7 +45,7 @@ export const ReservationCard = ({
   };
 
   const changeSubmenu = (menu: typeof subMenu) => {
-    setSubMenu((prev) => (prev === 'patient' ? 'reservation' : 'patient'));
+    setSubMenu(menu);
     setIsEdit(false);
   };
 
