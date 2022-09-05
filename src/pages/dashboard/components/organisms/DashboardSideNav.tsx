@@ -1,4 +1,4 @@
-import { checkManager, checkStay } from '../..';
+import { checkStay } from '../..';
 import { ClinicType, MeQuery } from '../../../../graphql/generated/graphql';
 import { renameUseSplit, setLocalStorage } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
@@ -42,7 +42,11 @@ export const DashboardSideNav = ({
       members:
         clinicLists.find((clinicInFind) => clinicInFind.id === id)?.members ??
         [],
-      isManager: checkManager(id, meData),
+      isManager: Boolean(
+        meData.me.members?.find(
+          (member) => member.clinic.id === id && member.manager
+        )
+      ),
       isStayed: checkStay(id, meData),
     };
     setSelectedInfo('clinic', newSelectedClinic, () =>

@@ -11,13 +11,6 @@ import { renameUseSplit } from '../../utils/utils';
 import { DashboardEndpoint } from '../../router/routes';
 import AcceptInvitation from './components/organisms/AcceptInvitation';
 
-export function checkManager(clinicId: number, meData: MeQuery) {
-  return Boolean(
-    meData.me.members?.find(
-      (member) => member.clinic.id === clinicId && member.manager
-    )
-  );
-}
 export function checkStay(clinicId: number, meData: MeQuery) {
   return Boolean(
     meData.me.members?.find(
@@ -61,14 +54,7 @@ export const Dashboard = () => {
           />
         }
       >
-        {isAccepted ? (
-          <Outlet />
-        ) : (
-          <AcceptInvitation
-            selectedClinic={selectedInfo.clinic}
-            loggedInUserId={meData.me.id}
-          />
-        )}
+        {isAccepted ? <Outlet /> : <AcceptInvitation />}
       </DashboardTemplate>
     </>
   );
