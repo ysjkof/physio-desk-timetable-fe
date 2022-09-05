@@ -1,5 +1,3 @@
-import { UTC_OPTION, UTC_OPTION_KST } from '../constants/constants';
-
 export const getSunday = (date: Date) => {
   const returnDate = new Date(date);
   returnDate.setHours(0, 0, 0, 0);

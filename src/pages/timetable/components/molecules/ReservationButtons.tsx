@@ -65,8 +65,8 @@ function ReservationButtons({
     );
 
     const startDate = newDateSetHourAndMinute({
-      hour: +getFrom4DigitTime(label, 'hour') + UTC_OPTION.kor.hour,
-      minute: +getFrom4DigitTime(label, 'minute') + UTC_OPTION.kor.minute,
+      hour: +getFrom4DigitTime(label, 'hour'),
+      minute: +getFrom4DigitTime(label, 'minute'),
       fromDate: date,
     });
     const endDate = new Date(startDate);
