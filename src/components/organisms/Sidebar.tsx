@@ -9,7 +9,9 @@ interface LiProps extends ChildrenProps {
   to: string;
 }
 interface UlProps extends ChildrenProps {}
-interface SidebarPoprs extends ChildrenProps {}
+interface SidebarPoprs extends ChildrenProps {
+  disable?: boolean;
+}
 
 function Li({ to, children, selectedLi }: LiProps) {
   return (
@@ -30,8 +32,17 @@ function Ul({ children }: UlProps) {
   return <ul className="flex flex-col">{children}</ul>;
 }
 
-function Sidebar({ children }: SidebarPoprs) {
-  return <div className="flex flex-col divide-y">{children}</div>;
+function Sidebar({ children, disable }: SidebarPoprs) {
+  return (
+    <div
+      className={cls(
+        'flex flex-col divide-y',
+        disable ? 'pointer-events-none opacity-25' : ''
+      )}
+    >
+      {children}
+    </div>
+  );
 }
 
 Sidebar.Li = Li;

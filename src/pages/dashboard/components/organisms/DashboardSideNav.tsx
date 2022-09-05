@@ -84,7 +84,7 @@ export const DashboardSideNav = ({
         </Selectbox.Options>
       </Selectbox>
 
-      <Sidebar>
+      <Sidebar disable={!isAccepted}>
         <Sidebar.Ul>
           {clinicMenu.map((menu, idx) => (
             <Sidebar.Li
