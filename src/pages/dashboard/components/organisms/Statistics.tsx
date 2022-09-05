@@ -190,25 +190,27 @@ export const Statistics = () => {
       />
       {loadingStatisticsData && <Loading />}
       {!loadingStatisticsData &&
-        userStatistics &&
-        data &&
-        data.getStatistics.dailyReports && (
-          <>
-            {data.getStatistics.dailyReports.length < 1 ? (
-              <Worning type="hasNotStatistics" />
-            ) : (
-              userStatistics.length > 0 && (
-                <Charts
-                  userStatistics={userStatistics}
-                  prescriptions={data.getStatistics.prescriptions!}
-                  dailyReports={data.getStatistics.dailyReports}
-                  startDate={getMonthStartDate()}
-                  endDate={getMonthEndDate()}
-                />
-              )
-            )}
-          </>
-        )}
+      userStatistics &&
+      data &&
+      data.getStatistics.dailyReports ? (
+        <>
+          {data.getStatistics.dailyReports.length < 1 ? (
+            <Worning type="hasNotStatistics" />
+          ) : (
+            userStatistics.length > 0 && (
+              <Charts
+                userStatistics={userStatistics}
+                prescriptions={data.getStatistics.prescriptions!}
+                dailyReports={data.getStatistics.dailyReports}
+                startDate={getMonthStartDate()}
+                endDate={getMonthEndDate()}
+              />
+            )
+          )}
+        </>
+      ) : (
+        <Worning>사용자를 선택하고 조회하기를 눌러주세요</Worning>
+      )}
     </>
   );
 };
