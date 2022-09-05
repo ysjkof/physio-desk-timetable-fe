@@ -77,11 +77,11 @@ export const PrescriptionPage = () => {
     formState: { isValid, errors },
   } = useForm<CreatePrescriptionInput>({ mode: 'onChange' });
 
-  const { name, requiredTime, price, prescriptionAtomIds, description } =
-    getValues();
-
   const onSubmitCreatePresciption = () => {
     if (!loadingCreatePrescriptionOption) {
+      const { name, requiredTime, price, prescriptionAtomIds, description } =
+        getValues();
+
       createPrescription({
         variables: {
           input: {
@@ -181,14 +181,14 @@ export const PrescriptionPage = () => {
               </div>
               <Input
                 id="name"
-                label={'처방이름*'}
-                placeholder={'도수30, 집중형충격파1, MT20'}
+                label="처방이름*"
+                placeholder="도수30, 집중형충격파1, MT20"
                 required
                 register={register('name', {
                   required: '처방이름을 입력해주세요',
                   pattern: REG_EXP.prescription.pattern,
                 })}
-                type={'text'}
+                type="text"
               >
                 <div className="group absolute left-[3.2rem] top-[0.08rem] cursor-pointer">
                   <FontAwesomeIcon icon={faCircleQuestion} fontSize={14} />
@@ -208,8 +208,8 @@ export const PrescriptionPage = () => {
                 <Input
                   id="requiredTime"
                   required
-                  label={'소요시간(분)*'}
-                  placeholder={'10분 단위, 0 이상의 숫자'}
+                  label="소요시간(분)*"
+                  placeholder="10분 단위, 0 이상의 숫자"
                   type="number"
                   step={10}
                   register={register('requiredTime', {
@@ -229,8 +229,8 @@ export const PrescriptionPage = () => {
                 </Input>
                 <Input
                   id="price"
-                  label={'가격(원)*'}
-                  placeholder={'0 이상의 숫자'}
+                  label="가격(원)*"
+                  placeholder="0 이상의 숫자"
                   required
                   register={register('price', {
                     required: '가격을 입력해주세요',
@@ -240,7 +240,7 @@ export const PrescriptionPage = () => {
                       message: '더 이상 불가합니다',
                     },
                   })}
-                  type={'number'}
+                  type="number"
                 >
                   {errors.price?.message && (
                     <FormError errorMessage={errors.price.message} />
