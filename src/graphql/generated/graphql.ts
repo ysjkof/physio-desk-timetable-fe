@@ -28,6 +28,7 @@ export type AcceptInvitationOutput = {
 
 export type CancelInvitationInput = {
   id: Scalars['Int'];
+  manager?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CheckAdminOutput = {

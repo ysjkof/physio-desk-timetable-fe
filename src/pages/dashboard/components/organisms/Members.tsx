@@ -1,39 +1,16 @@
-import {
-  FindMyClinicsDocument,
-  useAcceptInvitationMutation,
-  useCancelInvitationMutation,
-} from '../../../../graphql/generated/graphql';
-import { cls } from '../../../../utils/utils';
+import { checkManager, cls } from '../../../../utils/utils';
 import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
 import useStore from '../../../../hooks/useStore';
-import { useMe } from '../../../../hooks/useMe';
 import { Button } from '../../../../components/molecules/Button';
-import { client } from '../../../../apollo';
+import useCancelInvitation from '../../hooks/useCancelInvitation';
+import { loggedInUserVar } from '../../../../store';
 
 export const Members = () => {
-  const { data } = useMe();
+  const loggedInUser = loggedInUserVar();
   const { selectedInfo } = useStore();
+  const { invokeCancelInvitation, loading: loadingCancel } =
+    useCancelInvitation();
 
-  const [cancelInvitation] = useCancelInvitationMutation();
-  const invokeCancelInvitation = (id: number) => {
-    if (confirm('정말 초대를 취소 하겠습니까?')) {
-      cancelInvitation({
-        variables: {
-          input: {
-            id,
-          },
-        },
-        onCompleted(data) {
-          if (data.cancelInvitation.ok) {
-            alert('삭제 완료');
-            client.refetchQueries({ include: [FindMyClinicsDocument] });
-            return;
-          }
-          alert('삭제 실패');
-        },
-      });
-    }
-  };
   return (
     <DashboardSectionLayout
       title="구성원"
@@ -59,21 +36,29 @@ export const Members = () => {
                 <span
                   className={cls(
                     'py-1',
-                    data?.me.id === member.user.id ? 'font-bold' : ''
+                    loggedInUser?.id === member.user.id ? 'font-bold' : ''
                   )}
                 >
                   {member.user.name}
                 </span>
                 {!member.staying && !member.accepted && (
                   <>
-                    <Button
-                      loading={false}
-                      canClick
-                      isSmall
-                      onClick={() => invokeCancelInvitation(member.id)}
-                    >
-                      초대 취소
-                    </Button>
+                    {checkManager(
+                      selectedInfo.clinic?.members!,
+                      loggedInUser!.id
+                    ) ? (
+                      <Button
+                        type="button"
+                        loading={loadingCancel}
+                        canClick={!loadingCancel}
+                        isSmall
+                        onClick={() => invokeCancelInvitation(member.id, true)}
+                      >
+                        초대 취소
+                      </Button>
+                    ) : (
+                      <span />
+                    )}
                     <span className="text-center text-red-500">승인대기</span>
                   </>
                 )}
