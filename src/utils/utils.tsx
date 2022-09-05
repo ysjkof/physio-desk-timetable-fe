@@ -1,5 +1,4 @@
 import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
-import { ClinicType } from '../graphql/generated/graphql';
 import {
   CreateLocalStorageKey,
   GetLocalStorage,
@@ -33,6 +32,15 @@ export function checkMember(staying: boolean, accepted: boolean) {
   // if (staying && accepted) return "직원";
   // if (!staying && !accepted) return "수락대기";
   // if (!staying && accepted) return "탈퇴";
+}
+interface CheckManager {
+  id: number;
+  manager: boolean;
+  user: { id: number };
+}
+export function checkManager(members: CheckManager[], userId: number) {
+  const managerId = members.find((member) => member.manager)?.user.id;
+  return managerId && managerId === userId;
 }
 
 export function makeArrFromLength(length: number) {
