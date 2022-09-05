@@ -70,7 +70,9 @@ export const Statistics = () => {
           startDate,
           endDate,
           clinicId: selectedInfo.clinic!.id,
-          userIds: userIds.map((id) => +id),
+          userIds: Array.isArray(userIds)
+            ? userIds.map((id) => +id)
+            : [+userIds],
         },
       },
     });
@@ -190,18 +192,15 @@ export const Statistics = () => {
       {!loadingStatisticsData &&
         userStatistics &&
         data &&
-        data.getStatistics.prescriptions &&
         data.getStatistics.dailyReports && (
           <>
-            {data.getStatistics.prescriptions.length < 1 ? (
-              <Worning type="hasNotPrescription" />
-            ) : data.getStatistics.dailyReports.length < 1 ? (
+            {data.getStatistics.dailyReports.length < 1 ? (
               <Worning type="hasNotStatistics" />
             ) : (
               userStatistics.length > 0 && (
                 <Charts
                   userStatistics={userStatistics}
-                  prescriptions={data.getStatistics.prescriptions}
+                  prescriptions={data.getStatistics.prescriptions!}
                   dailyReports={data.getStatistics.dailyReports}
                   startDate={getMonthStartDate()}
                   endDate={getMonthEndDate()}
