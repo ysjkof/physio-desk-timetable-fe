@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { useListReservations } from '../../hooks/useListReservations';
+import { useListReservations } from './hooks/useListReservations';
 import { TableTemplate } from './components/templates/TableTemplate';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -32,7 +32,7 @@ import {
 } from '../timetableServices';
 import { DayWithUsers } from '../../types/type';
 import { useMe } from '../../hooks/useMe';
-import useViewoptions from '../../hooks/useViewOption';
+import useViewoptions from './hooks/useViewOption';
 import useStore from '../../hooks/useStore';
 
 export interface TimetableModalProps {

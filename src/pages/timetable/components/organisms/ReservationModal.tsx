@@ -3,7 +3,7 @@ import { TimetableModalProps } from '../..';
 import { ModalContentsLayout } from '../../../../components/templates/ModalContentsLayout';
 import { ModalTemplate } from '../../../../components/templates/ModalTemplate';
 import { ReservationCard } from '../molecules/ReservationCard';
-import { useListReservations } from '../../../../hooks/useListReservations';
+import { useListReservations } from '../../hooks/useListReservations';
 import { ReservationState } from '../../../../graphql/generated/graphql';
 import { DayOffCard } from '../molecules/DayOffCard';
 

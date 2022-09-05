@@ -1,14 +1,14 @@
 import { useReactiveVar } from '@apollo/client';
 import { useState } from 'react';
-import { TABLE_TIME_GAP } from '../constants/constants';
+import { TABLE_TIME_GAP } from '../../../constants/constants';
 import {
   compareDateMatch,
   get4DigitHour,
   getTimeGaps,
   newDateFromHoursAndMinute,
   newDateSetHourAndMinute,
-} from '../services/dateServices';
-import { viewOptionsVar } from '../store';
+} from '../../../services/dateServices';
+import { viewOptionsVar } from '../../../store';
 
 export default function useViewoptions() {
   const viewOptions = useReactiveVar(viewOptionsVar);

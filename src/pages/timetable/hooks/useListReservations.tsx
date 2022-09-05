@@ -1,6 +1,6 @@
-import { useListReservationsQuery } from '../graphql/generated/graphql';
-import { getAfterDate, getSunday } from '../services/dateServices';
-import useStore from './useStore';
+import { useListReservationsQuery } from '../../../graphql/generated/graphql';
+import { getAfterDate, getSunday } from '../../../services/dateServices';
+import useStore from '../../../hooks/useStore';
 
 export const useListReservations = () => {
   const { selectedInfo, selectedDate, clinicLists } = useStore();
