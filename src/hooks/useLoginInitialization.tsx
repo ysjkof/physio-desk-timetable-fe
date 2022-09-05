@@ -122,7 +122,14 @@ function useLoginInitialization() {
 
     setSelectedInfo(
       'clinic',
-      makeSelectedClinic(newSelectedClinic, meData.me.id)
+      makeSelectedClinic(newSelectedClinic, meData.me.id),
+      () =>
+        setLocalStorage({
+          key: 'selectedClinic',
+          userId: meData.me.id,
+          userName: meData.me.name,
+          value: newSelectedClinic,
+        })
     );
   };
 

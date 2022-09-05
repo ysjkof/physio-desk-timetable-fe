@@ -7,7 +7,6 @@ import {
 } from '../store';
 import {
   IClinicList,
-  IViewOption,
   SetSelectedInfoKey,
   SetSelectedInfoValue,
 } from '../types/type';
@@ -34,6 +33,9 @@ export default function useStore() {
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const selectedDate = useReactiveVar(selectedDateVar);
 
+  /**
+   * @param callback 필요시 localStorage에 저장하는 함수를 전달합니다
+   */
   const setSelectedInfo = (
     key: SetSelectedInfoKey,
     value: SetSelectedInfoValue,
