@@ -12,6 +12,7 @@ import { Button } from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { login } from '../authServices';
 import { toastVar } from '../../../store';
+import { MUOOL } from '../../../constants/constants';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ export const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Login | Muool</title>
+        <title>로그인 | {MUOOL}</title>
       </Helmet>
 
       <h4 className="mb-6 text-center text-base font-semibold">

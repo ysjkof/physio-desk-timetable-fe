@@ -13,6 +13,7 @@ import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { toastVar } from '../../../store';
+import { MUOOL } from '../../../constants/constants';
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ export const SignUp = () => {
   return (
     <>
       <Helmet>
-        <title>Create Account | Muool</title>
+        <title>계정 만들기 | {MUOOL}</title>
       </Helmet>
       <form
         onSubmit={handleSubmit(onSubmit)}

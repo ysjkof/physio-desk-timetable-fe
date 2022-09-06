@@ -34,6 +34,7 @@ import { DayWithUsers } from '../../types/type';
 import { useMe } from '../../hooks/useMe';
 import useViewoptions from './hooks/useViewOption';
 import useStore from '../../hooks/useStore';
+import { MUOOL } from '../../constants/constants';
 
 export interface TimetableModalProps {
   closeAction: () => void;
@@ -172,7 +173,7 @@ export const TimeTable = () => {
   return (
     <>
       <Helmet>
-        <title>시간표 | Muool</title>
+        <title>시간표 | {MUOOL}</title>
       </Helmet>
       {!viewOptions.get || !weekEvents ? (
         <Loading />

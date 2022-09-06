@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { FormError } from '../../../components/atoms/FormError';
 import { Button } from '../../../components/molecules/Button';
 import { Input } from '../../../components/molecules/Input';
+import { MUOOL } from '../../../constants/constants';
 import { REG_EXP } from '../../../constants/regex';
 import {
   EditProfileInput,
@@ -97,7 +98,7 @@ export const EditProfile = () => {
   return (
     <>
       <Helmet>
-        <title>Edit Profile | Muool</title>
+        <title>Edit Profile | {MUOOL}</title>
       </Helmet>
       <div className="container mx-auto h-full">
         <form

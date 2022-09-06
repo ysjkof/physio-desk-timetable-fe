@@ -6,6 +6,7 @@ import { Worning } from '../../components/atoms/Warning';
 import { SearchedPatientLi } from './organisms/SearchedPatientLi';
 import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
 import { selectedInfoVar } from '../../store';
+import { MUOOL } from '../../constants/constants';
 
 export const Search = () => {
   const location = useLocation();
@@ -38,7 +39,7 @@ export const Search = () => {
   return (
     <>
       <Helmet>
-        <title>검색 | Muool</title>
+        <title>검색 | {MUOOL}</title>
       </Helmet>
       {loading && <p>loading ...</p>}
       {!loading && data?.searchPatient.patients?.length === 0 ? (

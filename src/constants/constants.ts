@@ -79,3 +79,5 @@ export const USER_COLORS = [
 
 const milliseconds = 3000;
 export const defaultToastTimeout = milliseconds;
+
+export const MUOOL = 'Muool';

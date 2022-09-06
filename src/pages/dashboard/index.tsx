@@ -10,6 +10,7 @@ import useStore from '../../hooks/useStore';
 import { renameUseSplit } from '../../utils/utils';
 import { DashboardEndpoint } from '../../router/routes';
 import AcceptInvitation from './components/organisms/AcceptInvitation';
+import { MUOOL } from '../../constants/constants';
 
 export function checkStay(clinicId: number, meData: MeQuery) {
   return Boolean(
@@ -36,7 +37,7 @@ export const Dashboard = () => {
   return (
     <>
       <Helmet>
-        <title>대시보드| Muool</title>
+        <title>대시보드 | {MUOOL}</title>
       </Helmet>
 
       <DashboardTemplate

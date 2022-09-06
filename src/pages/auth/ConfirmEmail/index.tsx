@@ -2,6 +2,7 @@ import { gql, useApolloClient, useReactiveVar } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
+import { MUOOL } from '../../../constants/constants';
 import {
   useVerifyEmailMutation,
   VerifyEmailMutation,
@@ -89,7 +90,7 @@ export const ConfirmEmail = () => {
   return (
     <div className="mt-52 flex flex-col items-center justify-center">
       <Helmet>
-        <title>이메일 인증 | Muool</title>
+        <title>이메일 인증 | {MUOOL}</title>
       </Helmet>
       <h2 className="mb-1  font-medium">이메일 인증</h2>
       <h4 className="text-base font-medium text-red-600">
