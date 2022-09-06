@@ -40,6 +40,7 @@ export const ConfirmEmail = () => {
     if (error) {
       return setMessage(error);
     }
+
     if (ok && loggedInUser?.id) {
       // Reading and Writing Data to the cache guide: writeFragment
       // Fragment는 전체 DB에서 수정하고 싶은 일부분이다.
@@ -57,13 +58,14 @@ export const ConfirmEmail = () => {
           verified: true,
         },
       });
+
+      toastVar({
+        messages: ['이메일 인증됐습니다'],
+        fade: true,
+        milliseconds: 2000,
+      });
+      return navigate('/');
     }
-    toastVar({
-      messages: ['이메일 인증됐습니다'],
-      fade: true,
-      milliseconds: 2000,
-    });
-    navigate('/');
   };
 
   const [verifyEmail] = useVerifyEmailMutation({ onCompleted });
@@ -92,9 +94,9 @@ export const ConfirmEmail = () => {
       <Helmet>
         <title>이메일 인증 | {MUOOL}</title>
       </Helmet>
-      <h2 className="mb-1  font-medium">이메일 인증</h2>
-      <h4 className="text-base font-medium text-red-600">
-        {message ? message : "Please wait, don't close this page..."}
+      <h2 className="mb-4 text-lg font-medium">이메일 인증</h2>
+      <h4 className="animate-pulse text-base font-medium text-red-600">
+        {message ? message : '화면을 닫지 말고 기다려주세요. 확인 중입니다.'}
       </h4>
     </div>
   );
