@@ -43,7 +43,7 @@ export const PrescriptionPage = () => {
       onCompleted: (data) => {
         if (!data.createPrescription.ok) {
           if (data.createPrescription.error) {
-            toastVar({ message: data.createPrescription.error });
+            toastVar({ messages: [data.createPrescription.error] });
           }
           return;
         }

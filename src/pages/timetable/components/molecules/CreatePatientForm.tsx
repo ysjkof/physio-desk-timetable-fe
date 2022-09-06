@@ -57,7 +57,7 @@ export const CreatePatientForm = ({
     } = data;
     if (ok) {
       closeAction();
-      toastVar({ message: `"${patient?.name}"님을 등록했습니다` });
+      toastVar({ messages: [`"${patient?.name}"님을 등록했습니다`] });
       setSelectedInfo('patient', {
         id: patient?.id!,
         name: patient?.name!,

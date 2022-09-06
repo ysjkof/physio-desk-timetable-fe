@@ -35,7 +35,7 @@ export const CreateClinic = () => {
         onCompleted(data) {
           if (data.createClinic.ok) {
             if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
-            toastVar({ message: `병원 "${name}"을 만들었습니다` });
+            toastVar({ messages: [`병원 "${name}"을 만들었습니다`] });
 
             const newClinic = {
               ...data.createClinic.clinic?.members[0],

@@ -31,13 +31,17 @@ export const SignUp = () => {
 
     if (ok) {
       toastVar({
-        message:
-          '계정을 만들었습니다. 이메일 인증을 하면 모든 기능을 사용할 수 있습니다.',
+        messages: [
+          '계정을 만들었습니다.',
+          '입력하신 이메일 주소로 인증 코드를 보냈습니다.',
+          '이메일 서비스에 따라 1~10분 소요될 수 있습니다.',
+          '이메일 인증을 하면 모든 기능을 사용할 수 있습니다.',
+        ],
       });
       navigate('/');
     } else if (error) {
       toastVar({
-        message: error,
+        messages: [error],
       });
     }
   };
@@ -55,6 +59,7 @@ export const SignUp = () => {
       });
     }
   };
+
   return (
     <>
       <Helmet>

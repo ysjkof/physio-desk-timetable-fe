@@ -27,13 +27,13 @@ export const Login = () => {
       login: { ok, token, error },
     } = data;
     if (!ok) {
-      toastVar({ message: '로그인이 유효하지 않습니다.' });
+      toastVar({ messages: ['로그인이 유효하지 않습니다.'] });
     }
 
     if (ok && token) {
       login(token, () => navigate('/'));
     } else if (error) {
-      toastVar({ message: error });
+      toastVar({ messages: [error] });
     }
   };
 

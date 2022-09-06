@@ -38,7 +38,7 @@ export default function useAcceptInvitation() {
         },
         onCompleted(data) {
           if (data.acceptInvitation.ok) {
-            toastVar({ message: '병원 초대를 수락했습니다' });
+            toastVar({ messages: ['병원 초대를 수락했습니다'] });
             const memberIdx = acceptedClinic.members.findIndex(
               (member) => member.user.id === loggedInUserId
             );

@@ -58,7 +58,7 @@ export const ConfirmEmail = () => {
       });
     }
     toastVar({
-      message: '이메일 인증됐습니다',
+      messages: ['이메일 인증됐습니다'],
       fade: true,
       milliseconds: 2000,
     });

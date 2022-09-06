@@ -5,24 +5,24 @@ import { toastVar } from '../../store';
 import { cls } from '../../utils/utils';
 
 export default function Toast() {
-  const { message, fade, milliseconds } = useReactiveVar(toastVar);
+  const { messages, fade, milliseconds } = useReactiveVar(toastVar);
 
   const closeToast = () => {
     toastVar({});
   };
 
   useEffect(() => {
-    if (!message || !fade) return;
+    if (!messages || !fade) return;
     setTimeout(closeToast, milliseconds || defaultToastTimeout);
-  }, [message, fade]);
+  }, [messages, fade]);
 
   return (
     <>
-      {message && (
+      {messages && (
         <>
           <div
             className={cls(
-              'position-center fixed z-50 flex flex-col gap-4 rounded-md bg-slate-600 px-6 py-4 text-xl font-semibold text-white',
+              'position-center fixed z-50 flex flex-col gap-4 rounded-md bg-slate-600 px-6 py-4 text-base text-white',
               fade ? 'fade animate-fadeout' : ''
             )}
             style={{
@@ -31,11 +31,13 @@ export default function Toast() {
               }),
             }}
           >
-            {message}
+            {messages.map((message) => (
+              <p key={message}>{message}</p>
+            ))}
             <button
               onClick={closeToast}
               autoFocus
-              className="rounded-md border-2 border-white px-1 font-normal outline-none focus:ring focus:ring-blue-400"
+              className="rounded-md border-2 border-white px-1 outline-none focus:border-green-400"
             >
               확인
             </button>

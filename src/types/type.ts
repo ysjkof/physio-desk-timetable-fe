@@ -187,7 +187,7 @@ export interface RemoveTokenLocalStorage extends Partial<UserIdAndName> {
 export type LoggedInUser = MeQuery['me'] | undefined | null;
 
 export interface ToastState {
-  message?: string;
+  messages?: string[];
   fade?: boolean;
   milliseconds?: number;
 }

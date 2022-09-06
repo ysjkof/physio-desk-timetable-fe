@@ -29,7 +29,7 @@ export const EditProfile = () => {
       const { name, email } = getValues();
       if (prevName === name && prevEmail === email) return;
 
-      toastVar({ message: '사용자 정보 수정완료', fade: true });
+      toastVar({ messages: ['사용자 정보 수정완료'], fade: true });
 
       client.writeFragment({
         id: `User:${id}`,

@@ -87,7 +87,7 @@ export const ReserveForm = ({
       createReservation: { ok, error },
     } = data;
     if (error) {
-      toastVar({ message: `오류가 발생했습니다; ${error}` });
+      toastVar({ messages: [`오류가 발생했습니다; ${error}`] });
     }
     if (ok) closeAction();
   };
@@ -96,7 +96,7 @@ export const ReserveForm = ({
       editReservation: { ok, error },
     } = data;
     if (error) {
-      toastVar({ message: `오류가 발생했습니다; ${error}` });
+      toastVar({ messages: [`오류가 발생했습니다; ${error}`] });
     }
     // 할일: 캐시작업
     if (ok) closeAction();
