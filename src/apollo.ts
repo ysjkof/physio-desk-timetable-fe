@@ -15,12 +15,15 @@ const token = getLocalStorageItem<string>({ key: 'token' });
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar<string | null>(token);
 
+const PRODUCTION_URL = '://muool-backend.fly.dev/graphql';
+const DEV_URL = '://localhost:3002/graphql';
+
 const wsLink = new GraphQLWsLink(
   createClient({
     url:
       process.env.NODE_ENV === 'production'
-        ? 'wss://muool.herokuapp.com/graphql'
-        : 'ws://localhost:3002/graphql',
+        ? `wss${PRODUCTION_URL}`
+        : `ws${DEV_URL}`,
     connectionParams: () => {
       return { 'x-jwt': authTokenVar() };
     },
@@ -30,8 +33,8 @@ const wsLink = new GraphQLWsLink(
 const httpLink = createHttpLink({
   uri:
     process.env.NODE_ENV === 'production'
-      ? 'https://muool.herokuapp.com/graphql'
-      : 'http://localhost:3002/graphql',
+      ? `https${PRODUCTION_URL}`
+      : `http${DEV_URL}`,
 });
 
 const authLink = setContext((_, { headers }) => {
