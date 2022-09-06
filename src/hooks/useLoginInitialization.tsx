@@ -135,9 +135,12 @@ function useLoginInitialization() {
 
   useEffect(() => {
     setLoading(true);
-    if (!meData) return console.log('meData가 없습니다');
-    if (!findMyClinicsData || !findMyClinicsData.findMyClinics.clinics)
-      return console.log('findMyClinicsData가 없습니다');
+    if (
+      !meData ||
+      !findMyClinicsData ||
+      !findMyClinicsData.findMyClinics.clinics
+    )
+      return;
 
     loggedInUserVar(meData.me);
     setSelectedClinic(

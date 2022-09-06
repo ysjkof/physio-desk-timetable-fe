@@ -8,7 +8,7 @@ export const useMe = () => {
   const navigation = useNavigate();
   const token = getLocalStorageItem<string>({ key: 'token' });
   if (!token) {
-    console.log('토큰이 없습니다. 하려던 일은 useMe입니다');
+    console.info('토큰이 없습니다. 하려던 일은 useMe입니다');
   }
   return useMeQuery({
     onError(error) {
