@@ -15,6 +15,8 @@ import { REG_EXP } from '../../../constants/regex';
 import { toastVar } from '../../../store';
 
 export const SignUp = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     getValues,
@@ -23,11 +25,22 @@ export const SignUp = () => {
   } = useForm<CreateAccountInput>({
     mode: 'onChange',
   });
-  const navigate = useNavigate();
+
+  const [
+    createAccountMutation,
+    { loading, data: createaAccountMutationResult },
+  ] = useCreateAccountMutation();
+
   const onCompleted = (data: CreateAccountMutation) => {
     const {
       createAccount: { ok, error },
     } = data;
+
+    if (error) {
+      return toastVar({
+        messages: [error],
+      });
+    }
 
     if (ok) {
       toastVar({
@@ -38,24 +51,20 @@ export const SignUp = () => {
           '이메일 인증을 하면 모든 기능을 사용할 수 있습니다.',
         ],
       });
-      navigate('/');
-    } else if (error) {
-      toastVar({
-        messages: [error],
-      });
+      return navigate('/');
     }
   };
-  const [
-    createAccountMutation,
-    { loading, data: createaAccountMutationResult },
-  ] = useCreateAccountMutation({ onCompleted });
+
   const onSubmit = () => {
     if (!loading) {
       const { name, email, password } = getValues();
+      if (!name || !email || !password) return;
+
       createAccountMutation({
         variables: {
           input: { name, email, password },
         },
+        onCompleted,
       });
     }
   };

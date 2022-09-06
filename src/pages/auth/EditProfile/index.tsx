@@ -17,19 +17,39 @@ export const EditProfile = () => {
   const { data: userData } = useMe();
   const client = useApolloClient();
 
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { isValid, errors },
+  } = useForm<EditProfileInput>({
+    mode: 'onChange',
+    defaultValues: {
+      email: userData?.me.email,
+      name: userData?.me.name,
+    },
+  });
+
+  const [editProfile, { loading }] = useEditProfileMutation();
+
   const onCompleted = (data: EditProfileMutation) => {
     const {
-      editProfile: { ok },
+      editProfile: { ok, error },
     } = data;
+
+    if (error) {
+      return toastVar({ messages: [error] });
+    }
+
     if (ok && userData) {
+      toastVar({ messages: ['사용자 정보 수정완료'], fade: true });
+
       const {
         me: { name: prevName, email: prevEmail, id },
       } = userData;
 
       const { name, email } = getValues();
       if (prevName === name && prevEmail === email) return;
-
-      toastVar({ messages: ['사용자 정보 수정완료'], fade: true });
 
       client.writeFragment({
         id: `User:${id}`,
@@ -53,23 +73,6 @@ export const EditProfile = () => {
     }
   };
 
-  const [editProfile, { loading }] = useEditProfileMutation({
-    onCompleted,
-  });
-
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    formState: { isValid, errors },
-  } = useForm<EditProfileInput>({
-    mode: 'onChange',
-    defaultValues: {
-      email: userData?.me.email,
-      name: userData?.me.name,
-    },
-  });
-
   const onSubmit = () => {
     if (!userData) throw new Error('사용자 정보가 없습니다');
 
@@ -88,6 +91,7 @@ export const EditProfile = () => {
           ...(password !== '' && { password }),
         },
       },
+      onCompleted,
     });
   };
   return (

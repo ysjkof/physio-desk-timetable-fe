@@ -26,14 +26,13 @@ export const Login = () => {
     const {
       login: { ok, token, error },
     } = data;
-    if (!ok) {
-      toastVar({ messages: ['로그인이 유효하지 않습니다.'] });
+
+    if (error) {
+      return toastVar({ messages: [error] });
     }
 
     if (ok && token) {
-      login(token, () => navigate('/'));
-    } else if (error) {
-      toastVar({ messages: [error] });
+      return login(token, () => navigate('/'));
     }
   };
 
@@ -44,6 +43,8 @@ export const Login = () => {
   const onSubmit = () => {
     if (!loading) {
       const { email, password } = getValues();
+      if (!email || !password) return;
+
       loginMutation({
         variables: {
           input: {

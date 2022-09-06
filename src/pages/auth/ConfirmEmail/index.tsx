@@ -89,9 +89,9 @@ export const ConfirmEmail = () => {
   return (
     <div className="mt-52 flex flex-col items-center justify-center">
       <Helmet>
-        <title>Verify Email | Muool</title>
+        <title>이메일 인증 | Muool</title>
       </Helmet>
-      <h2 className="mb-1  font-medium">Confirming email...</h2>
+      <h2 className="mb-1  font-medium">이메일 인증</h2>
       <h4 className="text-base font-medium text-red-600">
         {message ? message : "Please wait, don't close this page..."}
       </h4>
