@@ -1,4 +1,5 @@
 import { gql, useApolloClient } from '@apollo/client';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { FormError } from '../../../components/atoms/FormError';
@@ -10,6 +11,7 @@ import {
   EditProfileInput,
   EditProfileMutation,
   useEditProfileMutation,
+  useSendAuthenticationEmailMutation,
 } from '../../../graphql/generated/graphql';
 import { useMe } from '../../../hooks/useMe';
 import { toastVar } from '../../../store';
@@ -95,6 +97,31 @@ export const EditProfile = () => {
       onCompleted,
     });
   };
+
+  const [sendAuthEmailMutation, { loading: sendAuthEmailLoading }] =
+    useSendAuthenticationEmailMutation();
+  const [wasSendAuthEmail, setWasSendAuthEmail] = useState(false);
+
+  const sendAuthEmail = () => {
+    sendAuthEmailMutation({
+      onCompleted(data) {
+        const { ok, error } = data.sendAuthenticationEmail;
+        if (ok) {
+          setWasSendAuthEmail(true);
+          return toastVar({
+            messages: ['인증 이메일을 다시보냈습니다.'],
+          });
+        }
+
+        if (error) {
+          return toastVar({
+            messages: [error],
+          });
+        }
+      },
+    });
+  };
+
   return (
     <>
       <Helmet>
@@ -122,6 +149,17 @@ export const EditProfile = () => {
               <FormError errorMessage={REG_EXP.email.condition} />
             )}
           </Input>
+          {userData && !userData.me.verified && (
+            <Button
+              canClick={!wasSendAuthEmail}
+              loading={sendAuthEmailLoading}
+              onClick={sendAuthEmail}
+            >
+              {wasSendAuthEmail
+                ? '인증 메일을 다시 보냈습니다'
+                : '인증 메일 다시 보내기'}
+            </Button>
+          )}
           <Input
             id="name"
             label={'이름'}
