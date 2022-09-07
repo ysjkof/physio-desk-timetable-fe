@@ -459,25 +459,6 @@ function getHHMM(inputDate: string | Date, seperator?: ':') {
 array.map((label) => <span>{getHHMM(label, ':')}</span>);
 ```
 
-# 2022-5-28; 요소별 z-index
-
-**정리완료**
-reserve-btn : 10
-time-indicator-bar : 31
-event-box : 30 { hover: 32, DayOff : 31 }
-table-labels : 32
-table-sub-header : 32
-TABLE_HEADER : 34
-modal-portal : 40
-USER_VIEW_CONTROLLER : 35
-dropdown menu in Header : 50(table-clinic-selector과 겹침)
-Toast : 50
-Toast modal background : 40
-
-**추후확인**
-section-layout(dashboard) 50
-datepicker 50
-
 # 2022-07-24; 잘 작동하는 캐시 코드
 
 웹소켓 적용 후 삭제

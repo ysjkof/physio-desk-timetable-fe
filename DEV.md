@@ -1,6 +1,5 @@
 # 문서
 
-
 ![muool-scroll](https://user-images.githubusercontent.com/77876601/184348555-de09e05c-31fc-419e-8bb9-892c4dda55c7.gif)
 
 ![muool-table-option-selector](https://user-images.githubusercontent.com/77876601/184348565-9a411dd1-b5b7-421b-8bc9-ecf905306efa.gif)
@@ -12,7 +11,6 @@
 ![muool-dashboard-menu](https://user-images.githubusercontent.com/77876601/184348618-1bbc7c2f-b881-4f78-8eac-b8f7e9b1bf1c.gif)
 
 ![muool-create-prescription](https://user-images.githubusercontent.com/77876601/184348624-cfa48a9e-3002-4f2e-a418-bc6fd32de305.gif)
-
 
 [DEV-NOTE](https://github.com/ysjkof/muool-frontend/blob/main/DEV-NOTE.md)
 
@@ -73,6 +71,26 @@ App.tsx에서 localStorage에 저장된 설정을 불러오고 비교해서 전�
   이 메뉴를 선택해야 통계 등을 조회할 수 있는데
   비활성이나 탈퇴한 병원을 여기서 선택할 수 없다면 메뉴를 새로 만들어야 한다
 - 비활성화된 병원을 안보이게 설정할 수 있다
+
+### 2.4 z-index
+
+**정리완료**
+reserve-btn : 10
+time-indicator-bar : 31
+event-box : 30 { hover: 32, DayOff : 31 }
+table-labels : 32
+table-sub-header : 32
+TABLE_HEADER : 34
+modal-portal : 40
+USER_VIEW_CONTROLLER : 35
+dropdown menu in Header : 50(table-clinic-selector과 겹침)
+Toast : 50
+Toast modal background : 40
+Tool-tip : 31
+
+**추후확인**
+section-layout(dashboard) 50
+datepicker 50
 
 ## 3. 삭제 규칙
 
