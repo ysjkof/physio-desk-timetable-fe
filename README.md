@@ -1,4 +1,4 @@
-테스트 배포 중 : https://muool.netlify.app
+테스트 배포 중 : https://muool.com
 
 # 문서
 
