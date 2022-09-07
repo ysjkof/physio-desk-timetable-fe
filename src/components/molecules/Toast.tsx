@@ -43,7 +43,7 @@ export default function Toast() {
             </button>
           </div>
           <div
-            className="fixed top-0 left-0 z-40 h-screen w-screen bg-black/50"
+            className="fixed top-0 left-0 z-40 h-screen w-screen"
             onClick={closeToast}
           />
         </>
