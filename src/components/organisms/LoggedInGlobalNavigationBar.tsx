@@ -9,6 +9,7 @@ import {
 } from '../../router/routes';
 import Dropdown from './Dropdown';
 import { logout } from '../../pages/auth/authServices';
+import { useState } from 'react';
 
 interface Notice {
   __typename?: 'Notice' | undefined;
@@ -20,7 +21,7 @@ export const LoggedInGlobalNavigationBar = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues, setValue } = useForm();
   const { data: meData } = useMe();
-
+  const [hasBanner, setHasBanner] = useState(true);
   const onSubmitSearch = () => {
     const { search } = getValues();
     const searchTrim = search.trim();
@@ -30,14 +31,20 @@ export const LoggedInGlobalNavigationBar = () => {
   const invokeLogout = () => {
     logout(() => navigate('/'));
   };
-
+  const closeBanner = () => setHasBanner(false);
   return (
     <>
-      {meData && !meData.me.verified && (
-        <div className="bg-red-500 p-3 text-center">
+      {hasBanner && meData && !meData.me.verified && (
+        <div className="relative bg-red-500 p-3 text-center">
           <span className="text-base font-bold text-white">
             EMAIL 인증을 하면 모든 기능을 사용할 수 있습니다
           </span>
+          <button
+            onClick={closeBanner}
+            className="position-center-y absolute right-10 text-sm text-white hover:font-semibold"
+          >
+            닫기
+          </button>
         </div>
       )}
       <header className="HEADER header" id="header">
