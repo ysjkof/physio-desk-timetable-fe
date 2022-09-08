@@ -134,19 +134,16 @@ function useLoginInitialization() {
   };
 
   const checkLatestStorage = (loginUser: MeQuery['me']) => {
-    let createdAt = localStorageUtils.get<string | Date>({
+    const localCreatedAt = localStorageUtils.get<string>({
       key: 'createdAt',
     });
 
-    if (!createdAt) {
-      return localStorageUtils.set({ key: 'createdAt', value: new Date() });
-    }
+    const createdAt = localCreatedAt ? new Date(localCreatedAt) : null;
 
-    createdAt = new Date(createdAt);
-    const latestDateString = '2022-09-08T07:52:25.494Z';
+    const latestDateString = '2022-09-08T09:08:25.076Z';
     const latestCreatedAt = new Date(latestDateString);
 
-    if (createdAt.getTime() > latestCreatedAt.getTime()) return;
+    if (createdAt && createdAt.getTime() > latestCreatedAt.getTime()) return;
 
     const user = { userId: loginUser.id, userName: loginUser.name };
     localStorageUtils.remove({ ...user, key: 'clinicLists' });

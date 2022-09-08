@@ -11,10 +11,10 @@ import {
 
 export const LOCAL_STORAGE_KEY = {
   token: 'muool-token',
+  createdAt: 'muool-local-storage-createdAt',
   clinicLists: 'muool-clinic-lists-',
   viewOption: 'muool-view-option-',
   selectedClinic: 'muool-selected-clinic-',
-  createdAt: 'muool-local-storage-createdAt-',
 } as const;
 
 class LocalStorage {
