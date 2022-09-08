@@ -10,11 +10,12 @@ type PublicLocalStorageKey = keyof Pick<
   'token' | 'createdAt'
 >;
 
-export type LocalStorageKey = keyof typeof LOCAL_STORAGE_KEY;
+export type LocalStorageKeysType = typeof LOCAL_STORAGE_KEY;
+export type LocalStorageKey = keyof LocalStorageKeysType;
 export type LocalStorageValue = typeof LOCAL_STORAGE_KEY[LocalStorageKey];
 
 // CREATE
-export interface CreateStorageKey extends Partial<UserIdAndName> {
+export interface GenerateStorageKey extends Partial<UserIdAndName> {
   key: LocalStorageValue;
 }
 

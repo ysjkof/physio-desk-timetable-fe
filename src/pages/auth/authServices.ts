@@ -1,9 +1,9 @@
 import { authTokenVar, client, isLoggedInVar } from '../../apollo';
 import { loggedInUserVar } from '../../store';
-import { removeStorage, setStorage } from '../../utils/localStorageUtils';
+import localStorageUtils from '../../utils/localStorageUtils';
 
 export const login = (token: string, callback?: () => void) => {
-  setStorage({ key: 'token', value: token });
+  localStorageUtils.set({ key: 'token', value: token });
   authTokenVar(token);
   isLoggedInVar(true);
 
@@ -11,7 +11,7 @@ export const login = (token: string, callback?: () => void) => {
 };
 
 export const logout = (callback?: () => void) => {
-  removeStorage({ key: 'token' });
+  localStorageUtils.remove({ key: 'token' });
   authTokenVar(null);
   isLoggedInVar(false);
   loggedInUserVar(null);

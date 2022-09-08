@@ -9,7 +9,7 @@ import {
   DashboardEndpoint,
   personalMenu,
 } from '../../../../router/routes';
-import { setStorage } from '../../../../utils/localStorageUtils';
+import localStorageUtils from '../../../../utils/localStorageUtils';
 
 interface DashboardSideNavProps {
   meData: MeQuery;
@@ -51,7 +51,7 @@ export const DashboardSideNav = ({
       isStayed: checkStay(id, meData),
     };
     setSelectedInfo('clinic', newSelectedClinic, () =>
-      setStorage({
+      localStorageUtils.set({
         key: 'selectedClinic',
         userId: meData.me.id,
         userName: meData.me.name,

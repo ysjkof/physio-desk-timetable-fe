@@ -1,7 +1,8 @@
 import {
-  CreateStorageKey,
+  GenerateStorageKey,
   GetPrivateStorage,
   GetPublicLocalStorage,
+  LocalStorageKeysType,
   RemovePrivateLocalStorage,
   RemovePublicLocalStorage,
   SetPrivateStorage,
@@ -16,56 +17,53 @@ export const LOCAL_STORAGE_KEY = {
   createdAt: 'muool-local-storage-createdAt-',
 } as const;
 
-export const createStorageKey = ({
-  key,
-  userId,
-  userName,
-}: CreateStorageKey) => {
-  if (userId && userName) {
-    return key + userId + '-' + userName;
+class LocalStorage {
+  constructor(private readonly storagekeys: LocalStorageKeysType) {}
+
+  private generateKey({ key, userId, userName }: GenerateStorageKey) {
+    if (userId && userName) {
+      return key + userId + '-' + userName;
+    }
+    return key;
   }
-  return key;
-};
 
-export function getStorage<T>({
-  key,
-  userId,
-  userName,
-}: GetPrivateStorage | GetPublicLocalStorage): T | null {
-  const storageKey = createStorageKey({
-    key: LOCAL_STORAGE_KEY[key],
+  get<T>({
+    key,
     userId,
     userName,
-  });
-  const item = localStorage.getItem(storageKey);
-  if (!item || item === 'undefined') return null;
+  }: GetPrivateStorage | GetPublicLocalStorage): T | null {
+    const storageKey = this.generateKey({
+      key: this.storagekeys[key],
+      userId,
+      userName,
+    });
+    const item = localStorage.getItem(storageKey);
+    if (!item || item === 'undefined') return null;
 
-  return JSON.parse(item);
+    return JSON.parse(item);
+  }
+
+  set({ key, userId, userName, value }: SetPrivateStorage | SetPublicStorage) {
+    const storageKey = this.generateKey({
+      key: this.storagekeys[key],
+      userId,
+      userName,
+    });
+    localStorage.setItem(storageKey, JSON.stringify(value));
+  }
+
+  remove<T>({
+    key,
+    userId,
+    userName,
+  }: RemovePrivateLocalStorage | RemovePublicLocalStorage) {
+    const storageKey = this.generateKey({
+      key: this.storagekeys[key],
+      userId,
+      userName,
+    });
+    localStorage.removeItem(storageKey)!;
+  }
 }
 
-export const setStorage = ({
-  key,
-  userId,
-  userName,
-  value,
-}: SetPrivateStorage | SetPublicStorage) => {
-  const storageKey = createStorageKey({
-    key: LOCAL_STORAGE_KEY[key],
-    userId,
-    userName,
-  });
-  localStorage.setItem(storageKey, JSON.stringify(value));
-};
-
-export function removeStorage<T>({
-  key,
-  userId,
-  userName,
-}: RemovePrivateLocalStorage | RemovePublicLocalStorage) {
-  const storageKey = createStorageKey({
-    key: LOCAL_STORAGE_KEY[key],
-    userId,
-    userName,
-  });
-  localStorage.removeItem(storageKey)!;
-}
+export default new LocalStorage(LOCAL_STORAGE_KEY);

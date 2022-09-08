@@ -18,7 +18,7 @@ import useStore from '../../../../hooks/useStore';
 import { loggedInUserVar, selectedDateVar } from '../../../../store';
 import { useReactiveVar } from '@apollo/client';
 import { ROUTES } from '../../../../router/routes';
-import { setStorage } from '../../../../utils/localStorageUtils';
+import localStorageUtils from '../../../../utils/localStorageUtils';
 
 interface TableNavProps {}
 
@@ -52,7 +52,7 @@ export function TableNav({}: TableNavProps) {
   const invokeSaveViewOptions = (value: any) => {
     if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
 
-    setStorage({
+    localStorageUtils.set({
       key: 'viewOption',
       userId: loggedInUser.id,
       userName: loggedInUser.name,

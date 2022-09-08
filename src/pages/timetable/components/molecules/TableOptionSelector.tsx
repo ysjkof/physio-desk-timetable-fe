@@ -19,7 +19,7 @@ import {
   getMinutesByUnit,
 } from '../../../../services/dateServices';
 import { useState } from 'react';
-import { setStorage } from '../../../../utils/localStorageUtils';
+import localStorageUtils from '../../../../utils/localStorageUtils';
 
 interface TableDurationForm {
   startHour: number;
@@ -66,7 +66,7 @@ export function TableOptionSelector() {
       return;
     }
     clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
-    setStorage({
+    localStorageUtils.set({
       key: 'clinicLists',
       userId: loggedInUser.id,
       userName: loggedInUser.name,
@@ -93,7 +93,7 @@ export function TableOptionSelector() {
         };
 
         setSelectedInfo('clinic', newSelectedClinic, () =>
-          setStorage({
+          localStorageUtils.set({
             key: 'selectedClinic',
             userId: loggedInUser.id,
             userName: loggedInUser.name,
@@ -117,7 +117,7 @@ export function TableOptionSelector() {
   const invokeSaveViewOptions = (value: any) => {
     if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
     viewOptions.set(value, () =>
-      setStorage({
+      localStorageUtils.set({
         key: 'viewOption',
         userId: loggedInUser.id,
         userName: loggedInUser.name,
