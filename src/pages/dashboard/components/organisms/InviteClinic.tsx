@@ -72,10 +72,11 @@ export const InviteClinic = () => {
           <div className="relative flex items-center shadow-sm">
             <Input
               id="search-user"
-              label={'이름*'}
+              label="이름*"
+              type="text"
               required
               placeholder="사용자 검색"
-              type="text"
+              maxLength={REG_EXP.personName.maxLength}
               register={register('name', {
                 required: '이름을 입력하세요',
                 pattern: REG_EXP.personName.pattern,

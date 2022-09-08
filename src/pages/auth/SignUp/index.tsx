@@ -86,6 +86,7 @@ export const SignUp = () => {
           label="Email"
           type="email"
           placeholder="Email"
+          maxLength={REG_EXP.email.maxLength}
           register={register('email', {
             required: 'Email을 입력하세요',
             pattern: REG_EXP.email.pattern,
@@ -113,7 +114,8 @@ export const SignUp = () => {
           id="name"
           label="이름"
           type="text"
-          placeholder="Name"
+          placeholder="이름"
+          maxLength={REG_EXP.personName.maxLength}
           register={register('name', {
             required: '이름을 입력하세요',
             pattern: REG_EXP.personName.pattern,
@@ -132,6 +134,7 @@ export const SignUp = () => {
           label="비밀번호"
           type="password"
           placeholder="Password"
+          maxLength={REG_EXP.password.maxLength}
           register={register('password', {
             required: '비밀번호를 입력하세요',
             pattern:

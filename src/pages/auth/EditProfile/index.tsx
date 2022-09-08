@@ -133,10 +133,11 @@ export const EditProfile = () => {
           className="mx-auto grid w-full max-w-md gap-3 space-y-4 rounded-md bg-white px-4 py-8 shadow"
         >
           <Input
+            id="email"
+            label="Email"
             type="email"
             placeholder="Email"
-            id="email"
-            label={'Email'}
+            maxLength={REG_EXP.email.maxLength}
             register={register('email', {
               required: 'Email을 입력하세요',
               pattern: REG_EXP.email.pattern,
@@ -162,13 +163,14 @@ export const EditProfile = () => {
           )}
           <Input
             id="name"
-            label={'이름'}
+            label="이름"
+            type="text"
+            placeholder="이름"
+            maxLength={REG_EXP.personName.maxLength}
             register={register('name', {
               required: '이름을 입력하세요',
               pattern: REG_EXP.personName.pattern,
             })}
-            type="text"
-            placeholder="Name"
           >
             {errors.name?.message && (
               <FormError errorMessage={errors.name.message} />
@@ -182,6 +184,7 @@ export const EditProfile = () => {
             label="비밀번호"
             type="password"
             placeholder="Password"
+            maxLength={REG_EXP.password.maxLength}
             register={register('password', {
               pattern:
                 process.env.NODE_ENV === 'production'

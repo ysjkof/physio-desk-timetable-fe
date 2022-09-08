@@ -122,12 +122,13 @@ export const CreatePatientForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">
       <Input
-        id={'name'}
-        label={'이름*'}
-        type={'text'}
-        placeholder={'이름을 입력하세요'}
+        id="name"
+        label="이름*"
+        type="text"
+        placeholder="이름을 입력하세요"
         required={true}
         autoFocus
+        maxLength={REG_EXP.personName.maxLength}
         register={register('name', {
           required: '이름을 입력하세요',
           pattern: REG_EXP.personName.pattern,

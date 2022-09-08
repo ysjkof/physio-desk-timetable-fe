@@ -73,9 +73,10 @@ export const Login = () => {
       >
         <Input
           id="email"
+          label={'Email'}
           type="email"
           placeholder="Email"
-          label={'Email'}
+          maxLength={REG_EXP.email.maxLength}
           register={register('email', {
             required: 'Email을 입력하세요',
             pattern: REG_EXP.email.pattern,

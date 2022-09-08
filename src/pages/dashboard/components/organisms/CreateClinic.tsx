@@ -108,9 +108,10 @@ export const CreateClinic = () => {
         >
           <Input
             id="name"
-            type="text"
             label="이름*"
+            type="text"
             placeholder={'병원 이름'}
+            maxLength={REG_EXP.clinicName.maxLength}
             onChange={invokeClearErrors}
             register={register('name', {
               required: '이름을 입력하세요',

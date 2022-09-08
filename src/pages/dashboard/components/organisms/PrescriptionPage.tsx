@@ -182,13 +182,14 @@ export const PrescriptionPage = () => {
               <Input
                 id="name"
                 label="처방이름*"
+                type="text"
                 placeholder="도수30, 집중형충격파1, MT20"
                 required
+                maxLength={REG_EXP.prescription.maxLength}
                 register={register('name', {
                   required: '처방이름을 입력해주세요',
                   pattern: REG_EXP.prescription.pattern,
                 })}
-                type="text"
               >
                 <div className="group absolute left-[3.2rem] top-[0.08rem] cursor-pointer">
                   <FontAwesomeIcon icon={faCircleQuestion} fontSize={14} />
@@ -207,11 +208,12 @@ export const PrescriptionPage = () => {
               <div className="flex justify-between gap-6">
                 <Input
                   id="requiredTime"
-                  required
                   label="소요시간(분)*"
-                  placeholder="10분 단위, 0 이상의 숫자"
                   type="number"
+                  placeholder="10분 단위, 0 이상의 숫자"
+                  required
                   step={10}
+                  maxLength={REG_EXP.numberEnd0.maxLength}
                   register={register('requiredTime', {
                     required: '시간을 입력해주세요',
                     min: { value: 10, message: '최소 10분입니다' },
