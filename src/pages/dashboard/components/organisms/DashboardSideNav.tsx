@@ -1,6 +1,6 @@
 import { checkStay } from '../..';
 import { ClinicType, MeQuery } from '../../../../graphql/generated/graphql';
-import { renameUseSplit, setLocalStorage } from '../../../../utils/utils';
+import { renameUseSplit } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
 import Sidebar from '../../../../components/organisms/Sidebar';
 import Selectbox from '../../../../components/organisms/Selectbox';
@@ -9,6 +9,7 @@ import {
   DashboardEndpoint,
   personalMenu,
 } from '../../../../router/routes';
+import { setStorage } from '../../../../utils/localStorageUtils';
 
 interface DashboardSideNavProps {
   meData: MeQuery;
@@ -50,7 +51,7 @@ export const DashboardSideNav = ({
       isStayed: checkStay(id, meData),
     };
     setSelectedInfo('clinic', newSelectedClinic, () =>
-      setLocalStorage({
+      setStorage({
         key: 'selectedClinic',
         userId: meData.me.id,
         userName: meData.me.name,

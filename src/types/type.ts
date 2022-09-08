@@ -1,9 +1,5 @@
 import { VIEW_PERIOD } from '../constants/constants';
 import {
-  LocalStorageValue,
-  LOCAL_STORAGE_KEY,
-} from '../constants/localStorage';
-import {
   Clinic,
   FindMyClinicsQuery,
   GetStatisticsQuery,
@@ -145,9 +141,6 @@ export interface DayWithUsers {
   users: IUserWithEvent[];
 }
 
-export interface LocalStorageCreatedAt {
-  createdAt: Date;
-}
 export interface SelectedClinic extends ISelectedClinic {}
 interface SelectedReservation extends IListReservation {}
 export interface SelectedPatient
@@ -167,41 +160,6 @@ export type SetSelectedInfoKey = keyof SelectedInfo;
 export type SetSelectedInfoValue = SelectedInfo[SetSelectedInfoKey];
 
 // utils
-
-interface UserIdAndName {
-  userId: number;
-  userName: string;
-}
-
-export interface CreateLocalStorageKey extends Partial<UserIdAndName> {
-  key: LocalStorageValue;
-}
-type PrivateLocalStorageKey = keyof Pick<
-  typeof LOCAL_STORAGE_KEY,
-  'clinicLists' | 'selectedClinic' | 'viewOption'
->;
-export interface GetLocalStorage extends UserIdAndName {
-  key: PrivateLocalStorageKey;
-}
-export interface SetLocalStorage extends GetLocalStorage {
-  value: any;
-}
-
-type PublicLocalStorageKey = keyof Pick<
-  typeof LOCAL_STORAGE_KEY,
-  'token' | 'createdAt'
->;
-export interface GetPublicLocalStorage extends Partial<UserIdAndName> {
-  key: PublicLocalStorageKey;
-}
-export interface SetPublicLocalStorage
-  extends Pick<SetLocalStorage, 'value'>,
-    Partial<UserIdAndName> {
-  key: PublicLocalStorageKey;
-}
-export interface RemovePublicLocalStorage extends Partial<UserIdAndName> {
-  key: PublicLocalStorageKey;
-}
 
 export type LoggedInUser = MeQuery['me'] | undefined | null;
 

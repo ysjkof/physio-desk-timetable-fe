@@ -17,8 +17,8 @@ import { IViewOption } from '../../../../types/type';
 import useStore from '../../../../hooks/useStore';
 import { loggedInUserVar, selectedDateVar } from '../../../../store';
 import { useReactiveVar } from '@apollo/client';
-import { setLocalStorage } from '../../../../utils/utils';
 import { ROUTES } from '../../../../router/routes';
+import { setStorage } from '../../../../utils/localStorageUtils';
 
 interface TableNavProps {}
 
@@ -52,7 +52,7 @@ export function TableNav({}: TableNavProps) {
   const invokeSaveViewOptions = (value: any) => {
     if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
 
-    setLocalStorage({
+    setStorage({
       key: 'viewOption',
       userId: loggedInUser.id,
       userName: loggedInUser.name,

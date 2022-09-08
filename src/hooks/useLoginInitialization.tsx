@@ -13,10 +13,10 @@ import {
   LoggedInUser,
 } from '../types/type';
 import {
-  getLocalStorageItem,
-  removeLocalStorageItem,
-  setLocalStorage,
-} from '../utils/utils';
+  getStorage,
+  removeStorage,
+  setStorage,
+} from '../utils/localStorageUtils';
 import { useMe } from './useMe';
 import useStore, { makeSelectedClinic } from './useStore';
 
@@ -29,14 +29,14 @@ function useLoginInitialization() {
   });
 
   const setViewOption = (meData: NonNullable<LoggedInUser>) => {
-    const localViewOptions = getLocalStorageItem<IViewOption>({
+    const localViewOptions = getStorage<IViewOption>({
       key: 'viewOption',
       userId: meData.id,
       userName: meData.name,
     });
 
     if (localViewOptions === null) {
-      setLocalStorage({
+      setStorage({
         key: 'viewOption',
         userId: meData.id,
         userName: meData.name,
@@ -61,7 +61,7 @@ function useLoginInitialization() {
     const myClinics = injectKeyValue(clinics);
     let updatedMyClinics: IClinicList[] = myClinics;
 
-    const localClinics = getLocalStorageItem<IClinicList[]>({
+    const localClinics = getStorage<IClinicList[]>({
       key: 'clinicLists',
       userId: meData.me.id,
       userName: meData.me.name,
@@ -93,7 +93,7 @@ function useLoginInitialization() {
       });
     }
 
-    setLocalStorage({
+    setStorage({
       key: 'clinicLists',
       userId: meData.me.id,
       userName: meData.me.name,
@@ -107,7 +107,7 @@ function useLoginInitialization() {
   const setSelectedClinic = (updatedMyClinics: IClinicList[]) => {
     if (!meData) return console.error('loggedInUser가 없습니다');
 
-    const localSelectClinic = getLocalStorageItem<ISelectedClinic>({
+    const localSelectClinic = getStorage<ISelectedClinic>({
       key: 'selectedClinic',
       userId: meData.me.id,
       userName: meData.me.name,
@@ -128,7 +128,7 @@ function useLoginInitialization() {
       'clinic',
       makeSelectedClinic(newSelectedClinic, meData.me.id),
       () =>
-        setLocalStorage({
+        setStorage({
           key: 'selectedClinic',
           userId: meData.me.id,
           userName: meData.me.name,
@@ -138,12 +138,12 @@ function useLoginInitialization() {
   };
 
   const checkLatestStorage = (loginUser: MeQuery['me']) => {
-    let createdAt = getLocalStorageItem<string | Date>({
+    let createdAt = getStorage<string | Date>({
       key: 'createdAt',
     });
 
     if (!createdAt) {
-      return setLocalStorage({ key: 'createdAt', value: new Date() });
+      return setStorage({ key: 'createdAt', value: new Date() });
     }
 
     createdAt = new Date(createdAt);
@@ -153,11 +153,11 @@ function useLoginInitialization() {
     if (createdAt.getTime() > latestCreatedAt.getTime()) return;
 
     const user = { userId: loginUser.id, userName: loginUser.name };
-    removeLocalStorageItem({ ...user, key: 'clinicLists' });
-    removeLocalStorageItem({ ...user, key: 'viewOption' });
-    removeLocalStorageItem({ ...user, key: 'selectedClinic' });
+    removeStorage({ ...user, key: 'clinicLists' });
+    removeStorage({ ...user, key: 'viewOption' });
+    removeStorage({ ...user, key: 'selectedClinic' });
 
-    setLocalStorage({
+    setStorage({
       key: 'createdAt',
       value: latestCreatedAt,
     });

@@ -7,9 +7,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
 import { MenuButton } from '../../../../components/molecules/MenuButton';
-import { cls, setLocalStorage } from '../../../../utils/utils';
-import { loggedInUserVar, viewOptionsVar } from '../../../../store';
-import { NEXT, PREV } from '../../../../constants/constants';
+import { cls } from '../../../../utils/utils';
+import { loggedInUserVar } from '../../../../store';
+import { NEXT } from '../../../../constants/constants';
 import { BtnArrow } from '../../../../components/atoms/ButtonArrow';
 import useStore from '../../../../hooks/useStore';
 import { useReactiveVar } from '@apollo/client';
@@ -19,6 +19,7 @@ import {
   getMinutesByUnit,
 } from '../../../../services/dateServices';
 import { useState } from 'react';
+import { setStorage } from '../../../../utils/localStorageUtils';
 
 interface TableDurationForm {
   startHour: number;
@@ -65,7 +66,7 @@ export function TableOptionSelector() {
       return;
     }
     clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
-    setLocalStorage({
+    setStorage({
       key: 'clinicLists',
       userId: loggedInUser.id,
       userName: loggedInUser.name,
@@ -92,7 +93,7 @@ export function TableOptionSelector() {
         };
 
         setSelectedInfo('clinic', newSelectedClinic, () =>
-          setLocalStorage({
+          setStorage({
             key: 'selectedClinic',
             userId: loggedInUser.id,
             userName: loggedInUser.name,
@@ -116,7 +117,7 @@ export function TableOptionSelector() {
   const invokeSaveViewOptions = (value: any) => {
     if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
     viewOptions.set(value, () =>
-      setLocalStorage({
+      setStorage({
         key: 'viewOption',
         userId: loggedInUser.id,
         userName: loggedInUser.name,
