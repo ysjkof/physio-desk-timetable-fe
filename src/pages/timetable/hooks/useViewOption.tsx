@@ -12,13 +12,13 @@ import { viewOptionsVar } from '../../../store';
 export default function useViewoptions() {
   const viewOptions = useReactiveVar(viewOptionsVar);
 
-  const [firstTime] = useState(
+  const [firstTime, setFirstTime] = useState(
     newDateSetHourAndMinute({
       hour: viewOptions.tableDuration.startHour,
       minute: viewOptions.tableDuration.startMinute,
     })
   );
-  const [lastTime] = useState(
+  const [lastTime, setLastTime] = useState(
     newDateSetHourAndMinute({
       hour: viewOptions.tableDuration.endHour,
       minute: viewOptions.tableDuration.endMinute,
@@ -46,35 +46,37 @@ export default function useViewoptions() {
   };
 
   useEffect(() => {
-    const isMatchFirstTime = compareDateMatch(
-      firstTime,
-      newDateSetHourAndMinute({
-        hour: viewOptions.tableDuration.startHour,
-        minute: viewOptions.tableDuration.startMinute,
-      }),
-      'hm'
-    );
-    const isMatchLastime = compareDateMatch(
-      lastTime,
-      newDateSetHourAndMinute({
-        hour: viewOptions.tableDuration.endHour,
-        minute: viewOptions.tableDuration.endMinute,
-      }),
-      'hm'
-    );
+    const newFirstTime = newDateSetHourAndMinute({
+      hour: viewOptions.tableDuration.startHour,
+      minute: viewOptions.tableDuration.startMinute,
+    });
+    const isMatchFirstTime = compareDateMatch(firstTime, newFirstTime, 'hm');
 
-    if (!isMatchFirstTime || !isMatchLastime) {
-      setLabels(
-        getTimeGaps(
-          viewOptions.tableDuration.startHour,
-          viewOptions.tableDuration.startMinute,
-          viewOptions.tableDuration.endHour,
-          viewOptions.tableDuration.endMinute,
-          TABLE_TIME_GAP
-        ).map((label) => get4DigitHour(label))
-      );
+    const newLastTime = newDateSetHourAndMinute({
+      hour: viewOptions.tableDuration.endHour,
+      minute: viewOptions.tableDuration.endMinute,
+    });
+    const isMatchLastime = compareDateMatch(lastTime, newLastTime, 'hm');
+
+    if (!isMatchFirstTime) {
+      setFirstTime(newFirstTime);
+    }
+    if (!isMatchLastime) {
+      setLastTime(newLastTime);
     }
   }, [viewOptions]);
+
+  useEffect(() => {
+    setLabels(
+      getTimeGaps(
+        viewOptions.tableDuration.startHour,
+        viewOptions.tableDuration.startMinute,
+        viewOptions.tableDuration.endHour,
+        viewOptions.tableDuration.endMinute,
+        TABLE_TIME_GAP
+      ).map((label) => get4DigitHour(label))
+    );
+  }, [firstTime, lastTime]);
 
   return { labels, setLabels, indicatorTimes };
 }
