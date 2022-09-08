@@ -24,10 +24,11 @@ function ScheduleInUserInDay({
   return (
     <>
       {events.map((event) => {
-        const idx = labels.findIndex((label) => {
+        const labelIdx = labels.findIndex((label) => {
           return label === get4DigitHour(event.startDate);
         });
-        const numberOfCell = idx === -1 ? 0 : idx;
+
+        if (labelIdx === -1) return;
         return (
           <EventBox
             key={event.id}
@@ -39,7 +40,7 @@ function ScheduleInUserInDay({
               event.endDate,
               '20minute'
             )}
-            inset={`${numberOfCell * TABLE_CELL_HEIGHT}px 0%`}
+            inset={`${labelIdx * TABLE_CELL_HEIGHT}px 0%`}
           />
         );
       })}
