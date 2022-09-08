@@ -1,13 +1,3 @@
-import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
-import {
-  CreateLocalStorageKey,
-  GetLocalStorage,
-  GetTokenLocalStorage,
-  RemoveTokenLocalStorage,
-  SetLocalStorage,
-  SetTokenLocalStorage,
-} from '../types/type';
-
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
 }
@@ -63,58 +53,7 @@ export function changeValueInArray<T>(array: T[], value: T, index: number) {
   return [...array.slice(0, index), value, ...array.slice(index + 1)];
 }
 
-export const createLocalStorageKey = ({
-  key,
-  userId,
-  userName,
-}: CreateLocalStorageKey) => {
-  if (userId && userName) {
-    return key + userId + '-' + userName;
-  }
-  return key;
-};
-
-export function getLocalStorageItem<T>({
-  key,
-  userId,
-  userName,
-}: GetLocalStorage | GetTokenLocalStorage): T | null {
-  const storageKey = createLocalStorageKey({
-    key: LOCAL_STORAGE_KEY[key],
-    userId,
-    userName,
-  });
-  const item = localStorage.getItem(storageKey)!;
-  if (!item) return null;
-  return JSON.parse(item);
-}
-
-export function removeLocalStorageItem<T>({
-  key,
-  userId,
-  userName,
-}: GetLocalStorage | RemoveTokenLocalStorage) {
-  const storageKey = createLocalStorageKey({
-    key: LOCAL_STORAGE_KEY[key],
-    userId,
-    userName,
-  });
-  localStorage.removeItem(storageKey)!;
-}
-
-export const setLocalStorage = ({
-  key,
-  userId,
-  userName,
-  value,
-}: SetLocalStorage | SetTokenLocalStorage) => {
-  const storageKey = createLocalStorageKey({
-    key: LOCAL_STORAGE_KEY[key],
-    userId,
-    userName,
-  });
-  localStorage.setItem(storageKey, JSON.stringify(value));
-};
+//
 
 const removePersonalClinicNumber = (name: string) => {
   const splitted = name.split(':');

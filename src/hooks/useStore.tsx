@@ -8,11 +8,15 @@ import {
 import {
   IClinicList,
   IViewOption,
+  SelectedClinic,
   SetSelectedInfoKey,
   SetSelectedInfoValue,
 } from '../types/type';
 
-export function makeSelectedClinic(clinic: IClinicList, userId: number) {
+export function makeSelectedClinic(
+  clinic: IClinicList,
+  userId: number
+): SelectedClinic {
   return {
     id: clinic.id,
     name: clinic.name,
@@ -39,6 +43,7 @@ export default function useStore() {
     callback?: () => void
   ) => {
     if (selectedInfo[key] && selectedInfo[key] === value) return;
+
     selectedInfoVar({ ...selectedInfo, [key]: value });
     if (callback) callback();
   };

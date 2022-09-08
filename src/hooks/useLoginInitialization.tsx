@@ -12,7 +12,7 @@ import {
   IViewOption,
   LoggedInUser,
 } from '../types/type';
-import { getLocalStorageItem, setLocalStorage } from '../utils/utils';
+import localStorageUtils from '../utils/localStorageUtils';
 import { useMe } from './useMe';
 import useStore, { makeSelectedClinic } from './useStore';
 
@@ -25,14 +25,14 @@ function useLoginInitialization() {
   });
 
   const setViewOption = (meData: NonNullable<LoggedInUser>) => {
-    const localViewOptions = getLocalStorageItem<IViewOption>({
+    const localViewOptions = localStorageUtils.get<IViewOption>({
       key: 'viewOption',
       userId: meData.id,
       userName: meData.name,
     });
 
     if (localViewOptions === null) {
-      setLocalStorage({
+      localStorageUtils.set({
         key: 'viewOption',
         userId: meData.id,
         userName: meData.name,
@@ -57,7 +57,7 @@ function useLoginInitialization() {
     const myClinics = injectKeyValue(clinics);
     let updatedMyClinics: IClinicList[] = myClinics;
 
-    const localClinics = getLocalStorageItem<IClinicList[]>({
+    const localClinics = localStorageUtils.get<IClinicList[]>({
       key: 'clinicLists',
       userId: meData.me.id,
       userName: meData.me.name,
@@ -89,7 +89,7 @@ function useLoginInitialization() {
       });
     }
 
-    setLocalStorage({
+    localStorageUtils.set({
       key: 'clinicLists',
       userId: meData.me.id,
       userName: meData.me.name,
@@ -103,7 +103,7 @@ function useLoginInitialization() {
   const setSelectedClinic = (updatedMyClinics: IClinicList[]) => {
     if (!meData) return console.error('loggedInUser가 없습니다');
 
-    const localSelectClinic = getLocalStorageItem<ISelectedClinic>({
+    const localSelectClinic = localStorageUtils.get<ISelectedClinic>({
       key: 'selectedClinic',
       userId: meData.me.id,
       userName: meData.me.name,
@@ -124,13 +124,40 @@ function useLoginInitialization() {
       'clinic',
       makeSelectedClinic(newSelectedClinic, meData.me.id),
       () =>
-        setLocalStorage({
+        localStorageUtils.set({
           key: 'selectedClinic',
           userId: meData.me.id,
           userName: meData.me.name,
           value: newSelectedClinic,
         })
     );
+  };
+
+  const checkLatestStorage = (loginUser: MeQuery['me']) => {
+    let createdAt = localStorageUtils.get<string | Date>({
+      key: 'createdAt',
+    });
+
+    if (!createdAt) {
+      return localStorageUtils.set({ key: 'createdAt', value: new Date() });
+    }
+
+    createdAt = new Date(createdAt);
+    const latestDateString = '2022-09-08T07:52:25.494Z';
+    const latestCreatedAt = new Date(latestDateString);
+
+    if (createdAt.getTime() > latestCreatedAt.getTime()) return;
+
+    const user = { userId: loginUser.id, userName: loginUser.name };
+    localStorageUtils.remove({ ...user, key: 'clinicLists' });
+    localStorageUtils.remove({ ...user, key: 'viewOption' });
+    localStorageUtils.remove({ ...user, key: 'selectedClinic' });
+
+    localStorageUtils.set({
+      key: 'createdAt',
+      value: latestCreatedAt,
+    });
+    return console.info('Initialized Local Storage');
   };
 
   useEffect(() => {
@@ -142,17 +169,15 @@ function useLoginInitialization() {
     )
       return;
 
+    checkLatestStorage(meData.me);
+    setViewOption(meData.me);
+
     loggedInUserVar(meData.me);
     setSelectedClinic(
       setClinicLists(meData, findMyClinicsData.findMyClinics.clinics)
     );
     setLoading(false);
   }, [meData, findMyClinicsData]);
-
-  useEffect(() => {
-    if (!meData) return;
-    setViewOption(meData.me);
-  }, [meData?.me.id]);
 
   return { loading };
 }

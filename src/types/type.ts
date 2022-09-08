@@ -1,5 +1,4 @@
 import { VIEW_PERIOD } from '../constants/constants';
-import { LocalStorageKey, LocalStorageValue } from '../constants/localStorage';
 import {
   Clinic,
   FindMyClinicsQuery,
@@ -13,12 +12,6 @@ import {
   User,
 } from '../graphql/generated/graphql';
 
-export interface SelectedPatient
-  extends Pick<Patient, 'name' | 'gender' | 'registrationNumber' | 'birthday'> {
-  id: number;
-  clinicName: string;
-  user?: { id: number; name: string };
-}
 type ViewPeriodKey = keyof typeof VIEW_PERIOD;
 type ViewPeriod = typeof VIEW_PERIOD[ViewPeriodKey];
 export interface IViewOption {
@@ -148,43 +141,25 @@ export interface DayWithUsers {
   users: IUserWithEvent[];
 }
 
+export interface SelectedClinic extends ISelectedClinic {}
+interface SelectedReservation extends IListReservation {}
+export interface SelectedPatient
+  extends Pick<Patient, 'name' | 'gender' | 'registrationNumber' | 'birthday'> {
+  id: number;
+  clinicName: string;
+  user?: { id: number; name: string };
+}
+
 export interface SelectedInfo {
-  clinic: ISelectedClinic | null;
+  clinic: SelectedClinic | null;
   patient: SelectedPatient | null;
-  reservation: IListReservation | null;
+  reservation: SelectedReservation | null;
 }
 
 export type SetSelectedInfoKey = keyof SelectedInfo;
 export type SetSelectedInfoValue = SelectedInfo[SetSelectedInfoKey];
 
 // utils
-
-interface UserIdAndName {
-  userId: number;
-  userName: string;
-}
-
-export interface CreateLocalStorageKey extends Partial<UserIdAndName> {
-  key: LocalStorageValue;
-}
-export interface GetLocalStorage extends UserIdAndName {
-  key: LocalStorageKey;
-}
-export interface SetLocalStorage extends GetLocalStorage {
-  value: any;
-}
-
-export interface GetTokenLocalStorage extends Partial<UserIdAndName> {
-  key: 'token';
-}
-export interface SetTokenLocalStorage
-  extends Pick<SetLocalStorage, 'value'>,
-    Partial<UserIdAndName> {
-  key: 'token';
-}
-export interface RemoveTokenLocalStorage extends Partial<UserIdAndName> {
-  key: 'token';
-}
 
 export type LoggedInUser = MeQuery['me'] | undefined | null;
 
