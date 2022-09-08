@@ -19,6 +19,7 @@ import { loggedInUserVar, selectedDateVar } from '../../../../store';
 import { useReactiveVar } from '@apollo/client';
 import { ROUTES } from '../../../../router/routes';
 import localStorageUtils from '../../../../utils/localStorageUtils';
+import { useEffect } from 'react';
 
 interface TableNavProps {}
 
@@ -59,6 +60,13 @@ export function TableNav({}: TableNavProps) {
       value,
     });
   };
+
+  useEffect(() => {
+    return viewOptions.set({
+      ...viewOptions.get,
+      seeActiveOption: false,
+    });
+  }, []);
 
   return (
     <>
