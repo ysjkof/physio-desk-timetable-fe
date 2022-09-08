@@ -2,7 +2,11 @@ import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useReducer, useRef, useState } from 'react';
 import useStore from '../../hooks/useStore';
-import { compareDateMatch } from '../../services/dateServices';
+import {
+  compareDateMatch,
+  getHoursByUnit,
+  getMinutesByUnit,
+} from '../../services/dateServices';
 import { cls, getPositionRef } from '../../utils/utils';
 import { ModalPortal } from '../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './DatepickerWithInput';
@@ -83,33 +87,13 @@ export const Datepicker = ({
     return result;
   }
 
-  function getHours(start: number, end: number) {
-    const hours = [];
-    let i = start;
-    while (i < end) {
-      hours.push(i);
-      i++;
-    }
-    return hours;
-  }
-
-  function getMinutes(minutesUnit: number) {
-    const minutes = [];
-    let i = 0;
-    while (i < 60) {
-      minutes.push(i);
-      i = i + minutesUnit;
-    }
-    return minutes;
-  }
-
-  const listOfHours = getHours(
-    viewOptions.get.tableDuration.start.hours,
-    viewOptions.get.tableDuration.end.hours
+  const listOfHours = getHoursByUnit(
+    viewOptions.get.tableDuration.startHour,
+    viewOptions.get.tableDuration.endHour
   );
 
   const minutesUnit = 10; // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
-  const listOfMinutes = getMinutes(minutesUnit);
+  const listOfMinutes = getMinutesByUnit(minutesUnit);
 
   const selectDay = (date: Date) => {
     const { year, month, day } = inputDate;

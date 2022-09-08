@@ -174,6 +174,7 @@ export function getTimeGaps(
     i++;
     if (start.valueOf() > end.valueOf()) i = 1500;
   }
+
   return labels;
 }
 
@@ -207,14 +208,14 @@ export function getMonthStartEnd(date: Date): [Date, Date] {
   return [startDate, endDate];
 }
 
-interface duration {
-  hours: number;
-  minutes: number;
+interface Duration {
+  hour: number;
+  minute: number;
 }
-export function compareTableEndtime(date: Date, { hours, minutes }: duration) {
-  const hour = date.getHours();
-  const minute = date.getMinutes();
-  return hour === hours && minute === minutes;
+export function compareTableEndtime(date: Date, { hour, minute }: Duration) {
+  const hourToCompare = date.getHours();
+  const minuteToCompare = date.getMinutes();
+  return hourToCompare === hour && minuteToCompare === minute;
 }
 
 export function getDateFromYMDHM(
@@ -244,12 +245,6 @@ export function getHowManyDayFromMillisec(millisecond: number) {
   return millisecond / 1000 / 60 / 60 / 24;
 }
 
-export function newDateFromHoursAndMinute(hour: number, minute: number) {
-  const date = new Date();
-  date.setHours(hour, minute, 0, 0);
-  return date;
-}
-
 /** date가 속한 주의 요일 인덱스에 맞는 날짜를 반환*/
 export const createDateFromDay = (date: Date, dayIdx: number) => {
   const newDate = new Date(date);
@@ -277,3 +272,23 @@ export const createDate = (
   }
   return newDate;
 };
+
+export function getHoursByUnit(start: number, end: number) {
+  const hours = [];
+  let i = start;
+  while (i < end) {
+    hours.push(i);
+    i++;
+  }
+  return hours;
+}
+
+export function getMinutesByUnit(minutesUnit: number) {
+  const minutes = [];
+  let i = 0;
+  while (i < 60) {
+    minutes.push(i);
+    i = i + minutesUnit;
+  }
+  return minutes;
+}
