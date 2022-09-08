@@ -73,15 +73,17 @@ export const getTimeLength = (
 ) => {
   const sd = new Date(startDate);
   const ed = new Date(endDate);
-  let value = 60;
+  let seconds = 60;
+  let minutes = 1;
+
   switch (unit) {
     case 'minute':
       break;
     case '20minute': // 시간표 한 칸의 최소 높이가 10분 20px이라서 한 번에 구하기 위함
-      value = 60 * 10;
+      minutes = 10;
       break;
   }
-  return (ed.getTime() - sd.getTime()) / 1000 / value;
+  return (ed.getTime() - sd.getTime()) / 1000 / seconds / minutes;
 };
 
 export const getWeeksOfMonth = (date: Date) => {
@@ -212,6 +214,10 @@ interface Duration {
   hour: number;
   minute: number;
 }
+
+/**
+ * param1의 Date객체의 시, 분과 param2 객체의 시, 분을 비교해 Boolean을 반환한다
+ */
 export function compareTableEndtime(date: Date, { hour, minute }: Duration) {
   const hourToCompare = date.getHours();
   const minuteToCompare = date.getMinutes();
