@@ -16,8 +16,10 @@ const defaultViewOptions: IViewOption = {
   seeActiveOption: false,
   navigationExpand: false,
   tableDuration: {
-    start: { hours: 9, minutes: 0 },
-    end: { hours: 19, minutes: 0 },
+    startHour: 9,
+    startMinute: 0,
+    endHour: 19,
+    endMinute: 0,
   },
 };
 

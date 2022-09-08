@@ -45,11 +45,12 @@ export const UserNameTitle = ({
   function lockTable() {
     if (loading) return;
 
-    const { start, end } = viewOptions.tableDuration;
+    const { startHour, startMinute, endHour, endMinute } =
+      viewOptions.tableDuration;
     const startDate = new Date(date);
     const endDate = new Date(date);
-    startDate.setHours(start.hours, start.minutes);
-    endDate.setHours(end.hours, end.minutes);
+    startDate.setHours(startHour, startMinute);
+    endDate.setHours(endHour, endMinute);
 
     createDayOff({
       variables: {
