@@ -140,10 +140,10 @@ function useLoginInitialization() {
 
     const createdAt = localCreatedAt ? new Date(localCreatedAt) : null;
 
-    const latestDateString = '2022-09-08T09:08:25.076Z';
+    const latestDateString = '2022-09-08T09:25:00.000Z';
     const latestCreatedAt = new Date(latestDateString);
 
-    if (createdAt && createdAt.getTime() > latestCreatedAt.getTime()) return;
+    if (createdAt && createdAt.getTime() >= latestCreatedAt.getTime()) return;
 
     const user = { userId: loginUser.id, userName: loginUser.name };
     localStorageUtils.remove({ ...user, key: 'clinicLists' });
