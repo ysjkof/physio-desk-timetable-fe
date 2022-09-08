@@ -12,7 +12,11 @@ import {
   IViewOption,
   LoggedInUser,
 } from '../types/type';
-import { getLocalStorageItem, setLocalStorage } from '../utils/utils';
+import {
+  getLocalStorageItem,
+  removeLocalStorageItem,
+  setLocalStorage,
+} from '../utils/utils';
 import { useMe } from './useMe';
 import useStore, { makeSelectedClinic } from './useStore';
 
@@ -133,6 +137,33 @@ function useLoginInitialization() {
     );
   };
 
+  const checkLatestStorage = (loginUser: MeQuery['me']) => {
+    let createdAt = getLocalStorageItem<string | Date>({
+      key: 'createdAt',
+    });
+
+    if (!createdAt) {
+      return setLocalStorage({ key: 'createdAt', value: new Date() });
+    }
+
+    createdAt = new Date(createdAt);
+    const latestDateString = '2022-09-08T07:52:25.494Z';
+    const latestCreatedAt = new Date(latestDateString);
+
+    if (createdAt.getTime() > latestCreatedAt.getTime()) return;
+
+    const user = { userId: loginUser.id, userName: loginUser.name };
+    removeLocalStorageItem({ ...user, key: 'clinicLists' });
+    removeLocalStorageItem({ ...user, key: 'viewOption' });
+    removeLocalStorageItem({ ...user, key: 'selectedClinic' });
+
+    setLocalStorage({
+      key: 'createdAt',
+      value: latestCreatedAt,
+    });
+    return console.info('Initialized Local Storage');
+  };
+
   useEffect(() => {
     setLoading(true);
     if (
@@ -142,17 +173,15 @@ function useLoginInitialization() {
     )
       return;
 
+    checkLatestStorage(meData.me);
+    setViewOption(meData.me);
+
     loggedInUserVar(meData.me);
     setSelectedClinic(
       setClinicLists(meData, findMyClinicsData.findMyClinics.clinics)
     );
     setLoading(false);
   }, [meData, findMyClinicsData]);
-
-  useEffect(() => {
-    if (!meData) return;
-    setViewOption(meData.me);
-  }, [meData?.me.id]);
 
   return { loading };
 }

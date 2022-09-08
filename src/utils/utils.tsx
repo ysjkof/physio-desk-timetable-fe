@@ -2,10 +2,10 @@ import { LOCAL_STORAGE_KEY } from '../constants/localStorage';
 import {
   CreateLocalStorageKey,
   GetLocalStorage,
-  GetTokenLocalStorage,
-  RemoveTokenLocalStorage,
+  GetPublicLocalStorage,
+  RemovePublicLocalStorage,
   SetLocalStorage,
-  SetTokenLocalStorage,
+  SetPublicLocalStorage,
 } from '../types/type';
 
 export function cls(...classnames: string[]) {
@@ -78,14 +78,15 @@ export function getLocalStorageItem<T>({
   key,
   userId,
   userName,
-}: GetLocalStorage | GetTokenLocalStorage): T | null {
+}: GetLocalStorage | GetPublicLocalStorage): T | null {
   const storageKey = createLocalStorageKey({
     key: LOCAL_STORAGE_KEY[key],
     userId,
     userName,
   });
-  const item = localStorage.getItem(storageKey)!;
-  if (!item) return null;
+  const item = localStorage.getItem(storageKey);
+  if (!item || item === 'undefined') return null;
+
   return JSON.parse(item);
 }
 
@@ -93,7 +94,7 @@ export function removeLocalStorageItem<T>({
   key,
   userId,
   userName,
-}: GetLocalStorage | RemoveTokenLocalStorage) {
+}: GetLocalStorage | RemovePublicLocalStorage) {
   const storageKey = createLocalStorageKey({
     key: LOCAL_STORAGE_KEY[key],
     userId,
@@ -107,7 +108,7 @@ export const setLocalStorage = ({
   userId,
   userName,
   value,
-}: SetLocalStorage | SetTokenLocalStorage) => {
+}: SetLocalStorage | SetPublicLocalStorage) => {
   const storageKey = createLocalStorageKey({
     key: LOCAL_STORAGE_KEY[key],
     userId,
