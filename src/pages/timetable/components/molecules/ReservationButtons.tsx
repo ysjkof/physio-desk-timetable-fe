@@ -1,6 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
 import { memo } from 'react';
-import { UTC_OPTION } from '../../../../constants/constants';
 import { useCreateReservationMutation } from '../../../../graphql/generated/graphql';
 import {
   compareDateMatch,
