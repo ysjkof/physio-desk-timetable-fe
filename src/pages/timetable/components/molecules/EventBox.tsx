@@ -124,10 +124,7 @@ export function EventBox({
           : '',
         isDayOff ? 'z-[31]' : ''
       )}
-      style={{
-        inset,
-        height,
-      }}
+      style={{ inset, height }}
     >
       <div
         onClick={onClickBox}
