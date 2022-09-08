@@ -43,7 +43,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
 
   return (
     <div
-      className="SCHEDULES grid w-full"
+      className="SCHEDULES grid w-full overflow-hidden"
       style={viewPeriodStyle[viewOptions.get.viewPeriod].template}
     >
       {schedules.map((day, i) => (

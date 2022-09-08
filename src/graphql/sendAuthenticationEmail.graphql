@@ -1,0 +1,6 @@
+mutation sendAuthenticationEmail {
+  sendAuthenticationEmail {
+    ok
+    error
+  }
+}

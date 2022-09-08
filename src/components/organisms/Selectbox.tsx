@@ -9,6 +9,7 @@ interface ChildrenProps {
 
 interface ButtonProps extends ChildrenProps {
   onClick: () => void;
+  iconSize?: number;
 }
 interface OptionProps extends ChildrenProps {
   onClick: () => void;
@@ -19,9 +20,10 @@ interface OptionsProps extends ChildrenProps {}
 interface SelectboxProps extends ChildrenProps {
   selectedValue: string;
   width?: string;
+  iconSize?: number;
 }
 
-function Button({ children, onClick }: ButtonProps) {
+function Button({ children, onClick, iconSize = 14 }: ButtonProps) {
   return (
     <button
       type="button"
@@ -31,8 +33,8 @@ function Button({ children, onClick }: ButtonProps) {
       {children}
       <FontAwesomeIcon
         icon={faChevronDown}
-        fontSize={14}
-        className="absolute right-2"
+        fontSize={iconSize}
+        className="position-center-y absolute right-2"
       />
     </button>
   );
@@ -61,7 +63,12 @@ function Options({ children }: OptionsProps) {
   );
 }
 
-function Selectbox({ children, selectedValue, width }: SelectboxProps) {
+function Selectbox({
+  children,
+  selectedValue,
+  width,
+  iconSize,
+}: SelectboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((prevState) => !prevState);
   const closeMenu = () => setIsOpen(false);
@@ -72,7 +79,9 @@ function Selectbox({ children, selectedValue, width }: SelectboxProps) {
 
   return (
     <div className="relative h-8 cursor-pointer border-b" style={{ width }}>
-      <Button onClick={toggleMenu}>{selectedValue}</Button>
+      <Button onClick={toggleMenu} iconSize={iconSize}>
+        {selectedValue}
+      </Button>
       {isOpen && (
         <>
           {children}

@@ -1,14 +1,31 @@
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
-import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBan,
+  faCommentSlash,
+  faExchange,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
 import { MenuButton } from '../../../../components/molecules/MenuButton';
 import { cls, setLocalStorage } from '../../../../utils/utils';
-import { loggedInUserVar } from '../../../../store';
-import { NEXT } from '../../../../constants/constants';
+import { loggedInUserVar, viewOptionsVar } from '../../../../store';
+import { NEXT, PREV } from '../../../../constants/constants';
 import { BtnArrow } from '../../../../components/atoms/ButtonArrow';
 import useStore from '../../../../hooks/useStore';
 import { useReactiveVar } from '@apollo/client';
+import Selectbox from '../../../../components/organisms/Selectbox';
+import {
+  getHoursByUnit,
+  getMinutesByUnit,
+} from '../../../../services/dateServices';
+import { useState } from 'react';
+
+interface TableDurationForm {
+  startHour: number;
+  startMinute: number;
+  endHour: number;
+  endMinute: number;
+}
 
 export function TableOptionSelector() {
   const {
@@ -20,6 +37,13 @@ export function TableOptionSelector() {
   } = useStore();
 
   const loggedInUser = useReactiveVar(loggedInUserVar);
+
+  const [tableDuration, setTableDuration] = useState<TableDurationForm>({
+    endHour: viewOptions.get.tableDuration.endHour,
+    endMinute: viewOptions.get.tableDuration.endMinute,
+    startHour: viewOptions.get.tableDuration.startHour,
+    startMinute: viewOptions.get.tableDuration.startMinute,
+  });
 
   const onClickToggleUser = (clinicId: number, memberId: number) => {
     if (!loggedInUser) throw new Error('❌ loginUser가 false입니다');
@@ -91,19 +115,45 @@ export function TableOptionSelector() {
 
   const invokeSaveViewOptions = (value: any) => {
     if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
-    viewOptions.set(value);
-    setLocalStorage({
-      key: 'viewOption',
-      userId: loggedInUser.id,
-      userName: loggedInUser.name,
-      value,
-    });
+    viewOptions.set(value, () =>
+      setLocalStorage({
+        key: 'viewOption',
+        userId: loggedInUser.id,
+        userName: loggedInUser.name,
+        value,
+      })
+    );
   };
   const variants: Variants = {
     init: { x: 300 },
     end: { x: 0, transition: { duration: 0.3 } },
     exit: { x: 300, transition: { duration: 0.3 } },
   };
+
+  const saveTableDuration = () => {
+    const { endHour, endMinute, startHour, startMinute } = tableDuration;
+    const newOptions = {
+      ...viewOptions.get,
+      tableDuration: {
+        startHour,
+        startMinute,
+        endHour,
+        endMinute,
+      },
+    };
+    invokeSaveViewOptions(newOptions);
+  };
+
+  const changeTableDurationTime = (
+    type: keyof TableDurationForm,
+    value: number
+  ) => {
+    setTableDuration((prev) => ({ ...prev, [type]: value }));
+  };
+
+  const hours = getHoursByUnit(0, 24);
+  const minutes = getMinutesByUnit(10);
+  const { endHour, endMinute, startHour, startMinute } = tableDuration;
 
   return selectedInfo.clinic ? (
     <motion.div
@@ -122,7 +172,76 @@ export function TableOptionSelector() {
         </span>
         <BtnArrow direction={NEXT} onClick={onClickChangeSeeActiveOption} />
       </div>
-
+      <div className="flex items-center whitespace-nowrap border-b py-1">
+        <Selectbox
+          selectedValue={`${(startHour + '').padStart(2, '0')}`}
+          iconSize={8}
+        >
+          <Selectbox.Options>
+            {hours.map((hour) => (
+              <Selectbox.Option
+                key={hour}
+                onClick={() => changeTableDurationTime('startHour', hour)}
+              >
+                {hour}
+              </Selectbox.Option>
+            ))}
+          </Selectbox.Options>
+        </Selectbox>
+        <Selectbox
+          selectedValue={`${(startMinute + '').padStart(2, '0')}`}
+          iconSize={8}
+        >
+          <Selectbox.Options>
+            {minutes.map((minute) => (
+              <Selectbox.Option
+                key={minute}
+                onClick={() => changeTableDurationTime('startMinute', minute)}
+              >
+                {minute}
+              </Selectbox.Option>
+            ))}
+          </Selectbox.Options>
+        </Selectbox>
+        ~
+        <Selectbox
+          selectedValue={`${(endHour + '').padStart(2, '0')}`}
+          iconSize={8}
+        >
+          <Selectbox.Options>
+            {hours.map((hour) => (
+              <Selectbox.Option
+                key={hour}
+                onClick={() => changeTableDurationTime('endHour', hour)}
+              >
+                {hour}
+              </Selectbox.Option>
+            ))}
+          </Selectbox.Options>
+        </Selectbox>
+        <Selectbox
+          selectedValue={`${(endMinute + '').padStart(2, '0')}`}
+          iconSize={8}
+        >
+          <Selectbox.Options>
+            {minutes.map((minute) => (
+              <Selectbox.Option
+                key={minute}
+                onClick={() => changeTableDurationTime('endMinute', minute)}
+              >
+                {minute}
+              </Selectbox.Option>
+            ))}
+          </Selectbox.Options>
+        </Selectbox>
+        <MenuButton
+          icon={<FontAwesomeIcon icon={faExchange} fontSize={14} />}
+          enabled
+          label="바꾸기"
+          type="button"
+          onClick={saveTableDuration}
+        />
+      </div>
       <div className="flex items-center gap-2 border-b py-1 px-3">
         <MenuButton
           icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}

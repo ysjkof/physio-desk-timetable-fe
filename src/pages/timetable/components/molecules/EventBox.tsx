@@ -61,10 +61,10 @@ export function EventBox({
   let height = numberOfCell * TABLE_CELL_HEIGHT;
   if (height > maxTableHeight) height = maxTableHeight;
 
-  const matchTableEndtime = compareTableEndtime(
-    new Date(event.endDate),
-    viewOptions.tableDuration.end
-  );
+  const matchTableEndtime = compareTableEndtime(new Date(event.endDate), {
+    hour: viewOptions.tableDuration.endHour,
+    minute: viewOptions.tableDuration.endMinute,
+  });
   if (matchTableEndtime) height = height;
 
   const eventBox = useRef<HTMLDivElement>(null);
@@ -124,10 +124,7 @@ export function EventBox({
           : '',
         isDayOff ? 'z-[31]' : ''
       )}
-      style={{
-        inset,
-        height,
-      }}
+      style={{ inset, height }}
     >
       <div
         onClick={onClickBox}

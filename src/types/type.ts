@@ -29,8 +29,10 @@ export interface IViewOption {
   seeActiveOption: boolean;
   navigationExpand: boolean;
   tableDuration: {
-    start: { hours: number; minutes: number };
-    end: { hours: number; minutes: number };
+    startHour: number;
+    startMinute: number;
+    endHour: number;
+    endMinute: number;
   };
 }
 

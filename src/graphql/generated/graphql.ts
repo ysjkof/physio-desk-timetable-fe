@@ -56,6 +56,12 @@ export enum ClinicType {
   Personal = 'Personal'
 }
 
+export type CoreOutput = {
+  __typename?: 'CoreOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type CreateAccountInput = {
   email: Scalars['String'];
   name: Scalars['String'];
@@ -456,6 +462,7 @@ export type Mutation = {
   inviteUser: InviteUserOutput;
   leaveClinic: LeaveClinicOutput;
   login: LoginOutput;
+  sendAuthenticationEmail: CoreOutput;
   verifyEmail: VerifyEmailOutput;
 };
 
@@ -1017,6 +1024,11 @@ export type SearchUsersQueryVariables = Exact<{
 
 
 export type SearchUsersQuery = { __typename?: 'Query', searchUsers: { __typename?: 'SearchUsersOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'User', id: number, name: string, email: string }> | null } };
+
+export type SendAuthenticationEmailMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SendAuthenticationEmailMutation = { __typename?: 'Mutation', sendAuthenticationEmail: { __typename?: 'CoreOutput', ok: boolean, error?: string | null } };
 
 export type ListenUpdateReservationSubscriptionVariables = Exact<{
   input: UpdateReservationInput;
@@ -2289,6 +2301,39 @@ export function useSearchUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type SearchUsersQueryHookResult = ReturnType<typeof useSearchUsersQuery>;
 export type SearchUsersLazyQueryHookResult = ReturnType<typeof useSearchUsersLazyQuery>;
 export type SearchUsersQueryResult = Apollo.QueryResult<SearchUsersQuery, SearchUsersQueryVariables>;
+export const SendAuthenticationEmailDocument = gql`
+    mutation sendAuthenticationEmail {
+  sendAuthenticationEmail {
+    ok
+    error
+  }
+}
+    `;
+export type SendAuthenticationEmailMutationFn = Apollo.MutationFunction<SendAuthenticationEmailMutation, SendAuthenticationEmailMutationVariables>;
+
+/**
+ * __useSendAuthenticationEmailMutation__
+ *
+ * To run a mutation, you first call `useSendAuthenticationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendAuthenticationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendAuthenticationEmailMutation, { data, loading, error }] = useSendAuthenticationEmailMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSendAuthenticationEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendAuthenticationEmailMutation, SendAuthenticationEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendAuthenticationEmailMutation, SendAuthenticationEmailMutationVariables>(SendAuthenticationEmailDocument, options);
+      }
+export type SendAuthenticationEmailMutationHookResult = ReturnType<typeof useSendAuthenticationEmailMutation>;
+export type SendAuthenticationEmailMutationResult = Apollo.MutationResult<SendAuthenticationEmailMutation>;
+export type SendAuthenticationEmailMutationOptions = Apollo.BaseMutationOptions<SendAuthenticationEmailMutation, SendAuthenticationEmailMutationVariables>;
 export const ListenUpdateReservationDocument = gql`
     subscription listenUpdateReservation($input: UpdateReservationInput!) {
   listenUpdateReservation(input: $input) {

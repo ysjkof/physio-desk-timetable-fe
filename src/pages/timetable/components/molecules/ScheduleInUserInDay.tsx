@@ -3,6 +3,7 @@ import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
 import {
   get4DigitHour,
   getTimeLength,
+  newDateSetHourAndMinute,
 } from '../../../../services/dateServices';
 import { IListReservation } from '../../../../types/type';
 import { EventBox } from './EventBox';
@@ -21,25 +22,58 @@ function ScheduleInUserInDay({
 }: ScheduleInUserInDayProps) {
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
+  const [hour, minute] = labels[0].split(':');
+  const [lastHour, lastMinute] = labels[labels.length - 1].split(':');
+  const firstLabelDate = newDateSetHourAndMinute({
+    hour: +hour,
+    minute: +minute,
+    fromDate: new Date(events[0]?.startDate),
+  });
+  const lastLabelDate = newDateSetHourAndMinute({
+    hour: +lastHour,
+    minute: +lastMinute,
+    fromDate: new Date(events[0]?.startDate),
+  });
+
+  const isOverEndDuration = (tableEndDate: Date, eventStartDate: Date) =>
+    tableEndDate.getTime() < eventStartDate.getTime();
+
   return (
     <>
       {events.map((event) => {
-        const idx = labels.findIndex((label) => {
+        const labelIdx = labels.findIndex((label) => {
           return label === get4DigitHour(event.startDate);
         });
-        const numberOfCell = idx === -1 ? 0 : idx;
+
+        let inset = `${labelIdx * TABLE_CELL_HEIGHT}px 0`;
+        let numberOfCell = getTimeLength(
+          event.startDate,
+          event.endDate,
+          '20minute'
+        );
+
+        if (labelIdx === -1) {
+          if (isOverEndDuration(lastLabelDate, new Date(event.startDate)))
+            return;
+
+          inset = '0';
+          numberOfCell =
+            numberOfCell +
+            getTimeLength(
+              firstLabelDate,
+              new Date(event.startDate),
+              '20minute'
+            );
+        }
+
         return (
           <EventBox
             key={event.id}
             event={event}
             userIndex={userIndex}
             maxTableHeight={maxTableHeight}
-            numberOfCell={getTimeLength(
-              event.startDate,
-              event.endDate,
-              '20minute'
-            )}
-            inset={`${numberOfCell * TABLE_CELL_HEIGHT}px 0%`}
+            numberOfCell={numberOfCell}
+            inset={inset}
           />
         );
       })}
