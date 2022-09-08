@@ -1,34 +1,3 @@
-.c-col-start-1 {
-  grid-column-start: 1;
-}
-.c-col-start-2 {
-  grid-column-start: 2;
-}
-.c-col-start-3 {
-  grid-column-start: 3;
-}
-.c-col-start-4 {
-  grid-column-start: 4;
-}
-.c-col-start-5 {
-  grid-column-start: 5;
-}
-.c-col-start-6 {
-  grid-column-start: 6;
-}
-.c-col-start-7 {
-  grid-column-start: 7;
-}
-.c-col-start-8 {
-  grid-column-start: 8;
-}
-.c-col-start-9 {
-  grid-column-start: 9;
-}
-.c-col-start-10 {
-  grid-column-start: 10;
-}
-
 /* overflow scroll에 스크롤바 제거 */
 .hidden-scrollbar {
   scrollbar-width: none;
