@@ -7,6 +7,7 @@ import {
 } from '../store';
 import {
   IClinicList,
+  IViewOption,
   SetSelectedInfoKey,
   SetSelectedInfoValue,
 } from '../types/type';
@@ -25,10 +26,6 @@ export function makeSelectedClinic(clinic: IClinicList, userId: number) {
 }
 
 export default function useStore() {
-  const viewOptions = {
-    get: useReactiveVar(viewOptionsVar),
-    set: viewOptionsVar,
-  };
   const clinicLists = useReactiveVar(clinicListsVar);
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const selectedDate = useReactiveVar(selectedDateVar);
@@ -44,6 +41,17 @@ export default function useStore() {
     if (selectedInfo[key] && selectedInfo[key] === value) return;
     selectedInfoVar({ ...selectedInfo, [key]: value });
     if (callback) callback();
+  };
+
+  const setViewOption = (value: IViewOption, callback?: () => void) => {
+    viewOptionsVar(value);
+
+    if (callback) callback();
+  };
+
+  const viewOptions = {
+    get: useReactiveVar(viewOptionsVar),
+    set: setViewOption,
   };
 
   return {
