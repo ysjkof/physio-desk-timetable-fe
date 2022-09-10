@@ -68,7 +68,7 @@ export interface ModifiedLoginUser
 
 //
 
-export interface DeactivateClinicInfo {
+export interface IdAndName {
   id: number;
   name: string;
 }
@@ -167,4 +167,9 @@ export interface ToastState {
   messages?: string[];
   fade?: boolean;
   milliseconds?: number;
+  bgColor?: boolean;
+}
+
+export interface ChildrenProps {
+  children?: React.ReactNode;
 }

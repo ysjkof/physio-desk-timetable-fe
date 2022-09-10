@@ -5,13 +5,13 @@ import {
 } from '../../../graphql/generated/graphql';
 
 export default function useCancelInvitation() {
-  const [cancelInvitation, { loading }] = useCancelInvitationMutation();
+  const [cancelInvitationMutation, { loading }] = useCancelInvitationMutation();
   /**
    * @param {number} id member id
    */
   const invokeCancelInvitation = (id: number, manager?: boolean) => {
     if (confirm('정말 초대를 취소 하겠습니까?')) {
-      cancelInvitation({
+      cancelInvitationMutation({
         variables: {
           input: {
             id,

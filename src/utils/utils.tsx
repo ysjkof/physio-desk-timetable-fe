@@ -13,12 +13,16 @@ export function getPositionRef(
   return { top, left };
 }
 
-export function checkMember(staying: boolean, accepted: boolean) {
+export function getMemberState(
+  staying: boolean,
+  accepted: boolean,
+  manager?: boolean
+) {
   if (!staying) {
-    return accepted ? '탈퇴' : '수락대기';
-  } else {
-    return accepted ? '직원' : null;
+    return accepted ? '탈퇴' : '승인대기';
   }
+
+  return manager ? '관리자' : '직원';
   // if (staying && accepted) return "직원";
   // if (!staying && !accepted) return "수락대기";
   // if (!staying && accepted) return "탈퇴";
@@ -30,7 +34,7 @@ interface CheckManager {
 }
 export function checkManager(members: CheckManager[], userId: number) {
   const managerId = members.find((member) => member.manager)?.user.id;
-  return managerId && managerId === userId;
+  return !!(managerId && managerId === userId);
 }
 
 export function makeArrFromLength(length: number) {

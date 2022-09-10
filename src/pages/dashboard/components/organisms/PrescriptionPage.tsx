@@ -158,7 +158,7 @@ export const PrescriptionPage = () => {
             <summary>처방 만들기</summary>
             <form
               onSubmit={handleSubmit(onSubmitCreatePresciption)}
-              className="space-y-2 pt-4 pb-2"
+              className="space-y-8 pt-4 pb-2"
             >
               <div className="prescription-selector flex items-center">
                 <h4 className="mr-4 w-9">처방*</h4>
@@ -191,10 +191,10 @@ export const PrescriptionPage = () => {
                   pattern: REG_EXP.prescription.pattern,
                 })}
               >
-                <div className="group absolute left-[3.2rem] top-[0.08rem] cursor-pointer">
+                <div className="group absolute left-[3.8rem] top-[0.08rem] cursor-pointer">
                   <FontAwesomeIcon icon={faCircleQuestion} fontSize={14} />
-                  <p className="bubble-arrow-t-2-5 absolute top-7 -left-12 hidden w-60 rounded-md bg-black px-3 py-2 text-white group-hover:block">
-                    사용하기 원하는 처방의 이름을 입력합니다.
+                  <p className="bubble-arrow-t-2-5 absolute top-7 -left-[2.2rem] hidden w-44 rounded-md bg-black px-3 py-2 text-white group-hover:block">
+                    이 이름으로 검색, 표시됩니다.
                   </p>
                 </div>
                 {errors.name?.message ? (
@@ -205,50 +205,48 @@ export const PrescriptionPage = () => {
                   )
                 )}
               </Input>
-              <div className="flex justify-between gap-6">
-                <Input
-                  id="requiredTime"
-                  label="소요시간(분)*"
-                  type="number"
-                  placeholder="10분 단위, 0 이상의 숫자"
-                  required
-                  step={10}
-                  maxLength={REG_EXP.numberEnd0.maxLength}
-                  register={register('requiredTime', {
-                    required: '시간을 입력해주세요',
-                    min: { value: 10, message: '최소 10분입니다' },
-                    max: { value: 180, message: '최대 180분입니다' },
-                    pattern: REG_EXP.numberEnd0.pattern,
-                  })}
-                >
-                  {errors.requiredTime?.message ? (
-                    <FormError errorMessage={errors.requiredTime.message} />
-                  ) : (
-                    errors.requiredTime?.type === 'pattern' && (
-                      <FormError errorMessage={REG_EXP.numberEnd0.condition} />
-                    )
-                  )}
-                </Input>
-                <Input
-                  id="price"
-                  label="가격(원)*"
-                  placeholder="0 이상의 숫자"
-                  required
-                  register={register('price', {
-                    required: '가격을 입력해주세요',
-                    min: { value: 0, message: '최소 0입니다' },
-                    max: {
-                      value: 100000000,
-                      message: '더 이상 불가합니다',
-                    },
-                  })}
-                  type="number"
-                >
-                  {errors.price?.message && (
-                    <FormError errorMessage={errors.price.message} />
-                  )}
-                </Input>
-              </div>
+              <Input
+                id="requiredTime"
+                label="소요시간(분)*"
+                type="number"
+                placeholder="10분 단위, 0 이상의 숫자"
+                required
+                step={10}
+                maxLength={REG_EXP.numberEnd0.maxLength}
+                register={register('requiredTime', {
+                  required: '시간을 입력해주세요',
+                  min: { value: 10, message: '최소 10분입니다' },
+                  max: { value: 180, message: '최대 180분입니다' },
+                  pattern: REG_EXP.numberEnd0.pattern,
+                })}
+              >
+                {errors.requiredTime?.message ? (
+                  <FormError errorMessage={errors.requiredTime.message} />
+                ) : (
+                  errors.requiredTime?.type === 'pattern' && (
+                    <FormError errorMessage={REG_EXP.numberEnd0.condition} />
+                  )
+                )}
+              </Input>
+              <Input
+                id="price"
+                label="가격(원)*"
+                placeholder="0 이상의 숫자"
+                required
+                register={register('price', {
+                  required: '가격을 입력해주세요',
+                  min: { value: 0, message: '최소 0입니다' },
+                  max: {
+                    value: 100000000,
+                    message: '더 이상 불가합니다',
+                  },
+                })}
+                type="number"
+              >
+                {errors.price?.message && (
+                  <FormError errorMessage={errors.price.message} />
+                )}
+              </Input>
               <Textarea
                 id="description"
                 label={'설명'}

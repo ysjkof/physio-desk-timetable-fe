@@ -2,16 +2,26 @@ import { useReactiveVar } from '@apollo/client';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
+import { client } from '../../../../apollo';
 import { Worning } from '../../../../components/atoms/Warning';
 import { Button } from '../../../../components/molecules/Button';
 import { MenuButton } from '../../../../components/molecules/MenuButton';
-import { useInactivateClinicMutation } from '../../../../graphql/generated/graphql';
-import { selectedInfoVar } from '../../../../store';
-import { DeactivateClinicInfo } from '../../../../types/type';
+import {
+  FindMyClinicsDocument,
+  useInactivateClinicMutation,
+} from '../../../../graphql/generated/graphql';
+import { selectedInfoVar, toastVar } from '../../../../store';
+import { IdAndName } from '../../../../types/type';
 
-interface DeactivateClinicProps extends DeactivateClinicInfo {}
+interface DeactivateClinicProps extends IdAndName {
+  closeAction: () => void;
+}
 
-export const DeactivateClinic = ({ id, name }: DeactivateClinicProps) => {
+export const DeactivateClinic = ({
+  id,
+  name,
+  closeAction,
+}: DeactivateClinicProps) => {
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const [agree, setAgree] = useState(false);
 
@@ -25,6 +35,21 @@ export const DeactivateClinic = ({ id, name }: DeactivateClinicProps) => {
     ) {
       mutationInactivateClinic({
         variables: { input: { clinicId: id } },
+        onCompleted(data) {
+          if (data.inactivateClinic.ok) {
+            client.refetchQueries({ include: [FindMyClinicsDocument] });
+            toastVar({
+              messages: [`${name}이 폐쇄됐습니다`],
+              fade: true,
+              bgColor: true,
+            });
+          }
+
+          if (data.inactivateClinic.error) {
+            toastVar({ messages: [data.inactivateClinic.error] });
+          }
+          closeAction();
+        },
       });
     }
   };

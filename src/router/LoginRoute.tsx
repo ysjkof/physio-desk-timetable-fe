@@ -9,7 +9,7 @@ import { Members } from '../pages/dashboard/components/organisms/Members';
 import { MyClinics } from '../pages/dashboard/components/organisms/MyClinics';
 import { PrescriptionPage } from '../pages/dashboard/components/organisms/PrescriptionPage';
 import { Statistics } from '../pages/dashboard/components/organisms/Statistics';
-import { EditProfile } from '../pages/auth/EditProfile';
+import { EditProfile } from '../pages/dashboard/components/organisms/EditProfile';
 import { Search } from '../pages/search';
 import { TimeTable } from '../pages/timetable';
 import ProtectRoute from './ProtectRoute';
