@@ -26,7 +26,7 @@ export const Checkbox = ({
         {...args}
         {...register}
         type={type}
-        className="check h-4 w-4 cursor-pointer appearance-none rounded-sm border border-gray-300 bg-white bg-contain bg-center bg-no-repeat py-1 transition duration-200 checked:border-green-600 checked:bg-green-600 checked:bg-check"
+        className="check h-4 w-4 cursor-pointer appearance-none rounded-sm border border-gray-300 bg-white bg-contain bg-center bg-no-repeat py-1 transition duration-200 checked:border-green-600 checked:bg-green-600 checked:bg-check-white"
       />
       {label}
     </label>
