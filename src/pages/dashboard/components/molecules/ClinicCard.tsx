@@ -1,6 +1,7 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonHTMLAttributes } from 'react';
+import CardContainer from '../../../../components/templates/CardContainer';
 import { ChildrenProps } from '../../../../types/type';
 import { cls, getMemberState } from '../../../../utils/utils';
 
@@ -47,10 +48,17 @@ interface CardProps {
 
 function ClinicCard({ clinicName, state, isActivate, children }: CardProps) {
   return (
-    <div className="flex h-20 w-80 flex-col justify-between rounded-md border">
+    <div
+      className={cls(
+        'flex h-20 w-80 flex-col justify-between rounded-md border',
+        state === '관리자' ? '-order-1' : ''
+      )}
+    >
       <div className="relative flex h-2/3 flex-col justify-center px-6">
         <p className="">
-          <span className="text-base font-medium">{clinicName}</span>
+          <span className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-medium">
+            {clinicName}
+          </span>
           <span
             className={cls(
               'ml-2',
@@ -71,12 +79,8 @@ function ClinicCard({ clinicName, state, isActivate, children }: CardProps) {
   );
 }
 
-function Container({ children }: ChildrenProps) {
-  return <div className="flex flex-wrap gap-y-10 gap-x-10">{children}</div>;
-}
-
 ClinicCard.Button = Button;
 ClinicCard.ButtonContainer = ButtonContainer;
-ClinicCard.Container = Container;
+ClinicCard.Container = CardContainer;
 
 export default ClinicCard;
