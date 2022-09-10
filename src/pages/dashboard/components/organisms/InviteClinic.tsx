@@ -10,12 +10,12 @@ import {
   SearchUsersInput,
   useInviteUserMutation,
 } from '../../../../graphql/generated/graphql';
-import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
 import useStore from '../../../../hooks/useStore';
 import { client } from '../../../../apollo';
 import { useState } from 'react';
 import { REG_EXP } from '../../../../constants/regex';
 import { FormError } from '../../../../components/atoms/FormError';
+import FormSection from '../molecules/FormSection';
 
 export const InviteClinic = () => {
   const { selectedInfo } = useStore();
@@ -57,6 +57,7 @@ export const InviteClinic = () => {
   };
 
   if (!selectedInfo.clinic) return <Loading />;
+
   if (selectedInfo.clinic && selectedInfo.clinic.type === ClinicType.Personal)
     return (
       <Worning>
@@ -65,10 +66,11 @@ export const InviteClinic = () => {
         }
       </Worning>
     );
+
   if (selectedInfo.clinic.isStayed && selectedInfo.clinic.isManager)
     return (
-      <DashboardSectionLayout width="md" title="병원에 초대" heightFull>
-        <form onSubmit={handleSubmit(inviteUser)}>
+      <FormSection>
+        <form onSubmit={handleSubmit(inviteUser)} className="mt-10 max-w-xs">
           <div className="relative flex items-center shadow-sm">
             <Input
               id="search-user"
@@ -98,7 +100,7 @@ export const InviteClinic = () => {
             <Worning>{data?.inviteUser.error || okMessage}</Worning>
           )}
         </form>
-      </DashboardSectionLayout>
+      </FormSection>
     );
 
   return <Worning type="hasNotPermission" />;

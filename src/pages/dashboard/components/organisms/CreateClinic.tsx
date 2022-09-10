@@ -12,7 +12,7 @@ import {
   useCreateClinicMutation,
 } from '../../../../graphql/generated/graphql';
 import { selectedInfoVar, toastVar } from '../../../../store';
-import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
+import FormSection from '../molecules/FormSection';
 
 export const CreateClinic = () => {
   const selectedInfo = useReactiveVar(selectedInfoVar);
@@ -96,48 +96,37 @@ export const CreateClinic = () => {
     clearErrors('name');
   };
   return (
-    <DashboardSectionLayout
-      title="병원 만들기"
-      width="md"
-      moreYGap
-      heightFull
-      children={
-        <form
-          onSubmit={handleSubmit(onSubmitCreateClinic)}
-          className="space-y-6"
+    <FormSection>
+      <form
+        onSubmit={handleSubmit(onSubmitCreateClinic)}
+        className="mt-10 space-y-6"
+      >
+        <Input
+          id="name"
+          label="이름*"
+          type="text"
+          placeholder={'병원 이름'}
+          maxLength={REG_EXP.clinicName.maxLength}
+          onChange={invokeClearErrors}
+          register={register('name', {
+            required: '이름을 입력하세요',
+            pattern: REG_EXP.clinicName.pattern,
+          })}
         >
-          <Input
-            id="name"
-            label="이름*"
-            type="text"
-            placeholder={'병원 이름'}
-            maxLength={REG_EXP.clinicName.maxLength}
-            onChange={invokeClearErrors}
-            register={register('name', {
-              required: '이름을 입력하세요',
-              pattern: REG_EXP.clinicName.pattern,
-            })}
-          >
-            {errors.name?.message ? (
-              <FormError errorMessage={errors.name.message} />
-            ) : errors.name?.type === 'pattern' ? (
-              <FormError errorMessage={REG_EXP.clinicName.condition} />
-            ) : (
-              data?.createClinic.error && (
-                <FormError errorMessage={data.createClinic.error} />
-              )
-            )}
-          </Input>
-          <Button
-            type="submit"
-            canClick={isValid}
-            loading={loading}
-            isWidthFull
-          >
-            만들기
-          </Button>
-        </form>
-      }
-    />
+          {errors.name?.message ? (
+            <FormError errorMessage={errors.name.message} />
+          ) : errors.name?.type === 'pattern' ? (
+            <FormError errorMessage={REG_EXP.clinicName.condition} />
+          ) : (
+            data?.createClinic.error && (
+              <FormError errorMessage={data.createClinic.error} />
+            )
+          )}
+        </Input>
+        <Button type="submit" canClick={isValid} loading={loading} isWidthFull>
+          만들기
+        </Button>
+      </form>
+    </FormSection>
   );
 };
