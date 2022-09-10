@@ -1,151 +1,122 @@
-import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { Loading } from '../../../../components/atoms/Loading';
 import { ModalTemplate } from '../../../../components/templates/ModalTemplate';
 import { ModalContentsLayout } from '../../../../components/templates/ModalContentsLayout';
-import { useFindMyClinicsQuery } from '../../../../graphql/generated/graphql';
-import { DeactivateClinicInfo } from '../../../../types/type';
-import { getMemberState, cls } from '../../../../utils/utils';
-import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
+import {
+  ClinicType,
+  useFindMyClinicsQuery,
+} from '../../../../graphql/generated/graphql';
+import { IdAndName } from '../../../../types/type';
+import { getMemberState, renameUseSplit } from '../../../../utils/utils';
 import { DeactivateClinic } from './DeactivateClinic';
 import { useMe } from '../../../../hooks/useMe';
-import { Button } from '../../../../components/molecules/Button';
 import useAcceptInvitation from '../../hooks/useAcceptInvitation';
 import useCancelInvitation from '../../hooks/useCancelInvitation';
+import ClinicCard from '../molecules/ClinicCard';
 
-const isPersonalClinic = (
-  compareMemberId: number,
-  psersonalClinicMemberId: number
-) => compareMemberId === psersonalClinicMemberId;
+interface CanClose {
+  isActivated: boolean;
+  isManager: boolean;
+  clinicType: ClinicType;
+}
 
 export const MyClinics = () => {
   const { acceptInvitation, loading: acceptLoading } = useAcceptInvitation();
-  const { invokeCancelInvitation } = useCancelInvitation();
+  const { invokeCancelInvitation, loading: cancelLoading } =
+    useCancelInvitation();
 
   const { data } = useMe();
   const [hasDeactivate, setHasDeactivate] = useState(false);
-  const [deactivateClinic, setDeactivateClinic] =
-    useState<DeactivateClinicInfo>({
-      id: 0,
-      name: '',
-    });
+  const [deactivateClinic, setDeactivateClinic] = useState<IdAndName>({
+    id: 0,
+    name: '',
+  });
 
   const { data: findMyClinicsData, loading } = useFindMyClinicsQuery({
     variables: { input: { includeInactivate: true } },
   });
 
-  const personalClinic = findMyClinicsData?.findMyClinics.clinics?.find(
-    (clinic) => clinic.type === 'Personal'
-  )!;
+  const clinicsExcludeOtherMember =
+    findMyClinicsData?.findMyClinics.clinics?.map((clinic) => {
+      const { id, isActivated, name, type } = clinic;
+      return {
+        id,
+        isActivated,
+        name,
+        type,
+        member: clinic.members
+          .flat(1)
+          .flat(1)
+          .find((member) => member.user.id === data?.me.id)!,
+      };
+    });
 
-  const myMembership = findMyClinicsData?.findMyClinics.clinics
-    ?.map((clinic) => clinic.members.flat(1))
-    .flat(1)
-    .filter((member) => member.user.id === data?.me.id);
-
-  const openDeactivate = ({ id, name }: DeactivateClinicInfo) => {
+  const openDeactivate = ({ id, name }: IdAndName) => {
     setDeactivateClinic({ id, name });
     setHasDeactivate(true);
   };
 
-  return loading ? (
-    <Loading />
-  ) : (
-    <>
-      <DashboardSectionLayout
-        title="나의 병원"
-        width="md"
-        heightFull
-        tooltip="현재까지 병원 목록을 봅니다"
-        children={
-          <>
-            <div className="grid grid-cols-[1fr_1fr_4rem_4rem_4rem] justify-between  border-b border-b-black">
-              <span>이름</span>
-              <span></span>
-              <span className="text-center">상태</span>
-              <span className="text-center">역할</span>
-              <span className="text-center">폐쇄</span>
-            </div>
-            <ul className="divide-y">
-              {myMembership?.length === 0 ? (
-                <p className="py-10 text-center font-semibold">
-                  목록이 없습니다
-                </p>
-              ) : (
-                myMembership?.map((member) => (
-                  <li
-                    key={member.id}
-                    className="group relative grid grid-cols-[1fr_1fr_4rem_4rem_4rem] items-center py-2"
+  const canClose = ({ isActivated, isManager, clinicType }: CanClose) =>
+    isActivated && isManager && clinicType === ClinicType.Group;
+
+  if (loading) return <Loading />;
+
+  return (
+    <section className="px-10 py-8">
+      <ClinicCard.Container>
+        {clinicsExcludeOtherMember?.map((clinic) => (
+          <ClinicCard
+            key={clinic.id}
+            clinicName={renameUseSplit(clinic.name)}
+            state={getMemberState(
+              clinic.member.staying,
+              clinic.member.accepted,
+              clinic.member.manager
+            )}
+            isActivate={clinic.isActivated}
+          >
+            <ClinicCard.ButtonContainer>
+              {getMemberState(clinic.member.staying, clinic.member.accepted) ===
+                '승인대기' && (
+                <>
+                  <ClinicCard.Button
+                    loading={acceptLoading}
+                    onClick={() => acceptInvitation(clinic.id)}
                   >
-                    <span className="text-ellipsis whitespace-nowrap">
-                      {member.clinic.name}
-                    </span>
-                    <div className="flex gap-2">
-                      {getMemberState(member.staying, member.accepted) ===
-                        '수락대기' && (
-                        <>
-                          <Button
-                            loading={acceptLoading}
-                            canClick={!acceptLoading}
-                            isSmall
-                            onClick={() => acceptInvitation(member.clinic.id)}
-                          >
-                            초대 수락
-                          </Button>
-                          <Button
-                            loading={acceptLoading}
-                            canClick={!acceptLoading}
-                            isSmall
-                            onClick={() => invokeCancelInvitation(member.id)}
-                          >
-                            거절
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      fontSize="large"
-                      className={cls(
-                        'mx-auto',
-                        findMyClinicsData?.findMyClinics.clinics?.find(
-                          (clinic) => clinic.id === member.clinic.id
-                        )?.isActivated
-                          ? 'text-green-500'
-                          : ''
-                      )}
-                    />
-                    <span className="text-center">
-                      {getMemberState(member.staying, member.accepted)}
-                    </span>
-                    {isPersonalClinic(
-                      member.id,
-                      personalClinic.members[0].id
-                    ) ||
-                      (member.manager && (
-                        <Button
-                          type="button"
-                          loading={false}
-                          isSmall
-                          canClick={member.manager}
-                          onClick={() =>
-                            openDeactivate({
-                              id: member.clinic.id,
-                              name: member.clinic.name,
-                            })
-                          }
-                        >
-                          실행
-                        </Button>
-                      ))}
-                  </li>
-                ))
+                    <div className="mr-2 h-5 w-5 bg-check" />
+                    초대 수락
+                  </ClinicCard.Button>
+                  <ClinicCard.Button
+                    loading={cancelLoading}
+                    onClick={() => invokeCancelInvitation(clinic.id)}
+                  >
+                    <div className="mr-2 h-5 w-5 bg-no" />
+                    거절
+                  </ClinicCard.Button>
+                </>
               )}
-            </ul>
-          </>
-        }
-      />
+              {canClose({
+                isActivated: clinic.isActivated,
+                isManager: clinic.member.manager,
+                clinicType: clinic.type,
+              }) && (
+                <ClinicCard.Button
+                  onClick={() =>
+                    openDeactivate({
+                      id: clinic.id,
+                      name: clinic.name,
+                    })
+                  }
+                >
+                  <div className="mr-2 h-5 w-5 bg-lock-closed" />
+                  폐쇄하기
+                </ClinicCard.Button>
+              )}
+            </ClinicCard.ButtonContainer>
+          </ClinicCard>
+        ))}
+      </ClinicCard.Container>
+
       {hasDeactivate && (
         <ModalTemplate
           isSmallChildren
@@ -158,12 +129,13 @@ export const MyClinics = () => {
                 <DeactivateClinic
                   id={deactivateClinic.id}
                   name={deactivateClinic.name}
+                  closeAction={() => setHasDeactivate(false)}
                 />
               }
             />
           }
         />
       )}
-    </>
+    </section>
   );
 };
