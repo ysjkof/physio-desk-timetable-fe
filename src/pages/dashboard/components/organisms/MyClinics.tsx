@@ -6,7 +6,7 @@ import { ModalTemplate } from '../../../../components/templates/ModalTemplate';
 import { ModalContentsLayout } from '../../../../components/templates/ModalContentsLayout';
 import { useFindMyClinicsQuery } from '../../../../graphql/generated/graphql';
 import { DeactivateClinicInfo } from '../../../../types/type';
-import { checkMember, cls } from '../../../../utils/utils';
+import { getMemberState, cls } from '../../../../utils/utils';
 import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
 import { DeactivateClinic } from './DeactivateClinic';
 import { useMe } from '../../../../hooks/useMe';
@@ -82,7 +82,7 @@ export const MyClinics = () => {
                       {member.clinic.name}
                     </span>
                     <div className="flex gap-2">
-                      {checkMember(member.staying, member.accepted) ===
+                      {getMemberState(member.staying, member.accepted) ===
                         '수락대기' && (
                         <>
                           <Button
@@ -117,7 +117,7 @@ export const MyClinics = () => {
                       )}
                     />
                     <span className="text-center">
-                      {checkMember(member.staying, member.accepted)}
+                      {getMemberState(member.staying, member.accepted)}
                     </span>
                     {isPersonalClinic(
                       member.id,
