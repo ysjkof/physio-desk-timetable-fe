@@ -1,18 +1,18 @@
 import { ChildrenProps } from '../../../../types/type';
 import { cls, getMemberState } from '../../../../utils/utils';
 
-function CardContainer({ children }: ChildrenProps) {
+function Container({ children }: ChildrenProps) {
   return <div className="flex flex-wrap gap-y-14">{children}</div>;
 }
 
-interface CardProps {
+interface UserCardProps {
   name: string;
   state?: ReturnType<typeof getMemberState>;
   size?: 'lg' | 'base';
   button?: React.ReactNode;
 }
 
-function Card({ name, state, size = 'base', button }: CardProps) {
+function UserCard({ name, state, size = 'base', button }: UserCardProps) {
   return (
     <div
       className={cls(
@@ -21,7 +21,7 @@ function Card({ name, state, size = 'base', button }: CardProps) {
       )}
     >
       <div className="flex items-center justify-center self-center overflow-hidden">
-        <img
+        <div
           className={cls(
             'flex items-center justify-center rounded-full border border-green-500 bg-green-300 bg-person font-bold',
             size === 'lg' ? 'h-20 w-20 text-2xl' : 'h-16 w-16 text-base'
@@ -37,6 +37,6 @@ function Card({ name, state, size = 'base', button }: CardProps) {
   );
 }
 
-Card.Container = CardContainer;
+UserCard.Container = Container;
 
-export default Card;
+export default UserCard;

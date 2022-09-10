@@ -3,7 +3,7 @@ import useStore from '../../../../hooks/useStore';
 import { Button } from '../../../../components/molecules/Button';
 import useCancelInvitation from '../../hooks/useCancelInvitation';
 import { loggedInUserVar } from '../../../../store';
-import Card from '../molecules/Card';
+import UserCard from '../molecules/UserCard';
 
 export const Members = () => {
   const loggedInUser = loggedInUserVar();
@@ -18,7 +18,7 @@ export const Members = () => {
 
   return (
     <section className="h-full">
-      <Card.Container>
+      <UserCard.Container>
         {selectedInfo.clinic?.members?.map((member) => {
           const state = getMemberState(
             member.staying,
@@ -26,7 +26,7 @@ export const Members = () => {
             member.manager
           );
           return (
-            <Card
+            <UserCard
               key={member.user.id}
               name={member.user.name}
               state={state}
@@ -47,7 +47,7 @@ export const Members = () => {
             />
           );
         })}
-      </Card.Container>
+      </UserCard.Container>
     </section>
   );
 };
