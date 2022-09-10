@@ -150,6 +150,7 @@ export const EditProfile = () => {
           </Input>
           {userData && !userData.me.verified && (
             <Button
+              isWidthFull
               canClick={!wasSendAuthEmail}
               loading={sendAuthEmailLoading}
               onClick={sendAuthEmail}
