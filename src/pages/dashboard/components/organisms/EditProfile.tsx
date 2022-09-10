@@ -2,19 +2,20 @@ import { gql, useApolloClient } from '@apollo/client';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { FormError } from '../../../components/atoms/FormError';
-import { Button } from '../../../components/molecules/Button';
-import { Input } from '../../../components/molecules/Input';
-import { MUOOL } from '../../../constants/constants';
-import { REG_EXP } from '../../../constants/regex';
+import { FormError } from '../../../../components/atoms/FormError';
+import { Button } from '../../../../components/molecules/Button';
+import { Input } from '../../../../components/molecules/Input';
+import { MUOOL } from '../../../../constants/constants';
+import { REG_EXP } from '../../../../constants/regex';
 import {
   EditProfileInput,
   EditProfileMutation,
   useEditProfileMutation,
   useSendAuthenticationEmailMutation,
-} from '../../../graphql/generated/graphql';
-import { useMe } from '../../../hooks/useMe';
-import { toastVar } from '../../../store';
+} from '../../../../graphql/generated/graphql';
+import { useMe } from '../../../../hooks/useMe';
+import { toastVar } from '../../../../store';
+import FormSection from '../molecules/FormSection';
 
 export const EditProfile = () => {
   const { data: userData } = useMe();
@@ -127,11 +128,8 @@ export const EditProfile = () => {
       <Helmet>
         <title>Edit Profile | {MUOOL}</title>
       </Helmet>
-      <div className="container mx-auto h-full">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mx-auto grid w-full max-w-md gap-3 space-y-4 rounded-md bg-white px-4 py-8 shadow"
-        >
+      <FormSection>
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-6">
           <Input
             id="email"
             label="Email"
@@ -200,11 +198,16 @@ export const EditProfile = () => {
               )
             )}
           </Input>
-          <Button type="submit" canClick={isValid} loading={loading}>
+          <Button
+            type="submit"
+            isWidthFull
+            canClick={isValid}
+            loading={loading}
+          >
             저장하기
           </Button>
         </form>
-      </div>
+      </FormSection>
     </>
   );
 };
