@@ -16,7 +16,7 @@ export function getPositionRef(
 export function getMemberState(
   staying: boolean,
   accepted: boolean,
-  manager: boolean
+  manager?: boolean
 ) {
   if (!staying) {
     return accepted ? '탈퇴' : '승인대기';
