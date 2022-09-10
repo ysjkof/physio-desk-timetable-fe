@@ -68,7 +68,7 @@ export interface ModifiedLoginUser
 
 //
 
-export interface DeactivateClinicInfo {
+export interface IdAndName {
   id: number;
   name: string;
 }
