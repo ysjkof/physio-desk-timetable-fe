@@ -1,8 +1,5 @@
+import { ChildrenProps } from '../../../../types/type';
 import { cls, getMemberState } from '../../../../utils/utils';
-
-interface ChildrenProps {
-  children: React.ReactNode;
-}
 
 function CardContainer({ children }: ChildrenProps) {
   return <div className="flex flex-wrap gap-y-14">{children}</div>;

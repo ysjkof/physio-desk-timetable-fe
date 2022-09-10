@@ -168,3 +168,7 @@ export interface ToastState {
   fade?: boolean;
   milliseconds?: number;
 }
+
+export interface ChildrenProps {
+  children?: React.ReactNode;
+}
