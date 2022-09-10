@@ -5,7 +5,7 @@ import { toastVar } from '../../store';
 import { cls } from '../../utils/utils';
 
 export default function Toast() {
-  const { messages, fade, milliseconds } = useReactiveVar(toastVar);
+  const { messages, fade, milliseconds, bgColor } = useReactiveVar(toastVar);
 
   const closeToast = () => {
     toastVar({});
@@ -43,7 +43,10 @@ export default function Toast() {
             </button>
           </div>
           <div
-            className="fixed top-0 left-0 z-40 h-screen w-screen"
+            className={cls(
+              'fixed top-0 left-0 z-40 h-screen w-screen',
+              bgColor ? 'bg-black/30' : ''
+            )}
             onClick={closeToast}
           />
         </>

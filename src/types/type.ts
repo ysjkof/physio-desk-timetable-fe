@@ -167,6 +167,7 @@ export interface ToastState {
   messages?: string[];
   fade?: boolean;
   milliseconds?: number;
+  bgColor?: boolean;
 }
 
 export interface ChildrenProps {
