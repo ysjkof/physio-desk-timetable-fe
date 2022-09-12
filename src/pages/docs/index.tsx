@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import BarBottomLeft from '../../svgs/BarBottomLeft';
 import XMark from '../../svgs/XMark';
+import DocsSidebarModal from './components/molecules/DocsSidebarModal';
 import DocsSidebar from './components/organisms/DocsSidebar';
-import DocsSidebarModal from './components/organisms/DocsSidebarModal';
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);
