@@ -95,7 +95,7 @@ export const DashboardSideNav = ({
             <Sidebar.Li
               key={idx}
               to={menu.route}
-              selectedLi={endpoint === menu.route}
+              selected={endpoint === menu.route}
             >
               {menu.name}
             </Sidebar.Li>
@@ -107,7 +107,7 @@ export const DashboardSideNav = ({
             <Sidebar.Li
               key={idx}
               to={menu.route}
-              selectedLi={endpoint === menu.route}
+              selected={endpoint === menu.route}
             >
               {menu.name}
             </Sidebar.Li>

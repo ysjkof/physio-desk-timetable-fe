@@ -4,11 +4,11 @@ import { cls } from '../../utils/utils';
 
 interface ChildrenProps {
   children: React.ReactNode;
-  selectedLi?: boolean;
 }
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 interface LiProps extends ChildrenProps {
   to: string;
+  selected?: boolean;
 }
 interface UlProps extends ChildrenProps {
   title?: string;
@@ -25,12 +25,12 @@ function Button({ children, ...args }: ButtonProps) {
   );
 }
 
-function Li({ to, children, selectedLi }: LiProps) {
+function Li({ to, children, selected }: LiProps) {
   return (
     <li
       className={cls(
         'h-full w-full cursor-pointer rounded-none hover:bg-gray-100',
-        selectedLi ? 'bg-green-100 font-semibold' : ''
+        selected ? 'bg-green-100 font-semibold' : ''
       )}
     >
       <Link to={to} className="block h-full w-full py-1.5 px-8">
