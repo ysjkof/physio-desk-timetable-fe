@@ -3,6 +3,7 @@ import BarBottomLeft from '../../svgs/BarBottomLeft';
 import XMark from '../../svgs/XMark';
 import DocsSidebarModal from './components/molecules/DocsSidebarModal';
 import DocsSidebar from './components/organisms/DocsSidebar';
+import { Outlet } from 'react-router-dom';
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);
@@ -40,8 +41,8 @@ export default function Docs() {
       )}
 
       <main
-        className="flex overflow-y-scroll"
-        style={{ height: 'calc(100% - 3rem - 33px)' }}
+        className="flex overflow-hidden"
+        style={{ height: 'calc(100% - 33px)' }}
       >
         {!isMobile && <DocsSidebar />}
         {isMobile && isOpen && (
@@ -49,91 +50,8 @@ export default function Docs() {
             <DocsSidebar />
           </DocsSidebarModal>
         )}
-        <section className="flex flex-col p-6">
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
-          <p>
-            main Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Pariatur, quas nemo? Repellat omnis dignissimos nostrum magni totam
-            odio praesentium at? Beatae, nobis. Sed, optio veritatis deserunt
-            dicta ipsum aut veniam.
-          </p>
+        <section className="flex flex-col overflow-y-scroll p-6">
+          <Outlet />
         </section>
       </main>
     </div>
