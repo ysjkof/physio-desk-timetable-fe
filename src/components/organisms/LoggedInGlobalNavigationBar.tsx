@@ -63,6 +63,9 @@ export const LoggedInGlobalNavigationBar = () => {
               className="header-search w-28 rounded-md"
             />
           </form>
+          <Link to={ROUTES.docs}>
+            <span className="whitespace-nowrap">문서</span>
+          </Link>
           <Link to="/tt">
             <span className="whitespace-nowrap  ">시간표</span>
           </Link>

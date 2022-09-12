@@ -12,6 +12,9 @@ export const GlobalNavigationBar = () => {
           </Link>
         </div>
         <div className="flex w-full items-center justify-end gap-6">
+          <Link to={ROUTES.docs}>
+            <span className="whitespace-nowrap">문서</span>
+          </Link>
           <Link to={ROUTES.login}>
             <span className="whitespace-nowrap">로그인/회원가입</span>
           </Link>
