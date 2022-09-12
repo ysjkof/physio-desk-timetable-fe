@@ -4,6 +4,7 @@ import { isLoggedInVar } from '../apollo';
 import { NotFound } from '../components/organisms/404';
 import CheckAdmin from '../components/organisms/CheckAdmin';
 import { ConfirmEmail } from '../pages/auth/ConfirmEmail';
+import Docs from '../pages/docs';
 import { Home } from '../pages/home';
 import { TestPage } from '../pages/TestPage';
 import LoginRoute from './LoginRoute';
@@ -34,6 +35,7 @@ function Router() {
       path={ROUTES.confirm_email}
       element={<ConfirmEmail />}
     />,
+    <Route key={ROUTES.docs} path={ROUTES.docs} element={<Docs />} />,
   ];
   return isLoggedIn ? (
     <LoginRoute CommonRoute={CommonRoute} />
