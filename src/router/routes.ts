@@ -74,7 +74,7 @@ export const ENDPOINT = {
     basisPatientRegistration: basic_patient_registration,
     basicPrescriptionRegistration: basic_prescription_registration,
     basicReserve: basic_reserve,
-    screenTimetable: screen_timetable,
+    screen_timetable,
     clinic_registration,
     dashboard_member,
     dashboard_invite,
@@ -112,30 +112,30 @@ export const docsMenu = [
     ],
   },
 
-  {
-    route: `/${docs}/`,
-    name: '화면 설명',
-    children: [{ route: screen_timetable, name: '시간표' }],
-  },
+  // {
+  //   route: `/${docs}/`,
+  //   name: '화면 설명',
+  //   children: [{ route: screen_timetable, name: '시간표' }],
+  // },
 
-  {
-    route: `/${docs}/`,
-    name: '병원',
-    children: [{ route: clinic_registration, name: '병원 만들기' }],
-  },
+  // {
+  //   route: `/${docs}/`,
+  //   name: '병원',
+  //   children: [{ route: clinic_registration, name: '병원 만들기' }],
+  // },
 
-  {
-    route: `/${docs}/`,
-    name: '대시보드 메뉴 안내',
-    children: [
-      ...clinicMenu.map((menu) => ({
-        ...menu,
-        route: `${dashboard}_menu.route`,
-      })),
-      ...personalMenu.map((menu) => ({
-        ...menu,
-        route: `${dashboard}_menu.route`,
-      })),
-    ],
-  },
+  // {
+  //   route: `/${docs}/`,
+  //   name: '대시보드 메뉴 안내',
+  //   children: [
+  //     ...clinicMenu.map((menu) => ({
+  //       ...menu,
+  //       route: `${dashboard}_menu.route`,
+  //     })),
+  //     ...personalMenu.map((menu) => ({
+  //       ...menu,
+  //       route: `${dashboard}_menu.route`,
+  //     })),
+  //   ],
+  // },
 ];
