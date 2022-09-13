@@ -78,7 +78,7 @@ function Dropdown({ title, children }: DropdownProps) {
 
   return (
     <div className="relative cursor-pointer" onClick={toggleMenu} ref={ref}>
-      <div className="w-24 overflow-hidden text-ellipsis whitespace-nowrap text-center font-extrabold">
+      <div className="max-w-[10rem] overflow-hidden text-ellipsis whitespace-nowrap font-extrabold">
         {title}
       </div>
       {isOpen && (

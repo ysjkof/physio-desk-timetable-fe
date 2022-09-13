@@ -32,7 +32,7 @@ export const DashboardTemplate = ({
   }, []);
 
   return (
-    <div className="grid grid-cols-[150px,1fr] grid-rows-[2rem,1fr]">
+    <div className="grid h-full grid-cols-[150px,1fr] grid-rows-[2rem,1fr]">
       <div className="col-start-1 row-span-2 row-start-1">{nav}</div>
       <div className="col-start-2 border-b border-l p-2" ref={ref}>
         {breadcrumb}

@@ -1,3 +1,7 @@
 export default function Logo() {
-  return <h1 className="text-2xl font-bold">물시간표</h1>;
+  return (
+    <h1 className="cursor-pointer whitespace-nowrap text-xl font-bold sm:text-2xl">
+      무울시간표
+    </h1>
+  );
 }

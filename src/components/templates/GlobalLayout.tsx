@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
-import { LoggedInGlobalNavigationBar } from '../organisms/LoggedInGlobalNavigationBar';
-import { GlobalNavigationBar } from '../organisms/GlobalNavigationBar';
 import useLoginInitialization from '../../hooks/useLoginInitialization';
 import { Loading } from '../atoms/Loading';
 import Toast from '../molecules/Toast';
+import { LoggedInGlobalNavBar } from '../organisms/LoggedInGlobalNavBar';
+import { LoggedOutGlobalNavBar } from '../organisms/LoggedOutGlobalNavBar';
 
 export const GlobalLayout = ({ isLoggedIn }: { isLoggedIn?: boolean }) => {
   let loading = true;
@@ -14,7 +14,7 @@ export const GlobalLayout = ({ isLoggedIn }: { isLoggedIn?: boolean }) => {
 
   return (
     <div className="h-screen overflow-hidden">
-      {isLoggedIn ? <LoggedInGlobalNavigationBar /> : <GlobalNavigationBar />}
+      {isLoggedIn ? <LoggedInGlobalNavBar /> : <LoggedOutGlobalNavBar />}
       <Outlet />
       <Toast />
     </div>
