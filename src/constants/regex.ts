@@ -7,28 +7,27 @@ export const REG_EXP = {
   email: {
     pattern:
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    condition: 'Email형식으로 입력하세요',
+    condition: 'Email형식으로 입력',
     maxLength: 50,
   },
   password: {
     pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,30}$/,
-    condition: '8~30자로 영어 소문자, 숫자, 특수문자를 사용할 수 있습니다',
+    condition: '8~30자로 영문자, 숫자, 특수문자를 사용',
     maxLength: 30,
   },
   personName: {
-    pattern: /^([가-힣\d\.]{2,10}|[a-z\d\. ,.'-]{6,30})$/i,
-    condition: '숫자, 온점(.) 포함, 한글 2~10자, 영문 6~30자 입니다',
+    pattern: /^([가-힣\d\.]{2,10}|[a-zA-Z\d\. ,.'-]{6,30})$/i,
+    condition: '숫자, 온점 포함, 한글 2~10자, 영문자 6~30자 사용',
     maxLength: 30,
   },
   clinicName: {
     pattern: /^([ㄱ-ㅎ가-힣a-zA-Z\d ]{4,30})$/,
-    condition: '4~30자로 한글, 영문, 숫자를 사용할 수 있습니다',
+    condition: '4~30자로 한글, 영문, 숫자를 사용',
     maxLength: 30,
   },
   prescription: {
-    pattern: /^[ㄱ-ㅎ가-힣a-zA-Z@!%*#&\d]{3,15}$/,
-    condition:
-      '3~15자로 한글, 영문, 숫자, 특수문자(@!%*#&)를 사용할 수 있습니다',
+    pattern: /^[ㄱ-ㅎ가-힣a-zA-Z@!%*#&.\d ]{3,15}$/,
+    condition: '3~15자로 한글, 영문, 숫자, 특수문자(.@!%*#&)를 사용',
     maxLength: 15,
   },
 };

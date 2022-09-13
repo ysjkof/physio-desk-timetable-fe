@@ -85,7 +85,7 @@ export const PrescriptionPage = () => {
       createPrescription({
         variables: {
           input: {
-            name,
+            name: name.trim(),
             requiredTime: +requiredTime,
             price: +price,
             description,
