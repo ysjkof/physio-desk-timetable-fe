@@ -1,4 +1,4 @@
-import Md from './BasicPatientRegistration.mdx';
+import Md from '../../mdx/BasicPatientRegistration.mdx';
 
 export default function BasicPatientRegistration() {
   return <Md />;

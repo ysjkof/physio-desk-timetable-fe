@@ -1,5 +1,5 @@
 import { ROUTES } from '../../../../router/routes';
-import Md from './BasicReserve.mdx';
+import Md from '../../mdx/BasicReserve.mdx';
 
 export default function BasicReserve() {
   return (
