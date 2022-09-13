@@ -26,6 +26,7 @@ export const basic_prescription_registration =
   'basic_prescription_registration';
 export const basic_reserve = 'basic_reserve';
 const roadmap = 'roadmap';
+const contacts = 'contacts';
 const screen_timetable = `screen_${timetable}`;
 const clinic_registration = 'clinic_registration';
 const dashboard_member = `${dashboard}_${member}`;
@@ -78,6 +79,7 @@ export const ENDPOINT = {
     basic_prescription_registration,
     basic_reserve,
     roadmap,
+    contacts,
     screen_timetable,
     clinic_registration,
     dashboard_member,

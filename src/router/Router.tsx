@@ -7,6 +7,7 @@ import { ConfirmEmail } from '../pages/auth/ConfirmEmail';
 import Docs from '../pages/docs';
 import DocsIndex from '../pages/docs/mdx/DocsIndex.mdx';
 import Roadmap from '../pages/docs/mdx/Roadmap.mdx';
+import Contacts from '../pages/docs/mdx/Contacts.mdx';
 import BasicPatientRegistration from '../pages/docs/components/organisms/BasicPatientRegistration';
 import BasicPrescriptionRegistration from '../pages/docs/components/organisms/BasicPrescriptionRegistration';
 import BasicReserve from '../pages/docs/components/organisms/BasicReserve';
@@ -41,6 +42,11 @@ function Router() {
       protectRoute: false,
       path: ENDPOINT.docs.roadmap,
       element: <Roadmap />,
+    },
+    {
+      protectRoute: false,
+      path: ENDPOINT.docs.contacts,
+      element: <Contacts />,
     },
   ];
 

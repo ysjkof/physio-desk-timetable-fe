@@ -20,7 +20,10 @@ export default function DocsSidebar() {
     {
       route: `${ROUTES.docs}/`,
       name: '기타',
-      children: [{ route: ENDPOINT.docs.roadmap, name: '개발 계획' }],
+      children: [
+        { route: ENDPOINT.docs.roadmap, name: '개발 계획' },
+        { route: ENDPOINT.docs.contacts, name: '연락처' },
+      ],
     },
     // {
     //   route: `${ROUTES.docs}/`,
