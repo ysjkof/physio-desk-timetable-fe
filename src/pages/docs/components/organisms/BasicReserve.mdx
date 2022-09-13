@@ -1,0 +1,51 @@
+import { Link } from 'react-router-dom';
+import img1 from '/images/doc-reserve/doc-reserve-01.webp';
+import img2 from '/images/doc-reserve/doc-reserve-02.webp';
+import img3 from '/images/doc-reserve/doc-reserve-03.webp';
+import img4 from '/images/doc-reserve/doc-reserve-04.webp';
+import img5 from '/images/doc-reserve/doc-reserve-05.webp';
+
+## 예약하기
+
+### 준비
+
+- 병원에 환자를 등록해야 합니다. <Link to={props.createPatientUrl}>환자등록 바로가기</Link>
+- 병원에 처방을 등록해야 합니다. <Link to={props.createPrescriptionUrl}>처방등록 바로가기</Link>
+
+### 예약하기
+
+<figure className="flex flex-col items-center">
+  <img src={img1} />
+  <figcaption>사진1 - 예약 버튼</figcaption>
+</figure>
+
+시간표 화면에서 표의 빈 공간에 마우스를 올리면 시간이 나타납니다. 원하는 날짜의 시간을
+클릭합니다.
+
+<figure className="flex flex-col items-center">
+  <img src={img2} width="320" />
+  <figcaption>사진2 - 예약 폼, 환자 검색</figcaption>
+</figure>
+
+검색 창에 **환자 이름을 검색**합니다. 이름 일부만 입력해도 검색할 수 있지만 이름 전체를 입력하는 게 좋습니다.
+
+<figure className="flex flex-col items-center">
+  <img src={img3} width="320" />
+  <figcaption>사진3 - 예약 폼, 검색 결과와 처방 버튼</figcaption>
+</figure>
+
+검색된 환자와 처방을 선택합니다.
+
+<figure className="flex flex-col items-center">
+  <img src={img4} width="320" />
+  <figcaption>사진4 - 예약 폼, 선택완료</figcaption>
+</figure>
+
+환자와 처방을 선택하면 강조되고(사진4) **예약하기 버튼**이 활성화 됩니다. 이제 예약하기 버튼을 누르면 예약됩니다.
+
+<figure className="flex flex-col items-center">
+  <img src={img5} />
+  <figcaption>사진5 - 시간표</figcaption>
+</figure>
+
+예약이 완료되면 시간표에 예약이 표시됩니다(사진5).
