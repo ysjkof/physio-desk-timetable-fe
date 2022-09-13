@@ -4,7 +4,7 @@ import { docsMenu } from '../../../../router/routes';
 
 export default function DocsSidebar() {
   const location = useLocation();
-  console.log(location);
+
   const splitted = location.pathname.split('/');
   const endpoint = splitted[splitted.length - 1];
 
