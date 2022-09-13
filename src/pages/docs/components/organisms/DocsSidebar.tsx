@@ -9,7 +9,7 @@ export default function DocsSidebar() {
   const endpoint = splitted[splitted.length - 1];
 
   return (
-    <aside className="w-full max-w-xs border-r">
+    <aside className="sm:w-52">
       <Sidebar>
         {docsMenu.map((menu) => (
           <Sidebar.Ul key={menu.name} title={menu.name}>

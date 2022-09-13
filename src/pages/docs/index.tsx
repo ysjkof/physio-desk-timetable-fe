@@ -16,13 +16,10 @@ export default function Docs() {
     mql.onchange = (event) => {
       if (event.matches) {
         if (mql.matches) setIsMobile(false);
-        /* the viewport is 600 pixels wide or less */
-        console.log('큰 화면 - more than 640px wide.');
+        // console.log('큰 화면 - more than 640px wide.');
       } else {
-        // setOpen(false);
         setIsMobile(true);
-        /* the viewport is more than 600 pixels wide */
-        console.log('좁은 화면 — less than 640px wide.');
+        // console.log('좁은 화면 — less than 640px wide.');
       }
     };
   }, []);
@@ -31,7 +28,7 @@ export default function Docs() {
     setOpen((prev) => !prev);
   };
   return (
-    <div className="h-full">
+    <main className="h-full bg-gray-50">
       {isMobile && (
         <nav className="flex h-12 items-center px-4 shadow-md ">
           <button type="button" className="p-2" onClick={toggleAside}>
@@ -40,8 +37,8 @@ export default function Docs() {
         </nav>
       )}
 
-      <main
-        className="flex overflow-hidden"
+      <div
+        className="mx-auto flex max-w-7xl justify-center overflow-hidden"
         style={{ height: 'calc(100% - 33px)' }}
       >
         {!isMobile && <DocsSidebar />}
@@ -50,10 +47,10 @@ export default function Docs() {
             <DocsSidebar />
           </DocsSidebarModal>
         )}
-        <section className="flex flex-col overflow-y-scroll p-6">
+        <article className="prose flex w-full max-w-3xl flex-col overflow-y-scroll bg-white py-16 px-6 sm:px-14">
           <Outlet />
-        </section>
-      </main>
-    </div>
+        </article>
+      </div>
+    </main>
   );
 }
