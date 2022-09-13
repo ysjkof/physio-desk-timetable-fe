@@ -5,6 +5,7 @@ import { NotFound } from '../components/organisms/404';
 import CheckAdmin from '../components/organisms/CheckAdmin';
 import { ConfirmEmail } from '../pages/auth/ConfirmEmail';
 import Docs from '../pages/docs';
+import DocsIndex from '../pages/docs/DocsIndex.mdx';
 import BasicPatientRegistration from '../pages/docs/components/organisms/BasicPatientRegistration';
 import BasicPrescriptionRegistration from '../pages/docs/components/organisms/BasicPrescriptionRegistration';
 import BasicReserve from '../pages/docs/components/organisms/BasicReserve';
@@ -57,7 +58,7 @@ function Router() {
       element={<ConfirmEmail />}
     />,
     <Route key="UserDocuments" path={ROUTES.docs} element={<Docs />}>
-      <Route index element={<h1>인덱스다</h1>} />
+      <Route index element={<DocsIndex></DocsIndex>} />
       {docsRoute.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
