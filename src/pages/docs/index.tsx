@@ -4,29 +4,36 @@ import XMark from '../../svgs/XMark';
 import DocsSidebarModal from './components/molecules/DocsSidebarModal';
 import DocsSidebar from './components/organisms/DocsSidebar';
 import { Outlet } from 'react-router-dom';
+import { Loading } from '../../components/atoms/Loading';
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
-
-  useEffect(() => {
-    const mql = window.matchMedia('(min-width:640px)');
-    if (mql.matches) setIsMobile(false);
-
-    mql.onchange = (event) => {
-      if (event.matches) {
-        if (mql.matches) setIsMobile(false);
-        // console.log('큰 화면 - more than 640px wide.');
-      } else {
-        setIsMobile(true);
-        // console.log('좁은 화면 — less than 640px wide.');
-      }
-    };
-  }, []);
+  const [loading, setLoading] = useState(true);
 
   const toggleAside = () => {
     setOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width:640px)');
+    if (mediaQuery.matches) setIsMobile(false);
+
+    const senseScreen = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        setIsMobile(false);
+      } else {
+        setIsMobile(true);
+      }
+    };
+
+    mediaQuery.addEventListener('change', senseScreen);
+    setLoading(false);
+    return () => mediaQuery.removeEventListener('change', senseScreen);
+  }, []);
+
+  if (loading) return <Loading />;
+
   return (
     <main className="h-full bg-gray-50">
       {isMobile && (
