@@ -4,7 +4,7 @@ import { AuthContainer } from '../pages/auth/components/AuthContainer';
 import { Login } from '../pages/auth/Login';
 import { SignUp } from '../pages/auth/SignUp';
 import { LoginRouteProps } from './LoginRoute';
-import { ENDPOINT, ROUTES } from './routes';
+import { ROUTES } from './routes';
 
 function LogoutRoute({ CommonRoute }: LoginRouteProps) {
   return (

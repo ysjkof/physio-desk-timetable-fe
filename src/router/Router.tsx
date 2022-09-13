@@ -5,7 +5,8 @@ import { NotFound } from '../components/organisms/404';
 import CheckAdmin from '../components/organisms/CheckAdmin';
 import { ConfirmEmail } from '../pages/auth/ConfirmEmail';
 import Docs from '../pages/docs';
-import DocsIndex from '../pages/docs/DocsIndex.mdx';
+import DocsIndex from '../pages/docs/mdx/DocsIndex.mdx';
+import Roadmap from '../pages/docs/mdx/Roadmap.mdx';
 import BasicPatientRegistration from '../pages/docs/components/organisms/BasicPatientRegistration';
 import BasicPrescriptionRegistration from '../pages/docs/components/organisms/BasicPrescriptionRegistration';
 import BasicReserve from '../pages/docs/components/organisms/BasicReserve';
@@ -19,20 +20,27 @@ function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
   const docsRoute = [
+    /** */
     {
       protectRoute: false,
-      path: ENDPOINT.docs.basisPatientRegistration,
+      path: ENDPOINT.docs.basic_patient_registration,
       element: <BasicPatientRegistration />,
     },
     {
       protectRoute: false,
-      path: ENDPOINT.docs.basicPrescriptionRegistration,
+      path: ENDPOINT.docs.basic_prescription_registration,
       element: <BasicPrescriptionRegistration />,
     },
     {
       protectRoute: false,
-      path: ENDPOINT.docs.basicReserve,
+      path: ENDPOINT.docs.basic_reserve,
       element: <BasicReserve />,
+    },
+    /** */
+    {
+      protectRoute: false,
+      path: ENDPOINT.docs.roadmap,
+      element: <Roadmap />,
     },
   ];
 
@@ -58,7 +66,7 @@ function Router() {
       element={<ConfirmEmail />}
     />,
     <Route key="UserDocuments" path={ROUTES.docs} element={<Docs />}>
-      <Route index element={<DocsIndex></DocsIndex>} />
+      <Route index element={<DocsIndex />} />
       {docsRoute.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}

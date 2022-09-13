@@ -20,10 +20,12 @@ const create = 'create';
 const clinics = 'clinics';
 
 // docs
-const docs = 'docs';
-const basic_patient_registration = 'basic_patient_registration';
-const basic_prescription_registration = 'basic_prescription_registration';
-const basic_reserve = 'basic_reserve';
+export const DOCS = 'docs';
+export const basic_patient_registration = 'basic_patient_registration';
+export const basic_prescription_registration =
+  'basic_prescription_registration';
+export const basic_reserve = 'basic_reserve';
+const roadmap = 'roadmap';
 const screen_timetable = `screen_${timetable}`;
 const clinic_registration = 'clinic_registration';
 const dashboard_member = `${dashboard}_${member}`;
@@ -35,7 +37,7 @@ const dashboard_clinics = `${dashboard}_${clinics}`;
 const dashboard_edit_profile = `${dashboard}_${edit_profile}`;
 
 export const ROUTES = {
-  docs: `/${docs}`,
+  docs: `/${DOCS}`,
   search: '/search',
   timetable: `/${timetable}`,
   reserve: `/${timetable}/${reserve}`,
@@ -53,6 +55,7 @@ export const ROUTES = {
   clinics: `/${dashboard}/${clinics}`,
   edit_profile: `/${dashboard}/${edit_profile}`,
 } as const;
+
 export const ENDPOINT = {
   reserve,
   create_patient,
@@ -60,7 +63,7 @@ export const ENDPOINT = {
   login,
   sign_up,
   confirm_email,
-  DASHBOARD: {
+  dashboard: {
     dashboard,
     member,
     invite,
@@ -71,9 +74,10 @@ export const ENDPOINT = {
     edit_profile,
   },
   docs: {
-    basisPatientRegistration: basic_patient_registration,
-    basicPrescriptionRegistration: basic_prescription_registration,
-    basicReserve: basic_reserve,
+    basic_patient_registration,
+    basic_prescription_registration,
+    basic_reserve,
+    roadmap,
     screen_timetable,
     clinic_registration,
     dashboard_member,
@@ -86,56 +90,17 @@ export const ENDPOINT = {
   },
 } as const;
 
-export type DashboardEndpoint = keyof typeof ENDPOINT.DASHBOARD;
+export type DashboardEndpoint = keyof typeof ENDPOINT.dashboard;
 
 export const clinicMenu = [
-  { route: ENDPOINT.DASHBOARD.member, name: '구성원' },
-  { route: ENDPOINT.DASHBOARD.invite, name: '초대' },
-  { route: ENDPOINT.DASHBOARD.prescription, name: '처방' },
-  { route: ENDPOINT.DASHBOARD.statistics, name: '통계' },
+  { route: ENDPOINT.dashboard.member, name: '구성원' },
+  { route: ENDPOINT.dashboard.invite, name: '초대' },
+  { route: ENDPOINT.dashboard.prescription, name: '처방' },
+  { route: ENDPOINT.dashboard.statistics, name: '통계' },
 ];
 
 export const personalMenu = [
-  { route: ENDPOINT.DASHBOARD.edit_profile, name: '나의 정보' },
-  { route: ENDPOINT.DASHBOARD.clinics, name: '나의 병원' },
-  { route: ENDPOINT.DASHBOARD.create, name: '병원 만들기' },
-];
-
-export const docsMenu = [
-  {
-    route: `/${docs}/`,
-    name: '처음 예약하기',
-    children: [
-      { route: basic_patient_registration, name: '환자 등록' },
-      { route: basic_prescription_registration, name: '처방 등록' },
-      { route: basic_reserve, name: '예약하기' },
-    ],
-  },
-
-  // {
-  //   route: `/${docs}/`,
-  //   name: '화면 설명',
-  //   children: [{ route: screen_timetable, name: '시간표' }],
-  // },
-
-  // {
-  //   route: `/${docs}/`,
-  //   name: '병원',
-  //   children: [{ route: clinic_registration, name: '병원 만들기' }],
-  // },
-
-  // {
-  //   route: `/${docs}/`,
-  //   name: '대시보드 메뉴 안내',
-  //   children: [
-  //     ...clinicMenu.map((menu) => ({
-  //       ...menu,
-  //       route: `${dashboard}_menu.route`,
-  //     })),
-  //     ...personalMenu.map((menu) => ({
-  //       ...menu,
-  //       route: `${dashboard}_menu.route`,
-  //     })),
-  //   ],
-  // },
+  { route: ENDPOINT.dashboard.edit_profile, name: '나의 정보' },
+  { route: ENDPOINT.dashboard.clinics, name: '나의 병원' },
+  { route: ENDPOINT.dashboard.create, name: '병원 만들기' },
 ];

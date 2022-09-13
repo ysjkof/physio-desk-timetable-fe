@@ -41,37 +41,37 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
   const dashboardRoute = [
     {
       protectRoute: { protect: false, isPass: null },
-      path: ENDPOINT.DASHBOARD.clinics,
+      path: ENDPOINT.dashboard.clinics,
       element: <MyClinics />,
     },
     {
       protectRoute: { protect: true, isPass: data?.me.verified },
-      path: ENDPOINT.DASHBOARD.create,
+      path: ENDPOINT.dashboard.create,
       element: <CreateClinic />,
     },
     {
       protectRoute: { protect: true, isPass: data?.me.verified },
-      path: ENDPOINT.DASHBOARD.invite,
+      path: ENDPOINT.dashboard.invite,
       element: <InviteClinic />,
     },
     {
       protectRoute: { protect: false, isPass: null },
-      path: ENDPOINT.DASHBOARD.member,
+      path: ENDPOINT.dashboard.member,
       element: <Members />,
     },
     {
       protectRoute: { protect: false, isPass: null },
-      path: ENDPOINT.DASHBOARD.prescription,
+      path: ENDPOINT.dashboard.prescription,
       element: <PrescriptionPage />,
     },
     {
       protectRoute: { protect: true, isPass: data?.me.verified },
-      path: ENDPOINT.DASHBOARD.statistics,
+      path: ENDPOINT.dashboard.statistics,
       element: <Statistics />,
     },
     {
       protectRoute: { protect: false, isPass: null },
-      path: ENDPOINT.DASHBOARD.edit_profile,
+      path: ENDPOINT.dashboard.edit_profile,
       element: <EditProfile />,
     },
   ];
