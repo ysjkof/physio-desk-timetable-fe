@@ -90,7 +90,7 @@ export const DashboardSideNav = ({
       </Selectbox>
 
       <Sidebar disable={!isAccepted}>
-        <Sidebar.Ul>
+        <Sidebar.Ul title="병원">
           {clinicMenu.map((menu, idx) => (
             <Sidebar.Li
               key={idx}
@@ -102,7 +102,7 @@ export const DashboardSideNav = ({
           ))}
         </Sidebar.Ul>
 
-        <Sidebar.Ul>
+        <Sidebar.Ul title="개인">
           {personalMenu.map((menu, idx) => (
             <Sidebar.Li
               key={idx}
