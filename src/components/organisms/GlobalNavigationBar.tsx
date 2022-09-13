@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../router/routes';
+import Logo from '../atoms/Logo';
 
 export const GlobalNavigationBar = () => {
   return (
@@ -7,8 +8,7 @@ export const GlobalNavigationBar = () => {
       <header className="HEADER header" id="header">
         <div className="flex w-full items-center gap-10">
           <Link to="/">
-            {/* <img src={muoolLogo} className="w-36" alt="Muool" /> */}
-            <span className="header-title">Muool</span>
+            <Logo />
           </Link>
         </div>
         <div className="flex w-full items-center justify-end gap-6">

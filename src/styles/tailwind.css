@@ -27,9 +27,6 @@
   .header {
     @apply relative z-40 flex items-center border-b bg-white text-sm;
   }
-  .header-title {
-    @apply text-2xl font-black;
-  }
   .header-search {
     @apply w-full appearance-none rounded-md border border-gray-300 px-5 font-light placeholder-gray-400 shadow-sm transition-colors focus:border-orange-500 focus:outline-none focus:ring-orange-500;
   }
