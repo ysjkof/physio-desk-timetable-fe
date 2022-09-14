@@ -14,7 +14,7 @@ export default function BarBottomLeft({ ...args }: SVG) {
       viewBox="0 0 20 20"
       fill="currentColor"
       {...args}
-      className={cls('h-5 w-5', args.className ? args.className : '')}
+      className={cls('h-5 w-5', args.className || '')}
     >
       <path
         fillRule="evenodd"
