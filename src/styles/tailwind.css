@@ -100,6 +100,10 @@
   .user-cols-divide {
     @apply border-r border-x-gray-500 last:border-r-transparent;
   }
+
+  .mdx-img {
+    @apply bg-photo bg-center bg-no-repeat;
+  }
 }
 
 @layer utilities {
