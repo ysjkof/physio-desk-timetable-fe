@@ -50,13 +50,14 @@ function ClinicCard({ clinicName, state, isActivate, children }: CardProps) {
   return (
     <div
       className={cls(
-        'flex h-20 w-80 flex-col justify-between rounded-md border',
-        state === '관리자' ? '-order-1' : ''
+        'flex h-24 w-80 flex-col justify-between rounded-md border',
+        state === '관리자' ? '-order-1' : '',
+        !isActivate ? 'font-light text-gray-500' : 'font-medium'
       )}
     >
       <div className="relative flex h-2/3 flex-col justify-center px-6">
-        <p className="">
-          <span className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-medium">
+        <div className="mb-1 flex items-center">
+          <span className="overflow-hidden text-ellipsis whitespace-nowrap text-base">
             {clinicName}
           </span>
           <span
@@ -71,8 +72,8 @@ function ClinicCard({ clinicName, state, isActivate, children }: CardProps) {
           >
             {state}
           </span>
-        </p>
-        <p>{isActivate || <span> / 폐쇄</span>}</p>
+        </div>
+        <p>{isActivate || <span> #폐쇄</span>}</p>
       </div>
       {children}
     </div>
