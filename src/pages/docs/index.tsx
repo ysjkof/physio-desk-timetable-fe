@@ -1,36 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import BarBottomLeft from '../../svgs/BarBottomLeft';
 import XMark from '../../svgs/XMark';
 import DocsSidebarModal from './components/molecules/DocsSidebarModal';
 import DocsSidebar from './components/organisms/DocsSidebar';
 import { Outlet } from 'react-router-dom';
 import { Loading } from '../../components/atoms/Loading';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(true);
-  const [loading, setLoading] = useState(true);
+
+  const { isMobile, loading } = useMediaQuery();
 
   const toggleAside = () => {
     setOpen((prev) => !prev);
   };
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width:640px)');
-    if (mediaQuery.matches) setIsMobile(false);
-
-    const senseScreen = (event: MediaQueryListEvent) => {
-      if (event.matches) {
-        setIsMobile(false);
-      } else {
-        setIsMobile(true);
-      }
-    };
-
-    mediaQuery.addEventListener('change', senseScreen);
-    setLoading(false);
-    return () => mediaQuery.removeEventListener('change', senseScreen);
-  }, []);
 
   if (loading) return <Loading />;
 
