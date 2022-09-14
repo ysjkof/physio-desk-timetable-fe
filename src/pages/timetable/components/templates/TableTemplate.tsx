@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
+import useWindowSize from '../../../../hooks/useWindowSize';
 
 interface TableTemplateProps {
   nav: ReactNode;
@@ -8,25 +9,12 @@ interface TableTemplateProps {
 }
 
 export const TableTemplate = ({ nav, labels, columns }: TableTemplateProps) => {
-  const [height, setHeight] = useState<null | number>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const { height, setMinus } = useWindowSize();
 
   useEffect(() => {
-    if (headerRef.current) {
-      let timer: NodeJS.Timeout | false = false;
-      const headerHeight = headerRef.current.clientHeight;
-      function handleTableHeight() {
-        const HEADER_HEIGHT = 41;
-        const windowHeight = window.innerHeight;
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(() => {
-          setHeight(windowHeight - headerHeight - HEADER_HEIGHT);
-        }, 200);
-      }
-      handleTableHeight();
-      window.addEventListener('resize', handleTableHeight);
-      return () => window.removeEventListener('resize', handleTableHeight);
-    }
+    if (!headerRef.current) return;
+    setMinus(headerRef.current.clientHeight);
   }, []);
 
   return (
@@ -40,18 +28,16 @@ export const TableTemplate = ({ nav, labels, columns }: TableTemplateProps) => {
       >
         {nav}
       </div>
-
-      {height && (
-        <div
-          className="TABLE_BODY grid h-screen w-full grid-cols-[40px,1fr] overflow-scroll"
-          style={{ height: height + 'px' }}
-        >
-          <div className="TABLE_LABELS sticky left-0 z-[32] border-r-2 border-black bg-white pt-[47px]">
-            {labels}
-          </div>
-          <div className="TABLE_MAIN flex flex-col">{columns}</div>
+      <div
+        className="TABLE_BODY grid h-screen w-full grid-cols-[40px,1fr] overflow-scroll"
+        style={{ height: height + 'px' }}
+      >
+        <div className="TABLE_LABELS sticky left-0 z-[32] border-r-2 border-black bg-white pt-[47px]">
+          {labels}
         </div>
-      )}
+        <div className="TABLE_MAIN flex flex-col">{columns}</div>
+      </div>
+      {/* )} */}
     </motion.div>
   );
 };
