@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
 import { MenuButton } from '../../../../components/molecules/MenuButton';
-import { cls } from '../../../../utils/utils';
+import { cls, renameUseSplit } from '../../../../utils/utils';
 import { loggedInUserVar } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
 import { BtnArrow } from '../../../../components/atoms/ButtonArrow';
@@ -278,7 +278,7 @@ export function TableOptionSelector() {
           clinicLists.map((clinic, i) => (
             <div key={i} className="CLINIC pt-2">
               <MenuButton
-                label={clinic.name}
+                label={renameUseSplit(clinic.name)}
                 enabled={clinic.id === selectedInfo.clinic?.id}
                 isWidthFull
                 icon={
