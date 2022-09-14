@@ -19,33 +19,41 @@ import { ENDPOINT, ROUTES } from './routes';
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const { confirm_email, docs } = ROUTES;
+  const {
+    basic_patient_registration,
+    basic_prescription_registration,
+    basic_reserve,
+    roadmap,
+    contacts,
+  } = ENDPOINT.docs;
 
   const docsRoute = [
     /** */
     {
       protectRoute: false,
-      path: ENDPOINT.docs.basic_patient_registration,
+      path: basic_patient_registration,
       element: <BasicPatientRegistration />,
     },
     {
       protectRoute: false,
-      path: ENDPOINT.docs.basic_prescription_registration,
+      path: basic_prescription_registration,
       element: <BasicPrescriptionRegistration />,
     },
     {
       protectRoute: false,
-      path: ENDPOINT.docs.basic_reserve,
+      path: basic_reserve,
       element: <BasicReserve />,
     },
     /** */
     {
       protectRoute: false,
-      path: ENDPOINT.docs.roadmap,
+      path: roadmap,
       element: <Roadmap />,
     },
     {
       protectRoute: false,
-      path: ENDPOINT.docs.contacts,
+      path: contacts,
       element: <Contacts />,
     },
   ];
@@ -67,11 +75,11 @@ function Router() {
     />,
     <Route key="notFound" path="*" element={<NotFound />} />,
     <Route
-      key={ROUTES.confirm_email}
-      path={ROUTES.confirm_email}
+      key={confirm_email}
+      path={confirm_email}
       element={<ConfirmEmail />}
     />,
-    <Route key="UserDocuments" path={ROUTES.docs} element={<Docs />}>
+    <Route key="UserDocuments" path={docs} element={<Docs />}>
       <Route index element={<DocsIndex />} />
       {docsRoute.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />

@@ -1,5 +1,33 @@
+import { Link } from 'react-router-dom';
+import { ROUTES } from '../../../router/routes';
+
 # 문서
 
-무울약의 사용법을 알리고 설명하는 문서입니다.
+무울시간표 사용법을 설명하는 문서입니다. 목록에서 필요한 항목을 선택하세요.
 
-왼쪽 목록에서 필요한 항목을 선택해 읽어주세요.
+## 목록
+
+### 처음 예약하기
+
+<ul className="flex flex-col pl-6">
+  <li>
+    <Link to={ROUTES.basic_patient_registration}>환자 등록</Link>
+  </li>
+  <li>
+    <Link to={ROUTES.basic_prescription_registration}>처방 등록</Link>
+  </li>
+  <li>
+    <Link to={ROUTES.basic_reserve}>예약하기</Link>
+  </li>
+</ul>
+
+### 기타
+
+<ul className="flex flex-col pl-6">
+  <li>
+    <Link to={ROUTES.roadmap}>개발 계획</Link>
+  </li>
+  <li>
+    <Link to={ROUTES.contacts}>연락처</Link>
+  </li>
+</ul>

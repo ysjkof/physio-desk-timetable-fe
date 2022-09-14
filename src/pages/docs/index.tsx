@@ -54,7 +54,7 @@ export default function Docs() {
             <DocsSidebar />
           </DocsSidebarModal>
         )}
-        <article className="prose flex w-full max-w-3xl flex-col overflow-y-scroll bg-white py-16 px-6 sm:px-14">
+        <article className="prose flex w-full max-w-3xl flex-col overflow-y-scroll bg-white py-16 px-6 prose-a:no-underline sm:px-14">
           <Outlet />
         </article>
       </div>

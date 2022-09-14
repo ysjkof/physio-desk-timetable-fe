@@ -39,6 +39,11 @@ const dashboard_edit_profile = `${dashboard}_${edit_profile}`;
 
 export const ROUTES = {
   docs: `/${DOCS}`,
+  basic_patient_registration: `/${DOCS}/${basic_patient_registration}`,
+  basic_prescription_registration: `/${DOCS}/${basic_prescription_registration}`,
+  basic_reserve: `/${DOCS}/${basic_reserve}`,
+  roadmap: `/${DOCS}/${roadmap}`,
+  contacts: `/${DOCS}/${contacts}`,
   search: '/search',
   timetable: `/${timetable}`,
   reserve: `/${timetable}/${reserve}`,
