@@ -30,7 +30,9 @@ export default function Docs() {
 
       <div
         className="mx-auto flex max-w-7xl justify-center overflow-hidden"
-        style={{ height: 'calc(100% - 33px)' }}
+        style={{
+          height: isMobile ? 'calc(100% - 33px - 3rem)' : 'calc(100% - 33px)',
+        }}
       >
         {!isMobile && <DocsSidebar />}
         {isMobile && isOpen && (
@@ -38,7 +40,7 @@ export default function Docs() {
             <DocsSidebar />
           </DocsSidebarModal>
         )}
-        <article className="prose flex w-full max-w-3xl flex-col overflow-y-scroll bg-white py-16 px-6 prose-a:no-underline sm:px-14">
+        <article className="prose flex w-full max-w-3xl flex-col overflow-y-scroll bg-white px-6 pt-2 pb-20 prose-a:no-underline sm:px-14 sm:pt-4 sm:pb-28">
           <Outlet />
         </article>
       </div>
