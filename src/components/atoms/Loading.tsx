@@ -1,4 +1,17 @@
+import { useEffect, useState } from 'react';
+
 export default function Loading() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    let timeout = setTimeout(() => {
+      setShow(true);
+    }, 200);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  if (!show) return null;
+
   return (
     <div className="position-center absolute space-y-6">
       <div className="mx-auto w-full max-w-sm rounded-md border p-4 shadow">
