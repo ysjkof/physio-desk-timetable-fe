@@ -1,6 +1,6 @@
 import { HtmlHTMLAttributes } from 'react';
-import { ChildrenProps } from '../../../types/type';
-import { cls } from '../../../utils/utils';
+import { ChildrenProps } from '../../../../types/type';
+import { cls } from '../../../../utils/utils';
 
 interface SectionProps
   extends ChildrenProps,

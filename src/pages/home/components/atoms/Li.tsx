@@ -1,4 +1,4 @@
-import { ChildrenProps } from '../../../types/type';
+import { ChildrenProps } from '../../../../types/type';
 
 export default function Li({ children }: ChildrenProps) {
   return (
