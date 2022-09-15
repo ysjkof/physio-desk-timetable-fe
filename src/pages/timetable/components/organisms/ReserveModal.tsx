@@ -1,8 +1,4 @@
-import { SearchPatient } from '../molecules/SearchPatient';
 import { TimetableModalProps } from '../..';
-import { ModalContentsLayout } from '../../../../components/templates/ModalContentsLayout';
-import { ReserveForm } from '../molecules/ReserveForm';
-import { ModalTemplate } from '../../../../components/templates/ModalTemplate';
 import { useLocation } from 'react-router-dom';
 import {
   createDateFromDay,
@@ -10,8 +6,12 @@ import {
 } from '../../../../services/dateServices';
 import { useReactiveVar } from '@apollo/client';
 import { selectedDateVar } from '../../../../store';
+import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
+import SearchPatient from '../molecules/SearchPatient';
+import ReserveForm from '../molecules/ReserveForm';
+import ModalTemplate from '../../../../components/templates/ModalTemplate';
 
-export const ReserveModal = ({ closeAction }: TimetableModalProps) => {
+export default function ReserveModal({ closeAction }: TimetableModalProps) {
   const location = useLocation();
   const selectedDate = useReactiveVar(selectedDateVar);
 
@@ -57,4 +57,4 @@ export const ReserveModal = ({ closeAction }: TimetableModalProps) => {
       }
     />
   );
-};
+}

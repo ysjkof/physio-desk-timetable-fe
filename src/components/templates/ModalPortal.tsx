@@ -1,4 +1,3 @@
-import React from 'react';
 import { createPortal } from 'react-dom';
 import { cls } from '../../utils/utils';
 
@@ -10,13 +9,13 @@ interface IModalPortal {
   top?: number;
 }
 
-export const ModalPortal = ({
+export default function ModalPortal({
   closeAction,
   children,
   left,
   right,
   top,
-}: IModalPortal) => {
+}: IModalPortal) {
   const container = document.getElementById('root') as HTMLElement;
 
   return createPortal(
@@ -41,4 +40,4 @@ export const ModalPortal = ({
     </div>,
     container
   );
-};
+}

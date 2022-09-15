@@ -9,15 +9,24 @@ interface BtnArrowProps {
   className?: string;
 }
 
-export const BtnArrow = ({ direction, onClick, className }: BtnArrowProps) => (
-  <button
-    className={cls('btn-menu rounded-md border bg-white p-1', className ?? '')}
-    onClick={onClick}
-  >
-    {direction === PREV ? (
-      <FontAwesomeIcon icon={faArrowLeft} fontSize={14} />
-    ) : (
-      <FontAwesomeIcon icon={faArrowRight} fontSize={14} />
-    )}
-  </button>
-);
+export default function BtnArrow({
+  direction,
+  onClick,
+  className,
+}: BtnArrowProps) {
+  return (
+    <button
+      className={cls(
+        'btn-menu rounded-md border bg-white p-1',
+        className ?? ''
+      )}
+      onClick={onClick}
+    >
+      {direction === PREV ? (
+        <FontAwesomeIcon icon={faArrowLeft} fontSize={14} />
+      ) : (
+        <FontAwesomeIcon icon={faArrowRight} fontSize={14} />
+      )}
+    </button>
+  );
+}

@@ -6,7 +6,7 @@ import {
   newDateSetHourAndMinute,
 } from '../../../../services/dateServices';
 import { IListReservation } from '../../../../types/type';
-import { EventBox } from './EventBox';
+import EventBox from './EventBox';
 
 interface ScheduleInUserInDayProps {
   userIndex: number;

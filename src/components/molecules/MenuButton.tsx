@@ -15,7 +15,7 @@ interface BtnMenuProps {
   isCenter?: boolean;
 }
 
-export const MenuButton = ({
+export default function MenuButton({
   onClick,
   label,
   icon,
@@ -27,7 +27,7 @@ export const MenuButton = ({
   thinFont,
   type = 'button',
   isCenter,
-}: BtnMenuProps) => {
+}: BtnMenuProps) {
   return (
     <button
       type={type}
@@ -50,4 +50,4 @@ export const MenuButton = ({
       {icon} {label}
     </button>
   );
-};
+}

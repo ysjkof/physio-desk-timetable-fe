@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import BarBottomLeft from '../../svgs/BarBottomLeft';
-import XMark from '../../svgs/XMark';
-import DocsSidebarModal from './components/molecules/DocsSidebarModal';
-import DocsSidebar from './components/organisms/DocsSidebar';
+import { lazy, useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Loading } from '../../components/atoms/Loading';
+import DocsSidebar from './components/organisms/DocsSidebar';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import useWindowSize from '../../hooks/useWindowSize';
+import BarBottomLeft from '../../svgs/BarBottomLeft';
+import XMark from '../../svgs/XMark';
+
+const DocsSidebarModal = lazy(
+  () => import('./components/molecules/DocsSidebarModal')
+);
+const Loading = lazy(() => import('../../components/atoms/Loading'));
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);

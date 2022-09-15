@@ -1,19 +1,35 @@
+import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { GlobalLayout } from '../components/templates/GlobalLayout';
-import { AuthContainer } from '../pages/auth/components/AuthContainer';
-import { Login } from '../pages/auth/Login';
-import { SignUp } from '../pages/auth/SignUp';
-import { Home } from '../pages/home';
+import GlobalLayout from '../components/templates/GlobalLayout';
+import AuthContainer from '../pages/auth/components/AuthContainer';
+
 import { LoginRouteProps } from './LoginRoute';
 import { ROUTES } from './routes';
 
+const Home = lazy(() => import('../pages/home'));
+const Login = lazy(() => import('../pages/auth/Login'));
+const SignUp = lazy(() => import('../pages/auth/SignUp'));
+
+const Loading = lazy(() => import('../components/atoms/Loading'));
+
 function LogoutRoute({ CommonRoute }: LoginRouteProps) {
+  const { login, sign_up } = ROUTES;
+
   return (
     <Routes>
       <Route path="/" element={<GlobalLayout />}>
-        <Route key="home" index element={<Home />} />,
         <Route
-          path={ROUTES.login}
+          key="home"
+          index
+          element={
+            <Suspense fallback={<Loading />}>
+              <Home />
+            </Suspense>
+          }
+        />
+        ,
+        <Route
+          path={login}
           element={
             <AuthContainer>
               <Login />
@@ -21,7 +37,7 @@ function LogoutRoute({ CommonRoute }: LoginRouteProps) {
           }
         />
         <Route
-          path={ROUTES.sign_up}
+          path={sign_up}
           element={
             <AuthContainer>
               <SignUp />

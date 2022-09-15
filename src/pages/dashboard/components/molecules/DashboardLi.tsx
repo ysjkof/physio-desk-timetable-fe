@@ -7,13 +7,13 @@ interface DashboardLiProps {
   borderBottom?: boolean;
   textCenter?: boolean;
 }
-export const DashboardLi = ({
+export default function DashboardLi({
   textContents,
   borderTop,
   borderRight,
   borderBottom,
   textCenter,
-}: DashboardLiProps) => {
+}: DashboardLiProps) {
   return (
     <li
       className={cls(
@@ -33,4 +33,4 @@ export const DashboardLi = ({
       </span>
     </li>
   );
-};
+}

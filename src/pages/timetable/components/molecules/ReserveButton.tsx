@@ -90,15 +90,4 @@ function ReserveButton({
   );
 }
 
-// export default memo(ReserveButton);
 export default ReserveButton;
-
-// export default memo(ReserveButton, (prevProps, nextProps) => {
-//   // console.log(
-//   //   prevProps.date,
-//   //   nextProps.date,
-//   //   compareDateMatch(prevProps.date, nextProps.date, 'ymd')
-//   // );
-
-//   return true;
-// });

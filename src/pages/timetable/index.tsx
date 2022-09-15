@@ -1,19 +1,13 @@
+import { lazy, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useListReservations } from './hooks/useListReservations';
-import { TableTemplate } from './components/templates/TableTemplate';
-import { useEffect, useRef, useState } from 'react';
+import TableTemplate from './components/templates/TableTemplate';
 import {
   compareDateMatch,
   getSunday,
   getWeeks,
 } from '../../services/dateServices';
-import { TableNav } from './components/organisms/TableNav';
 import { AnimatePresence } from 'framer-motion';
-import TimeLabels from './components/organisms/TimeLabels';
-import { Titles } from './components/organisms/Titles';
-import { TableModals } from './components/templates/TableModals';
-import { Loading } from '../../components/atoms/Loading';
-import Schedules from './components/organisms/Schedules';
 import {
   ListenDeleteReservationDocument,
   ListenDeleteReservationSubscription,
@@ -35,12 +29,18 @@ import { useMe } from '../../hooks/useMe';
 import useViewoptions from './hooks/useViewOption';
 import useStore from '../../hooks/useStore';
 import { MUOOL } from '../../constants/constants';
+import TableNav from './components/organisms/TableNav';
+import TimeLabels from './components/organisms/TimeLabels';
+import Titles from './components/organisms/Titles';
+import TableModals from './components/templates/TableModals';
+import Schedules from './components/organisms/Schedules';
+const Loading = lazy(() => import('../../components/atoms/Loading'));
 
 export interface TimetableModalProps {
   closeAction: () => void;
 }
 
-export const TimeTable = () => {
+export default function TimeTable() {
   const { labels } = useViewoptions();
   const { data: loginUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
@@ -206,4 +206,4 @@ export const TimeTable = () => {
       <TableModals />
     </>
   );
-};
+}

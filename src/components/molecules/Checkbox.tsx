@@ -9,13 +9,13 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 /**Input type "checkbox"나 "radio" 전용 컴포넌트 */
-export const Checkbox = ({
+export default function Checkbox({
   id,
   register,
   type,
   label,
   ...args
-}: CheckboxProps) => {
+}: CheckboxProps) {
   return (
     <label
       className="flex cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap"
@@ -31,4 +31,4 @@ export const Checkbox = ({
       {label}
     </label>
   );
-};
+}

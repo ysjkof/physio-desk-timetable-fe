@@ -1,25 +1,25 @@
-import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRotateLeft,
   faBan,
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { cls } from '../../../../utils/utils';
 import {
   ReservationState,
   useEditReservationMutation,
 } from '../../../../graphql/generated/graphql';
+import { cls } from '../../../../utils/utils';
 import { IListReservation } from '../../../../types/type';
+import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 
 interface EditReservationStateProps {
   reservation: IListReservation;
   redirect?: () => void;
 }
 
-export const EditReservationState = ({
+export default function EditReservationState({
   reservation,
-}: EditReservationStateProps) => {
+}: EditReservationStateProps) {
   const [editReservationMutation] = useEditReservationMutation();
 
   const onClickEditReserve = (state: ReservationState) => {
@@ -75,4 +75,4 @@ export const EditReservationState = ({
       />
     </>
   );
-};
+}

@@ -10,7 +10,7 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   rows?: number;
 }
 
-export const Textarea = ({
+export default function Textarea({
   label,
   id,
   placeholder,
@@ -19,7 +19,7 @@ export const Textarea = ({
   children,
   rows,
   ...args
-}: TextareaProps) => {
+}: TextareaProps) {
   return (
     <label className="relative flex w-full flex-col gap-2" htmlFor={id}>
       {label}
@@ -33,4 +33,4 @@ export const Textarea = ({
       {children}
     </label>
   );
-};
+}

@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { Loading } from '../../../../components/atoms/Loading';
-import { ModalTemplate } from '../../../../components/templates/ModalTemplate';
-import { ModalContentsLayout } from '../../../../components/templates/ModalContentsLayout';
+import { lazy, useState } from 'react';
 import {
   ClinicType,
   useFindMyClinicsQuery,
 } from '../../../../graphql/generated/graphql';
 import { IdAndName } from '../../../../types/type';
 import { getMemberState, renameUseSplit } from '../../../../utils/utils';
-import { DeactivateClinic } from './DeactivateClinic';
+import DeactivateClinic from './DeactivateClinic';
 import { useMe } from '../../../../hooks/useMe';
 import useAcceptInvitation from '../../hooks/useAcceptInvitation';
 import useCancelInvitation from '../../hooks/useCancelInvitation';
 import ClinicCard from '../molecules/ClinicCard';
+import ModalTemplate from '../../../../components/templates/ModalTemplate';
+import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
+const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 interface CanClose {
   isActivated: boolean;
@@ -20,7 +20,7 @@ interface CanClose {
   clinicType: ClinicType;
 }
 
-export const MyClinics = () => {
+export default function MyClinics() {
   const { acceptInvitation, loading: acceptLoading } = useAcceptInvitation();
   const { invokeCancelInvitation, loading: cancelLoading } =
     useCancelInvitation();
@@ -138,4 +138,4 @@ export const MyClinics = () => {
       )}
     </section>
   );
-};
+}

@@ -6,11 +6,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
-import { MenuButton } from '../../../../components/molecules/MenuButton';
+import MenuButton from '../../../../components/molecules/MenuButton';
 import { cls, renameUseSplit } from '../../../../utils/utils';
 import { loggedInUserVar } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
-import { BtnArrow } from '../../../../components/atoms/ButtonArrow';
+import BtnArrow from '../../../../components/atoms/ButtonArrow';
 import useStore from '../../../../hooks/useStore';
 import { useReactiveVar } from '@apollo/client';
 import Selectbox from '../../../../components/organisms/Selectbox';
@@ -28,7 +28,7 @@ interface TableDurationForm {
   endMinute: number;
 }
 
-export function TableOptionSelector() {
+export default function TableOptionSelector() {
   const {
     setSelectedInfo,
     viewOptions,

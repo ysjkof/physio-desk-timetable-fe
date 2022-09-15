@@ -3,11 +3,12 @@ import { ROUTES } from '../../router/routes';
 import { ChildrenProps } from '../../types/type';
 import { cls } from '../../utils/utils';
 import Logo from '../atoms/Logo';
+
 interface GlobalNavigationBar extends ChildrenProps {}
 
-export const GlobalNavigationBarLayout = ({
+export default function GlobalNavigationBarLayout({
   children,
-}: GlobalNavigationBar) => {
+}: GlobalNavigationBar) {
   const location = useLocation();
   const pathname = location.pathname;
 
@@ -33,4 +34,4 @@ export const GlobalNavigationBarLayout = ({
       </div>
     </header>
   );
-};
+}

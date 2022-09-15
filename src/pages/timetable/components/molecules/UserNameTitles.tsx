@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { compareDateMatch } from '../../../../services/dateServices';
 import { cls } from '../../../../utils/utils';
 import { getGridTemplateColumns } from '../../../timetableServices';
-import { UserNameTitle } from './UserNameTitle';
+import UserNameTitle from './UserNameTitle';
 
 interface UserNameTitlesProps {
   userLength: number;

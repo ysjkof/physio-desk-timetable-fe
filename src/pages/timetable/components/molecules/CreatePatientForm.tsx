@@ -1,21 +1,21 @@
 import { useForm } from 'react-hook-form';
-import { FormError } from '../../../../components/atoms/FormError';
-import { Button } from '../../../../components/molecules/Button';
+import FormError from '../../../../components/atoms/FormError';
+import Button from '../../../../components/molecules/Button';
 import {
   CreatePatientInput,
   CreatePatientMutation,
   useCreatePatientMutation,
   useEditPatientMutation,
 } from '../../../../graphql/generated/graphql';
-import { Input } from '../../../../components/molecules/Input';
+import Input from '../../../../components/molecules/Input';
 import { TimetableModalProps } from '../..';
-import { DatepickerWithInput } from '../../../../components/molecules/DatepickerWithInput';
+import DatepickerWithInput from '../../../../components/molecules/DatepickerWithInput';
 import { useEffect, useState } from 'react';
 import useStore from '../../../../hooks/useStore';
 import { toastVar } from '../../../../store';
 import { REG_EXP } from '../../../../constants/regex';
-import { Textarea } from '../../../../components/molecules/Textarea';
-import { Checkbox } from '../../../../components/molecules/Checkbox';
+import Textarea from '../../../../components/molecules/Textarea';
+import Checkbox from '../../../../components/molecules/Checkbox';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -29,10 +29,10 @@ interface CreatePatientFormProps extends TimetableModalProps {
   };
 }
 
-export const CreatePatientForm = ({
+export default function CreatePatientForm({
   closeAction,
   patient,
-}: CreatePatientFormProps) => {
+}: CreatePatientFormProps) {
   const { selectedInfo, setSelectedInfo } = useStore();
 
   const {
@@ -195,4 +195,4 @@ export const CreatePatientForm = ({
       )}
     </form>
   );
-};
+}

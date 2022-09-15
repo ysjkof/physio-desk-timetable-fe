@@ -1,10 +1,10 @@
 import { useMe } from '../../hooks/useMe';
 import { useState } from 'react';
 import Banner from '../molecules/Banner';
-import { GlobalNavigationBarLayout } from '../molecules/GlobalNavigationBarLayout';
-import { LoggedInGlobalNavBarMenu } from '../molecules/LoggedInGlobalNavBarMenu';
+import GlobalNavigationBarLayout from '../molecules/GlobalNavigationBarLayout';
+import LoggedInGlobalNavBarMenu from '../molecules/LoggedInGlobalNavBarMenu';
 
-export const LoggedInGlobalNavBar = () => {
+export default function LoggedInGlobalNavBar() {
   const { data: meData } = useMe();
   const [hasBanner, setHasBanner] = useState(true);
   const closeBanner = () => setHasBanner(false);
@@ -19,4 +19,4 @@ export const LoggedInGlobalNavBar = () => {
       </GlobalNavigationBarLayout>
     </>
   );
-};
+}

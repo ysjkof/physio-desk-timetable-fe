@@ -5,7 +5,7 @@ import { clinicMenu, personalMenu, ROUTES } from '../../router/routes';
 import Dropdown from '../organisms/Dropdown';
 import { logout } from '../../pages/auth/authServices';
 
-export const LoggedInGlobalNavBarMenu = () => {
+export default function LoggedInGlobalNavBarMenu() {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues, setValue } = useForm();
   const { data: meData } = useMe();
@@ -57,4 +57,4 @@ export const LoggedInGlobalNavBarMenu = () => {
       </Dropdown>
     </>
   );
-};
+}

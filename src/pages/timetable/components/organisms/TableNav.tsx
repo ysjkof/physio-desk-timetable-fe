@@ -7,12 +7,12 @@ import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { MenuButton } from '../../../../components/molecules/MenuButton';
-import { BtnMenuToggle } from '../../../../components/molecules/MenuToggleButton';
+import MenuButton from '../../../../components/molecules/MenuButton';
+import BtnMenuToggle from '../../../../components/molecules/MenuToggleButton';
 import { NEXT, PREV, VIEW_PERIOD } from '../../../../constants/constants';
-import { BtnArrow } from '../../../../components/atoms/ButtonArrow';
-import { TableOptionSelector } from '../molecules/TableOptionSelector';
-import { NavDatepicker } from '../molecules/NavDatepicker';
+import BtnArrow from '../../../../components/atoms/ButtonArrow';
+import TableOptionSelector from '../molecules/TableOptionSelector';
+import NavDatepicker from '../molecules/NavDatepicker';
 import { IViewOption } from '../../../../types/type';
 import useStore from '../../../../hooks/useStore';
 import { loggedInUserVar, selectedDateVar } from '../../../../store';
@@ -28,7 +28,7 @@ const tableNavVarients = {
   start: { y: 0, transition: { type: 'tween', duration: 0.3 } },
 };
 
-export function TableNav({}: TableNavProps) {
+export default function TableNav({}: TableNavProps) {
   const navigate = useNavigate();
   const today = new Date();
   const { setSelectedInfo, selectedInfo, selectedDate, viewOptions } =

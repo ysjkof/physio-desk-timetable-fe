@@ -9,7 +9,7 @@ import {
 } from '../../../graphql/generated/graphql';
 import { loggedInUserVar, toastVar } from '../../../store';
 
-export const ConfirmEmail = () => {
+export default function ConfirmEmail() {
   const client = useApolloClient();
   const navigate = useNavigate();
   const loggedInUser = useReactiveVar(loggedInUserVar);
@@ -100,4 +100,4 @@ export const ConfirmEmail = () => {
       </h4>
     </div>
   );
-};
+}

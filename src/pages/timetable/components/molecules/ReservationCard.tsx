@@ -1,25 +1,25 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { ReservationCardName } from './ReservationCardName';
-import { ReservationCardPatientDetail } from './ReservationCardPatientDetail';
-import { TimetableModalProps } from '../..';
 import { useDeleteReservationMutation } from '../../../../graphql/generated/graphql';
-import { ReservationCardDetail } from './ReservationCardDetail';
-import { BtnMenuToggle } from '../../../../components/molecules/MenuToggleButton';
-import { MenuButton } from '../../../../components/molecules/MenuButton';
-import { ReserveForm } from './ReserveForm';
-import { CreatePatientForm } from './CreatePatientForm';
 import { IListReservation } from '../../../../types/type';
+import { TimetableModalProps } from '../..';
+import ReserveForm from './ReserveForm';
+import CreatePatientForm from './CreatePatientForm';
+import ReservationCardName from './ReservationCardName';
+import ReservationCardPatientDetail from './ReservationCardPatientDetail';
+import ReservationCardDetail from './ReservationCardDetail';
+import BtnMenuToggle from '../../../../components/molecules/MenuToggleButton';
+import MenuButton from '../../../../components/molecules/MenuButton';
 
 interface ReservationCardProps extends TimetableModalProps {
   reservation: IListReservation;
 }
 
-export const ReservationCard = ({
+export default function ReservationCard({
   closeAction,
   reservation,
-}: ReservationCardProps) => {
+}: ReservationCardProps) {
   const [subMenu, setSubMenu] = useState<'reservation' | 'patient'>(
     'reservation'
   );
@@ -126,4 +126,4 @@ export const ReservationCard = ({
   ) : (
     <></>
   );
-};
+}

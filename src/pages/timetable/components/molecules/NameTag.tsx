@@ -9,7 +9,7 @@ export interface INameTagProps extends SelectedPatient {
   canClick?: boolean;
 }
 
-export const NameTag = ({
+export default function NameTag({
   id,
   gender,
   name,
@@ -18,7 +18,7 @@ export const NameTag = ({
   clinicName,
   canClick = false,
   user,
-}: INameTagProps) => {
+}: INameTagProps) {
   const { setSelectedInfo } = useStore();
   const onClick = () =>
     setSelectedInfo('patient', {
@@ -55,4 +55,4 @@ export const NameTag = ({
       {clinicName && <span className="col-span-2">{clinicName}</span>}
     </div>
   );
-};
+}

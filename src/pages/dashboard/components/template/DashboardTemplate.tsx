@@ -6,11 +6,11 @@ interface DashboardTemplateProps {
   nav: ReactNode;
   children: ReactNode;
 }
-export const DashboardTemplate = ({
+export default function DashboardTemplate({
   breadcrumb,
   nav,
   children,
-}: DashboardTemplateProps) => {
+}: DashboardTemplateProps) {
   const { height, changeMinus } = useWindowSize(true);
   const breadcrumbRef = useRef<HTMLDivElement>(null);
 
@@ -33,4 +33,4 @@ export const DashboardTemplate = ({
       </div>
     </div>
   );
-};
+}

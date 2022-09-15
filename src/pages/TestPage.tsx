@@ -12,7 +12,7 @@ import {
 import { selectedInfoVar } from '../store';
 import { PrescriptionWithSelect } from '../types/type';
 
-export function TestPage() {
+export default function TestPage() {
   return (
     <div className="px-4 ">
       <h1 className="text-base font-extrabold">TEST PAGE</h1>

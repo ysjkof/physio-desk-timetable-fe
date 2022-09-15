@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { compareDateMatch } from '../../../../services/dateServices';
 import { cls } from '../../../../utils/utils';
 import { SCROLL_ADRESS } from '../../../../constants/constants';
-import { BtnDatecheck } from '../../../../components/atoms/ButtonDatecheck';
+import BtnDatecheck from '../../../../components/atoms/ButtonDatecheck';
 import useStore from '../../../../hooks/useStore';
 import { memo } from 'react';
 import { selectedDateVar } from '../../../../store';

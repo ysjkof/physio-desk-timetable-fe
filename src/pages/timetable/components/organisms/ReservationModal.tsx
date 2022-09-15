@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TimetableModalProps } from '../..';
-import { ModalContentsLayout } from '../../../../components/templates/ModalContentsLayout';
-import { ModalTemplate } from '../../../../components/templates/ModalTemplate';
-import { ReservationCard } from '../molecules/ReservationCard';
 import { useListReservations } from '../../hooks/useListReservations';
 import { ReservationState } from '../../../../graphql/generated/graphql';
-import { DayOffCard } from '../molecules/DayOffCard';
+import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
+import ModalTemplate from '../../../../components/templates/ModalTemplate';
+import ReservationCard from '../molecules/ReservationCard';
+import DayOffCard from '../molecules/DayOffCard';
 
-export const ReservationModal = ({ closeAction }: TimetableModalProps) => {
+export default function ReservationModal({ closeAction }: TimetableModalProps) {
   const navigate = useNavigate();
   const location = useLocation();
   //@ts-ignore
@@ -59,4 +59,4 @@ export const ReservationModal = ({ closeAction }: TimetableModalProps) => {
       }
     />
   );
-};
+}

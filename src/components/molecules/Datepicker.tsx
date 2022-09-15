@@ -8,7 +8,7 @@ import {
   getMinutesByUnit,
 } from '../../services/dateServices';
 import { cls, getPositionRef } from '../../utils/utils';
-import { ModalPortal } from '../templates/ModalPortal';
+import ModalPortal from '../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './DatepickerWithInput';
 
 interface DatePickerInterface extends HasDateOption, DatepickerInputState {
@@ -16,13 +16,13 @@ interface DatePickerInterface extends HasDateOption, DatepickerInputState {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Datepicker = ({
+export default function Datepicker({
   inputDate,
   setInputDate,
   isOpen,
   setOpen,
   hasHour,
-}: DatePickerInterface) => {
+}: DatePickerInterface) {
   const { viewOptions } = useStore();
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(today);
@@ -276,4 +276,4 @@ export const Datepicker = ({
       )}
     </div>
   );
-};
+}

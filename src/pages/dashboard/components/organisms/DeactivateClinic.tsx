@@ -3,25 +3,25 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { client } from '../../../../apollo';
-import { Worning } from '../../../../components/atoms/Warning';
-import { Button } from '../../../../components/molecules/Button';
-import { MenuButton } from '../../../../components/molecules/MenuButton';
 import {
   FindMyClinicsDocument,
   useInactivateClinicMutation,
 } from '../../../../graphql/generated/graphql';
 import { selectedInfoVar, toastVar } from '../../../../store';
 import { IdAndName } from '../../../../types/type';
+import Worning from '../../../../components/atoms/Warning';
+import Button from '../../../../components/molecules/Button';
+import MenuButton from '../../../../components/molecules/MenuButton';
 
 interface DeactivateClinicProps extends IdAndName {
   closeAction: () => void;
 }
 
-export const DeactivateClinic = ({
+export default function DeactivateClinic({
   id,
   name,
   closeAction,
-}: DeactivateClinicProps) => {
+}: DeactivateClinicProps) {
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const [agree, setAgree] = useState(false);
 
@@ -75,4 +75,4 @@ export const DeactivateClinic = ({
   ) : (
     <Worning type="hasNotPermission" />
   );
-};
+}

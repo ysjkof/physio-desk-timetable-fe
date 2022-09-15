@@ -1,6 +1,6 @@
 import { compareDateMatch } from '../../../../services/dateServices';
 import { cls } from '../../../../utils/utils';
-import { TimeIndicatorBar } from './TimeIndicatorBar';
+import TimeIndicatorBar from './TimeIndicatorBar';
 import { DayWithUsers } from '../../../../types/type';
 import useStore from '../../../../hooks/useStore';
 import ReservationButtons from '../molecules/ReservationButtons';

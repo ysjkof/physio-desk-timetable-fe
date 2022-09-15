@@ -5,8 +5,10 @@ interface FormErrorProps {
   isHighter?: boolean;
 }
 
-export const FormError = ({ errorMessage, isHighter }: FormErrorProps) => (
-  <span className={cls('form-error', isHighter ? '-top-7' : '-top-1')}>
-    {errorMessage}
-  </span>
-);
+export default function FormError({ errorMessage, isHighter }: FormErrorProps) {
+  return (
+    <span className={cls('form-error', isHighter ? '-top-7' : '-top-1')}>
+      {errorMessage}
+    </span>
+  );
+}

@@ -9,7 +9,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   children?: ReactNode;
 }
 
-export const Input = ({
+export default function Input({
   label,
   id,
   placeholder,
@@ -17,7 +17,7 @@ export const Input = ({
   value,
   children,
   ...args
-}: InputProps) => {
+}: InputProps) {
   return (
     <label className="relative flex w-full flex-col gap-2" htmlFor={id}>
       {label}
@@ -32,4 +32,4 @@ export const Input = ({
       {children}
     </label>
   );
-};
+}

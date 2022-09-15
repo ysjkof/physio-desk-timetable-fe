@@ -2,9 +2,9 @@ import { gql, useApolloClient } from '@apollo/client';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { FormError } from '../../../../components/atoms/FormError';
-import { Button } from '../../../../components/molecules/Button';
-import { Input } from '../../../../components/molecules/Input';
+import FormError from '../../../../components/atoms/FormError';
+import Button from '../../../../components/molecules/Button';
+import Input from '../../../../components/molecules/Input';
 import { MUOOL } from '../../../../constants/constants';
 import { REG_EXP } from '../../../../constants/regex';
 import {
@@ -17,7 +17,7 @@ import { useMe } from '../../../../hooks/useMe';
 import { toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
 
-export const EditProfile = () => {
+export default function EditProfile() {
   const { data: userData } = useMe();
   const client = useApolloClient();
 
@@ -211,4 +211,4 @@ export const EditProfile = () => {
       </FormSection>
     </>
   );
-};
+}

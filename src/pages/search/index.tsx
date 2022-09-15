@@ -2,13 +2,13 @@ import { useReactiveVar } from '@apollo/client';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Worning } from '../../components/atoms/Warning';
-import { SearchedPatientLi } from './organisms/SearchedPatientLi';
+import Worning from '../../components/atoms/Warning';
+import SearchedPatientLi from './organisms/SearchedPatientLi';
 import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
 import { selectedInfoVar } from '../../store';
 import { MUOOL } from '../../constants/constants';
 
-export const Search = () => {
+export default function Search() {
   const location = useLocation();
   const navigate = useNavigate();
   const [callQuery, { loading, data }] = useSearchPatientLazyQuery();
@@ -61,4 +61,4 @@ export const Search = () => {
       )}
     </>
   );
-};
+}

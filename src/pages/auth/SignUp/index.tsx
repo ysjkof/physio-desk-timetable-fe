@@ -8,14 +8,14 @@ import {
   CreateAccountMutation,
   useCreateAccountMutation,
 } from '../../../graphql/generated/graphql';
-import { Input } from '../../../components/molecules/Input';
-import { FormError } from '../../../components/atoms/FormError';
-import { Button } from '../../../components/molecules/Button';
+import Input from '../../../components/molecules/Input';
+import FormError from '../../../components/atoms/FormError';
+import Button from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { toastVar } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
 
-export const SignUp = () => {
+export default function SignUp() {
   const navigate = useNavigate();
 
   const {
@@ -162,4 +162,4 @@ export const SignUp = () => {
       </form>
     </>
   );
-};
+}
