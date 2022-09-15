@@ -13,7 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
 
-export function LandingPage() {
+export default function LandingPage() {
   const isLoggedIn = isLoggedInVar();
   const { isMobile } = useMediaQuery();
 

@@ -15,7 +15,7 @@ import { TestPage } from '../pages/TestPage';
 import LoginRoute from './LoginRoute';
 import LogoutRoute from './LogoutRoute';
 import { ENDPOINT, ROUTES } from './routes';
-import { LandingPage } from '../pages/home/components/organisms/LandingPage';
+import LandingPage from '../pages/home/components/organisms/LandingPage';
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
