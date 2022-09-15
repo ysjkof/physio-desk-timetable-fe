@@ -50,14 +50,14 @@ function Li({ to, children, selected }: LiProps) {
 
 function Ul({ children, title }: UlProps) {
   return (
-    <ul className="flex flex-col pl-4 pr-16">
+    <div className="flex flex-col pl-4 pr-16">
       {title && (
-        <h3 className="pointer-events-none whitespace-nowrap pt-4 pb-2 text-sm font-semibold">
+        <h1 className="pointer-events-none whitespace-nowrap pt-4 pb-2 text-sm font-semibold">
           {title}
-        </h3>
+        </h1>
       )}
-      {children}
-    </ul>
+      <ul>{children}</ul>
+    </div>
   );
 }
 
