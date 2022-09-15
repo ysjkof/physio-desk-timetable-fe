@@ -21,6 +21,7 @@ const clinics = 'clinics';
 
 // docs
 export const DOCS = 'docs';
+const overview = 'overview';
 export const basic_patient_registration = 'basic_patient_registration';
 export const basic_prescription_registration =
   'basic_prescription_registration';
@@ -39,6 +40,7 @@ const dashboard_edit_profile = `${dashboard}_${edit_profile}`;
 
 export const ROUTES = {
   docs: `/${DOCS}`,
+  overview: `/${DOCS}/${overview}`,
   basic_patient_registration: `/${DOCS}/${basic_patient_registration}`,
   basic_prescription_registration: `/${DOCS}/${basic_prescription_registration}`,
   basic_reserve: `/${DOCS}/${basic_reserve}`,
@@ -80,6 +82,7 @@ export const ENDPOINT = {
     edit_profile,
   },
   docs: {
+    overview,
     basic_patient_registration,
     basic_prescription_registration,
     basic_reserve,

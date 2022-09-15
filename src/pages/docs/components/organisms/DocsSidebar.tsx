@@ -6,6 +6,11 @@ export default function DocsSidebar() {
   const docsMenu = [
     {
       route: `${ROUTES.docs}/`,
+      name: '소개',
+      children: [{ route: ENDPOINT.docs.overview, name: '개요' }],
+    },
+    {
+      route: `${ROUTES.docs}/`,
       name: '처음 예약하기',
       children: [
         { route: ENDPOINT.docs.basic_patient_registration, name: '환자 등록' },

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { Worning } from '../components/atoms/Warning';
 import { GlobalLayout } from '../components/templates/GlobalLayout';
 import { useMe } from '../hooks/useMe';
@@ -79,6 +79,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
   return (
     <Routes>
       <Route path="/" element={<GlobalLayout isLoggedIn />}>
+        <Route index element={<Navigate to={ROUTES.timetable} />} />,
         <Route path={ROUTES.search} element={<Search />} />
         <Route
           key="TimetableRoute"

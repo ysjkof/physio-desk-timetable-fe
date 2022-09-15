@@ -11,11 +11,11 @@ import Contacts from '../pages/docs/mdx/Contacts.mdx';
 import BasicPatientRegistration from '../pages/docs/components/organisms/BasicPatientRegistration';
 import BasicPrescriptionRegistration from '../pages/docs/components/organisms/BasicPrescriptionRegistration';
 import BasicReserve from '../pages/docs/components/organisms/BasicReserve';
-import { Home } from '../pages/home';
 import { TestPage } from '../pages/TestPage';
 import LoginRoute from './LoginRoute';
 import LogoutRoute from './LogoutRoute';
 import { ENDPOINT, ROUTES } from './routes';
+import { LandingPage } from '../pages/home/components/organisms/LandingPage';
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -26,9 +26,16 @@ function Router() {
     basic_reserve,
     roadmap,
     contacts,
+    overview,
   } = ENDPOINT.docs;
 
   const docsRoute = [
+    /** */
+    {
+      protectRoute: false,
+      path: overview,
+      element: <LandingPage />,
+    },
     /** */
     {
       protectRoute: false,
@@ -59,7 +66,6 @@ function Router() {
   ];
 
   const CommonRoute = [
-    <Route key="home" index element={<Home />} />,
     <Route
       key="test"
       path="test"
