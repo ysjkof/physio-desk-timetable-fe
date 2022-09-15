@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import useLoginInitialization from '../../hooks/useLoginInitialization';
 import Toast from '../molecules/Toast';
@@ -22,7 +22,9 @@ export default function GlobalLayout({ isLoggedIn }: { isLoggedIn?: boolean }) {
   return (
     <div className="h-screen overflow-hidden">
       {isLoggedIn ? <LoggedInGlobalNavBar /> : <LoggedOutGlobalNavBar />}
-      <Outlet />
+      <Suspense fallback={<Loading />}>
+        <Outlet />
+      </Suspense>
       <Toast />
     </div>
   );

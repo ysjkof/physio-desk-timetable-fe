@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useMe } from '../hooks/useMe';
 import { ENDPOINT, ROUTES } from './routes';
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import ProtectRoute from './ProtectRoute';
 import Worning from '../components/atoms/Warning';
 import GlobalLayout from '../components/templates/GlobalLayout';
@@ -102,14 +102,12 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
           key="TimetableRoute"
           path={ROUTES.timetable}
           element={
-            <Suspense fallback="">
-              <ProtectRoute
-                failElement={<Worning type="verifyEmail" />}
-                isPass={data?.me.verified}
-              >
-                <TimeTable />
-              </ProtectRoute>
-            </Suspense>
+            <ProtectRoute
+              failElement={<Worning type="verifyEmail" />}
+              isPass={data?.me.verified}
+            >
+              <TimeTable />
+            </ProtectRoute>
           }
         >
           {timetableRoute.map((route) => (
@@ -119,11 +117,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
         <Route
           key="DashboardRoute"
           path={ROUTES.dashboard}
-          element={
-            <Suspense fallback={<Loading />}>
-              <Dashboard />
-            </Suspense>
-          }
+          element={<Dashboard />}
         >
           <Route index element={<Worning type="selectMenu" />} />
           {dashboardRoute.map((route) => {
@@ -139,11 +133,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
             );
 
             return (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={<Suspense fallback={<Loading />}>{element}</Suspense>}
-              />
+              <Route key={route.path} path={route.path} element={element} />
             );
           })}
         </Route>

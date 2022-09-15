@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import GlobalLayout from '../components/templates/GlobalLayout';
 import AuthContainer from '../pages/auth/components/AuthContainer';
@@ -18,16 +18,7 @@ function LogoutRoute({ CommonRoute }: LoginRouteProps) {
   return (
     <Routes>
       <Route path="/" element={<GlobalLayout />}>
-        <Route
-          key="home"
-          index
-          element={
-            <Suspense fallback={<Loading />}>
-              <Home />
-            </Suspense>
-          }
-        />
-        ,
+        <Route key="home" index element={<Home />} />
         <Route
           path={login}
           element={

@@ -1,8 +1,9 @@
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Route } from 'react-router-dom';
 import { isLoggedInVar } from '../apollo';
 import { ENDPOINT, ROUTES } from './routes';
+
 const LandingPage = lazy(
   () => import('../pages/home/components/organisms/LandingPage')
 );
@@ -25,8 +26,6 @@ const Contacts = lazy(() => import('../pages/docs/mdx/Contacts.mdx'));
 const LoginRoute = lazy(() => import('./LoginRoute'));
 const LogoutRoute = lazy(() => import('./LogoutRoute'));
 const ConfirmEmail = lazy(() => import('../pages/auth/ConfirmEmail'));
-
-const Loading = lazy(() => import('../components/atoms/Loading'));
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -104,23 +103,15 @@ function Router() {
     <Route key="UserDocuments" path={docs} element={<Docs />}>
       <Route index element={<DocsIndex />} />
       {docsRoute.map((route) => (
-        <Route
-          key={route.path}
-          path={route.path}
-          element={<Suspense fallback={<Loading />}>{route.element}</Suspense>}
-        />
+        <Route key={route.path} path={route.path} element={route.element} />
       ))}
     </Route>,
   ];
 
-  return (
-    <Suspense fallback={<Loading />}>
-      {isLoggedIn ? (
-        <LoginRoute CommonRoute={CommonRoute} />
-      ) : (
-        <LogoutRoute CommonRoute={CommonRoute} />
-      )}
-    </Suspense>
+  return isLoggedIn ? (
+    <LoginRoute CommonRoute={CommonRoute} />
+  ) : (
+    <LogoutRoute CommonRoute={CommonRoute} />
   );
 }
 

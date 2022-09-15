@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MeQuery } from '../../graphql/generated/graphql';
@@ -11,6 +11,7 @@ import AcceptInvitation from './components/organisms/AcceptInvitation';
 import DashboardTemplate from './components/template/DashboardTemplate';
 import DashboardSideNav from './components/organisms/DashboardSideNav';
 import DashboardTitle from './components/molecules/DashboardTitle';
+
 const Loading = lazy(() => import('../../components/atoms/Loading'));
 
 export function checkStay(clinicId: number, meData: MeQuery) {
@@ -56,7 +57,13 @@ export default function Dashboard() {
           />
         }
       >
-        {isAccepted ? <Outlet /> : <AcceptInvitation />}
+        {isAccepted ? (
+          <Suspense fallback={<Loading />}>
+            <Outlet />
+          </Suspense>
+        ) : (
+          <AcceptInvitation />
+        )}
       </DashboardTemplate>
     </>
   );
