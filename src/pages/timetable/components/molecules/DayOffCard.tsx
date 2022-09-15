@@ -3,16 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { TimetableModalProps } from '../..';
 import { useDeleteReservationMutation } from '../../../../graphql/generated/graphql';
-import { MenuButton } from '../../../../components/molecules/MenuButton';
-import { ReserveForm } from './ReserveForm';
-import { ReservationCardDetail } from './ReservationCardDetail';
 import { IListReservation } from '../../../../types/type';
+import ReserveForm from './ReserveForm';
+import ReservationCardDetail from './ReservationCardDetail';
+import MenuButton from '../../../../components/molecules/MenuButton';
 
 interface DayOffCardProps extends TimetableModalProps {
   reservation: IListReservation;
 }
 
-export const DayOffCard = ({ closeAction, reservation }: DayOffCardProps) => {
+export default function DayOffCard({
+  closeAction,
+  reservation,
+}: DayOffCardProps) {
   const [isEdit, setIsEdit] = useState(false);
 
   const [deleteReservationMutation] = useDeleteReservationMutation({});
@@ -67,4 +70,4 @@ export const DayOffCard = ({ closeAction, reservation }: DayOffCardProps) => {
       </div>
     </div>
   );
-};
+}

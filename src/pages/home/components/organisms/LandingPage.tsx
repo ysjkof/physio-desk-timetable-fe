@@ -71,7 +71,7 @@ export default function LandingPage() {
             '팀원 색깔 구별',
             '통계',
           ].map((text) => (
-            <Li>{text}</Li>
+            <Li key={text}>{text}</Li>
           ))}
         </ul>
       </Section>

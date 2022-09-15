@@ -10,14 +10,14 @@ interface SearchedPatientLiProps {
   columnCount?: 2 | 3 | 4;
 }
 
-export const SearchedPatientLi = ({
+export default function SearchedPatientLi({
   id,
   gender,
   name,
   registrationNumber,
   birthday,
   columnCount = 4,
-}: SearchedPatientLiProps) => {
+}: SearchedPatientLiProps) {
   const seeDetail = () => {};
   const seeReservations = () => {};
   return (
@@ -85,4 +85,4 @@ export const SearchedPatientLi = ({
       )}
     </div>
   );
-};
+}

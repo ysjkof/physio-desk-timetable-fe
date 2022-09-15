@@ -1,5 +1,5 @@
-import React from 'react';
-import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
+import React, { lazy } from 'react';
+import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import {
   VictoryAxis,
   VictoryBar,
@@ -15,19 +15,19 @@ import {
   getHowManyDayFromMillisec,
   getYMD,
 } from '../../../../services/dateServices';
-import { TableChartColLayout } from './TableChartColLayout';
+import TableChartColLayout from './TableChartColLayout';
 
 import {
   STATISTICS_LABEL,
   STATISTICS_LABEL_COLORS,
 } from '../../../../constants/constants';
 import { useEffect, useState } from 'react';
-import { Loading } from '../../../../components/atoms/Loading';
 import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
 } from '../../../../types/type';
+const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 interface IChartsProps {
   userStatistics: IUserStatistics[];
@@ -87,13 +87,13 @@ function getUserReports(
   );
 }
 
-const Charts = ({
+function Charts({
   userStatistics,
   prescriptions,
   dailyReports,
   startDate,
   endDate,
-}: IChartsProps) => {
+}: IChartsProps) {
   const [finalDailyReports, setFinalDailyReports] = useState<ReturnType<
     typeof injectEveryDayToDailyRreports
   > | null>(null);
@@ -292,6 +292,6 @@ const Charts = ({
   ) : (
     <Loading />
   );
-};
+}
 
 export default React.memo(Charts);

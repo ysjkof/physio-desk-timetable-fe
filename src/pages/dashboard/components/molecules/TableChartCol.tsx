@@ -1,16 +1,16 @@
 import { ReactNode } from 'react';
-import { DashboardLi } from './DashboardLi';
+import DashboardLi from './DashboardLi';
 
 interface TableChartColProps {
   title?: string;
   titleBorderRight?: boolean;
   children: ReactNode;
 }
-export const TableChartCol = ({
+export default function TableChartCol({
   title,
   titleBorderRight,
   children,
-}: TableChartColProps) => {
+}: TableChartColProps) {
   return (
     <div className="TABLE_CHART_COL flex w-full flex-col">
       {title ? (
@@ -26,4 +26,4 @@ export const TableChartCol = ({
       {children}
     </div>
   );
-};
+}

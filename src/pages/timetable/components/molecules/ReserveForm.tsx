@@ -12,11 +12,11 @@ import {
   useEditReservationMutation,
   useFindPrescriptionsQuery,
 } from '../../../../graphql/generated/graphql';
-import { DatepickerWithInput } from '../../../../components/molecules/DatepickerWithInput';
-import { Button } from '../../../../components/molecules/Button';
-import { FormError } from '../../../../components/atoms/FormError';
-import { SelectUser } from './SelectUser';
-import { DayOffForm } from './DayOffForm';
+import DatepickerWithInput from '../../../../components/molecules/DatepickerWithInput';
+import Button from '../../../../components/molecules/Button';
+import FormError from '../../../../components/atoms/FormError';
+import SelectUser from './SelectUser';
+import DayOffForm from './DayOffForm';
 import {
   IListReservation,
   IReserveForm,
@@ -24,7 +24,7 @@ import {
   PrescriptionWithSelect,
 } from '../../../../types/type';
 import useStore from '../../../../hooks/useStore';
-import { Textarea } from '../../../../components/molecules/Textarea';
+import Textarea from '../../../../components/molecules/Textarea';
 import { toastVar } from '../../../../store';
 import { ROUTES } from '../../../../router/routes';
 import { cls } from '../../../../utils/utils';
@@ -37,14 +37,14 @@ interface IReservaFromProps extends TimetableModalProps {
   isDayoff?: boolean;
 }
 
-export const ReserveForm = ({
+export default function ReserveForm({
   closeAction,
   startDate,
   userId,
   selectedPrescriptionData,
   reservation,
   isDayoff,
-}: IReservaFromProps) => {
+}: IReservaFromProps) {
   const { selectedInfo, setSelectedInfo } = useStore();
   const [selectedPrescription, setSelectedPrescription] =
     useState<ISelectedPrescription>({
@@ -387,4 +387,4 @@ export const ReserveForm = ({
       )}
     </form>
   );
-};
+}

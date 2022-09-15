@@ -17,7 +17,7 @@ interface DashboardSectionLayoutProps {
   heightFull?: boolean;
 }
 
-export const DashboardSectionLayout = ({
+export default function DashboardSectionLayout({
   children,
   title,
   width,
@@ -30,7 +30,7 @@ export const DashboardSectionLayout = ({
   padding,
   moreYGap,
   heightFull,
-}: DashboardSectionLayoutProps) => {
+}: DashboardSectionLayoutProps) {
   return (
     <div
       className={cls(
@@ -68,4 +68,4 @@ export const DashboardSectionLayout = ({
       </div>
     </div>
   );
-};
+}

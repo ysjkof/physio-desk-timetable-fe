@@ -10,7 +10,7 @@ interface ITimeIndicatorBarProps {
   isActive: boolean;
 }
 
-export const TimeIndicatorBar = ({ isActive }: ITimeIndicatorBarProps) => {
+export default function TimeIndicatorBar({ isActive }: ITimeIndicatorBarProps) {
   const { selectedDate } = useStore();
   const {
     indicatorTimes: { firstTime, lastTime },
@@ -48,4 +48,4 @@ export const TimeIndicatorBar = ({ isActive }: ITimeIndicatorBarProps) => {
       )}
     </div>
   );
-};
+}

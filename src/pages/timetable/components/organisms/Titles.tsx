@@ -15,7 +15,7 @@ interface TitlesProps {
   userLength: number;
 }
 
-export function Titles({ userFrameForWeek, userLength }: TitlesProps) {
+export default function Titles({ userFrameForWeek, userLength }: TitlesProps) {
   const today = new Date();
   const { selectedInfo, viewOptions, selectedDate } = useStore();
   const { data: loginUser } = useMe();

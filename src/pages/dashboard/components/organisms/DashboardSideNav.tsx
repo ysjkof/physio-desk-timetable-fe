@@ -2,14 +2,14 @@ import { checkStay } from '../..';
 import { ClinicType, MeQuery } from '../../../../graphql/generated/graphql';
 import { renameUseSplit } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
-import Sidebar from '../../../../components/organisms/Sidebar';
-import Selectbox from '../../../../components/organisms/Selectbox';
 import {
   clinicMenu,
   DashboardEndpoint,
   personalMenu,
 } from '../../../../router/routes';
 import localStorageUtils from '../../../../utils/localStorageUtils';
+import Sidebar from '../../../../components/organisms/Sidebar';
+import Selectbox from '../../../../components/organisms/Selectbox';
 
 interface DashboardSideNavProps {
   meData: MeQuery;
@@ -17,11 +17,11 @@ interface DashboardSideNavProps {
   isAccepted: boolean | undefined;
 }
 
-export const DashboardSideNav = ({
+export default function DashboardSideNav({
   meData,
   endpoint,
   isAccepted,
-}: DashboardSideNavProps) => {
+}: DashboardSideNavProps) {
   const { clinicLists, setSelectedInfo, selectedInfo } = useStore();
   const clinicListsSelectMeMember = clinicLists.map((clinic) => {
     const idx = clinic.members.findIndex(
@@ -116,4 +116,4 @@ export const DashboardSideNav = ({
       </Sidebar>
     </nav>
   );
-};
+}

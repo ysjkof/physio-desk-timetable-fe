@@ -4,13 +4,12 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchPatientLazyQuery } from '../../../../graphql/generated/graphql';
 import useStore from '../../../../hooks/useStore';
-import { Worning } from '../../../../components/atoms/Warning';
-import { MenuButton } from '../../../../components/molecules/MenuButton';
-import { NameTag } from './NameTag';
+import Worning from '../../../../components/atoms/Warning';
+import MenuButton from '../../../../components/molecules/MenuButton';
+import NameTag from './NameTag';
 import { cls, renameUseSplit } from '../../../../utils/utils';
-interface SearchPatientProps {}
 
-export const SearchPatient = ({}: SearchPatientProps) => {
+export default function SearchPatient() {
   const { selectedInfo, setSelectedInfo } = useStore();
 
   const { register, getValues, handleSubmit } = useForm({
@@ -154,4 +153,4 @@ export const SearchPatient = ({}: SearchPatientProps) => {
       </div>
     </form>
   );
-};
+}

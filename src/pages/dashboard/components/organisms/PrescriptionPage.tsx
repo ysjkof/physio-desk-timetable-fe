@@ -4,7 +4,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
+import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import {
   CreatePrescriptionInput,
   FindPrescriptionsDocument,
@@ -12,19 +12,19 @@ import {
   useFindAtomPrescriptionsQuery,
   useFindPrescriptionsQuery,
 } from '../../../../graphql/generated/graphql';
-import { Button } from '../../../../components/molecules/Button';
-import { Input } from '../../../../components/molecules/Input';
-import { FormError } from '../../../../components/atoms/FormError';
+import Button from '../../../../components/molecules/Button';
+import Input from '../../../../components/molecules/Input';
+import FormError from '../../../../components/atoms/FormError';
 import { REG_EXP } from '../../../../constants/regex';
 import useStore from '../../../../hooks/useStore';
-import { Textarea } from '../../../../components/molecules/Textarea';
-import { Worning } from '../../../../components/atoms/Warning';
+import Textarea from '../../../../components/molecules/Textarea';
+import Worning from '../../../../components/atoms/Warning';
 import { toastVar } from '../../../../store';
 import { client } from '../../../../apollo';
-import { Checkbox } from '../../../../components/molecules/Checkbox';
+import Checkbox from '../../../../components/molecules/Checkbox';
 import { cls } from '../../../../utils/utils';
 
-export const PrescriptionPage = () => {
+export default function PrescriptionPage() {
   const { selectedInfo } = useStore();
   const { data: findAtomPrescriptions, loading: loadingAtom } =
     useFindAtomPrescriptionsQuery();
@@ -274,4 +274,4 @@ export const PrescriptionPage = () => {
       />
     </div>
   );
-};
+}

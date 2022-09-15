@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Datepicker } from './Datepicker';
-import { DatepickerInput } from './DatepickerInput';
+import Datepicker from './Datepicker';
+import DatepickerInput from './DatepickerInput';
 
 export interface HasDateOption {
   hasHour?: boolean;
@@ -28,12 +28,12 @@ interface IDatepickerWithInputProps extends HasDateOption {
   textColor?: string;
 }
 
-export const DatepickerWithInput = ({
+export default function DatepickerWithInput({
   setSelectedDate,
   defaultDate,
   textColor,
   hasHour = false,
-}: IDatepickerWithInputProps) => {
+}: IDatepickerWithInputProps) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
 
@@ -82,4 +82,4 @@ export const DatepickerWithInput = ({
       />
     </div>
   );
-};
+}

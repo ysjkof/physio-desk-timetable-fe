@@ -17,14 +17,14 @@ interface UserNameTitleProps {
   date: Date;
 }
 
-export const UserNameTitle = ({
+export default function UserNameTitle({
   isMe,
   name,
   userIndex,
   clinicId,
   userId,
   date,
-}: UserNameTitleProps) => {
+}: UserNameTitleProps) {
   const [createDayOff, { loading }] = useCreateDayOffMutation();
   const viewOptions = useReactiveVar(viewOptionsVar);
   const navigate = useNavigate();
@@ -97,4 +97,4 @@ export const UserNameTitle = ({
       </div>
     </div>
   );
-};
+}

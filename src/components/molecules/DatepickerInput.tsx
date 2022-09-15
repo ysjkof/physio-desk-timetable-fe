@@ -1,4 +1,4 @@
-import { FormError } from '../atoms/FormError';
+import FormError from '../atoms/FormError';
 import {
   DatepickerErrorState,
   DatepickerInputState,
@@ -24,7 +24,7 @@ const DATEPICKER_ERROR = {
   minute: '분은 00~50분까지 입력할 수 있습니다',
 };
 
-export const DatepickerInput = ({
+export default function DatepickerInput({
   inputDate,
   setInputDate,
   error,
@@ -32,7 +32,7 @@ export const DatepickerInput = ({
   setOpen,
   textColor,
   hasHour,
-}: InputInDatepickerProps) => {
+}: InputInDatepickerProps) {
   const validate = (value: string, regExp: RegExp) => {
     return new RegExp(regExp).test(value);
   };
@@ -182,4 +182,4 @@ export const DatepickerInput = ({
       )}
     </div>
   );
-};
+}

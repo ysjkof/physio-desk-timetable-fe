@@ -6,15 +6,15 @@ import {
   LoginMutation,
   useLoginMutation,
 } from '../../../graphql/generated/graphql';
-import { Input } from '../../../components/molecules/Input';
-import { FormError } from '../../../components/atoms/FormError';
-import { Button } from '../../../components/molecules/Button';
+import Input from '../../../components/molecules/Input';
+import FormError from '../../../components/atoms/FormError';
+import Button from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { login } from '../authServices';
 import { toastVar } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
 
-export const Login = () => {
+export default function Login() {
   const navigate = useNavigate();
   const {
     register,
@@ -120,4 +120,4 @@ export const Login = () => {
       </form>
     </>
   );
-};
+}

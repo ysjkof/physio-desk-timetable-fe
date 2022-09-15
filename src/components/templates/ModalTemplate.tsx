@@ -10,13 +10,13 @@ interface ModalTemplateProps {
   isSmallChildren?: boolean;
 }
 
-export const ModalTemplate = ({
+export default function ModalTemplate({
   children,
   closeAction,
   top,
   left,
   isSmallChildren,
-}: ModalTemplateProps) => {
+}: ModalTemplateProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -48,4 +48,4 @@ export const ModalTemplate = ({
       </motion.div>
     </motion.div>
   );
-};
+}

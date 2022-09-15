@@ -1,9 +1,9 @@
 import { useReactiveVar } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
-import { FormError } from '../../../../components/atoms/FormError';
-import { Button } from '../../../../components/molecules/Button';
-import { Input } from '../../../../components/molecules/Input';
+import FormError from '../../../../components/atoms/FormError';
+import Button from '../../../../components/molecules/Button';
+import Input from '../../../../components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
 import {
   CreateClinicInput,
@@ -14,7 +14,7 @@ import {
 import { selectedInfoVar, toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
 
-export const CreateClinic = () => {
+export default function CreateClinic() {
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const {
     register,
@@ -129,4 +129,4 @@ export const CreateClinic = () => {
       </form>
     </FormSection>
   );
-};
+}

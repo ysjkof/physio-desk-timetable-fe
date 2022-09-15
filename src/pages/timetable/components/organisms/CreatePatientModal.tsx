@@ -1,9 +1,11 @@
-import { ModalContentsLayout } from '../../../../components/templates/ModalContentsLayout';
 import { TimetableModalProps } from '../..';
-import { ModalTemplate } from '../../../../components/templates/ModalTemplate';
-import { CreatePatientForm } from '../molecules/CreatePatientForm';
+import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
+import ModalTemplate from '../../../../components/templates/ModalTemplate';
+import CreatePatientForm from '../molecules/CreatePatientForm';
 
-export const CreatePatientModal = ({ closeAction }: TimetableModalProps) => {
+export default function CreatePatientModal({
+  closeAction,
+}: TimetableModalProps) {
   return (
     <ModalTemplate
       closeAction={closeAction}
@@ -14,4 +16,4 @@ export const CreatePatientModal = ({ closeAction }: TimetableModalProps) => {
       }
     />
   );
-};
+}

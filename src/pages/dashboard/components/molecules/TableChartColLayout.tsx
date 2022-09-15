@@ -4,9 +4,8 @@ import {
   IUserStatistics,
 } from '../../../../types/type';
 import { makeArrFromLength } from '../../../../utils/utils';
-import { DashboardLi } from './DashboardLi';
-
-import { TableChartCol } from './TableChartCol';
+import DashboardLi from './DashboardLi';
+import TableChartCol from './TableChartCol';
 
 interface TableChartColLayoutProps {
   userStatistics: IUserStatistics[];
@@ -18,7 +17,7 @@ interface TableChartColLayoutProps {
   hasTotalInColumn?: boolean;
   showPrice?: boolean;
 }
-export const TableChartColLayout = ({
+export default function TableChartColLayout({
   dailyReports,
   userStatistics,
   prescriptionInfo,
@@ -27,7 +26,7 @@ export const TableChartColLayout = ({
   hasTotalInRow,
   hasTotalInColumn,
   showPrice,
-}: TableChartColLayoutProps) => {
+}: TableChartColLayoutProps) {
   const userCounts = dailyReports?.reduce(
     (acc, cur) => [
       acc[0] + cur.reservationCount,
@@ -182,4 +181,4 @@ export const TableChartColLayout = ({
       )}
     </div>
   );
-};
+}

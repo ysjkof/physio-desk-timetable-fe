@@ -4,11 +4,11 @@ import {
   compareDateMatch,
   getWeeksOfMonth,
 } from '../../../../services/dateServices';
-import { cls } from '../../../../utils/utils';
-import { NEXT, PREV } from '../../../../constants/constants';
-import { BtnArrow } from '../../../../components/atoms/ButtonArrow';
 import useStore from '../../../../hooks/useStore';
+import { cls } from '../../../../utils/utils';
 import { selectedDateVar } from '../../../../store';
+import { NEXT, PREV } from '../../../../constants/constants';
+import BtnArrow from '../../../../components/atoms/ButtonArrow';
 
 interface Calendar {
   selectedMonth: { date: Date }[];
@@ -19,7 +19,7 @@ interface NavDatepickerProps {
   varients: any;
 }
 
-export function NavDatepicker({ varients }: NavDatepickerProps) {
+export default function NavDatepicker({ varients }: NavDatepickerProps) {
   const { selectedDate } = useStore();
   const [calendar, setCalendar] = useState<Calendar>({
     selectedMonth: getWeeksOfMonth(selectedDate),

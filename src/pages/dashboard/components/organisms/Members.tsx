@@ -4,7 +4,7 @@ import useCancelInvitation from '../../hooks/useCancelInvitation';
 import { loggedInUserVar } from '../../../../store';
 import UserCard from '../molecules/UserCard';
 
-export const Members = () => {
+export default function Members() {
   const loggedInUser = loggedInUserVar();
   const { selectedInfo } = useStore();
   const { invokeCancelInvitation, loading: loadingCancel } =
@@ -48,4 +48,4 @@ export const Members = () => {
       </UserCard.Container>
     </section>
   );
-};
+}

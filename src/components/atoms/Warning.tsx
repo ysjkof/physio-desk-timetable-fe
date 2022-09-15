@@ -17,7 +17,10 @@ interface WarningProps {
   children?: null;
 }
 
-export const Worning = ({ type, children }: WarningProps | ChildrenProps) => {
+export default function Worning({
+  type,
+  children,
+}: WarningProps | ChildrenProps) {
   const messages = {
     hasNotPermission: '권한이 없습니다',
     hasNotStatistics: '통계 내역이 없습니다',
@@ -34,4 +37,4 @@ export const Worning = ({ type, children }: WarningProps | ChildrenProps) => {
       {type ? messages[type] : children}
     </p>
   );
-};
+}

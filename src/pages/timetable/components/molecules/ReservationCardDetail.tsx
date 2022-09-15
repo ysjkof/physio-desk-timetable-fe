@@ -1,18 +1,18 @@
 import { getTimeLength } from '../../../../services/dateServices';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
-import { EditReservationState } from './EditReservationState';
 import { ReservationState } from '../../../../graphql/generated/graphql';
 import { IListReservation } from '../../../../types/type';
+import EditReservationState from './EditReservationState';
 
 interface ReservationCardDetailProps {
   reservation: IListReservation;
   hasEndDate?: boolean;
 }
 
-export const ReservationCardDetail = ({
+export default function ReservationCardDetail({
   reservation,
   hasEndDate,
-}: ReservationCardDetailProps) => {
+}: ReservationCardDetailProps) {
   const isDayOff = reservation.state === ReservationState.DayOff;
 
   return (
@@ -75,4 +75,4 @@ export const ReservationCardDetail = ({
       </div>
     </div>
   );
-};
+}

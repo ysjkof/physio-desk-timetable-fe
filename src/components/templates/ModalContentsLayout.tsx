@@ -1,22 +1,21 @@
 import { useReactiveVar } from '@apollo/client';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { selectedInfoVar } from '../../store';
 import { renameUseSplit } from '../../utils/utils';
 
 interface ModalContentLayoutProps {
   title: string;
-  children: ReactNode;
+  children: React.ReactNode;
   closeAction: () => void;
 }
 // create-patient, reservation-card, reserve-card에 공통 레이아웃
-export const ModalContentsLayout = ({
+export default function ModalContentsLayout({
   title,
   children,
   closeAction,
-}: ModalContentLayoutProps) => {
+}: ModalContentLayoutProps) {
   const selectedInfo = useReactiveVar(selectedInfoVar);
 
   return (
@@ -38,4 +37,4 @@ export const ModalContentsLayout = ({
       {children}
     </>
   );
-};
+}

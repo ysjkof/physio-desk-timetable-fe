@@ -1,5 +1,5 @@
-import { Worning } from '../../../../components/atoms/Warning';
-import { Button } from '../../../../components/molecules/Button';
+import Worning from '../../../../components/atoms/Warning';
+import Button from '../../../../components/molecules/Button';
 import useAcceptInvitation from '../../hooks/useAcceptInvitation';
 import useCancelInvitation from '../../hooks/useCancelInvitation';
 

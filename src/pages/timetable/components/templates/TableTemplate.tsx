@@ -8,7 +8,11 @@ interface TableTemplateProps {
   columns: ReactNode;
 }
 
-export const TableTemplate = ({ nav, labels, columns }: TableTemplateProps) => {
+export default function TableTemplate({
+  nav,
+  labels,
+  columns,
+}: TableTemplateProps) {
   const { height, changeMinus } = useWindowSize(true);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -42,4 +46,4 @@ export const TableTemplate = ({ nav, labels, columns }: TableTemplateProps) => {
       {/* )} */}
     </motion.div>
   );
-};
+}

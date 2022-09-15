@@ -7,6 +7,7 @@ interface SectionProps
     HtmlHTMLAttributes<HTMLDivElement> {
   bgColor?: 'white';
 }
+
 export default function Section({ children, ...args }: SectionProps) {
   return (
     <section {...args} className={cls('pt-14 pb-16', args.className || '')}>

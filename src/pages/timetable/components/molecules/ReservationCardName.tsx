@@ -8,12 +8,12 @@ interface ReservationCardNameProps {
   birthday: Date;
 }
 
-export const ReservationCardName = ({
+export default function ReservationCardName({
   gender,
   name,
   registrationNumber,
   birthday,
-}: ReservationCardNameProps) => {
+}: ReservationCardNameProps) {
   return (
     <div className="relative grid w-full grid-cols-5 items-center border-b text-center shadow-md">
       <span className="border-b py-1 text-center text-gray-500">등록번호</span>
@@ -44,4 +44,4 @@ export const ReservationCardName = ({
       </div>
     </div>
   );
-};
+}

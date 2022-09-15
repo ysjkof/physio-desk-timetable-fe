@@ -1,11 +1,11 @@
 import { useReactiveVar } from '@apollo/client';
 import { selectedInfoVar } from '../../../../store';
-import { DatepickerWithInput } from '../../../../components/molecules/DatepickerWithInput';
-import { Button } from '../../../../components/molecules/Button';
-import { SelectUser } from './SelectUser';
-import { Input } from '../../../../components/molecules/Input';
 import { UseFormRegister } from 'react-hook-form';
 import { IReserveForm } from '../../../../types/type';
+import SelectUser from './SelectUser';
+import Button from '../../../../components/molecules/Button';
+import Input from '../../../../components/molecules/Input';
+import DatepickerWithInput from '../../../../components/molecules/DatepickerWithInput';
 
 interface DayOffFormProps {
   register: UseFormRegister<IReserveForm>;
@@ -16,14 +16,14 @@ interface DayOffFormProps {
   startDate?: Date;
 }
 
-export const DayOffForm = ({
+export default function DayOffForm({
   register,
   isValid,
   loading,
   setSelectedStartDateState,
   setSelectedEndDateState,
   startDate,
-}: DayOffFormProps) => {
+}: DayOffFormProps) {
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const createDefaultEndDate = () => {
     if (!startDate) return;
@@ -72,4 +72,4 @@ export const DayOffForm = ({
       </Button>
     </>
   );
-};
+}

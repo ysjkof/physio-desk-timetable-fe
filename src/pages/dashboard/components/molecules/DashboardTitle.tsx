@@ -6,10 +6,10 @@ interface DashboardTitleProps {
   endpoint: DashboardEndpoint;
 }
 
-export const DashboardTitle = ({
+export default function DashboardTitle({
   clinicName,
   endpoint,
-}: DashboardTitleProps) => {
+}: DashboardTitleProps) {
   return (
     <h2 className="bg-white">
       <span>
@@ -17,4 +17,4 @@ export const DashboardTitle = ({
       </span>
     </h2>
   );
-};
+}

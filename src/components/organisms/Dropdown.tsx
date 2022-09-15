@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPositionRef } from '../../utils/utils';
-import { ModalPortal } from '../templates/ModalPortal';
+import ModalPortal from '../templates/ModalPortal';
 
 interface ChildrenProps {
   children: React.ReactNode;
