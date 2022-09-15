@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Route } from 'react-router-dom';
 import { isLoggedInVar } from '../apollo';
@@ -26,6 +26,8 @@ const Contacts = lazy(() => import('../pages/docs/mdx/Contacts.mdx'));
 const LoginRoute = lazy(() => import('./LoginRoute'));
 const LogoutRoute = lazy(() => import('./LogoutRoute'));
 const ConfirmEmail = lazy(() => import('../pages/auth/ConfirmEmail'));
+
+const Loading = lazy(() => import('../components/atoms/Loading'));
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -108,10 +110,14 @@ function Router() {
     </Route>,
   ];
 
-  return isLoggedIn ? (
-    <LoginRoute CommonRoute={CommonRoute} />
-  ) : (
-    <LogoutRoute CommonRoute={CommonRoute} />
+  return (
+    <Suspense fallback={<Loading />}>
+      {isLoggedIn ? (
+        <LoginRoute CommonRoute={CommonRoute} />
+      ) : (
+        <LogoutRoute CommonRoute={CommonRoute} />
+      )}
+    </Suspense>
   );
 }
 

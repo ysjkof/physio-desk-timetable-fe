@@ -10,8 +10,6 @@ const Home = lazy(() => import('../pages/home'));
 const Login = lazy(() => import('../pages/auth/Login'));
 const SignUp = lazy(() => import('../pages/auth/SignUp'));
 
-const Loading = lazy(() => import('../components/atoms/Loading'));
-
 function LogoutRoute({ CommonRoute }: LoginRouteProps) {
   const { login, sign_up } = ROUTES;
 

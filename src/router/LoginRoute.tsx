@@ -30,7 +30,6 @@ const EditProfile = lazy(
   () => import('../pages/dashboard/components/organisms/EditProfile')
 );
 const Search = lazy(() => import('../pages/search'));
-const Loading = lazy(() => import('../components/atoms/Loading'));
 
 export interface LoginRouteProps {
   CommonRoute: JSX.Element[];

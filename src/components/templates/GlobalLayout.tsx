@@ -17,7 +17,7 @@ export default function GlobalLayout({ isLoggedIn }: { isLoggedIn?: boolean }) {
     loading = useLoginInitialization().loading;
   }
 
-  if (isLoggedIn && loading) return <Loading></Loading>;
+  if (isLoggedIn && loading) return <Loading />;
 
   return (
     <div className="h-screen overflow-hidden">
