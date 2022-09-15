@@ -1,4 +1,5 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import Logo from '../../../components/atoms/Logo';
 import { ROUTES } from '../../../router/routes';
 
 export default function AuthContainer({
@@ -11,9 +12,10 @@ export default function AuthContainer({
   return (
     <div className="mt-10 flex h-screen flex-col items-center lg:mt-28">
       <div className="flex w-full max-w-screen-sm flex-col items-center px-5">
-        {/* <Link to="/">
-     <img alt="Muool" src={muoolLogo} className="mb-5 w-80" />
-    </Link> */}
+        <Link className="mb-5" to="/">
+          <Logo size={2} className="mb-6" />
+        </Link>
+
         {children}
 
         <NavLink
