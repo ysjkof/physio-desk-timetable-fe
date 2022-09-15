@@ -12,9 +12,11 @@ import {
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import useMediaQuery from '../../hooks/useMediaQuery';
+import useWindowSize from '../../hooks/useWindowSize';
 
 export function Home() {
   const isLoggedIn = isLoggedInVar();
+  const { height } = useWindowSize(true);
 
   const tableWide = '/images/landing-page/table-wide.webp';
   const myFourClinicsMobil = '/images/landing-page/my-four-clinics_mobil.webp';
@@ -28,7 +30,7 @@ export function Home() {
 
   const { isMobile, loading } = useMediaQuery();
   return (
-    <div className="h-full overflow-y-scroll text-base">
+    <div className="h-full overflow-y-scroll text-base" style={{ height }}>
       <div className="my-10">
         <div
           className="mx-auto flex h-[400px] max-w-7xl items-center justify-center bg-cover bg-center bg-no-repeat"

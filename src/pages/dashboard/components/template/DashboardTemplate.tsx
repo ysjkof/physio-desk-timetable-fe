@@ -1,4 +1,5 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
+import useWindowSize from '../../../../hooks/useWindowSize';
 
 interface DashboardTemplateProps {
   breadcrumb: ReactNode;
@@ -10,31 +11,18 @@ export const DashboardTemplate = ({
   nav,
   children,
 }: DashboardTemplateProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState<number | null>(null);
+  const { height, changeMinus } = useWindowSize(true);
+  const breadcrumbRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout | false = false;
-    function handleTableHeight() {
-      const headerElement = document.getElementById('header');
-      const headlessHeight = window.innerHeight - headerElement?.offsetHeight!;
-      const breadcrumbHight = ref.current?.offsetHeight!;
-      const dashboardMainHeight = headlessHeight - breadcrumbHight;
-
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        setHeight(dashboardMainHeight);
-      }, 200);
-    }
-    handleTableHeight();
-    window.addEventListener('resize', handleTableHeight);
-    return () => window.removeEventListener('resize', handleTableHeight);
+    if (!breadcrumbRef.current) return;
+    changeMinus(breadcrumbRef.current.clientHeight);
   }, []);
 
   return (
     <div className="grid h-full grid-cols-[150px,1fr] grid-rows-[2rem,1fr]">
       <div className="col-start-1 row-span-2 row-start-1">{nav}</div>
-      <div className="col-start-2 border-b border-l p-2" ref={ref}>
+      <div className="col-start-2 border-b border-l p-2" ref={breadcrumbRef}>
         {breadcrumb}
       </div>
       <div

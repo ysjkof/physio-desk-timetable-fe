@@ -9,12 +9,13 @@ interface TableTemplateProps {
 }
 
 export const TableTemplate = ({ nav, labels, columns }: TableTemplateProps) => {
+  const { height, changeMinus } = useWindowSize(true);
   const headerRef = useRef<HTMLDivElement>(null);
-  const { height, setMinus } = useWindowSize();
 
   useEffect(() => {
     if (!headerRef.current) return;
-    setMinus(headerRef.current.clientHeight);
+
+    changeMinus(headerRef.current.clientHeight);
   }, []);
 
   return (
@@ -23,6 +24,7 @@ export const TableTemplate = ({ nav, labels, columns }: TableTemplateProps) => {
       className="TIMETABLE_TEMPLATE h-full opacity-0"
     >
       <div
+        id="table-header"
         className="TABLE_HEADER table-header relative z-[34] flex flex-col border-b bg-white"
         ref={headerRef}
       >
