@@ -1,21 +1,32 @@
+import { lazy, Suspense } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Route } from 'react-router-dom';
 import { isLoggedInVar } from '../apollo';
-import { NotFound } from '../components/organisms/404';
-import CheckAdmin from '../components/organisms/CheckAdmin';
-import { ConfirmEmail } from '../pages/auth/ConfirmEmail';
-import Docs from '../pages/docs';
-import DocsIndex from '../pages/docs/mdx/DocsIndex.mdx';
-import Roadmap from '../pages/docs/mdx/Roadmap.mdx';
-import Contacts from '../pages/docs/mdx/Contacts.mdx';
-import BasicPatientRegistration from '../pages/docs/components/organisms/BasicPatientRegistration';
-import BasicPrescriptionRegistration from '../pages/docs/components/organisms/BasicPrescriptionRegistration';
-import BasicReserve from '../pages/docs/components/organisms/BasicReserve';
-import { TestPage } from '../pages/TestPage';
-import LoginRoute from './LoginRoute';
-import LogoutRoute from './LogoutRoute';
 import { ENDPOINT, ROUTES } from './routes';
-import LandingPage from '../pages/home/components/organisms/LandingPage';
+const LandingPage = lazy(
+  () => import('../pages/home/components/organisms/LandingPage')
+);
+const TestPage = lazy(() => import('../pages/TestPage'));
+const NotFound = lazy(() => import('../components/organisms/404'));
+const CheckAdmin = lazy(() => import('../components/organisms/CheckAdmin'));
+
+const Docs = lazy(() => import('../pages/docs'));
+const DocsIndex = lazy(() => import('../pages/docs/mdx/DocsIndex.mdx'));
+const BasicReserve = lazy(() => import('../pages/docs/mdx/BasicReserve.mdx'));
+const BasicPatientRegistration = lazy(
+  () => import('../pages/docs/mdx/BasicPatientRegistration.mdx')
+);
+const BasicPrescriptionRegistration = lazy(
+  () => import('../pages/docs/mdx/BasicPrescriptionRegistration.mdx')
+);
+const Roadmap = lazy(() => import('../pages/docs/mdx/Roadmap.mdx'));
+const Contacts = lazy(() => import('../pages/docs/mdx/Contacts.mdx'));
+
+const LoginRoute = lazy(() => import('./LoginRoute'));
+const LogoutRoute = lazy(() => import('./LogoutRoute'));
+const ConfirmEmail = lazy(() => import('../pages/auth/ConfirmEmail'));
+
+const Loading = lazy(() => import('../components/atoms/Loading'));
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -50,7 +61,12 @@ function Router() {
     {
       protectRoute: false,
       path: basic_reserve,
-      element: <BasicReserve />,
+      element: (
+        <BasicReserve
+          createPatientUrl={ROUTES.create_patient}
+          createPrescriptionUrl={ROUTES.prescription}
+        />
+      ),
     },
     /** */
     {
@@ -88,15 +104,23 @@ function Router() {
     <Route key="UserDocuments" path={docs} element={<Docs />}>
       <Route index element={<DocsIndex />} />
       {docsRoute.map((route) => (
-        <Route key={route.path} path={route.path} element={route.element} />
+        <Route
+          key={route.path}
+          path={route.path}
+          element={<Suspense fallback={<Loading />}>{route.element}</Suspense>}
+        />
       ))}
     </Route>,
   ];
 
-  return isLoggedIn ? (
-    <LoginRoute CommonRoute={CommonRoute} />
-  ) : (
-    <LogoutRoute CommonRoute={CommonRoute} />
+  return (
+    <Suspense fallback={<Loading />}>
+      {isLoggedIn ? (
+        <LoginRoute CommonRoute={CommonRoute} />
+      ) : (
+        <LogoutRoute CommonRoute={CommonRoute} />
+      )}
+    </Suspense>
   );
 }
 

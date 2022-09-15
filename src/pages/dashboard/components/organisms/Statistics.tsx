@@ -1,24 +1,24 @@
-import { DashboardSectionLayout } from '../template/DashboardSectionLayout';
+import { lazy, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import { useGetStatisticsLazyQuery } from '../../../../graphql/generated/graphql';
-import { useEffect, useState } from 'react';
-import { MenuButton } from '../../../../components/molecules/MenuButton';
-import { Worning } from '../../../../components/atoms/Warning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { getMonthStartEnd } from '../../../../services/dateServices';
-import { Loading } from '../../../../components/atoms/Loading';
-import { Button } from '../../../../components/molecules/Button';
 import combineUserStatistics from '../../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../../types/type';
 import useStore from '../../../../hooks/useStore';
 import Charts from '../molecules/Charts';
-import { Checkbox } from '../../../../components/molecules/Checkbox';
-import { useForm } from 'react-hook-form';
+import Worning from '../../../../components/atoms/Warning';
+import Button from '../../../../components/molecules/Button';
+import Checkbox from '../../../../components/molecules/Checkbox';
+import MenuButton from '../../../../components/molecules/MenuButton';
+const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
-export const Statistics = () => {
+export default function Statistics() {
   const { selectedInfo, selectedDate } = useStore();
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
@@ -213,4 +213,4 @@ export const Statistics = () => {
       )}
     </>
   );
-};
+}

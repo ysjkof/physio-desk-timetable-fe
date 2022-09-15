@@ -1,19 +1,36 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { Worning } from '../components/atoms/Warning';
-import { GlobalLayout } from '../components/templates/GlobalLayout';
 import { useMe } from '../hooks/useMe';
-import { Dashboard } from '../pages/dashboard';
-import { CreateClinic } from '../pages/dashboard/components/organisms/CreateClinic';
-import { InviteClinic } from '../pages/dashboard/components/organisms/InviteClinic';
-import { Members } from '../pages/dashboard/components/organisms/Members';
-import { MyClinics } from '../pages/dashboard/components/organisms/MyClinics';
-import { PrescriptionPage } from '../pages/dashboard/components/organisms/PrescriptionPage';
-import { Statistics } from '../pages/dashboard/components/organisms/Statistics';
-import { EditProfile } from '../pages/dashboard/components/organisms/EditProfile';
-import { Search } from '../pages/search';
-import { TimeTable } from '../pages/timetable';
-import ProtectRoute from './ProtectRoute';
 import { ENDPOINT, ROUTES } from './routes';
+import { lazy, Suspense } from 'react';
+import ProtectRoute from './ProtectRoute';
+import Worning from '../components/atoms/Warning';
+import GlobalLayout from '../components/templates/GlobalLayout';
+
+const TimeTable = lazy(() => import('../pages/timetable'));
+const Dashboard = lazy(() => import('../pages/dashboard'));
+const CreateClinic = lazy(
+  () => import('../pages/dashboard/components/organisms/CreateClinic')
+);
+const InviteClinic = lazy(
+  () => import('../pages/dashboard/components/organisms/InviteClinic')
+);
+const Members = lazy(
+  () => import('../pages/dashboard/components/organisms/Members')
+);
+const MyClinics = lazy(
+  () => import('../pages/dashboard/components/organisms/MyClinics')
+);
+const PrescriptionPage = lazy(
+  () => import('../pages/dashboard/components/organisms/PrescriptionPage')
+);
+const Statistics = lazy(
+  () => import('../pages/dashboard/components/organisms/Statistics')
+);
+const EditProfile = lazy(
+  () => import('../pages/dashboard/components/organisms/EditProfile')
+);
+const Search = lazy(() => import('../pages/search'));
+const Loading = lazy(() => import('../components/atoms/Loading'));
 
 export interface LoginRouteProps {
   CommonRoute: JSX.Element[];
@@ -85,12 +102,14 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
           key="TimetableRoute"
           path={ROUTES.timetable}
           element={
-            <ProtectRoute
-              failElement={<Worning type="verifyEmail" />}
-              isPass={data?.me.verified}
-            >
-              <TimeTable />
-            </ProtectRoute>
+            <Suspense fallback="">
+              <ProtectRoute
+                failElement={<Worning type="verifyEmail" />}
+                isPass={data?.me.verified}
+              >
+                <TimeTable />
+              </ProtectRoute>
+            </Suspense>
           }
         >
           {timetableRoute.map((route) => (
@@ -100,7 +119,11 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
         <Route
           key="DashboardRoute"
           path={ROUTES.dashboard}
-          element={<Dashboard />}
+          element={
+            <Suspense fallback={<Loading />}>
+              <Dashboard />
+            </Suspense>
+          }
         >
           <Route index element={<Worning type="selectMenu" />} />
           {dashboardRoute.map((route) => {
@@ -116,7 +139,11 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
             );
 
             return (
-              <Route key={route.path} path={route.path} element={element} />
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<Suspense fallback={<Loading />}>{element}</Suspense>}
+              />
             );
           })}
         </Route>

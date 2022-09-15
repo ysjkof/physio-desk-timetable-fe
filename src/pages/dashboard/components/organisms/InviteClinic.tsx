@@ -1,9 +1,7 @@
+import { lazy, useState } from 'react';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import { Loading } from '../../../../components/atoms/Loading';
-import { Worning } from '../../../../components/atoms/Warning';
-import { Input } from '../../../../components/molecules/Input';
 import {
   ClinicType,
   FindMyClinicsDocument,
@@ -12,12 +10,14 @@ import {
 } from '../../../../graphql/generated/graphql';
 import useStore from '../../../../hooks/useStore';
 import { client } from '../../../../apollo';
-import { useState } from 'react';
+import Worning from '../../../../components/atoms/Warning';
+import Input from '../../../../components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
-import { FormError } from '../../../../components/atoms/FormError';
+import FormError from '../../../../components/atoms/FormError';
 import FormSection from '../molecules/FormSection';
+const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
-export const InviteClinic = () => {
+export default function InviteClinic() {
   const { selectedInfo } = useStore();
   const [okMessage, setOkMessage] = useState('');
 
@@ -104,4 +104,4 @@ export const InviteClinic = () => {
     );
 
   return <Worning type="hasNotPermission" />;
-};
+}

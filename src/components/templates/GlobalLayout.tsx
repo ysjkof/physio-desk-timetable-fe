@@ -1,11 +1,17 @@
+import { lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 import useLoginInitialization from '../../hooks/useLoginInitialization';
-import { Loading } from '../atoms/Loading';
 import Toast from '../molecules/Toast';
-import { LoggedInGlobalNavBar } from '../organisms/LoggedInGlobalNavBar';
-import { LoggedOutGlobalNavBar } from '../organisms/LoggedOutGlobalNavBar';
+const Loading = lazy(() => import('../atoms/Loading'));
 
-export const GlobalLayout = ({ isLoggedIn }: { isLoggedIn?: boolean }) => {
+const LoggedInGlobalNavBar = lazy(
+  () => import('../organisms/LoggedInGlobalNavBar')
+);
+const LoggedOutGlobalNavBar = lazy(
+  () => import('../organisms/LoggedOutGlobalNavBar')
+);
+
+export default function GlobalLayout({ isLoggedIn }: { isLoggedIn?: boolean }) {
   let loading = true;
   if (isLoggedIn) {
     loading = useLoginInitialization().loading;
@@ -20,4 +26,4 @@ export const GlobalLayout = ({ isLoggedIn }: { isLoggedIn?: boolean }) => {
       <Toast />
     </div>
   );
-};
+}

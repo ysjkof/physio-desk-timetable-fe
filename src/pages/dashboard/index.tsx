@@ -1,16 +1,17 @@
+import { lazy } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MeQuery } from '../../graphql/generated/graphql';
 import { useMe } from '../../hooks/useMe';
-import { Outlet, useLocation } from 'react-router-dom';
-import { DashboardTemplate } from './components/template/DashboardTemplate';
-import { DashboardSideNav } from './components/organisms/DashboardSideNav';
-import { DashboardTitle } from './components/molecules/DashboardTitle';
-import { Loading } from '../../components/atoms/Loading';
 import useStore from '../../hooks/useStore';
-import { renameUseSplit } from '../../utils/utils';
 import { DashboardEndpoint } from '../../router/routes';
-import AcceptInvitation from './components/organisms/AcceptInvitation';
+import { renameUseSplit } from '../../utils/utils';
 import { MUOOL } from '../../constants/constants';
+import AcceptInvitation from './components/organisms/AcceptInvitation';
+import DashboardTemplate from './components/template/DashboardTemplate';
+import DashboardSideNav from './components/organisms/DashboardSideNav';
+import DashboardTitle from './components/molecules/DashboardTitle';
+const Loading = lazy(() => import('../../components/atoms/Loading'));
 
 export function checkStay(clinicId: number, meData: MeQuery) {
   return Boolean(
@@ -21,7 +22,7 @@ export function checkStay(clinicId: number, meData: MeQuery) {
   );
 }
 
-export const Dashboard = () => {
+export default function Dashboard() {
   const { data: meData, loading } = useMe();
   const { selectedInfo } = useStore();
   const location = useLocation();
@@ -59,4 +60,4 @@ export const Dashboard = () => {
       </DashboardTemplate>
     </>
   );
-};
+}
