@@ -1,3 +1,4 @@
+import { SVGProps } from 'react';
 import { VIEW_PERIOD } from '../constants/constants';
 import {
   Clinic,
@@ -173,3 +174,5 @@ export interface ToastState {
 export interface ChildrenProps {
   children?: React.ReactNode;
 }
+
+export interface SVG extends SVGProps<SVGSVGElement> {}

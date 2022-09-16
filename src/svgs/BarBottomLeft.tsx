@@ -1,7 +1,5 @@
-import { SVGProps } from 'react';
+import { SVG } from '../types/type';
 import { cls } from '../utils/utils';
-
-interface SVG extends SVGProps<SVGSVGElement> {}
 
 /**
  * heroicicons.com
