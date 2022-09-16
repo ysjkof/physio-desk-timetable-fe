@@ -1,4 +1,4 @@
-import GlobalNavigationBarLayout from '../molecules/GlobalNavigationBarLayout';
+import GlobalNavigationBarLayout from '../templates/GlobalNavigationBarLayout';
 import LoggedOutGlobalNavBarMenu from '../molecules/LoggedOutGlobalNavBarMenu';
 
 export default function LoggedOutGlobalNavBar() {

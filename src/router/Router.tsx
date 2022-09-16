@@ -8,8 +8,8 @@ const LandingPage = lazy(
   () => import('../pages/home/components/organisms/LandingPage')
 );
 const TestPage = lazy(() => import('../pages/TestPage'));
-const NotFound = lazy(() => import('../components/organisms/404'));
-const CheckAdmin = lazy(() => import('../components/organisms/CheckAdmin'));
+const NotFound = lazy(() => import('../components/404'));
+const CheckAdmin = lazy(() => import('../utils/CheckAdmin'));
 
 const Docs = lazy(() => import('../pages/docs'));
 const DocsIndex = lazy(() => import('../pages/docs/mdx/DocsIndex.mdx'));

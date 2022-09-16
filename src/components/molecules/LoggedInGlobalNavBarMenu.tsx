@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMe } from '../../hooks/useMe';
 import { clinicMenu, personalMenu, ROUTES } from '../../router/routes';
-import Dropdown from '../organisms/Dropdown';
+import Dropdown from './Dropdown';
 import { logout } from '../../pages/auth/authServices';
 
 export default function LoggedInGlobalNavBarMenu() {

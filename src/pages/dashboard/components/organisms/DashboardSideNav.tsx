@@ -8,8 +8,8 @@ import {
   personalMenu,
 } from '../../../../router/routes';
 import localStorageUtils from '../../../../utils/localStorageUtils';
-import Sidebar from '../../../../components/organisms/Sidebar';
-import Selectbox from '../../../../components/organisms/Selectbox';
+import Sidebar from '../../../../components/molecules/Sidebar';
+import Selectbox from '../../../../components/molecules/Selectbox';
 
 interface DashboardSideNavProps {
   meData: MeQuery;

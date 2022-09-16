@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { MUOOL } from '../../constants/constants';
+import { MUOOL } from '../constants/constants';
 
 export default function NotFound() {
   return (

@@ -1,7 +1,7 @@
 import { useMe } from '../../hooks/useMe';
 import { useState } from 'react';
 import Banner from '../molecules/Banner';
-import GlobalNavigationBarLayout from '../molecules/GlobalNavigationBarLayout';
+import GlobalNavigationBarLayout from '../templates/GlobalNavigationBarLayout';
 import LoggedInGlobalNavBarMenu from '../molecules/LoggedInGlobalNavBarMenu';
 
 export default function LoggedInGlobalNavBar() {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useCheckAdminLazyQuery } from '../../graphql/generated/graphql';
-import NotFound from './404';
+import { useCheckAdminLazyQuery } from '../graphql/generated/graphql';
+import NotFound from '../components/404';
 
 interface CheckAdminProps {
   children: React.ReactNode;
