@@ -1,9 +1,10 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonHTMLAttributes } from 'react';
+import StateBadge from '../../../../components/atoms/StateBadge';
 import CardContainer from '../../../../components/templates/CardContainer';
 import { ChildrenProps } from '../../../../types/type';
-import { cls, getMemberState } from '../../../../utils/utils';
+import { cls, StayingState } from '../../../../utils/utils';
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
@@ -43,7 +44,7 @@ interface CardProps {
   clinicName: string;
   children: React.ReactNode;
   isActivate: boolean;
-  state?: ReturnType<typeof getMemberState>;
+  state: StayingState;
 }
 
 function ClinicCard({ clinicName, state, isActivate, children }: CardProps) {
@@ -60,18 +61,7 @@ function ClinicCard({ clinicName, state, isActivate, children }: CardProps) {
           <span className="overflow-hidden text-ellipsis whitespace-nowrap text-base">
             {clinicName}
           </span>
-          <span
-            className={cls(
-              'ml-2',
-              state === '탈퇴'
-                ? 'rounded-md bg-gray-100 px-1.5 py-0.5 text-gray-700'
-                : state === '승인대기'
-                ? 'rounded-md bg-red-100 px-1.5 py-0.5 text-red-700'
-                : 'rounded-md bg-green-100 px-1.5 py-0.5 text-green-700'
-            )}
-          >
-            {state}
-          </span>
+          <StateBadge state={state} />
         </div>
         <p>{isActivate || <span> #폐쇄</span>}</p>
       </div>

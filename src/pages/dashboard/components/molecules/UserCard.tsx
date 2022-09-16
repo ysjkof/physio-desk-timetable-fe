@@ -1,9 +1,10 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonHTMLAttributes } from 'react';
+import StateBadge from '../../../../components/atoms/StateBadge';
 import CardContainer from '../../../../components/templates/CardContainer';
 import { ChildrenProps } from '../../../../types/type';
-import { cls, getMemberState } from '../../../../utils/utils';
+import { cls, StayingState } from '../../../../utils/utils';
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
@@ -37,7 +38,7 @@ export function Button({ loading, children, ...args }: ButtonProps) {
 
 interface UserCardProps {
   name: string;
-  state?: ReturnType<typeof getMemberState>;
+  state: StayingState;
   size?: 'lg' | 'base';
   button?: React.ReactNode;
 }
@@ -62,7 +63,7 @@ function UserCard({ name, state, size = 'base', button }: UserCardProps) {
         <p className="ml-2 basis-6 overflow-hidden text-ellipsis whitespace-nowrap text-base font-medium">
           {name}
         </p>
-        <p className="ml-2 basis-6">{state}</p>
+        <StateBadge state={state} className="mb-1.5" />
         <div className="basis-6">{button}</div>
       </div>
     </div>

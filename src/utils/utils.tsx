@@ -27,6 +27,24 @@ export function getMemberState(
   // if (!staying && !accepted) return "수락대기";
   // if (!staying && accepted) return "탈퇴";
 }
+export type StayingState = ReturnType<typeof getMemberState>;
+export function isStayMember(state: StayingState) {
+  let result = false;
+  switch (state) {
+    case '승인대기':
+      break;
+    case '관리자':
+      result = true;
+      break;
+    case '직원':
+      result = true;
+      break;
+    case '탈퇴':
+      break;
+  }
+  return result;
+}
+
 interface CheckManager {
   id: number;
   manager: boolean;
