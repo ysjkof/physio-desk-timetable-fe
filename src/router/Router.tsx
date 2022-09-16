@@ -20,6 +20,9 @@ const BasicPatientRegistration = lazy(
 const BasicPrescriptionRegistration = lazy(
   () => import('../pages/docs/mdx/BasicPrescriptionRegistration.mdx')
 );
+const ViewDuration = lazy(() => import('../pages/docs/mdx/ViewDuration.mdx'));
+const ViewState = lazy(() => import('../pages/docs/mdx/ViewState.mdx'));
+const ViewClinic = lazy(() => import('../pages/docs/mdx/ViewClinic.mdx'));
 const Roadmap = lazy(() => import('../pages/docs/mdx/Roadmap.mdx'));
 const Contacts = lazy(() => import('../pages/docs/mdx/Contacts.mdx'));
 
@@ -36,6 +39,9 @@ function Router() {
     basic_patient_registration,
     basic_prescription_registration,
     basic_reserve,
+    view_duration,
+    view_state,
+    view_clinic,
     roadmap,
     contacts,
     overview,
@@ -44,23 +50,19 @@ function Router() {
   const docsRoute = [
     /** */
     {
-      protectRoute: false,
       path: overview,
       element: <LandingPage />,
     },
     /** */
     {
-      protectRoute: false,
       path: basic_patient_registration,
       element: <BasicPatientRegistration />,
     },
     {
-      protectRoute: false,
       path: basic_prescription_registration,
       element: <BasicPrescriptionRegistration />,
     },
     {
-      protectRoute: false,
       path: basic_reserve,
       element: (
         <BasicReserve
@@ -71,12 +73,23 @@ function Router() {
     },
     /** */
     {
-      protectRoute: false,
+      path: view_duration,
+      element: <ViewDuration />,
+    },
+    {
+      path: view_state,
+      element: <ViewState />,
+    },
+    {
+      path: view_clinic,
+      element: <ViewClinic />,
+    },
+    /** */
+    {
       path: roadmap,
       element: <Roadmap />,
     },
     {
-      protectRoute: false,
       path: contacts,
       element: <Contacts />,
     },

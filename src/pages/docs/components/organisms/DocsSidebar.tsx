@@ -21,6 +21,18 @@ export default function DocsSidebar() {
         { route: ENDPOINT.docs.basic_reserve, name: '예약하기' },
       ],
     },
+    {
+      route: `${ROUTES.docs}/`,
+      name: '시간표 보기 설정',
+      children: [
+        { route: ENDPOINT.docs.view_duration, name: '표시 시간' },
+        {
+          route: ENDPOINT.docs.view_state,
+          name: '취소, 부도 숨기기',
+        },
+        { route: ENDPOINT.docs.view_clinic, name: '병원 선택' },
+      ],
+    },
 
     {
       route: `${ROUTES.docs}/`,
@@ -30,11 +42,6 @@ export default function DocsSidebar() {
         { route: ENDPOINT.docs.contacts, name: '연락처' },
       ],
     },
-    // {
-    //   route: `${ROUTES.docs}/`,
-    //   name: '화면 설명',
-    //   children: [{ route: screen_timetable, name: '시간표' }],
-    // },
 
     // {
     //   route: `${ROUTES.docs}/`,

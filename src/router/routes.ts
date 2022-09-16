@@ -30,6 +30,9 @@ const roadmap = 'roadmap';
 const contacts = 'contacts';
 const screen_timetable = `screen_${timetable}`;
 const clinic_registration = 'clinic_registration';
+const view_duration = 'view_duration';
+const view_state = 'view_state';
+const view_clinic = 'view_clinic';
 const dashboard_member = `${dashboard}_${member}`;
 const dashboard_invite = `${dashboard}_${invite}`;
 const dashboard_prescription = `${dashboard}_${prescription}`;
@@ -44,6 +47,9 @@ export const ROUTES = {
   basic_patient_registration: `/${DOCS}/${basic_patient_registration}`,
   basic_prescription_registration: `/${DOCS}/${basic_prescription_registration}`,
   basic_reserve: `/${DOCS}/${basic_reserve}`,
+  view_duration: `/${DOCS}/${view_duration}`,
+  view_state: `/${DOCS}/${view_state}`,
+  view_clinic: `/${DOCS}/${view_clinic}`,
   roadmap: `/${DOCS}/${roadmap}`,
   contacts: `/${DOCS}/${contacts}`,
   search: '/search',
@@ -86,6 +92,9 @@ export const ENDPOINT = {
     basic_patient_registration,
     basic_prescription_registration,
     basic_reserve,
+    view_duration,
+    view_state,
+    view_clinic,
     roadmap,
     contacts,
     screen_timetable,
