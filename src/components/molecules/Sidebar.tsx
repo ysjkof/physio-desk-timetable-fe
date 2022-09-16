@@ -6,26 +6,49 @@ interface ChildrenProps {
   children: React.ReactNode;
 }
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
-interface LiProps extends ChildrenProps {
-  to: string;
+interface ClassNameProps {
+  className?: string;
+}
+
+interface SelectedProps {
   selected?: boolean;
 }
-interface UlProps extends ChildrenProps {
-  title?: string;
+
+interface ToProps extends ChildrenProps, SelectedProps {
+  to: string;
+  onClick?: () => void;
 }
-interface SidebarPoprs extends ChildrenProps {
+interface OnClickProps extends ChildrenProps, SelectedProps {
+  onClick: () => void;
+  to?: string;
+}
+
+interface UlProps extends ChildrenProps {
+  title?: React.ReactNode;
+  removePadding?: boolean;
+  opacity?: boolean;
+}
+interface SidebarPoprs extends ChildrenProps, ClassNameProps {
   disable?: boolean;
+  noGap?: boolean;
 }
 
 function Button({ children, ...args }: ButtonProps) {
   return (
-    <button className={cls('h-full w-full cursor-pointer')} {...args}>
+    <button
+      type="button"
+      {...args}
+      className={cls(
+        'flex h-full w-full cursor-pointer items-center',
+        args.className || ''
+      )}
+    >
       {children}
     </button>
   );
 }
 
-function Li({ to, children, selected }: LiProps) {
+function Li({ to, onClick, children, selected }: ToProps | OnClickProps) {
   return (
     <li
       className={cls(
@@ -33,26 +56,46 @@ function Li({ to, children, selected }: LiProps) {
         selected ? 'font-medium text-gray-600' : 'font-light text-gray-500'
       )}
     >
-      <Link
-        to={to}
-        className={cls(
-          'block h-full w-full border-l py-1.5 pl-4',
-          selected
-            ? 'before:pointer-events-none before:absolute before:-left-0.5 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full before:bg-green-500'
-            : ''
-        )}
-      >
-        {children}
-      </Link>
+      {to ? (
+        <Link
+          to={to}
+          className={cls(
+            'block h-full w-full border-l py-1.5 pl-4 text-left',
+            selected
+              ? 'before:pointer-events-none before:absolute before:-left-0.5 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full before:bg-green-500'
+              : ''
+          )}
+        >
+          {children}
+        </Link>
+      ) : (
+        <button
+          onClick={onClick}
+          className={cls(
+            'block h-full w-full py-1.5 pl-4 text-left',
+            selected
+              ? 'before:pointer-events-none before:absolute before:-left-0.5 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full before:bg-green-500'
+              : ''
+          )}
+        >
+          {children}
+        </button>
+      )}
     </li>
   );
 }
 
-function Ul({ children, title }: UlProps) {
+function Ul({ children, title, removePadding, opacity }: UlProps) {
   return (
-    <div className="flex flex-col pl-4 pr-16">
+    <div
+      className={cls(
+        'flex flex-col pl-4',
+        removePadding ? '' : 'pr-16',
+        opacity ? 'opacity-50' : ''
+      )}
+    >
       {title && (
-        <h1 className="pointer-events-none whitespace-nowrap pt-4 pb-2 text-sm font-semibold">
+        <h1 className="whitespace-nowrap pt-4 pb-2 text-sm font-semibold">
           {title}
         </h1>
       )}
@@ -61,12 +104,14 @@ function Ul({ children, title }: UlProps) {
   );
 }
 
-function Sidebar({ children, disable }: SidebarPoprs) {
+function Sidebar({ children, className, disable, noGap }: SidebarPoprs) {
   return (
     <div
       className={cls(
-        'SIDE-BAR flex flex-col space-y-10',
-        disable ? 'pointer-events-none opacity-25' : ''
+        'SIDE-BAR flex flex-col',
+        disable ? 'pointer-events-none opacity-25' : '',
+        noGap ? '' : 'space-y-10',
+        className || ''
       )}
     >
       {children}
