@@ -52,7 +52,7 @@ export default function Docs() {
             <DocsSidebar />
           </DocsSidebarModal>
         )}
-        <article className="prose flex h-full w-full max-w-3xl flex-col overflow-y-scroll bg-white px-6 pt-2 pb-20 prose-a:no-underline sm:px-14 sm:pt-4 sm:pb-28">
+        <article className="prose relative flex h-full w-full max-w-3xl flex-col overflow-y-scroll bg-white px-6 pt-2 pb-20 prose-a:no-underline sm:px-14 sm:pt-4 sm:pb-28">
           <Suspense fallback={<Loading />}>
             <Outlet />
           </Suspense>
