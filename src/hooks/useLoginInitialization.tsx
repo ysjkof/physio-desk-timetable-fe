@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { IsLoggedIn } from '../components/templates/GlobalLayout';
 import {
   ClinicType,
   MeQuery,
-  useFindMyClinicsQuery,
+  useFindMyClinicsLazyQuery,
+  useMeLazyQuery,
 } from '../graphql/generated/graphql';
 import { loggedInUserVar, viewOptionsVar } from '../store';
 import {
@@ -13,16 +15,16 @@ import {
   LoggedInUser,
 } from '../types/type';
 import localStorageUtils from '../utils/localStorageUtils';
-import { useMe } from './useMe';
 import useStore, { makeSelectedClinic } from './useStore';
 
-function useLoginInitialization() {
+function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
   const [loading, setLoading] = useState(true);
-  const { data: meData } = useMe();
   const { setSelectedInfo, viewOptions, clinicListsVar } = useStore();
-  const { data: findMyClinicsData } = useFindMyClinicsQuery({
-    variables: { input: { includeInactivate: true } },
-  });
+  const [meQuery, { data: meData }] = useMeLazyQuery();
+  const [findMyClinicsQuery, { data: findMyClinicsData }] =
+    useFindMyClinicsLazyQuery({
+      variables: { input: { includeInactivate: true } },
+    });
 
   const setViewOption = (meData: NonNullable<LoggedInUser>) => {
     const localViewOptions = localStorageUtils.get<IViewOption>({
@@ -159,13 +161,16 @@ function useLoginInitialization() {
 
   useEffect(() => {
     setLoading(true);
+    if (!isLoggedIn) return;
+    meQuery();
+    findMyClinicsQuery();
+
     if (
       !meData ||
       !findMyClinicsData ||
       !findMyClinicsData.findMyClinics.clinics
     )
       return;
-
     checkLatestStorage(meData.me);
     setViewOption(meData.me);
 

@@ -11,11 +11,12 @@ const LoggedOutGlobalNavBar = lazy(
   () => import('../organisms/LoggedOutGlobalNavBar')
 );
 
-export default function GlobalLayout({ isLoggedIn }: { isLoggedIn?: boolean }) {
-  let loading = true;
-  if (isLoggedIn) {
-    loading = useLoginInitialization().loading;
-  }
+export interface IsLoggedIn {
+  isLoggedIn?: boolean;
+}
+
+export default function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
+  const { loading } = useLoginInitialization({ isLoggedIn });
 
   if (isLoggedIn && loading) return <Loading />;
 
