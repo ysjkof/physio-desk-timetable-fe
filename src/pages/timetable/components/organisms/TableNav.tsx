@@ -3,7 +3,6 @@ import {
   faPlusSquare,
   faRectangleXmark,
 } from '@fortawesome/free-regular-svg-icons';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +19,7 @@ import { useReactiveVar } from '@apollo/client';
 import { ROUTES } from '../../../../router/routes';
 import localStorageUtils from '../../../../utils/localStorageUtils';
 import { useEffect } from 'react';
+import CogSixTooth from '../../../../svgs/CogSixTooth';
 
 interface TableNavProps {}
 
@@ -153,7 +153,7 @@ export default function TableNav({}: TableNavProps) {
             }}
           /> */}
           <MenuButton
-            icon={<FontAwesomeIcon icon={faGear} fontSize={14} />}
+            icon={<CogSixTooth />}
             enabled={viewOptions.get.seeActiveOption}
             label={'설정'}
             onClick={() => {
