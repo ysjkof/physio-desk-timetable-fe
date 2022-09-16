@@ -72,9 +72,9 @@ function Li({ to, onClick, children, selected }: ToProps | OnClickProps) {
         <button
           onClick={onClick}
           className={cls(
-            'block h-full w-full py-1.5 pl-4 text-left',
+            'block h-full w-full py-1.5 pl-7 text-left',
             selected
-              ? 'before:pointer-events-none before:absolute before:-left-0.5 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full before:bg-green-500'
+              ? 'before:pointer-events-none before:absolute before:left-1.5 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full before:bg-green-500'
               : ''
           )}
         >
