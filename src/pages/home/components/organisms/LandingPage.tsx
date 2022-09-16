@@ -59,7 +59,7 @@ export default function LandingPage() {
             하고 시작해보세요.
           </p>
         )}
-        <ul className="mt-10 flex w-fit flex-wrap justify-center gap-x-12 gap-y-6">
+        <ul className="mt-10 grid w-full grid-cols-[60%] flex-wrap justify-center gap-y-6 p-0 sm:grid-cols-2 sm:gap-x-12 lg:grid-cols-3">
           {[
             '실시간 동기화',
             '예약 복사 붙여넣기',
