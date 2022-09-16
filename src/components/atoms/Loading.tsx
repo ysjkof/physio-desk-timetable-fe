@@ -30,7 +30,7 @@ export default function Loading() {
         </div>
       </div>
       <p className="animate-pulse  text-base">
-        불러오는 중입니다. 몇초 뒤에 변화가 없으면 새로고침하세요.
+        불러오는 중입니다. 몇 초만 기다려 주세요.
       </p>
     </div>
   );
