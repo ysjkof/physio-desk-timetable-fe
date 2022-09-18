@@ -7,7 +7,7 @@ export default function DocsSidebarModal({
   children,
 }: DocsSidebarModalProps) {
   return (
-    <div id="Modal-Background" className="fixed h-screen w-screen">
+    <div id="Modal-Background" className="fixed z-50 h-screen w-screen">
       <div
         className="absolute top-0 z-40 h-full w-full bg-black/50 backdrop-blur-sm"
         onClick={toggleAside}
