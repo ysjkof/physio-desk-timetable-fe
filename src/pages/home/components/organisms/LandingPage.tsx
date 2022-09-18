@@ -12,6 +12,8 @@ import {
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
+import DocsEventBox from '../molecules/DocsEventBox';
+import { ReservationState } from '../../../../graphql/generated/graphql';
 
 export default function LandingPage() {
   const isLoggedIn = isLoggedInVar();
@@ -20,12 +22,76 @@ export default function LandingPage() {
   const tableWide = '/images/landing-page/table-wide.webp';
   const myFourClinicsMobil = '/images/landing-page/my-four-clinics_mobil.webp';
   const myFourClinicsDesk = '/images/landing-page/my-four-clinics_desk.webp';
-  const quickActionReserve =
-    '/images/landing-page/event-quick-action-reserve.webp';
-  const quickActionNoshow =
-    '/images/landing-page/event-quick-action-noshow.webp';
-  const quickActionCancel =
-    '/images/landing-page/event-quick-action-cancel.webp';
+
+  const features = [
+    '실시간 동기화',
+    '예약 복사 붙여넣기',
+    '쉬는 날 예약 막기',
+    '직원 추가',
+    '이직시 백업 안 필요',
+    '처방 추가',
+    '시간표 시간 조절',
+    '팀원 색깔 구별',
+    '통계',
+  ];
+  const threeReservationState = [
+    ReservationState.Reserved,
+    ReservationState.Canceled,
+    ReservationState.NoShow,
+  ];
+
+  const descriptionReservationState = [
+    {
+      title: '예약',
+      description: (
+        <p className="m-0">
+          예약 상태입니다. 상자 배경색은 회색이 아닌 특정 색깔로 표시됩니다
+        </p>
+      ),
+    },
+    {
+      title: '취소',
+      description: (
+        <p className="m-0">
+          두 번째 아이콘{' '}
+          <FontAwesomeIcon
+            icon={faBan}
+            fontSize={24}
+            className="text-red-500"
+          />
+          을 누르면 취소 상태가 됩니다.
+        </p>
+      ),
+    },
+    {
+      title: '부도',
+      description: (
+        <p className="m-0">
+          세 번째 아이콘{' '}
+          <FontAwesomeIcon
+            icon={faCommentSlash}
+            fontSize={24}
+            className="text-black"
+          />
+          을 누르면 부도 상태가 됩니다.
+        </p>
+      ),
+    },
+    {
+      title: '되돌리기',
+      description: (
+        <p className="m-0">
+          취소나 부도 상태일 때 네 번째 아이콘{' '}
+          <FontAwesomeIcon
+            icon={faArrowRotateLeft}
+            fontSize={24}
+            className="text-blue-800"
+          />
+          누르면 예약 상태로 돌아갑니다.
+        </p>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -60,17 +126,7 @@ export default function LandingPage() {
           </p>
         )}
         <ul className="mt-10 grid w-full grid-cols-[60%] flex-wrap justify-center gap-y-6 p-0 sm:grid-cols-2 sm:gap-x-12 lg:grid-cols-3">
-          {[
-            '실시간 동기화',
-            '예약 복사 붙여넣기',
-            '쉬는 날 예약 막기',
-            '직원 추가',
-            '이직시 백업 안 필요',
-            '처방 추가',
-            '시간표 시간 조절',
-            '팀원 색깔 구별',
-            '통계',
-          ].map((text) => (
+          {features.map((text) => (
             <Li key={text}>{text}</Li>
           ))}
         </ul>
@@ -90,65 +146,24 @@ export default function LandingPage() {
         <P>
           예약 상자에 마우스를 올리면 빠른 예약 상태 변경 아이콘이 나타납니다.
         </P>
-        <div className="flex">
-          <div className="sm w-1/2 space-y-4 pr-4">
-            <div className="h-1/4">
-              <img className="h-fit w-full" src={quickActionReserve} />
-            </div>
-            <div className="h-1/4">
-              <img className="h-fit w-full" src={quickActionCancel} />
-            </div>
-            <div className="h-1/4">
-              <img className="h-fit w-full" src={quickActionNoshow} />
-            </div>
+        <div className="mt-12 flex">
+          <div className="flex w-1/2 flex-col gap-5 pr-4">
+            {threeReservationState.map((state) => (
+              <div className="relative flex h-1/4 justify-center pt-2">
+                <DocsEventBox height={70} width={150} state={state} />
+              </div>
+            ))}
             <div className="h-1/4"></div>
           </div>
-          <div className="w-1/2 space-y-4">
-            <div className="h-1/4">
-              <h3 className="mb-4 text-xl font-medium text-gray-900">예약</h3>
-              <p>
-                예약 상태입니다. 상자 배경색은 회색이 아닌 특정 색깔로
-                표시됩니다
-              </p>
-            </div>
-            <div className="h-1/4">
-              <h3 className="mb-4 text-xl font-medium text-gray-900">취소</h3>
-              <p>
-                두 번째 아이콘{' '}
-                <FontAwesomeIcon
-                  icon={faBan}
-                  fontSize={24}
-                  className="text-red-500"
-                />
-                을 누르면 취소 상태가 됩니다.
-              </p>
-            </div>
-            <div className="h-1/4">
-              <h3 className="mb-4 text-xl font-medium text-gray-900">부도</h3>
-              <p>
-                세 번째 아이콘{' '}
-                <FontAwesomeIcon
-                  icon={faCommentSlash}
-                  fontSize={24}
-                  className="text-black"
-                />
-                을 누르면 부도 상태가 됩니다.
-              </p>
-            </div>
-            <div className="h-1/4">
-              <h3 className="mb-4 text-xl font-medium text-gray-900">
-                되돌리기
-              </h3>
-              <p>
-                취소나 부도 상태일 때 네 번째 아이콘{' '}
-                <FontAwesomeIcon
-                  icon={faArrowRotateLeft}
-                  fontSize={24}
-                  className="text-blue-800"
-                />
-                누르면 예약 상태로 돌아갑니다.
-              </p>
-            </div>
+          <div className="flex w-1/2 flex-col gap-5">
+            {descriptionReservationState.map((state) => (
+              <div className="relative flex h-1/4 flex-col">
+                <h3 className="mb-4 mt-0 text-xl font-medium text-gray-900">
+                  {state.title}
+                </h3>
+                <p>{state.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </Section>

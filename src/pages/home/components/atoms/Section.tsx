@@ -10,7 +10,7 @@ interface SectionProps
 
 export default function Section({ children, ...args }: SectionProps) {
   return (
-    <section {...args} className={cls('pt-14 pb-16', args.className || '')}>
+    <section {...args} className={cls('mb-16', args.className || '')}>
       <div className="mx-auto max-w-2xl px-6">{children}</div>
     </section>
   );
