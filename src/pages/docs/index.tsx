@@ -14,7 +14,7 @@ const Loading = lazy(() => import('../../components/atoms/Loading'));
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);
 
-  const { isMobile, loading } = useMediaQuery();
+  const [isDesktop, loading] = useMediaQuery({ minWidth: '768' });
 
   const { height, changeMinus } = useWindowSize(true);
   const navRef = useRef<HTMLDivElement>(null);
@@ -28,13 +28,13 @@ export default function Docs() {
 
     const { clientHeight } = navRef.current;
     changeMinus(clientHeight);
-  }, [isMobile]);
+  }, [isDesktop]);
 
   if (loading) return <Loading />;
 
   return (
     <main className="h-full bg-gray-50">
-      {isMobile && (
+      {isDesktop && (
         <nav className="flex h-12 items-center px-4 shadow-md" ref={navRef}>
           <button type="button" className="p-2" onClick={toggleAside}>
             {isOpen ? <XMark /> : <BarBottomLeft />}
@@ -46,8 +46,8 @@ export default function Docs() {
         className="mx-auto flex max-w-7xl justify-center overflow-hidden"
         style={{ height }}
       >
-        {!isMobile && <DocsSidebar />}
-        {isMobile && isOpen && (
+        {!isDesktop && <DocsSidebar />}
+        {isDesktop && isOpen && (
           <DocsSidebarModal toggleAside={toggleAside}>
             <DocsSidebar />
           </DocsSidebarModal>

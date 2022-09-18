@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react';
 
-export default function useMediaQuery() {
-  const [isMobile, setIsMobile] = useState(true);
+interface useMediaQueryProps {
+  minWidth: string;
+}
+
+/**
+ * minWidth는 px단위
+ * 640px : 너비가 640px이상이면 태블릿
+ * 768px : 너비가 768px이상이면 데스크톱
+ */
+export default function useMediaQuery({ minWidth }: useMediaQueryProps) {
+  const [isMatch, setIsMobile] = useState(true);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width:640px)');
+    const mediaQuery = window.matchMedia(`(min-width:${minWidth}px)`);
     if (mediaQuery.matches) setIsMobile(false);
 
     const senseScreen = (event: MediaQueryListEvent) => {
@@ -21,5 +30,5 @@ export default function useMediaQuery() {
     return () => mediaQuery.removeEventListener('change', senseScreen);
   }, []);
 
-  return { isMobile, loading };
+  return [isMatch, loading];
 }
