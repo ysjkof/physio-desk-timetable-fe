@@ -95,7 +95,7 @@ export default function LandingPage() {
 
   return (
     <>
-      <div className="my-10">
+      <Section widthFull>
         <div
           className="mx-auto flex h-[400px] max-w-7xl items-center justify-center bg-cover bg-center bg-no-repeat"
           style={{
@@ -106,8 +106,8 @@ export default function LandingPage() {
             무울시간표가 캘린더 기반 예약 시스템에 필요한 모든 걸 제공합니다.
           </H1>
         </div>
-      </div>
-      <Section className="bg-stone-200">
+      </Section>
+      <Section className="bg-stone-200 py-10">
         <P>
           더 이상 예약 관리를 위해 스프레드 시트를 만들지 마세요. 무울시간표는
           스프레드 시트 시간표의 장점만 가져왔습니다. 그리고 더{' '}
