@@ -15,7 +15,7 @@ import useMediaQuery from '../../../../hooks/useMediaQuery';
 
 export default function LandingPage() {
   const isLoggedIn = isLoggedInVar();
-  const { isMobile } = useMediaQuery();
+  const [isMobile] = useMediaQuery({ minWidth: '640px' });
 
   const tableWide = '/images/landing-page/table-wide.webp';
   const myFourClinicsMobil = '/images/landing-page/my-four-clinics_mobil.webp';
@@ -79,7 +79,10 @@ export default function LandingPage() {
         <H1>여러개의 병원을 관리할 수 있습니다.</H1>
         <P>예전에 그만둔 병원도 소속됐던 기간의 예약을 확인할 수 있습니다.</P>
         <div className="flex justify-center">
-          <img src={isMobile ? myFourClinicsMobil : myFourClinicsDesk} />
+          <img
+            className="h-fit w-[608px]"
+            src={isMobile ? myFourClinicsMobil : myFourClinicsDesk}
+          />
         </div>
       </Section>
       <Section>
@@ -88,10 +91,16 @@ export default function LandingPage() {
           예약 상자에 마우스를 올리면 빠른 예약 상태 변경 아이콘이 나타납니다.
         </P>
         <div className="flex">
-          <div className="w-1/2 space-y-4 pr-4">
-            <img className="h-1/4" src={quickActionReserve} />
-            <img className="h-1/4" src={quickActionCancel} />
-            <img className="h-1/4" src={quickActionNoshow} />
+          <div className="sm w-1/2 space-y-4 pr-4">
+            <div className="h-1/4">
+              <img className="h-fit w-full" src={quickActionReserve} />
+            </div>
+            <div className="h-1/4">
+              <img className="h-fit w-full" src={quickActionCancel} />
+            </div>
+            <div className="h-1/4">
+              <img className="h-fit w-full" src={quickActionNoshow} />
+            </div>
             <div className="h-1/4"></div>
           </div>
           <div className="w-1/2 space-y-4">
