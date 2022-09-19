@@ -14,6 +14,7 @@ import Checkbox from '../../components/molecules/Checkbox';
 import { useForm } from 'react-hook-form';
 import SearchList from './organisms/SearchList';
 import ListCell from './atoms/ListCell';
+import { getYMD } from '../../services/dateServices';
 
 export default function Search() {
   const location = useLocation();
@@ -93,9 +94,11 @@ export default function Search() {
             ))}
           </div>
           <div className="flex divide-x border-b-2 px-6">
-            {['병원', '등록번호', '이름', '성별', '생년월일'].map((title) => (
-              <ListCell>{title}</ListCell>
-            ))}
+            {['병원', '등록번호', '이름', '성별', '생년월일', '기능'].map(
+              (title) => (
+                <ListCell key={title}>{title}</ListCell>
+              )
+            )}
           </div>
         </div>
         <div id="Search-Results" className="divide-y">
@@ -107,11 +110,12 @@ export default function Search() {
             data.searchPatient.patients.map((patient, idx) => (
               <SearchList
                 key={idx}
+                id={patient.id}
                 clinicName={renameUseSplit(patient.clinic?.name || 'error')}
                 registrationNumber={patient.registrationNumber}
                 name={patient.name}
                 gender={patient.gender}
-                birthday={patient.birthday}
+                birthday={getYMD(patient.birthday, 'yyyymmdd', '-')}
               />
             ))
           )}
@@ -125,7 +129,7 @@ export default function Search() {
               key={pageNumber}
               type="button"
               className={cls(
-                'px-2',
+                'border px-2',
                 page === pageNumber ? 'text-base font-semibold' : ''
               )}
               onClick={() => changePage(pageNumber)}
