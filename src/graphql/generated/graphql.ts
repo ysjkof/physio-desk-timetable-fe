@@ -722,7 +722,7 @@ export enum ReservationState {
 }
 
 export type SearchPatientInput = {
-  clinicId: Scalars['Int'];
+  clinicIds: Array<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
   query: Scalars['String'];
 };

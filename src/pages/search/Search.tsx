@@ -23,7 +23,9 @@ export default function Search() {
   const [pageNumbers, setPageNumbers] = useState([1]);
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const { clinicLists } = useStore();
-  const { register, getValues } = useForm<{ clinicIds: number[] }>();
+  const { register, getValues } = useForm<{ clinicIds: number[] }>({
+    defaultValues: { clinicIds: [selectedInfo.clinic?.id] },
+  });
 
   const [callQuery, { loading, data }] = useSearchPatientLazyQuery();
 
@@ -33,12 +35,13 @@ export default function Search() {
     if (!queryName) {
       return navigate(-1);
     }
+    const { clinicIds } = getValues();
     callQuery({
       variables: {
         input: {
           page,
           query: decodeURI(queryName),
-          clinicId: selectedInfo.clinic!.id,
+          clinicIds: clinicIds.map((id) => +id),
         },
       },
       onCompleted(data) {
@@ -58,12 +61,6 @@ export default function Search() {
   const { height } = useWindowSize(true);
 
   if (loading) return <Loading />;
-  if (
-    !data ||
-    !data.searchPatient.patients ||
-    data.searchPatient.patients.length === 0
-  )
-    return <Worning type="emptySearch" />;
 
   return (
     <>
@@ -97,16 +94,22 @@ export default function Search() {
           </div>
         </div>
         <div id="Search-Results" className="divide-y">
-          {data?.searchPatient.patients?.map((patient, idx) => (
-            <SearchList
-              key={idx}
-              clinicName={renameUseSplit(patient.clinic?.name || 'error')}
-              registrationNumber={patient.registrationNumber}
-              name={patient.name}
-              gender={patient.gender}
-              birthday={patient.birthday}
-            />
-          ))}
+          {!data ||
+          !data.searchPatient.patients ||
+          data.searchPatient.patients.length === 0 ? (
+            <Worning type="emptySearch" />
+          ) : (
+            data.searchPatient.patients.map((patient, idx) => (
+              <SearchList
+                key={idx}
+                clinicName={renameUseSplit(patient.clinic?.name || 'error')}
+                registrationNumber={patient.registrationNumber}
+                name={patient.name}
+                gender={patient.gender}
+                birthday={patient.birthday}
+              />
+            ))
+          )}
         </div>
         <div
           id="Search-Footer"
