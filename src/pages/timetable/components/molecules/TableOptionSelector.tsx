@@ -164,15 +164,19 @@ export default function TableOptionSelector() {
   const minutes = getMinutesByUnit(10);
   const { endHour, endMinute, startHour, startMinute } = tableDuration;
 
-  return selectedInfo.clinic ? (
+  return (
     <motion.div
       variants={variants}
       initial="init"
       animate="end"
       exit="exit"
-      className="USER_VIEW_CONTROLLER absolute top-6 z-[35] w-[240px] rounded-md border border-gray-400 bg-white py-2 shadow-cst"
+      id="Table-View-Option"
+      className="w-[240px] rounded-md border border-gray-400 bg-white py-2 shadow-cst"
     >
-      <div className="HEADER flex items-center justify-between border-b px-3 pb-1">
+      <div
+        id="Table-View-Option_Header"
+        className="flex items-center justify-between border-b px-3 pb-1"
+      >
         <span className="group relative z-40 px-1 after:ml-1 after:rounded-full after:border after:px-1 after:content-['?']">
           보기설정
           <p className="bubble-arrow-t-right absolute top-7 -right-4 hidden w-48 rounded-md bg-black p-4 text-white group-hover:block">
@@ -181,7 +185,10 @@ export default function TableOptionSelector() {
         </span>
         <BtnArrow direction={NEXT} onClick={onClickChangeSeeActiveOption} />
       </div>
-      <div className="flex items-center whitespace-nowrap border-b py-1">
+      <div
+        id="Table-View-Option_View-Time"
+        className="flex items-center whitespace-nowrap border-b py-1"
+      >
         <Selectbox
           selectedValue={`${(startHour + '').padStart(2, '0')}`}
           iconSize={8}
@@ -251,7 +258,10 @@ export default function TableOptionSelector() {
           onClick={saveTableDuration}
         />
       </div>
-      <div className="flex items-center gap-2 border-b py-1 px-3">
+      <div
+        id="Table-View-Option_Toggle-Visible-State"
+        className="flex items-center gap-2 border-b py-1 px-3"
+      >
         <MenuButton
           icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
           enabled={viewOptions.get.seeCancel}
@@ -336,7 +346,5 @@ export default function TableOptionSelector() {
         })}
       </Sidebar>
     </motion.div>
-  ) : (
-    <></>
   );
 }

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { forwardRef, HtmlHTMLAttributes, ReactNode } from 'react';
 import { cls } from '../../utils/utils';
 
 interface BtnMenuProps {
@@ -15,19 +15,22 @@ interface BtnMenuProps {
   isCenter?: boolean;
 }
 
-export default function MenuButton({
-  onClick,
-  label,
-  icon,
-  enabled,
-  isWidthFull,
-  hasBorder,
-  hasActiveRing,
-  hasFocus,
-  thinFont,
-  type = 'button',
-  isCenter,
-}: BtnMenuProps) {
+export default forwardRef<HTMLButtonElement, BtnMenuProps>(function MenuButton(
+  {
+    onClick,
+    label,
+    icon,
+    enabled,
+    isWidthFull,
+    hasBorder,
+    hasActiveRing,
+    hasFocus,
+    thinFont,
+    type = 'button',
+    isCenter,
+  },
+  ref
+) {
   return (
     <button
       type={type}
@@ -46,8 +49,9 @@ export default function MenuButton({
         hasFocus ? 'focus:emphasize-ring' : ''
       )}
       onClick={onClick}
+      ref={ref}
     >
       {icon} {label}
     </button>
   );
-}
+});

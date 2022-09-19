@@ -18,8 +18,10 @@ import { loggedInUserVar, selectedDateVar } from '../../../../store';
 import { useReactiveVar } from '@apollo/client';
 import { ROUTES } from '../../../../router/routes';
 import localStorageUtils from '../../../../utils/localStorageUtils';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import CogSixTooth from '../../../../svgs/CogSixTooth';
+import ModalPortal from '../../../../components/templates/ModalPortal';
+import { getPositionRef } from '../../../../utils/utils';
 
 interface TableNavProps {}
 
@@ -67,6 +69,9 @@ export default function TableNav({}: TableNavProps) {
       seeActiveOption: false,
     });
   }, []);
+
+  const settingRef = useRef<HTMLButtonElement>(null);
+  const { top } = getPositionRef(settingRef);
 
   return (
     <>
@@ -164,9 +169,26 @@ export default function TableNav({}: TableNavProps) {
               viewOptions.set(newViewOptions);
               // seeActiveOption은 로컬스토리지에 저장할 필요 없다
             }}
+            ref={settingRef}
           />
           <AnimatePresence>
-            {viewOptions.get.seeActiveOption && <TableOptionSelector />}
+            {viewOptions.get.seeActiveOption && (
+              <ModalPortal
+                top={top}
+                right={10}
+                closeAction={() => {
+                  if (viewOptions.get) {
+                    const newViewOptions = {
+                      ...viewOptions.get,
+                      seeActiveOption: !viewOptions.get.seeActiveOption,
+                    };
+                    viewOptions.set(newViewOptions);
+                  }
+                }}
+              >
+                <TableOptionSelector />
+              </ModalPortal>
+            )}
           </AnimatePresence>
         </div>
       </div>
