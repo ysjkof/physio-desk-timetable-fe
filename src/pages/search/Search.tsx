@@ -14,6 +14,7 @@ import Checkbox from '../../components/molecules/Checkbox';
 import { useForm } from 'react-hook-form';
 import SearchList from './organisms/SearchList';
 import ListCell from './atoms/ListCell';
+import { getYMD } from '../../services/dateServices';
 
 export default function Search() {
   const location = useLocation();
@@ -23,9 +24,16 @@ export default function Search() {
   const [pageNumbers, setPageNumbers] = useState([1]);
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const { clinicLists } = useStore();
-  const { register, getValues } = useForm<{ clinicIds: number[] }>();
+  const { register, getValues } = useForm<{ clinicIds: number[] }>({
+    defaultValues: { clinicIds: [selectedInfo.clinic?.id] },
+  });
 
   const [callQuery, { loading, data }] = useSearchPatientLazyQuery();
+
+  const changePage = (pageNumber: number) => {
+    if (page === pageNumber) return;
+    setPage(pageNumber);
+  };
 
   useEffect(() => {
     const { search } = location;
@@ -33,12 +41,13 @@ export default function Search() {
     if (!queryName) {
       return navigate(-1);
     }
+    const { clinicIds } = getValues();
     callQuery({
       variables: {
         input: {
           page,
           query: decodeURI(queryName),
-          clinicId: selectedInfo.clinic!.id,
+          clinicIds: clinicIds.map((id) => +id),
         },
       },
       onCompleted(data) {
@@ -53,17 +62,11 @@ export default function Search() {
         }
       },
     });
-  }, [location]);
+  }, [location, page]);
 
   const { height } = useWindowSize(true);
 
   if (loading) return <Loading />;
-  if (
-    !data ||
-    !data.searchPatient.patients ||
-    data.searchPatient.patients.length === 0
-  )
-    return <Worning type="emptySearch" />;
 
   return (
     <>
@@ -91,22 +94,31 @@ export default function Search() {
             ))}
           </div>
           <div className="flex divide-x border-b-2 px-6">
-            {['병원', '등록번호', '이름', '성별', '생년월일'].map((title) => (
-              <ListCell>{title}</ListCell>
-            ))}
+            {['병원', '등록번호', '이름', '성별', '생년월일', '기능'].map(
+              (title) => (
+                <ListCell key={title}>{title}</ListCell>
+              )
+            )}
           </div>
         </div>
         <div id="Search-Results" className="divide-y">
-          {data?.searchPatient.patients?.map((patient, idx) => (
-            <SearchList
-              key={idx}
-              clinicName={renameUseSplit(patient.clinic?.name || 'error')}
-              registrationNumber={patient.registrationNumber}
-              name={patient.name}
-              gender={patient.gender}
-              birthday={patient.birthday}
-            />
-          ))}
+          {!data ||
+          !data.searchPatient.patients ||
+          data.searchPatient.patients.length === 0 ? (
+            <Worning type="emptySearch" />
+          ) : (
+            data.searchPatient.patients.map((patient, idx) => (
+              <SearchList
+                key={idx}
+                id={patient.id}
+                clinicName={renameUseSplit(patient.clinic?.name || 'error')}
+                registrationNumber={patient.registrationNumber}
+                name={patient.name}
+                gender={patient.gender}
+                birthday={getYMD(patient.birthday, 'yyyymmdd', '-')}
+              />
+            ))
+          )}
         </div>
         <div
           id="Search-Footer"
@@ -117,9 +129,10 @@ export default function Search() {
               key={pageNumber}
               type="button"
               className={cls(
-                'px-2',
+                'border px-2',
                 page === pageNumber ? 'text-base font-semibold' : ''
               )}
+              onClick={() => changePage(pageNumber)}
             >
               {pageNumber}
             </button>

@@ -288,6 +288,17 @@ export type GetClinicOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type GetPatientInput = {
+  id: Scalars['Int'];
+};
+
+export type GetPatientOutput = {
+  __typename?: 'GetPatientOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  patient?: Maybe<Patient>;
+};
+
 export type GetPatientsInput = {
   onlyId?: InputMaybe<Scalars['Boolean']>;
   patientIds: Array<Scalars['Int']>;
@@ -325,8 +336,8 @@ export type GetReservationOutput = {
 };
 
 export type GetReservationsByPatientInput = {
+  id: Scalars['Int'];
   page?: InputMaybe<Scalars['Int']>;
-  patientId?: InputMaybe<Scalars['Int']>;
 };
 
 export type GetReservationsByPatientOutput = {
@@ -615,6 +626,7 @@ export type Query = {
   findMyClinics: FindMyClinicsOutput;
   findPrescriptions: FindPrescriptionsOutput;
   getClinic: GetClinicOutput;
+  getPatient: GetPatientOutput;
   getPatients: GetPatientsOutput;
   getPrescriptions: GetPrescriptionsOutput;
   getReservation: GetReservationOutput;
@@ -650,6 +662,11 @@ export type QueryFindPrescriptionsArgs = {
 
 export type QueryGetClinicArgs = {
   input: GetClinicInput;
+};
+
+
+export type QueryGetPatientArgs = {
+  input: GetPatientInput;
 };
 
 
@@ -722,7 +739,7 @@ export enum ReservationState {
 }
 
 export type SearchPatientInput = {
-  clinicId: Scalars['Int'];
+  clinicIds: Array<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
   query: Scalars['String'];
 };
@@ -970,6 +987,13 @@ export type GetPatientsQueryVariables = Exact<{
 
 
 export type GetPatientsQuery = { __typename?: 'Query', getPatients: { __typename?: 'GetPatientsOutput', ok: boolean, error?: string | null, patients: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null }> } };
+
+export type GetReservationsByPatientQueryVariables = Exact<{
+  input: GetReservationsByPatientInput;
+}>;
+
+
+export type GetReservationsByPatientQuery = { __typename?: 'Query', getReservationsByPatient: { __typename?: 'GetReservationsByPatientOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, prescriptions?: Array<{ __typename?: 'Prescription', name: string, requiredTime: number }> | null, user: { __typename?: 'User', id: number, name: string }, lastModifier: { __typename?: 'User', id: number, name: string } }> | null } };
 
 export type GetStatisticsQueryVariables = Exact<{
   input: GetStatisticsInput;
@@ -1886,6 +1910,64 @@ export function useGetPatientsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetPatientsQueryHookResult = ReturnType<typeof useGetPatientsQuery>;
 export type GetPatientsLazyQueryHookResult = ReturnType<typeof useGetPatientsLazyQuery>;
 export type GetPatientsQueryResult = Apollo.QueryResult<GetPatientsQuery, GetPatientsQueryVariables>;
+export const GetReservationsByPatientDocument = gql`
+    query getReservationsByPatient($input: GetReservationsByPatientInput!) {
+  getReservationsByPatient(input: $input) {
+    ok
+    error
+    totalPages
+    totalCount
+    results {
+      id
+      startDate
+      endDate
+      state
+      memo
+      isFirst
+      prescriptions {
+        name
+        requiredTime
+      }
+      user {
+        id
+        name
+      }
+      lastModifier {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetReservationsByPatientQuery__
+ *
+ * To run a query within a React component, call `useGetReservationsByPatientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReservationsByPatientQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReservationsByPatientQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetReservationsByPatientQuery(baseOptions: Apollo.QueryHookOptions<GetReservationsByPatientQuery, GetReservationsByPatientQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReservationsByPatientQuery, GetReservationsByPatientQueryVariables>(GetReservationsByPatientDocument, options);
+      }
+export function useGetReservationsByPatientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReservationsByPatientQuery, GetReservationsByPatientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReservationsByPatientQuery, GetReservationsByPatientQueryVariables>(GetReservationsByPatientDocument, options);
+        }
+export type GetReservationsByPatientQueryHookResult = ReturnType<typeof useGetReservationsByPatientQuery>;
+export type GetReservationsByPatientLazyQueryHookResult = ReturnType<typeof useGetReservationsByPatientLazyQuery>;
+export type GetReservationsByPatientQueryResult = Apollo.QueryResult<GetReservationsByPatientQuery, GetReservationsByPatientQueryVariables>;
 export const GetStatisticsDocument = gql`
     query getStatistics($input: GetStatisticsInput!) {
   getStatistics(input: $input) {

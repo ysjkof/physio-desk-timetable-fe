@@ -1,0 +1,28 @@
+query getReservationsByPatient($input: GetReservationsByPatientInput!) {
+  getReservationsByPatient(input: $input) {
+    ok
+    error
+    totalPages
+    totalCount
+    results {
+      id
+      startDate
+      endDate
+      state
+      memo
+      isFirst
+      prescriptions {
+        name
+        requiredTime
+      }
+      user {
+        id
+        name
+      }
+      lastModifier {
+        id
+        name
+      }
+    }
+  }
+}
