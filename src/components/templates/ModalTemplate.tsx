@@ -32,7 +32,7 @@ export default function ModalTemplate({
           'modal-background',
           top ? 'bg-transparent opacity-100' : ''
         )}
-        onClick={() => closeAction()}
+        onClick={closeAction}
       />
       <motion.div
         drag

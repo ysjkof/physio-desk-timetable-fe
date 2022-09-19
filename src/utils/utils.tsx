@@ -3,14 +3,20 @@ export function cls(...classnames: string[]) {
 }
 
 export function getPositionRef(
-  ref: React.RefObject<HTMLDivElement>,
-  modalGap: number
+  ref: React.RefObject<HTMLDivElement | HTMLButtonElement>,
+  modalGap?: number
 ) {
-  const height = ref.current?.getBoundingClientRect().height ?? 0;
-  const top =
-    ref.current?.getBoundingClientRect().top! + height + modalGap ?? 0;
-  const left = ref.current?.getBoundingClientRect().left ?? 0;
-  return { top, left };
+  if (!ref.current) return { top: 0, left: 0 };
+  const {
+    height,
+    left,
+    right,
+    width,
+    top: refTop,
+  } = ref.current.getBoundingClientRect();
+
+  const top = refTop + height + (modalGap || 0);
+  return { top, width, left, right };
 }
 
 export function getMemberState(
