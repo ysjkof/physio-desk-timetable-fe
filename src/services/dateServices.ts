@@ -28,6 +28,7 @@ export const getYMD = (
   separator?: '-' | '/'
 ) => {
   const localDate = new Date(inputDate);
+
   let year = '';
   const month = String(localDate.getMonth() + 1).padStart(2, '0');
   const date = String(localDate.getDate()).padStart(2, '0');
@@ -41,11 +42,12 @@ export const getYMD = (
       year = String(localDate.getFullYear());
       break;
   }
+
   if (separator)
     return year
       ? `${year}${separator}${month}${separator}${date}`
       : `${month}${separator}${date}`;
-  return year ? `${year ?? ''}${month}${date}` : `${month}${date}`;
+  return year ? `${year}${month}${date}` : `${month}${date}`;
 };
 
 export function getHHMM(inputDate: string | Date, seperator?: ':') {
