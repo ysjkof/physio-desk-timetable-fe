@@ -29,6 +29,11 @@ export default function Search() {
 
   const [callQuery, { loading, data }] = useSearchPatientLazyQuery();
 
+  const changePage = (pageNumber: number) => {
+    if (page === pageNumber) return;
+    setPage(pageNumber);
+  };
+
   useEffect(() => {
     const { search } = location;
     const [_, queryName] = search.split('?name=');
@@ -56,7 +61,7 @@ export default function Search() {
         }
       },
     });
-  }, [location]);
+  }, [location, page]);
 
   const { height } = useWindowSize(true);
 
@@ -123,6 +128,7 @@ export default function Search() {
                 'px-2',
                 page === pageNumber ? 'text-base font-semibold' : ''
               )}
+              onClick={() => changePage(pageNumber)}
             >
               {pageNumber}
             </button>
