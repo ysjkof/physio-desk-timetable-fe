@@ -1,8 +1,37 @@
 import useStore from '../../../../hooks/useStore';
 import Worning from '../../../../components/atoms/Warning';
 import { Link, Outlet } from 'react-router-dom';
-import PrescriptionList from './PrescriptionList';
 import Button from '../../../../components/molecules/Button';
+import { useFindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
+import CardContainer from '../../../../components/templates/CardContainer';
+import PrescriptionCard from '../molecules/PrescriptionCard';
+
+function PrescriptionList({ clinicId }: { clinicId: number }) {
+  const { data } = useFindPrescriptionsQuery({
+    variables: {
+      input: {
+        clinicId,
+        onlyLookUpActive: false,
+      },
+    },
+  });
+
+  return (
+    <CardContainer>
+      {data?.findPrescriptions.prescriptions?.length === 0 ? (
+        <Worning type="hasNotPrescription"></Worning>
+      ) : (
+        data?.findPrescriptions.prescriptions?.map((presc) => (
+          <PrescriptionCard
+            key={presc.id}
+            prescription={presc}
+            clinicId={clinicId}
+          />
+        ))
+      )}
+    </CardContainer>
+  );
+}
 
 export default function PrescriptionPage() {
   const { selectedInfo } = useStore();
@@ -26,7 +55,7 @@ export default function PrescriptionPage() {
       </div>
 
       <section className="px-10">
-        <PrescriptionList />
+        <PrescriptionList clinicId={selectedInfo.clinic.id} />
       </section>
       <Outlet />
     </div>
