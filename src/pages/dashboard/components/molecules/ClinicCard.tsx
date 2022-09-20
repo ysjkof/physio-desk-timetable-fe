@@ -57,7 +57,7 @@ function ClinicCard({ clinicName, state, isActivate, children }: CardProps) {
       )}
     >
       <div className="relative flex h-2/3 flex-col justify-center px-6">
-        <div className="mb-1 flex items-center">
+        <div className="mb-1 flex items-center gap-2">
           <span className="overflow-hidden text-ellipsis whitespace-nowrap text-base">
             {clinicName}
           </span>

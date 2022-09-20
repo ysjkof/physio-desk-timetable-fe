@@ -5,6 +5,8 @@ import { lazy } from 'react';
 import ProtectRoute from './ProtectRoute';
 import Worning from '../components/atoms/Warning';
 import GlobalLayout from '../components/templates/GlobalLayout';
+import PrescriptionList from '../pages/dashboard/components/organisms/PrescriptionList';
+import CreatePrescription from '../pages/dashboard/components/organisms/CreatePrescription';
 
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
@@ -79,6 +81,13 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
       protectRoute: { protect: false, isPass: null },
       path: ENDPOINT.dashboard.prescription,
       element: <PrescriptionPage />,
+      outlet: [
+        <Route
+          key={'CreatePrescription'}
+          path="create-prescription"
+          element={<CreatePrescription />}
+        />,
+      ],
     },
     {
       protectRoute: { protect: true, isPass: data?.me.verified },
@@ -120,20 +129,33 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
         >
           <Route index element={<Worning type="selectMenu" />} />
           {dashboardRoute.map((route) => {
-            const element = route.protectRoute.protect ? (
-              <ProtectRoute
-                failElement={<Worning type="verifyEmail" />}
-                isPass={!!route.protectRoute.isPass}
-              >
-                {route.element}
-              </ProtectRoute>
-            ) : (
-              route.element
-            );
+            let {
+              element,
+              path,
+              protectRoute: { protect, isPass },
+              outlet,
+            } = route;
 
-            return (
-              <Route key={route.path} path={route.path} element={element} />
-            );
+            if (protect) {
+              element = (
+                <ProtectRoute
+                  failElement={<Worning type="verifyEmail" />}
+                  isPass={!!isPass}
+                >
+                  {element}
+                </ProtectRoute>
+              );
+            }
+
+            if (outlet) {
+              return (
+                <Route key={path} path={path} element={element}>
+                  {outlet}
+                </Route>
+              );
+            }
+
+            return <Route key={path} path={path} element={element} />;
           })}
         </Route>
         {CommonRoute}
