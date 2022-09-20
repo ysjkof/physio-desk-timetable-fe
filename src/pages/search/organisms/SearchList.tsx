@@ -43,7 +43,7 @@ export default function SearchList({
     setShowAction((prev) => !prev);
   };
 
-  const [callQuery] = useGetReservationsByPatientLazyQuery({
+  const [callQuery, { data }] = useGetReservationsByPatientLazyQuery({
     fetchPolicy: 'cache-and-network',
   });
 
@@ -101,13 +101,7 @@ export default function SearchList({
         <ListCell>{clinicName}</ListCell>
         <ListCell>{registrationNumber}</ListCell>
         <ListCell className="gap-1">
-          {reservations.length > 1 ? (
-            showAction ? (
-              <ChevronUp />
-            ) : (
-              <ChevronDown />
-            )
-          ) : null}
+          {data ? showAction ? <ChevronUp /> : <ChevronDown /> : null}
           {name}
         </ListCell>
         <ListCell>{gender}</ListCell>
@@ -125,7 +119,7 @@ export default function SearchList({
         </ListCell>
       </div>
 
-      {reservations.length > 1 && showAction && (
+      {data && showAction && (
         <div className="flex flex-col items-center justify-center bg-gray-200 p-6 pb-2">
           <div className="w-full rounded-md bg-white">
             <div className="flex w-full px-4 pt-4">
