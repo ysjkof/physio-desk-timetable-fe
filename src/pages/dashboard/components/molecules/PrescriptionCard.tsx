@@ -1,14 +1,107 @@
-import { FindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
-import { cls } from '../../../../utils/utils';
+import { client } from '../../../../apollo';
+import {
+  FindPrescriptionsDocument,
+  FindPrescriptionsQuery,
+  useEditPrescriptionMutation,
+} from '../../../../graphql/generated/graphql';
+import { changeValueInArray, cls } from '../../../../utils/utils';
+
+interface PrescriptionStateProps extends Pick<CardProps, 'clinicId'> {
+  id: number;
+  activate: boolean;
+}
+
+function PrescriptionState({ id, activate, clinicId }: PrescriptionStateProps) {
+  const [callMutation] = useEditPrescriptionMutation();
+
+  const toggleActivation = () => {
+    const todo = activate ? '비활성' : '활성';
+    if (!confirm(`처방을 ${todo} 하시겠습니까?`)) return;
+
+    const inputActivate = !activate;
+
+    callMutation({
+      variables: {
+        input: {
+          id,
+          activate: inputActivate,
+        },
+      },
+      onCompleted(data) {
+        const { ok } = data.editPrescription;
+        ok;
+
+        client.cache.updateQuery<FindPrescriptionsQuery>(
+          {
+            query: FindPrescriptionsDocument,
+            variables: {
+              input: {
+                clinicId,
+                onlyLookUpActive: false,
+              },
+            },
+          },
+          (cacheData) => {
+            if (
+              !cacheData ||
+              !cacheData.findPrescriptions ||
+              !cacheData.findPrescriptions.prescriptions
+            )
+              return cacheData;
+
+            const index = cacheData.findPrescriptions.prescriptions.findIndex(
+              (prescription) => prescription.id === id
+            );
+            if (index === -1) return cacheData;
+            const changePrescription = {
+              ...cacheData.findPrescriptions.prescriptions[index],
+              activate: inputActivate,
+            };
+
+            return {
+              ...cacheData,
+              findPrescriptions: {
+                ...cacheData.findPrescriptions,
+                prescriptions: changeValueInArray(
+                  cacheData.findPrescriptions.prescriptions,
+                  changePrescription,
+                  index
+                ),
+              },
+            };
+          }
+        );
+      },
+    });
+  };
+
+  return (
+    <button
+      type="button"
+      className={cls(
+        'whitespace-nowrap rounded-full',
+        activate ? 'badge-green' : 'badge-gray line-through'
+      )}
+      onClick={toggleActivation}
+    >
+      활성
+    </button>
+  );
+}
 
 interface CardProps {
   prescription: NonNullable<
     FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
   >;
+  clinicId: number;
 }
 
-export default function PrescriptionCard({ prescription }: CardProps) {
+export default function PrescriptionCard({
+  prescription,
+  clinicId,
+}: CardProps) {
   const {
+    id,
     name,
     price,
     requiredTime,
@@ -41,14 +134,11 @@ export default function PrescriptionCard({ prescription }: CardProps) {
           </div>
         </div>
         <div className="mb-1 flex items-center gap-2">
-          <span
-            className={cls(
-              'whitespace-nowrap rounded-full',
-              activate ? 'badge-green' : 'badge-gray'
-            )}
-          >
-            활성
-          </span>
+          <PrescriptionState
+            id={id}
+            activate={!!activate}
+            clinicId={clinicId}
+          />
           <span className="w-12 text-right">{requiredTime}분</span>
           <span className="w-20 text-right">{price}원</span>
         </div>

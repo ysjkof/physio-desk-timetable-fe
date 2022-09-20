@@ -205,6 +205,19 @@ export type EditPatientOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type EditPrescriptionInput = {
+  activate?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type EditPrescriptionOutput = {
+  __typename?: 'EditPrescriptionOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type EditProfileInput = {
   email?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -467,6 +480,7 @@ export type Mutation = {
   deletePatient: DeletePatientOutput;
   deleteReservation: DeleteReservationOutput;
   editPatient: EditPatientOutput;
+  editPrescription: EditPrescriptionOutput;
   editProfile: EditProfileOutput;
   editReservation: EditReservationOutput;
   inactivateClinic: InactivateClinicOutput;
@@ -535,6 +549,11 @@ export type MutationDeleteReservationArgs = {
 
 export type MutationEditPatientArgs = {
   input: EditPatientInput;
+};
+
+
+export type MutationEditPrescriptionArgs = {
+  input: EditPrescriptionInput;
 };
 
 
@@ -933,6 +952,13 @@ export type EditPatientMutationVariables = Exact<{
 
 
 export type EditPatientMutation = { __typename?: 'Mutation', editPatient: { __typename?: 'EditPatientOutput', error?: string | null, ok: boolean } };
+
+export type EditPrescriptionMutationVariables = Exact<{
+  input: EditPrescriptionInput;
+}>;
+
+
+export type EditPrescriptionMutation = { __typename?: 'Mutation', editPrescription: { __typename?: 'EditPrescriptionOutput', ok: boolean, error?: string | null } };
 
 export type EditProfileMutationVariables = Exact<{
   input: EditProfileInput;
@@ -1556,6 +1582,40 @@ export function useEditPatientMutation(baseOptions?: Apollo.MutationHookOptions<
 export type EditPatientMutationHookResult = ReturnType<typeof useEditPatientMutation>;
 export type EditPatientMutationResult = Apollo.MutationResult<EditPatientMutation>;
 export type EditPatientMutationOptions = Apollo.BaseMutationOptions<EditPatientMutation, EditPatientMutationVariables>;
+export const EditPrescriptionDocument = gql`
+    mutation editPrescription($input: EditPrescriptionInput!) {
+  editPrescription(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type EditPrescriptionMutationFn = Apollo.MutationFunction<EditPrescriptionMutation, EditPrescriptionMutationVariables>;
+
+/**
+ * __useEditPrescriptionMutation__
+ *
+ * To run a mutation, you first call `useEditPrescriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditPrescriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editPrescriptionMutation, { data, loading, error }] = useEditPrescriptionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEditPrescriptionMutation(baseOptions?: Apollo.MutationHookOptions<EditPrescriptionMutation, EditPrescriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditPrescriptionMutation, EditPrescriptionMutationVariables>(EditPrescriptionDocument, options);
+      }
+export type EditPrescriptionMutationHookResult = ReturnType<typeof useEditPrescriptionMutation>;
+export type EditPrescriptionMutationResult = Apollo.MutationResult<EditPrescriptionMutation>;
+export type EditPrescriptionMutationOptions = Apollo.BaseMutationOptions<EditPrescriptionMutation, EditPrescriptionMutationVariables>;
 export const EditProfileDocument = gql`
     mutation editProfile($input: EditProfileInput!) {
   editProfile(input: $input) {

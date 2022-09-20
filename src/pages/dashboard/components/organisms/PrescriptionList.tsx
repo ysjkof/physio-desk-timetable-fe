@@ -6,10 +6,11 @@ import Worning from '../../../../components/atoms/Warning';
 
 export default function PrescriptionList() {
   const { selectedInfo } = useStore();
+  const clinicId = selectedInfo.clinic?.id || 0;
   const { data } = useFindPrescriptionsQuery({
     variables: {
       input: {
-        clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,
+        clinicId,
         onlyLookUpActive: false,
       },
     },
@@ -21,7 +22,11 @@ export default function PrescriptionList() {
         <Worning type="hasNotPrescription"></Worning>
       ) : (
         data?.findPrescriptions.prescriptions?.map((presc) => (
-          <PrescriptionCard key={presc.id} prescription={presc} />
+          <PrescriptionCard
+            key={presc.id}
+            prescription={presc}
+            clinicId={clinicId}
+          />
         ))
       )}
     </CardContainer>
