@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import SearchList from './organisms/SearchList';
 import ListCell from './atoms/ListCell';
 import { getYMD } from '../../services/dateServices';
+import Button from '../../components/molecules/Button';
 
 export default function Search() {
   const location = useLocation();
@@ -78,7 +79,13 @@ export default function Search() {
         style={{ height }}
       >
         <div id="Search-Header" className="shadow-sm">
-          <h1 className="border-b px-6 py-2 text-base font-bold">환자 검색</h1>
+          <div className="flex justify-between border-b px-6 py-2">
+            <h1 className="text-base font-bold">환자 검색</h1>
+            <Button canClick isSmall onClick={invokeQuery} loading={loading}>
+              검색
+            </Button>
+          </div>
+
           <div className="flex flex-wrap gap-6 border-b px-6 py-2">
             {clinicLists.map((clinic) => (
               <Checkbox
