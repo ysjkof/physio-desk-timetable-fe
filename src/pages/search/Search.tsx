@@ -5,8 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Worning from '../../components/atoms/Warning';
 import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
 import { selectedInfoVar } from '../../store';
-import { MUOOL } from '../../constants/constants';
-import Loading from '../../components/atoms/Loading';
+import { GENDER_KOR, MUOOL } from '../../constants/constants';
 import useWindowSize from '../../hooks/useWindowSize';
 import { cls, renameUseSplit } from '../../utils/utils';
 import useStore from '../../hooks/useStore';
@@ -35,7 +34,7 @@ export default function Search() {
     setPage(pageNumber);
   };
 
-  useEffect(() => {
+  const invokeQuery = () => {
     const { search } = location;
     const [_, queryName] = search.split('?name=');
     if (!queryName) {
@@ -62,11 +61,12 @@ export default function Search() {
         }
       },
     });
+  };
+  useEffect(() => {
+    invokeQuery();
   }, [location, page]);
 
   const { height } = useWindowSize(true);
-
-  if (loading) return <Loading />;
 
   return (
     <>
@@ -79,7 +79,7 @@ export default function Search() {
       >
         <div id="Search-Header" className="shadow-sm">
           <h1 className="border-b px-6 py-2 text-base font-bold">환자 검색</h1>
-          <div className="flex gap-6 border-b px-6 py-2">
+          <div className="flex flex-wrap gap-6 border-b px-6 py-2">
             {clinicLists.map((clinic) => (
               <Checkbox
                 key={clinic.id}
@@ -93,10 +93,12 @@ export default function Search() {
               />
             ))}
           </div>
-          <div className="flex divide-x border-b-2 px-6">
+          <div className="grid grid-cols-[1fr,4rem,1fr,3rem,5rem,5rem] divide-x border-b-2 sm:px-6 lg:grid-cols-6">
             {['병원', '등록번호', '이름', '성별', '생년월일', '기능'].map(
               (title) => (
-                <ListCell key={title}>{title}</ListCell>
+                <ListCell key={title} className="">
+                  {title}
+                </ListCell>
               )
             )}
           </div>
@@ -114,7 +116,7 @@ export default function Search() {
                 clinicName={renameUseSplit(patient.clinic?.name || 'error')}
                 registrationNumber={patient.registrationNumber}
                 name={patient.name}
-                gender={patient.gender}
+                gender={GENDER_KOR[patient.gender as keyof typeof GENDER_KOR]}
                 birthday={getYMD(patient.birthday, 'yyyymmdd', '-')}
               />
             ))

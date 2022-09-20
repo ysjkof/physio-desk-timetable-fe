@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Button from '../../../components/molecules/Button';
+import { RESERVATION_STATE_KOR } from '../../../constants/constants';
 import {
+  GetReservationsByPatientQuery,
   Patient,
   useGetReservationsByPatientLazyQuery,
 } from '../../../graphql/generated/graphql';
@@ -9,6 +11,10 @@ import ChevronDown from '../../../svgs/ChevronDown';
 import ChevronUp from '../../../svgs/ChevronUp';
 import { cls } from '../../../utils/utils';
 import ListCell from '../atoms/ListCell';
+
+type Reservations = NonNullable<
+  GetReservationsByPatientQuery['getReservationsByPatient']['results']
+>;
 
 interface SearchListProps
   extends Pick<
@@ -30,26 +36,43 @@ export default function SearchList({
 
   const [selectedPage, setSelectedPage] = useState(1);
   const [pageNumbers, setPageNumbers] = useState([1]);
+  const [reservationCount, setReservationCount] = useState(0);
+  const [reservations, setReservations] = useState<Reservations>([]);
+
   const toggleAction = () => {
     setShowAction((prev) => !prev);
   };
 
-  const [callQuery, { data, loading }] = useGetReservationsByPatientLazyQuery({
-    onCompleted(data) {
-      const { totalPages } = data.getReservationsByPatient;
-      if (totalPages) {
-        const numbers = [1];
-        while (numbers.length < totalPages) {
-          numbers.push(numbers.length + 1);
-        }
-        setPageNumbers(numbers);
-      }
-    },
+  const [callQuery] = useGetReservationsByPatientLazyQuery({
+    fetchPolicy: 'cache-and-network',
   });
+
+  const onCompleted = (data: GetReservationsByPatientQuery) => {
+    const { totalPages, totalCount, results } = data.getReservationsByPatient;
+
+    const getNumbers = (pageNumber: number) => {
+      const numbers = [1];
+      while (numbers.length < pageNumber) {
+        numbers.push(numbers.length + 1);
+      }
+      return numbers;
+    };
+
+    if (pageNumbers.length !== totalPages) {
+      setPageNumbers(getNumbers(totalPages || 1));
+    }
+    if (reservationCount !== totalCount) {
+      setReservationCount(totalCount || 0);
+    }
+    if (results) {
+      setReservations(results);
+    }
+  };
 
   const queryReservations = (page: number) => {
     callQuery({
       variables: { input: { page, id } },
+      onCompleted,
     });
   };
 
@@ -71,21 +94,30 @@ export default function SearchList({
 
   return (
     <div className="hover:shadow-cst">
-      <div className="flex px-6 hover:cursor-pointer" onClick={toggleAction}>
+      <div
+        className="grid grid-cols-[1fr,4rem,1fr,3rem,5rem,5rem] hover:cursor-pointer sm:px-6 lg:grid-cols-6"
+        onClick={toggleAction}
+      >
         <ListCell>{clinicName}</ListCell>
         <ListCell>{registrationNumber}</ListCell>
         <ListCell className="gap-1">
-          {data ? showAction ? <ChevronUp /> : <ChevronDown /> : null}
+          {reservations.length > 1 ? (
+            showAction ? (
+              <ChevronUp />
+            ) : (
+              <ChevronDown />
+            )
+          ) : null}
           {name}
         </ListCell>
         <ListCell>{gender}</ListCell>
         <ListCell>{birthday}</ListCell>
-        <ListCell className="gap-2">
+        <ListCell>
           <Button
             canClick
             type="button"
             onClick={() => queryReservations(selectedPage)}
-            loading={loading}
+            loading={false}
             isSmall
           >
             지난 예약
@@ -93,26 +125,25 @@ export default function SearchList({
         </ListCell>
       </div>
 
-      {showAction && data && (
+      {reservations.length > 1 && showAction && (
         <div className="flex flex-col items-center justify-center bg-gray-200 p-6 pb-2">
           <div className="w-full rounded-md bg-white">
             <div className="flex w-full px-4 pt-4">
-              총 예약 수 : {data?.getReservationsByPatient.totalCount}
+              총 예약 수 : {reservationCount}
             </div>
             <div className="flex w-full border-b px-2">
-              <ListCell>시간</ListCell>
-              <ListCell>상태</ListCell>
-              <ListCell>치료한사람</ListCell>
-              <ListCell>수정한사람</ListCell>
+              {['시간', '상태', '치료한사람', '예약한사람'].map((title) => (
+                <ListCell key={title}>{title}</ListCell>
+              ))}
             </div>
-            <div className="h-[320px]">
-              {data?.getReservationsByPatient.results?.map((reservation) => (
+            <div className="sm:min-h-[320px]">
+              {reservations.map((reservation) => (
                 <div key={reservation.id} className="flex w-full px-2">
                   <ListCell>
                     {getTime(reservation.startDate, reservation.endDate)}
                   </ListCell>
                   <ListCell>
-                    {reservation.state}
+                    {RESERVATION_STATE_KOR[reservation.state]}
                     {reservation.isFirst && '신환'}
                   </ListCell>
                   <ListCell>{reservation.user.name}</ListCell>
