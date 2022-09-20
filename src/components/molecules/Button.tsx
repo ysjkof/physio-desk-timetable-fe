@@ -1,9 +1,10 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode } from 'react';
+import { ClassNameProps } from '../../types/type';
 import { cls } from '../../utils/utils';
 
-interface ButtonProps {
+interface ButtonProps extends ClassNameProps {
   canClick: boolean | null;
   loading: boolean;
   children: ReactNode;
@@ -21,6 +22,7 @@ export default function Button({
   isWidthFull,
   type = 'button',
   onClick,
+  className,
 }: ButtonProps) {
   return (
     <button
@@ -29,7 +31,8 @@ export default function Button({
         'flex items-center justify-center rounded-md bg-green-600 py-1 px-2 tracking-widest text-white transition-colors focus:outline-none',
         isSmall ? 'text-xs' : 'text-base',
         isWidthFull ? 'w-full' : '',
-        canClick ? 'bg-green-600' : 'pointer-events-none opacity-50'
+        canClick ? 'bg-green-600' : 'pointer-events-none opacity-50',
+        className || ''
       )}
       onClick={onClick}
     >
