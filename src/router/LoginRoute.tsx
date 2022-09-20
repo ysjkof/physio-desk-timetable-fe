@@ -5,7 +5,6 @@ import { lazy } from 'react';
 import ProtectRoute from './ProtectRoute';
 import Worning from '../components/atoms/Warning';
 import GlobalLayout from '../components/templates/GlobalLayout';
-import PrescriptionList from '../pages/dashboard/components/organisms/PrescriptionList';
 import CreatePrescription from '../pages/dashboard/components/organisms/CreatePrescription';
 
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));

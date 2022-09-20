@@ -30,7 +30,7 @@ export default function SearchPatient() {
           input: {
             page: queryPageNumber,
             query: patientNameTrim,
-            clinicId: selectedInfo.clinic.id,
+            clinicIds: [selectedInfo.clinic.id],
           },
         },
       });
