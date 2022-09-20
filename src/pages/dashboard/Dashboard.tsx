@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useMatch } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MeQuery } from '../../graphql/generated/graphql';
 import { useMe } from '../../hooks/useMe';
@@ -28,7 +28,7 @@ export default function Dashboard() {
   const { selectedInfo } = useStore();
   const location = useLocation();
   const pathname = location.pathname.split('/');
-  const endpoint = pathname[pathname.length - 1] as DashboardEndpoint;
+  const endpoint = pathname[2] as DashboardEndpoint;
 
   if (!meData || !selectedInfo.clinic || loading) return <Loading />;
 
