@@ -16,6 +16,7 @@ import { toastVar } from '../../../../store';
 import { REG_EXP } from '../../../../constants/regex';
 import Textarea from '../../../../components/molecules/Textarea';
 import Checkbox from '../../../../components/molecules/Checkbox';
+import { GENDER_KOR } from '../../../../constants/constants';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -143,15 +144,12 @@ export default function CreatePatientForm({
         )}
       </Input>
       <div className="gender-radio flex justify-around">
-        {[
-          { label: '남성', value: 'male' },
-          { label: '여성', value: 'female' },
-        ].map((gender) => (
+        {['male', 'female'].map((gender) => (
           <Checkbox
-            id={'gender_' + gender.value}
-            label={gender.label}
+            id={'gender_' + gender}
+            label={GENDER_KOR[gender as 'male' | 'female']}
             type="radio"
-            value={gender.value}
+            value={gender}
             register={register('gender', { required: '성별을 선택하세요' })}
           />
         ))}

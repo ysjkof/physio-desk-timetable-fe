@@ -1,8 +1,9 @@
+import { GENDER_KOR } from '../../../../constants/constants';
 import { getYMD } from '../../../../services/dateServices';
 import { cls } from '../../../../utils/utils';
 
 interface ReservationCardNameProps {
-  gender: string;
+  gender: keyof typeof GENDER_KOR;
   name: string;
   registrationNumber: number | null | undefined;
   birthday: Date;
@@ -38,7 +39,7 @@ export default function ReservationCardName({
             gender === 'male' ? 'text-blue-500' : 'text-red-400'
           )}
         >
-          {gender === 'male' ? '남성' : '여성'}
+          {GENDER_KOR[gender]}
         </span>
         <span>{getYMD(birthday, 'yyyymmdd', '-')}</span>
       </div>

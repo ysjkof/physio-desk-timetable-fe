@@ -11,6 +11,7 @@ import ReservationCardPatientDetail from './ReservationCardPatientDetail';
 import ReservationCardDetail from './ReservationCardDetail';
 import BtnMenuToggle from '../../../../components/molecules/MenuToggleButton';
 import MenuButton from '../../../../components/molecules/MenuButton';
+import { GENDER_KOR } from '../../../../constants/constants';
 
 interface ReservationCardProps extends TimetableModalProps {
   reservation: IListReservation;
@@ -58,7 +59,7 @@ export default function ReservationCard({
       <h4 className="mb-5 text-left font-medium"></h4>
       <ReservationCardName
         birthday={reservation.patient.birthday}
-        gender={reservation.patient.gender}
+        gender={reservation.patient.gender as keyof typeof GENDER_KOR}
         name={reservation.patient.name}
         registrationNumber={reservation.patient.registrationNumber}
       />

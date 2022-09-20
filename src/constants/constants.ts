@@ -81,3 +81,8 @@ const milliseconds = 3000;
 export const defaultToastTimeout = milliseconds;
 
 export const MUOOL = 'Muool';
+
+export const GENDER_KOR = {
+  male: '남성',
+  female: '여성',
+} as const;
