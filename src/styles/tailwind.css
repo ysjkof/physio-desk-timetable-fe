@@ -107,6 +107,16 @@
   .mdx-img {
     @apply bg-photo bg-center bg-no-repeat;
   }
+
+  .badge-red {
+    @apply rounded-md bg-red-100 px-1.5 py-0.5 text-red-700;
+  }
+  .badge-green {
+    @apply rounded-md bg-green-100 px-1.5 py-0.5 text-green-700;
+  }
+  .badge-gray {
+    @apply rounded-md bg-gray-100 px-1.5 py-0.5 text-gray-700;
+  }
 }
 
 @layer utilities {
