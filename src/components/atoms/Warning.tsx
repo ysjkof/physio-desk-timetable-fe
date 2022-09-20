@@ -33,7 +33,7 @@ export default function Worning({
   };
 
   return (
-    <p className="my-10 text-center text-base font-semibold">
+    <p className="my-10 mx-auto text-center text-base font-semibold">
       {type ? messages[type] : children}
     </p>
   );
