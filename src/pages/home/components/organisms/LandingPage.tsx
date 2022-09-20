@@ -149,7 +149,10 @@ export default function LandingPage() {
         <div className="mt-12 flex">
           <div className="flex w-1/2 flex-col gap-5 pr-4">
             {threeReservationState.map((state) => (
-              <div className="relative flex h-1/4 justify-center pt-2">
+              <div
+                key={state}
+                className="relative flex h-1/4 justify-center pt-2"
+              >
                 <DocsEventBox height={70} width={150} state={state} />
               </div>
             ))}
@@ -157,11 +160,11 @@ export default function LandingPage() {
           </div>
           <div className="flex w-1/2 flex-col gap-5">
             {descriptionReservationState.map((state) => (
-              <div className="relative flex h-1/4 flex-col">
+              <div key={state.title} className="relative flex h-1/4 flex-col">
                 <h3 className="mb-4 mt-0 text-xl font-medium text-gray-900">
                   {state.title}
                 </h3>
-                <p>{state.description}</p>
+                {state.description}
               </div>
             ))}
           </div>
