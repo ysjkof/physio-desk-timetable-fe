@@ -5,8 +5,15 @@ import Button from '../../../../components/molecules/Button';
 import { useFindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
 import CardContainer from '../../../../components/templates/CardContainer';
 import PrescriptionCard from '../molecules/PrescriptionCard';
+import { useState } from 'react';
+import MenuButton from '../../../../components/molecules/MenuButton';
 
-function PrescriptionList({ clinicId }: { clinicId: number }) {
+export interface PrescriptionListProps {
+  clinicId: number;
+  showInactivate: boolean;
+}
+
+function PrescriptionList({ clinicId, showInactivate }: PrescriptionListProps) {
   const { data } = useFindPrescriptionsQuery({
     variables: {
       input: {
@@ -21,13 +28,17 @@ function PrescriptionList({ clinicId }: { clinicId: number }) {
       {data?.findPrescriptions.prescriptions?.length === 0 ? (
         <Worning type="hasNotPrescription"></Worning>
       ) : (
-        data?.findPrescriptions.prescriptions?.map((presc) => (
-          <PrescriptionCard
-            key={presc.id}
-            prescription={presc}
-            clinicId={clinicId}
-          />
-        ))
+        data?.findPrescriptions.prescriptions?.map((presc) => {
+          if (!showInactivate && !presc.activate) return null;
+
+          return (
+            <PrescriptionCard
+              key={presc.id}
+              prescription={presc}
+              clinicId={clinicId}
+            />
+          );
+        })
       )}
     </CardContainer>
   );
@@ -35,7 +46,8 @@ function PrescriptionList({ clinicId }: { clinicId: number }) {
 
 export default function PrescriptionPage() {
   const { selectedInfo } = useStore();
-
+  const [showInactivate, setShowInactivate] = useState(true);
+  const toggleShowInactivate = () => setShowInactivate((prev) => !prev);
   if (!selectedInfo.clinic?.isStayed)
     return <Worning type="hasNotPermission" />;
 
@@ -52,10 +64,18 @@ export default function PrescriptionPage() {
             만들기
           </Link>
         </Button>
+        <MenuButton
+          label="비활성숨기기"
+          enabled={!showInactivate}
+          onClick={toggleShowInactivate}
+        />
       </div>
 
       <section className="px-10">
-        <PrescriptionList clinicId={selectedInfo.clinic.id} />
+        <PrescriptionList
+          clinicId={selectedInfo.clinic.id}
+          showInactivate={showInactivate}
+        />
       </section>
       <Outlet />
     </div>

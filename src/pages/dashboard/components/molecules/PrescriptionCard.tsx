@@ -3,14 +3,14 @@ import Button from '../../../../components/molecules/Button';
 import { FindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
 import Edit from '../../../../svgs/Edit';
 import { cls } from '../../../../utils/utils';
+import { PrescriptionListProps } from '../organisms/PrescriptionPage';
 import PrescriptionEdit from './PrescriptionEdit';
 import PrescriptionState from './PrescriptionState';
 
-export interface CardProps {
+export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
   prescription: NonNullable<
     FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
   >;
-  clinicId: number;
 }
 
 export default function PrescriptionCard({
