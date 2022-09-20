@@ -93,9 +93,6 @@
     @apply cursor-pointer after:absolute after:top-full after:left-[19.5%] after:border-8  after:border-t-black after:border-b-transparent after:border-l-transparent after:border-r-transparent;
   }
 
-  .form-error {
-    @apply absolute right-0 whitespace-nowrap rounded-md px-2 py-1 font-semibold text-red-400;
-  }
   .seperate-bar {
     @apply w-full border-b;
   }
