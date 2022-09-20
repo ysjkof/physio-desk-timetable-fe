@@ -1,10 +1,11 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useMatch } from 'react-router-dom';
 import DocsSidebar from './components/organisms/DocsSidebar';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import useWindowSize from '../../hooks/useWindowSize';
 import BarBottomLeft from '../../svgs/BarBottomLeft';
 import XMark from '../../svgs/XMark';
+import { cls } from '../../utils/utils';
 
 const DocsSidebarModal = lazy(
   () => import('./components/molecules/DocsSidebarModal')
@@ -13,8 +14,9 @@ const Loading = lazy(() => import('../../components/atoms/Loading'));
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);
-
   const [isDesktop, loading] = useMediaQuery({ minWidth: '768' });
+
+  const isOverview = useMatch('docs/overview');
 
   const { height, changeMinus } = useWindowSize(true);
   const navRef = useRef<HTMLDivElement>(null);
@@ -52,7 +54,12 @@ export default function Docs() {
             <DocsSidebar />
           </DocsSidebarModal>
         )}
-        <article className="prose relative flex h-full w-full max-w-3xl flex-col overflow-y-scroll bg-white pt-2 pb-20 prose-a:no-underline sm:pt-4 sm:pb-28">
+        <article
+          className={cls(
+            'prose relative flex h-full w-full max-w-3xl flex-col overflow-y-scroll bg-white pt-2 pb-20 prose-a:no-underline sm:pt-4 sm:pb-28',
+            isOverview ? '' : 'px-6  sm:px-16'
+          )}
+        >
           <Suspense fallback={<Loading />}>
             <Outlet />
           </Suspense>
