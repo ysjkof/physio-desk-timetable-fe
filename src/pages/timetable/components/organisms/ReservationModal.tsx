@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { TimetableModalProps } from '../..';
+import { TimetableModalProps } from '../../Timetable';
 import { useListReservations } from '../../hooks/useListReservations';
 import { ReservationState } from '../../../../graphql/generated/graphql';
 import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';

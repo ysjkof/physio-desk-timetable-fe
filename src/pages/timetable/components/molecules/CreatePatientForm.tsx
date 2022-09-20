@@ -8,7 +8,7 @@ import {
   useEditPatientMutation,
 } from '../../../../graphql/generated/graphql';
 import Input from '../../../../components/molecules/Input';
-import { TimetableModalProps } from '../..';
+import { TimetableModalProps } from '../../Timetable';
 import DatepickerWithInput from '../../../../components/molecules/DatepickerWithInput';
 import { useEffect, useState } from 'react';
 import useStore from '../../../../hooks/useStore';

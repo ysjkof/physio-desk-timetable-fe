@@ -11,7 +11,7 @@ const TestPage = lazy(() => import('../pages/TestPage'));
 const NotFound = lazy(() => import('../components/404'));
 const CheckAdmin = lazy(() => import('../utils/CheckAdmin'));
 
-const Docs = lazy(() => import('../pages/docs'));
+const Docs = lazy(() => import('../pages/docs/Docs'));
 const DocsIndex = lazy(() => import('../pages/docs/mdx/DocsIndex.mdx'));
 const BasicReserve = lazy(() => import('../pages/docs/mdx/BasicReserve.mdx'));
 const BasicPatientRegistration = lazy(
@@ -28,7 +28,9 @@ const Contacts = lazy(() => import('../pages/docs/mdx/Contacts.mdx'));
 
 const LoginRoute = lazy(() => import('./LoginRoute'));
 const LogoutRoute = lazy(() => import('./LogoutRoute'));
-const ConfirmEmail = lazy(() => import('../pages/auth/ConfirmEmail'));
+const ConfirmEmail = lazy(
+  () => import('../pages/auth/ConfirmEmail/ConfirmEmail')
+);
 
 const Loading = lazy(() => import('../components/atoms/Loading'));
 

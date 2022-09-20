@@ -1,4 +1,4 @@
-import { TimetableModalProps } from '../..';
+import { TimetableModalProps } from '../../Timetable';
 import { useLocation } from 'react-router-dom';
 import {
   createDateFromDay,

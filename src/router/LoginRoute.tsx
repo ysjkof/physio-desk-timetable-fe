@@ -6,8 +6,8 @@ import ProtectRoute from './ProtectRoute';
 import Worning from '../components/atoms/Warning';
 import GlobalLayout from '../components/templates/GlobalLayout';
 
-const TimeTable = lazy(() => import('../pages/timetable'));
-const Dashboard = lazy(() => import('../pages/dashboard'));
+const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
+const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
 const CreateClinic = lazy(
   () => import('../pages/dashboard/components/organisms/CreateClinic')
 );

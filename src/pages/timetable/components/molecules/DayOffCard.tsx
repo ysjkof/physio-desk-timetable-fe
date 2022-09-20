@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { TimetableModalProps } from '../..';
+import { TimetableModalProps } from '../../Timetable';
 import { useDeleteReservationMutation } from '../../../../graphql/generated/graphql';
 import { IListReservation } from '../../../../types/type';
 import ReserveForm from './ReserveForm';

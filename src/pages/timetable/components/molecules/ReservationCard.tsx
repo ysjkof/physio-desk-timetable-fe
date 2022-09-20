@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useDeleteReservationMutation } from '../../../../graphql/generated/graphql';
 import { IListReservation } from '../../../../types/type';
-import { TimetableModalProps } from '../..';
+import { TimetableModalProps } from '../../Timetable';
 import ReserveForm from './ReserveForm';
 import CreatePatientForm from './CreatePatientForm';
 import ReservationCardName from './ReservationCardName';

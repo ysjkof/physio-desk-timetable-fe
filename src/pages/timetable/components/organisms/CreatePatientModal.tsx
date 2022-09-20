@@ -1,4 +1,4 @@
-import { TimetableModalProps } from '../..';
+import { TimetableModalProps } from '../../Timetable';
 import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
 import ModalTemplate from '../../../../components/templates/ModalTemplate';
 import CreatePatientForm from '../molecules/CreatePatientForm';

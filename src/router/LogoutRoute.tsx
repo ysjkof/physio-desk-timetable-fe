@@ -6,9 +6,9 @@ import AuthContainer from '../pages/auth/components/AuthContainer';
 import { LoginRouteProps } from './LoginRoute';
 import { ROUTES } from './routes';
 
-const Home = lazy(() => import('../pages/home'));
-const Login = lazy(() => import('../pages/auth/Login'));
-const SignUp = lazy(() => import('../pages/auth/SignUp'));
+const Home = lazy(() => import('../pages/home/Home'));
+const Login = lazy(() => import('../pages/auth/Login/Login'));
+const SignUp = lazy(() => import('../pages/auth/SignUp/SignUp'));
 
 function LogoutRoute({ CommonRoute }: LoginRouteProps) {
   const { login, sign_up } = ROUTES;
