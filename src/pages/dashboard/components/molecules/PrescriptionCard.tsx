@@ -74,21 +74,21 @@ export default function PrescriptionCard({
             </div>
           </div>
 
-          <div className="mb-1 flex items-center gap-2">
+          <div className="mb-1 grid grid-cols-[2rem,4rem,6rem,2rem] items-center justify-between">
             <PrescriptionState
               id={id}
               activate={!!activate}
               clinicId={clinicId}
             />
-            <span className="w-12 text-right">{requiredTime}분</span>
-            <span className="w-20 text-right">{price}원</span>
-            <button className="ml-auto" onClick={toggleEditMode}>
+            <span className="px-1 text-right">{requiredTime}분</span>
+            <span className="px-1 text-right">{price}원</span>
+            <button className="pl-2" onClick={toggleEditMode}>
               <Edit />
             </button>
           </div>
           {description && (
             <details className="pt-2">
-              <summary className="overflow-hidden text-ellipsis whitespace-nowrap">
+              <summary className="w-56 overflow-hidden text-ellipsis whitespace-nowrap">
                 {description}
               </summary>
               {description}
