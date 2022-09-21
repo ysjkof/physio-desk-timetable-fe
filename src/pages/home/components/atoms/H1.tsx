@@ -1,15 +1,14 @@
-import { HTMLAttributes } from 'react';
-import { ChildrenProps } from '../../../../types/type';
+import { ChildrenProps, ClassNameProps } from '../../../../types/type';
 import { cls } from '../../../../utils/utils';
 
-interface H1Poprs extends ChildrenProps, HTMLAttributes<HTMLHeadElement> {}
+export interface HeadingPoprs extends ChildrenProps, ClassNameProps {}
 
-export default function H1({ children, ...args }: H1Poprs) {
+export default function H1({ children, ...args }: HeadingPoprs) {
   return (
     <h1
       {...args}
       className={cls(
-        'mb-6 text-3xl font-medium text-gray-900',
+        'mx-auto mb-6 w-fit text-4xl  font-bold text-gray-900',
         args.className || ''
       )}
     >
