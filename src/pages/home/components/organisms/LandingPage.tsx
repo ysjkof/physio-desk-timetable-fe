@@ -20,7 +20,7 @@ import H3 from '../atoms/H3';
 
 export default function LandingPage() {
   const isLoggedIn = isLoggedInVar();
-  const [isMobile] = useMediaQuery({ minWidth: '640px' });
+  const [isMobile] = useMediaQuery({ minWidth: '640' });
 
   const tableWide = '/images/landing-page/table-wide.webp';
   const myFourClinicsMobil = '/images/landing-page/my-four-clinics_mobil.webp';
