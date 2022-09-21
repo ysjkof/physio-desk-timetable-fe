@@ -9,8 +9,9 @@ import { renameUseSplit } from '../../utils/utils';
 import { MUOOL } from '../../constants/constants';
 import AcceptInvitation from './components/organisms/AcceptInvitation';
 import DashboardTemplate from './components/template/DashboardTemplate';
-import DashboardSideNav from './components/organisms/DashboardSideNav';
+import DashboardSidebar from './components/organisms/DashboardSidebar';
 import DashboardTitle from './components/molecules/DashboardTitle';
+import DashboardClinicSelector from './components/organisms/DashboardClinicSelector';
 
 const Loading = lazy(() => import('../../components/atoms/Loading'));
 
@@ -43,18 +44,12 @@ export default function Dashboard() {
       </Helmet>
 
       <DashboardTemplate
-        nav={
-          <DashboardSideNav
-            meData={meData}
-            endpoint={endpoint}
-            isAccepted={isAccepted}
-          />
+        clinicSelector={
+          <DashboardClinicSelector meData={meData} isAccepted={isAccepted} />
         }
-        breadcrumb={
-          <DashboardTitle
-            clinicName={renameUseSplit(selectedInfo.clinic.name)}
-            endpoint={endpoint}
-          />
+        breadcrumb={<DashboardTitle endpoint={endpoint} />}
+        sidebar={
+          <DashboardSidebar endpoint={endpoint} isAccepted={isAccepted} />
         }
       >
         {isAccepted ? (
