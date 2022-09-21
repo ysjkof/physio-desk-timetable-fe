@@ -97,6 +97,7 @@ export default function Search() {
                 register={register('clinicIds', {
                   required: true,
                 })}
+                defaultChecked={clinic.id === selectedInfo.clinic?.id}
               />
             ))}
           </div>
