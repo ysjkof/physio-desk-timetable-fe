@@ -103,7 +103,10 @@ export default function LandingPage() {
     <>
       <Section widthFull>
         <div className="mx-auto flex max-w-7xl flex-col">
-          <img src={tableWide} className="h-fit w-full" />
+          <img
+            src={tableWide}
+            className="h-[101px] w-full md:h-[189px] lg:h-[303px]"
+          />
         </div>
       </Section>
       <Section>
@@ -156,7 +159,7 @@ export default function LandingPage() {
           <P>예전에 그만둔 병원도 소속됐던 기간의 예약을 확인할 수 있습니다.</P>
           <div className="flex justify-center">
             <img
-              className="h-fit w-[608px]"
+              className="h-fit sm:w-[279px] md:w-[544px] "
               src={isMobile ? myFourClinicsMobil : myFourClinicsDesk}
             />
           </div>
