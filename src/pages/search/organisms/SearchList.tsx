@@ -101,7 +101,7 @@ export default function SearchList({
         <ListCell>{clinicName}</ListCell>
         <ListCell>{registrationNumber}</ListCell>
         <ListCell className="gap-1">
-          {data ? showAction ? <ChevronUp /> : <ChevronDown /> : null}
+          {showAction ? <ChevronUp /> : <ChevronDown />}
           {name}
         </ListCell>
         <ListCell>{gender}</ListCell>
@@ -119,7 +119,7 @@ export default function SearchList({
         </ListCell>
       </div>
 
-      {data && showAction && (
+      {showAction && (
         <div className="flex flex-col items-center justify-center bg-gray-200 p-6 pb-2">
           <div className="w-full rounded-md bg-white">
             <div className="flex w-full px-4 pt-4">
