@@ -1,5 +1,8 @@
-import { ChildrenProps } from '../../../../types/type';
+import { ChildrenProps, ClassNameProps } from '../../../../types/type';
+import { cls } from '../../../../utils/utils';
 
-export default function P({ children }: ChildrenProps) {
-  return <p className="mb-4">{children}</p>;
+interface PProps extends ChildrenProps, ClassNameProps {}
+
+export default function P({ children, className }: PProps) {
+  return <p className={cls('mb-4', className || '')}>{children}</p>;
 }

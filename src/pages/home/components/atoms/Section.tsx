@@ -12,7 +12,7 @@ export default function Section({
   className,
 }: SectionProps) {
   return (
-    <section className={cls('mb-16', className || '')}>
+    <section className={cls('mb-32', className || '')}>
       {widthFull ? (
         children
       ) : (

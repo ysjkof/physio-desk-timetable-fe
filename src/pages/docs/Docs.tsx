@@ -57,7 +57,7 @@ export default function Docs() {
         <article
           className={cls(
             'prose relative flex h-full w-full max-w-3xl flex-col overflow-y-scroll bg-white pt-2 pb-20 prose-a:no-underline sm:pt-4 sm:pb-28',
-            isOverview ? '' : 'px-6  sm:px-16'
+            isOverview ? '' : 'px-6 md:px-16'
           )}
         >
           <Suspense fallback={<Loading />}>

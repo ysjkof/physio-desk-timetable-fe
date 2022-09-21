@@ -1,9 +1,17 @@
-import { ChildrenProps } from '../../../../types/type';
+import { ChildrenProps, ClassNameProps } from '../../../../types/type';
+import { cls } from '../../../../utils/utils';
 
-export default function Li({ children }: ChildrenProps) {
+interface LiProps extends ChildrenProps, ClassNameProps {}
+
+export default function Li({ children, className }: LiProps) {
   return (
-    <li className="flex w-full items-center justify-center whitespace-nowrap rounded-lg bg-white py-2 font-medium shadow-md ">
-      <span>{children}</span>
+    <li
+      className={cls(
+        'flex w-[170px] items-center whitespace-nowrap font-medium',
+        className || ''
+      )}
+    >
+      {children}
     </li>
   );
 }
