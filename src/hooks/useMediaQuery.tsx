@@ -10,18 +10,18 @@ interface useMediaQueryProps {
  * 768px : 너비가 768px이상이면 데스크톱
  */
 export default function useMediaQuery({ minWidth }: useMediaQueryProps) {
-  const [isMatch, setIsMobile] = useState(true);
+  const [isMatch, setIsMatch] = useState(true);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(`(min-width:${minWidth}px)`);
-    if (mediaQuery.matches) setIsMobile(false);
+    if (mediaQuery.matches) setIsMatch(true);
 
     const senseScreen = (event: MediaQueryListEvent) => {
       if (event.matches) {
-        setIsMobile(false);
+        setIsMatch(true);
       } else {
-        setIsMobile(true);
+        setIsMatch(false);
       }
     };
 

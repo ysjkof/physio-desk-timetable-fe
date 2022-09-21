@@ -36,7 +36,7 @@ export default function Docs() {
 
   return (
     <main className="h-full bg-gray-50">
-      {isDesktop && (
+      {!isDesktop && (
         <nav className="flex h-12 items-center px-4 shadow-md" ref={navRef}>
           <button type="button" className="p-2" onClick={toggleAside}>
             {isOpen ? <XMark /> : <BarBottomLeft />}
@@ -48,8 +48,8 @@ export default function Docs() {
         className="mx-auto flex max-w-7xl justify-center overflow-hidden"
         style={{ height }}
       >
-        {!isDesktop && <DocsSidebar />}
-        {isDesktop && isOpen && (
+        {isDesktop && <DocsSidebar />}
+        {!isDesktop && isOpen && (
           <DocsSidebarModal toggleAside={toggleAside}>
             <DocsSidebar />
           </DocsSidebarModal>
