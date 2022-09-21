@@ -248,10 +248,12 @@ export default function ReserveForm({
   useEffect(() => {
     if (prescriptionsData) {
       let prescriptions =
-        prescriptionsData.findPrescriptions.prescriptions?.map((presc) => ({
-          ...presc,
-          isSelect: false,
-        })) ?? [];
+        prescriptionsData.findPrescriptions.prescriptions
+          ?.filter((prescription) => prescription.activate)
+          .map((prescription) => ({
+            ...prescription,
+            isSelect: false,
+          })) ?? [];
       if (selectedPrescriptionData) {
         onClickPrescription(null, prescriptions, selectedPrescriptionData);
       } else {
