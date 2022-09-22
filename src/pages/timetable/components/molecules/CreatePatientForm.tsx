@@ -123,7 +123,7 @@ export default function CreatePatientForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-6">
       <Input
-        id="name"
+        id="create-patient-form__name"
         label="이름*"
         type="text"
         placeholder="이름을 입력하세요"
@@ -146,7 +146,8 @@ export default function CreatePatientForm({
       <div className="gender-radio flex justify-around">
         {['male', 'female'].map((gender) => (
           <Checkbox
-            id={'gender_' + gender}
+            key={gender}
+            id={'create-patient-form__gender-' + gender}
             label={GENDER_KOR[gender as 'male' | 'female']}
             type="radio"
             value={gender}
@@ -163,10 +164,10 @@ export default function CreatePatientForm({
       </label>
 
       <Textarea
-        id={'memo'}
-        label={'메모'}
+        id="create-patient-form__memo"
+        label="메모"
         rows={4}
-        placeholder={'메모를 입력하세요'}
+        placeholder="메모를 입력하세요"
         required={false}
         register={register('memo', {
           maxLength: {

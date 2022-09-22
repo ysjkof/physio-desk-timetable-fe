@@ -119,7 +119,7 @@ export default function PrescriptionEdit({
       <GetFormError />
       <div className="">
         <input
-          id="name"
+          id="prescription-edit__name"
           type="text"
           placeholder="처방 이름을 입력하세요"
           required
@@ -145,7 +145,7 @@ export default function PrescriptionEdit({
       </div>
       <div className="flex items-center justify-between">
         <textarea
-          id="description"
+          id="prescription-edit__description"
           placeholder={'설명을 입력하세요'}
           {...register('description', {
             maxLength: { value: 200, message: '최대 200자입니다' },

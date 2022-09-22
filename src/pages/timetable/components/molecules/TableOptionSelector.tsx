@@ -170,11 +170,11 @@ export default function TableOptionSelector() {
       initial="init"
       animate="end"
       exit="exit"
-      id="Table-View-Option"
+      id="table-option-selector"
       className="w-[240px] rounded-md border border-gray-400 bg-white py-2 shadow-cst"
     >
       <div
-        id="Table-View-Option_Header"
+        id="table-option-selector__header"
         className="flex items-center justify-between border-b px-3 pb-1"
       >
         <span className="group relative z-40 px-1 after:ml-1 after:rounded-full after:border after:px-1 after:content-['?']">
@@ -186,7 +186,7 @@ export default function TableOptionSelector() {
         <BtnArrow direction={NEXT} onClick={onClickChangeSeeActiveOption} />
       </div>
       <div
-        id="Table-View-Option_View-Time"
+        id="table-option-selector__view-time"
         className="flex items-center whitespace-nowrap border-b py-1"
       >
         <Selectbox
@@ -259,7 +259,7 @@ export default function TableOptionSelector() {
         />
       </div>
       <div
-        id="Table-View-Option_Toggle-Visible-State"
+        id="table-option-selector__toggle-visible-state"
         className="flex items-center gap-2 border-b py-1 px-3"
       >
         <MenuButton

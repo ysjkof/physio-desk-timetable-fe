@@ -55,7 +55,7 @@ export default function SearchPatient() {
           {...register('patientName', {
             required: '환자 이름을 입력하세요',
           })}
-          id="patientName"
+          id="search-patient__patientName"
           required
           type="text"
           placeholder="이름을 입력하세요"
@@ -65,11 +65,11 @@ export default function SearchPatient() {
           autoFocus
         />
         <label
-          htmlFor="icon-search"
+          htmlFor="search-patient__icon-search"
           className="absolute right-0 mr-2 cursor-pointer"
         >
           <input
-            id="icon-search"
+            id="search-patient__icon-search"
             type="submit"
             value={''}
             tabIndex={-1}

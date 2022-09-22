@@ -126,7 +126,7 @@ export default function CreatePrescription() {
             </div>
           </div>
           <Input
-            id="name"
+            id="create-prescription__name"
             label="처방이름*"
             type="text"
             placeholder="도수30, 집중형충격파1, MT20"
@@ -152,7 +152,7 @@ export default function CreatePrescription() {
             )}
           </Input>
           <Input
-            id="requiredTime"
+            id="create-prescription__requiredTime"
             label="소요시간(분)*"
             type="number"
             placeholder="10분 단위, 0 이상의 숫자"
@@ -175,7 +175,7 @@ export default function CreatePrescription() {
             )}
           </Input>
           <Input
-            id="price"
+            id="create-prescription__price"
             label="가격(원)*"
             placeholder="0 이상의 숫자"
             required
@@ -194,7 +194,7 @@ export default function CreatePrescription() {
             )}
           </Input>
           <Textarea
-            id="description"
+            id="create-prescription__description"
             label={'설명'}
             placeholder={'처방에 대한 설명'}
             register={register('description', {

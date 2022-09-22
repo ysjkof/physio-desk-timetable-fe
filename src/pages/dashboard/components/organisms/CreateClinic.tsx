@@ -102,7 +102,7 @@ export default function CreateClinic() {
         className="mt-10 space-y-6"
       >
         <Input
-          id="name"
+          id="create-clinic__name"
           label="이름*"
           type="text"
           placeholder={'병원 이름'}

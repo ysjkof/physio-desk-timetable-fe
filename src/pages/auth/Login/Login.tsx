@@ -72,7 +72,7 @@ export default function Login() {
         className="mt-5 mb-5 grid w-full gap-3"
       >
         <Input
-          id="email"
+          id="login__email"
           label={'Email'}
           type="email"
           placeholder="Email"
@@ -94,7 +94,7 @@ export default function Login() {
           }
         />
         <Input
-          id="password"
+          id="login__password"
           label="비밀번호"
           type="password"
           placeholder="Password"

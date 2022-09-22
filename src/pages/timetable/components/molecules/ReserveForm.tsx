@@ -360,7 +360,7 @@ export default function ReserveForm({
             )}
           </label>
           <Textarea
-            id="memo"
+            id="reserve-form__memo"
             label={'메모'}
             placeholder={'처방에 대한 설명'}
             register={register('memo', {

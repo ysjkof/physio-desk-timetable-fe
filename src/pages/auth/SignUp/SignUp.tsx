@@ -82,7 +82,7 @@ export default function SignUp() {
         className="mt-5 mb-5 grid w-full gap-3"
       >
         <Input
-          id="email"
+          id="sign-up__email"
           label="Email"
           type="email"
           placeholder="Email"
@@ -111,7 +111,7 @@ export default function SignUp() {
           }
         </Input>
         <Input
-          id="name"
+          id="sign-up__name"
           label="이름"
           type="text"
           placeholder="이름"
@@ -130,7 +130,7 @@ export default function SignUp() {
           )}
         </Input>
         <Input
-          id="password"
+          id="sign-up__password"
           label="비밀번호"
           type="password"
           placeholder="Password"

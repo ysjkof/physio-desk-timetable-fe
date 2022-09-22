@@ -73,7 +73,7 @@ export default function InviteClinic() {
         <form onSubmit={handleSubmit(inviteUser)} className="mt-10 max-w-xs">
           <div className="relative flex items-center shadow-sm">
             <Input
-              id="search-user"
+              id="invite-clinic__name"
               label="이름*"
               type="text"
               required

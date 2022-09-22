@@ -131,7 +131,7 @@ export default function EditProfile() {
       <FormSection>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-6">
           <Input
-            id="email"
+            id="edit-profile__email"
             label="Email"
             type="email"
             placeholder="Email"
@@ -161,7 +161,7 @@ export default function EditProfile() {
             </Button>
           )}
           <Input
-            id="name"
+            id="edit-profile__name"
             label="이름"
             type="text"
             placeholder="이름"
@@ -179,7 +179,7 @@ export default function EditProfile() {
             )}
           </Input>
           <Input
-            id="password"
+            id="edit-profile__password"
             label="비밀번호"
             type="password"
             placeholder="Password"

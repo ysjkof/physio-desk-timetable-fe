@@ -150,7 +150,7 @@ export default function Statistics() {
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, idx) => (
                   <Checkbox
                     key={month}
-                    id={month + ''}
+                    id={'statistics__month-' + month}
                     label={month + '월'}
                     type="radio"
                     value={month}

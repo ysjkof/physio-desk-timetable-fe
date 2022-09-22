@@ -59,9 +59,9 @@ export default function DayOffForm({
       </label>
 
       <Input
-        id="memo"
-        label={'메모'}
-        placeholder={'간단한 남길 말'}
+        id="day-off-form__memo"
+        label="메모"
+        placeholder="간단한 남길 말"
         register={register('memo', {
           maxLength: { value: 200, message: '최대 200자입니다' },
         })}

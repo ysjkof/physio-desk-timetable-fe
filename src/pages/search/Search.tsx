@@ -78,7 +78,7 @@ export default function Search() {
         className="mx-auto overflow-y-scroll border-t bg-white pb-16"
         style={{ height }}
       >
-        <div id="Search-Header" className="shadow-sm">
+        <div id="search__header" className="shadow-sm">
           <div className="flex justify-between border-b px-6 py-2">
             <h1 className="text-base font-bold">환자 검색</h1>
             <Button canClick isSmall onClick={invokeQuery} loading={loading}>
@@ -90,7 +90,7 @@ export default function Search() {
             {clinicLists.map((clinic) => (
               <Checkbox
                 key={clinic.id}
-                id={clinic.id + ''}
+                id={'search__clinic-' + clinic.id}
                 label={renameUseSplit(clinic.name)}
                 type="checkbox"
                 value={clinic.id}
@@ -111,7 +111,7 @@ export default function Search() {
             )}
           </div>
         </div>
-        <div id="Search-Results" className="divide-y">
+        <div id="search__results" className="divide-y">
           {!data ||
           !data.searchPatient.patients ||
           data.searchPatient.patients.length === 0 ? (
@@ -131,7 +131,7 @@ export default function Search() {
           )}
         </div>
         <div
-          id="Search-Footer"
+          id="search__footer"
           className="absolute bottom-0 flex h-16 w-full items-center justify-center gap-2 border-t-2 bg-white text-sm"
         >
           {pageNumbers.map((pageNumber) => (
