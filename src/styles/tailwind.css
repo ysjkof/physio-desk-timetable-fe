@@ -24,12 +24,6 @@
   .saturday {
     @apply text-blue-600;
   }
-  .table-header {
-    @apply flex w-full justify-between px-2;
-  }
-  .table-main {
-    @apply relative h-full w-full;
-  }
 
   .btn-menu {
     @apply relative rounded-sm border border-transparent py-[1px] px-1.5 tracking-widest hover:bg-gray-200;
@@ -82,10 +76,6 @@
   }
   .bubble-arrow-b-2-5 {
     @apply cursor-pointer after:absolute after:top-full after:left-[19.5%] after:border-8  after:border-t-black after:border-b-transparent after:border-l-transparent after:border-r-transparent;
-  }
-
-  .seperate-bar {
-    @apply w-full border-b;
   }
 
   .user-cols-divide {
