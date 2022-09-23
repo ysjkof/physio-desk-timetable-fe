@@ -6,7 +6,11 @@ import {
   Patient,
   useGetReservationsByPatientLazyQuery,
 } from '../../../graphql/generated/graphql';
-import { getHHMM, getTimeLength, getYMD } from '../../../services/dateServices';
+import {
+  getTimeLength,
+  getTimeString,
+  getYMD,
+} from '../../../services/dateServices';
 import ChevronDown from '../../../svgs/ChevronDown';
 import ChevronUp from '../../../svgs/ChevronUp';
 import { cls } from '../../../utils/utils';
@@ -86,9 +90,9 @@ export default function SearchList({
     const startDate = start instanceof Date ? start : new Date(start);
     const endDate = end instanceof Date ? end : new Date(end);
 
-    return `${getYMD(startDate, 'yyyymmdd', '-')} ${getHHMM(
+    return `${getYMD(startDate, 'yyyymmdd', '-')} ${getTimeString(
       startDate,
-      ':'
+      false
     )}(${getTimeLength(startDate, endDate, 'minute')}분 치료)`;
   };
 

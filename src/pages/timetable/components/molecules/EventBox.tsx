@@ -13,7 +13,7 @@ import EditReservationState from './EditReservationState';
 import { ReservationState } from '../../../../graphql/generated/graphql';
 import {
   compareTableEndtime,
-  getHHMM,
+  getTimeString,
 } from '../../../../services/dateServices';
 import { cls } from '../../../../utils/utils';
 import { selectedInfoVar, viewOptionsVar } from '../../../../store';
@@ -209,7 +209,8 @@ export default function EventBox({
             }}
           >
             <span className="mb-1 flex">
-              시간 : {getHHMM(startDate, ':')} ~ {getHHMM(endDate, ':')}
+              시간 : {getTimeString(new Date(startDate), false)} ~{' '}
+              {getTimeString(new Date(endDate), false)}
             </span>
             {!isDayOff && (
               <ul className="mb-1 flex flex-col">

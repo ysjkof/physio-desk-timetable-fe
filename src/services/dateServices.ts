@@ -50,13 +50,16 @@ export const getYMD = (
   return year ? `${year}${month}${date}` : `${month}${date}`;
 };
 
-export function getHHMM(inputDate: string | Date, seperator?: ':') {
-  const date = new Date(inputDate);
-  const hh = String(date.getHours()).padStart(2, '0');
-  const mm = String(date.getMinutes()).padStart(2, '0');
-  if (seperator === ':') return `${hh}:${mm}`;
-  return `${hh}${mm}`;
-}
+/**
+ * 다음 형태로 시각 반환한다. 다음: 오전 11:38
+ * @param date
+ * @returns
+ */
+export const getTimeString = (date: Date, prefix?: boolean) =>
+  new Intl.DateTimeFormat('ko', {
+    timeStyle: 'short',
+    hour12: !!prefix,
+  }).format(date);
 
 export function addHourToDate(fromDate: Date, hours: Date) {
   const year = fromDate.getFullYear();
