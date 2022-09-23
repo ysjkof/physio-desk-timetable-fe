@@ -25,7 +25,8 @@ export default function TableTemplate({
   return (
     <motion.div
       animate={{ opacity: 1 }}
-      className="TIMETABLE_TEMPLATE h-full opacity-0"
+      id="timetable__template"
+      className="h-full opacity-0"
     >
       <div
         id="timetable__nav"

@@ -77,6 +77,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
                     labels={labels}
                     events={member.events}
                     userIndex={userIndex}
+                    isSingleUser={userLength === 1}
                   />
                 </div>
               )

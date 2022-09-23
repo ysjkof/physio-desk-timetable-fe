@@ -13,12 +13,14 @@ interface ScheduleInUserInDayProps {
   events: IListReservation[];
   labels: string[];
   labelMaxLength: number;
+  isSingleUser: boolean;
 }
 function ScheduleInUserInDay({
   userIndex,
   events,
   labels,
   labelMaxLength,
+  isSingleUser,
 }: ScheduleInUserInDayProps) {
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
@@ -74,6 +76,7 @@ function ScheduleInUserInDay({
             maxTableHeight={maxTableHeight}
             numberOfCell={numberOfCell}
             inset={inset}
+            isSingleUser={isSingleUser}
           />
         );
       })}
@@ -89,6 +92,7 @@ export default memo(ScheduleInUserInDay, (prevProps, nextProps) => {
       nextProps.labels[nextProps.labels.length] &&
     prevProps.labelMaxLength === nextProps.labelMaxLength &&
     prevProps.events === nextProps.events &&
-    prevProps.userIndex === nextProps.userIndex
+    prevProps.userIndex === nextProps.userIndex &&
+    prevProps.isSingleUser === nextProps.isSingleUser
   );
 });

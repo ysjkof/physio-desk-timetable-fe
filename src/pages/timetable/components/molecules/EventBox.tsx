@@ -30,6 +30,7 @@ interface EventBoxProps {
   maxTableHeight: number;
   numberOfCell: number;
   event: IListReservation;
+  isSingleUser: boolean;
 }
 
 export default function EventBox({
@@ -38,6 +39,7 @@ export default function EventBox({
   maxTableHeight,
   numberOfCell,
   event,
+  isSingleUser,
 }: EventBoxProps) {
   const {
     id: reservationId,
@@ -73,21 +75,45 @@ export default function EventBox({
 
   const positioningTooltip = () => {
     if (eventBox.current && tooltip.current && eventController.current) {
-      const eventBoxTop = eventBox.current.offsetTop;
-      const userColEl = eventBox.current.parentElement!;
-      const userColHeight = userColEl.clientHeight;
-      const userColWidth = userColEl.clientHeight;
+      const {
+        offsetTop: eventBoxTop,
+        clientHeight: boxHeight,
+        parentElement: eventBoxParentElement,
+      } = eventBox.current;
+      if (!eventBoxParentElement) throw new Error('이벤트 박스가 없습니다.');
 
-      const { right, width, top, bottom } =
-        tooltip.current.getBoundingClientRect();
+      const { clientHeight: userColsWidth } = eventBoxParentElement;
 
-      if (right > userColWidth) {
+      const columnContainer = document.getElementById('timetable__template');
+      if (!columnContainer) throw new Error('스케쥴 컨테이너가 없습니다.');
+
+      const { clientHeight: columnViewportHeight } = columnContainer;
+
+      const {
+        right: tooltipRight,
+        width: tooltipWidth,
+        bottom: tooltipBottom,
+      } = tooltip.current.getBoundingClientRect();
+
+      if (tooltipRight > userColsWidth) {
         tooltip.current.classList.remove('left-[90px]');
-        tooltip.current.style.left = -width + 'px';
+        tooltip.current.style.left = `-${tooltipWidth}px`;
       }
-      if (bottom > userColHeight) {
-        tooltip.current.classList.remove('top-4');
-        tooltip.current.style.bottom = '0';
+
+      if (tooltipBottom > columnViewportHeight) {
+        tooltip.current.classList.remove('top-5');
+
+        const boxTop = +inset.split('px')[0];
+        const boxBottom = boxHeight + boxTop;
+        const isOverflow = maxTableHeight < boxBottom;
+
+        if (isOverflow) {
+          tooltip.current.style.bottom = `${boxBottom - maxTableHeight}px`;
+        } else {
+          tooltip.current.style.top = `-${
+            tooltipBottom - columnViewportHeight
+          }px`;
+        }
       }
 
       if (eventBoxTop === 0) {
@@ -198,7 +224,8 @@ export default function EventBox({
           <div
             ref={tooltip}
             className={cls(
-              'tooltip absolute top-4 left-[90px] w-[150px] rounded border p-1 shadow-cst',
+              'EVENT-BOX__TOOL-TIP absolute top-5 w-[150px] rounded border p-1 shadow-cst',
+              isSingleUser ? 'left-[162px]' : 'left-[90px]',
               !isReserve ? 'no-reserved' : ''
             )}
             style={{
