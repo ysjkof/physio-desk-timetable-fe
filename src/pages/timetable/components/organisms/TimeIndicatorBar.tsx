@@ -3,7 +3,7 @@ import {
   TABLE_CELL_HEIGHT,
   TABLE_TIME_GAP,
 } from '../../../../constants/constants';
-import useStore from '../../../../hooks/useStore';
+import { getTimeString } from '../../../../services/dateServices';
 import useViewoptions from '../../hooks/useViewOption';
 
 interface ITimeIndicatorBarProps {
@@ -11,12 +11,13 @@ interface ITimeIndicatorBarProps {
 }
 
 export default function TimeIndicatorBar({ isActive }: ITimeIndicatorBarProps) {
-  const { selectedDate } = useStore();
   const {
     indicatorTimes: { firstTime, lastTime },
   } = useViewoptions();
 
+  const [time, setTime] = useState(getTimeString(new Date()));
   const [top, setTop] = useState<number>();
+
   const setPosition = () => {
     const nowMinute = Date.now() / 1000 / 60; // 현재 시각을 분으로 변환
     const nowTime = nowMinute - firstTime;
@@ -27,6 +28,9 @@ export default function TimeIndicatorBar({ isActive }: ITimeIndicatorBarProps) {
       setTop(0);
     } else {
       setTop(Math.floor((nowTime / TABLE_TIME_GAP) * TABLE_CELL_HEIGHT));
+
+      if (!isActive) return;
+      setTime(getTimeString(new Date(), true));
     }
   };
 
@@ -38,14 +42,7 @@ export default function TimeIndicatorBar({ isActive }: ITimeIndicatorBarProps) {
   if (top === 0 || typeof top !== 'number') return <></>;
   return (
     <div className="time-indicator-bar" style={{ top: `${top}px` }}>
-      {isActive && (
-        <span className="mx-auto">
-          {selectedDate.toLocaleString('ko-KR', {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
-        </span>
-      )}
+      {isActive && <span className="mx-auto">{time}</span>}
     </div>
   );
 }
