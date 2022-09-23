@@ -118,7 +118,7 @@ export default function SearchPatient() {
               name={selectedInfo.patient.name}
               registrationNumber={selectedInfo.patient.registrationNumber}
               birthday={selectedInfo.patient.birthday}
-              clinicName={renameUseSplit(selectedInfo.patient.clinicName)}
+              clinicName={selectedInfo.patient.clinicName}
               user={selectedInfo.patient.user}
             />
             <MenuButton
