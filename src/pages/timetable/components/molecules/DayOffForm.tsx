@@ -5,7 +5,7 @@ import { IReserveForm } from '../../../../types/type';
 import SelectUser from './SelectUser';
 import Button from '../../../../components/molecules/Button';
 import Input from '../../../../components/molecules/Input';
-import DatepickerWithInput from '../../../../components/molecules/DatepickerWithInput';
+import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
 
 interface DayOffFormProps {
   register: UseFormRegister<IReserveForm>;
@@ -43,7 +43,7 @@ export default function DayOffForm({
       </label>
       <label className="flex flex-col gap-2">
         시작 시각
-        <DatepickerWithInput
+        <Datepicker
           setSelectedDate={setSelectedStartDateState}
           hasHour
           defaultDate={startDate && new Date(startDate)}
@@ -51,7 +51,7 @@ export default function DayOffForm({
       </label>
       <label className="flex flex-col gap-2">
         종료 시각
-        <DatepickerWithInput
+        <Datepicker
           setSelectedDate={setSelectedEndDateState}
           hasHour
           defaultDate={createDefaultEndDate()}

@@ -9,7 +9,6 @@ import {
 } from '../../../../graphql/generated/graphql';
 import Input from '../../../../components/molecules/Input';
 import { TimetableModalProps } from '../../Timetable';
-import DatepickerWithInput from '../../../../components/molecules/DatepickerWithInput';
 import { useEffect, useState } from 'react';
 import useStore from '../../../../hooks/useStore';
 import { toastVar } from '../../../../store';
@@ -17,6 +16,7 @@ import { REG_EXP } from '../../../../constants/regex';
 import Textarea from '../../../../components/molecules/Textarea';
 import Checkbox from '../../../../components/molecules/Checkbox';
 import { GENDER_KOR } from '../../../../constants/constants';
+import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -157,7 +157,7 @@ export default function CreatePatientForm({
       </div>
       <label className="flex flex-col gap-2">
         생년월일
-        <DatepickerWithInput
+        <Datepicker
           setSelectedDate={setBirthday}
           defaultDate={patient && new Date(patient.birthday)}
         />

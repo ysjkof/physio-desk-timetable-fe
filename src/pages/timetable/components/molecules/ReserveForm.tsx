@@ -12,7 +12,6 @@ import {
   useEditReservationMutation,
   useFindPrescriptionsQuery,
 } from '../../../../graphql/generated/graphql';
-import DatepickerWithInput from '../../../../components/molecules/DatepickerWithInput';
 import Button from '../../../../components/molecules/Button';
 import FormError from '../../../../components/atoms/FormError';
 import SelectUser from './SelectUser';
@@ -28,6 +27,7 @@ import Textarea from '../../../../components/molecules/Textarea';
 import { toastVar } from '../../../../store';
 import { ROUTES } from '../../../../router/routes';
 import { cls } from '../../../../utils/utils';
+import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
 
 interface IReservaFromProps extends TimetableModalProps {
   startDate?: Date;
@@ -296,7 +296,7 @@ export default function ReserveForm({
           </label>
           <label className="flex flex-col gap-2">
             시작 시각
-            <DatepickerWithInput
+            <Datepicker
               setSelectedDate={setSelectedStartDateState}
               hasHour
               defaultDate={new Date(startDate ?? reservation?.startDate)}

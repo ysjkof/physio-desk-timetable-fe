@@ -2,11 +2,11 @@ import {
   DatepickerErrorState,
   DatepickerInputState,
   HasDateOption,
-} from './DatepickerWithInput';
+} from './Datepicker';
 import { ChangeEvent, InputHTMLAttributes } from 'react';
-import { REG_EXP_DATEPICKER } from '../../constants/regex';
-import { cls } from '../../utils/utils';
-import FormError from '../atoms/FormError';
+import { REG_EXP_DATEPICKER } from '../../../constants/regex';
+import { cls } from '../../../utils/utils';
+import FormError from '../../atoms/FormError';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -155,7 +155,7 @@ export default function DatepickerInput({
   return (
     <div
       className={cls(
-        'relative grid w-full gap-1',
+        'datepicker__input relative grid w-full gap-1',
         hasHour
           ? 'grid-cols-[1fr_repeat(4,_0.7fr)]'
           : 'grid-cols-[1fr_repeat(2,_0.7fr)]'

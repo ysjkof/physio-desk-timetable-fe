@@ -1,22 +1,22 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useReducer, useRef } from 'react';
-import useStore from '../../hooks/useStore';
+import useStore from '../../../hooks/useStore';
 import {
   compareDateMatch,
   getHoursByUnit,
   getMinutesByUnit,
-} from '../../services/dateServices';
-import { cls, getPositionRef } from '../../utils/utils';
-import ModalPortal from '../templates/ModalPortal';
-import { DatepickerInputState, HasDateOption } from './DatepickerWithInput';
+} from '../../../services/dateServices';
+import { cls, getPositionRef } from '../../../utils/utils';
+import ModalPortal from '../../templates/ModalPortal';
+import { DatepickerInputState, HasDateOption } from './Datepicker';
 
 interface DatePickerInterface extends HasDateOption, DatepickerInputState {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Datepicker({
+export default function DatepickerCalendar({
   inputDate,
   setInputDate,
   isOpen,
@@ -136,8 +136,12 @@ export default function Datepicker({
     setOpen(false);
   };
   return (
-    <div className="datepicker-icon relative">
-      <div onClick={toggleDatepicker} className="cursor-pointer" ref={ref}>
+    <div className="datepicker__calendar relative">
+      <div
+        onClick={toggleDatepicker}
+        className="datepicker__calendar-icon cursor-pointer"
+        ref={ref}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"
@@ -159,7 +163,7 @@ export default function Datepicker({
           top={top}
           closeAction={closeDatepicker}
           children={
-            <div className="absolute bottom-0 z-50 w-[440px]">
+            <div className="datepicker__calendar-body absolute bottom-0 z-50 w-[440px]">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
                 <div className="datepicker-navigation mb-1 flex justify-between border-b pb-2">
                   <div>{displayedYearMonth}</div>

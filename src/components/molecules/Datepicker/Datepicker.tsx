@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Datepicker from './Datepicker';
+import DatepickerCalendar from './DatepickerCalendar';
 import DatepickerInput from './DatepickerInput';
 
 export interface HasDateOption {
@@ -28,7 +28,7 @@ interface IDatepickerWithInputProps extends HasDateOption {
   textColor?: string;
 }
 
-export default function DatepickerWithInput({
+export default function Datepicker({
   setSelectedDate,
   defaultDate,
   textColor,
@@ -63,8 +63,8 @@ export default function DatepickerWithInput({
   }, [inputDate]);
 
   return (
-    <div className="datepicker-with-input flex w-full items-center gap-1">
-      <Datepicker
+    <div className="datepicker flex w-full items-center gap-1">
+      <DatepickerCalendar
         inputDate={inputDate}
         setInputDate={setInputDate}
         isOpen={open}
