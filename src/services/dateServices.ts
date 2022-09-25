@@ -266,21 +266,16 @@ export const createDateFromDay = (date: Date, dayIdx: number) => {
 
 /** 새 날짜를 생성하면서 시, 분, 초, 밀리초를 초기화 한다. 초와 밀리초는 무조건 0이다. */
 export const createDate = (
-  date: string | Date,
-  option?: { hour?: number; minute?: number }
+  date?: string | Date,
+  option?: { hour: number; minute: number }
 ) => {
   const newDate = date ? new Date(date) : new Date();
   if (option) {
     const { hour, minute } = option;
-    if (hour && minute) {
-      newDate.setHours(hour, minute);
-    } else if (minute) {
-      newDate.setMinutes(minute);
-    }
-    newDate.setSeconds(0, 0);
-  } else {
-    newDate.setMinutes(0, 0, 0);
+    newDate.setHours(hour, minute, 0, 0);
+    return newDate;
   }
+  newDate.setHours(0, 0, 0, 0);
   return newDate;
 };
 
