@@ -12,7 +12,7 @@ import {
   isStayMember,
   renameUseSplit,
 } from '../../../../utils/utils';
-import { loggedInUserVar } from '../../../../store';
+import { loggedInUserVar, toastVar } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
 import BtnArrow from '../../../../components/atoms/ButtonArrow';
 import useStore from '../../../../hooks/useStore';
@@ -114,11 +114,10 @@ export default function TableOptionSelector() {
 
   const onClickChangeSeeActiveOption = () => {
     if (viewOptions.get) {
-      const newViewOptions = {
+      viewOptions.set({
         ...viewOptions.get,
         seeActiveOption: !viewOptions.get.seeActiveOption,
-      };
-      viewOptions.set(newViewOptions);
+      });
     }
   };
 
@@ -133,36 +132,60 @@ export default function TableOptionSelector() {
       })
     );
   };
-  const variants: Variants = {
-    init: { x: 300 },
-    end: { x: 0, transition: { duration: 0.3 } },
-    exit: { x: 300, transition: { duration: 0.3 } },
-  };
-
   const saveTableDuration = () => {
     const { endHour, endMinute, startHour, startMinute } = tableDuration;
-    const newOptions = {
+    if (startHour > endHour) {
+      toastVar({ messages: ['시작 시간을 끝 시간보다 작게 해주세요.'] });
+      return;
+    }
+
+    invokeSaveViewOptions({
       ...viewOptions.get,
+      seeActiveOption: false,
       tableDuration: {
         startHour,
         startMinute,
         endHour,
         endMinute,
       },
-    };
-    invokeSaveViewOptions(newOptions);
+    });
   };
 
   const changeTableDurationTime = (
     type: keyof TableDurationForm,
     value: number
   ) => {
+    const { endHour } = tableDuration;
+    if (type === 'startHour' && value >= endHour) {
+      setTableDuration((prev) => ({
+        ...prev,
+        startHour: value,
+        endHour: value + 1,
+      }));
+      toastVar({
+        messages: ['시작 시간은 끝 시간보다 작게 해주세요'],
+        fade: true,
+        milliseconds: 2000,
+      });
+      return;
+    }
     setTableDuration((prev) => ({ ...prev, [type]: value }));
   };
 
-  const hours = getHoursByUnit(0, 24);
-  const minutes = getMinutesByUnit(10);
+  const startHours = getHoursByUnit(0, 24);
+  const endHours = (() => {
+    return startHours.filter((hour) => hour > tableDuration.startHour);
+  })();
+  const startMinutes = getMinutesByUnit(10);
+  const endMinutes = startMinutes;
+
   const { endHour, endMinute, startHour, startMinute } = tableDuration;
+
+  const variants: Variants = {
+    init: { x: 300 },
+    end: { x: 0, transition: { duration: 0.3 } },
+    exit: { x: 300, transition: { duration: 0.3 } },
+  };
 
   return (
     <motion.div
@@ -194,7 +217,7 @@ export default function TableOptionSelector() {
           iconSize={8}
         >
           <Selectbox.Options>
-            {hours.map((hour) => (
+            {startHours.map((hour) => (
               <Selectbox.Option
                 key={hour}
                 onClick={() => changeTableDurationTime('startHour', hour)}
@@ -209,7 +232,7 @@ export default function TableOptionSelector() {
           iconSize={8}
         >
           <Selectbox.Options>
-            {minutes.map((minute) => (
+            {startMinutes.map((minute) => (
               <Selectbox.Option
                 key={minute}
                 onClick={() => changeTableDurationTime('startMinute', minute)}
@@ -225,7 +248,7 @@ export default function TableOptionSelector() {
           iconSize={8}
         >
           <Selectbox.Options>
-            {hours.map((hour) => (
+            {endHours.map((hour) => (
               <Selectbox.Option
                 key={hour}
                 onClick={() => changeTableDurationTime('endHour', hour)}
@@ -240,7 +263,7 @@ export default function TableOptionSelector() {
           iconSize={8}
         >
           <Selectbox.Options>
-            {minutes.map((minute) => (
+            {endMinutes.map((minute) => (
               <Selectbox.Option
                 key={minute}
                 onClick={() => changeTableDurationTime('endMinute', minute)}
@@ -267,11 +290,10 @@ export default function TableOptionSelector() {
           enabled={viewOptions.get.seeCancel}
           label={'취소'}
           onClick={() => {
-            const newViewOptions = {
+            invokeSaveViewOptions({
               ...viewOptions.get,
               seeCancel: !viewOptions.get.seeCancel,
-            };
-            invokeSaveViewOptions(newViewOptions);
+            });
           }}
         />
         <MenuButton
@@ -279,11 +301,10 @@ export default function TableOptionSelector() {
           enabled={viewOptions.get.seeNoshow}
           label={'부도'}
           onClick={() => {
-            const newViewOptions = {
+            invokeSaveViewOptions({
               ...viewOptions.get,
               seeNoshow: !viewOptions.get.seeNoshow,
-            };
-            invokeSaveViewOptions(newViewOptions);
+            });
           }}
         />
       </div>
