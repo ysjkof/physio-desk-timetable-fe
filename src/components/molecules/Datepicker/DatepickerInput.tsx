@@ -98,59 +98,7 @@ export default function DatepickerInput({
     }));
   };
 
-  const inputDateAttributes = [
-    {
-      label: '년',
-      name: 'year',
-      value: year,
-      onChange: handleInputChange,
-      type: 'number',
-      className: ' input-datepicker',
-      placeholder: 'YYYY',
-    },
-    {
-      label: '월',
-      name: 'month',
-      value: month,
-      onChange: handleInputChange,
-      type: 'number',
-      className: ' input-datepicker',
-      placeholder: 'MM',
-    },
-    {
-      label: '일',
-      name: 'day',
-      value: day,
-      onChange: handleInputChange,
-      type: 'number',
-      className: ' input-datepicker',
-      placeholder: 'DD',
-    },
-  ];
-
-  const inputTimeAttributes = [
-    {
-      label: '시',
-      name: 'hour',
-      value: hour,
-      onChange: handleInputChange,
-      type: 'number',
-      className: ' input-datepicker',
-      placeholder: 'HH',
-    },
-    {
-      label: '분',
-      name: 'minute',
-      value: minute,
-      onChange: handleInputChange,
-      type: 'number',
-      className: ' input-datepicker',
-      placeholder: 'mm',
-      minLength: 1,
-      maxLength: 2,
-      step: 10,
-    },
-  ];
+  const commonAttribute = { type: 'number', onChange: handleInputChange };
 
   return (
     <div
@@ -163,8 +111,61 @@ export default function DatepickerInput({
       style={{ ...(textColor && { color: textColor }) }}
     >
       {error && <FormError errorMessage={error} isHighter />}
-      {<Inputs attributes={inputDateAttributes} />}
-      {hasHour && <Inputs attributes={inputTimeAttributes} />}
+
+      <Inputs
+        attributes={[
+          {
+            ...commonAttribute,
+            label: '년',
+            name: 'year',
+            value: year,
+            className: ' input-datepicker',
+            placeholder: 'YYYY',
+          },
+          {
+            ...commonAttribute,
+            label: '월',
+            name: 'month',
+            value: month,
+            className: ' input-datepicker',
+            placeholder: 'MM',
+          },
+          {
+            ...commonAttribute,
+            label: '일',
+            name: 'day',
+            value: day,
+            className: ' input-datepicker',
+            placeholder: 'DD',
+          },
+        ]}
+      />
+
+      {hasHour && (
+        <Inputs
+          attributes={[
+            {
+              ...commonAttribute,
+              label: '시',
+              name: 'hour',
+              value: hour,
+              className: ' input-datepicker',
+              placeholder: 'HH',
+            },
+            {
+              ...commonAttribute,
+              label: '분',
+              name: 'minute',
+              value: minute,
+              className: ' input-datepicker',
+              placeholder: 'mm',
+              minLength: 1,
+              maxLength: 2,
+              step: 10,
+            },
+          ]}
+        />
+      )}
     </div>
   );
 }
