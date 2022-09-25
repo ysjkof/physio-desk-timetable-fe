@@ -74,7 +74,6 @@ export default function DatepickerWithInput({
       <DatepickerInput
         inputDate={inputDate}
         setInputDate={setInputDate}
-        setOpen={setOpen}
         textColor={textColor}
         hasHour={hasHour}
         error={error}
