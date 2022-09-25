@@ -1,6 +1,6 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useReducer, useRef, useState } from 'react';
+import { useReducer, useRef } from 'react';
 import useStore from '../../hooks/useStore';
 import {
   compareDateMatch,
@@ -25,7 +25,6 @@ export default function Datepicker({
 }: DatePickerInterface) {
   const { viewOptions } = useStore();
   const today = new Date();
-  const [selectedDate, setSelectedDate] = useState(today);
 
   const changeShowMonthReducer = (
     state: Date[],
@@ -41,7 +40,6 @@ export default function Datepicker({
         return getWeeksOfMonth(newDate);
       case 'thisMonth':
         return getWeeksOfMonth(new Date());
-
       default:
         throw new Error('일어날 수 없는 일 입니다');
     }
@@ -95,30 +93,33 @@ export default function Datepicker({
   const minutesUnit = 10; // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
   const listOfMinutes = getMinutesByUnit(minutesUnit);
 
-  const selectDay = (date: Date) => {
+  /** 클릭한 날짜가 동일할 경우 callback을 실행한다. callback은 모달 닫는 함수를 전달한다 */
+  const selectDay = (date: Date, callback: () => void) => {
     const { year, month, day } = inputDate;
     const isSame =
       +year === date.getFullYear() &&
       +month === date.getMonth() + 1 &&
       +day === date.getDate();
-    if (isSame) return;
+    if (isSame) return callback();
+
     setInputDate((prevState) => ({
       ...prevState,
       year: '' + date.getFullYear(),
       month: '' + (date.getMonth() + 1),
       day: '' + date.getDate(),
     }));
-    setSelectedDate(date);
   };
 
-  const invokeSelectHour = (hour: string) => {
-    if (inputDate.hour === hour) return;
+  /** 클릭한 시가 동일할 경우 callback을 실행한다. callback은 모달 닫는 함수를 전달한다 */
+  const invokeSelectHour = (hour: string, callback: () => void) => {
+    if (inputDate.hour === hour) return callback();
     setInputDate((prevDate) => {
       return { ...prevDate, hour };
     });
   };
-  const invokeSelectMinute = (minute: string) => {
-    if (inputDate.minute === minute) return;
+  /** 클릭한 분이 동일할 경우 callback을 실행한다. callback은 모달 닫는 함수를 전달한다 */
+  const invokeSelectMinute = (minute: string, callback: () => void) => {
+    if (inputDate.minute === minute) return callback();
     setInputDate((prevDate) => {
       return { ...prevDate, minute };
     });
@@ -128,13 +129,15 @@ export default function Datepicker({
     showMonthCalendar[15].getMonth() + 1
   }월`;
 
+  const toggleDatepicker = () => {
+    setOpen((prev) => !prev);
+  };
+  const closeDatepicker = () => {
+    setOpen(false);
+  };
   return (
     <div className="datepicker-icon relative">
-      <div
-        onClick={() => setOpen((current) => !current)}
-        className="cursor-pointer"
-        ref={ref}
-      >
+      <div onClick={toggleDatepicker} className="cursor-pointer" ref={ref}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"
@@ -154,43 +157,47 @@ export default function Datepicker({
         <ModalPortal
           left={left}
           top={top}
-          closeAction={() => setOpen}
+          closeAction={closeDatepicker}
           children={
             <div className="absolute bottom-0 z-50 w-[440px]">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
                 <div className="datepicker-navigation mb-1 flex justify-between border-b pb-2">
                   <div>{displayedYearMonth}</div>
                   <div className="space-x-6">
-                    <span
+                    <button
+                      type="button"
                       onClick={() => {
                         changeShowMonth('decrement');
                       }}
                       className="cursor-pointer"
                     >
                       <FontAwesomeIcon icon={faArrowUp} />
-                    </span>
-                    <span
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => {
                         changeShowMonth('increment');
                       }}
                       className="cursor-pointer"
                     >
                       <FontAwesomeIcon icon={faArrowDown} />
-                    </span>
-                    <span
+                    </button>
+                    <button
+                      type="button"
                       className="cursor-pointer"
                       onClick={() => {
                         changeShowMonth('thisMonth');
                       }}
                     >
                       오늘
-                    </span>
-                    <span
+                    </button>
+                    <button
+                      type="button"
                       className="cursor-pointer"
                       onClick={() => setOpen(false)}
                     >
                       닫기
-                    </span>
+                    </button>
                   </div>
                 </div>
                 <div className="datepicker-calendar flex divide-x">
@@ -216,11 +223,17 @@ export default function Datepicker({
                           compareDateMatch(day, today, 'ymd')
                             ? 'rounded-md border border-transparent ring-2 ring-red-500'
                             : '',
-                          compareDateMatch(day, selectedDate, 'ymd')
+                          compareDateMatch(
+                            day,
+                            new Date(
+                              `${inputDate.year}-${inputDate.month}-${inputDate.day}`
+                            ),
+                            'ymd'
+                          )
                             ? 'rounded-md bg-red-400 text-white'
                             : ''
                         )}
-                        onClick={() => selectDay(day)}
+                        onClick={() => selectDay(day, closeDatepicker)}
                       >
                         {day.getDate()}
                       </span>
@@ -239,7 +252,9 @@ export default function Datepicker({
                                 ? 'rounded-md bg-blue-500 text-white'
                                 : ''
                             )}
-                            onClick={() => invokeSelectHour('' + hours)}
+                            onClick={() =>
+                              invokeSelectHour('' + hours, closeDatepicker)
+                            }
                           >
                             {('' + hours).padStart(2, '0')}
                           </span>
@@ -256,16 +271,14 @@ export default function Datepicker({
                                 ? 'rounded-md bg-blue-500 text-white'
                                 : ''
                             )}
-                            onClick={() => invokeSelectMinute('' + minute)}
+                            onClick={() =>
+                              invokeSelectMinute('' + minute, closeDatepicker)
+                            }
                           >
                             {('' + minute).padStart(2, '0')}
                           </span>
                         ))}
                       </div>
-                      {/* <div className="flex flex-col whitespace-nowrap">
-                        <span className="">오전</span>
-                        <span className="">오후</span>
-                      </div> */}
                     </div>
                   )}
                 </div>
