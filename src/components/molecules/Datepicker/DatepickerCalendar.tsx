@@ -14,11 +14,14 @@ import { cls, getPositionRef } from '../../../utils/utils';
 import ModalPortal from '../../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './Datepicker';
 
-interface DatePickerInterface extends HasDateOption, DatepickerInputState {
-  isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+interface Attributes
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    ChildrenProps {
+  inactivate?: boolean;
 }
-
+interface ButtonsProps {
+  attributes: Attributes[];
+}
 interface DayProps {
   day: number;
   isSunday: boolean;
@@ -29,15 +32,15 @@ interface DayProps {
   inactivate: boolean;
   onClick: () => void;
 }
-
-interface Attributes
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    ChildrenProps {
-  inactivate?: boolean;
+type Time = '시' | '분';
+interface TimeSelectorProps extends DatepickerInputState {
+  type: Time;
+  numbers: number[];
+  closeDatepicker: () => void;
 }
-
-interface ButtonsProps {
-  attributes: Attributes[];
+interface DatePickerInterface extends HasDateOption, DatepickerInputState {
+  isOpen: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function Buttons({ attributes }: ButtonsProps) {
@@ -47,13 +50,12 @@ function Buttons({ attributes }: ButtonsProps) {
         const { onClick, children, inactivate } = attribute;
         return (
           <button
-            key={idx}
+            key={`datepicker__calendar-body__button-${idx}`}
             type="button"
             onClick={inactivate ? undefined : onClick}
-            className={cls(
-              'cursor-pointer',
-              inactivate ? 'pointer-events-none opacity-50' : ''
-            )}
+            className={
+              inactivate ? 'pointer-events-none opacity-50' : 'cursor-pointer'
+            }
           >
             {children}
           </button>
@@ -101,6 +103,51 @@ function Day({
     >
       {day}
     </button>
+  );
+}
+
+function TimeSelector({
+  type,
+  numbers,
+  inputDate,
+  setInputDate,
+  closeDatepicker,
+}: TimeSelectorProps) {
+  const selectHour = (hour: string) => {
+    if (inputDate.hour === hour) return closeDatepicker();
+    setInputDate((prevDate) => {
+      return { ...prevDate, hour };
+    });
+  };
+  const selectMinute = (minute: string) => {
+    if (inputDate.minute === minute) return closeDatepicker();
+    setInputDate((prevDate) => {
+      return { ...prevDate, minute };
+    });
+  };
+
+  return (
+    <div className="hidden-scrollbar flex flex-col overflow-y-scroll">
+      <span>{type}</span>
+      {numbers.map((number) => (
+        <span
+          key={`time-selector-${type}-${number}`}
+          className={cls(
+            'cursor-pointer px-1.5',
+            +inputDate.hour === number
+              ? 'rounded-md bg-blue-500 text-white'
+              : ''
+          )}
+          onClick={
+            type === '시'
+              ? () => selectHour('' + number)
+              : () => selectMinute('' + number)
+          }
+        >
+          {('' + number).padStart(2, '0')}
+        </span>
+      ))}
+    </div>
   );
 }
 
@@ -198,21 +245,6 @@ export default function DatepickerCalendar({
     }));
   };
 
-  /** 클릭한 시가 동일할 경우 callback을 실행한다. callback은 모달 닫는 함수를 전달한다 */
-  const invokeSelectHour = (hour: string, callback: () => void) => {
-    if (inputDate.hour === hour) return callback();
-    setInputDate((prevDate) => {
-      return { ...prevDate, hour };
-    });
-  };
-  /** 클릭한 분이 동일할 경우 callback을 실행한다. callback은 모달 닫는 함수를 전달한다 */
-  const invokeSelectMinute = (minute: string, callback: () => void) => {
-    if (inputDate.minute === minute) return callback();
-    setInputDate((prevDate) => {
-      return { ...prevDate, minute };
-    });
-  };
-
   const displayedYearMonth = `${showMonthCalendar[15].getFullYear()}년 ${
     showMonthCalendar[15].getMonth() + 1
   }월`;
@@ -241,7 +273,7 @@ export default function DatepickerCalendar({
           children={
             <div className="datepicker__calendar-body absolute bottom-0 z-50 w-[440px]">
               <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
-                <div className="datepicker-navigation mb-1 flex justify-between border-b pb-2">
+                <div className="mb-1 flex justify-between border-b pb-2">
                   <div>{displayedYearMonth}</div>
                   <div className="space-x-6">
                     {
@@ -273,13 +305,11 @@ export default function DatepickerCalendar({
                     }
                   </div>
                 </div>
-                <div className="datepicker-calendar flex divide-x">
-                  <div className="datepicker-calendar-col left grid w-full grid-cols-7 pr-1.5 text-center">
-                    {['일', '월', '화', '수', '목', '금', '토'].map(
-                      (day, i) => (
-                        <div key={i}>{day}</div>
-                      )
-                    )}
+                <div className="flex divide-x">
+                  <div className="grid w-full grid-cols-7 pr-1.5 text-center">
+                    {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
+                      <div key={`datepicker__calendar-day${day}`}>{day}</div>
+                    ))}
                     {showMonthCalendar.map((day) => {
                       const dayNumber = day.getDay();
                       const selectedDate = new Date(
@@ -304,45 +334,21 @@ export default function DatepickerCalendar({
                     })}
                   </div>
                   {hasHour && (
-                    <div className="datepicker-calendar-col-time-picker flex h-32 space-x-2 pl-2 text-center">
-                      <div className="hours-picker hidden-scrollbar flex flex-col overflow-y-scroll">
-                        <span>시</span>
-                        {listOfHours.map((hours, i) => (
-                          <span
-                            key={i}
-                            className={cls(
-                              'cursor-pointer px-1.5',
-                              +inputDate.hour === hours
-                                ? 'rounded-md bg-blue-500 text-white'
-                                : ''
-                            )}
-                            onClick={() =>
-                              invokeSelectHour('' + hours, closeDatepicker)
-                            }
-                          >
-                            {('' + hours).padStart(2, '0')}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="MINUTE_PICKER hidden-scrollbar flex flex-col overflow-y-scroll">
-                        <span>분</span>
-                        {listOfMinutes.map((minute, i) => (
-                          <span
-                            key={i}
-                            className={cls(
-                              'cursor-pointer px-1.5',
-                              +inputDate.minute === minute
-                                ? 'rounded-md bg-blue-500 text-white'
-                                : ''
-                            )}
-                            onClick={() =>
-                              invokeSelectMinute('' + minute, closeDatepicker)
-                            }
-                          >
-                            {('' + minute).padStart(2, '0')}
-                          </span>
-                        ))}
-                      </div>
+                    <div className="flex h-32 space-x-2 pl-2 text-center">
+                      <TimeSelector
+                        type="시"
+                        numbers={listOfHours}
+                        inputDate={inputDate}
+                        setInputDate={setInputDate}
+                        closeDatepicker={closeDatepicker}
+                      />
+                      <TimeSelector
+                        type="분"
+                        numbers={listOfMinutes}
+                        inputDate={inputDate}
+                        setInputDate={setInputDate}
+                        closeDatepicker={closeDatepicker}
+                      />
                     </div>
                   )}
                 </div>
