@@ -16,9 +16,9 @@ export const REG_EXP = {
     maxLength: 30,
   },
   personName: {
-    pattern: /^([가-힣\d\.]{2,10}|[a-zA-Z\d\. ,.'-]{6,30})$/i,
-    condition: '숫자, 온점 포함, 한글 2~10자, 영문자 6~30자 사용',
-    maxLength: 30,
+    pattern: /^[가-힣a-zA-Z\d\. ,.'-]{2,20}$/i,
+    condition: "2~20자로 한글, 영문, 숫자, 특수문자(,.'-)를 사용",
+    maxLength: 20,
   },
   clinicName: {
     pattern: /^([ㄱ-ㅎ가-힣a-zA-Z\d ]{4,30})$/,
