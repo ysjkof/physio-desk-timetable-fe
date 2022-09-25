@@ -33,7 +33,7 @@ export const REG_EXP = {
 };
 
 const year = /^(19|20)\d{2}$/;
-const month = /^(0[1-9]|1[012])$/;
+const month = /^([1-9]|0[1-9]|1[012])$/;
 const day = /^([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])$/;
 const hour = /^(0[0-9]|1[0-9]|2[0-3])$/;
 const minute = /^([1-5][0])$/;
