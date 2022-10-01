@@ -1,8 +1,8 @@
 import { TimetableModalProps } from '../../Timetable';
 import { useLocation } from 'react-router-dom';
 import {
+  createDate,
   createDateFromDay,
-  newDateSetHourAndMinute,
 } from '../../../../services/dateServices';
 import { useReactiveVar } from '@apollo/client';
 import { selectedDateVar } from '../../../../store';
@@ -27,10 +27,9 @@ export default function ReserveModal({ closeAction }: TimetableModalProps) {
 
   const startDate =
     state.startDate &&
-    newDateSetHourAndMinute({
+    createDate(createDateFromDay(selectedDate, state.startDate.dayIndex), {
       hour: state.startDate.hour,
       minute: state.startDate.minute,
-      fromDate: createDateFromDay(selectedDate, state.startDate.dayIndex),
     });
 
   const { userId, isDayOff } = state;

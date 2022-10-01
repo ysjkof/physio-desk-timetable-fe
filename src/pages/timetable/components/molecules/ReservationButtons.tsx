@@ -3,8 +3,8 @@ import { memo } from 'react';
 import { useCreateReservationMutation } from '../../../../graphql/generated/graphql';
 import {
   compareDateMatch,
+  createDate,
   getFrom4DigitTime,
-  newDateSetHourAndMinute,
 } from '../../../../services/dateServices';
 import { checkMatchMinute } from '../../../timetableServices';
 import { selectedInfoVar } from '../../../../store';
@@ -36,6 +36,7 @@ function ReservationButtons({
       prescriptionIds: [],
       requiredTime: 0,
     };
+
     const { prescriptionIds, requiredTime } = reservation.prescriptions!.reduce(
       (acc, prescription) => {
         return {
@@ -63,10 +64,9 @@ function ReservationButtons({
       selectedInfo.reservation
     );
 
-    const startDate = newDateSetHourAndMinute({
+    const startDate = createDate(date, {
       hour: +getFrom4DigitTime(label, 'hour'),
       minute: +getFrom4DigitTime(label, 'minute'),
-      fromDate: date,
     });
     const endDate = new Date(startDate);
     endDate.setMinutes(endDate.getMinutes() + requiredTime);
