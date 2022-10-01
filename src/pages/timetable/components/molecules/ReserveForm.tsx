@@ -38,35 +38,14 @@ export default function ReserveForm({
   const {
     register,
     getValues,
-    formState: { isValid, errors },
+    formState: { isValid },
     handleSubmit,
     setValue,
   } = useForm<ReserveFormType>({
     mode: 'onChange',
   });
 
-  useEffect(() => {
-    if (reservation) {
-      setValue('memo', reservation.memo || '');
-      setValue('userId', reservation.user.id);
-      // @ts-ignore
-      setSelectedInfo('patient', reservation.patient);
-    } else if (userId) {
-      setValue('userId', userId);
-    }
-  }, [userId, reservation]);
-
-  // UI 상호작용
-  const [selectedPrescription, setSelectedPrescription] =
-    useState<ISelectedPrescription>({
-      price: 0,
-      minute: 0,
-      prescriptions: [],
-    });
-  const [prescriptions, setPrescriptions] = useState<PrescriptionWithSelect[]>(
-    []
-  );
-
+  // 처방 처리
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
     variables: {
       input: {
@@ -75,6 +54,22 @@ export default function ReserveForm({
       },
     },
   });
+  const [prescriptions, setPrescriptions] = useState<PrescriptionWithSelect[]>(
+    prescriptionsData?.findPrescriptions.prescriptions
+      ? prescriptionsData.findPrescriptions.prescriptions
+          .filter((prescription) => prescription.activate)
+          .map((prescription) => ({
+            ...prescription,
+            isSelect: false,
+          }))
+      : []
+  );
+  const [selectedPrescription, setSelectedPrescription] =
+    useState<ISelectedPrescription>({
+      price: 0,
+      minute: 0,
+      prescriptions: [],
+    });
 
   function getTotal(
     getThis: 'price' | 'requiredTime',
@@ -85,56 +80,40 @@ export default function ReserveForm({
       .reduce((prev, curr) => prev + curr[getThis], 0);
   }
 
-  function onClickPrescription(
-    id: number | null,
-    prescriptions: PrescriptionWithSelect[],
-    selectedPrescriptionData?: PrescriptionWithSelect[]
+  function cloneSelectedPrescription(
+    selectedPrescription: PrescriptionWithSelect[]
   ) {
-    let newPrescriptions: PrescriptionWithSelect[] = [];
-
-    if (selectedPrescriptionData) {
-      newPrescriptions = prescriptions.map((prev) => {
-        const exists = selectedPrescriptionData.find(
-          (prescription) => prescription.id === prev.id
-        );
-        if (exists) {
-          return { ...exists, isSelect: !prev.isSelect };
-        }
-        return { ...prev, isSelect: false };
-      });
-    } else {
-      newPrescriptions = prescriptions.map((prev) => {
-        if (prev.id === id) {
-          return { ...prev, isSelect: !prev.isSelect };
-        }
-        return prev;
-      });
-    }
-
-    const newState = {
-      minute: getTotal('requiredTime', newPrescriptions),
-      price: getTotal('price', newPrescriptions),
-      prescriptions: newPrescriptions
+    const cloningPrescription = prescriptions.map((prev) => {
+      const exists = selectedPrescription.find(
+        (prescription) => prescription.id === prev.id
+      );
+      return exists || prev;
+    });
+    return cloningPrescription;
+  }
+  function refreshSelectedPrescription(id: number) {
+    return prescriptions.map((prev) => {
+      if (prev.id === id) {
+        return { ...prev, isSelect: !prev.isSelect };
+      }
+      return prev;
+    });
+  }
+  function saveSelectedPrescription(
+    selectedPrescriptions: PrescriptionWithSelect[]
+  ) {
+    setPrescriptions(selectedPrescriptions);
+    setSelectedPrescription({
+      minute: getTotal('requiredTime', selectedPrescriptions),
+      price: getTotal('price', selectedPrescriptions),
+      prescriptions: selectedPrescriptions
         .filter((prescription) => prescription.isSelect)
         .map((prescription) => prescription.id),
-    };
-
-    setPrescriptions(newPrescriptions);
-    setSelectedPrescription(newState);
+    });
   }
-
-  useEffect(() => {
-    if (prescriptionsData) {
-      let prescriptions =
-        prescriptionsData.findPrescriptions.prescriptions
-          ?.filter((prescription) => prescription.activate)
-          .map((prescription) => ({
-            ...prescription,
-            isSelect: false,
-          })) ?? [];
-      setPrescriptions(prescriptions);
-    }
-  }, [prescriptionsData]);
+  function selectPrescription(id: number) {
+    saveSelectedPrescription(refreshSelectedPrescription(id));
+  }
 
   // 데이터 통신
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
@@ -185,6 +164,34 @@ export default function ReserveForm({
     };
   }, []);
 
+  useEffect(() => {
+    if (reservation) {
+      const {
+        memo,
+        user,
+        patient,
+        prescriptions: prevPrescriptions,
+      } = reservation;
+
+      setValue('memo', memo || '');
+      setValue('userId', user.id);
+      // @ts-ignore
+      setSelectedInfo('patient', patient);
+
+      if (!prevPrescriptions) throw new Error('처방이 없다');
+      const selectedPrescription = prevPrescriptions.map((prev) => ({
+        ...prev,
+        isSelect: true,
+      }));
+      saveSelectedPrescription(cloneSelectedPrescription(selectedPrescription));
+      return;
+    }
+
+    if (userId) {
+      setValue('userId', userId);
+    }
+  }, [userId, reservation]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-4">
       <label className="flex flex-col gap-2">
@@ -234,9 +241,7 @@ export default function ReserveForm({
                 <li
                   key={index}
                   value={prescription.id}
-                  onClick={() =>
-                    onClickPrescription(prescription.id, prescriptions)
-                  }
+                  onClick={() => selectPrescription(prescription.id)}
                   className={cls(
                     'btn-menu overflow-hidden rounded-md border text-center',
                     prescription.isSelect
