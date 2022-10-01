@@ -9,7 +9,7 @@ interface ReservationCardNameProps {
   birthday: Date;
 }
 
-export default function ReservationCardName({
+export default function ReservationNameCard({
   gender,
   name,
   registrationNumber,

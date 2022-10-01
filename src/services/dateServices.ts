@@ -143,19 +143,6 @@ export const compareSameWeek = (date: Date, secondDate: Date): boolean => {
   return compareDateMatch(getSunday(date), getSunday(secondDate), 'ymd');
 };
 
-export const newDateSetHourAndMinute = ({
-  hour,
-  minute,
-  fromDate,
-}: {
-  hour: number;
-  minute: number;
-  fromDate?: Date;
-}) => {
-  const date = fromDate ? fromDate : new Date();
-  date.setHours(hour, minute, 0, 0);
-  return date;
-};
 // 시작시각부터 끝시각까지 timeGap의 차이가 나는 Date배열을 만든다
 export function getTimeGaps(
   startHours: number,
@@ -165,11 +152,11 @@ export function getTimeGaps(
   timeGap: number
 ): Date[] {
   const labels = [];
-  const start = newDateSetHourAndMinute({
+  const start = createDate(undefined, {
     hour: startHours,
     minute: startMinutes,
   });
-  const end = newDateSetHourAndMinute({ hour: endHours, minute: endMinutes });
+  const end = createDate(undefined, { hour: endHours, minute: endMinutes });
 
   let i = 0;
   while (i < 1500) {

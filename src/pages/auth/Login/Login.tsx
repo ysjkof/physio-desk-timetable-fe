@@ -37,9 +37,7 @@ export default function Login() {
     }
   };
 
-  const [loginMutation, { loading }] = useLoginMutation({
-    onCompleted,
-  });
+  const [loginMutation, { loading }] = useLoginMutation({ onCompleted });
 
   const onSubmit = () => {
     if (!loading) {

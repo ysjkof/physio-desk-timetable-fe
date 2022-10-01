@@ -114,30 +114,30 @@ export default function LandingPage() {
         <P className="mx-auto mb-0 w-72 sm:w-96">
           무울시간표는 캘린더 기반 예약 시스템에 필요한 모든 걸 제공하는{' '}
           <strong>병원 전용 예약 관리 서비스</strong>입니다.
-          {!isLoggedIn && (
-            <p className="mt-8">
-              <Link
-                to={ROUTES.sign_up}
-                className="my-6 mr-2 rounded-md bg-black px-8 py-0.5 font-medium text-white"
-              >
-                회원가입
-              </Link>
-              하고 시작해보세요.
-            </p>
-          )}
         </P>
+        {!isLoggedIn && (
+          <P className="mx-auto mt-8 w-72 sm:w-96">
+            <Link
+              to={ROUTES.sign_up}
+              className="my-6 mr-2 rounded-md bg-black px-8 py-0.5 font-medium text-white"
+            >
+              회원가입
+            </Link>
+            하고 시작해보세요.
+          </P>
+        )}
       </Section>
       <Section className="">
         <H2>물리치료실과 접수팀이 협업하기 위한 병원 전용 예약 관리 서비스</H2>
-        <P className="mx-auto flex w-fit pr-10">
-          우리 목표는
+        <div className="mx-auto flex w-fit pr-10">
+          <span>우리 목표는</span>
           <ul className="mx-3">
             <li className="italic underline">빠른 일정 파악</li>
             <li className="italic underline">예약 통계 분석</li>
             <li className="italic underline">예약 실수 방지</li>
           </ul>
           <span className="self-end">입니다.</span>
-        </P>
+        </div>
       </Section>
       <Section>
         <H2>필수 기능을 제공합니다</H2>
@@ -202,7 +202,7 @@ export default function LandingPage() {
             자동으로 처리됩니다
           </P>
         </Section>
-      </Section>{' '}
+      </Section>
     </>
   );
 }

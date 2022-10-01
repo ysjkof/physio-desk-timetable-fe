@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { TABLE_TIME_GAP } from '../../../constants/constants';
 import {
   compareDateMatch,
+  createDate,
   get4DigitHour,
   getTimeGaps,
-  newDateSetHourAndMinute,
 } from '../../../services/dateServices';
 import { viewOptionsVar } from '../../../store';
 
@@ -13,13 +13,13 @@ export default function useViewoptions() {
   const viewOptions = useReactiveVar(viewOptionsVar);
 
   const [firstTime, setFirstTime] = useState(
-    newDateSetHourAndMinute({
+    createDate(undefined, {
       hour: viewOptions.tableDuration.startHour,
       minute: viewOptions.tableDuration.startMinute,
     })
   );
   const [lastTime, setLastTime] = useState(
-    newDateSetHourAndMinute({
+    createDate(undefined, {
       hour: viewOptions.tableDuration.endHour,
       minute: viewOptions.tableDuration.endMinute,
     })
@@ -46,13 +46,13 @@ export default function useViewoptions() {
   };
 
   useEffect(() => {
-    const newFirstTime = newDateSetHourAndMinute({
+    const newFirstTime = createDate(undefined, {
       hour: viewOptions.tableDuration.startHour,
       minute: viewOptions.tableDuration.startMinute,
     });
     const isMatchFirstTime = compareDateMatch(firstTime, newFirstTime, 'hm');
 
-    const newLastTime = newDateSetHourAndMinute({
+    const newLastTime = createDate(undefined, {
       hour: viewOptions.tableDuration.endHour,
       minute: viewOptions.tableDuration.endMinute,
     });

@@ -115,19 +115,9 @@ export interface ISelectedPrescription {
   prescriptions: number[];
 }
 
-export interface IReserveForm {
-  // startDateYear: number;
-  // startDateMonth: number;
-  // startDateDate: number;
-  // startDateHours: number;
-  // startDateMinutes: number;
-  // endDateYear?: number;
-  // endDateMonth?: number;
-  // endDateDate?: number;
-  // endDateHours?: number;
-  // endDateMinutes?: number;
+export interface ReserveFormType {
+  userId: number;
   memo?: string;
-  userId?: number;
   description?: string;
 }
 

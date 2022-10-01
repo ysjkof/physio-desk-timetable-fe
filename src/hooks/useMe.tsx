@@ -12,34 +12,8 @@ export const useMe = () => {
   }
   return useMeQuery({
     onError(error) {
-      if (error) {
-        const {
-          clientErrors,
-          extraInfo,
-          message,
-          name,
-          networkError,
-          cause,
-          graphQLErrors,
-          stack,
-        } = error;
-
-        console.warn(
-          `
-    useMe에서 에러 발생
-    clientErrors : ${clientErrors}
-    extraInfo : ${extraInfo}
-    message : ${message}
-    name : ${name}
-    networkError : ${networkError}
-    cause : ${cause}
-    graphQLErrors :`,
-          graphQLErrors
-        );
-
-        console.warn('    stack :', stack);
-        logout(() => navigation('/'));
-      }
+      console.info('Error on useMe');
+      logout(() => navigation('/'));
     },
   });
 };

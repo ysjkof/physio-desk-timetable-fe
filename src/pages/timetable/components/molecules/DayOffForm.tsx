@@ -1,41 +1,98 @@
 import { useReactiveVar } from '@apollo/client';
 import { selectedInfoVar } from '../../../../store';
-import { UseFormRegister } from 'react-hook-form';
-import { IReserveForm } from '../../../../types/type';
+import { useForm } from 'react-hook-form';
+import { IListReservation, ReserveFormType } from '../../../../types/type';
 import SelectUser from './SelectUser';
 import Button from '../../../../components/molecules/Button';
 import Input from '../../../../components/molecules/Input';
 import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
+import { useEffect, useState } from 'react';
+import { TimetableModalProps } from '../../Timetable';
+import useDayoff from '../../hooks/useDayoff';
+import { createDate } from '../../../../services/dateServices';
 
-interface DayOffFormProps {
-  register: UseFormRegister<IReserveForm>;
-  isValid: boolean;
-  loading: boolean;
-  setSelectedStartDateState: React.Dispatch<React.SetStateAction<Date | null>>;
-  setSelectedEndDateState: React.Dispatch<React.SetStateAction<Date | null>>;
+interface DayOffFormNewProps extends TimetableModalProps {
+  userId: number;
   startDate?: Date;
+  reservation?: IListReservation;
 }
-
 export default function DayOffForm({
-  register,
-  isValid,
-  loading,
-  setSelectedStartDateState,
-  setSelectedEndDateState,
+  userId,
   startDate,
-}: DayOffFormProps) {
+  reservation,
+  closeAction,
+}: DayOffFormNewProps) {
   const selectedInfo = useReactiveVar(selectedInfoVar);
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(
+    reservation?.startDate ? new Date(reservation.startDate) : startDate
+  );
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | undefined>(
+    reservation?.endDate ? new Date(reservation.endDate) : undefined
+  );
+
+  const {
+    register,
+    getValues,
+    formState: { isValid },
+    handleSubmit,
+    setValue,
+  } = useForm<ReserveFormType>({
+    mode: 'onChange',
+  });
+
+  const { createDayoff, editDayoff, loading } = useDayoff({
+    isCreate: false,
+    closeAction,
+  });
+
+  const onSubmit = () => {
+    if (loading) return;
+    if (!selectedEndDate) throw new Error('endDate가 없습니다.');
+    const { memo, userId } = getValues();
+
+    if (reservation) {
+      editDayoff({
+        startDate: selectedStartDate,
+        endDate: selectedEndDate,
+        memo,
+        userId,
+        reservationId: reservation.id,
+      });
+      return;
+    }
+
+    createDayoff({
+      startDate: selectedStartDate,
+      endDate: selectedEndDate,
+      memo,
+      userId,
+      clinicId: selectedInfo.clinic!.id,
+    });
+  };
+
+  useEffect(() => {
+    if (reservation) {
+      const { memo, user } = reservation;
+      setValue('memo', memo || '');
+      setValue('userId', user.id);
+      return;
+    }
+
+    setValue('userId', userId);
+  }, [userId, reservation]);
+
   const createDefaultEndDate = () => {
     if (!startDate) return;
-
-    const endDate = new Date(startDate);
-    endDate.setHours(endDate.getHours() + 4);
-    return endDate;
+    const time = {
+      hour: startDate.getHours() + 3,
+      minute: 0,
+    };
+    return createDate(startDate, time);
   };
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-4">
       <label className="flex flex-col gap-2">
-        담당 치료사
+        치료사
         <SelectUser
           members={selectedInfo.clinic?.members ?? []}
           register={register('userId')}
@@ -44,17 +101,17 @@ export default function DayOffForm({
       <label className="flex flex-col gap-2">
         시작 시각
         <Datepicker
-          setSelectedDate={setSelectedStartDateState}
+          setSelectedDate={setSelectedStartDate}
           hasHour
-          defaultDate={startDate && new Date(startDate)}
+          defaultDate={selectedStartDate}
         />
       </label>
       <label className="flex flex-col gap-2">
         종료 시각
         <Datepicker
-          setSelectedDate={setSelectedEndDateState}
+          setSelectedDate={setSelectedEndDate}
           hasHour
-          defaultDate={createDefaultEndDate()}
+          defaultDate={selectedEndDate || createDefaultEndDate()}
         />
       </label>
 
@@ -70,6 +127,6 @@ export default function DayOffForm({
       <Button type="submit" canClick={isValid} loading={loading}>
         잠금 수정
       </Button>
-    </>
+    </form>
   );
 }

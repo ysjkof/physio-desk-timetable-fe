@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
 import {
+  createDate,
   get4DigitHour,
   getTimeLength,
-  newDateSetHourAndMinute,
 } from '../../../../services/dateServices';
 import { IListReservation } from '../../../../types/type';
 import EventBox from './EventBox';
@@ -26,15 +26,13 @@ function ScheduleInUserInDay({
 
   const [hour, minute] = labels[0].split(':');
   const [lastHour, lastMinute] = labels[labels.length - 1].split(':');
-  const firstLabelDate = newDateSetHourAndMinute({
+  const firstLabelDate = createDate(events[0]?.startDate, {
     hour: +hour,
     minute: +minute,
-    fromDate: new Date(events[0]?.startDate),
   });
-  const lastLabelDate = newDateSetHourAndMinute({
+  const lastLabelDate = createDate(events[0]?.startDate, {
     hour: +lastHour,
     minute: +lastMinute,
-    fromDate: new Date(events[0]?.startDate),
   });
 
   const isOverEndDuration = (tableEndDate: Date, eventStartDate: Date) =>

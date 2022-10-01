@@ -3,11 +3,11 @@ import { memo } from 'react';
 import { useCreateReservationMutation } from '../../../../graphql/generated/graphql';
 import {
   compareDateMatch,
+  createDate,
   getFrom4DigitTime,
-  newDateSetHourAndMinute,
 } from '../../../../services/dateServices';
 import { checkMatchMinute } from '../../../timetableServices';
-import { selectedInfoVar } from '../../../../store';
+import { selectedInfoVar, toastVar } from '../../../../store';
 import { IListReservation } from '../../../../types/type';
 import ReserveButton from './ReserveButton';
 
@@ -36,6 +36,7 @@ function ReservationButtons({
       prescriptionIds: [],
       requiredTime: 0,
     };
+
     const { prescriptionIds, requiredTime } = reservation.prescriptions!.reduce(
       (acc, prescription) => {
         return {
@@ -63,10 +64,9 @@ function ReservationButtons({
       selectedInfo.reservation
     );
 
-    const startDate = newDateSetHourAndMinute({
+    const startDate = createDate(date, {
       hour: +getFrom4DigitTime(label, 'hour'),
       minute: +getFrom4DigitTime(label, 'minute'),
-      fromDate: date,
     });
     const endDate = new Date(startDate);
     endDate.setMinutes(endDate.getMinutes() + requiredTime);
@@ -82,6 +82,10 @@ function ReservationButtons({
           endDate,
           prescriptionIds,
         },
+      },
+      onCompleted(data) {
+        const { error } = data.createReservation;
+        if (error) toastVar({ messages: [error], fade: true });
       },
     });
     // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기
