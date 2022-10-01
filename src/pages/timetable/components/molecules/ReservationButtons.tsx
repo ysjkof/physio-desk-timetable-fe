@@ -7,7 +7,7 @@ import {
   getFrom4DigitTime,
 } from '../../../../services/dateServices';
 import { checkMatchMinute } from '../../../timetableServices';
-import { selectedInfoVar } from '../../../../store';
+import { selectedInfoVar, toastVar } from '../../../../store';
 import { IListReservation } from '../../../../types/type';
 import ReserveButton from './ReserveButton';
 
@@ -82,6 +82,10 @@ function ReservationButtons({
           endDate,
           prescriptionIds,
         },
+      },
+      onCompleted(data) {
+        const { error } = data.createReservation;
+        if (error) toastVar({ messages: [error], fade: true });
       },
     });
     // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기
