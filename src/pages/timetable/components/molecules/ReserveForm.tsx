@@ -116,7 +116,7 @@ export default function ReserveForm({
   }
 
   // 데이터 통신
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(
     startDate || new Date()
   );
 

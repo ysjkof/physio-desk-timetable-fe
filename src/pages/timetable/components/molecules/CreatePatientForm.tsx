@@ -77,7 +77,7 @@ export default function CreatePatientForm({
   const [editPatientMutation, { loading: editLoading }] =
     useEditPatientMutation({});
 
-  const [birthday, setBirthday] = useState<Date | null>(null);
+  const [birthday, setBirthday] = useState<Date | undefined>(undefined);
 
   const onSubmit = () => {
     if (!loading && !editLoading) {
@@ -183,7 +183,7 @@ export default function CreatePatientForm({
 
       <Button
         type="submit"
-        canClick={birthday && isValid}
+        canClick={!!birthday && isValid}
         loading={loading || editLoading}
         children={patient ? '환자수정' : '환자등록'}
       />
