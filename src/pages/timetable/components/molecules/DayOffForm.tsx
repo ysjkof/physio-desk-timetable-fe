@@ -23,10 +23,12 @@ export default function DayOffForm({
   closeAction,
 }: DayOffFormNewProps) {
   const selectedInfo = useReactiveVar(selectedInfoVar);
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
-    startDate || new Date()
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(
+    reservation?.startDate ? new Date(reservation.startDate) : startDate
   );
-  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | undefined>(
+    reservation?.endDate ? new Date(reservation.endDate) : undefined
+  );
 
   const {
     register,
@@ -70,11 +72,9 @@ export default function DayOffForm({
 
   useEffect(() => {
     if (reservation) {
-      const { memo, user, patient } = reservation;
+      const { memo, user } = reservation;
       setValue('memo', memo || '');
       setValue('userId', user.id);
-      // @ts-ignore
-      setSelectedInfo('patient', patient);
       return;
     }
 
@@ -84,7 +84,7 @@ export default function DayOffForm({
   const createDefaultEndDate = () => {
     if (!startDate) return;
     const time = {
-      hour: startDate.getHours() + 4,
+      hour: startDate.getHours() + 3,
       minute: 0,
     };
     return createDate(startDate, time);
@@ -103,7 +103,7 @@ export default function DayOffForm({
         <Datepicker
           setSelectedDate={setSelectedStartDate}
           hasHour
-          defaultDate={startDate && new Date(startDate)}
+          defaultDate={selectedStartDate}
         />
       </label>
       <label className="flex flex-col gap-2">
@@ -111,7 +111,7 @@ export default function DayOffForm({
         <Datepicker
           setSelectedDate={setSelectedEndDate}
           hasHour
-          defaultDate={createDefaultEndDate()}
+          defaultDate={selectedEndDate || createDefaultEndDate()}
         />
       </label>
 

@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { TimetableModalProps } from '../../Timetable';
-import { useDeleteReservationMutation } from '../../../../graphql/generated/graphql';
 import { IListReservation } from '../../../../types/type';
-import ReserveForm from './ReserveForm';
-import ReservationCardDetail from './ReservationCardDetail';
 import MenuButton from '../../../../components/molecules/MenuButton';
+import useDeleteReservation from '../../hooks/useDeleteReservation';
+import DayOffForm from './DayOffForm';
+import CardDetail from './CardDetail';
+import { getTimeLength } from '../../../../services/dateServices';
 
 interface DayOffCardProps extends TimetableModalProps {
   reservation: IListReservation;
@@ -17,24 +18,11 @@ export default function DayOffCard({
   reservation,
 }: DayOffCardProps) {
   const [isEdit, setIsEdit] = useState(false);
+  const { id, user, startDate, endDate, lastModifier, memo } = reservation;
 
-  const [deleteReservationMutation] = useDeleteReservationMutation({});
-
-  const onClickDelete = () => {
-    const confirmDelete = window.confirm('예약을 지웁니다.');
-    if (confirmDelete) {
-      deleteReservationMutation({
-        variables: { input: { reservationId: reservation.id } },
-        onCompleted(data) {
-          const {
-            deleteReservation: { ok },
-          } = data;
-          if (ok) {
-            closeAction();
-          }
-        },
-      });
-    }
+  const { deleteReservation } = useDeleteReservation();
+  const invokeDelete = () => {
+    deleteReservation({ reservationId: id, closeAction });
   };
 
   return (
@@ -46,7 +34,7 @@ export default function DayOffCard({
           icon={<FontAwesomeIcon icon={faTrashCan} fontSize={14} />}
           enabled
           label={'삭제'}
-          onClick={onClickDelete}
+          onClick={invokeDelete}
         />
         <MenuButton
           icon={<FontAwesomeIcon icon={faEdit} fontSize={14} />}
@@ -57,15 +45,26 @@ export default function DayOffCard({
       </div>
 
       <div className="h-full overflow-y-scroll">
-        {!isEdit && (
-          <ReservationCardDetail reservation={reservation} hasEndDate />
-        )}
-        {isEdit && (
-          <ReserveForm
-            userId={reservation.user.id}
-            closeAction={closeAction}
+        {isEdit ? (
+          <DayOffForm
+            userId={user.id}
             reservation={reservation}
+            closeAction={closeAction}
           />
+        ) : (
+          <CardDetail>
+            <CardDetail.Therapist>{user.name}</CardDetail.Therapist>
+            <CardDetail.Time
+              startTime={new Date(startDate).toLocaleString()}
+              endTime={new Date(endDate).toLocaleString()}
+              totalTime={getTimeLength(startDate, endDate, 'minute')}
+            />
+            <CardDetail.LastUpdate
+              name={lastModifier.name}
+              updatedAt={new Date(lastModifier.updatedAt).toLocaleString()}
+            />
+            <CardDetail.Memo>{memo}</CardDetail.Memo>
+          </CardDetail>
         )}
       </div>
     </div>
