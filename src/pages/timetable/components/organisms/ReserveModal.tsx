@@ -8,31 +8,34 @@ import { useReactiveVar } from '@apollo/client';
 import { selectedDateVar } from '../../../../store';
 import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
 import SearchPatient from '../molecules/SearchPatient';
-import ReserveForm from '../molecules/ReserveForm';
 import ModalTemplate from '../../../../components/templates/ModalTemplate';
+import DayOffForm from '../molecules/DayOffForm';
+import ReserveForm from '../molecules/ReserveForm';
+
+interface LocationState {
+  startDate: {
+    hour: number;
+    minute: number;
+    dayIndex: number;
+  };
+  userId: number;
+  isDayOff?: boolean;
+}
 
 export default function ReserveModal({ closeAction }: TimetableModalProps) {
   const location = useLocation();
   const selectedDate = useReactiveVar(selectedDateVar);
 
-  const state = location.state as {
-    startDate: {
-      hour: number;
-      minute: number;
-      dayIndex: number;
-    };
-    userId: number;
-    isDayOff?: boolean;
-  };
+  const {
+    startDate: { hour, minute, dayIndex },
+    userId,
+    isDayOff,
+  }: LocationState = location.state;
 
-  const startDate =
-    state.startDate &&
-    createDate(createDateFromDay(selectedDate, state.startDate.dayIndex), {
-      hour: state.startDate.hour,
-      minute: state.startDate.minute,
-    });
-
-  const { userId, isDayOff } = state;
+  const startDate = createDate(createDateFromDay(selectedDate, dayIndex), {
+    hour,
+    minute,
+  });
 
   return (
     <ModalTemplate
@@ -43,13 +46,22 @@ export default function ReserveModal({ closeAction }: TimetableModalProps) {
           closeAction={closeAction}
           children={
             <>
-              {!isDayOff && <SearchPatient />}
-              <ReserveForm
-                closeAction={closeAction}
-                startDate={startDate}
-                userId={userId}
-                isDayoff={isDayOff}
-              />
+              {isDayOff ? (
+                <DayOffForm
+                  userId={userId}
+                  startDate={startDate}
+                  closeAction={closeAction}
+                />
+              ) : (
+                <>
+                  <SearchPatient />
+                  <ReserveForm
+                    userId={userId}
+                    startDate={startDate}
+                    closeAction={closeAction}
+                  />
+                </>
+              )}
             </>
           }
         />

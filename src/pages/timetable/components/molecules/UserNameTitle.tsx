@@ -38,6 +38,7 @@ export default function UserNameTitle({
           minute: date.getMinutes() + UTC_OPTION_KST.minute,
           dayIndex: date.getDay(),
         },
+        userId,
       },
     });
   }

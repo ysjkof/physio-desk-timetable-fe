@@ -1,3 +1,5 @@
+import { toastVar } from '../store';
+
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
 }
@@ -90,4 +92,16 @@ const removePersonalClinicNumber = (name: string) => {
 export const renameUseSplit = (name: string) => {
   const isSplit = removePersonalClinicNumber(name);
   return isSplit ? '전용 : ' + isSplit : name;
+};
+
+export const toastOrNavigation = (
+  ok: boolean,
+  error?: string | null,
+  closeAction?: () => void
+) => {
+  if (error) {
+    toastVar({ messages: [`오류가 발생했습니다; ${error}`] });
+  }
+
+  if (closeAction && ok) closeAction();
 };
