@@ -5,7 +5,7 @@ import {
   useCreateReservationMutation,
   useEditReservationMutation,
 } from '../../../graphql/generated/graphql';
-import { toastOrNavigation } from '../../../utils/utils';
+import { simpleCheckGQLError } from '../../../utils/utils';
 import { TimetableModalProps } from '../Timetable';
 
 interface UseDayoffProps extends TimetableModalProps {
@@ -49,7 +49,7 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
       },
       onCompleted(data) {
         const { ok, error } = data.createReservation;
-        toastOrNavigation(ok, error, closeAction);
+        simpleCheckGQLError(ok, error, closeAction);
       },
     });
   };
@@ -76,7 +76,7 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
       },
       onCompleted(data) {
         const { ok, error } = data.editReservation;
-        toastOrNavigation(ok, error, closeAction);
+        simpleCheckGQLError(ok, error, closeAction);
       },
     });
   };
