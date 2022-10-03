@@ -106,3 +106,8 @@ export const simpleCheckGQLError = (
 
   if (callback && ok) callback();
 };
+
+export function checkArrayIncludeValue<T>(arr: T[] | undefined | null) {
+  if (!arr) return false;
+  return arr.length >= 1 ? arr : false;
+}
