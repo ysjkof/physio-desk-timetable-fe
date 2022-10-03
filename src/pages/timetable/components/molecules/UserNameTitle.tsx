@@ -2,7 +2,7 @@ import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { useCreateDayOffMutation } from '../../../../graphql/generated/graphql';
-import { cls } from '../../../../utils/utils';
+import { cls, simpleCheckGQLError } from '../../../../utils/utils';
 import { USER_COLORS, UTC_OPTION_KST } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
 import { createDate } from '../../../../services/dateServices';
@@ -55,6 +55,10 @@ export default function UserNameTitle({
           clinicId,
           userId,
         },
+      },
+      onCompleted(data) {
+        const { ok, error } = data.createDayOff;
+        simpleCheckGQLError(ok, error);
       },
     });
   }
