@@ -1,5 +1,5 @@
 import { useDeleteReservationMutation } from '../../../graphql/generated/graphql';
-import { toastOrNavigation } from '../../../utils/utils';
+import { simpleCheckGQLError } from '../../../utils/utils';
 interface DeleteReservation {
   reservationId: number;
   closeAction?: () => void;
@@ -20,8 +20,7 @@ export default function useDeleteReservation() {
           const {
             deleteReservation: { ok, error },
           } = data;
-
-          toastOrNavigation(ok, error, closeAction);
+          simpleCheckGQLError(ok, error, closeAction);
         },
       });
     }

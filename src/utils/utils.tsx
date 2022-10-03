@@ -94,14 +94,19 @@ export const renameUseSplit = (name: string) => {
   return isSplit ? '전용 : ' + isSplit : name;
 };
 
-export const toastOrNavigation = (
+/** ok, error만 있는 GraphQL 응답을 받고 토스트 출력이나 콜백 실행 */
+export const simpleCheckGQLError = (
   ok: boolean,
   error?: string | null,
-  closeAction?: () => void
+  callback?: () => void
 ) => {
   if (error) {
     toastVar({ messages: [`오류가 발생했습니다; ${error}`] });
   }
-
-  if (closeAction && ok) closeAction();
+  if (callback && ok) callback();
 };
+
+export function checkArrayIncludeValue<T>(arr: T[] | undefined | null) {
+  if (!arr) return false;
+  return arr.length >= 1 ? arr : false;
+}

@@ -10,8 +10,7 @@ import DayOffCard from '../molecules/DayOffCard';
 export default function ReservationModal({ closeAction }: TimetableModalProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  //@ts-ignore
-  const reservationId = location.state?.reservationId;
+  const reservationId = location.state.reservationId;
   const { data } = useListReservations();
   const reservation = data?.listReservations.results?.find(
     (r) => r.id === reservationId

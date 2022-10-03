@@ -12,7 +12,7 @@ import {
 } from '../../../../types/type';
 import Textarea from '../../../../components/molecules/Textarea';
 import { ROUTES } from '../../../../router/routes';
-import { cls } from '../../../../utils/utils';
+import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
 import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
 import { useEffect, useState } from 'react';
 import { useFindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
@@ -54,16 +54,28 @@ export default function ReserveForm({
       },
     },
   });
+  
+  function injectSelectIntoPrescription<T>(arr: T[]) {
+    return arr.map((prescription) => ({
+      ...prescription,
+      isSelect: false,
+    }));
+  }
+
+  // 처방을 그냥 빈 배열로 시작할 경우 예약카드에서 수정할 때 깜빡임
   const [prescriptions, setPrescriptions] = useState<PrescriptionWithSelect[]>(
-    prescriptionsData?.findPrescriptions.prescriptions
-      ? prescriptionsData.findPrescriptions.prescriptions
-          .filter((prescription) => prescription.activate)
-          .map((prescription) => ({
-            ...prescription,
-            isSelect: false,
-          }))
-      : []
+    () => {
+      const existPrescriptions = checkArrayIncludeValue(
+        prescriptionsData?.findPrescriptions.prescriptions
+      );
+      return existPrescriptions
+        ? injectSelectIntoPrescription(
+            existPrescriptions.filter((prescription) => prescription.activate)
+          )
+        : [];
+    }
   );
+  
   const [selectedPrescription, setSelectedPrescription] =
     useState<ISelectedPrescription>({
       price: 0,
@@ -81,9 +93,10 @@ export default function ReserveForm({
   }
 
   function cloneSelectedPrescription(
+    origin: PrescriptionWithSelect[],
     selectedPrescription: PrescriptionWithSelect[]
   ) {
-    const cloningPrescription = prescriptions.map((prev) => {
+    const cloningPrescription = origin.map((prev) => {
       const exists = selectedPrescription.find(
         (prescription) => prescription.id === prev.id
       );
@@ -91,14 +104,7 @@ export default function ReserveForm({
     });
     return cloningPrescription;
   }
-  function refreshSelectedPrescription(id: number) {
-    return prescriptions.map((prev) => {
-      if (prev.id === id) {
-        return { ...prev, isSelect: !prev.isSelect };
-      }
-      return prev;
-    });
-  }
+  
   function saveSelectedPrescription(
     selectedPrescriptions: PrescriptionWithSelect[]
   ) {
@@ -111,12 +117,21 @@ export default function ReserveForm({
         .map((prescription) => prescription.id),
     });
   }
+
+  function refreshSelectedPrescription(id: number) {
+    return prescriptions.map((prev) => {
+      if (prev.id === id) {
+        return { ...prev, isSelect: !prev.isSelect };
+      }
+      return prev;
+    });
+  }
   function selectPrescription(id: number) {
     saveSelectedPrescription(refreshSelectedPrescription(id));
   }
 
   // 데이터 통신
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(
     startDate || new Date()
   );
 
@@ -165,32 +180,52 @@ export default function ReserveForm({
   }, []);
 
   useEffect(() => {
-    if (reservation) {
+    if (userId) {
+      setValue('userId', userId);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    const existPrescriptions = checkArrayIncludeValue(
+      prescriptionsData?.findPrescriptions.prescriptions
+    );
+
+    let processedPrescriptions: PrescriptionWithSelect[] | undefined =
+      undefined;
+    if (existPrescriptions) {
+      processedPrescriptions = injectSelectIntoPrescription(
+        existPrescriptions.filter((prescription) => prescription.activate)
+      );
+    }
+
+    if (processedPrescriptions && reservation) {
       const {
         memo,
         user,
         patient,
         prescriptions: prevPrescriptions,
       } = reservation;
+      if (!prevPrescriptions) throw new Error('처방이 없다');
 
       setValue('memo', memo || '');
       setValue('userId', user.id);
       // @ts-ignore
       setSelectedInfo('patient', patient);
 
-      if (!prevPrescriptions) throw new Error('처방이 없다');
       const selectedPrescription = prevPrescriptions.map((prev) => ({
         ...prev,
         isSelect: true,
       }));
-      saveSelectedPrescription(cloneSelectedPrescription(selectedPrescription));
-      return;
+      
+      processedPrescriptions = cloneSelectedPrescription(
+        processedPrescriptions,
+        selectedPrescription
+      );
     }
 
-    if (userId) {
-      setValue('userId', userId);
-    }
-  }, [userId, reservation]);
+    if (!processedPrescriptions) return;
+    saveSelectedPrescription(processedPrescriptions);
+  }, [reservation, prescriptionsData]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid w-full gap-4">
