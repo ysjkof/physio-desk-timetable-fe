@@ -1,12 +1,11 @@
-import { useReactiveVar } from '@apollo/client';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { useCreateDayOffMutation } from '../../../../graphql/generated/graphql';
 import { cls } from '../../../../utils/utils';
-import { viewOptionsVar } from '../../../../store';
 import { USER_COLORS, UTC_OPTION_KST } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
+import { createDate } from '../../../../services/dateServices';
 
 interface UserNameTitleProps {
   isMe: boolean;
@@ -26,10 +25,9 @@ export default function UserNameTitle({
   date,
 }: UserNameTitleProps) {
   const [createDayOff, { loading }] = useCreateDayOffMutation();
-  const viewOptions = useReactiveVar(viewOptionsVar);
   const navigate = useNavigate();
 
-  function onClickBox() {
+  function closePartTime() {
     navigate(ROUTES.reserve, {
       state: {
         isDayOff: true,
@@ -43,15 +41,11 @@ export default function UserNameTitle({
     });
   }
 
-  function lockTable() {
+  function closeDay() {
     if (loading) return;
 
-    const { startHour, startMinute, endHour, endMinute } =
-      viewOptions.tableDuration;
-    const startDate = new Date(date);
-    const endDate = new Date(date);
-    startDate.setHours(startHour, startMinute);
-    endDate.setHours(endHour, endMinute);
+    const startDate = createDate(date);
+    const endDate = createDate(startDate, { hour: 23, minute: 59 });
 
     createDayOff({
       variables: {
@@ -82,14 +76,14 @@ export default function UserNameTitle({
         <div className="hidden  whitespace-nowrap  group-hover:block">
           <div
             className="flex cursor-pointer items-center gap-1 py-1 px-2 hover:bg-gray-200"
-            onClick={lockTable}
+            onClick={closeDay}
           >
             <FontAwesomeIcon icon={faLock} />
             <span>예약잠금(종일)</span>
           </div>
           <div
             className="flex cursor-pointer items-center gap-1 py-1 px-2 hover:bg-gray-200"
-            onClick={onClickBox}
+            onClick={closePartTime}
           >
             <FontAwesomeIcon icon={faLock} />
             <span>예약잠금</span>
