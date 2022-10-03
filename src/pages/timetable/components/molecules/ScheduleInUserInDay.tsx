@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
+import { ReservationState } from '../../../../graphql/generated/graphql';
 import {
   createDate,
   get4DigitHour,
@@ -25,38 +26,24 @@ function ScheduleInUserInDay({
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
   const [hour, minute] = labels[0].split(':');
-  const [lastHour, lastMinute] = labels[labels.length - 1].split(':');
+  const endLabelIdx = labels.length - 1;
+
   const firstLabelDate = createDate(events[0]?.startDate, {
     hour: +hour,
     minute: +minute,
   });
-  const lastLabelDate = createDate(events[0]?.startDate, {
-    hour: +lastHour,
-    minute: +lastMinute,
-  });
-
-  const isOverEndDuration = (tableEndDate: Date, eventStartDate: Date) =>
-    tableEndDate.getTime() < eventStartDate.getTime();
 
   return (
     <>
       {events.map((event) => {
-        const labelIdx = labels.findIndex((label) => {
-          return label === get4DigitHour(event.startDate);
-        });
-
-        let inset = `${labelIdx * TABLE_CELL_HEIGHT}px 0`;
+        let inset = '0';
         let numberOfCell = getTimeLength(
           event.startDate,
           event.endDate,
           '20minute'
         );
 
-        if (labelIdx === -1) {
-          if (isOverEndDuration(lastLabelDate, new Date(event.startDate)))
-            return;
-
-          inset = '0';
+        if (event.state === ReservationState.DayOff) {
           numberOfCell =
             numberOfCell +
             getTimeLength(
@@ -64,6 +51,17 @@ function ScheduleInUserInDay({
               new Date(event.startDate),
               '20minute'
             );
+        } else {
+          const labelIdx = labels.findIndex((label) => {
+            return label === get4DigitHour(event.startDate);
+          });
+          /**
+           * 시작시간이 마지막 시작 시간과 같으면 화면을 벗어나기 때문에 리턴
+           * labelIdx가 없으면 화면을 벗어나기 때문에 한 번 더 확인하고 리턴
+           */
+          if (labelIdx === endLabelIdx || labelIdx === -1) return;
+
+          inset = `${labelIdx * TABLE_CELL_HEIGHT}px 0`;
         }
 
         return (
