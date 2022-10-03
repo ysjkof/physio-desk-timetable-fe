@@ -103,7 +103,6 @@ export const simpleCheckGQLError = (
   if (error) {
     toastVar({ messages: [`오류가 발생했습니다; ${error}`] });
   }
-
   if (callback && ok) callback();
 };
 

@@ -54,7 +54,7 @@ export default function ReserveForm({
       },
     },
   });
-
+  
   function injectSelectIntoPrescription<T>(arr: T[]) {
     return arr.map((prescription) => ({
       ...prescription,
@@ -75,7 +75,7 @@ export default function ReserveForm({
         : [];
     }
   );
-
+  
   const [selectedPrescription, setSelectedPrescription] =
     useState<ISelectedPrescription>({
       price: 0,
@@ -104,7 +104,7 @@ export default function ReserveForm({
     });
     return cloningPrescription;
   }
-
+  
   function saveSelectedPrescription(
     selectedPrescriptions: PrescriptionWithSelect[]
   ) {
@@ -216,6 +216,7 @@ export default function ReserveForm({
         ...prev,
         isSelect: true,
       }));
+      
       processedPrescriptions = cloneSelectedPrescription(
         processedPrescriptions,
         selectedPrescription

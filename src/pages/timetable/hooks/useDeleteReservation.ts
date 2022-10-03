@@ -20,7 +20,6 @@ export default function useDeleteReservation() {
           const {
             deleteReservation: { ok, error },
           } = data;
-
           simpleCheckGQLError(ok, error, closeAction);
         },
       });
