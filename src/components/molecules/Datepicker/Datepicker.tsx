@@ -9,7 +9,6 @@ export interface DatepickerErrorState {
   error: string;
   setError: React.Dispatch<React.SetStateAction<string>>;
 }
-
 export interface InputDate {
   year: string;
   month: string;
@@ -21,7 +20,6 @@ export interface DatepickerInputState {
   inputDate: InputDate;
   setInputDate: React.Dispatch<React.SetStateAction<InputDate>>;
 }
-
 interface IDatepickerWithInputProps extends HasDateOption {
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
   defaultDate?: Date;
