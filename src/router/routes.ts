@@ -8,6 +8,7 @@ const auth = 'auth';
 const login = 'login';
 const sign_up = 'sign_up';
 const confirm_email = 'confirm_email';
+const change_email = 'change_email';
 const edit_profile = 'edit_profile';
 
 // dashboard
@@ -60,6 +61,7 @@ export const ROUTES = {
   login: `/${auth}/${login}`,
   sign_up: `/${auth}/${sign_up}`,
   confirm_email: `/${auth}/${confirm_email}`,
+  change_email: `/${auth}/${change_email}`,
   dashboard: `/${dashboard}`,
   member: `/${dashboard}/${member}`,
   invite: `/${dashboard}/${invite}`,

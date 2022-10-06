@@ -3,6 +3,7 @@ import { useReactiveVar } from '@apollo/client';
 import { Route } from 'react-router-dom';
 import { isLoggedInVar } from '../apollo';
 import { ENDPOINT, ROUTES } from './routes';
+import ChangeEmail from '../pages/auth/ChangeEmail/ChangeEmail';
 
 const LandingPage = lazy(
   () => import('../pages/home/components/organisms/LandingPage')
@@ -36,7 +37,7 @@ const Loading = lazy(() => import('../components/atoms/Loading'));
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
-  const { confirm_email, docs } = ROUTES;
+  const { confirm_email, change_email, docs } = ROUTES;
   const {
     basic_patient_registration,
     basic_prescription_registration,
@@ -117,6 +118,7 @@ function Router() {
       path={confirm_email}
       element={<ConfirmEmail />}
     />,
+    <Route key={change_email} path={change_email} element={<ChangeEmail />} />,
     <Route key="UserDocuments" path={docs} element={<Docs />}>
       <Route index element={<DocsIndex />} />
       {docsRoute.map((route) => (
