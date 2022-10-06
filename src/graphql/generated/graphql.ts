@@ -56,12 +56,6 @@ export enum ClinicType {
   Personal = 'Personal'
 }
 
-export type CoreOutput = {
-  __typename?: 'CoreOutput';
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-};
-
 export type CreateAccountInput = {
   email: Scalars['String'];
   name: Scalars['String'];
@@ -219,7 +213,6 @@ export type EditPrescriptionOutput = {
 };
 
 export type EditProfileInput = {
-  email?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
 };
@@ -487,7 +480,8 @@ export type Mutation = {
   inviteUser: InviteUserOutput;
   leaveClinic: LeaveClinicOutput;
   login: LoginOutput;
-  sendAuthenticationEmail: CoreOutput;
+  sendChangeEmail: SendChangeEmailOutput;
+  verifyChangeEmail: VerifyChangeEmailOutput;
   verifyEmail: VerifyEmailOutput;
 };
 
@@ -584,6 +578,16 @@ export type MutationLeaveClinicArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput;
+};
+
+
+export type MutationSendChangeEmailArgs = {
+  input: SendChangeEmailInput;
+};
+
+
+export type MutationVerifyChangeEmailArgs = {
+  input: VerifyChangeEmailInput;
 };
 
 
@@ -784,6 +788,16 @@ export type SearchUsersOutput = {
   totalCount?: Maybe<Scalars['Int']>;
 };
 
+export type SendChangeEmailInput = {
+  email: Scalars['String'];
+};
+
+export type SendChangeEmailOutput = {
+  __typename?: 'SendChangeEmailOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   listenDeleteReservation: ListenDeleteReservationOutput;
@@ -839,6 +853,17 @@ export enum UserRole {
   TopAdmin = 'TopAdmin'
 }
 
+export type VerifyChangeEmailInput = {
+  code: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type VerifyChangeEmailOutput = {
+  __typename?: 'VerifyChangeEmailOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type VerifyEmailInput = {
   code: Scalars['String'];
 };
@@ -847,6 +872,7 @@ export type VerifyEmailOutput = {
   __typename?: 'VerifyEmailOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
+  user?: Maybe<User>;
 };
 
 export type VisitRate = {
@@ -1075,10 +1101,12 @@ export type SearchUsersQueryVariables = Exact<{
 
 export type SearchUsersQuery = { __typename?: 'Query', searchUsers: { __typename?: 'SearchUsersOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'User', id: number, name: string, email: string }> | null } };
 
-export type SendAuthenticationEmailMutationVariables = Exact<{ [key: string]: never; }>;
+export type SendChangeEmailMutationVariables = Exact<{
+  input: SendChangeEmailInput;
+}>;
 
 
-export type SendAuthenticationEmailMutation = { __typename?: 'Mutation', sendAuthenticationEmail: { __typename?: 'CoreOutput', ok: boolean, error?: string | null } };
+export type SendChangeEmailMutation = { __typename?: 'Mutation', sendChangeEmail: { __typename?: 'SendChangeEmailOutput', ok: boolean, error?: string | null } };
 
 export type ListenUpdateReservationSubscriptionVariables = Exact<{
   input: UpdateReservationInput;
@@ -1093,6 +1121,13 @@ export type ListenDeleteReservationSubscriptionVariables = Exact<{
 
 
 export type ListenDeleteReservationSubscription = { __typename?: 'Subscription', listenDeleteReservation: { __typename?: 'ListenDeleteReservationOutput', id: number, clinicId: number } };
+
+export type VerifyChangeEmailMutationVariables = Exact<{
+  input: VerifyChangeEmailInput;
+}>;
+
+
+export type VerifyChangeEmailMutation = { __typename?: 'Mutation', verifyChangeEmail: { __typename?: 'VerifyChangeEmailOutput', ok: boolean, error?: string | null } };
 
 export type VerifyEmailMutationVariables = Exact<{
   input: VerifyEmailInput;
@@ -2443,39 +2478,40 @@ export function useSearchUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type SearchUsersQueryHookResult = ReturnType<typeof useSearchUsersQuery>;
 export type SearchUsersLazyQueryHookResult = ReturnType<typeof useSearchUsersLazyQuery>;
 export type SearchUsersQueryResult = Apollo.QueryResult<SearchUsersQuery, SearchUsersQueryVariables>;
-export const SendAuthenticationEmailDocument = gql`
-    mutation sendAuthenticationEmail {
-  sendAuthenticationEmail {
+export const SendChangeEmailDocument = gql`
+    mutation sendChangeEmail($input: SendChangeEmailInput!) {
+  sendChangeEmail(input: $input) {
     ok
     error
   }
 }
     `;
-export type SendAuthenticationEmailMutationFn = Apollo.MutationFunction<SendAuthenticationEmailMutation, SendAuthenticationEmailMutationVariables>;
+export type SendChangeEmailMutationFn = Apollo.MutationFunction<SendChangeEmailMutation, SendChangeEmailMutationVariables>;
 
 /**
- * __useSendAuthenticationEmailMutation__
+ * __useSendChangeEmailMutation__
  *
- * To run a mutation, you first call `useSendAuthenticationEmailMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSendAuthenticationEmailMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSendChangeEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendChangeEmailMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [sendAuthenticationEmailMutation, { data, loading, error }] = useSendAuthenticationEmailMutation({
+ * const [sendChangeEmailMutation, { data, loading, error }] = useSendChangeEmailMutation({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useSendAuthenticationEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendAuthenticationEmailMutation, SendAuthenticationEmailMutationVariables>) {
+export function useSendChangeEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendChangeEmailMutation, SendChangeEmailMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SendAuthenticationEmailMutation, SendAuthenticationEmailMutationVariables>(SendAuthenticationEmailDocument, options);
+        return Apollo.useMutation<SendChangeEmailMutation, SendChangeEmailMutationVariables>(SendChangeEmailDocument, options);
       }
-export type SendAuthenticationEmailMutationHookResult = ReturnType<typeof useSendAuthenticationEmailMutation>;
-export type SendAuthenticationEmailMutationResult = Apollo.MutationResult<SendAuthenticationEmailMutation>;
-export type SendAuthenticationEmailMutationOptions = Apollo.BaseMutationOptions<SendAuthenticationEmailMutation, SendAuthenticationEmailMutationVariables>;
+export type SendChangeEmailMutationHookResult = ReturnType<typeof useSendChangeEmailMutation>;
+export type SendChangeEmailMutationResult = Apollo.MutationResult<SendChangeEmailMutation>;
+export type SendChangeEmailMutationOptions = Apollo.BaseMutationOptions<SendChangeEmailMutation, SendChangeEmailMutationVariables>;
 export const ListenUpdateReservationDocument = gql`
     subscription listenUpdateReservation($input: UpdateReservationInput!) {
   listenUpdateReservation(input: $input) {
@@ -2561,6 +2597,40 @@ export function useListenDeleteReservationSubscription(baseOptions: Apollo.Subsc
       }
 export type ListenDeleteReservationSubscriptionHookResult = ReturnType<typeof useListenDeleteReservationSubscription>;
 export type ListenDeleteReservationSubscriptionResult = Apollo.SubscriptionResult<ListenDeleteReservationSubscription>;
+export const VerifyChangeEmailDocument = gql`
+    mutation verifyChangeEmail($input: VerifyChangeEmailInput!) {
+  verifyChangeEmail(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type VerifyChangeEmailMutationFn = Apollo.MutationFunction<VerifyChangeEmailMutation, VerifyChangeEmailMutationVariables>;
+
+/**
+ * __useVerifyChangeEmailMutation__
+ *
+ * To run a mutation, you first call `useVerifyChangeEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyChangeEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyChangeEmailMutation, { data, loading, error }] = useVerifyChangeEmailMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useVerifyChangeEmailMutation(baseOptions?: Apollo.MutationHookOptions<VerifyChangeEmailMutation, VerifyChangeEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VerifyChangeEmailMutation, VerifyChangeEmailMutationVariables>(VerifyChangeEmailDocument, options);
+      }
+export type VerifyChangeEmailMutationHookResult = ReturnType<typeof useVerifyChangeEmailMutation>;
+export type VerifyChangeEmailMutationResult = Apollo.MutationResult<VerifyChangeEmailMutation>;
+export type VerifyChangeEmailMutationOptions = Apollo.BaseMutationOptions<VerifyChangeEmailMutation, VerifyChangeEmailMutationVariables>;
 export const VerifyEmailDocument = gql`
     mutation verifyEmail($input: VerifyEmailInput!) {
   verifyEmail(input: $input) {
