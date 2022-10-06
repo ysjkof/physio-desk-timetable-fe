@@ -9,15 +9,15 @@ import { MUOOL } from '../../../../constants/constants';
 import { REG_EXP } from '../../../../constants/regex';
 import {
   EditProfileInput,
-  EditProfileMutation,
   useEditProfileMutation,
-  useSendAuthenticationEmailMutation,
 } from '../../../../graphql/generated/graphql';
 import { useMe } from '../../../../hooks/useMe';
 import { toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
+import EditEmail from './EditEmail';
 
 export default function EditProfile() {
+  const [isEditEmail, setIsEditEmail] = useState(false);
   const { data: userData } = useMe();
   const client = useApolloClient();
 
@@ -26,140 +26,80 @@ export default function EditProfile() {
     handleSubmit,
     getValues,
     formState: { isValid, errors },
-  } = useForm<EditProfileInput>({
+  } = useForm<Omit<EditProfileInput, 'email'>>({
     mode: 'onChange',
     defaultValues: {
-      email: userData?.me.email,
       name: userData?.me.name,
     },
   });
 
   const [editProfile, { loading }] = useEditProfileMutation();
 
-  const onCompleted = (data: EditProfileMutation) => {
-    const {
-      editProfile: { ok, error },
-    } = data;
-
-    if (error) {
-      return toastVar({ messages: [error] });
-    }
-
-    if (ok && userData) {
-      toastVar({ messages: ['사용자 정보 수정완료'], fade: true });
-
-      const {
-        me: { name: prevName, email: prevEmail, id },
-      } = userData;
-
-      const { name, email } = getValues();
-      if (prevName === name && prevEmail === email) return;
-
-      client.writeFragment({
-        id: `User:${id}`,
-        fragment: gql`
-          fragment EditedUser on User {
-            email
-            name
-            verified
-          }
-        `,
-        data: {
-          ...(prevName !== name && {
-            name,
-          }),
-          ...(prevEmail !== email && {
-            email,
-            verified: false,
-          }),
-        },
-      });
-    }
-  };
-
   const onSubmit = () => {
     if (!userData) throw new Error('사용자 정보가 없습니다');
+    const prevName = userData.me.name;
+    const { name, password } = getValues();
 
-    const {
-      me: { name: prevName, email: prevEmail },
-    } = userData;
-    const { email, name, password } = getValues();
-
-    if (prevEmail === email && prevName === name && password === '') return;
+    if (prevName === name && password === '') return;
 
     editProfile({
       variables: {
         input: {
-          ...(email && prevEmail !== email && { email }),
           ...(name && prevName !== name && { name: name.trim() }),
           ...(password !== '' && { password }),
         },
       },
-      onCompleted,
-    });
-  };
-
-  const [sendAuthEmailMutation, { loading: sendAuthEmailLoading }] =
-    useSendAuthenticationEmailMutation();
-  const [wasSendAuthEmail, setWasSendAuthEmail] = useState(false);
-
-  const sendAuthEmail = () => {
-    sendAuthEmailMutation({
       onCompleted(data) {
-        const { ok, error } = data.sendAuthenticationEmail;
-        if (ok) {
-          setWasSendAuthEmail(true);
-          return toastVar({
-            messages: ['인증 이메일을 다시보냈습니다.'],
-          });
-        }
-
+        const { ok, error } = data.editProfile;
         if (error) {
-          return toastVar({
-            messages: [error],
+          return toastVar({ messages: [error] });
+        }
+        if (ok && userData) {
+          toastVar({ messages: ['사용자 정보 수정완료'], fade: true });
+          const { name: prevName, id } = userData.me;
+
+          const { name } = getValues();
+          if (prevName === name) return;
+
+          client.writeFragment({
+            id: `User:${id}`,
+            fragment: gql`
+              fragment EditedUser on User {
+                name
+              }
+            `,
+            data: {
+              ...(prevName !== name && {
+                name,
+              }),
+            },
           });
         }
       },
     });
   };
 
+  const openEditEmail = () => setIsEditEmail((prev) => !prev);
   return (
     <>
       <Helmet>
         <title>Edit Profile | {MUOOL}</title>
       </Helmet>
       <FormSection>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-6">
-          <Input
-            id="edit-profile__email"
-            label="Email"
-            type="email"
-            placeholder="Email"
-            maxLength={REG_EXP.email.maxLength}
-            register={register('email', {
-              required: 'Email을 입력하세요',
-              pattern: REG_EXP.email.pattern,
-            })}
-          >
-            {errors.email?.message && (
-              <FormError errorMessage={errors.email.message} />
-            )}
-            {errors.email?.type === 'pattern' && (
-              <FormError errorMessage={REG_EXP.email.condition} />
-            )}
-          </Input>
-          {userData && !userData.me.verified && (
-            <Button
-              isWidthFull
-              canClick={!wasSendAuthEmail}
-              loading={sendAuthEmailLoading}
-              onClick={sendAuthEmail}
-            >
-              {wasSendAuthEmail
-                ? '인증 메일을 다시 보냈습니다'
-                : '인증 메일 다시 보내기'}
-            </Button>
-          )}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-10 w-full max-w-sm space-y-6"
+        >
+          <div className="relative flex w-full flex-col gap-2">
+            Email
+            <span className="mt-4 overflow-hidden text-ellipsis px-2 text-sm font-medium">
+              {userData?.me.email}
+            </span>
+          </div>
+          <Button isWidthFull canClick loading={false} onClick={openEditEmail}>
+            {isEditEmail ? '닫기' : '이메일 바꾸기'}
+          </Button>
+          {isEditEmail ? <EditEmail /> : ''}
           <Input
             id="edit-profile__name"
             label="이름"
