@@ -18,7 +18,7 @@ export default function BtnMenuToggle({
   return (
     <button
       className={cls(
-        'btn-menu border-inherit',
+        'btn-menu whitespace-nowrap border-inherit',
         width ? 'w-full justify-around space-x-20' : 'space-x-2'
       )}
       onClick={onClick}
