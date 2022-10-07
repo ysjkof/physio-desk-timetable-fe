@@ -64,11 +64,9 @@ export default function PrescriptionPage() {
             만들기
           </Link>
         </Button>
-        <MenuButton
-          label="비활성숨기기"
-          enabled={!showInactivate}
-          onClick={toggleShowInactivate}
-        />
+        <MenuButton enabled={!showInactivate} onClick={toggleShowInactivate}>
+          비활성숨기기
+        </MenuButton>
       </div>
 
       <section className="px-10">

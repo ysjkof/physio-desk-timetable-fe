@@ -129,10 +129,11 @@ export default function Statistics() {
               <div className="flex items-center">
                 <MenuButton
                   onClick={() => changeYear('minus')}
-                  icon={<FontAwesomeIcon icon={faChevronLeft} fontSize={14} />}
                   enabled
                   hasBorder
-                />
+                >
+                  <FontAwesomeIcon icon={faChevronLeft} fontSize={14} />
+                </MenuButton>
                 <input
                   type="number"
                   {...register('year', { required: true })}
@@ -142,9 +143,10 @@ export default function Statistics() {
                 <MenuButton
                   onClick={() => changeYear('plus')}
                   enabled
-                  icon={<FontAwesomeIcon icon={faChevronRight} fontSize={14} />}
                   hasBorder
-                />
+                >
+                  <FontAwesomeIcon icon={faChevronRight} fontSize={14} />
+                </MenuButton>
               </div>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, idx) => (

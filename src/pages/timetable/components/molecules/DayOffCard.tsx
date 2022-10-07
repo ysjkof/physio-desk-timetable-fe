@@ -30,18 +30,14 @@ export default function DayOffCard({
       <h4 className="mb-5 text-left font-medium"></h4>
 
       <div className="reservation-editor flex justify-around">
-        <MenuButton
-          icon={<FontAwesomeIcon icon={faTrashCan} fontSize={14} />}
-          enabled
-          label={'삭제'}
-          onClick={invokeDelete}
-        />
-        <MenuButton
-          icon={<FontAwesomeIcon icon={faEdit} fontSize={14} />}
-          enabled={isEdit}
-          label={'수정'}
-          onClick={() => setIsEdit((prev) => !prev)}
-        />
+        <MenuButton enabled onClick={invokeDelete}>
+          <FontAwesomeIcon icon={faTrashCan} fontSize={14} />
+          삭제
+        </MenuButton>
+        <MenuButton enabled={isEdit} onClick={() => setIsEdit((prev) => !prev)}>
+          <FontAwesomeIcon icon={faEdit} fontSize={14} />
+          수정
+        </MenuButton>
       </div>
 
       <div className="h-full overflow-y-scroll">

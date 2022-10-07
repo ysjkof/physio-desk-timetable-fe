@@ -273,40 +273,39 @@ export default function TableOptionSelector() {
             ))}
           </Selectbox.Options>
         </Selectbox>
-        <MenuButton
-          icon={<FontAwesomeIcon icon={faExchange} fontSize={14} />}
-          enabled
-          label="바꾸기"
-          type="button"
-          onClick={saveTableDuration}
-        />
+        <MenuButton enabled type="button" onClick={saveTableDuration}>
+          <FontAwesomeIcon icon={faExchange} fontSize={14} />
+          바꾸기
+        </MenuButton>
       </div>
       <div
         id="table-option-selector__toggle-visible-state"
         className="flex items-center gap-2 border-b py-1 px-3"
       >
         <MenuButton
-          icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
           enabled={viewOptions.get.seeCancel}
-          label={'취소'}
           onClick={() => {
             invokeSaveViewOptions({
               ...viewOptions.get,
               seeCancel: !viewOptions.get.seeCancel,
             });
           }}
-        />
+        >
+          <FontAwesomeIcon icon={faBan} fontSize={14} />
+          취소'
+        </MenuButton>
         <MenuButton
-          icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
           enabled={viewOptions.get.seeNoshow}
-          label={'부도'}
           onClick={() => {
             invokeSaveViewOptions({
               ...viewOptions.get,
               seeNoshow: !viewOptions.get.seeNoshow,
             });
           }}
-        />
+        >
+          <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />
+          부도'
+        </MenuButton>
       </div>
       <Sidebar noGap className="divide-y">
         {clinicLists.map((clinic) => {

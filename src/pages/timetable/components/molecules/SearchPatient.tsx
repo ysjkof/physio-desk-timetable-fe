@@ -121,11 +121,9 @@ export default function SearchPatient() {
               clinicName={selectedInfo.patient.clinicName}
               user={selectedInfo.patient.user}
             />
-            <MenuButton
-              onClick={removeSelectedPatient}
-              enabled
-              icon={<FontAwesomeIcon icon={faXmark} fontSize={14} />}
-            />
+            <MenuButton onClick={removeSelectedPatient} enabled>
+              <FontAwesomeIcon icon={faXmark} fontSize={14} />
+            </MenuButton>
           </div>
         )}
       </div>

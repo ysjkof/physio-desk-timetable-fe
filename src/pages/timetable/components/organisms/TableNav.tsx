@@ -21,7 +21,7 @@ import localStorageUtils from '../../../../utils/localStorageUtils';
 import { useEffect, useRef } from 'react';
 import CogSixTooth from '../../../../svgs/CogSixTooth';
 import ModalPortal from '../../../../components/templates/ModalPortal';
-import { getPositionRef } from '../../../../utils/utils';
+import { getPositionRef, renameUseSplit } from '../../../../utils/utils';
 
 interface TableNavProps {}
 
@@ -106,14 +106,10 @@ export default function TableNav({}: TableNavProps) {
           </div>
         )}
         <div className="flex w-full items-center justify-end gap-x-2">
-          <MenuButton
-            icon={
-              <FontAwesomeIcon icon={faPlusSquare} fontSize={14} className="" />
-            }
-            enabled
-            label={'환자등록'}
-            onClick={() => navigate(ROUTES.create_patient)}
-          />
+          <MenuButton enabled onClick={() => navigate(ROUTES.create_patient)}>
+            <FontAwesomeIcon icon={faPlusSquare} fontSize={14} className="" />
+            환자등록
+          </MenuButton>
           <BtnMenuToggle
             onClick={() => {
               const newViewOptions: IViewOption = {
@@ -132,9 +128,7 @@ export default function TableNav({}: TableNavProps) {
           />
           {/* ---------------------- 구분선 ---------------------- */}
           <MenuButton
-            icon={<FontAwesomeIcon icon={faCalendarAlt} fontSize={14} />}
             enabled={viewOptions.get.navigationExpand}
-            label={'달력'}
             onClick={() => {
               const newViewOptions = {
                 ...viewOptions.get,
@@ -143,7 +137,10 @@ export default function TableNav({}: TableNavProps) {
               viewOptions.set(newViewOptions);
               invokeSaveViewOptions(newViewOptions);
             }}
-          />
+          >
+            <FontAwesomeIcon icon={faCalendarAlt} fontSize={14} />
+            달력
+          </MenuButton>
           {/* <MenuButton
             icon={<FontAwesomeIcon icon={faList} fontSize={14} />}
             enabled={viewOptions.get.seeList}
@@ -158,9 +155,7 @@ export default function TableNav({}: TableNavProps) {
             }}
           /> */}
           <MenuButton
-            icon={<CogSixTooth />}
             enabled={viewOptions.get.seeActiveOption}
-            label={'설정'}
             onClick={() => {
               const newViewOptions = {
                 ...viewOptions.get,
@@ -170,7 +165,10 @@ export default function TableNav({}: TableNavProps) {
               // seeActiveOption은 로컬스토리지에 저장할 필요 없다
             }}
             ref={settingRef}
-          />
+          >
+            <CogSixTooth />
+            {renameUseSplit(selectedInfo.clinic?.name || '')}
+          </MenuButton>
           <AnimatePresence>
             {viewOptions.get.seeActiveOption && (
               <ModalPortal

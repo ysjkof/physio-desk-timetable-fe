@@ -3,8 +3,7 @@ import { cls } from '../../utils/utils';
 
 interface BtnMenuProps {
   onClick?: any;
-  label?: string;
-  icon?: ReactNode;
+  children?: ReactNode;
   enabled?: boolean;
   isWidthFull?: boolean;
   hasBorder?: boolean;
@@ -18,8 +17,7 @@ interface BtnMenuProps {
 export default forwardRef<HTMLButtonElement, BtnMenuProps>(function MenuButton(
   {
     onClick,
-    label,
-    icon,
+    children,
     enabled,
     isWidthFull,
     hasBorder,
@@ -51,7 +49,7 @@ export default forwardRef<HTMLButtonElement, BtnMenuProps>(function MenuButton(
       onClick={onClick}
       ref={ref}
     >
-      {icon} {label}
+      {children}
     </button>
   );
 });

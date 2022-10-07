@@ -61,13 +61,14 @@ export default function DeactivateClinic({
         수정이 불가능합니다.
       </p>
       <MenuButton
-        label="동의"
         isCenter
         hasActiveRing
         enabled={agree}
-        icon={<FontAwesomeIcon icon={faCheck} fontSize={14} />}
         onClick={() => setAgree((prev) => !prev)}
-      />
+      >
+        <FontAwesomeIcon icon={faCheck} fontSize={14} />
+        동의
+      </MenuButton>
       <Button canClick={agree} loading={loading} onClick={onClick} isWidthFull>
         비활성하기
       </Button>
