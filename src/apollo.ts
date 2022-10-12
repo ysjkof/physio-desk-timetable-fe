@@ -28,7 +28,7 @@ const BACKEND_URLS = {
   LOCAL,
 };
 
-const PRODUCTION_URL = BACKEND_URLS.FLYIO;
+const PRODUCTION_URL = process.env.BACKEND === 'FLYIO' ? FLYIO : ORACLE_CLOUD;
 const DEV_URL = BACKEND_URLS.LOCAL;
 
 const isProduction = process.env.NODE_ENV === 'production';

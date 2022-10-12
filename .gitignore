@@ -43,3 +43,4 @@ dist-ssr
 #
 .vscode
 stats.html
+.env
