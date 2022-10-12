@@ -18,17 +18,13 @@ const token = localStorageUtils.get<string>({ key: 'token' });
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar<string | null>(token);
 
-const FLYIO = '://muool-backend.fly.dev/graphql';
-const ORACLE_CLOUD = '://db.muool.com:8443/graphql';
-const LOCAL = '://localhost:3002/graphql';
-
 const BACKEND_URLS = {
-  FLYIO,
-  ORACLE_CLOUD,
-  LOCAL,
+  FLYIO: '://muool-backend.fly.dev/graphql',
+  ORACLE_CLOUD: '://db.muool.com:8443/graphql',
+  LOCAL: '://localhost:3002/graphql',
 };
 
-const PRODUCTION_URL = process.env.BACKEND === 'FLYIO' ? FLYIO : ORACLE_CLOUD;
+const PRODUCTION_URL = BACKEND_URLS.ORACLE_CLOUD;
 const DEV_URL = BACKEND_URLS.LOCAL;
 
 const isProduction = process.env.NODE_ENV === 'production';
