@@ -28,7 +28,7 @@ const BACKEND_URLS = {
   LOCAL,
 };
 
-const PRODUCTION_URL = BACKEND_URLS.ORACLE_CLOUD;
+const PRODUCTION_URL = BACKEND_URLS.FLYIO;
 const DEV_URL = BACKEND_URLS.LOCAL;
 
 const isProduction = process.env.NODE_ENV === 'production';
