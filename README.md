@@ -1,4 +1,6 @@
-테스트 배포 중 : https://muool.com
+릴리즈 버전 : beta 0.00.01
+
+배포 중 : https://muool.com
 
 # 문서
 
