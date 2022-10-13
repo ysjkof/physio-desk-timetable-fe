@@ -80,7 +80,7 @@ export default function EditEmail() {
         loading={loading}
         onClick={sendChangeEmail}
       >
-        변경 인증 이메일 전송하기
+        이메일 변경 요청하기
       </Button>
     </div>
   );
