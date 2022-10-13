@@ -292,7 +292,7 @@ export default function TableOptionSelector() {
           }}
         >
           <FontAwesomeIcon icon={faBan} fontSize={14} />
-          취소'
+          취소
         </MenuButton>
         <MenuButton
           enabled={viewOptions.get.seeNoshow}
@@ -304,7 +304,7 @@ export default function TableOptionSelector() {
           }}
         >
           <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />
-          부도'
+          부도
         </MenuButton>
       </div>
       <Sidebar noGap className="divide-y">
