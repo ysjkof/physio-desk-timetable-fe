@@ -1,4 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
+import { FormEvent, useState } from 'react';
+import Loading from '../components/atoms/Loading';
 import {
   useCreateAccountMutation,
   useCreateAtomPrescriptionMutation,
@@ -24,17 +26,16 @@ export default function TestPage() {
   );
 }
 
-const clinicId = 11;
 const makeAccount = (email: string, name: string) => ({
   email,
   name,
   password: '123',
 });
-const makePatient = (name: string) => ({
+const makePatient = (name: string, clinicId: number) => ({
   name,
   clinicId,
   gender: Math.ceil(Math.random() * 2) === 1 ? 'male' : 'female',
-  birthday: new Date('1980-1-1'),
+  birthday: new Date('2002-10-13'),
 });
 
 const length = 10;
@@ -45,7 +46,6 @@ const accountArr = arr.map((_, idx) =>
   makeAccount(`test${idx}@t.co`, `치료사${idx}`)
 );
 
-const patientArr = arr.map((_, idx) => makePatient(`환자님${idx}`));
 const newPrescriptions = [
   { name: 'MT1', price: 80000, requiredTime: 30, prescriptionAtomIds: [1] },
   { name: 'MT2', price: 130000, requiredTime: 50, prescriptionAtomIds: [1] },
@@ -91,36 +91,45 @@ function selectPrescriptionForTest(inputPresc: PrescriptionWithSelect[]) {
   };
 }
 
-export function CreateDummyData() {
-  const selectedInfo = useReactiveVar(selectedInfoVar);
-
-  const [createAccount] = useCreateAccountMutation();
-  const [createClinic] = useCreateClinicMutation();
-  const [createPatient] = useCreatePatientMutation();
-  const [createAtom] = useCreateAtomPrescriptionMutation();
-  const [createPrescription] = useCreatePrescriptionMutation();
-  const [createReservationMutation] = useCreateReservationMutation();
-  const { data: allPatients } = useFindAllPatientsQuery({
-    variables: { input: { clinicId: selectedInfo.clinic?.id ?? 0 } },
+function CreateReservation() {
+  const [createdReservation, setCreatedReservation] = useState({
+    totalCount: 0,
+    thisCount: 0,
   });
+  const { clinic } = useReactiveVar(selectedInfoVar);
+  const clinicId = clinic?.id;
+  if (!clinicId) return <Loading />;
 
   const { data: prescriptionsData } = useFindPrescriptionsQuery({
     variables: {
       input: {
-        clinicId: selectedInfo.clinic?.id ?? 0,
+        clinicId,
         onlyLookUpActive: false,
       },
     },
   });
+  const { data: allPatients } = useFindAllPatientsQuery({
+    variables: { input: { clinicId } },
+  });
+  const [createReservationMutation] = useCreateReservationMutation();
 
-  let prescriptions: PrescriptionWithSelect[] =
-    prescriptionsData?.findPrescriptions.prescriptions!.map((presc) => ({
-      ...presc,
-      isSelect: false,
-    })) ?? [];
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const date = form.get('date') as string;
 
-  function createDummyReserve() {
-    const firstDate = new Date('2022-7-1');
+    if (!clinicId || !date) return console.warn('날짜와 병원 id가 잘못됐다.');
+
+    const [year, month] = date.split('-');
+
+    let prescriptions: PrescriptionWithSelect[] =
+      prescriptionsData?.findPrescriptions.prescriptions!.map((presc) => ({
+        ...presc,
+        isSelect: false,
+      })) ?? [];
+
+    const firstDate = new Date(`${year}-${month}-1`);
+
     let count = 0;
     for (let i = 0; i < 30; i++) {
       firstDate.setDate(i + 1);
@@ -135,10 +144,10 @@ export function CreateDummyData() {
           Math.random() * (patients?.length! ?? 0)
         );
         const memberRandon = Math.floor(
-          Math.random() * (selectedInfo.clinic?.members.length ?? 0)
+          Math.random() * (clinic?.members.length ?? 0)
         );
         const patientId = patients[patientRandom].id;
-        const userId = selectedInfo.clinic?.members[memberRandon].user.id!;
+        const userId = clinic?.members[memberRandon].user.id!;
 
         createReservationMutation({
           variables: {
@@ -147,19 +156,78 @@ export function CreateDummyData() {
               endDate: time[1],
               patientId,
               userId,
-              clinicId: selectedInfo.clinic!.id,
+              clinicId: +clinicId,
               prescriptionIds: [presc.id],
             },
           },
         });
       });
     }
-    console.log('총 생성된 예약 : ', count);
-  }
+    setCreatedReservation((prevValue) => ({
+      thisCount: count,
+      totalCount: prevValue.thisCount + count,
+    }));
+  };
+
+  return (
+    <div className="border p-2">
+      <form className="mb-4 flex flex-col px-4" onSubmit={handleSubmit}>
+        <h2>무작위 예약 만들기</h2>
+        <label>
+          날짜
+          <input
+            name="date"
+            className="rounded-md border px-1"
+            type="date"
+            defaultValue={new Intl.DateTimeFormat('ko-KR')
+              .format(new Date())
+              .replaceAll('. ', '-')
+              .replace('.', '')}
+          ></input>
+        </label>
+        <button
+          className="w-fit rounded-sm bg-gray-500 px-2 text-white"
+          type="submit"
+        >
+          실행
+        </button>
+      </form>
+      <p>
+        병원 id: {clinic?.id}
+        <br />
+        병원이름 : {clinic?.name}
+        <br />
+        예약한 수 : {createdReservation.thisCount}
+        <br />총 예약한 수 : {createdReservation.totalCount}
+      </p>
+    </div>
+  );
+}
+
+function CreateDummyData() {
+  const selectedInfo = useReactiveVar(selectedInfoVar);
+  const [reserveDate, setReserveDate] = useState(new Date().getMonth() + 1);
+
+  const clinicId = selectedInfo.clinic?.id;
+
+  const [createAccount] = useCreateAccountMutation();
+  const [createClinic] = useCreateClinicMutation();
+  const [createPatient] = useCreatePatientMutation();
+  const [createAtom] = useCreateAtomPrescriptionMutation();
+  const [createPrescription] = useCreatePrescriptionMutation();
 
   return (
     <div className="px-4 ">
       <h1 className="text-base font-extrabold">Create Dummy Data</h1>
+      <p>
+        병원 id: {selectedInfo.clinic?.id}
+        <br />
+        병원이름 : {selectedInfo.clinic?.name}
+        <br />
+        예약될 월 : {reserveDate}
+        <br />
+      </p>
+      <br />
       <div className="flex gap-4">
         <button
           onClick={() =>
@@ -193,22 +261,25 @@ export function CreateDummyData() {
           병원생성
         </button>
         <button
-          onClick={() =>
-            patientArr.forEach((acc) => {
-              const { clinicId, name, gender, birthday } = acc;
+          onClick={() => {
+            if (!clinicId) throw new Error('clinicId false');
+            arr
+              .map((_, idx) => makePatient(`환자님${idx}`, clinicId))
+              .forEach((acc) => {
+                const { clinicId, name, gender, birthday } = acc;
 
-              createPatient({
-                variables: {
-                  input: {
-                    name,
-                    clinicId,
-                    gender,
-                    birthday,
+                createPatient({
+                  variables: {
+                    input: {
+                      name,
+                      clinicId,
+                      gender,
+                      birthday,
+                    },
                   },
-                },
+                });
               });
-            })
-          }
+          }}
         >
           환자생성
         </button>
@@ -229,7 +300,8 @@ export function CreateDummyData() {
           아톰 만들기
         </button>
         <button
-          onClick={() =>
+          onClick={() => {
+            if (!clinicId) throw new Error('clinicId false');
             newPrescriptions.forEach(
               ({ name, prescriptionAtomIds, price, requiredTime }) =>
                 createPrescription({
@@ -243,13 +315,13 @@ export function CreateDummyData() {
                     },
                   },
                 })
-            )
-          }
+            );
+          }}
         >
           처방 만들기
         </button>
-        <button onClick={() => createDummyReserve()}>무작위 예약 만들기</button>
       </div>
+      <CreateReservation />
     </div>
   );
 }
