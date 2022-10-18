@@ -1,19 +1,20 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TimetableModalProps } from '../../Timetable';
 import { useListReservations } from '../../hooks/useListReservations';
-import { ReservationState } from '../../../../graphql/generated/graphql';
 import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
 import ModalTemplate from '../../../../components/templates/ModalTemplate';
 import ReservationCard from '../molecules/ReservationCard';
 import DayOffCard from '../molecules/DayOffCard';
+import { ReservationState } from '../../../../models/generated.models';
 
 export default function ReservationModal({ closeAction }: TimetableModalProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const reservationId = location.state.reservationId;
   const { data } = useListReservations();
+
   const reservation = data?.listReservations.results?.find(
-    (r) => r.id === reservationId
+    ({ id }) => id === reservationId
   )!;
 
   const isDayOff = reservation?.state === ReservationState.DayOff;

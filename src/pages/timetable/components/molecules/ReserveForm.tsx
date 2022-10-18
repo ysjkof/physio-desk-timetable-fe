@@ -15,10 +15,13 @@ import { ROUTES } from '../../../../router/routes';
 import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
 import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
 import { useEffect, useState } from 'react';
-import { useFindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
+
 import useStore from '../../../../hooks/useStore';
 import { useForm } from 'react-hook-form';
 import useReserve from '../../hooks/useReserve';
+import { FindPrescriptions } from '../../../../graphql/documentNode';
+import { useQuery } from '@apollo/client';
+import { FindPrescriptionsQuery } from '../../../../models/generated.models';
 
 interface IReservaFromProps extends TimetableModalProps {
   userId: number;
@@ -46,15 +49,18 @@ export default function ReserveForm({
   });
 
   // 처방 처리
-  const { data: prescriptionsData } = useFindPrescriptionsQuery({
-    variables: {
-      input: {
-        clinicId: selectedInfo.clinic?.id ?? 0,
-        onlyLookUpActive: false,
+  const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
+    FindPrescriptions,
+    {
+      variables: {
+        input: {
+          clinicId: selectedInfo.clinic?.id ?? 0,
+          onlyLookUpActive: false,
+        },
       },
-    },
-  });
-  
+    }
+  );
+
   function injectSelectIntoPrescription<T>(arr: T[]) {
     return arr.map((prescription) => ({
       ...prescription,
@@ -75,7 +81,7 @@ export default function ReserveForm({
         : [];
     }
   );
-  
+
   const [selectedPrescription, setSelectedPrescription] =
     useState<ISelectedPrescription>({
       price: 0,
@@ -104,7 +110,7 @@ export default function ReserveForm({
     });
     return cloningPrescription;
   }
-  
+
   function saveSelectedPrescription(
     selectedPrescriptions: PrescriptionWithSelect[]
   ) {
@@ -216,7 +222,7 @@ export default function ReserveForm({
         ...prev,
         isSelect: true,
       }));
-      
+
       processedPrescriptions = cloneSelectedPrescription(
         processedPrescriptions,
         selectedPrescription

@@ -1,12 +1,14 @@
+import { useQuery } from '@apollo/client';
+import { useState } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 import useStore from '../../../../hooks/useStore';
 import Worning from '../../../../components/atoms/Warning';
-import { Link, Outlet } from 'react-router-dom';
 import Button from '../../../../components/molecules/Button';
-import { useFindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
 import CardContainer from '../../../../components/templates/CardContainer';
 import PrescriptionCard from '../molecules/PrescriptionCard';
-import { useState } from 'react';
 import MenuButton from '../../../../components/molecules/MenuButton';
+import { FindPrescriptions } from '../../../../graphql/documentNode';
+import type { FindPrescriptionsQuery } from '../../../../models/generated.models';
 
 export interface PrescriptionListProps {
   clinicId: number;
@@ -14,7 +16,7 @@ export interface PrescriptionListProps {
 }
 
 function PrescriptionList({ clinicId, showInactivate }: PrescriptionListProps) {
-  const { data } = useFindPrescriptionsQuery({
+  const { data } = useQuery<FindPrescriptionsQuery>(FindPrescriptions, {
     variables: {
       input: {
         clinicId,

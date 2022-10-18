@@ -1,11 +1,13 @@
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { useCreateDayOffMutation } from '../../../../graphql/generated/graphql';
 import { cls, simpleCheckGQLError } from '../../../../utils/utils';
 import { USER_COLORS, UTC_OPTION_KST } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
 import { createDate } from '../../../../services/dateServices';
+import { CreateDayOff } from '../../../../graphql/documentNode';
+import { useMutation } from '@apollo/client';
+import type { CreateDayOffMutation } from '../../../../models/generated.models';
 
 interface UserNameTitleProps {
   isMe: boolean;
@@ -24,7 +26,8 @@ export default function UserNameTitle({
   userId,
   date,
 }: UserNameTitleProps) {
-  const [createDayOff, { loading }] = useCreateDayOffMutation();
+  const [createDayOff, { loading }] =
+    useMutation<CreateDayOffMutation>(CreateDayOff);
   const navigate = useNavigate();
 
   function closePartTime() {

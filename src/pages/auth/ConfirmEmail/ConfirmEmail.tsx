@@ -1,10 +1,16 @@
-import { gql, useApolloClient, useReactiveVar } from '@apollo/client';
+import {
+  gql,
+  useApolloClient,
+  useMutation,
+  useReactiveVar,
+} from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { MUOOL } from '../../../constants/constants';
-import { useVerifyEmailMutation } from '../../../graphql/generated/graphql';
+import { VerifyEmail } from '../../../graphql/documentNode';
 import { loggedInUserVar } from '../../../store';
+import type { VerifyEmailMutation } from '../../../models/generated.models';
 
 export default function ConfirmEmail() {
   const client = useApolloClient();
@@ -18,7 +24,7 @@ export default function ConfirmEmail() {
     navigate('/');
   }
 
-  const [verifyEmail] = useVerifyEmailMutation();
+  const [verifyEmail] = useMutation<VerifyEmailMutation>(VerifyEmail);
 
   const intervalUpdateMessage = (error: string | null | undefined) => {
     let i = 5;

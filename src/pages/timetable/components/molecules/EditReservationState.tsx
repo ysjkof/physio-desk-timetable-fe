@@ -4,13 +4,15 @@ import {
   faBan,
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  ReservationState,
-  useEditReservationMutation,
-} from '../../../../graphql/generated/graphql';
 import { cls } from '../../../../utils/utils';
 import { IListReservation } from '../../../../types/type';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
+import { useMutation } from '@apollo/client';
+import { EditReservation } from '../../../../graphql/documentNode';
+import {
+  EditReservationMutation,
+  ReservationState,
+} from '../../../../models/generated.models';
 
 interface EditReservationStateProps {
   reservation: IListReservation;
@@ -20,7 +22,8 @@ interface EditReservationStateProps {
 export default function EditReservationState({
   reservation,
 }: EditReservationStateProps) {
-  const [editReservationMutation] = useEditReservationMutation();
+  const [editReservationMutation] =
+    useMutation<EditReservationMutation>(EditReservation);
 
   const onClickEditReserve = (state: ReservationState) => {
     const confirmDelete = window.confirm(

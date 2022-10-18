@@ -1,18 +1,19 @@
 import { useForm } from 'react-hook-form';
+import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import {
-  LoginInput,
-  LoginMutation,
-  useLoginMutation,
-} from '../../../graphql/generated/graphql';
+import { login } from '../authServices';
+import { toastVar } from '../../../store';
 import Input from '../../../components/molecules/Input';
 import FormError from '../../../components/atoms/FormError';
 import Button from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
-import { login } from '../authServices';
-import { toastVar } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
+import { Login as LoginDocument } from '../../../graphql/documentNode';
+import type {
+  LoginInput,
+  LoginMutation,
+} from '../../../models/generated.models';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -23,21 +24,8 @@ export default function Login() {
     handleSubmit,
   } = useForm<LoginInput>({ mode: 'onChange' });
 
-  const onCompleted = (data: LoginMutation) => {
-    const {
-      login: { ok, token, error },
-    } = data;
-
-    if (error) {
-      return toastVar({ messages: [error] });
-    }
-
-    if (ok && token) {
-      return login(token, () => navigate('/'));
-    }
-  };
-
-  const [loginMutation, { loading }] = useLoginMutation({ onCompleted });
+  const [loginMutation, { loading }] =
+    useMutation<LoginMutation>(LoginDocument);
 
   const onSubmit = () => {
     if (!loading) {
@@ -50,6 +38,19 @@ export default function Login() {
             email,
             password,
           },
+        },
+        onCompleted(data) {
+          const {
+            login: { ok, token, error },
+          } = data;
+
+          if (error) {
+            return toastVar({ messages: [error] });
+          }
+
+          if (ok && token) {
+            return login(token, () => navigate('/'));
+          }
         },
       });
     }

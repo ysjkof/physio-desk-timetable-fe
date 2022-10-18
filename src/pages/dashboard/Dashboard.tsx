@@ -1,17 +1,16 @@
 import { lazy, Suspense } from 'react';
-import { Outlet, useLocation, useMatch } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { MeQuery } from '../../graphql/generated/graphql';
 import { useMe } from '../../hooks/useMe';
 import useStore from '../../hooks/useStore';
 import { DashboardEndpoint } from '../../router/routes';
-import { renameUseSplit } from '../../utils/utils';
 import { MUOOL } from '../../constants/constants';
 import AcceptInvitation from './components/organisms/AcceptInvitation';
 import DashboardTemplate from './components/template/DashboardTemplate';
 import DashboardSidebar from './components/organisms/DashboardSidebar';
 import DashboardTitle from './components/molecules/DashboardTitle';
 import DashboardClinicSelector from './components/organisms/DashboardClinicSelector';
+import { MeQuery } from '../../models/generated.models';
 
 const Loading = lazy(() => import('../../components/atoms/Loading'));
 

@@ -1,18 +1,27 @@
-import { useReactiveVar } from '@apollo/client';
+import type { PrescriptionWithSelect } from '../types/type';
+import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { FormEvent, useState } from 'react';
-import Loading from '../components/atoms/Loading';
-import {
-  useCreateAccountMutation,
-  useCreateAtomPrescriptionMutation,
-  useCreateClinicMutation,
-  useCreatePatientMutation,
-  useCreatePrescriptionMutation,
-  useCreateReservationMutation,
-  useFindAllPatientsQuery,
-  useFindPrescriptionsQuery,
-} from '../graphql/generated/graphql';
 import { selectedInfoVar } from '../store';
-import { PrescriptionWithSelect } from '../types/type';
+import {
+  FindPrescriptions,
+  CreateReservation as CreateReservationDocument,
+  FindAllPatients,
+  CreateAccount,
+  CreateClinic,
+  CreatePatient,
+  CreateAtomPrescription,
+  CreatePrescription,
+} from '../graphql/documentNode';
+import type {
+  CreateAccountMutation,
+  CreateAtomPrescriptionMutation,
+  CreateClinicMutation,
+  CreatePatientMutation,
+  CreatePrescriptionMutation,
+  CreateReservationMutation,
+  FindAllPatientsQuery,
+  FindPrescriptionsQuery,
+} from '../models/generated.models';
 
 export default function TestPage() {
   return (
@@ -98,20 +107,28 @@ function CreateReservation() {
   });
   const { clinic } = useReactiveVar(selectedInfoVar);
   const clinicId = clinic?.id;
-  if (!clinicId) return <Loading />;
+  if (!clinicId) return <p>로그인 해야 됩니다.</p>;
 
-  const { data: prescriptionsData } = useFindPrescriptionsQuery({
-    variables: {
-      input: {
-        clinicId,
-        onlyLookUpActive: false,
+  const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
+    FindPrescriptions,
+    {
+      variables: {
+        input: {
+          clinicId,
+          onlyLookUpActive: false,
+        },
       },
-    },
-  });
-  const { data: allPatients } = useFindAllPatientsQuery({
-    variables: { input: { clinicId } },
-  });
-  const [createReservationMutation] = useCreateReservationMutation();
+    }
+  );
+  const { data: allPatients } = useQuery<FindAllPatientsQuery>(
+    FindAllPatients,
+    {
+      variables: { input: { clinicId } },
+    }
+  );
+  const [createReservationMutation] = useMutation<CreateReservationMutation>(
+    CreateReservationDocument
+  );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -209,12 +226,16 @@ function CreateDummyData() {
   const [reserveDate, setReserveDate] = useState(new Date().getMonth() + 1);
 
   const clinicId = selectedInfo.clinic?.id;
+  if (!clinicId) return <p>Not Permission</p>;
 
-  const [createAccount] = useCreateAccountMutation();
-  const [createClinic] = useCreateClinicMutation();
-  const [createPatient] = useCreatePatientMutation();
-  const [createAtom] = useCreateAtomPrescriptionMutation();
-  const [createPrescription] = useCreatePrescriptionMutation();
+  const [createAccount] = useMutation<CreateAccountMutation>(CreateAccount);
+  const [createClinic] = useMutation<CreateClinicMutation>(CreateClinic);
+  const [createPatient] = useMutation<CreatePatientMutation>(CreatePatient);
+  const [createAtom] = useMutation<CreateAtomPrescriptionMutation>(
+    CreateAtomPrescription
+  );
+  const [createPrescription] =
+    useMutation<CreatePrescriptionMutation>(CreatePrescription);
 
   return (
     <div className="px-4 ">

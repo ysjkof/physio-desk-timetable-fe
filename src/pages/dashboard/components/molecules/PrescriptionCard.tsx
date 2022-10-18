@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import Button from '../../../../components/molecules/Button';
-import { FindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
-import Edit from '../../../../svgs/Edit';
 import { cls } from '../../../../utils/utils';
 import { PrescriptionListProps } from '../organisms/PrescriptionPage';
 import PrescriptionEdit from './PrescriptionEdit';
 import PrescriptionState from './PrescriptionState';
+import Button from '../../../../components/molecules/Button';
+import Edit from '../../../../svgs/Edit';
+import type { FindPrescriptionsQuery } from '../../../../models/generated.models';
 
 export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
   prescription: NonNullable<

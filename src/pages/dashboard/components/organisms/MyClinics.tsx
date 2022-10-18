@@ -1,8 +1,4 @@
 import { lazy, useState } from 'react';
-import {
-  ClinicType,
-  useFindMyClinicsQuery,
-} from '../../../../graphql/generated/graphql';
 import { IdAndName } from '../../../../types/type';
 import { getMemberState, renameUseSplit } from '../../../../utils/utils';
 import DeactivateClinic from './DeactivateClinic';
@@ -12,6 +8,12 @@ import useCancelInvitation from '../../hooks/useCancelInvitation';
 import ClinicCard from '../molecules/ClinicCard';
 import ModalTemplate from '../../../../components/templates/ModalTemplate';
 import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
+import { FindMyClinics } from '../../../../graphql/documentNode';
+import { useQuery } from '@apollo/client';
+import {
+  FindMyClinicsQuery,
+  ClinicType,
+} from '../../../../models/generated.models';
 const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 interface CanClose {
@@ -32,9 +34,12 @@ export default function MyClinics() {
     name: '',
   });
 
-  const { data: findMyClinicsData, loading } = useFindMyClinicsQuery({
-    variables: { input: { includeInactivate: true } },
-  });
+  const { data: findMyClinicsData, loading } = useQuery<FindMyClinicsQuery>(
+    FindMyClinics,
+    {
+      variables: { input: { includeInactivate: true } },
+    }
+  );
 
   const clinicsExcludeOtherMember =
     findMyClinicsData?.findMyClinics.clinics?.map((clinic) => {

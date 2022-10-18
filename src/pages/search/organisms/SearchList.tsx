@@ -1,11 +1,8 @@
+import { useLazyQuery } from '@apollo/client';
 import { useState } from 'react';
 import Button from '../../../components/molecules/Button';
 import { RESERVATION_STATE_KOR } from '../../../constants/constants';
-import {
-  GetReservationsByPatientQuery,
-  Patient,
-  useGetReservationsByPatientLazyQuery,
-} from '../../../graphql/generated/graphql';
+import { GetReservationsByPatient } from '../../../graphql/documentNode';
 import {
   getTimeLength,
   getTimeString,
@@ -15,6 +12,10 @@ import ChevronDown from '../../../svgs/ChevronDown';
 import ChevronUp from '../../../svgs/ChevronUp';
 import { cls } from '../../../utils/utils';
 import ListCell from '../atoms/ListCell';
+import {
+  GetReservationsByPatientQuery,
+  Patient,
+} from '../../../models/generated.models';
 
 type Reservations = NonNullable<
   GetReservationsByPatientQuery['getReservationsByPatient']['results']
@@ -47,9 +48,12 @@ export default function SearchList({
     setShowAction((prev) => !prev);
   };
 
-  const [callQuery, { data }] = useGetReservationsByPatientLazyQuery({
-    fetchPolicy: 'cache-and-network',
-  });
+  const [callQuery, { data }] = useLazyQuery<GetReservationsByPatientQuery>(
+    GetReservationsByPatient,
+    {
+      fetchPolicy: 'cache-and-network',
+    }
+  );
 
   const onCompleted = (data: GetReservationsByPatientQuery) => {
     const { totalPages, totalCount, results } = data.getReservationsByPatient;

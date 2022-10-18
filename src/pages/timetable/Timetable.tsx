@@ -1,19 +1,12 @@
+import type { DayWithUsers } from '../../types/type';
 import { lazy, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useListReservations } from './hooks/useListReservations';
-import TableTemplate from './components/templates/TableTemplate';
+import { AnimatePresence } from 'framer-motion';
 import {
   compareDateMatch,
   getSunday,
   getWeeks,
 } from '../../services/dateServices';
-import { AnimatePresence } from 'framer-motion';
-import {
-  ListenDeleteReservationDocument,
-  ListenDeleteReservationSubscription,
-  ListenUpdateReservationDocument,
-  ListenUpdateReservationSubscription,
-} from '../../graphql/generated/graphql';
 import {
   changeValueInArray,
   removeItemInArrayByIndex,
@@ -24,16 +17,26 @@ import {
   makeUsersInDay,
   spreadClinicMembers,
 } from '../timetableServices';
-import { DayWithUsers } from '../../types/type';
 import { useMe } from '../../hooks/useMe';
-import useViewoptions from './hooks/useViewOption';
 import useStore from '../../hooks/useStore';
+import useViewoptions from './hooks/useViewOption';
+import { useListReservations } from './hooks/useListReservations';
 import { MUOOL } from '../../constants/constants';
 import TableNav from './components/organisms/TableNav';
-import TimeLabels from './components/organisms/TimeLabels';
 import Titles from './components/organisms/Titles';
-import TableModals from './components/templates/TableModals';
 import Schedules from './components/organisms/Schedules';
+import TimeLabels from './components/organisms/TimeLabels';
+import TableModals from './components/templates/TableModals';
+import TableTemplate from './components/templates/TableTemplate';
+import {
+  ListenDeleteReservation,
+  ListenUpdateReservation,
+} from '../../graphql/documentNode';
+import type {
+  ListenDeleteReservationSubscription,
+  ListenUpdateReservationSubscription,
+  ListReservationsQuery,
+} from '../../models/generated.models';
 const Loading = lazy(() => import('../../components/atoms/Loading'));
 
 export interface TimetableModalProps {
@@ -84,16 +87,16 @@ export default function TimeTable() {
 
     if (reservationData?.listReservations.ok && selectedInfo.clinic?.id) {
       subscribeToMore({
-        document: ListenDeleteReservationDocument,
+        document: ListenDeleteReservation,
         variables: { input: { clinicId: selectedInfo.clinic.id } },
-        updateQuery: (
-          prev,
+        updateQuery(
+          prev: ListReservationsQuery,
           {
             subscriptionData: {
               data: { listenDeleteReservation },
             },
           }: { subscriptionData: { data: ListenDeleteReservationSubscription } }
-        ) => {
+        ) {
           if (!listenDeleteReservation || !prev.listReservations.results)
             return prev;
 
@@ -116,7 +119,7 @@ export default function TimeTable() {
       });
 
       subscribeToMore({
-        document: ListenUpdateReservationDocument,
+        document: ListenUpdateReservation,
         variables: { input: { clinicId: selectedInfo.clinic.id } },
         // 웹소켓이 받는 updated 데이터와 listReservation의 데이터 형태가 달라 타입에러 발생
         // 하지만 id로 apollo cache가 필요한 값을 처리한다
@@ -126,7 +129,7 @@ export default function TimeTable() {
         // 웹소켓이 보내는 데이터량을 줄이기 위해 ts-ignore하고 문제시 바꾸기로함
         // @ts-ignore
         updateQuery: (
-          prev,
+          prev: ListReservationsQuery,
           {
             subscriptionData: {
               data: { listenUpdateReservation },

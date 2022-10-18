@@ -11,7 +11,7 @@ import {
   Patient,
   Prescription,
   User,
-} from '../graphql/generated/graphql';
+} from '../models/generated.models';
 
 type ViewPeriodKey = keyof typeof VIEW_PERIOD;
 type ViewPeriod = typeof VIEW_PERIOD[ViewPeriodKey];

@@ -1,28 +1,28 @@
+import type { IListReservation } from '../../../../types/type';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
+import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCancel,
   faCommentSlash,
   faCopy,
   faLock,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import EditReservationState from './EditReservationState';
-import { ReservationState } from '../../../../graphql/generated/graphql';
 import {
   compareTableEndtime,
   getTimeString,
 } from '../../../../services/dateServices';
-import { cls } from '../../../../utils/utils';
 import { selectedInfoVar, viewOptionsVar } from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
 } from '../../../../constants/constants';
+import EditReservationState from './EditReservationState';
+import { cls } from '../../../../utils/utils';
 import { ROUTES } from '../../../../router/routes';
-import { IListReservation } from '../../../../types/type';
+import { ReservationState } from '../../../../models/generated.models';
 
 interface EventBoxProps {
   userIndex: number;

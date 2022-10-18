@@ -1,22 +1,23 @@
-import { useForm } from 'react-hook-form';
-import FormError from '../../../../components/atoms/FormError';
-import Button from '../../../../components/molecules/Button';
-import {
-  CreatePatientInput,
-  CreatePatientMutation,
-  useCreatePatientMutation,
-  useEditPatientMutation,
-} from '../../../../graphql/generated/graphql';
-import Input from '../../../../components/molecules/Input';
-import { TimetableModalProps } from '../../Timetable';
 import { useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { useForm } from 'react-hook-form';
 import useStore from '../../../../hooks/useStore';
 import { toastVar } from '../../../../store';
+import { TimetableModalProps } from '../../Timetable';
 import { REG_EXP } from '../../../../constants/regex';
+import { GENDER_KOR } from '../../../../constants/constants';
+import FormError from '../../../../components/atoms/FormError';
+import Button from '../../../../components/molecules/Button';
+import Input from '../../../../components/molecules/Input';
 import Textarea from '../../../../components/molecules/Textarea';
 import Checkbox from '../../../../components/molecules/Checkbox';
-import { GENDER_KOR } from '../../../../constants/constants';
 import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
+import { CreatePatient, EditPatient } from '../../../../graphql/documentNode';
+import type {
+  CreatePatientInput,
+  CreatePatientMutation,
+  EditPatientMutation,
+} from '../../../../models/generated.models';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -52,30 +53,13 @@ export default function CreatePatientForm({
     },
   });
 
-  const onCompleted = (data: CreatePatientMutation) => {
-    const {
-      createPatient: { ok, patient },
-    } = data;
-    if (ok) {
-      closeAction();
-      toastVar({ messages: [`"${patient?.name}"님을 등록했습니다`] });
-      setSelectedInfo('patient', {
-        id: patient?.id!,
-        name: patient?.name!,
-        gender: patient?.gender!,
-        birthday: patient?.birthday,
-        registrationNumber: patient?.registrationNumber!,
-        clinicName: selectedInfo.clinic?.name ?? '',
-      });
-    }
-  };
   const [
     createPatientMutation,
     { loading, data: createaPatientMutationResult },
-  ] = useCreatePatientMutation({ onCompleted });
+  ] = useMutation<CreatePatientMutation>(CreatePatient);
 
   const [editPatientMutation, { loading: editLoading }] =
-    useEditPatientMutation({});
+    useMutation<EditPatientMutation>(EditPatient);
 
   const [birthday, setBirthday] = useState<Date | undefined>(undefined);
 
@@ -109,6 +93,23 @@ export default function CreatePatientForm({
               clinicId: selectedInfo.clinic.id,
               ...(birthday && { birthday }),
             },
+          },
+          onCompleted(data) {
+            const {
+              createPatient: { ok, patient },
+            } = data;
+            if (ok) {
+              closeAction();
+              toastVar({ messages: [`"${patient?.name}"님을 등록했습니다`] });
+              setSelectedInfo('patient', {
+                id: patient?.id!,
+                name: patient?.name!,
+                gender: patient?.gender!,
+                birthday: patient?.birthday,
+                registrationNumber: patient?.registrationNumber!,
+                clinicName: selectedInfo.clinic?.name ?? '',
+              });
+            }
           },
         });
       }

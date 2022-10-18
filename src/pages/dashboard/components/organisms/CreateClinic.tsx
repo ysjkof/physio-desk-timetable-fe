@@ -1,18 +1,21 @@
-import { useReactiveVar } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
 import FormError from '../../../../components/atoms/FormError';
 import Button from '../../../../components/molecules/Button';
 import Input from '../../../../components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
-import {
-  CreateClinicInput,
-  FindMyClinicsDocument,
-  MeDocument,
-  useCreateClinicMutation,
-} from '../../../../graphql/generated/graphql';
 import { selectedInfoVar, toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
+import {
+  CreateClinic as CreateClinicDocument,
+  FindMyClinics,
+  Me,
+} from '../../../../graphql/documentNode';
+import type {
+  CreateClinicInput,
+  CreateClinicMutation,
+} from '../../../../models/generated.models';
 
 export default function CreateClinic() {
   const selectedInfo = useReactiveVar(selectedInfoVar);
@@ -24,7 +27,8 @@ export default function CreateClinic() {
     formState: { errors, isValid },
   } = useForm<Pick<CreateClinicInput, 'name'>>({ mode: 'onChange' });
 
-  const [createClinicMutation, { loading, data }] = useCreateClinicMutation();
+  const [createClinicMutation, { loading, data }] =
+    useMutation<CreateClinicMutation>(CreateClinicDocument);
 
   const onSubmitCreateClinic = () => {
     if (!loading) {
@@ -53,7 +57,7 @@ export default function CreateClinic() {
 
             client.cache.updateQuery(
               {
-                query: FindMyClinicsDocument,
+                query: FindMyClinics,
                 variables: { input: { includeInactivate: true } },
               },
               (cacheData) => {
@@ -75,7 +79,7 @@ export default function CreateClinic() {
 
             client.cache.updateQuery(
               {
-                query: MeDocument,
+                query: Me,
               },
               (cacheData) => {
                 return {

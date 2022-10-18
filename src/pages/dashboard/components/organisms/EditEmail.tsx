@@ -1,11 +1,13 @@
+import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import FormError from '../../../../components/atoms/FormError';
 import Button from '../../../../components/molecules/Button';
 import Input from '../../../../components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
-import { useSendChangeEmailMutation } from '../../../../graphql/generated/graphql';
+import { SendChangeEmail } from '../../../../graphql/documentNode';
 import { useMe } from '../../../../hooks/useMe';
 import { toastVar } from '../../../../store';
+import type { SendChangeEmailMutation } from '../../../../models/generated.models';
 
 export default function EditEmail() {
   const { data: userData } = useMe();
@@ -20,7 +22,8 @@ export default function EditEmail() {
     },
   });
 
-  const [sendChangeEmailMutation, { loading }] = useSendChangeEmailMutation();
+  const [sendChangeEmailMutation, { loading }] =
+    useMutation<SendChangeEmailMutation>(SendChangeEmail);
 
   const sendChangeEmail = () => {
     let { email } = getValues();

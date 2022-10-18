@@ -1,6 +1,5 @@
-import { useReactiveVar } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { memo } from 'react';
-import { useCreateReservationMutation } from '../../../../graphql/generated/graphql';
 import {
   compareDateMatch,
   createDate,
@@ -10,6 +9,8 @@ import { checkMatchMinute } from '../../../timetableServices';
 import { selectedInfoVar, toastVar } from '../../../../store';
 import { IListReservation } from '../../../../types/type';
 import ReserveButton from './ReserveButton';
+import { CreateReservation } from '../../../../graphql/documentNode';
+import type { CreateReservationMutation } from '../../../../models/generated.models';
 
 interface ReservationButtonsProps {
   userIndex: number;
@@ -49,7 +50,7 @@ function ReservationButtons({
     return { prescriptionIds, requiredTime };
   }
   const [createReservationMutation, { loading }] =
-    useCreateReservationMutation();
+    useMutation<CreateReservationMutation>(CreateReservation);
 
   const clearSelectedReservation = () => {
     selectedInfoVar({ ...selectedInfo, reservation: null });

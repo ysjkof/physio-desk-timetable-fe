@@ -1,11 +1,7 @@
+import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { IsLoggedIn } from '../components/templates/GlobalLayout';
-import {
-  ClinicType,
-  MeQuery,
-  useFindMyClinicsLazyQuery,
-  useMeLazyQuery,
-} from '../graphql/generated/graphql';
+import { FindMyClinics, Me } from '../graphql/documentNode';
 import { loggedInUserVar, viewOptionsVar } from '../store';
 import {
   IClinic,
@@ -16,13 +12,18 @@ import {
 } from '../types/type';
 import localStorageUtils from '../utils/localStorageUtils';
 import useStore, { makeSelectedClinic } from './useStore';
+import {
+  ClinicType,
+  FindMyClinicsQuery,
+  MeQuery,
+} from '../models/generated.models';
 
 function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
   const [loading, setLoading] = useState(true);
   const { setSelectedInfo, viewOptions, clinicListsVar } = useStore();
-  const [meQuery, { data: meData }] = useMeLazyQuery();
+  const [meQuery, { data: meData }] = useLazyQuery<MeQuery>(Me);
   const [findMyClinicsQuery, { data: findMyClinicsData }] =
-    useFindMyClinicsLazyQuery({
+    useLazyQuery<FindMyClinicsQuery>(FindMyClinics, {
       variables: { input: { includeInactivate: true } },
     });
 

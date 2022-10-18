@@ -1,17 +1,21 @@
+import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
 import FormError from '../../../../components/atoms/FormError';
 import Button from '../../../../components/molecules/Button';
 import { REG_EXP } from '../../../../constants/regex';
 import {
-  EditPrescriptionInput,
-  FindPrescriptionsDocument,
-  FindPrescriptionsQuery,
-  useEditPrescriptionMutation,
-} from '../../../../graphql/generated/graphql';
+  EditPrescription,
+  FindPrescriptions,
+} from '../../../../graphql/documentNode';
 import { toastVar } from '../../../../store';
 import { changeValueInArray, cls } from '../../../../utils/utils';
 import { CardProps } from './PrescriptionCard';
+import type {
+  EditPrescriptionInput,
+  EditPrescriptionMutation,
+  FindPrescriptionsQuery,
+} from '../../../../models/generated.models';
 
 interface PrescriptionEditProps extends CardProps {}
 
@@ -36,7 +40,8 @@ export default function PrescriptionEdit({
     defaultValues: { name, description },
   });
 
-  const [editPrescriptionMutation] = useEditPrescriptionMutation();
+  const [editPrescriptionMutation] =
+    useMutation<EditPrescriptionMutation>(EditPrescription);
 
   const onSubmit = () => {
     const { description: newDescription, name: newName } = getValues();
@@ -60,7 +65,7 @@ export default function PrescriptionEdit({
 
         client.cache.updateQuery<FindPrescriptionsQuery>(
           {
-            query: FindPrescriptionsDocument,
+            query: FindPrescriptions,
             variables: {
               input: {
                 clinicId,

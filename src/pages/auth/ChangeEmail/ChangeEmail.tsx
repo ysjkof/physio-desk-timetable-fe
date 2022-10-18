@@ -1,17 +1,18 @@
-import { gql, useReactiveVar } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { gql, useMutation, useReactiveVar } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
 import { client } from '../../../apollo';
 import { MUOOL } from '../../../constants/constants';
-import { useVerifyChangeEmailMutation } from '../../../graphql/generated/graphql';
 import { loggedInUserVar } from '../../../store';
+import { VerifyChangeEmail } from '../../../graphql/documentNode';
+import type { VerifyChangeEmailMutation } from '../../../models/generated.models';
 
 export default function ChangeEmail() {
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const [message, setMessage] = useState('');
 
   const [verifyChangeEmailMutation, { loading }] =
-    useVerifyChangeEmailMutation();
+    useMutation<VerifyChangeEmailMutation>(VerifyChangeEmail);
 
   useEffect(() => {
     if (loading) return;

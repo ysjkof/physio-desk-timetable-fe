@@ -1,9 +1,9 @@
 import { checkStay } from '../../Dashboard';
-import { ClinicType, MeQuery } from '../../../../graphql/generated/graphql';
 import { renameUseSplit } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
 import localStorageUtils from '../../../../utils/localStorageUtils';
 import Selectbox from '../../../../components/molecules/Selectbox';
+import { ClinicType, MeQuery } from '../../../../models/generated.models';
 
 interface DashboardSideNavProps {
   meData: MeQuery;

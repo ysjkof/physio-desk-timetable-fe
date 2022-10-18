@@ -1,7 +1,9 @@
+import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { useMeQuery } from '../graphql/generated/graphql';
+import { Me } from '../graphql/documentNode';
 import { logout } from '../pages/auth/authServices';
 import localStorageUtils from '../utils/localStorageUtils';
+import type { MeQuery } from '../models/generated.models';
 
 // apollo는 캐시를 먼저 탐색하고 없다면 백엔드에 요청한다. useMe가 여러곳에서 호출되더라도 캐시에 있다면 자동으로 재사용하고 백엔드를 거치지 않는다.
 export const useMe = () => {
@@ -10,7 +12,8 @@ export const useMe = () => {
   if (!token) {
     console.info('토큰이 없습니다. 하려던 일은 useMe입니다');
   }
-  return useMeQuery({
+
+  return useQuery<MeQuery>(Me, {
     onError(error) {
       console.info('Error on useMe');
       logout(() => navigation('/'));

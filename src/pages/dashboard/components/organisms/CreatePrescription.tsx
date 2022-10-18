@@ -1,13 +1,6 @@
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import {
-  CreatePrescriptionInput,
-  FindPrescriptionsDocument,
-  FindPrescriptionsQuery,
-  useCreatePrescriptionMutation,
-  useFindAtomPrescriptionsQuery,
-} from '../../../../graphql/generated/graphql';
 import Button from '../../../../components/molecules/Button';
 import Input from '../../../../components/molecules/Input';
 import FormError from '../../../../components/atoms/FormError';
@@ -18,14 +11,26 @@ import Worning from '../../../../components/atoms/Warning';
 import { toastVar } from '../../../../store';
 import { client } from '../../../../apollo';
 import Checkbox from '../../../../components/molecules/Checkbox';
+import {
+  FindAtomPrescriptions,
+  CreatePrescription as CreatePrescriptionDocument,
+  FindPrescriptions,
+} from '../../../../graphql/documentNode';
+import { useMutation, useQuery } from '@apollo/client';
+import type {
+  CreatePrescriptionInput,
+  CreatePrescriptionMutation,
+  FindAtomPrescriptionsQuery,
+  FindPrescriptionsQuery,
+} from '../../../../models/generated.models';
 
 export default function CreatePrescription() {
   const { selectedInfo } = useStore();
   const { data: findAtomPrescriptions, loading: loadingAtom } =
-    useFindAtomPrescriptionsQuery();
+    useQuery<FindAtomPrescriptionsQuery>(FindAtomPrescriptions);
 
   const [createPrescription, { loading: loadingCreatePrescriptionOption }] =
-    useCreatePrescriptionMutation({
+    useMutation<CreatePrescriptionMutation>(CreatePrescriptionDocument, {
       onCompleted: (data) => {
         if (!data.createPrescription.ok) {
           if (data.createPrescription.error) {
@@ -36,7 +41,7 @@ export default function CreatePrescription() {
 
         client.cache.updateQuery<FindPrescriptionsQuery>(
           {
-            query: FindPrescriptionsDocument,
+            query: FindPrescriptions,
             variables: {
               input: {
                 clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,

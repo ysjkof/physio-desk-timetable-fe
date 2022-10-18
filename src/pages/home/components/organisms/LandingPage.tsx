@@ -13,10 +13,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import useMediaQuery from '../../../../hooks/useMediaQuery';
 import DocsEventBox from '../molecules/DocsEventBox';
-import { ReservationState } from '../../../../graphql/generated/graphql';
 import Check from '../../../../svgs/Check';
 import H1 from '../atoms/H1';
 import H3 from '../atoms/H3';
+import { ReservationState } from '../../../../models/generated.models';
 
 export default function LandingPage() {
   const isLoggedIn = isLoggedInVar();
