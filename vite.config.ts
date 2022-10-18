@@ -6,5 +6,9 @@ import remarkGfm from 'remark-gfm';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), visualizer(), mdx({ remarkPlugins: [remarkGfm] })],
+  plugins: [
+    react(),
+    visualizer({ gzipSize: true }),
+    mdx({ remarkPlugins: [remarkGfm] }),
+  ],
 });
