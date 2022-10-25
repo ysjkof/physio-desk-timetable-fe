@@ -1,12 +1,17 @@
+import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import {
-  CreateReservationInput,
-  EditReservationInput,
-  useCreateReservationMutation,
-  useEditReservationMutation,
-} from '../../../graphql/generated/graphql';
-import { simpleCheckGQLError } from '../../../utils/utils';
 import { TimetableModalProps } from '../Timetable';
+import { simpleCheckGQLError } from '../../../utils/utils';
+import {
+  CREATE_RESERVATION_DOCUMENT,
+  EDIT_RESERVATION_DOCUMENT,
+} from '../../../graphql';
+import type {
+  CreateReservationInput,
+  CreateReservationMutation,
+  EditReservationInput,
+  EditReservationMutation,
+} from '../../../models/generated.models';
 
 interface UseDayoffProps extends TimetableModalProps {
   isCreate: boolean;
@@ -27,7 +32,7 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
   const [loading, setLoading] = useState(false);
 
   const [createDayoffMutation, { loading: createLoading }] =
-    useCreateReservationMutation();
+    useMutation<CreateReservationMutation>(CREATE_RESERVATION_DOCUMENT);
 
   const createDayoff = ({
     startDate,
@@ -55,7 +60,7 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
   };
 
   const [editDayoffMutation, { loading: editLoading }] =
-    useEditReservationMutation();
+    useMutation<EditReservationMutation>(EDIT_RESERVATION_DOCUMENT);
 
   const editDayoff = ({
     startDate,

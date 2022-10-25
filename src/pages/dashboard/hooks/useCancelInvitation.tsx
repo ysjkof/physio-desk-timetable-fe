@@ -1,11 +1,14 @@
+import { useMutation } from '@apollo/client';
 import { client } from '../../../apollo';
 import {
-  FindMyClinicsDocument,
-  useCancelInvitationMutation,
-} from '../../../graphql/generated/graphql';
+  CANCEL_INVITATION_DOCUMENT,
+  FIND_MY_CLINICS_DOCUMENT,
+} from '../../../graphql';
+import type { CancelInvitationMutation } from '../../../models/generated.models';
 
 export default function useCancelInvitation() {
-  const [cancelInvitationMutation, { loading }] = useCancelInvitationMutation();
+  const [cancelInvitationMutation, { loading }] =
+    useMutation<CancelInvitationMutation>(CANCEL_INVITATION_DOCUMENT);
   /**
    * @param {number} id member id
    */
@@ -21,7 +24,7 @@ export default function useCancelInvitation() {
         onCompleted(data) {
           if (data.cancelInvitation.ok) {
             alert('삭제 완료');
-            client.refetchQueries({ include: [FindMyClinicsDocument] });
+            client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
             return;
           }
           alert('삭제 실패');

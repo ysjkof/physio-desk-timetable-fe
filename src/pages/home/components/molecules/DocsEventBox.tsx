@@ -7,9 +7,9 @@ import {
   faLock,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReservationState } from '../../../../graphql/generated/graphql';
 import { cls } from '../../../../utils/utils';
 import { USER_COLORS } from '../../../../constants/constants';
+import { ReservationState } from '../../../../models/generated.models';
 
 interface EventBoxProps {
   height: number;

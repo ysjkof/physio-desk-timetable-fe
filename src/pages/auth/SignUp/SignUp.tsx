@@ -1,19 +1,20 @@
+import { useMutation } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
-import {
-  CreateAccountInput,
-  CreateAccountMutation,
-  useCreateAccountMutation,
-} from '../../../graphql/generated/graphql';
 import Input from '../../../components/molecules/Input';
 import FormError from '../../../components/atoms/FormError';
 import Button from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { toastVar } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
+import { CREATE_ACCOUNT_DOCUMENT } from '../../../graphql';
+import type {
+  CreateAccountInput,
+  CreateAccountMutation,
+} from '../../../models/generated.models';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function SignUp() {
   const [
     createAccountMutation,
     { loading, data: createaAccountMutationResult },
-  ] = useCreateAccountMutation();
+  ] = useMutation<CreateAccountMutation>(CREATE_ACCOUNT_DOCUMENT);
 
   const onCompleted = (data: CreateAccountMutation) => {
     const {

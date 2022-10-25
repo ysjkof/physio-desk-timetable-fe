@@ -1,18 +1,23 @@
+import { useMutation } from '@apollo/client';
 import { client } from '../../../apollo';
-import {
-  ClinicType,
-  FindMyClinicsDocument,
-  FindMyClinicsQuery,
-  MeDocument,
-  MeQuery,
-  useAcceptInvitationMutation,
-} from '../../../graphql/generated/graphql';
-import { loggedInUserVar, toastVar } from '../../../store';
-import { changeValueInArray } from '../../../utils/utils';
 import useStore from '../../../hooks/useStore';
+import { changeValueInArray } from '../../../utils/utils';
+import { loggedInUserVar, toastVar } from '../../../store';
+import {
+  ACCEPT_INVITATION_DOCUMENT,
+  FIND_MY_CLINICS_DOCUMENT,
+  ME_DOCUMENT,
+} from '../../../graphql';
+import {
+  AcceptInvitationMutation,
+  ClinicType,
+  FindMyClinicsQuery,
+  MeQuery,
+} from '../../../models/generated.models';
 
 export default function useAcceptInvitation() {
-  const [acceptInvitationMutation, { loading }] = useAcceptInvitationMutation();
+  const [acceptInvitationMutation, { loading }] =
+    useMutation<AcceptInvitationMutation>(ACCEPT_INVITATION_DOCUMENT);
   const { selectedInfo, clinicLists } = useStore();
 
   const loggedInUserId = loggedInUserVar()?.id;
@@ -58,7 +63,7 @@ export default function useAcceptInvitation() {
 
             client.cache.updateQuery<FindMyClinicsQuery>(
               {
-                query: FindMyClinicsDocument,
+                query: FIND_MY_CLINICS_DOCUMENT,
                 variables: { input: { includeInactivate: true } },
               },
               (cacheData) => {
@@ -101,7 +106,7 @@ export default function useAcceptInvitation() {
 
             client.cache.updateQuery<MeQuery>(
               {
-                query: MeDocument,
+                query: ME_DOCUMENT,
               },
               (cacheData) => {
                 if (!cacheData || !cacheData.me || !cacheData.me.members)

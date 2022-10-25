@@ -1,6 +1,0 @@
-mutation inactivateClinic($input: InactivateClinicInput!) {
-  inactivateClinic(input: $input) {
-    ok
-    error
-  }
-}

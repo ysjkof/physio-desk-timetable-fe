@@ -1,11 +1,6 @@
-overwrite: true
-schema: "http://localhost:3002/graphql"
-documents: "src/**/*.graphql"
+schema: 'http://localhost:3002/graphql'
+documents: ['src/graphql/**/*.gql.ts']
 generates:
-  src/graphql/generated/graphql.ts:
-    plugins:
-      - typescript
-      - typescript-operations
-      - typescript-react-apollo
-    config:
-      withHooks: true
+  src/models/generated.models.ts:
+    { plugins: ['typescript', 'typescript-operations'] }
+watch: true

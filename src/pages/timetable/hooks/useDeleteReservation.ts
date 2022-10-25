@@ -1,12 +1,17 @@
-import { useDeleteReservationMutation } from '../../../graphql/generated/graphql';
+import { useMutation } from '@apollo/client';
 import { simpleCheckGQLError } from '../../../utils/utils';
+import { DELETE_RESERVATION_DOCUMENT } from '../../../graphql';
+import type { DeleteReservationMutation } from '../../../models/generated.models';
+
 interface DeleteReservation {
   reservationId: number;
   closeAction?: () => void;
 }
 
 export default function useDeleteReservation() {
-  const [deleteReservationMutation] = useDeleteReservationMutation();
+  const [deleteReservationMutation] = useMutation<DeleteReservationMutation>(
+    DELETE_RESERVATION_DOCUMENT
+  );
 
   const deleteReservation = ({
     reservationId,

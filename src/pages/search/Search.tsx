@@ -1,20 +1,21 @@
-import { useReactiveVar } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Worning from '../../components/atoms/Warning';
-import { useSearchPatientLazyQuery } from '../../graphql/generated/graphql';
-import { selectedInfoVar } from '../../store';
-import { GENDER_KOR, MUOOL } from '../../constants/constants';
-import useWindowSize from '../../hooks/useWindowSize';
-import { cls, renameUseSplit } from '../../utils/utils';
-import useStore from '../../hooks/useStore';
-import Checkbox from '../../components/molecules/Checkbox';
+import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import SearchList from './organisms/SearchList';
-import ListCell from './atoms/ListCell';
+import { selectedInfoVar } from '../../store';
+import { cls, renameUseSplit } from '../../utils/utils';
+import useWindowSize from '../../hooks/useWindowSize';
+import useStore from '../../hooks/useStore';
 import { getYMD } from '../../services/dateServices';
+import ListCell from './atoms/ListCell';
+import SearchList from './organisms/SearchList';
 import Button from '../../components/molecules/Button';
+import Worning from '../../components/atoms/Warning';
+import Checkbox from '../../components/molecules/Checkbox';
+import { GENDER_KOR, MUOOL } from '../../constants/constants';
+import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
+import type { SearchPatientQuery } from '../../models/generated.models';
 
 export default function Search() {
   const location = useLocation();
@@ -28,7 +29,9 @@ export default function Search() {
     defaultValues: { clinicIds: [selectedInfo.clinic?.id] },
   });
 
-  const [callQuery, { loading, data }] = useSearchPatientLazyQuery();
+  const [callQuery, { loading, data }] = useLazyQuery<SearchPatientQuery>(
+    SEARCH_PATIENT_DOCUMENT
+  );
 
   const changePage = (pageNumber: number) => {
     if (page === pageNumber) return;

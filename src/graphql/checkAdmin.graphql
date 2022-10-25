@@ -1,6 +1,0 @@
-query checkAdmin($code: String!) {
-  checkAdmin(code: $code) {
-    ok
-    error
-  }
-}

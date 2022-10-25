@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useCheckAdminLazyQuery } from '../graphql/generated/graphql';
+import { useLazyQuery } from '@apollo/client';
 import NotFound from '../components/404';
+import { CHECK_ADMIN_DOCUMENT } from '../graphql';
+import type { CheckAdminQuery } from '../models/generated.models';
 
 interface CheckAdminProps {
   children: React.ReactNode;
 }
 export default function CheckAdmin({ children }: CheckAdminProps) {
-  const [checkAdminMutation, { data }] = useCheckAdminLazyQuery();
+  const [callCheckAdmin, { data }] =
+    useLazyQuery<CheckAdminQuery>(CHECK_ADMIN_DOCUMENT);
   const [hasInput, setHasInput] = useState(false);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const code = formData.get('code');
     if (code && typeof code === 'string') {
-      checkAdminMutation({ variables: { code } });
+      callCheckAdmin({ variables: { code } });
     }
   };
 

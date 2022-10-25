@@ -1,4 +1,4 @@
-import { gql, useApolloClient } from '@apollo/client';
+import { gql, useApolloClient, useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
@@ -7,14 +7,15 @@ import Button from '../../../../components/molecules/Button';
 import Input from '../../../../components/molecules/Input';
 import { MUOOL } from '../../../../constants/constants';
 import { REG_EXP } from '../../../../constants/regex';
-import {
-  EditProfileInput,
-  useEditProfileMutation,
-} from '../../../../graphql/generated/graphql';
 import { useMe } from '../../../../hooks/useMe';
 import { toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
 import EditEmail from './EditEmail';
+import type {
+  EditProfileInput,
+  EditProfileMutation,
+} from '../../../../models/generated.models';
+import { EDIT_PROFILE_DOCUMENT } from '../../../../graphql';
 
 export default function EditProfile() {
   const [isEditEmail, setIsEditEmail] = useState(false);
@@ -33,7 +34,9 @@ export default function EditProfile() {
     },
   });
 
-  const [editProfile, { loading }] = useEditProfileMutation();
+  const [editProfile, { loading }] = useMutation<EditProfileMutation>(
+    EDIT_PROFILE_DOCUMENT
+  );
 
   const onSubmit = () => {
     if (!userData) throw new Error('사용자 정보가 없습니다');
@@ -64,7 +67,7 @@ export default function EditProfile() {
           client.writeFragment({
             id: `User:${id}`,
             fragment: gql`
-              fragment EditedUser on User {
+              fragment NameFields on User {
                 name
               }
             `,

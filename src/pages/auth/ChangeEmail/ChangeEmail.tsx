@@ -1,17 +1,21 @@
-import { gql, useReactiveVar } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
 import { client } from '../../../apollo';
 import { MUOOL } from '../../../constants/constants';
-import { useVerifyChangeEmailMutation } from '../../../graphql/generated/graphql';
 import { loggedInUserVar } from '../../../store';
+import {
+  USER_EMAIL_AND_VERIFY_FIELDS,
+  VERIFY_CHANGE_EMAIL_DOCUMENT,
+} from '../../../graphql';
+import type { VerifyChangeEmailMutation } from '../../../models/generated.models';
 
 export default function ChangeEmail() {
   const loggedInUser = useReactiveVar(loggedInUserVar);
   const [message, setMessage] = useState('');
 
   const [verifyChangeEmailMutation, { loading }] =
-    useVerifyChangeEmailMutation();
+    useMutation<VerifyChangeEmailMutation>(VERIFY_CHANGE_EMAIL_DOCUMENT);
 
   useEffect(() => {
     if (loading) return;
@@ -47,12 +51,7 @@ export default function ChangeEmail() {
               // 캐시에서 User:1 이런식으로 돼 있기 때문에 아래처럼.
               id: `User:${loggedInUser.id}`,
               // 이하 cache로 보내서 업데이트 됐으면 하는 프래그먼트로. 무엇을 바꾸고 싶은지 선언
-              fragment: gql`
-                fragment VerifiedUser on User {
-                  email
-                  verified
-                }
-              `,
+              fragment: USER_EMAIL_AND_VERIFY_FIELDS,
               // 그 data를 보냄.
               data: {
                 email,

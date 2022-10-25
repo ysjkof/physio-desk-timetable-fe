@@ -1,13 +1,13 @@
 import { memo } from 'react';
-import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
-import { ReservationState } from '../../../../graphql/generated/graphql';
 import {
   createDate,
   get4DigitHour,
   getTimeLength,
 } from '../../../../services/dateServices';
-import { IListReservation } from '../../../../types/type';
 import EventBox from './EventBox';
+import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
+import type { IListReservation } from '../../../../types/type';
+import { ReservationState } from '../../../../models/generated.models';
 
 interface ScheduleInUserInDayProps {
   userIndex: number;

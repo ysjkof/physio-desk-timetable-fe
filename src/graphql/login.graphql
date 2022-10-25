@@ -1,7 +1,0 @@
-mutation login($input: LoginInput!) {
-  login(input: $input) {
-    ok
-    token
-    error
-  }
-}

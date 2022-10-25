@@ -1,6 +1,0 @@
-mutation verifyChangeEmail($input: VerifyChangeEmailInput!) {
-  verifyChangeEmail(input: $input) {
-    ok
-    error
-  }
-}

@@ -1,13 +1,15 @@
-import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSearchPatientLazyQuery } from '../../../../graphql/generated/graphql';
+import { useLazyQuery } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import useStore from '../../../../hooks/useStore';
+import NameTag from './NameTag';
 import Worning from '../../../../components/atoms/Warning';
 import MenuButton from '../../../../components/molecules/MenuButton';
-import NameTag from './NameTag';
 import { cls, renameUseSplit } from '../../../../utils/utils';
+import { SEARCH_PATIENT_DOCUMENT } from '../../../../graphql';
+import type { SearchPatientQuery } from '../../../../models/generated.models';
 
 export default function SearchPatient() {
   const { selectedInfo, setSelectedInfo } = useStore();
@@ -18,7 +20,7 @@ export default function SearchPatient() {
   const [queryPageNumber, setQueryPageNumber] = useState(1);
 
   const [callQuery, { loading, data: searchPatientResult }] =
-    useSearchPatientLazyQuery();
+    useLazyQuery<SearchPatientQuery>(SEARCH_PATIENT_DOCUMENT);
 
   const onSubmit = () => {
     if (!loading && selectedInfo.clinic) {

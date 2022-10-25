@@ -1,13 +1,8 @@
 import { lazy, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import {
-  ClinicType,
-  FindMyClinicsDocument,
-  SearchUsersInput,
-  useInviteUserMutation,
-} from '../../../../graphql/generated/graphql';
 import useStore from '../../../../hooks/useStore';
 import { client } from '../../../../apollo';
 import Worning from '../../../../components/atoms/Warning';
@@ -15,6 +10,15 @@ import Input from '../../../../components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
 import FormError from '../../../../components/atoms/FormError';
 import FormSection from '../molecules/FormSection';
+import {
+  FIND_MY_CLINICS_DOCUMENT,
+  INVITE_USER_DOCUMENT,
+} from '../../../../graphql';
+import {
+  ClinicType,
+  InviteUserMutation,
+  SearchUsersInput,
+} from '../../../../models/generated.models';
 const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 export default function InviteClinic() {
@@ -31,7 +35,7 @@ export default function InviteClinic() {
   });
 
   const [inviteUserMutation, { loading: inviteUserLoading, data }] =
-    useInviteUserMutation();
+    useMutation<InviteUserMutation>(INVITE_USER_DOCUMENT);
 
   const inviteUser = () => {
     if (inviteUserLoading) return;
@@ -49,7 +53,7 @@ export default function InviteClinic() {
                 selectedInfo.clinic?.name || '병원'
               }"에 "${name}"님을 초대했습니다`
             );
-            client.refetchQueries({ include: [FindMyClinicsDocument] });
+            client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
           }
         },
       });

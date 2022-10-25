@@ -1,6 +1,8 @@
-import { useListReservationsQuery } from '../../../graphql/generated/graphql';
-import { getAfterDate, getSunday } from '../../../services/dateServices';
+import { useQuery } from '@apollo/client';
 import useStore from '../../../hooks/useStore';
+import { getAfterDate, getSunday } from '../../../services/dateServices';
+import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
+import type { ListReservationsQuery } from '../../../models/generated.models';
 
 export const useListReservations = () => {
   const { selectedInfo, selectedDate, clinicLists } = useStore();
@@ -12,7 +14,7 @@ export const useListReservations = () => {
 
   if (!selectedClinic) throw new Error('선택된 병원이 없습니다.');
 
-  return useListReservationsQuery({
+  return useQuery<ListReservationsQuery>(LIST_RESERVATIONS_DOCUMENT, {
     variables: {
       input: {
         startDate,

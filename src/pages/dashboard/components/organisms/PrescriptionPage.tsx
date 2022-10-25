@@ -1,12 +1,14 @@
+import { useQuery } from '@apollo/client';
+import { useState } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 import useStore from '../../../../hooks/useStore';
 import Worning from '../../../../components/atoms/Warning';
-import { Link, Outlet } from 'react-router-dom';
 import Button from '../../../../components/molecules/Button';
-import { useFindPrescriptionsQuery } from '../../../../graphql/generated/graphql';
 import CardContainer from '../../../../components/templates/CardContainer';
 import PrescriptionCard from '../molecules/PrescriptionCard';
-import { useState } from 'react';
 import MenuButton from '../../../../components/molecules/MenuButton';
+import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
+import type { FindPrescriptionsQuery } from '../../../../models/generated.models';
 
 export interface PrescriptionListProps {
   clinicId: number;
@@ -14,14 +16,17 @@ export interface PrescriptionListProps {
 }
 
 function PrescriptionList({ clinicId, showInactivate }: PrescriptionListProps) {
-  const { data } = useFindPrescriptionsQuery({
-    variables: {
-      input: {
-        clinicId,
-        onlyLookUpActive: false,
+  const { data } = useQuery<FindPrescriptionsQuery>(
+    FIND_PRESCRIPTIONS_DOCUMENT,
+    {
+      variables: {
+        input: {
+          clinicId,
+          onlyLookUpActive: false,
+        },
       },
-    },
-  });
+    }
+  );
 
   return (
     <CardContainer>

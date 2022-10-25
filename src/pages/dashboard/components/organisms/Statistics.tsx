@@ -1,7 +1,6 @@
 import { lazy, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import DashboardSectionLayout from '../template/DashboardSectionLayout';
-import { useGetStatisticsLazyQuery } from '../../../../graphql/generated/graphql';
+import { useLazyQuery } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
@@ -11,11 +10,14 @@ import { getMonthStartEnd } from '../../../../services/dateServices';
 import combineUserStatistics from '../../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../../types/type';
 import useStore from '../../../../hooks/useStore';
+import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import Charts from '../molecules/Charts';
 import Worning from '../../../../components/atoms/Warning';
 import Button from '../../../../components/molecules/Button';
 import Checkbox from '../../../../components/molecules/Checkbox';
 import MenuButton from '../../../../components/molecules/MenuButton';
+import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
+import type { GetStatisticsQuery } from '../../../../models/generated.models';
 const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 export default function Statistics() {
@@ -56,7 +58,7 @@ export default function Statistics() {
     });
 
   const [getStatisticsLazyQuery, { data, loading: loadingStatisticsData }] =
-    useGetStatisticsLazyQuery();
+    useLazyQuery<GetStatisticsQuery>(GET_STATISTICS_DOCUMENT);
 
   const onSubmit = () => {
     const { userIds, year, month } = getValues();
