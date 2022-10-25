@@ -9,9 +9,9 @@ import Worning from '../../../../components/atoms/Warning';
 import Button from '../../../../components/molecules/Button';
 import MenuButton from '../../../../components/molecules/MenuButton';
 import {
-  FindMyClinics,
-  InactivateClinic,
-} from '../../../../graphql/documentNode';
+  FIND_MY_CLINICS_DOCUMENT,
+  INACTIVATE_CLINIC_DOCUMENT,
+} from '../../../../graphql';
 import type { InactivateClinicMutation } from '../../../../models/generated.models';
 
 interface DeactivateClinicProps extends IdAndName {
@@ -27,7 +27,7 @@ export default function DeactivateClinic({
   const [agree, setAgree] = useState(false);
 
   const [mutationInactivateClinic, { loading }] =
-    useMutation<InactivateClinicMutation>(InactivateClinic);
+    useMutation<InactivateClinicMutation>(INACTIVATE_CLINIC_DOCUMENT);
 
   const onClick = () => {
     if (
@@ -39,7 +39,7 @@ export default function DeactivateClinic({
         variables: { input: { clinicId: id } },
         onCompleted(data) {
           if (data.inactivateClinic.ok) {
-            client.refetchQueries({ include: [FindMyClinics] });
+            client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
             toastVar({
               messages: [`${name}이 폐쇄됐습니다`],
               fade: true,

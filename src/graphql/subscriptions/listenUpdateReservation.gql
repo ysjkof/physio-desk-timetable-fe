@@ -1,6 +1,0 @@
-subscription listenDeleteReservation($input: ListenDeleteReservationInput!) {
-  listenDeleteReservation(input: $input) {
-    id
-    clinicId
-  }
-}

@@ -4,7 +4,7 @@ import FormError from '../../../../components/atoms/FormError';
 import Button from '../../../../components/molecules/Button';
 import Input from '../../../../components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
-import { SendChangeEmail } from '../../../../graphql/documentNode';
+import { SEND_CHANGE_EMAIL_DOCUMENT } from '../../../../graphql';
 import { useMe } from '../../../../hooks/useMe';
 import { toastVar } from '../../../../store';
 import type { SendChangeEmailMutation } from '../../../../models/generated.models';
@@ -23,7 +23,7 @@ export default function EditEmail() {
   });
 
   const [sendChangeEmailMutation, { loading }] =
-    useMutation<SendChangeEmailMutation>(SendChangeEmail);
+    useMutation<SendChangeEmailMutation>(SEND_CHANGE_EMAIL_DOCUMENT);
 
   const sendChangeEmail = () => {
     let { email } = getValues();

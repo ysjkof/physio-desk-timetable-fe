@@ -1,27 +1,26 @@
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { TimetableModalProps } from '../../Timetable';
 import Button from '../../../../components/molecules/Button';
 import SelectUser from './SelectUser';
-import {
+import Textarea from '../../../../components/molecules/Textarea';
+import { ROUTES } from '../../../../router/routes';
+import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
+import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
+import useStore from '../../../../hooks/useStore';
+import useReserve from '../../hooks/useReserve';
+import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
+import type { FindPrescriptionsQuery } from '../../../../models/generated.models';
+import type {
   IListReservation,
   ISelectedPrescription,
   PrescriptionWithSelect,
   ReserveFormType,
 } from '../../../../types/type';
-import Textarea from '../../../../components/molecules/Textarea';
-import { ROUTES } from '../../../../router/routes';
-import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
-import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
-import { useEffect, useState } from 'react';
-
-import useStore from '../../../../hooks/useStore';
-import { useForm } from 'react-hook-form';
-import useReserve from '../../hooks/useReserve';
-import { FindPrescriptions } from '../../../../graphql/documentNode';
-import { useQuery } from '@apollo/client';
-import { FindPrescriptionsQuery } from '../../../../models/generated.models';
 
 interface IReservaFromProps extends TimetableModalProps {
   userId: number;
@@ -50,7 +49,7 @@ export default function ReserveForm({
 
   // 처방 처리
   const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
-    FindPrescriptions,
+    FIND_PRESCRIPTIONS_DOCUMENT,
     {
       variables: {
         input: {

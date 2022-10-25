@@ -4,10 +4,10 @@ import useStore from '../../../hooks/useStore';
 import { changeValueInArray } from '../../../utils/utils';
 import { loggedInUserVar, toastVar } from '../../../store';
 import {
-  AcceptInvitation,
-  FindMyClinics,
-  Me,
-} from '../../../graphql/documentNode';
+  ACCEPT_INVITATION_DOCUMENT,
+  FIND_MY_CLINICS_DOCUMENT,
+  ME_DOCUMENT,
+} from '../../../graphql';
 import {
   AcceptInvitationMutation,
   ClinicType,
@@ -17,7 +17,7 @@ import {
 
 export default function useAcceptInvitation() {
   const [acceptInvitationMutation, { loading }] =
-    useMutation<AcceptInvitationMutation>(AcceptInvitation);
+    useMutation<AcceptInvitationMutation>(ACCEPT_INVITATION_DOCUMENT);
   const { selectedInfo, clinicLists } = useStore();
 
   const loggedInUserId = loggedInUserVar()?.id;
@@ -63,7 +63,7 @@ export default function useAcceptInvitation() {
 
             client.cache.updateQuery<FindMyClinicsQuery>(
               {
-                query: FindMyClinics,
+                query: FIND_MY_CLINICS_DOCUMENT,
                 variables: { input: { includeInactivate: true } },
               },
               (cacheData) => {
@@ -106,7 +106,7 @@ export default function useAcceptInvitation() {
 
             client.cache.updateQuery<MeQuery>(
               {
-                query: Me,
+                query: ME_DOCUMENT,
               },
               (cacheData) => {
                 if (!cacheData || !cacheData.me || !cacheData.me.members)

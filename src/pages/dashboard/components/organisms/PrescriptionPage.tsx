@@ -7,7 +7,7 @@ import Button from '../../../../components/molecules/Button';
 import CardContainer from '../../../../components/templates/CardContainer';
 import PrescriptionCard from '../molecules/PrescriptionCard';
 import MenuButton from '../../../../components/molecules/MenuButton';
-import { FindPrescriptions } from '../../../../graphql/documentNode';
+import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
 import type { FindPrescriptionsQuery } from '../../../../models/generated.models';
 
 export interface PrescriptionListProps {
@@ -16,14 +16,17 @@ export interface PrescriptionListProps {
 }
 
 function PrescriptionList({ clinicId, showInactivate }: PrescriptionListProps) {
-  const { data } = useQuery<FindPrescriptionsQuery>(FindPrescriptions, {
-    variables: {
-      input: {
-        clinicId,
-        onlyLookUpActive: false,
+  const { data } = useQuery<FindPrescriptionsQuery>(
+    FIND_PRESCRIPTIONS_DOCUMENT,
+    {
+      variables: {
+        input: {
+          clinicId,
+          onlyLookUpActive: false,
+        },
       },
-    },
-  });
+    }
+  );
 
   return (
     <CardContainer>

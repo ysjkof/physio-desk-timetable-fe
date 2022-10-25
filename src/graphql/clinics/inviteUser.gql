@@ -1,6 +1,0 @@
-mutation inviteUser($input: InviteUserInput!) {
-  inviteUser(input: $input) {
-    ok
-    error
-  }
-}

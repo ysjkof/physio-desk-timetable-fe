@@ -9,7 +9,7 @@ import FormError from '../../../components/atoms/FormError';
 import Button from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { MUOOL } from '../../../constants/constants';
-import { Login as LoginDocument } from '../../../graphql/documentNode';
+import { LOGIN_DOCUMENT } from '../../../graphql';
 import type {
   LoginInput,
   LoginMutation,
@@ -25,7 +25,7 @@ export default function Login() {
   } = useForm<LoginInput>({ mode: 'onChange' });
 
   const [loginMutation, { loading }] =
-    useMutation<LoginMutation>(LoginDocument);
+    useMutation<LoginMutation>(LOGIN_DOCUMENT);
 
   const onSubmit = () => {
     if (!loading) {

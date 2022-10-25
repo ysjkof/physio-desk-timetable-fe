@@ -5,9 +5,9 @@ import FormError from '../../../../components/atoms/FormError';
 import Button from '../../../../components/molecules/Button';
 import { REG_EXP } from '../../../../constants/regex';
 import {
-  EditPrescription,
-  FindPrescriptions,
-} from '../../../../graphql/documentNode';
+  EDIT_PRESCRIPTION_DOCUMENT,
+  FIND_PRESCRIPTIONS_DOCUMENT,
+} from '../../../../graphql';
 import { toastVar } from '../../../../store';
 import { changeValueInArray, cls } from '../../../../utils/utils';
 import { CardProps } from './PrescriptionCard';
@@ -40,8 +40,9 @@ export default function PrescriptionEdit({
     defaultValues: { name, description },
   });
 
-  const [editPrescriptionMutation] =
-    useMutation<EditPrescriptionMutation>(EditPrescription);
+  const [editPrescriptionMutation] = useMutation<EditPrescriptionMutation>(
+    EDIT_PRESCRIPTION_DOCUMENT
+  );
 
   const onSubmit = () => {
     const { description: newDescription, name: newName } = getValues();
@@ -65,7 +66,7 @@ export default function PrescriptionEdit({
 
         client.cache.updateQuery<FindPrescriptionsQuery>(
           {
-            query: FindPrescriptions,
+            query: FIND_PRESCRIPTIONS_DOCUMENT,
             variables: {
               input: {
                 clinicId,

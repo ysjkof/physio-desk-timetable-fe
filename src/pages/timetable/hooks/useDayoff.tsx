@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { TimetableModalProps } from '../Timetable';
 import { simpleCheckGQLError } from '../../../utils/utils';
 import {
-  CreateReservation,
-  EditReservation,
-} from '../../../graphql/documentNode';
+  CREATE_RESERVATION_DOCUMENT,
+  EDIT_RESERVATION_DOCUMENT,
+} from '../../../graphql';
 import type {
   CreateReservationInput,
   CreateReservationMutation,
@@ -32,7 +32,7 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
   const [loading, setLoading] = useState(false);
 
   const [createDayoffMutation, { loading: createLoading }] =
-    useMutation<CreateReservationMutation>(CreateReservation);
+    useMutation<CreateReservationMutation>(CREATE_RESERVATION_DOCUMENT);
 
   const createDayoff = ({
     startDate,
@@ -60,7 +60,7 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
   };
 
   const [editDayoffMutation, { loading: editLoading }] =
-    useMutation<EditReservationMutation>(EditReservation);
+    useMutation<EditReservationMutation>(EDIT_RESERVATION_DOCUMENT);
 
   const editDayoff = ({
     startDate,

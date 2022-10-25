@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
-import { ListReservations } from '../../../graphql/documentNode';
 import useStore from '../../../hooks/useStore';
 import { getAfterDate, getSunday } from '../../../services/dateServices';
+import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
 import type { ListReservationsQuery } from '../../../models/generated.models';
 
 export const useListReservations = () => {
@@ -14,7 +14,7 @@ export const useListReservations = () => {
 
   if (!selectedClinic) throw new Error('선택된 병원이 없습니다.');
 
-  return useQuery<ListReservationsQuery>(ListReservations, {
+  return useQuery<ListReservationsQuery>(LIST_RESERVATIONS_DOCUMENT, {
     variables: {
       input: {
         startDate,

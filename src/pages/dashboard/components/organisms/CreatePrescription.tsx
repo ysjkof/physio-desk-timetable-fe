@@ -1,3 +1,4 @@
+import { useMutation, useQuery } from '@apollo/client';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
@@ -12,11 +13,10 @@ import { toastVar } from '../../../../store';
 import { client } from '../../../../apollo';
 import Checkbox from '../../../../components/molecules/Checkbox';
 import {
-  FindAtomPrescriptions,
-  CreatePrescription as CreatePrescriptionDocument,
-  FindPrescriptions,
-} from '../../../../graphql/documentNode';
-import { useMutation, useQuery } from '@apollo/client';
+  CREATE_PRESCRIPTION_DOCUMENT,
+  FIND_ATOM_PRESCRIPTIONS_DOCUMENT,
+  FIND_PRESCRIPTIONS_DOCUMENT,
+} from '../../../../graphql';
 import type {
   CreatePrescriptionInput,
   CreatePrescriptionMutation,
@@ -27,10 +27,10 @@ import type {
 export default function CreatePrescription() {
   const { selectedInfo } = useStore();
   const { data: findAtomPrescriptions, loading: loadingAtom } =
-    useQuery<FindAtomPrescriptionsQuery>(FindAtomPrescriptions);
+    useQuery<FindAtomPrescriptionsQuery>(FIND_ATOM_PRESCRIPTIONS_DOCUMENT);
 
   const [createPrescription, { loading: loadingCreatePrescriptionOption }] =
-    useMutation<CreatePrescriptionMutation>(CreatePrescriptionDocument, {
+    useMutation<CreatePrescriptionMutation>(CREATE_PRESCRIPTION_DOCUMENT, {
       onCompleted: (data) => {
         if (!data.createPrescription.ok) {
           if (data.createPrescription.error) {
@@ -41,7 +41,7 @@ export default function CreatePrescription() {
 
         client.cache.updateQuery<FindPrescriptionsQuery>(
           {
-            query: FindPrescriptions,
+            query: FIND_PRESCRIPTIONS_DOCUMENT,
             variables: {
               input: {
                 clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,

@@ -5,8 +5,8 @@ import { cls, simpleCheckGQLError } from '../../../../utils/utils';
 import { USER_COLORS, UTC_OPTION_KST } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
 import { createDate } from '../../../../services/dateServices';
-import { CreateDayOff } from '../../../../graphql/documentNode';
 import { useMutation } from '@apollo/client';
+import { CREATE_DAY_OFF_DOCUMENT } from '../../../../graphql';
 import type { CreateDayOffMutation } from '../../../../models/generated.models';
 
 interface UserNameTitleProps {
@@ -26,8 +26,9 @@ export default function UserNameTitle({
   userId,
   date,
 }: UserNameTitleProps) {
-  const [createDayOff, { loading }] =
-    useMutation<CreateDayOffMutation>(CreateDayOff);
+  const [createDayOff, { loading }] = useMutation<CreateDayOffMutation>(
+    CREATE_DAY_OFF_DOCUMENT
+  );
   const navigate = useNavigate();
 
   function closePartTime() {

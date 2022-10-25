@@ -1,11 +1,11 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import {
-  CreateReservation,
-  EditReservation,
-} from '../../../graphql/documentNode';
 import { simpleCheckGQLError } from '../../../utils/utils';
 import { TimetableModalProps } from '../Timetable';
+import {
+  CREATE_RESERVATION_DOCUMENT,
+  EDIT_RESERVATION_DOCUMENT,
+} from '../../../graphql';
 import type {
   CreateReservationInput,
   CreateReservationMutation,
@@ -21,7 +21,7 @@ export default function useReserve({ isCreate, closeAction }: UseDayoffProps) {
   const [loading, setLoading] = useState(false);
 
   const [createReservationMutation, { loading: createLoading }] =
-    useMutation<CreateReservationMutation>(CreateReservation);
+    useMutation<CreateReservationMutation>(CREATE_RESERVATION_DOCUMENT);
 
   const createReservation = ({
     startDate,
@@ -52,7 +52,7 @@ export default function useReserve({ isCreate, closeAction }: UseDayoffProps) {
   };
 
   const [editReservationMutation, { loading: editLoading }] =
-    useMutation<EditReservationMutation>(EditReservation);
+    useMutation<EditReservationMutation>(EDIT_RESERVATION_DOCUMENT);
 
   const editReservation = ({
     startDate,

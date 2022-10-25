@@ -10,7 +10,7 @@ import Button from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { toastVar } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
-import { CreateAccount } from '../../../graphql/documentNode';
+import { CREATE_ACCOUNT_DOCUMENT } from '../../../graphql';
 import type {
   CreateAccountInput,
   CreateAccountMutation,
@@ -31,7 +31,7 @@ export default function SignUp() {
   const [
     createAccountMutation,
     { loading, data: createaAccountMutationResult },
-  ] = useMutation<CreateAccountMutation>(CreateAccount);
+  ] = useMutation<CreateAccountMutation>(CREATE_ACCOUNT_DOCUMENT);
 
   const onCompleted = (data: CreateAccountMutation) => {
     const {

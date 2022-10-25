@@ -1,6 +1,0 @@
-mutation createDayOff($input: CreateDayOffInput!) {
-  createDayOff(input: $input) {
-    ok
-    error
-  }
-}

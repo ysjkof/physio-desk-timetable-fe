@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { CheckAdmin as CheckAdminDocument } from '../graphql/documentNode';
 import NotFound from '../components/404';
+import { CHECK_ADMIN_DOCUMENT } from '../graphql';
 import type { CheckAdminQuery } from '../models/generated.models';
 
 interface CheckAdminProps {
@@ -9,7 +9,7 @@ interface CheckAdminProps {
 }
 export default function CheckAdmin({ children }: CheckAdminProps) {
   const [callCheckAdmin, { data }] =
-    useLazyQuery<CheckAdminQuery>(CheckAdminDocument);
+    useLazyQuery<CheckAdminQuery>(CHECK_ADMIN_DOCUMENT);
   const [hasInput, setHasInput] = useState(false);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

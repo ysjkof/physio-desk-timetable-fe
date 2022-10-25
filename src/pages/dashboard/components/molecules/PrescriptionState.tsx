@@ -1,12 +1,12 @@
 import { useMutation } from '@apollo/client';
 import { client } from '../../../../apollo';
-import {
-  EditPrescription,
-  FindPrescriptions,
-} from '../../../../graphql/documentNode';
 import { toastVar } from '../../../../store';
 import { changeValueInArray, cls } from '../../../../utils/utils';
 import { CardProps } from './PrescriptionCard';
+import {
+  EDIT_PRESCRIPTION_DOCUMENT,
+  FIND_PRESCRIPTIONS_DOCUMENT,
+} from '../../../../graphql';
 import type {
   EditPrescriptionMutation,
   FindPrescriptionsQuery,
@@ -22,8 +22,9 @@ export default function PrescriptionState({
   activate,
   clinicId,
 }: PrescriptionStateProps) {
-  const [callMutation] =
-    useMutation<EditPrescriptionMutation>(EditPrescription);
+  const [callMutation] = useMutation<EditPrescriptionMutation>(
+    EDIT_PRESCRIPTION_DOCUMENT
+  );
 
   const toggleActivation = () => {
     const todo = activate ? '비활성' : '활성';
@@ -44,7 +45,7 @@ export default function PrescriptionState({
 
         client.cache.updateQuery<FindPrescriptionsQuery>(
           {
-            query: FindPrescriptions,
+            query: FIND_PRESCRIPTIONS_DOCUMENT,
             variables: {
               input: {
                 clinicId,

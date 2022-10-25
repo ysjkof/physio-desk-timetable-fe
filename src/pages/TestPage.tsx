@@ -3,15 +3,14 @@ import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { FormEvent, useState } from 'react';
 import { selectedInfoVar } from '../store';
 import {
-  FindPrescriptions,
-  CreateReservation as CreateReservationDocument,
-  FindAllPatients,
-  CreateAccount,
-  CreateClinic,
-  CreatePatient,
-  CreateAtomPrescription,
-  CreatePrescription,
-} from '../graphql/documentNode';
+  CREATE_ACCOUNT_DOCUMENT,
+  CREATE_ATOM_PRESCRIPTION_DOCUMENT,
+  CREATE_CLINIC_DOCUMENT,
+  CREATE_PATIENT_DOCUMENT,
+  CREATE_RESERVATION_DOCUMENT,
+  FIND_ALL_PATIENTS_DOCUMENT,
+  FIND_PRESCRIPTIONS_DOCUMENT,
+} from '../graphql';
 import type {
   CreateAccountMutation,
   CreateAtomPrescriptionMutation,
@@ -110,7 +109,7 @@ function CreateReservation() {
   if (!clinicId) return <p>로그인 해야 됩니다.</p>;
 
   const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
-    FindPrescriptions,
+    FIND_PRESCRIPTIONS_DOCUMENT,
     {
       variables: {
         input: {
@@ -121,13 +120,13 @@ function CreateReservation() {
     }
   );
   const { data: allPatients } = useQuery<FindAllPatientsQuery>(
-    FindAllPatients,
+    FIND_ALL_PATIENTS_DOCUMENT,
     {
       variables: { input: { clinicId } },
     }
   );
   const [createReservationMutation] = useMutation<CreateReservationMutation>(
-    CreateReservationDocument
+    CREATE_RESERVATION_DOCUMENT
   );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -228,14 +227,21 @@ function CreateDummyData() {
   const clinicId = selectedInfo.clinic?.id;
   if (!clinicId) return <p>Not Permission</p>;
 
-  const [createAccount] = useMutation<CreateAccountMutation>(CreateAccount);
-  const [createClinic] = useMutation<CreateClinicMutation>(CreateClinic);
-  const [createPatient] = useMutation<CreatePatientMutation>(CreatePatient);
-  const [createAtom] = useMutation<CreateAtomPrescriptionMutation>(
-    CreateAtomPrescription
+  const [createAccount] = useMutation<CreateAccountMutation>(
+    CREATE_ACCOUNT_DOCUMENT
   );
-  const [createPrescription] =
-    useMutation<CreatePrescriptionMutation>(CreatePrescription);
+  const [createClinic] = useMutation<CreateClinicMutation>(
+    CREATE_CLINIC_DOCUMENT
+  );
+  const [createPatient] = useMutation<CreatePatientMutation>(
+    CREATE_PATIENT_DOCUMENT
+  );
+  const [createAtom] = useMutation<CreateAtomPrescriptionMutation>(
+    CREATE_ATOM_PRESCRIPTION_DOCUMENT
+  );
+  const [createPrescription] = useMutation<CreatePrescriptionMutation>(
+    CREATE_ATOM_PRESCRIPTION_DOCUMENT
+  );
 
   return (
     <div className="px-4 ">

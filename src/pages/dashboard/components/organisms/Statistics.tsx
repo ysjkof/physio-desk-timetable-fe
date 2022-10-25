@@ -16,7 +16,7 @@ import Worning from '../../../../components/atoms/Warning';
 import Button from '../../../../components/molecules/Button';
 import Checkbox from '../../../../components/molecules/Checkbox';
 import MenuButton from '../../../../components/molecules/MenuButton';
-import { GetStatistics } from '../../../../graphql/documentNode';
+import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
 import type { GetStatisticsQuery } from '../../../../models/generated.models';
 const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
@@ -58,7 +58,7 @@ export default function Statistics() {
     });
 
   const [getStatisticsLazyQuery, { data, loading: loadingStatisticsData }] =
-    useLazyQuery<GetStatisticsQuery>(GetStatistics);
+    useLazyQuery<GetStatisticsQuery>(GET_STATISTICS_DOCUMENT);
 
   const onSubmit = () => {
     const { userIds, year, month } = getValues();

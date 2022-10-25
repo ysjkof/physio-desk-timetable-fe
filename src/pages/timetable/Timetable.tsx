@@ -29,9 +29,9 @@ import TimeLabels from './components/organisms/TimeLabels';
 import TableModals from './components/templates/TableModals';
 import TableTemplate from './components/templates/TableTemplate';
 import {
-  ListenDeleteReservation,
-  ListenUpdateReservation,
-} from '../../graphql/documentNode';
+  LISTEN_DELETE_RESERVATION_DOCUMENT,
+  LISTEN_UPDATE_RESERVATION_DOCUMENT,
+} from '../../graphql';
 import type {
   ListenDeleteReservationSubscription,
   ListenUpdateReservationSubscription,
@@ -87,7 +87,7 @@ export default function TimeTable() {
 
     if (reservationData?.listReservations.ok && selectedInfo.clinic?.id) {
       subscribeToMore({
-        document: ListenDeleteReservation,
+        document: LISTEN_DELETE_RESERVATION_DOCUMENT,
         variables: { input: { clinicId: selectedInfo.clinic.id } },
         updateQuery(
           prev: ListReservationsQuery,
@@ -119,7 +119,7 @@ export default function TimeTable() {
       });
 
       subscribeToMore({
-        document: ListenUpdateReservation,
+        document: LISTEN_UPDATE_RESERVATION_DOCUMENT,
         variables: { input: { clinicId: selectedInfo.clinic.id } },
         // 웹소켓이 받는 updated 데이터와 listReservation의 데이터 형태가 달라 타입에러 발생
         // 하지만 id로 apollo cache가 필요한 값을 처리한다

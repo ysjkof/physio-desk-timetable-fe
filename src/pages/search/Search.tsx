@@ -14,7 +14,7 @@ import Button from '../../components/molecules/Button';
 import Worning from '../../components/atoms/Warning';
 import Checkbox from '../../components/molecules/Checkbox';
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
-import { SearchPatient } from '../../graphql/documentNode';
+import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
 import type { SearchPatientQuery } from '../../models/generated.models';
 
 export default function Search() {
@@ -29,8 +29,9 @@ export default function Search() {
     defaultValues: { clinicIds: [selectedInfo.clinic?.id] },
   });
 
-  const [callQuery, { loading, data }] =
-    useLazyQuery<SearchPatientQuery>(SearchPatient);
+  const [callQuery, { loading, data }] = useLazyQuery<SearchPatientQuery>(
+    SEARCH_PATIENT_DOCUMENT
+  );
 
   const changePage = (pageNumber: number) => {
     if (page === pageNumber) return;

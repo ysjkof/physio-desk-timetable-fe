@@ -1,6 +1,0 @@
-mutation sendChangeEmail($input: SendChangeEmailInput!) {
-  sendChangeEmail(input: $input) {
-    ok
-    error
-  }
-}

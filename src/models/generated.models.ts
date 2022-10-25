@@ -885,6 +885,10 @@ export type GetStatisticsOutputPrescription = {
   name: Scalars['String'];
 };
 
+export type CommonClinicFieldsFragment = { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean };
+
+export type CommonMemberFieldsFragment = { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean };
+
 export type AcceptInvitationMutationVariables = Exact<{
   input: AcceptInvitationInput;
 }>;
@@ -904,21 +908,21 @@ export type CreateClinicMutationVariables = Exact<{
 }>;
 
 
-export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string } }> } | null } };
+export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> } | null } };
 
 export type FindMyClinicsQueryVariables = Exact<{
   input: FindMyClinicsInput;
 }>;
 
 
-export type FindMyClinicsQuery = { __typename?: 'Query', findMyClinics: { __typename?: 'FindMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string }, clinic: { __typename?: 'Clinic', id: number, name: string } }> }> | null } };
+export type FindMyClinicsQuery = { __typename?: 'Query', findMyClinics: { __typename?: 'FindMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string }, clinic: { __typename?: 'Clinic', id: number, name: string } }> }> | null } };
 
 export type GetClinicQueryVariables = Exact<{
   input: GetClinicInput;
 }>;
 
 
-export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, members: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
 
 export type InactivateClinicMutationVariables = Exact<{
   input: InactivateClinicInput;
@@ -941,12 +945,16 @@ export type LeaveClinicMutationVariables = Exact<{
 
 export type LeaveClinicMutation = { __typename?: 'Mutation', leaveClinic: { __typename?: 'LeaveClinicOutput', ok: boolean, error?: string | null } };
 
+export type AllPatientFieldsFragment = { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null };
+
+export type CommonPatientFieldsFragment = { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null };
+
 export type CreatePatientMutationVariables = Exact<{
   input: CreatePatientInput;
 }>;
 
 
-export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null } | null } };
+export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null } };
 
 export type EditPatientMutationVariables = Exact<{
   input: EditPatientInput;
@@ -960,21 +968,25 @@ export type FindAllPatientsQueryVariables = Exact<{
 }>;
 
 
-export type FindAllPatientsQuery = { __typename?: 'Query', findAllPatients: { __typename?: 'FindAllPatientsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, clinic?: { __typename?: 'Clinic', name: string } | null }> | null } };
+export type FindAllPatientsQuery = { __typename?: 'Query', findAllPatients: { __typename?: 'FindAllPatientsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, clinic?: { __typename?: 'Clinic', name: string } | null }> | null } };
 
 export type GetPatientsQueryVariables = Exact<{
   input: GetPatientsInput;
 }>;
 
 
-export type GetPatientsQuery = { __typename?: 'Query', getPatients: { __typename?: 'GetPatientsOutput', ok: boolean, error?: string | null, patients: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null }> } };
+export type GetPatientsQuery = { __typename?: 'Query', getPatients: { __typename?: 'GetPatientsOutput', ok: boolean, error?: string | null, patients: Array<{ __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null }> } };
 
 export type SearchPatientQueryVariables = Exact<{
   input: SearchPatientInput;
 }>;
 
 
-export type SearchPatientQuery = { __typename?: 'Query', searchPatient: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, users: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
+export type SearchPatientQuery = { __typename?: 'Query', searchPatient: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, clinic?: { __typename?: 'Clinic', id: number, name: string } | null, users: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
+
+export type AllPrescriptionFieldsFragment = { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null };
+
+export type CommonPrescriptionFieldsFragment = { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number };
 
 export type CreateAtomPrescriptionMutationVariables = Exact<{
   input: CreateAtomPrescriptionInput;
@@ -1009,6 +1021,8 @@ export type FindPrescriptionsQueryVariables = Exact<{
 
 export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
 
+export type CommonReservationFieldsFragment = { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean };
+
 export type CreateDayOffMutationVariables = Exact<{
   input: CreateDayOffInput;
 }>;
@@ -1035,7 +1049,7 @@ export type EditReservationMutationVariables = Exact<{
 }>;
 
 
-export type EditReservationMutation = { __typename?: 'Mutation', editReservation: { __typename?: 'EditReservationOutput', error?: string | null, ok: boolean } };
+export type EditReservationMutation = { __typename?: 'Mutation', editReservation: { __typename?: 'EditReservationOutput', ok: boolean, error?: string | null } };
 
 export type GetReservationsByPatientQueryVariables = Exact<{
   input: GetReservationsByPatientInput;
@@ -1056,14 +1070,7 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, name: string, gender: string, registrationNumber: number, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', id: number, email: string, name: string, updatedAt?: any | null }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
-
-export type ListenUpdateReservationSubscriptionVariables = Exact<{
-  input: UpdateReservationInput;
-}>;
-
-
-export type ListenUpdateReservationSubscription = { __typename?: 'Subscription', listenUpdateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number }, patient?: { __typename?: 'Patient', id: number, name: string } | null, lastModifier: { __typename?: 'User', id: number, email: string, name: string, updatedAt?: any | null }, clinic: { __typename?: 'Clinic', id: number }, prescriptions?: Array<{ __typename?: 'Prescription', id: number }> | null } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
 
 export type ListenDeleteReservationSubscriptionVariables = Exact<{
   input: ListenDeleteReservationInput;
@@ -1071,6 +1078,17 @@ export type ListenDeleteReservationSubscriptionVariables = Exact<{
 
 
 export type ListenDeleteReservationSubscription = { __typename?: 'Subscription', listenDeleteReservation: { __typename?: 'ListenDeleteReservationOutput', id: number, clinicId: number } };
+
+export type ListenUpdateReservationSubscriptionVariables = Exact<{
+  input: UpdateReservationInput;
+}>;
+
+
+export type ListenUpdateReservationSubscription = { __typename?: 'Subscription', listenUpdateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number }, patient?: { __typename?: 'Patient', id: number, name: string } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number }, prescriptions?: Array<{ __typename?: 'Prescription', id: number }> | null } };
+
+export type UserEmailAndVerifyFieldsFragment = { __typename?: 'User', email: string, verified: boolean };
+
+export type UserIdNameEmailFieldsFragment = { __typename?: 'User', id: number, name: string, email: string };
 
 export type CheckAdminQueryVariables = Exact<{
   code: Scalars['String'];
@@ -1098,12 +1116,12 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', ok: boolean, token?: string | null, error?: string | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', ok: boolean, error?: string | null, token?: string | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, members?: Array<{ __typename?: 'Member', id: number, staying: boolean, manager: boolean, accepted: boolean, clinic: { __typename?: 'Clinic', id: number, name: string, isActivated: boolean, type: ClinicType } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, members?: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, clinic: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
 
 export type SearchUsersQueryVariables = Exact<{
   input: SearchUsersInput;

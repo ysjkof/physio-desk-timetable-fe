@@ -1,6 +1,0 @@
-mutation editPatient($input: EditPatientInput!) {
-  editPatient(input: $input) {
-    error
-    ok
-  }
-}

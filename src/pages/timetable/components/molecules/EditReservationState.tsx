@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRotateLeft,
@@ -7,8 +8,7 @@ import {
 import { cls } from '../../../../utils/utils';
 import { IListReservation } from '../../../../types/type';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
-import { useMutation } from '@apollo/client';
-import { EditReservation } from '../../../../graphql/documentNode';
+import { EDIT_RESERVATION_DOCUMENT } from '../../../../graphql';
 import {
   EditReservationMutation,
   ReservationState,
@@ -22,8 +22,9 @@ interface EditReservationStateProps {
 export default function EditReservationState({
   reservation,
 }: EditReservationStateProps) {
-  const [editReservationMutation] =
-    useMutation<EditReservationMutation>(EditReservation);
+  const [editReservationMutation] = useMutation<EditReservationMutation>(
+    EDIT_RESERVATION_DOCUMENT
+  );
 
   const onClickEditReserve = (state: ReservationState) => {
     const confirmDelete = window.confirm(

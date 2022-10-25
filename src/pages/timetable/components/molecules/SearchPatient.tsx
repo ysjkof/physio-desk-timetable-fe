@@ -8,7 +8,7 @@ import NameTag from './NameTag';
 import Worning from '../../../../components/atoms/Warning';
 import MenuButton from '../../../../components/molecules/MenuButton';
 import { cls, renameUseSplit } from '../../../../utils/utils';
-import { SearchPatient as SearchPatientDocument } from '../../../../graphql/documentNode';
+import { SEARCH_PATIENT_DOCUMENT } from '../../../../graphql';
 import type { SearchPatientQuery } from '../../../../models/generated.models';
 
 export default function SearchPatient() {
@@ -20,7 +20,7 @@ export default function SearchPatient() {
   const [queryPageNumber, setQueryPageNumber] = useState(1);
 
   const [callQuery, { loading, data: searchPatientResult }] =
-    useLazyQuery<SearchPatientQuery>(SearchPatientDocument);
+    useLazyQuery<SearchPatientQuery>(SEARCH_PATIENT_DOCUMENT);
 
   const onSubmit = () => {
     if (!loading && selectedInfo.clinic) {

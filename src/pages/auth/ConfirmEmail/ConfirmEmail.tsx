@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { MUOOL } from '../../../constants/constants';
-import { VerifyEmail } from '../../../graphql/documentNode';
 import { loggedInUserVar } from '../../../store';
+import { VERIFY_EMAIL_DOCUMENT } from '../../../graphql';
 import type { VerifyEmailMutation } from '../../../models/generated.models';
 
 export default function ConfirmEmail() {
@@ -24,7 +24,7 @@ export default function ConfirmEmail() {
     navigate('/');
   }
 
-  const [verifyEmail] = useMutation<VerifyEmailMutation>(VerifyEmail);
+  const [verifyEmail] = useMutation<VerifyEmailMutation>(VERIFY_EMAIL_DOCUMENT);
 
   const intervalUpdateMessage = (error: string | null | undefined) => {
     let i = 5;
@@ -66,7 +66,7 @@ export default function ConfirmEmail() {
               id: `User:${loggedInUser.id}`,
               // 이하 cache로 보내서 업데이트 됐으면 하는 프래그먼트로. 무엇을 바꾸고 싶은지 선언
               fragment: gql`
-                fragment VerifiedUser on User {
+                fragment VerifiedField on User {
                   verified
                 }
               `,

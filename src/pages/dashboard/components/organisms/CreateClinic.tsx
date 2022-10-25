@@ -8,10 +8,10 @@ import { REG_EXP } from '../../../../constants/regex';
 import { selectedInfoVar, toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
 import {
-  CreateClinic as CreateClinicDocument,
-  FindMyClinics,
-  Me,
-} from '../../../../graphql/documentNode';
+  ME_DOCUMENT,
+  CREATE_CLINIC_DOCUMENT,
+  FIND_MY_CLINICS_DOCUMENT,
+} from '../../../../graphql';
 import type {
   CreateClinicInput,
   CreateClinicMutation,
@@ -28,7 +28,7 @@ export default function CreateClinic() {
   } = useForm<Pick<CreateClinicInput, 'name'>>({ mode: 'onChange' });
 
   const [createClinicMutation, { loading, data }] =
-    useMutation<CreateClinicMutation>(CreateClinicDocument);
+    useMutation<CreateClinicMutation>(CREATE_CLINIC_DOCUMENT);
 
   const onSubmitCreateClinic = () => {
     if (!loading) {
@@ -57,7 +57,7 @@ export default function CreateClinic() {
 
             client.cache.updateQuery(
               {
-                query: FindMyClinics,
+                query: FIND_MY_CLINICS_DOCUMENT,
                 variables: { input: { includeInactivate: true } },
               },
               (cacheData) => {
@@ -79,7 +79,7 @@ export default function CreateClinic() {
 
             client.cache.updateQuery(
               {
-                query: Me,
+                query: ME_DOCUMENT,
               },
               (cacheData) => {
                 return {

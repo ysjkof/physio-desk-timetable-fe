@@ -12,7 +12,10 @@ import Input from '../../../../components/molecules/Input';
 import Textarea from '../../../../components/molecules/Textarea';
 import Checkbox from '../../../../components/molecules/Checkbox';
 import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
-import { CreatePatient, EditPatient } from '../../../../graphql/documentNode';
+import {
+  CREATE_PATIENT_DOCUMENT,
+  EDIT_PATIENT_DOCUMENT,
+} from '../../../../graphql';
 import type {
   CreatePatientInput,
   CreatePatientMutation,
@@ -56,10 +59,10 @@ export default function CreatePatientForm({
   const [
     createPatientMutation,
     { loading, data: createaPatientMutationResult },
-  ] = useMutation<CreatePatientMutation>(CreatePatient);
+  ] = useMutation<CreatePatientMutation>(CREATE_PATIENT_DOCUMENT);
 
   const [editPatientMutation, { loading: editLoading }] =
-    useMutation<EditPatientMutation>(EditPatient);
+    useMutation<EditPatientMutation>(EDIT_PATIENT_DOCUMENT);
 
   const [birthday, setBirthday] = useState<Date | undefined>(undefined);
 

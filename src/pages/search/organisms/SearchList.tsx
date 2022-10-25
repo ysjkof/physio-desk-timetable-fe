@@ -2,7 +2,6 @@ import { useLazyQuery } from '@apollo/client';
 import { useState } from 'react';
 import Button from '../../../components/molecules/Button';
 import { RESERVATION_STATE_KOR } from '../../../constants/constants';
-import { GetReservationsByPatient } from '../../../graphql/documentNode';
 import {
   getTimeLength,
   getTimeString,
@@ -12,6 +11,7 @@ import ChevronDown from '../../../svgs/ChevronDown';
 import ChevronUp from '../../../svgs/ChevronUp';
 import { cls } from '../../../utils/utils';
 import ListCell from '../atoms/ListCell';
+import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from '../../../graphql';
 import {
   GetReservationsByPatientQuery,
   Patient,
@@ -49,7 +49,7 @@ export default function SearchList({
   };
 
   const [callQuery, { data }] = useLazyQuery<GetReservationsByPatientQuery>(
-    GetReservationsByPatient,
+    GET_RESERVATIONS_BY_PATIENT_DOCUMENT,
     {
       fetchPolicy: 'cache-and-network',
     }
