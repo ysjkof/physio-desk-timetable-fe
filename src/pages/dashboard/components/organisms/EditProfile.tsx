@@ -14,7 +14,7 @@ import EditEmail from './EditEmail';
 import type {
   EditProfileInput,
   EditProfileMutation,
-} from '../../../../models/generated.models';
+} from '../../../../types/generated.types';
 import { EDIT_PROFILE_DOCUMENT } from '../../../../graphql';
 
 export default function EditProfile() {

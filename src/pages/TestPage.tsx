@@ -1,4 +1,4 @@
-import type { PrescriptionWithSelect } from '../types/type';
+import type { PrescriptionWithSelect } from '../types/common.types';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { FormEvent, useState } from 'react';
 import { selectedInfoVar } from '../store';
@@ -20,7 +20,7 @@ import type {
   CreateReservationMutation,
   FindAllPatientsQuery,
   FindPrescriptionsQuery,
-} from '../models/generated.models';
+} from '../types/generated.types';
 
 export default function TestPage() {
   return (

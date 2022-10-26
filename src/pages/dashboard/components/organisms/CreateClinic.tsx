@@ -15,7 +15,7 @@ import {
 import type {
   CreateClinicInput,
   CreateClinicMutation,
-} from '../../../../models/generated.models';
+} from '../../../../types/generated.types';
 
 export default function CreateClinic() {
   const selectedInfo = useReactiveVar(selectedInfoVar);

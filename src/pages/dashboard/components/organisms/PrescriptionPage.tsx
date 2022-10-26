@@ -8,7 +8,7 @@ import CardContainer from '../../../../components/templates/CardContainer';
 import PrescriptionCard from '../molecules/PrescriptionCard';
 import MenuButton from '../../../../components/molecules/MenuButton';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
-import type { FindPrescriptionsQuery } from '../../../../models/generated.models';
+import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 
 export interface PrescriptionListProps {
   clinicId: number;

@@ -10,7 +10,7 @@ import {
 import type {
   EditPrescriptionMutation,
   FindPrescriptionsQuery,
-} from '../../../../models/generated.models';
+} from '../../../../types/generated.types';
 
 interface PrescriptionStateProps extends Pick<CardProps, 'clinicId'> {
   id: number;

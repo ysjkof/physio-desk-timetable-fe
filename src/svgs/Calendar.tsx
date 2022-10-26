@@ -1,4 +1,4 @@
-import { SVG } from '../types/type';
+import { SVG } from '../types/common.types';
 import { cls } from '../utils/utils';
 
 export default function Calendar({ ...args }: SVG) {

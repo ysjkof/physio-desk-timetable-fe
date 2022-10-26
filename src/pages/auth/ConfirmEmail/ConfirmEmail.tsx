@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { MUOOL } from '../../../constants/constants';
 import { loggedInUserVar } from '../../../store';
 import { VERIFY_EMAIL_DOCUMENT } from '../../../graphql';
-import type { VerifyEmailMutation } from '../../../models/generated.models';
+import type { VerifyEmailMutation } from '../../../types/generated.types';
 
 export default function ConfirmEmail() {
   const client = useApolloClient();

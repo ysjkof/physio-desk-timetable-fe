@@ -6,13 +6,13 @@ import {
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { cls } from '../../../../utils/utils';
-import { IListReservation } from '../../../../types/type';
+import { IListReservation } from '../../../../types/common.types';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { EDIT_RESERVATION_DOCUMENT } from '../../../../graphql';
 import {
   EditReservationMutation,
   ReservationState,
-} from '../../../../models/generated.models';
+} from '../../../../types/generated.types';
 
 interface EditReservationStateProps {
   reservation: IListReservation;

@@ -5,7 +5,7 @@ import {
   IMember,
   IMemberWithActivate,
   IUserWithEvent,
-} from '../types/type';
+} from '../types/common.types';
 import { compareDateMatch } from '../services/dateServices';
 
 export const spreadClinicMembers = (

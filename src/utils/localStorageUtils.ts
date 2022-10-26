@@ -7,7 +7,7 @@ import {
   RemovePublicLocalStorage,
   SetPrivateStorage,
   SetPublicStorage,
-} from '../types/localStorageType';
+} from '../types/localStorage.types';
 
 export const LOCAL_STORAGE_KEY = {
   token: 'muool-token',

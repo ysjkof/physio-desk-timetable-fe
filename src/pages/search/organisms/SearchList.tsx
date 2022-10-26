@@ -15,7 +15,7 @@ import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from '../../../graphql';
 import {
   GetReservationsByPatientQuery,
   Patient,
-} from '../../../models/generated.models';
+} from '../../../types/generated.types';
 
 type Reservations = NonNullable<
   GetReservationsByPatientQuery['getReservationsByPatient']['results']

@@ -16,7 +16,7 @@ import DocsEventBox from '../molecules/DocsEventBox';
 import Check from '../../../../svgs/Check';
 import H1 from '../atoms/H1';
 import H3 from '../atoms/H3';
-import { ReservationState } from '../../../../models/generated.models';
+import { ReservationState } from '../../../../types/generated.types';
 
 export default function LandingPage() {
   const isLoggedIn = isLoggedInVar();

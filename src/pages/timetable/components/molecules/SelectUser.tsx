@@ -1,5 +1,5 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
-import { IMemberWithActivate } from '../../../../types/type';
+import { IMemberWithActivate } from '../../../../types/common.types';
 
 interface EventBoxProps {
   members: IMemberWithActivate[];

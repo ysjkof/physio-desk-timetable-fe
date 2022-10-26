@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { getMonthStartEnd } from '../../../../services/dateServices';
 import combineUserStatistics from '../../statisticsServices';
-import { IUserStatistics, MemberState } from '../../../../types/type';
+import { IUserStatistics, MemberState } from '../../../../types/common.types';
 import useStore from '../../../../hooks/useStore';
 import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import Charts from '../molecules/Charts';
@@ -17,7 +17,7 @@ import Button from '../../../../components/molecules/Button';
 import Checkbox from '../../../../components/molecules/Checkbox';
 import MenuButton from '../../../../components/molecules/MenuButton';
 import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
-import type { GetStatisticsQuery } from '../../../../models/generated.models';
+import type { GetStatisticsQuery } from '../../../../types/generated.types';
 const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 export default function Statistics() {

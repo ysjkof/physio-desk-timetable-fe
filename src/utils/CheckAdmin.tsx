@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import NotFound from '../components/404';
 import { CHECK_ADMIN_DOCUMENT } from '../graphql';
-import type { CheckAdminQuery } from '../models/generated.models';
+import type { CheckAdminQuery } from '../types/generated.types';
 
 interface CheckAdminProps {
   children: React.ReactNode;

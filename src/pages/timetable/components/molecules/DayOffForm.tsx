@@ -1,7 +1,10 @@
 import { useReactiveVar } from '@apollo/client';
 import { selectedInfoVar } from '../../../../store';
 import { useForm } from 'react-hook-form';
-import { IListReservation, ReserveFormType } from '../../../../types/type';
+import {
+  IListReservation,
+  ReserveFormType,
+} from '../../../../types/common.types';
 import SelectUser from './SelectUser';
 import Button from '../../../../components/molecules/Button';
 import Input from '../../../../components/molecules/Input';

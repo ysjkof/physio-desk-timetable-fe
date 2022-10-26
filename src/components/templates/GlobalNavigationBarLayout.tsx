@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../router/routes';
-import { ChildrenProps } from '../../types/type';
+import { ChildrenProps } from '../../types/common.types';
 import { cls } from '../../utils/utils';
 import Logo from '../atoms/Logo';
 

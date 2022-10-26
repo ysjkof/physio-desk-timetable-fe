@@ -7,7 +7,7 @@ import { ROUTES } from '../../../../router/routes';
 import { createDate } from '../../../../services/dateServices';
 import { useMutation } from '@apollo/client';
 import { CREATE_DAY_OFF_DOCUMENT } from '../../../../graphql';
-import type { CreateDayOffMutation } from '../../../../models/generated.models';
+import type { CreateDayOffMutation } from '../../../../types/generated.types';
 
 interface UserNameTitleProps {
   isMe: boolean;

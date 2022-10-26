@@ -4,7 +4,7 @@ import {
   CANCEL_INVITATION_DOCUMENT,
   FIND_MY_CLINICS_DOCUMENT,
 } from '../../../graphql';
-import type { CancelInvitationMutation } from '../../../models/generated.models';
+import type { CancelInvitationMutation } from '../../../types/generated.types';
 
 export default function useCancelInvitation() {
   const [cancelInvitationMutation, { loading }] =

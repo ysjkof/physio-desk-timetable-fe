@@ -1,6 +1,6 @@
 import { compareDateMatch } from '../../../../services/dateServices';
 import DateTitle from '../molecules/DateTitle';
-import { DayWithUsers } from '../../../../types/type';
+import { DayWithUsers } from '../../../../types/common.types';
 import { useMe } from '../../../../hooks/useMe';
 import useStore from '../../../../hooks/useStore';
 import UserNameTitles from '../molecules/UserNameTitles';

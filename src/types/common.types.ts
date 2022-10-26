@@ -11,7 +11,7 @@ import {
   Patient,
   Prescription,
   User,
-} from '../models/generated.models';
+} from './generated.types';
 
 type ViewPeriodKey = keyof typeof VIEW_PERIOD;
 type ViewPeriod = typeof VIEW_PERIOD[ViewPeriodKey];

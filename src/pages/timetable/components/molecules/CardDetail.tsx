@@ -1,4 +1,4 @@
-import { ChildrenProps } from '../../../../types/type';
+import { ChildrenProps } from '../../../../types/common.types';
 
 interface TimeProps {
   totalTime: number;

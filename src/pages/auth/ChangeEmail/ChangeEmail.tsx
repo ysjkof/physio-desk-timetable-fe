@@ -8,7 +8,7 @@ import {
   USER_EMAIL_AND_VERIFY_FIELDS,
   VERIFY_CHANGE_EMAIL_DOCUMENT,
 } from '../../../graphql';
-import type { VerifyChangeEmailMutation } from '../../../models/generated.models';
+import type { VerifyChangeEmailMutation } from '../../../types/generated.types';
 
 export default function ChangeEmail() {
   const loggedInUser = useReactiveVar(loggedInUserVar);

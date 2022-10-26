@@ -9,7 +9,7 @@ import {
   getMinutesByUnit,
 } from '../../../services/dateServices';
 import Calendar from '../../../svgs/Calendar';
-import { ChildrenProps } from '../../../types/type';
+import { ChildrenProps } from '../../../types/common.types';
 import { cls, getPositionRef } from '../../../utils/utils';
 import ModalPortal from '../../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './Datepicker';

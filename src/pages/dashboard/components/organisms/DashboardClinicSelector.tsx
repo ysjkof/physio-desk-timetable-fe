@@ -3,7 +3,7 @@ import { renameUseSplit } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
 import localStorageUtils from '../../../../utils/localStorageUtils';
 import Selectbox from '../../../../components/molecules/Selectbox';
-import { ClinicType, MeQuery } from '../../../../models/generated.models';
+import { ClinicType, MeQuery } from '../../../../types/generated.types';
 
 interface DashboardSideNavProps {
   meData: MeQuery;

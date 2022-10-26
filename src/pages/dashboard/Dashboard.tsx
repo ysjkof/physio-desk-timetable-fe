@@ -10,7 +10,7 @@ import DashboardTemplate from './components/template/DashboardTemplate';
 import DashboardSidebar from './components/organisms/DashboardSidebar';
 import DashboardTitle from './components/molecules/DashboardTitle';
 import DashboardClinicSelector from './components/organisms/DashboardClinicSelector';
-import { MeQuery } from '../../models/generated.models';
+import { MeQuery } from '../../types/generated.types';
 
 const Loading = lazy(() => import('../../components/atoms/Loading'));
 

@@ -1,4 +1,4 @@
-import type { DayWithUsers } from '../../types/type';
+import type { DayWithUsers } from '../../types/common.types';
 import { lazy, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
@@ -36,7 +36,7 @@ import type {
   ListenDeleteReservationSubscription,
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
-} from '../../models/generated.models';
+} from '../../types/generated.types';
 const Loading = lazy(() => import('../../components/atoms/Loading'));
 
 export interface TimetableModalProps {

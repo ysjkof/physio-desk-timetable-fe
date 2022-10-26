@@ -9,7 +9,7 @@ import Worning from '../../../../components/atoms/Warning';
 import MenuButton from '../../../../components/molecules/MenuButton';
 import { cls, renameUseSplit } from '../../../../utils/utils';
 import { SEARCH_PATIENT_DOCUMENT } from '../../../../graphql';
-import type { SearchPatientQuery } from '../../../../models/generated.models';
+import type { SearchPatientQuery } from '../../../../types/generated.types';
 
 export default function SearchPatient() {
   const { selectedInfo, setSelectedInfo } = useStore();

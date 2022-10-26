@@ -15,7 +15,7 @@ import type {
   EditPrescriptionInput,
   EditPrescriptionMutation,
   FindPrescriptionsQuery,
-} from '../../../../models/generated.models';
+} from '../../../../types/generated.types';
 
 interface PrescriptionEditProps extends CardProps {}
 

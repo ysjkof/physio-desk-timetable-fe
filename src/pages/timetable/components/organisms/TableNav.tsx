@@ -12,7 +12,7 @@ import { NEXT, PREV, VIEW_PERIOD } from '../../../../constants/constants';
 import BtnArrow from '../../../../components/atoms/ButtonArrow';
 import TableOptionSelector from '../molecules/TableOptionSelector';
 import NavDatepicker from '../molecules/NavDatepicker';
-import { IViewOption } from '../../../../types/type';
+import { IViewOption } from '../../../../types/common.types';
 import useStore from '../../../../hooks/useStore';
 import { loggedInUserVar, selectedDateVar } from '../../../../store';
 import { useReactiveVar } from '@apollo/client';

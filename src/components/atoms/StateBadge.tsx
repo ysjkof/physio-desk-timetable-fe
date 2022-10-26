@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import { ChildrenProps } from '../../types/type';
+import { ChildrenProps } from '../../types/common.types';
 import { cls, StayingState } from '../../utils/utils';
 
 interface StateBadgeProps

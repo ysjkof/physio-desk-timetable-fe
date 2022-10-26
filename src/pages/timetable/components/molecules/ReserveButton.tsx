@@ -9,7 +9,7 @@ import {
   USER_COLORS,
 } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
-import { IListReservation } from '../../../../types/type';
+import { IListReservation } from '../../../../types/common.types';
 import { cls } from '../../../../utils/utils';
 
 interface ReserveBtnProps {

@@ -6,8 +6,8 @@ import {
 } from '../../../../services/dateServices';
 import EventBox from './EventBox';
 import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
-import type { IListReservation } from '../../../../types/type';
-import { ReservationState } from '../../../../models/generated.models';
+import type { IListReservation } from '../../../../types/common.types';
+import { ReservationState } from '../../../../types/generated.types';
 
 interface ScheduleInUserInDayProps {
   userIndex: number;

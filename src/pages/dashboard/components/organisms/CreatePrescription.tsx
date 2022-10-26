@@ -22,7 +22,7 @@ import type {
   CreatePrescriptionMutation,
   FindAtomPrescriptionsQuery,
   FindPrescriptionsQuery,
-} from '../../../../models/generated.models';
+} from '../../../../types/generated.types';
 
 export default function CreatePrescription() {
   const { selectedInfo } = useStore();

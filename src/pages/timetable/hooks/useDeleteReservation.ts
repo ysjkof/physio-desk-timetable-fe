@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { simpleCheckGQLError } from '../../../utils/utils';
 import { DELETE_RESERVATION_DOCUMENT } from '../../../graphql';
-import type { DeleteReservationMutation } from '../../../models/generated.models';
+import type { DeleteReservationMutation } from '../../../types/generated.types';
 
 interface DeleteReservation {
   reservationId: number;

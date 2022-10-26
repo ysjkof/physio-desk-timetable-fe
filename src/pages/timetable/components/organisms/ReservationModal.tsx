@@ -5,7 +5,7 @@ import ModalContentsLayout from '../../../../components/templates/ModalContentsL
 import ModalTemplate from '../../../../components/templates/ModalTemplate';
 import ReservationCard from '../molecules/ReservationCard';
 import DayOffCard from '../molecules/DayOffCard';
-import { ReservationState } from '../../../../models/generated.models';
+import { ReservationState } from '../../../../types/generated.types';
 
 export default function ReservationModal({ closeAction }: TimetableModalProps) {
   const navigate = useNavigate();

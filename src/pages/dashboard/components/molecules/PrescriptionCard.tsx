@@ -5,7 +5,7 @@ import PrescriptionEdit from './PrescriptionEdit';
 import PrescriptionState from './PrescriptionState';
 import Button from '../../../../components/molecules/Button';
 import Edit from '../../../../svgs/Edit';
-import type { FindPrescriptionsQuery } from '../../../../models/generated.models';
+import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 
 export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
   prescription: NonNullable<

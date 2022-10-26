@@ -15,7 +15,7 @@ import Worning from '../../components/atoms/Warning';
 import Checkbox from '../../components/molecules/Checkbox';
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
 import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
-import type { SearchPatientQuery } from '../../models/generated.models';
+import type { SearchPatientQuery } from '../../types/generated.types';
 
 export default function Search() {
   const location = useLocation();

@@ -1,5 +1,5 @@
 import useWindowSize from '../../../../hooks/useWindowSize';
-import { ChildrenProps } from '../../../../types/type';
+import { ChildrenProps } from '../../../../types/common.types';
 
 export default function HomeTemplate({ children }: ChildrenProps) {
   const { height } = useWindowSize(true);

@@ -2,7 +2,7 @@ import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
-} from '../../../../types/type';
+} from '../../../../types/common.types';
 import { makeArrFromLength } from '../../../../utils/utils';
 import DashboardLi from './DashboardLi';
 import TableChartCol from './TableChartCol';

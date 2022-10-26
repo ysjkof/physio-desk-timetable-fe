@@ -18,7 +18,7 @@ import {
   ClinicType,
   InviteUserMutation,
   SearchUsersInput,
-} from '../../../../models/generated.models';
+} from '../../../../types/generated.types';
 const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 export default function InviteClinic() {

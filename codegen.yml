@@ -1,6 +1,6 @@
 schema: 'http://localhost:3002/graphql'
 documents: ['src/graphql/**/*.gql.ts']
 generates:
-  src/models/generated.models.ts:
+  src/types/generated.types.ts:
     { plugins: ['typescript', 'typescript-operations'] }
 watch: true

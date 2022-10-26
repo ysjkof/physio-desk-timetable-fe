@@ -7,7 +7,7 @@ import { REG_EXP } from '../../../../constants/regex';
 import { SEND_CHANGE_EMAIL_DOCUMENT } from '../../../../graphql';
 import { useMe } from '../../../../hooks/useMe';
 import { toastVar } from '../../../../store';
-import type { SendChangeEmailMutation } from '../../../../models/generated.models';
+import type { SendChangeEmailMutation } from '../../../../types/generated.types';
 
 export default function EditEmail() {
   const { data: userData } = useMe();

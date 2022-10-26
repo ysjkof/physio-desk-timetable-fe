@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import useStore from '../../../hooks/useStore';
 import { getAfterDate, getSunday } from '../../../services/dateServices';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
-import type { ListReservationsQuery } from '../../../models/generated.models';
+import type { ListReservationsQuery } from '../../../types/generated.types';
 
 export const useListReservations = () => {
   const { selectedInfo, selectedDate, clinicLists } = useStore();

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { client } from '../../../../apollo';
 import { selectedInfoVar, toastVar } from '../../../../store';
-import { IdAndName } from '../../../../types/type';
+import { IdAndName } from '../../../../types/common.types';
 import Worning from '../../../../components/atoms/Warning';
 import Button from '../../../../components/molecules/Button';
 import MenuButton from '../../../../components/molecules/MenuButton';
@@ -12,7 +12,7 @@ import {
   FIND_MY_CLINICS_DOCUMENT,
   INACTIVATE_CLINIC_DOCUMENT,
 } from '../../../../graphql';
-import type { InactivateClinicMutation } from '../../../../models/generated.models';
+import type { InactivateClinicMutation } from '../../../../types/generated.types';
 
 interface DeactivateClinicProps extends IdAndName {
   closeAction: () => void;

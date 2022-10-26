@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { IListReservation } from '../../../../types/type';
+import { IListReservation } from '../../../../types/common.types';
 import { TimetableModalProps } from '../../Timetable';
 import ReserveForm from './ReserveForm';
 import CreatePatientForm from './CreatePatientForm';

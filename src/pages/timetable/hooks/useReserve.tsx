@@ -11,7 +11,7 @@ import type {
   CreateReservationMutation,
   EditReservationInput,
   EditReservationMutation,
-} from '../../../models/generated.models';
+} from '../../../types/generated.types';
 
 interface UseDayoffProps extends TimetableModalProps {
   isCreate: boolean;

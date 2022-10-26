@@ -12,8 +12,8 @@ import { FIND_MY_CLINICS_DOCUMENT } from '../../../../graphql';
 import {
   FindMyClinicsQuery,
   ClinicType,
-} from '../../../../models/generated.models';
-import type { IdAndName } from '../../../../types/type';
+} from '../../../../types/generated.types';
+import type { IdAndName } from '../../../../types/common.types';
 const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 interface CanClose {

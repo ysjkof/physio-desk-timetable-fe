@@ -11,7 +11,7 @@ import {
   SelectedClinic,
   SetSelectedInfoKey,
   SetSelectedInfoValue,
-} from '../types/type';
+} from '../types/common.types';
 
 export function makeSelectedClinic(
   clinic: IClinicList,

@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cls } from '../../../../utils/utils';
 import { USER_COLORS } from '../../../../constants/constants';
-import { ReservationState } from '../../../../models/generated.models';
+import { ReservationState } from '../../../../types/generated.types';
 
 interface EventBoxProps {
   height: number;

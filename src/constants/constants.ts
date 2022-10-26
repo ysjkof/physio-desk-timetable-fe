@@ -1,4 +1,4 @@
-import { ReservationState } from '../models/generated.models';
+import { ReservationState } from '../types/generated.types';
 
 // 한국 표준시(韓國標準時, KST, Korea Standard Time) = UTC+09:00
 export const UTC_OPTION_KST = { string: '+0900', hour: 9, minute: 0 };

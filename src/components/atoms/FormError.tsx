@@ -1,4 +1,4 @@
-import { ClassNameProps } from '../../types/type';
+import { ClassNameProps } from '../../types/common.types';
 import { cls } from '../../utils/utils';
 
 interface FormErrorProps extends ClassNameProps {

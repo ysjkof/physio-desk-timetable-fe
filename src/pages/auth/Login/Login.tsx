@@ -10,10 +10,7 @@ import Button from '../../../components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { MUOOL } from '../../../constants/constants';
 import { LOGIN_DOCUMENT } from '../../../graphql';
-import type {
-  LoginInput,
-  LoginMutation,
-} from '../../../models/generated.models';
+import type { LoginInput, LoginMutation } from '../../../types/generated.types';
 
 export default function Login() {
   const navigate = useNavigate();

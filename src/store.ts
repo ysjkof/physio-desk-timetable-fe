@@ -6,7 +6,7 @@ import {
   LoggedInUser,
   SelectedInfo,
   ToastState,
-} from './types/type';
+} from './types/common.types';
 
 const defaultViewOptions: IViewOption = {
   viewPeriod: VIEW_PERIOD.ONE_WEEK,

@@ -13,7 +13,7 @@ import {
   ClinicType,
   FindMyClinicsQuery,
   MeQuery,
-} from '../../../models/generated.models';
+} from '../../../types/generated.types';
 
 export default function useAcceptInvitation() {
   const [acceptInvitationMutation, { loading }] =

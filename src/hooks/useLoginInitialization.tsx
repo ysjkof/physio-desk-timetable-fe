@@ -8,14 +8,14 @@ import {
   ISelectedClinic,
   IViewOption,
   LoggedInUser,
-} from '../types/type';
+} from '../types/common.types';
 import localStorageUtils from '../utils/localStorageUtils';
 import useStore, { makeSelectedClinic } from './useStore';
 import {
   ClinicType,
   FindMyClinicsQuery,
   MeQuery,
-} from '../models/generated.models';
+} from '../types/generated.types';
 import { ME_DOCUMENT, FIND_MY_CLINICS_DOCUMENT } from '../graphql';
 
 function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {

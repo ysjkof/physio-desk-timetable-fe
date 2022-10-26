@@ -26,7 +26,7 @@ import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
-} from '../../../../types/type';
+} from '../../../../types/common.types';
 const Loading = lazy(() => import('../../../../components/atoms/Loading'));
 
 interface IChartsProps {

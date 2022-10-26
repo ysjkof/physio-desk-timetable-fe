@@ -1,4 +1,4 @@
-import type { IListReservation } from '../../../../types/type';
+import type { IListReservation } from '../../../../types/common.types';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
@@ -22,7 +22,7 @@ import {
 import EditReservationState from './EditReservationState';
 import { cls } from '../../../../utils/utils';
 import { ROUTES } from '../../../../router/routes';
-import { ReservationState } from '../../../../models/generated.models';
+import { ReservationState } from '../../../../types/generated.types';
 
 interface EventBoxProps {
   userIndex: number;

@@ -19,8 +19,8 @@ import {
 import type {
   CreatePatientInput,
   CreatePatientMutation,
-  EditPatientMutation,
-} from '../../../../models/generated.models';
+  EditPatientOutput,
+} from '../../../../types/generated.types';
 
 interface CreatePatientFormProps extends TimetableModalProps {
   patient?: {
@@ -62,7 +62,7 @@ export default function CreatePatientForm({
   ] = useMutation<CreatePatientMutation>(CREATE_PATIENT_DOCUMENT);
 
   const [editPatientMutation, { loading: editLoading }] =
-    useMutation<EditPatientMutation>(EDIT_PATIENT_DOCUMENT);
+    useMutation<EditPatientOutput>(EDIT_PATIENT_DOCUMENT);
 
   const [birthday, setBirthday] = useState<Date | undefined>(undefined);
 

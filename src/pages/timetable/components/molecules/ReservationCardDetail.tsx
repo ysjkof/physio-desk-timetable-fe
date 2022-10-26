@@ -1,6 +1,6 @@
 import { getTimeLength } from '../../../../services/dateServices';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
-import { IListReservation } from '../../../../types/type';
+import { IListReservation } from '../../../../types/common.types';
 import EditReservationState from './EditReservationState';
 import CardDetail from './CardDetail';
 

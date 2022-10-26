@@ -26,7 +26,7 @@ import { useState } from 'react';
 import localStorageUtils from '../../../../utils/localStorageUtils';
 import StateBadge from '../../../../components/atoms/StateBadge';
 import Sidebar from '../../../../components/molecules/Sidebar';
-import { IMemberWithActivate } from '../../../../types/type';
+import { IMemberWithActivate } from '../../../../types/common.types';
 import Check from '../../../../svgs/Check';
 
 interface TableDurationForm {

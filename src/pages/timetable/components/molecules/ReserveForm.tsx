@@ -14,13 +14,13 @@ import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
 import useStore from '../../../../hooks/useStore';
 import useReserve from '../../hooks/useReserve';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
-import type { FindPrescriptionsQuery } from '../../../../models/generated.models';
+import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 import type {
   IListReservation,
   ISelectedPrescription,
   PrescriptionWithSelect,
   ReserveFormType,
-} from '../../../../types/type';
+} from '../../../../types/common.types';
 
 interface IReservaFromProps extends TimetableModalProps {
   userId: number;

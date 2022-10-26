@@ -9,8 +9,8 @@ import { checkMatchMinute } from '../../../timetableServices';
 import { selectedInfoVar, toastVar } from '../../../../store';
 import ReserveButton from './ReserveButton';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
-import type { CreateReservationMutation } from '../../../../models/generated.models';
-import type { IListReservation } from '../../../../types/type';
+import type { CreateReservationMutation } from '../../../../types/generated.types';
+import type { IListReservation } from '../../../../types/common.types';
 
 interface ReservationButtonsProps {
   userIndex: number;

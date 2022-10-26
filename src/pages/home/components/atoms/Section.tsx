@@ -1,4 +1,4 @@
-import { ChildrenProps, ClassNameProps } from '../../../../types/type';
+import { ChildrenProps, ClassNameProps } from '../../../../types/common.types';
 import { cls } from '../../../../utils/utils';
 
 interface SectionProps extends ChildrenProps, ClassNameProps {

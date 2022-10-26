@@ -14,7 +14,7 @@ import { CREATE_ACCOUNT_DOCUMENT } from '../../../graphql';
 import type {
   CreateAccountInput,
   CreateAccountMutation,
-} from '../../../models/generated.models';
+} from '../../../types/generated.types';
 
 export default function SignUp() {
   const navigate = useNavigate();
