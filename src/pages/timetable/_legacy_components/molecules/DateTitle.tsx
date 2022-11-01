@@ -3,7 +3,7 @@ import { faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { compareDateMatch } from '../../../../services/dateServices';
 import { cls } from '../../../../utils/utils';
-import { SCROLL_ADRESS } from '../../../../constants/constants';
+import { SCROLL_ADDRESS } from '../../../../constants/constants';
 import BtnDatecheck from '../../../../_legacy_components/atoms/ButtonDatecheck';
 import useStore from '../../../../hooks/useStore';
 import { memo } from 'react';
@@ -25,10 +25,10 @@ function DateTitle({ date, isToday, userLength }: DateTitleProps) {
         'DateTitle user-cols-divide relative flex cursor-pointer items-center border-b bg-white py-1 hover:bg-gray-200',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
-      id={`${SCROLL_ADRESS + date}`}
+      id={`${SCROLL_ADDRESS + date}`}
       onClick={() => {
         // table-row의 요소를 불러와 스크롤 조절함
-        const el = document.getElementById(SCROLL_ADRESS + date);
+        const el = document.getElementById(SCROLL_ADDRESS + date);
         el?.scrollIntoView({
           block: 'center',
           inline: 'center',

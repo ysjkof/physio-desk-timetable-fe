@@ -18,7 +18,7 @@ export const TABLE_TIME_GAP = 10; // 분 단위, 나중에 전역변수로 조�
 
 export const NEXT = 'next';
 export const PREV = 'prev';
-export const SCROLL_ADRESS = 'scroll-adress-';
+export const SCROLL_ADDRESS = 'scroll-address-';
 
 // Reservation State 한글
 export const RESERVATION_STATE_KOR = {
