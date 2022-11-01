@@ -1,35 +1,37 @@
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useReactiveVar } from '@apollo/client';
+import { getMonth, getWeekOfMonth } from 'date-fns';
+import { AnimatePresence } from 'framer-motion';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { USER_COLORS, VIEW_PERIOD } from '../../../../constants/constants';
-import TableOptionSelector from '../molecules/TableOptionSelector';
-import { IViewOption } from '../../../../types/common.types';
 import useStore from '../../../../hooks/useStore';
 import {
   clinicListsVar,
   loggedInUserVar,
   selectedDateVar,
 } from '../../../../store';
-import { useReactiveVar } from '@apollo/client';
 import { ROUTES } from '../../../../router/routes';
 import localStorageUtils from '../../../../utils/localStorageUtils';
-import { useEffect, useRef } from 'react';
-import ModalPortal from '../../../../_legacy_components/templates/ModalPortal';
 import { getPositionRef } from '../../../../utils/utils';
-import { MenuButton } from '../../../../components/MenuButton';
-import Calendar from '../../../../svgs/Calendar';
-import { TwoLabelSwitch } from '../../../../components/TwoLabelSwitch';
-import ChevronLeft from '../../../../svgs/ChevronLeft';
-import ChevronRight from '../../../../svgs/ChevronRight';
-import { CheckableButton } from '../../../../components/CheckableButton';
-import EllipsisVertical from '../../../../svgs/EllipsisVertical';
-import UserPlus from '../../../../svgs/UserPlus';
-import { getMonth, getWeek, getWeekOfMonth } from 'date-fns';
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  EllipsisVertical,
+  UserPlus,
+} from '../../../../svgs';
+import TableOptionSelector from '../../_legacy_components/molecules/TableOptionSelector';
+import ModalPortal from '../../../../_legacy_components/templates/ModalPortal';
+import {
+  CheckableButton,
+  MenuButton,
+  TwoLabelSwitch,
+} from '../../../../components';
+import type { IViewOption } from '../../../../types/common.types';
 
-interface TableNavProps {}
-
-export default function TableNav({}: TableNavProps) {
+export default function TableController() {
   const navigate = useNavigate();
   const today = new Date();
   const {

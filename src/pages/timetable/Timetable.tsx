@@ -22,7 +22,7 @@ import useViewOptions from './hooks/useViewOption';
 import { useListReservations } from './hooks/useListReservations';
 import { MUOOL } from '../../constants/constants';
 import { Titles } from './components/Titles';
-import TableNav from './_legacy_components/organisms/TableNav';
+import TableController from './components/TableController/TableController';
 import Schedules from './_legacy_components/organisms/Schedules';
 import TimeLabels from './_legacy_components/organisms/TimeLabels';
 import TableModals from './_legacy_components/templates/TableModals';
@@ -182,7 +182,7 @@ export default function TimeTable() {
         <Loading />
       ) : (
         <TableTemplate
-          nav={<TableNav />}
+          nav={<TableController />}
           labels={<TimeLabels labels={labels} />}
           columns={
             <>
