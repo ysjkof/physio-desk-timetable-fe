@@ -1,9 +1,7 @@
 import { compareDateMatch } from '../../../../services/dateServices';
 import DateTitle from '../molecules/DateTitle';
 import { DayWithUsers } from '../../../../types/common.types';
-import { useMe } from '../../../../hooks/useMe';
 import useStore from '../../../../hooks/useStore';
-import UserNameTitles from '../molecules/UserNameTitles';
 import { VIEW_PERIOD } from '../../../../constants/constants';
 import {
   getGridTemplateColumns,
@@ -17,13 +15,7 @@ interface TitlesProps {
 
 export default function Titles({ userFrameForWeek, userLength }: TitlesProps) {
   const today = new Date();
-  const { selectedInfo, viewOptions, selectedDate } = useStore();
-  const { data: loginUser } = useMe();
-
-  const userFrame =
-    viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY
-      ? userFrameForWeek && [userFrameForWeek[selectedDate.getDay()]]
-      : userFrameForWeek;
+  const { viewOptions } = useStore();
 
   const weekGridCol = getGridTemplateColumns(7, getTableCellWidth(userLength));
   const viewPeriodStyle = {
@@ -55,30 +47,6 @@ export default function Titles({ userFrameForWeek, userLength }: TitlesProps) {
             userLength={userLength}
           />
         ))}
-      </div>
-      <div
-        className="USER_NAME_TITLE grid w-full"
-        style={viewPeriodStyle[viewOptions.get.viewPeriod].userNameTitle}
-      >
-        {userFrame.map((day, i) => {
-          const users = day.users.map((member) => {
-            return {
-              id: member.user.id,
-              name: member.user.name,
-              isActivate: !!member.isActivate,
-            };
-          });
-          return (
-            <UserNameTitles
-              key={i}
-              userLength={userLength}
-              users={users}
-              loginUser={loginUser!.me.id}
-              clinicId={selectedInfo.clinic!.id}
-              date={day.date}
-            />
-          );
-        })}
       </div>
     </div>
   );

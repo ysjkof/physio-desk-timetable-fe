@@ -1,12 +1,13 @@
 import { memo } from 'react';
 import { compareDateMatch } from '../../../../services/dateServices';
+import { IUserWithEvent } from '../../../../types/common.types';
 import { cls } from '../../../../utils/utils';
 import { getGridTemplateColumns } from '../../../timetableServices';
 import UserNameTitle from './UserNameTitle';
 
 interface UserNameTitlesProps {
   userLength: number;
-  users: { id: number; name: string; isActivate: boolean }[];
+  users: IUserWithEvent[];
   clinicId: number;
   loginUser: number;
   date: Date;
@@ -34,7 +35,7 @@ function UserNameTitles({
             <UserNameTitle
               key={userIndex}
               isMe={member.id === loginUser}
-              name={member.name}
+              name={member.user.name}
               userIndex={userIndex}
               clinicId={clinicId}
               userId={member.id}
