@@ -1,12 +1,12 @@
-import { compareDateMatch } from '../../../../services/dateServices';
-import DateTitle from '../molecules/DateTitle';
-import { DayWithUsers } from '../../../../types/common.types';
 import useStore from '../../../../hooks/useStore';
-import { VIEW_PERIOD } from '../../../../constants/constants';
+import { compareDateMatch } from '../../../../services/dateServices';
 import {
   getGridTemplateColumns,
   getTableCellWidth,
 } from '../../../timetableServices';
+import DateTitle from './DateTitle';
+import { VIEW_PERIOD } from '../../../../constants/constants';
+import type { DayWithUsers } from '../../../../types/common.types';
 
 interface TitlesProps {
   userFrameForWeek: DayWithUsers[];
@@ -15,7 +15,7 @@ interface TitlesProps {
 
 export default function Titles({ userFrameForWeek, userLength }: TitlesProps) {
   const today = new Date();
-  const { viewOptions } = useStore();
+  const { viewOptions, selectedDate } = useStore();
 
   const weekGridCol = getGridTemplateColumns(7, getTableCellWidth(userLength));
   const viewPeriodStyle = {
@@ -42,9 +42,10 @@ export default function Titles({ userFrameForWeek, userLength }: TitlesProps) {
         {userFrameForWeek?.map((day, i) => (
           <DateTitle
             key={i}
+            userLength={userLength}
             date={day.date}
             isToday={compareDateMatch(today, day.date, 'ymd')}
-            userLength={userLength}
+            isSelectedMonth={compareDateMatch(selectedDate, day.date, 'ym')}
           />
         ))}
       </div>

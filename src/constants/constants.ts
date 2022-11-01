@@ -86,3 +86,5 @@ export const GENDER_KOR = {
   male: '남성',
   female: '여성',
 } as const;
+
+export const LOCALE = 'ko-KR';

@@ -1,4 +1,3 @@
-import type { DayWithUsers } from '../../types/common.types';
 import { lazy, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
@@ -22,8 +21,8 @@ import useStore from '../../hooks/useStore';
 import useViewOptions from './hooks/useViewOption';
 import { useListReservations } from './hooks/useListReservations';
 import { MUOOL } from '../../constants/constants';
+import { Titles } from './components/Titles';
 import TableNav from './_legacy_components/organisms/TableNav';
-import Titles from './_legacy_components/organisms/Titles';
 import Schedules from './_legacy_components/organisms/Schedules';
 import TimeLabels from './_legacy_components/organisms/TimeLabels';
 import TableModals from './_legacy_components/templates/TableModals';
@@ -32,6 +31,7 @@ import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
 } from '../../graphql';
+import type { DayWithUsers } from '../../types/common.types';
 import type {
   ListenDeleteReservationSubscription,
   ListenUpdateReservationSubscription,
