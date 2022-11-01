@@ -1,8 +1,8 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonHTMLAttributes } from 'react';
-import StateBadge from '../../../../components/atoms/StateBadge';
-import CardContainer from '../../../../components/templates/CardContainer';
+import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
+import CardContainer from '../../../../_legacy_components/templates/CardContainer';
 import { ChildrenProps } from '../../../../types/common.types';
 import { cls, StayingState } from '../../../../utils/utils';
 

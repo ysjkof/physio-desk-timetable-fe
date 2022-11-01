@@ -6,12 +6,12 @@ import { toastVar } from '../../../../store';
 import { TimetableModalProps } from '../../Timetable';
 import { REG_EXP } from '../../../../constants/regex';
 import { GENDER_KOR } from '../../../../constants/constants';
-import FormError from '../../../../components/atoms/FormError';
-import Button from '../../../../components/molecules/Button';
-import Input from '../../../../components/molecules/Input';
-import Textarea from '../../../../components/molecules/Textarea';
-import Checkbox from '../../../../components/molecules/Checkbox';
-import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
+import FormError from '../../../../_legacy_components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Input from '../../../../_legacy_components/molecules/Input';
+import Textarea from '../../../../_legacy_components/molecules/Textarea';
+import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
+import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
 import {
   CREATE_PATIENT_DOCUMENT,
   EDIT_PATIENT_DOCUMENT,

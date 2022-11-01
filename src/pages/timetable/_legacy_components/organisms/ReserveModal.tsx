@@ -6,9 +6,9 @@ import {
 } from '../../../../services/dateServices';
 import { useReactiveVar } from '@apollo/client';
 import { selectedDateVar } from '../../../../store';
-import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
+import ModalContentsLayout from '../../../../_legacy_components/templates/ModalContentsLayout';
 import SearchPatient from '../molecules/SearchPatient';
-import ModalTemplate from '../../../../components/templates/ModalTemplate';
+import ModalTemplate from '../../../../_legacy_components/templates/ModalTemplate';
 import DayOffForm from '../molecules/DayOffForm';
 import ReserveForm from '../molecules/ReserveForm';
 

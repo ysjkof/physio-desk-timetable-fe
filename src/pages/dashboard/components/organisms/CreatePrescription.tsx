@@ -2,16 +2,16 @@ import { useMutation, useQuery } from '@apollo/client';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import Button from '../../../../components/molecules/Button';
-import Input from '../../../../components/molecules/Input';
-import FormError from '../../../../components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Input from '../../../../_legacy_components/molecules/Input';
+import FormError from '../../../../_legacy_components/atoms/FormError';
 import { REG_EXP } from '../../../../constants/regex';
 import useStore from '../../../../hooks/useStore';
-import Textarea from '../../../../components/molecules/Textarea';
-import Worning from '../../../../components/atoms/Warning';
+import Textarea from '../../../../_legacy_components/molecules/Textarea';
+import Worning from '../../../../_legacy_components/atoms/Warning';
 import { toastVar } from '../../../../store';
 import { client } from '../../../../apollo';
-import Checkbox from '../../../../components/molecules/Checkbox';
+import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 import {
   CREATE_PRESCRIPTION_DOCUMENT,
   FIND_ATOM_PRESCRIPTIONS_DOCUMENT,

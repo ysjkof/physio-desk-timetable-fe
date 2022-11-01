@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
 import useStore from '../../../../hooks/useStore';
 import { client } from '../../../../apollo';
-import Worning from '../../../../components/atoms/Warning';
-import Input from '../../../../components/molecules/Input';
+import Worning from '../../../../_legacy_components/atoms/Warning';
+import Input from '../../../../_legacy_components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
-import FormError from '../../../../components/atoms/FormError';
+import FormError from '../../../../_legacy_components/atoms/FormError';
 import FormSection from '../molecules/FormSection';
 import {
   FIND_MY_CLINICS_DOCUMENT,
@@ -19,7 +19,9 @@ import {
   InviteUserMutation,
   SearchUsersInput,
 } from '../../../../types/generated.types';
-const Loading = lazy(() => import('../../../../components/atoms/Loading'));
+const Loading = lazy(
+  () => import('../../../../_legacy_components/atoms/Loading')
+);
 
 export default function InviteClinic() {
   const { selectedInfo } = useStore();

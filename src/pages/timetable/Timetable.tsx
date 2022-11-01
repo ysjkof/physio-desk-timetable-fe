@@ -22,12 +22,12 @@ import useStore from '../../hooks/useStore';
 import useViewoptions from './hooks/useViewOption';
 import { useListReservations } from './hooks/useListReservations';
 import { MUOOL } from '../../constants/constants';
-import TableNav from './components/organisms/TableNav';
-import Titles from './components/organisms/Titles';
-import Schedules from './components/organisms/Schedules';
-import TimeLabels from './components/organisms/TimeLabels';
-import TableModals from './components/templates/TableModals';
-import TableTemplate from './components/templates/TableTemplate';
+import TableNav from './_legacy_components/organisms/TableNav';
+import Titles from './_legacy_components/organisms/Titles';
+import Schedules from './_legacy_components/organisms/Schedules';
+import TimeLabels from './_legacy_components/organisms/TimeLabels';
+import TableModals from './_legacy_components/templates/TableModals';
+import TableTemplate from './_legacy_components/templates/TableTemplate';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
@@ -37,7 +37,7 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
 } from '../../types/generated.types';
-const Loading = lazy(() => import('../../components/atoms/Loading'));
+const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export interface TimetableModalProps {
   closeAction: () => void;

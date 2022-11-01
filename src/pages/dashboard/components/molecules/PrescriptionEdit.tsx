@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
-import FormError from '../../../../components/atoms/FormError';
-import Button from '../../../../components/molecules/Button';
+import FormError from '../../../../_legacy_components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
 import { REG_EXP } from '../../../../constants/regex';
 import {
   EDIT_PRESCRIPTION_DOCUMENT,

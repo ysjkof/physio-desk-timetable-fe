@@ -6,10 +6,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import MenuButton from '../../../../components/molecules/MenuButton';
-import BtnMenuToggle from '../../../../components/molecules/MenuToggleButton';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
+import BtnMenuToggle from '../../../../_legacy_components/molecules/MenuToggleButton';
 import { NEXT, PREV, VIEW_PERIOD } from '../../../../constants/constants';
-import BtnArrow from '../../../../components/atoms/ButtonArrow';
+import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import TableOptionSelector from '../molecules/TableOptionSelector';
 import NavDatepicker from '../molecules/NavDatepicker';
 import { IViewOption } from '../../../../types/common.types';
@@ -20,7 +20,7 @@ import { ROUTES } from '../../../../router/routes';
 import localStorageUtils from '../../../../utils/localStorageUtils';
 import { useEffect, useRef } from 'react';
 import CogSixTooth from '../../../../svgs/CogSixTooth';
-import ModalPortal from '../../../../components/templates/ModalPortal';
+import ModalPortal from '../../../../_legacy_components/templates/ModalPortal';
 import { getPositionRef, renameUseSplit } from '../../../../utils/utils';
 
 interface TableNavProps {}

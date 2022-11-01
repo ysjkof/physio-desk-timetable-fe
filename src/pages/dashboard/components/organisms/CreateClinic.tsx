@@ -1,9 +1,9 @@
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
-import FormError from '../../../../components/atoms/FormError';
-import Button from '../../../../components/molecules/Button';
-import Input from '../../../../components/molecules/Input';
+import FormError from '../../../../_legacy_components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Input from '../../../../_legacy_components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
 import { selectedInfoVar, toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';

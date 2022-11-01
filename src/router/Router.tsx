@@ -9,7 +9,7 @@ const LandingPage = lazy(
   () => import('../pages/home/components/organisms/LandingPage')
 );
 const TestPage = lazy(() => import('../pages/TestPage'));
-const NotFound = lazy(() => import('../components/404'));
+const NotFound = lazy(() => import('../_legacy_components/404'));
 const CheckAdmin = lazy(() => import('../utils/CheckAdmin'));
 
 const Docs = lazy(() => import('../pages/docs/Docs'));
@@ -33,7 +33,7 @@ const ConfirmEmail = lazy(
   () => import('../pages/auth/ConfirmEmail/ConfirmEmail')
 );
 
-const Loading = lazy(() => import('../components/atoms/Loading'));
+const Loading = lazy(() => import('../_legacy_components/atoms/Loading'));
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);

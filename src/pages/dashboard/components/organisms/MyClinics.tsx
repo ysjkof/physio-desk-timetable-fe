@@ -6,15 +6,17 @@ import useAcceptInvitation from '../../hooks/useAcceptInvitation';
 import useCancelInvitation from '../../hooks/useCancelInvitation';
 import DeactivateClinic from './DeactivateClinic';
 import ClinicCard from '../molecules/ClinicCard';
-import ModalTemplate from '../../../../components/templates/ModalTemplate';
-import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
+import ModalTemplate from '../../../../_legacy_components/templates/ModalTemplate';
+import ModalContentsLayout from '../../../../_legacy_components/templates/ModalContentsLayout';
 import { FIND_MY_CLINICS_DOCUMENT } from '../../../../graphql';
 import {
   FindMyClinicsQuery,
   ClinicType,
 } from '../../../../types/generated.types';
 import type { IdAndName } from '../../../../types/common.types';
-const Loading = lazy(() => import('../../../../components/atoms/Loading'));
+const Loading = lazy(
+  () => import('../../../../_legacy_components/atoms/Loading')
+);
 
 interface CanClose {
   isActivated: boolean;

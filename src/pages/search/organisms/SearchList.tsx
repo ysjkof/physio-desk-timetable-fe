@@ -1,6 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 import { useState } from 'react';
-import Button from '../../../components/molecules/Button';
+import Button from '../../../_legacy_components/molecules/Button';
 import { RESERVATION_STATE_KOR } from '../../../constants/constants';
 import {
   getTimeLength,

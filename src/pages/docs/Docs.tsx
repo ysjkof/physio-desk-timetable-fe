@@ -10,7 +10,7 @@ import { cls } from '../../utils/utils';
 const DocsSidebarModal = lazy(
   () => import('./components/molecules/DocsSidebarModal')
 );
-const Loading = lazy(() => import('../../components/atoms/Loading'));
+const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);

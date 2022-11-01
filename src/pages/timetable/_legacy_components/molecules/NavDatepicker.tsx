@@ -8,7 +8,7 @@ import useStore from '../../../../hooks/useStore';
 import { cls } from '../../../../utils/utils';
 import { selectedDateVar } from '../../../../store';
 import { NEXT, PREV } from '../../../../constants/constants';
-import BtnArrow from '../../../../components/atoms/ButtonArrow';
+import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 
 interface Calendar {
   selectedMonth: { date: Date }[];

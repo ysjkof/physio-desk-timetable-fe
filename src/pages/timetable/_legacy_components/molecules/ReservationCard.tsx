@@ -7,11 +7,11 @@ import ReserveForm from './ReserveForm';
 import CreatePatientForm from './CreatePatientForm';
 import ReservationNameCard from './ReservationNameCard';
 import ReservationCardDetail from './ReservationCardDetail';
-import BtnMenuToggle from '../../../../components/molecules/MenuToggleButton';
-import MenuButton from '../../../../components/molecules/MenuButton';
+import BtnMenuToggle from '../../../../_legacy_components/molecules/MenuToggleButton';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { GENDER_KOR } from '../../../../constants/constants';
 import useDeleteReservation from '../../hooks/useDeleteReservation';
-import Loading from '../../../../components/atoms/Loading';
+import Loading from '../../../../_legacy_components/atoms/Loading';
 
 interface ReservationCardProps extends TimetableModalProps {
   reservation: IListReservation;

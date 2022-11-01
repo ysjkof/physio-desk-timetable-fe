@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { client } from '../../../../apollo';
 import { selectedInfoVar, toastVar } from '../../../../store';
 import { IdAndName } from '../../../../types/common.types';
-import Worning from '../../../../components/atoms/Warning';
-import Button from '../../../../components/molecules/Button';
-import MenuButton from '../../../../components/molecules/MenuButton';
+import Worning from '../../../../_legacy_components/atoms/Warning';
+import Button from '../../../../_legacy_components/molecules/Button';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import {
   FIND_MY_CLINICS_DOCUMENT,
   INACTIVATE_CLINIC_DOCUMENT,

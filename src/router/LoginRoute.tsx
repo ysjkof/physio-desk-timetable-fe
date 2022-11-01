@@ -3,8 +3,8 @@ import { useMe } from '../hooks/useMe';
 import { ENDPOINT, ROUTES } from './routes';
 import { lazy } from 'react';
 import ProtectRoute from './ProtectRoute';
-import Worning from '../components/atoms/Warning';
-import GlobalLayout from '../components/templates/GlobalLayout';
+import Worning from '../_legacy_components/atoms/Warning';
+import GlobalLayout from '../_legacy_components/templates/GlobalLayout';
 import CreatePrescription from '../pages/dashboard/components/organisms/CreatePrescription';
 
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));

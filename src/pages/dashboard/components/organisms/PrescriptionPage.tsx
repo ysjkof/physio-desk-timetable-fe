@@ -2,11 +2,11 @@ import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import useStore from '../../../../hooks/useStore';
-import Worning from '../../../../components/atoms/Warning';
-import Button from '../../../../components/molecules/Button';
-import CardContainer from '../../../../components/templates/CardContainer';
+import Worning from '../../../../_legacy_components/atoms/Warning';
+import Button from '../../../../_legacy_components/molecules/Button';
+import CardContainer from '../../../../_legacy_components/templates/CardContainer';
 import PrescriptionCard from '../molecules/PrescriptionCard';
-import MenuButton from '../../../../components/molecules/MenuButton';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
 import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 

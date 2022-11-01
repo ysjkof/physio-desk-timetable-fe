@@ -5,7 +5,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
-import MenuButton from '../../../../components/molecules/MenuButton';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import {
   cls,
   getMemberState,
@@ -14,18 +14,18 @@ import {
 } from '../../../../utils/utils';
 import { loggedInUserVar, toastVar } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
-import BtnArrow from '../../../../components/atoms/ButtonArrow';
+import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import useStore from '../../../../hooks/useStore';
 import { useReactiveVar } from '@apollo/client';
-import Selectbox from '../../../../components/molecules/Selectbox';
+import Selectbox from '../../../../_legacy_components/molecules/Selectbox';
 import {
   getHoursByUnit,
   getMinutesByUnit,
 } from '../../../../services/dateServices';
 import { useState } from 'react';
 import localStorageUtils from '../../../../utils/localStorageUtils';
-import StateBadge from '../../../../components/atoms/StateBadge';
-import Sidebar from '../../../../components/molecules/Sidebar';
+import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
+import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import { IMemberWithActivate } from '../../../../types/common.types';
 import Check from '../../../../svgs/Check';
 

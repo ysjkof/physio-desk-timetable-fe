@@ -1,6 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { IsLoggedIn } from '../components/templates/GlobalLayout';
+import { IsLoggedIn } from '../_legacy_components/templates/GlobalLayout';
 import { loggedInUserVar, viewOptionsVar } from '../store';
 import {
   IClinic,

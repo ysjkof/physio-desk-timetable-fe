@@ -12,13 +12,15 @@ import { IUserStatistics, MemberState } from '../../../../types/common.types';
 import useStore from '../../../../hooks/useStore';
 import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import Charts from '../molecules/Charts';
-import Worning from '../../../../components/atoms/Warning';
-import Button from '../../../../components/molecules/Button';
-import Checkbox from '../../../../components/molecules/Checkbox';
-import MenuButton from '../../../../components/molecules/MenuButton';
+import Worning from '../../../../_legacy_components/atoms/Warning';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
 import type { GetStatisticsQuery } from '../../../../types/generated.types';
-const Loading = lazy(() => import('../../../../components/atoms/Loading'));
+const Loading = lazy(
+  () => import('../../../../_legacy_components/atoms/Loading')
+);
 
 export default function Statistics() {
   const { selectedInfo, selectedDate } = useStore();

@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import Sidebar from '../../../../components/molecules/Sidebar';
+import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import { ENDPOINT, ROUTES } from '../../../../router/routes';
 
 export default function DocsSidebar() {

@@ -6,9 +6,9 @@ import {
   ReserveFormType,
 } from '../../../../types/common.types';
 import SelectUser from './SelectUser';
-import Button from '../../../../components/molecules/Button';
-import Input from '../../../../components/molecules/Input';
-import Datepicker from '../../../../components/molecules/Datepicker/Datepicker';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Input from '../../../../_legacy_components/molecules/Input';
+import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
 import { useEffect, useState } from 'react';
 import { TimetableModalProps } from '../../Timetable';
 import useDayoff from '../../hooks/useDayoff';

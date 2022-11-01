@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
-import FormError from '../../../../components/atoms/FormError';
-import Button from '../../../../components/molecules/Button';
-import Input from '../../../../components/molecules/Input';
+import FormError from '../../../../_legacy_components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Input from '../../../../_legacy_components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
 import { SEND_CHANGE_EMAIL_DOCUMENT } from '../../../../graphql';
 import { useMe } from '../../../../hooks/useMe';

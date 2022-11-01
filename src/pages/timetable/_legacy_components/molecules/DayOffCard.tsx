@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { TimetableModalProps } from '../../Timetable';
 import { IListReservation } from '../../../../types/common.types';
-import MenuButton from '../../../../components/molecules/MenuButton';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import useDeleteReservation from '../../hooks/useDeleteReservation';
 import DayOffForm from './DayOffForm';
 import CardDetail from './CardDetail';

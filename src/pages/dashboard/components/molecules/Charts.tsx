@@ -27,7 +27,9 @@ import {
   IDailyReport,
   IUserStatistics,
 } from '../../../../types/common.types';
-const Loading = lazy(() => import('../../../../components/atoms/Loading'));
+const Loading = lazy(
+  () => import('../../../../_legacy_components/atoms/Loading')
+);
 
 interface IChartsProps {
   userStatistics: IUserStatistics[];

@@ -12,7 +12,7 @@ import DashboardTitle from './components/molecules/DashboardTitle';
 import DashboardClinicSelector from './components/organisms/DashboardClinicSelector';
 import { MeQuery } from '../../types/generated.types';
 
-const Loading = lazy(() => import('../../components/atoms/Loading'));
+const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export function checkStay(clinicId: number, meData: MeQuery) {
   return Boolean(

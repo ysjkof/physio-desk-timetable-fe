@@ -3,7 +3,7 @@ import {
   DashboardEndpoint,
   personalMenu,
 } from '../../../../router/routes';
-import Sidebar from '../../../../components/molecules/Sidebar';
+import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 
 interface DashboardSidebarProps {
   endpoint: DashboardEndpoint;

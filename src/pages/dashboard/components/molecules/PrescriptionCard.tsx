@@ -3,7 +3,7 @@ import { cls } from '../../../../utils/utils';
 import { PrescriptionListProps } from '../organisms/PrescriptionPage';
 import PrescriptionEdit from './PrescriptionEdit';
 import PrescriptionState from './PrescriptionState';
-import Button from '../../../../components/molecules/Button';
+import Button from '../../../../_legacy_components/molecules/Button';
 import Edit from '../../../../svgs/Edit';
 import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 
