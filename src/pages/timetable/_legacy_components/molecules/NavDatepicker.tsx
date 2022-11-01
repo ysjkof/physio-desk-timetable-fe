@@ -16,10 +16,10 @@ interface Calendar {
 }
 
 interface NavDatepickerProps {
-  varients: any;
+  variants: any;
 }
 
-export default function NavDatepicker({ varients }: NavDatepickerProps) {
+export default function NavDatepicker({ variants }: NavDatepickerProps) {
   const { selectedDate } = useStore();
   const [calendar, setCalendar] = useState<Calendar>({
     selectedMonth: getWeeksOfMonth(selectedDate),
@@ -51,7 +51,7 @@ export default function NavDatepicker({ varients }: NavDatepickerProps) {
     <motion.div
       className="TABLE_NAV relative flex bg-white px-2 pt-6"
       custom={true}
-      variants={varients}
+      variants={variants}
       initial="ini"
       animate="start"
     >

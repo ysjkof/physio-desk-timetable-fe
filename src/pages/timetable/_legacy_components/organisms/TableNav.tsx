@@ -25,7 +25,7 @@ import { getPositionRef, renameUseSplit } from '../../../../utils/utils';
 
 interface TableNavProps {}
 
-const tableNavVarients = {
+const tableNavVariants = {
   ini: (isUp: boolean) => ({ y: isUp ? -40 : 30 }),
   start: { y: 0, transition: { type: 'tween', duration: 0.3 } },
 };
@@ -192,7 +192,7 @@ export default function TableNav({}: TableNavProps) {
       </div>
       <AnimatePresence>
         {viewOptions.get.navigationExpand ? (
-          <NavDatepicker varients={tableNavVarients} />
+          <NavDatepicker variants={tableNavVariants} />
         ) : (
           <>
             <div className="absolute top-[25px] left-0 flex h-[29px] w-[38px] items-center bg-white">
