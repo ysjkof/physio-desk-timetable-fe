@@ -165,7 +165,9 @@ export interface ChildrenProps {
   children?: React.ReactNode;
 }
 
-export interface SVG extends SVGProps<SVGSVGElement> {}
+export interface SVG extends SVGProps<SVGSVGElement> {
+  iconSize?: 'LG' | 'MD' | 'SM';
+}
 
 export interface ClassNameProps {
   className?: string;
