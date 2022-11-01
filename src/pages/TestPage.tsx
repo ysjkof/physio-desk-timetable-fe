@@ -159,11 +159,11 @@ function CreateReservation() {
         const patientRandom = Math.floor(
           Math.random() * (patients?.length! ?? 0)
         );
-        const memberRandon = Math.floor(
+        const memberRandom = Math.floor(
           Math.random() * (clinic?.members.length ?? 0)
         );
         const patientId = patients[patientRandom].id;
-        const userId = clinic?.members[memberRandon].user.id!;
+        const userId = clinic?.members[memberRandom].user.id!;
 
         createReservationMutation({
           variables: {

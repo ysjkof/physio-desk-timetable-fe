@@ -19,7 +19,7 @@ import {
 } from '../timetableServices';
 import { useMe } from '../../hooks/useMe';
 import useStore from '../../hooks/useStore';
-import useViewoptions from './hooks/useViewOption';
+import useViewOptions from './hooks/useViewOption';
 import { useListReservations } from './hooks/useListReservations';
 import { MUOOL } from '../../constants/constants';
 import TableNav from './_legacy_components/organisms/TableNav';
@@ -44,7 +44,7 @@ export interface TimetableModalProps {
 }
 
 export default function TimeTable() {
-  const { labels } = useViewoptions();
+  const { labels } = useViewOptions();
   const { data: loginUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
   const { selectedInfo, viewOptions, clinicLists, selectedDate } = useStore();

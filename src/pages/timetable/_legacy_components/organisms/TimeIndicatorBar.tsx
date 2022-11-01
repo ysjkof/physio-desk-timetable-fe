@@ -4,7 +4,7 @@ import {
   TABLE_TIME_GAP,
 } from '../../../../constants/constants';
 import { getTimeString } from '../../../../services/dateServices';
-import useViewoptions from '../../hooks/useViewOption';
+import useViewOptions from '../../hooks/useViewOption';
 
 interface ITimeIndicatorBarProps {
   isActive: boolean;
@@ -13,7 +13,7 @@ interface ITimeIndicatorBarProps {
 export default function TimeIndicatorBar({ isActive }: ITimeIndicatorBarProps) {
   const {
     indicatorTimes: { firstTime, lastTime },
-  } = useViewoptions();
+  } = useViewOptions();
 
   const [time, setTime] = useState(getTimeString(new Date()));
   const [top, setTop] = useState<number>();

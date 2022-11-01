@@ -9,7 +9,7 @@ import {
 } from '../../../services/dateServices';
 import { viewOptionsVar } from '../../../store';
 
-export default function useViewoptions() {
+export default function useViewOptions() {
   const viewOptions = useReactiveVar(viewOptionsVar);
 
   const [firstTime, setFirstTime] = useState(
@@ -56,12 +56,12 @@ export default function useViewoptions() {
       hour: viewOptions.tableDuration.endHour,
       minute: viewOptions.tableDuration.endMinute,
     });
-    const isMatchLastime = compareDateMatch(lastTime, newLastTime, 'hm');
+    const isMatchLastTime = compareDateMatch(lastTime, newLastTime, 'hm');
 
     if (!isMatchFirstTime) {
       setFirstTime(newFirstTime);
     }
-    if (!isMatchLastime) {
+    if (!isMatchLastTime) {
       setLastTime(newLastTime);
     }
   }, [viewOptions]);
