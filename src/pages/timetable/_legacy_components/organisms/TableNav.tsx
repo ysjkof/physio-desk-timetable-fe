@@ -1,40 +1,44 @@
-import {
-  faCalendarAlt,
-  faPlusSquare,
-  faRectangleXmark,
-} from '@fortawesome/free-regular-svg-icons';
+import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
-import BtnMenuToggle from '../../../../_legacy_components/molecules/MenuToggleButton';
-import { NEXT, PREV, VIEW_PERIOD } from '../../../../constants/constants';
-import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
+import { USER_COLORS, VIEW_PERIOD } from '../../../../constants/constants';
 import TableOptionSelector from '../molecules/TableOptionSelector';
-import NavDatepicker from '../molecules/NavDatepicker';
 import { IViewOption } from '../../../../types/common.types';
 import useStore from '../../../../hooks/useStore';
-import { loggedInUserVar, selectedDateVar } from '../../../../store';
+import {
+  clinicListsVar,
+  loggedInUserVar,
+  selectedDateVar,
+} from '../../../../store';
 import { useReactiveVar } from '@apollo/client';
 import { ROUTES } from '../../../../router/routes';
 import localStorageUtils from '../../../../utils/localStorageUtils';
 import { useEffect, useRef } from 'react';
-import CogSixTooth from '../../../../svgs/CogSixTooth';
 import ModalPortal from '../../../../_legacy_components/templates/ModalPortal';
-import { getPositionRef, renameUseSplit } from '../../../../utils/utils';
+import { getPositionRef } from '../../../../utils/utils';
+import { MenuButton } from '../../../../components/MenuButton';
+import Calendar from '../../../../svgs/Calendar';
+import { TwoLabelSwitch } from '../../../../components/TwoLabelSwitch';
+import ChevronLeft from '../../../../svgs/ChevronLeft';
+import ChevronRight from '../../../../svgs/ChevronRight';
+import { CheckableButton } from '../../../../components/CheckableButton';
+import EllipsisVertical from '../../../../svgs/EllipsisVertical';
+import UserPlus from '../../../../svgs/UserPlus';
+import { getMonth, getWeek, getWeekOfMonth } from 'date-fns';
 
 interface TableNavProps {}
-
-const tableNavVariants = {
-  ini: (isUp: boolean) => ({ y: isUp ? -40 : 30 }),
-  start: { y: 0, transition: { type: 'tween', duration: 0.3 } },
-};
 
 export default function TableNav({}: TableNavProps) {
   const navigate = useNavigate();
   const today = new Date();
-  const { setSelectedInfo, selectedInfo, selectedDate, viewOptions } =
-    useStore();
+  const {
+    setSelectedInfo,
+    selectedInfo,
+    selectedDate,
+    viewOptions,
+    clinicLists,
+  } = useStore();
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
   const handleDateNavMovePrev = () => {
@@ -72,21 +76,116 @@ export default function TableNav({}: TableNavProps) {
 
   const settingRef = useRef<HTMLButtonElement>(null);
   const { top } = getPositionRef(settingRef);
+  const toggleViewPeriod = () => {
+    const newViewOptions: IViewOption = {
+      ...viewOptions.get,
+      viewPeriod:
+        viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY
+          ? VIEW_PERIOD.ONE_WEEK
+          : VIEW_PERIOD.ONE_DAY,
+    };
+    viewOptions.set(newViewOptions);
+    invokeSaveViewOptions(newViewOptions);
+  };
+
+  const toggleCalender = () => {
+    const newViewOptions: IViewOption = {
+      ...viewOptions.get,
+      navigationExpand: !viewOptions.get.navigationExpand,
+    };
+    viewOptions.set(newViewOptions);
+    invokeSaveViewOptions(newViewOptions);
+  };
+
+  const toggleViewOptions = () => {
+    const newViewOptions = {
+      ...viewOptions.get,
+      seeActiveOption: !viewOptions.get.seeActiveOption,
+    };
+    viewOptions.set(newViewOptions);
+    // seeActiveOption은 로컬스토리지에 저장할 필요 없다
+  };
+
+  const clinic = clinicLists.find(({ id }) => id === selectedInfo.clinic?.id);
+
+  const toggleUsers = (clinicId: number, memberId: number) => {
+    if (!loggedInUser) throw new Error('❌ loginUser가 false입니다');
+    const clinicIdx = clinicLists.findIndex(
+      (prevClinic) => prevClinic.id === clinicId
+    );
+    if (clinicIdx === -1) throw new Error('❌ group index가 -1입니다');
+    const memberIdx = clinicLists[clinicIdx].members.findIndex(
+      (prevMember) => prevMember.id === memberId
+    );
+    if (memberIdx === -1) throw new Error('❌ member index가 -1입니다');
+
+    const activateLength = clinicLists[clinicIdx].members.filter(
+      (member) => member.isActivate
+    ).length;
+    let isActivate = clinicLists[clinicIdx].members[memberIdx].isActivate;
+
+    if (isActivate && activateLength === 1) {
+      return;
+    }
+    clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
+    localStorageUtils.set({
+      key: 'clinicLists',
+      userId: loggedInUser.id,
+      userName: loggedInUser.name,
+      value: [...clinicLists],
+    });
+    clinicListsVar([...clinicLists]);
+  };
+  const weekNumber = getWeekOfMonth(selectedDate);
+  const month = (getMonth(selectedDate) + 1 + '').padStart(2, '0');
 
   return (
     <>
+      <div className="flex w-full items-center justify-between border-b py-1">
+        <div className="flex items-center gap-4">
+          <ChevronLeft
+            className="rounded-sm border stroke-2"
+            iconSize="LG"
+            onClick={handleDateNavMovePrev}
+          />
+          <button
+            className="w-32 whitespace-nowrap text-3xl font-medium hover:font-bold"
+            onClick={() => selectedDateVar(today)}
+          >
+            {`${month}월 ${weekNumber}주차`}
+          </button>
+          <ChevronRight
+            className="rounded-sm border stroke-2"
+            iconSize="LG"
+            onClick={handleDateNavMoveNext}
+          />
+        </div>
+        <div className="flex gap-2">
+          <TwoLabelSwitch
+            labels={['하루', '주단위']}
+            onClick={toggleViewPeriod}
+            isActivated={viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_WEEK}
+          />
+          <MenuButton
+            onClick={toggleCalender}
+            label="달력보기"
+            icon={<Calendar />}
+            isActivated={viewOptions.get.navigationExpand}
+          />
+        </div>
+      </div>
       <div className="flex w-full items-center justify-between py-1">
-        <button
-          className="min-w-[120px] font-medium hover:font-bold"
-          onClick={() => selectedDateVar(today)}
-        >
-          {today.toLocaleString('ko-KR', {
-            year: '2-digit',
-            month: 'short',
-            day: 'numeric',
-            weekday: 'short',
-          })}
-        </button>
+        <div className="flex gap-2">
+          {clinic?.members.map((member, i) => (
+            <CheckableButton
+              color={'black'}
+              backgroundColor={USER_COLORS[i].deep}
+              isActivated={member.isActivate}
+              label={member.user.name}
+              onClick={() => toggleUsers(clinic.id, member.id)}
+            />
+          ))}
+        </div>
         {selectedInfo.reservation && (
           <div className="flex w-full items-center justify-center">
             <span className="mr-4 flex">
@@ -106,69 +205,23 @@ export default function TableNav({}: TableNavProps) {
           </div>
         )}
         <div className="flex w-full items-center justify-end gap-x-2">
-          <MenuButton enabled onClick={() => navigate(ROUTES.create_patient)}>
-            <FontAwesomeIcon icon={faPlusSquare} fontSize={14} className="" />
-            환자등록
-          </MenuButton>
-          <BtnMenuToggle
-            onClick={() => {
-              const newViewOptions: IViewOption = {
-                ...viewOptions.get,
-                viewPeriod:
-                  viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY
-                    ? VIEW_PERIOD.ONE_WEEK
-                    : VIEW_PERIOD.ONE_DAY,
-              };
-              viewOptions.set(newViewOptions);
-              invokeSaveViewOptions(newViewOptions);
-            }}
-            firstEnabled={viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_WEEK}
-            secondEnabled={viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY}
-            label={['1주일', '하루']}
-          />
-          {/* ---------------------- 구분선 ---------------------- */}
           <MenuButton
-            enabled={viewOptions.get.navigationExpand}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions.get,
-                navigationExpand: !viewOptions.get.navigationExpand,
-              };
-              viewOptions.set(newViewOptions);
-              invokeSaveViewOptions(newViewOptions);
-            }}
-          >
-            <FontAwesomeIcon icon={faCalendarAlt} fontSize={14} />
-            달력
-          </MenuButton>
-          {/* <MenuButton
-            icon={<FontAwesomeIcon icon={faList} fontSize={14} />}
-            enabled={viewOptions.get.seeList}
-            label={'목록'}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions.get,
-                seeList: !viewOptions.get.seeList,
-              };
-              viewOptions.set(newViewOptions);
-              invokeSaveViewOptions(newViewOptions);
-            }}
-          /> */}
-          <MenuButton
-            enabled={viewOptions.get.seeActiveOption}
-            onClick={() => {
-              const newViewOptions = {
-                ...viewOptions.get,
-                seeActiveOption: !viewOptions.get.seeActiveOption,
-              };
-              viewOptions.set(newViewOptions);
-              // seeActiveOption은 로컬스토리지에 저장할 필요 없다
-            }}
+            label="환자 등록하기"
+            icon={<UserPlus />}
+            backgroundColor="#6BA6FF"
+            color="white"
+            onClick={() => navigate(ROUTES.create_patient)}
             ref={settingRef}
-          >
-            <CogSixTooth />
-            {renameUseSplit(selectedInfo.clinic?.name || '')}
-          </MenuButton>
+          />
+          <MenuButton
+            label="설정"
+            icon={<EllipsisVertical />}
+            backgroundColor="#6889BB"
+            color="white"
+            onClick={toggleViewOptions}
+            ref={settingRef}
+          />
+
           <AnimatePresence>
             {viewOptions.get.seeActiveOption && (
               <ModalPortal
@@ -190,24 +243,6 @@ export default function TableNav({}: TableNavProps) {
           </AnimatePresence>
         </div>
       </div>
-      <AnimatePresence>
-        {viewOptions.get.navigationExpand ? (
-          <NavDatepicker variants={tableNavVariants} />
-        ) : (
-          <>
-            <div className="absolute top-[25px] left-0 flex h-[29px] w-[38px] items-center bg-white">
-              <BtnArrow direction={PREV} onClick={handleDateNavMovePrev} />
-            </div>
-            <BtnArrow
-              direction={NEXT}
-              onClick={handleDateNavMoveNext}
-              className={
-                'absolute top-[25px] right-0 flex h-[29px] items-center'
-              }
-            />
-          </>
-        )}
-      </AnimatePresence>
     </>
   );
 }

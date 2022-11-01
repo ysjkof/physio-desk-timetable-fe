@@ -12,7 +12,7 @@ export const spreadClinicMembers = (
   clinics: IClinicList[] | null,
   clinicId: number
 ) => {
-  const result: IMember[] = [];
+  const result: IMemberWithActivate[] = [];
   const clinic = clinics?.find((clinic) => clinic.id === clinicId);
   if (clinic) {
     const newMember = clinic.members.map((member) => member);
