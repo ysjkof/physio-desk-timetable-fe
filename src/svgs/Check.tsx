@@ -12,7 +12,7 @@ export default function Check({ ...args }: SVG) {
       viewBox="0 0 20 20"
       fill="currentColor"
       {...args}
-      className={cls('h-5 w-5', args.className || '')}
+      className={cls('h-4 w-4', args.className || '')}
     >
       <path
         fillRule="evenodd"

@@ -10,7 +10,7 @@ export default function Calendar({ ...args }: SVG) {
       stroke="currentColor"
       strokeWidth={2}
       {...args}
-      className={cls('h-6 w-6', args.className || '')}
+      className={cls('h-4 w-4', args.className || '')}
     >
       <path
         strokeLinecap="round"
