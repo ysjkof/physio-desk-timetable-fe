@@ -16,7 +16,7 @@ export function CheckableButton({
     <div
       onClick={onClick}
       className={cls(
-        'flex h-fit items-center gap-2 whitespace-nowrap rounded-sm border border-gray-500 px-2 py-0.5',
+        'flex h-fit select-none items-center gap-2 whitespace-nowrap rounded-sm border border-gray-500 px-2 py-0.5',
         isActivated ? 'text-white' : 'bg-white'
       )}
       style={{
