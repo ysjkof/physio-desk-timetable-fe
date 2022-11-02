@@ -180,6 +180,7 @@ export default function TableController() {
         <div className="flex gap-2">
           {clinic?.members.map((member, i) => (
             <CheckableButton
+              key={i}
               color={'black'}
               backgroundColor={USER_COLORS[i].deep}
               isActivated={member.isActivate}
