@@ -88,3 +88,5 @@ export const GENDER_KOR = {
 } as const;
 
 export const LOCALE = 'ko-KR';
+
+export const SHOW_MINUTES = ['00', '30'];

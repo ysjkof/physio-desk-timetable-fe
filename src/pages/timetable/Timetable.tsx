@@ -22,9 +22,10 @@ import useViewOptions from './hooks/useViewOption';
 import { useListReservations } from './hooks/useListReservations';
 import { MUOOL } from '../../constants/constants';
 import { Titles } from './components/Titles';
-import TableController from './components/TableController/TableController';
+import { TableController } from './components/TableController';
+import { TimeLabels } from './components/TimeLabels';
 import Schedules from './_legacy_components/organisms/Schedules';
-import TimeLabels from './_legacy_components/organisms/TimeLabels';
+
 import TableModals from './_legacy_components/templates/TableModals';
 import TableTemplate from './_legacy_components/templates/TableTemplate';
 import {
