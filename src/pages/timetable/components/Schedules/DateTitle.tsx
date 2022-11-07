@@ -10,28 +10,6 @@ interface DateTitleProps {
   isSelectedMonth: boolean;
 }
 
-function Day({
-  children,
-  day,
-  isSelectedMonth,
-}: {
-  children: React.ReactNode;
-  day: number;
-  isSelectedMonth: boolean;
-}) {
-  return (
-    <span
-      className={cls(
-        'text-xl leading-6',
-        day === 0 ? 'sunday' : day === 6 ? 'saturday' : '',
-        isSelectedMonth ? '' : 'opacity-50'
-      )}
-    >
-      {children}
-    </span>
-  );
-}
-
 function DateTitle({
   userLength,
   date,
@@ -77,6 +55,28 @@ function DateTitle({
         </Day>
       </div>
     </div>
+  );
+}
+
+function Day({
+  children,
+  day,
+  isSelectedMonth,
+}: {
+  children: React.ReactNode;
+  day: number;
+  isSelectedMonth: boolean;
+}) {
+  return (
+    <span
+      className={cls(
+        'text-xl leading-6',
+        day === 0 ? 'sunday' : day === 6 ? 'saturday' : '',
+        isSelectedMonth ? '' : 'opacity-50'
+      )}
+    >
+      {children}
+    </span>
   );
 }
 

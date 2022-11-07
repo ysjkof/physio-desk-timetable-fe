@@ -21,11 +21,9 @@ import useStore from '../../hooks/useStore';
 import useViewOptions from './hooks/useViewOption';
 import { useListReservations } from './hooks/useListReservations';
 import { MUOOL } from '../../constants/constants';
-import { Titles } from './components/Titles';
 import { TableController } from './components/TableController';
 import { TimeLabels } from './components/TimeLabels';
-import Schedules from './_legacy_components/organisms/Schedules';
-
+import { Schedules } from './components/Schedules';
 import TableModals from './_legacy_components/templates/TableModals';
 import TableTemplate from './_legacy_components/templates/TableTemplate';
 import {
@@ -189,17 +187,11 @@ export default function TimeTable() {
             <>
               <AnimatePresence>
                 {viewOptions.get.seeList === false && (
-                  <>
-                    <Titles
-                      userLength={userLength}
-                      userFrameForWeek={userFrameForWeek}
-                    />
-                    <Schedules
-                      userLength={userLength}
-                      labels={labels}
-                      weekEvents={weekEvents}
-                    />
-                  </>
+                  <Schedules
+                    userLength={userLength}
+                    labels={labels}
+                    weekEvents={weekEvents}
+                  />
                 )}
               </AnimatePresence>
               {viewOptions.get.seeList === true && '준비 중'}
