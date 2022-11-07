@@ -4,11 +4,13 @@ import { cls } from '../utils/utils';
 export function CheckableButton({
   label,
   color,
+  backgroundColor,
   isActivated,
   onClick,
 }: {
   label: string;
   color: string;
+  backgroundColor: string;
   isActivated: Boolean;
   onClick: () => void;
 }) {
@@ -20,16 +22,17 @@ export function CheckableButton({
         isActivated ? 'text-white' : 'bg-white'
       )}
       style={{
-        ...(isActivated && { backgroundColor: color }),
+        ...(isActivated && { color, backgroundColor }),
       }}
     >
       <Check
-        className={cls(
-          'h-[0.75rem] w-[0.75rem] rounded-sm',
-          isActivated ? 'bg-white' : 'bg-gray-500 text-white'
-        )}
+        className={cls('rounded-sm bg-gray-400 text-white')}
+        iconSize="SM"
         style={{
-          ...(isActivated && { color }),
+          ...(isActivated && {
+            color: backgroundColor,
+            backgroundColor: color,
+          }),
         }}
       />
       {label}

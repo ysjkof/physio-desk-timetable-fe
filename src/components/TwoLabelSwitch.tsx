@@ -14,7 +14,7 @@ function SwitchLabel({ label }: SwitchLabelType) {
   return (
     <button
       className={cls(
-        'pointer-events-none z-10 flex w-1/2 items-center justify-center whitespace-nowrap px-4'
+        'z-10 flex w-1/2 items-center justify-center whitespace-nowrap px-4'
       )}
       type="button"
     >
@@ -32,7 +32,7 @@ function MovingBox({ isActivated }: Pick<SwitchProps, 'isActivated'>) {
       <span
         aria-hidden="true"
         className={cls(
-          'pointer-events-none h-full w-1/2 transform rounded-sm bg-white transition duration-200 ease-in-out',
+          'h-full w-1/2 transform rounded-sm bg-white transition duration-200 ease-in-out',
           isActivated ? 'translate-x-full' : 'translate-x-0'
         )}
       />
@@ -43,11 +43,11 @@ function MovingBox({ isActivated }: Pick<SwitchProps, 'isActivated'>) {
 export function TwoLabelSwitch({ isActivated, labels, onClick }: SwitchProps) {
   return (
     <div
-      className="relative flex h-8 w-fit cursor-pointer items-center justify-center rounded-sm border border-gray-200 bg-gray-200"
+      className="relative flex h-8 w-fit cursor-pointer select-none items-center justify-center rounded-sm border border-gray-200 bg-gray-200"
       onClick={onClick}
     >
       {labels.map((label) => (
-        <SwitchLabel label={label} />
+        <SwitchLabel key={label} label={label} />
       ))}
       <MovingBox isActivated={isActivated} />
     </div>

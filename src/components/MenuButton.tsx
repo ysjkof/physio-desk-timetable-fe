@@ -10,16 +10,12 @@ interface MenuButtonProps {
   onClick: () => void;
 }
 export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
-  function MenuButton({
-    icon,
-    isActivated,
-    color,
-    backgroundColor,
-    label,
-    onClick,
-  }: MenuButtonProps) {
+  function MenuButton(
+    { icon, isActivated, color, backgroundColor, label, onClick },
+    ref
+  ) {
     return (
-      <div
+      <button
         className={cls(
           'flex h-8 w-fit select-none items-center gap-2 whitespace-nowrap rounded-sm border border-gray-500 px-2',
           isActivated ? 'bg-gray-500 text-white' : ''
@@ -32,10 +28,12 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
             color,
           }),
         }}
+        ref={ref}
+        type="button"
       >
         {icon && icon}
         {label}
-      </div>
+      </button>
     );
   }
 );
