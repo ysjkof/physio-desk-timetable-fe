@@ -1,4 +1,5 @@
 import BarBottomLeft from './BarBottomLeft';
+import Building from './Building';
 import Calendar from './Calendar';
 import Check from './Check';
 import ChevronDown from './ChevronDown';
@@ -8,11 +9,13 @@ import ChevronUp from './ChevronUp';
 import CogSixTooth from './CogSixTooth';
 import Edit from './Edit';
 import EllipsisVertical from './EllipsisVertical';
+import Table from './Table';
 import UserPlus from './UserPlus';
 import XMark from './XMark';
 
 export {
   BarBottomLeft,
+  Building,
   Calendar,
   Check,
   ChevronDown,
@@ -22,6 +25,7 @@ export {
   CogSixTooth,
   Edit,
   EllipsisVertical,
+  Table,
   UserPlus,
   XMark,
 };
