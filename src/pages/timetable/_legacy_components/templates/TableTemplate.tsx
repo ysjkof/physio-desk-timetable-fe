@@ -29,12 +29,14 @@ export default function TableTemplate({
     <motion.div
       animate={{ opacity: 1 }}
       id="timetable__template"
-      className="grid h-full opacity-0"
+      className="grid h-full grid-cols-[11rem,1fr] grid-rows-[7rem,1fr] opacity-0"
     >
-      <div id="timetable__aside-nav">{aside}</div>
+      <div id="timetable__aside-nav" className="col-span-1 row-span-2">
+        {aside}
+      </div>
       <div
         id="timetable__nav"
-        className="relative z-[34] flex w-full flex-col justify-between bg-white px-2"
+        className="relative z-[34] mt-4 flex w-full flex-col justify-between bg-white px-2"
         ref={headerRef}
       >
         {nav}

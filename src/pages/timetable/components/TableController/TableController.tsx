@@ -176,7 +176,7 @@ export default function TableController() {
           />
         </div>
       </div>
-      <div className="flex w-full items-center justify-between py-1">
+      <div className="flex w-full items-center justify-between pb-3">
         <div className="flex gap-2">
           {clinic?.members.map((member, i) => (
             <CheckableButton

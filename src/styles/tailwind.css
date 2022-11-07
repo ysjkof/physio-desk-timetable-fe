@@ -15,22 +15,6 @@
     -webkit-appearance: none;
     margin: 0;
   }
-
-  #timetable__template {
-    grid-template-areas:
-      'aside header header'
-      'aside main main'
-      'aside main main';
-  }
-  #timetable__aside-nav {
-    grid-area: aside;
-  }
-  #timetable__nav {
-    grid-area: header;
-  }
-  #timetable__body {
-    grid-area: main;
-  }
 }
 
 @layer components {
