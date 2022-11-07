@@ -1,3 +1,4 @@
+import { useReactiveVar } from '@apollo/client';
 import {
   faBan,
   faCommentSlash,
@@ -5,7 +6,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
-import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import {
   cls,
   getMemberState,
@@ -14,20 +14,20 @@ import {
 } from '../../../../utils/utils';
 import { loggedInUserVar, toastVar } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
-import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import useStore from '../../../../hooks/useStore';
-import { useReactiveVar } from '@apollo/client';
-import Selectbox from '../../../../components/Selectbox';
+import { Selectbox } from '../../../../components/Selectbox';
 import {
   getHoursByUnit,
   getMinutesByUnit,
 } from '../../../../services/dateServices';
 import { useState } from 'react';
 import localStorageUtils from '../../../../utils/localStorageUtils';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
+import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
-import { IMemberWithActivate } from '../../../../types/common.types';
 import Check from '../../../../svgs/Check';
+import type { IMemberWithActivate } from '../../../../types/common.types';
 
 interface TableDurationForm {
   startHour: number;

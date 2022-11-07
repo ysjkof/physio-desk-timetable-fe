@@ -1,7 +1,7 @@
 import { renameUseSplit } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
 import localStorageUtils from '../../../../utils/localStorageUtils';
-import Selectbox from '../../../../components/Selectbox';
+import { Selectbox } from '../../../../components';
 import { checkStay } from '../../../dashboard/Dashboard';
 import { useMe } from '../../../../hooks/useMe';
 import { ClinicType } from '../../../../types/generated.types';

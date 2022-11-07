@@ -108,4 +108,4 @@ function Selectbox({
 Selectbox.Option = Option;
 Selectbox.Options = Options;
 
-export default Selectbox;
+export { Selectbox };

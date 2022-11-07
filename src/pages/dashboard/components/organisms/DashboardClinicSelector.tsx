@@ -2,7 +2,7 @@ import { checkStay } from '../../Dashboard';
 import { renameUseSplit } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
 import localStorageUtils from '../../../../utils/localStorageUtils';
-import Selectbox from '../../../../components/Selectbox';
+import { Selectbox } from '../../../../components';
 import { ClinicType, MeQuery } from '../../../../types/generated.types';
 
 interface DashboardSideNavProps {
