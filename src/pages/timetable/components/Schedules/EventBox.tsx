@@ -1,4 +1,3 @@
-import type { IListReservation } from '../../../../types/common.types';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
@@ -19,10 +18,11 @@ import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
 } from '../../../../constants/constants';
-import EditReservationState from './EditReservationState';
+import EditReservationState from '../../_legacy_components/molecules/EditReservationState';
 import { cls } from '../../../../utils/utils';
 import { ROUTES } from '../../../../router/routes';
 import { ReservationState } from '../../../../types/generated.types';
+import type { IListReservation } from '../../../../types/common.types';
 
 interface EventBoxProps {
   userIndex: number;
@@ -155,13 +155,12 @@ export default function EventBox({
       <div
         onClick={onClickBox}
         className={cls(
-          'relative h-full overflow-hidden border px-1',
+          'relative h-full overflow-hidden border-l-8 bg-white px-1',
           !isReserve ? 'no-reserved' : ''
         )}
         style={{
           ...(isReserve && {
             borderColor: USER_COLORS[userIndex]?.deep ?? 'black',
-            backgroundColor: USER_COLORS[userIndex]?.light ?? 'white',
           }),
         }}
       >

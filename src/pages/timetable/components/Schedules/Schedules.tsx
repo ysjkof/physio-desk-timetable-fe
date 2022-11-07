@@ -5,7 +5,7 @@ import { getGridTemplateColumns } from '../../../timetableServices';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import ReservationButtons from './ReserveButtons';
-import ScheduleInUserInDay from '../../_legacy_components/molecules/ScheduleInUserInDay';
+import EventBoxContainer from './EventBoxContainer';
 import type { DayWithUsers } from '../../../../types/common.types';
 
 interface SchedulesProps {
@@ -80,7 +80,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
                       userId={member.user.id}
                       userIndex={userIndex}
                     />
-                    <ScheduleInUserInDay
+                    <EventBoxContainer
                       labelMaxLength={labelMaxLength}
                       labels={labels}
                       events={member.events}

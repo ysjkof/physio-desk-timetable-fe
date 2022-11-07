@@ -6,23 +6,23 @@ import {
 } from '../../../../services/dateServices';
 import EventBox from './EventBox';
 import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
-import type { IListReservation } from '../../../../types/common.types';
 import { ReservationState } from '../../../../types/generated.types';
+import type { IListReservation } from '../../../../types/common.types';
 
-interface ScheduleInUserInDayProps {
+interface EventBoxContainerProps {
   userIndex: number;
   events: IListReservation[];
   labels: string[];
   labelMaxLength: number;
   isSingleUser: boolean;
 }
-function ScheduleInUserInDay({
+function EventBoxContainer({
   userIndex,
   events,
   labels,
   labelMaxLength,
   isSingleUser,
-}: ScheduleInUserInDayProps) {
+}: EventBoxContainerProps) {
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
   const [hour, minute] = labels[0].split(':');
@@ -80,7 +80,7 @@ function ScheduleInUserInDay({
   );
 }
 
-export default memo(ScheduleInUserInDay, (prevProps, nextProps) => {
+export default memo(EventBoxContainer, (prevProps, nextProps) => {
   return (
     prevProps.labels[0] === nextProps.labels[0] &&
     prevProps.labels[1] === nextProps.labels[1] &&
