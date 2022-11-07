@@ -1,7 +1,7 @@
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { cls } from '../../utils/utils';
+import { cls } from '../utils/utils';
 
 interface ChildrenProps {
   children: React.ReactNode;
@@ -21,6 +21,8 @@ interface SelectboxProps extends ChildrenProps {
   selectedValue: string;
   width?: string;
   iconSize?: number;
+  hasBorder?: boolean;
+  backgroundColor?: string;
 }
 
 function Button({ children, onClick, iconSize = 14 }: ButtonProps) {
@@ -45,7 +47,7 @@ function Option({ children, selected, suffix, onClick }: OptionProps) {
     <span
       onClick={onClick}
       className={cls(
-        'flex w-full items-center justify-between overflow-hidden text-ellipsis whitespace-nowrap bg-white px-2 py-1 hover:bg-blue-200',
+        'flex w-full items-center justify-between overflow-hidden text-ellipsis whitespace-nowrap bg-inherit px-2 py-1 hover:bg-blue-200',
         selected ? 'font-semibold' : ''
       )}
     >
@@ -57,7 +59,7 @@ function Option({ children, selected, suffix, onClick }: OptionProps) {
 
 function Options({ children }: OptionsProps) {
   return (
-    <ul className="absolute right-0 z-50 flex w-full flex-col shadow-cst">
+    <ul className="absolute right-0 z-50 flex w-full flex-col border border-inherit bg-inherit shadow-cst">
       {children}
     </ul>
   );
@@ -68,6 +70,8 @@ function Selectbox({
   selectedValue,
   width,
   iconSize,
+  hasBorder,
+  backgroundColor = 'white',
 }: SelectboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((prevState) => !prevState);
@@ -78,7 +82,13 @@ function Selectbox({
   }, [selectedValue]);
 
   return (
-    <div className="relative h-8 cursor-pointer border-b" style={{ width }}>
+    <div
+      className={cls(
+        'relative h-8 w-full cursor-pointer',
+        hasBorder ? 'rounded-sm border border-[#606295]' : 'border-b'
+      )}
+      style={{ width, backgroundColor }}
+    >
       <Button onClick={toggleMenu} iconSize={iconSize}>
         {selectedValue}
       </Button>

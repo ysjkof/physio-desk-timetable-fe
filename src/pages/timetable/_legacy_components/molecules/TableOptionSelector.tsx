@@ -17,7 +17,7 @@ import { NEXT } from '../../../../constants/constants';
 import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import useStore from '../../../../hooks/useStore';
 import { useReactiveVar } from '@apollo/client';
-import Selectbox from '../../../../_legacy_components/molecules/Selectbox';
+import Selectbox from '../../../../components/Selectbox';
 import {
   getHoursByUnit,
   getMinutesByUnit,
