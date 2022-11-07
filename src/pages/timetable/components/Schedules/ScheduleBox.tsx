@@ -17,7 +17,7 @@ function ScheduleBox({
   return (
     <div
       className={cls(
-        'USER_COLS relative grid border-b',
+        'USER_COLS relative grid border-r-2 border-b-2',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
       style={viewPeriodStyle}

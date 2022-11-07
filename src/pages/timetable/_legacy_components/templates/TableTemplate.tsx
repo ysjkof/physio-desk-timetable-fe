@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { ReactNode, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import useWindowSize from '../../../../hooks/useWindowSize';
 
 interface TableTemplateProps {
@@ -30,27 +30,24 @@ export default function TableTemplate({
     >
       <div
         id="timetable__nav"
-        className="relative z-[34] flex w-full flex-col justify-between border-b bg-white px-2"
+        className="relative z-[34] flex w-full flex-col justify-between bg-white px-2"
         ref={headerRef}
       >
         {nav}
       </div>
       <div
         id="timetable__body"
-        className="grid h-screen w-full grid-cols-[40px,1fr] overflow-scroll"
+        className="flex h-screen w-full overflow-scroll"
         style={{ height: height + 'px' }}
       >
         <div
           id="timetable__labels"
-          className="sticky left-0 z-[32] border-r-2 border-black bg-white pt-[47px]"
+          className="sticky left-0 z-[32] bg-white px-4 pt-[47px]"
         >
           {labels}
         </div>
-        <div id="timetable__columns" className="flex flex-col">
-          {columns}
-        </div>
+        <div id="timetable__columns">{columns}</div>
       </div>
-      {/* )} */}
     </motion.div>
   );
 }
