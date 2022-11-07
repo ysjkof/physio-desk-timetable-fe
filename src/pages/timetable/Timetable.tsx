@@ -36,6 +36,7 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
 } from '../../types/generated.types';
+import { TableAside } from './components/TableAside';
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export interface TimetableModalProps {
@@ -181,6 +182,7 @@ export default function TimeTable() {
         <Loading />
       ) : (
         <TableTemplate
+          aside={<TableAside />}
           nav={<TableController />}
           labels={<TimeLabels labels={labels} />}
           columns={

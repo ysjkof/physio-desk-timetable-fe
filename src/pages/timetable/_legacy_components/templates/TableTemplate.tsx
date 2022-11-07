@@ -1,14 +1,17 @@
 import { ReactNode, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import useWindowSize from '../../../../hooks/useWindowSize';
 
 interface TableTemplateProps {
+  aside: ReactNode;
   nav: ReactNode;
   labels: ReactNode;
   columns: ReactNode;
 }
 
 export default function TableTemplate({
+  aside,
   nav,
   labels,
   columns,
@@ -26,8 +29,9 @@ export default function TableTemplate({
     <motion.div
       animate={{ opacity: 1 }}
       id="timetable__template"
-      className="h-full opacity-0"
+      className="grid h-full opacity-0"
     >
+      <div id="timetable__aside-nav">{aside}</div>
       <div
         id="timetable__nav"
         className="relative z-[34] flex w-full flex-col justify-between bg-white px-2"
