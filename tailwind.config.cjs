@@ -14,6 +14,14 @@ module.exports = {
         },
       },
       animation: { fadeout: 'fadeout 3s linear 1' },
+      screens: {
+        sm: '375px',
+        md: '640px',
+      },
+      colors: {
+        'table-bg': '#E4E4ED',
+        'table-line': '#D8D8E9',
+      },
       backgroundImage: {
         'check-white': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='4' stroke='white' class='w-6 h-6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.75l6 6 9-13.5' /%3E%3C/svg%3E")`,
         // heroicons.com -> user
@@ -26,10 +34,6 @@ module.exports = {
         no: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor' class='w-5 h-5'%3E%3Cpath fill-rule='evenodd' d='M5.965 4.904l9.131 9.131a6.5 6.5 0 00-9.131-9.131zm8.07 10.192L4.904 5.965a6.5 6.5 0 009.131 9.131zM4.343 4.343a8 8 0 1111.314 11.314A8 8 0 014.343 4.343z' clip-rule='evenodd' /%3E%3C/svg%3E")`,
         // heroicons.com > photo outline > edit color, stroke-width
         photo: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='0.2' stroke='lightgray'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z' /%3E%3C/svg%3E")`,
-      },
-      screens: {
-        sm: '375px',
-        md: '640px',
       },
     },
   },
