@@ -22,7 +22,7 @@ export default function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
 
   return (
     <div className="h-screen overflow-hidden">
-      {isLoggedIn ? <LoggedInGlobalNavBar /> : <LoggedOutGlobalNavBar />}
+      {/* {isLoggedIn ? <LoggedInGlobalNavBar /> : <LoggedOutGlobalNavBar />} */}
       <Suspense fallback={<Loading />}>
         <Outlet />
       </Suspense>

@@ -1,11 +1,11 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { IMemberWithActivate } from '../../../../types/common.types';
 
-interface EventBoxProps {
+interface SelectUserProps {
   members: IMemberWithActivate[];
   register: UseFormRegisterReturn;
 }
-export default function SelectUser({ members, register }: EventBoxProps) {
+export default function SelectUser({ members, register }: SelectUserProps) {
   return (
     <select {...register} className="w-full rounded-md border text-center">
       {members.map((m) => (
