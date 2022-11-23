@@ -25,7 +25,7 @@ import { TableController } from './components/TableController';
 import { TimeLabels } from './components/TimeLabels';
 import { Schedules } from './components/Schedules';
 import TableModals from './_legacy_components/templates/TableModals';
-import TableTemplate from './_legacy_components/templates/TableTemplate';
+import TimetableTemplate from './components/TimetableTemplate';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
@@ -181,7 +181,7 @@ export default function TimeTable() {
       {!viewOptions.get || !weekEvents ? (
         <Loading />
       ) : (
-        <TableTemplate
+        <TimetableTemplate
           aside={<TableAside />}
           nav={<TableController />}
           labels={<TimeLabels labels={labels} />}

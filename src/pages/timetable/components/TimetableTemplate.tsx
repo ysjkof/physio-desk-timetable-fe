@@ -1,23 +1,17 @@
-import { ReactNode, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import useWindowSize from '../../../../hooks/useWindowSize';
+import useWindowSize from '../../../hooks/useWindowSize';
+import type { TimetableTemplateProps } from '../../../types/props.types';
 
-interface TableTemplateProps {
-  aside: ReactNode;
-  nav: ReactNode;
-  labels: ReactNode;
-  columns: ReactNode;
-}
-
-export default function TableTemplate({
+export default function TimetableTemplate({
   aside,
   nav,
   labels,
   columns,
-}: TableTemplateProps) {
+}: TimetableTemplateProps) {
   const { height, changeMinus } = useWindowSize(true);
   const headerRef = useRef<HTMLDivElement>(null);
+  const extraMargin = 20;
 
   useEffect(() => {
     if (!headerRef.current) return;
@@ -44,11 +38,11 @@ export default function TableTemplate({
       <div
         id="timetable__body"
         className="flex h-screen w-full overflow-scroll"
-        style={{ height: height + 'px' }}
+        style={{ height: height - extraMargin + 'px' }}
       >
         <div
           id="timetable__labels"
-          className="sticky left-0 z-[32] bg-white px-4 pt-[47px]"
+          className="sticky left-0 z-[32] bg-white pt-[73px]"
         >
           {labels}
         </div>

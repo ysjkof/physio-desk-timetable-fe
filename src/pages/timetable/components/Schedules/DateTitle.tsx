@@ -2,13 +2,7 @@ import { memo } from 'react';
 import { compareDateMatch } from '../../../../services/dateServices';
 import { cls } from '../../../../utils/utils';
 import { LOCALE, SCROLL_ADDRESS } from '../../../../constants/constants';
-
-interface DateTitleProps {
-  date: Date;
-  userLength: number;
-  isToday: boolean;
-  isSelectedMonth: boolean;
-}
+import type { DateTitleProps } from '../../../../types/props.types';
 
 function DateTitle({
   userLength,
@@ -40,43 +34,27 @@ function DateTitle({
     <div
       id={`${SCROLL_ADDRESS + date}`}
       className={cls(
-        'DATE-TITLE flex cursor-pointer select-none items-center border-b-4 bg-white hover:bg-gray-200',
+        'DATE-TITLE mb-1 flex cursor-pointer select-none items-center bg-white hover:bg-gray-200',
         userLength === 1 ? 'border-x-inherit' : '',
-        isToday
-          ? 'border-b-[#6BA6FF] text-[#6BA6FF]'
-          : 'border-b-transparent text-[#9C9FCF]'
+        isToday ? 'bg-table-day-strong text-white' : 'bg-table-day-light',
+        isSelectedMonth ? '' : 'opacity-50'
       )}
       onClick={moveScroll}
     >
-      <div className="flex w-full flex-col items-center justify-center whitespace-nowrap">
-        <span className="text-gray-800">{weekday}</span>
-        <Day day={dayNumber} isSelectedMonth={isSelectedMonth}>
+      <div className="flex w-full items-center justify-center gap-2 whitespace-nowrap py-0.5 text-base font-medium">
+        <span
+          className={cls(
+            isToday ? 'text-white' : 'text-table-day-color',
+            dayNumber === 0 ? 'sunday' : dayNumber === 6 ? 'saturday' : ''
+          )}
+        >
+          {weekday}
+        </span>
+        <span className={cls(isToday ? 'text-white' : 'text-table-day-strong')}>
           {dayString}
-        </Day>
+        </span>
       </div>
     </div>
-  );
-}
-
-function Day({
-  children,
-  day,
-  isSelectedMonth,
-}: {
-  children: React.ReactNode;
-  day: number;
-  isSelectedMonth: boolean;
-}) {
-  return (
-    <span
-      className={cls(
-        'text-xl leading-6',
-        day === 0 ? 'sunday' : day === 6 ? 'saturday' : '',
-        isSelectedMonth ? '' : 'opacity-50'
-      )}
-    >
-      {children}
-    </span>
   );
 }
 

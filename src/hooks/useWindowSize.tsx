@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 /** 반환하는 height = View Port Height - Global Navigation Bar Height*/
-export default function useWindowSize(hasEventListner?: boolean) {
+export default function useWindowSize(hasEventListener?: boolean) {
   const [height, setHeight] = useState(window.innerHeight);
   const [minus, setMinus] = useState(0);
 
@@ -28,7 +28,7 @@ export default function useWindowSize(hasEventListner?: boolean) {
     };
     debounceDelayedGetHeight();
 
-    if (hasEventListner) {
+    if (hasEventListener) {
       window.addEventListener('resize', debounceDelayedGetHeight);
       return () =>
         window.removeEventListener('resize', debounceDelayedGetHeight);

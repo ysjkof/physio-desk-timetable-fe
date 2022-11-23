@@ -22,6 +22,9 @@ module.exports = {
         'table-bg': '#E4E4ED',
         'table-line': '#D8D8E9',
         'table-aside-bg': '#262850',
+        'table-day-strong': '#64648E',
+        'table-day-light': '#E0E0EC',
+        'table-day-color': '#717198',
       },
       backgroundImage: {
         'check-white': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='4' stroke='white' class='w-6 h-6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.75l6 6 9-13.5' /%3E%3C/svg%3E")`,

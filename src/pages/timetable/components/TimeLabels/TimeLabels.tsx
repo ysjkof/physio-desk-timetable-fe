@@ -1,10 +1,7 @@
 import { memo } from 'react';
 import { SHOW_MINUTES } from '../../../../constants/constants';
 import { TimeLabel } from '../../../../models';
-
-interface TimeLabelsProps {
-  labels: string[];
-}
+import type { TimeLabelsProps } from '../../../../types/props.types';
 
 function TimeLabels({ labels }: TimeLabelsProps) {
   const getTimeLabels = (_labels: string[]) =>
@@ -16,7 +13,7 @@ function TimeLabels({ labels }: TimeLabelsProps) {
     <>
       {timeLabels.map((labelClass, i) => {
         return (
-          <div key={i} className="h-[20px] w-full bg-white">
+          <div key={i} className="h-[20px] bg-white pr-2 pl-4">
             {labelClass.getIsShow() && (
               <span
                 className="relative -top-2 h-full font-bold"
