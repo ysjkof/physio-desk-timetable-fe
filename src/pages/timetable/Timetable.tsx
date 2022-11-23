@@ -21,11 +21,14 @@ import useStore from '../../hooks/useStore';
 import useViewOptions from './hooks/useViewOption';
 import { useListReservations } from './hooks/useListReservations';
 import { MUOOL } from '../../constants/constants';
-import { TableController } from './components/TableController';
-import { TimeLabels } from './components/TimeLabels';
-import { Schedules } from './components/Schedules';
+import {
+  Schedules,
+  TableAside,
+  TableController,
+  TimeLabels,
+  TimetableTemplate,
+} from './components';
 import TableModals from './_legacy_components/templates/TableModals';
-import TimetableTemplate from './components/TimetableTemplate';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
@@ -36,7 +39,6 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
 } from '../../types/generated.types';
-import { TableAside } from './components/TableAside';
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export interface TimetableModalProps {
