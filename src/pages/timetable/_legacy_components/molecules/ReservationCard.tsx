@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { IListReservation } from '../../../../types/common.types';
 import { TimetableModalProps } from '../../Timetable';
 import ReserveForm from './ReserveForm';
 import CreatePatientForm from './CreatePatientForm';
@@ -10,8 +9,9 @@ import ReservationCardDetail from './ReservationCardDetail';
 import BtnMenuToggle from '../../../../_legacy_components/molecules/MenuToggleButton';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { GENDER_KOR } from '../../../../constants/constants';
-import useDeleteReservation from '../../hooks/useDeleteReservation';
+import { useDeleteReservation } from '../../hooks';
 import Loading from '../../../../_legacy_components/atoms/Loading';
+import type { IListReservation } from '../../../../types/common.types';
 
 interface ReservationCardProps extends TimetableModalProps {
   reservation: IListReservation;

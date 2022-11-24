@@ -18,8 +18,7 @@ import {
 } from '../timetableServices';
 import { useMe } from '../../hooks/useMe';
 import useStore from '../../hooks/useStore';
-import useViewOptions from './hooks/useViewOption';
-import { useListReservations } from './hooks/useListReservations';
+import { useListReservations, useViewOptions } from './hooks';
 import { MUOOL } from '../../constants/constants';
 import {
   Schedules,
@@ -39,6 +38,7 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
 } from '../../types/generated.types';
+
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export interface TimetableModalProps {

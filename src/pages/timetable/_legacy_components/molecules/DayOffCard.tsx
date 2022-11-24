@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { TimetableModalProps } from '../../Timetable';
-import { IListReservation } from '../../../../types/common.types';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
-import useDeleteReservation from '../../hooks/useDeleteReservation';
+import { useDeleteReservation } from '../../hooks';
 import DayOffForm from './DayOffForm';
 import CardDetail from './CardDetail';
 import { getTimeLength } from '../../../../services/dateServices';
+import type { TimetableModalProps } from '../../Timetable';
+import type { IListReservation } from '../../../../types/common.types';
 
 interface DayOffCardProps extends TimetableModalProps {
   reservation: IListReservation;

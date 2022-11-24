@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { TimetableModalProps } from '../Timetable';
 import { simpleCheckGQLError } from '../../../utils/utils';
+import { TimetableModalProps } from '../Timetable';
 import {
   CREATE_RESERVATION_DOCUMENT,
   EDIT_RESERVATION_DOCUMENT,
@@ -16,40 +16,32 @@ import type {
 interface UseDayoffProps extends TimetableModalProps {
   isCreate: boolean;
 }
-interface DayoffInput
-  extends Pick<
-    CreateReservationInput,
-    'startDate' | 'endDate' | 'memo' | 'userId'
-  > {}
-interface CreateDayoffInput
-  extends DayoffInput,
-    Pick<CreateReservationInput, 'clinicId'> {}
-interface EditDayoffInput
-  extends DayoffInput,
-    Pick<EditReservationInput, 'reservationId'> {}
 
-export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
+export function useReserve({ isCreate, closeAction }: UseDayoffProps) {
   const [loading, setLoading] = useState(false);
 
-  const [createDayoffMutation, { loading: createLoading }] =
+  const [createReservationMutation, { loading: createLoading }] =
     useMutation<CreateReservationMutation>(CREATE_RESERVATION_DOCUMENT);
 
-  const createDayoff = ({
+  const createReservation = ({
     startDate,
     endDate,
     memo,
     userId,
     clinicId,
-  }: CreateDayoffInput) => {
-    createDayoffMutation({
+    patientId,
+    prescriptionIds,
+  }: CreateReservationInput) => {
+    createReservationMutation({
       variables: {
         input: {
           startDate,
           endDate,
           memo,
-          isDayoff: true,
           userId,
           clinicId,
+          patientId,
+          prescriptionIds,
         },
       },
       onCompleted(data) {
@@ -59,17 +51,18 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
     });
   };
 
-  const [editDayoffMutation, { loading: editLoading }] =
+  const [editReservationMutation, { loading: editLoading }] =
     useMutation<EditReservationMutation>(EDIT_RESERVATION_DOCUMENT);
 
-  const editDayoff = ({
+  const editReservation = ({
     startDate,
     endDate,
     memo,
     userId,
     reservationId,
-  }: EditDayoffInput) => {
-    editDayoffMutation({
+    prescriptionIds,
+  }: EditReservationInput) => {
+    editReservationMutation({
       variables: {
         input: {
           startDate,
@@ -77,6 +70,7 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
           memo,
           userId,
           reservationId,
+          prescriptionIds,
         },
       },
       onCompleted(data) {
@@ -90,5 +84,5 @@ export default function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
     setLoading(isCreate ? createLoading : editLoading);
   }, [createLoading, editLoading]);
 
-  return { editDayoff, createDayoff, loading };
+  return { createReservation, editReservation, loading };
 }

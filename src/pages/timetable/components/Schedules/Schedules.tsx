@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { compareDateMatch } from '../../../../services/dateServices';
 import useStore from '../../../../hooks/useStore';
 import { VIEW_PERIOD } from '../../../../constants/constants';
@@ -5,9 +6,8 @@ import { getGridTemplateColumns } from '../../../timetableServices';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
-import type { SchedulesProps } from '../../../../types/props.types';
-import { ReactNode } from 'react';
 import { cls } from '../../../../utils/utils';
+import type { SchedulesProps } from '../../../../types/props.types';
 
 function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
   const today = new Date();

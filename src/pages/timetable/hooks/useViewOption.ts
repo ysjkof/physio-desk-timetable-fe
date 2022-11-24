@@ -9,7 +9,7 @@ import {
 } from '../../../services/dateServices';
 import { viewOptionsVar } from '../../../store';
 
-export default function useViewOptions() {
+export function useViewOptions() {
   const viewOptions = useReactiveVar(viewOptionsVar);
 
   const [firstTime, setFirstTime] = useState(

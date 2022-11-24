@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TimetableModalProps } from '../../Timetable';
-import { useListReservations } from '../../hooks/useListReservations';
+import { useListReservations } from '../../hooks';
 import ModalContentsLayout from '../../../../_legacy_components/templates/ModalContentsLayout';
 import ModalTemplate from '../../../../_legacy_components/templates/ModalTemplate';
 import ReservationCard from '../molecules/ReservationCard';

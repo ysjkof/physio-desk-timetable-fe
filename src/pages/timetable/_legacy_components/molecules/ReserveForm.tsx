@@ -12,7 +12,7 @@ import { ROUTES } from '../../../../router/routes';
 import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
 import useStore from '../../../../hooks/useStore';
-import useReserve from '../../hooks/useReserve';
+import { useReserve } from '../../hooks';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
 import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 import type {

@@ -4,7 +4,7 @@ import {
   TABLE_TIME_GAP,
 } from '../../../../constants/constants';
 import { getTimeString } from '../../../../services/dateServices';
-import useViewOptions from '../../hooks/useViewOption';
+import { useViewOptions } from '../../hooks';
 
 interface ITimeIndicatorBarProps {
   isActive: boolean;

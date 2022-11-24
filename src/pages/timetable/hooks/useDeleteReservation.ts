@@ -8,7 +8,7 @@ interface DeleteReservation {
   closeAction?: () => void;
 }
 
-export default function useDeleteReservation() {
+export function useDeleteReservation() {
   const [deleteReservationMutation] = useMutation<DeleteReservationMutation>(
     DELETE_RESERVATION_DOCUMENT
   );

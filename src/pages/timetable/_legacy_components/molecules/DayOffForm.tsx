@@ -1,18 +1,18 @@
+import { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
-import { selectedInfoVar } from '../../../../store';
 import { useForm } from 'react-hook-form';
-import {
-  IListReservation,
-  ReserveFormType,
-} from '../../../../types/common.types';
+import { selectedInfoVar } from '../../../../store';
 import SelectUser from './SelectUser';
 import Button from '../../../../_legacy_components/molecules/Button';
 import Input from '../../../../_legacy_components/molecules/Input';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
-import { useEffect, useState } from 'react';
 import { TimetableModalProps } from '../../Timetable';
-import useDayoff from '../../hooks/useDayoff';
+import { useDayoff } from '../../hooks';
 import { createDate } from '../../../../services/dateServices';
+import type {
+  IListReservation,
+  ReserveFormType,
+} from '../../../../types/common.types';
 
 interface DayOffFormNewProps extends TimetableModalProps {
   userId: number;
