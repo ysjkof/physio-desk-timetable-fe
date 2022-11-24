@@ -1,9 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import {
-  faBan,
-  faCommentSlash,
-  faExchange,
-} from '@fortawesome/free-solid-svg-icons';
+import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
 import {
@@ -12,7 +8,7 @@ import {
   isStayMember,
   renameUseSplit,
 } from '../../../../utils/utils';
-import { loggedInUserVar, toastVar } from '../../../../store';
+import { loggedInUserVar, tableTimeVar, toastVar } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
 import useStore from '../../../../hooks/useStore';
 import { Selectbox } from '../../../../components/Selectbox';
@@ -20,21 +16,14 @@ import {
   getHoursByUnit,
   getMinutesByUnit,
 } from '../../../../services/dateServices';
-import { useState } from 'react';
 import localStorageUtils from '../../../../utils/localStorageUtils';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import Check from '../../../../svgs/Check';
+import { FirstAndLastTime, TableTime } from '../../../../models/TableTime';
 import type { IMemberWithActivate } from '../../../../types/common.types';
-
-interface TableDurationForm {
-  startHour: number;
-  startMinute: number;
-  endHour: number;
-  endMinute: number;
-}
 
 export default function TableOptionSelector() {
   const {
@@ -44,15 +33,10 @@ export default function TableOptionSelector() {
     clinicListsVar,
     selectedInfo,
   } = useStore();
+  const tableTime = useReactiveVar(tableTimeVar);
+  const tableTimeService = TableTime;
 
   const loggedInUser = useReactiveVar(loggedInUserVar);
-
-  const [tableDuration, setTableDuration] = useState<TableDurationForm>({
-    endHour: viewOptions.get.tableDuration.endHour,
-    endMinute: viewOptions.get.tableDuration.endMinute,
-    startHour: viewOptions.get.tableDuration.startHour,
-    startMinute: viewOptions.get.tableDuration.startMinute,
-  });
 
   const onClickToggleUser = (clinicId: number, memberId: number) => {
     if (!loggedInUser) throw new Error('❌ loginUser가 false입니다');
@@ -132,36 +116,19 @@ export default function TableOptionSelector() {
       })
     );
   };
-  const saveTableDuration = () => {
-    const { endHour, endMinute, startHour, startMinute } = tableDuration;
-    if (startHour > endHour) {
-      toastVar({ messages: ['시작 시간을 끝 시간보다 작게 해주세요.'] });
-      return;
-    }
 
-    invokeSaveViewOptions({
-      ...viewOptions.get,
-      seeActiveOption: false,
-      tableDuration: {
-        startHour,
-        startMinute,
-        endHour,
-        endMinute,
-      },
-    });
-  };
+  const changeTableTime = (type: keyof FirstAndLastTime, value: number) => {
+    if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
 
-  const changeTableDurationTime = (
-    type: keyof TableDurationForm,
-    value: number
-  ) => {
-    const { endHour } = tableDuration;
-    if (type === 'startHour' && value >= endHour) {
-      setTableDuration((prev) => ({
-        ...prev,
-        startHour: value,
-        endHour: value + 1,
-      }));
+    let tableTimeOptions = { ...tableTime, [type]: value };
+
+    if (type === 'firstHour' && value >= tableTime.lastHour) {
+      tableTimeOptions = {
+        ...tableTime,
+        firstHour: value,
+        lastHour: value + 1,
+      };
+
       toastVar({
         messages: ['시작 시간은 끝 시간보다 작게 해주세요'],
         fade: true,
@@ -169,17 +136,20 @@ export default function TableOptionSelector() {
       });
       return;
     }
-    setTableDuration((prev) => ({ ...prev, [type]: value }));
+
+    tableTimeService.saveToLocalStorage(tableTimeOptions);
+
+    tableTimeVar(tableTimeOptions);
   };
 
   const startHours = getHoursByUnit(0, 24);
   const endHours = (() => {
-    return startHours.filter((hour) => hour > tableDuration.startHour);
+    return startHours.filter((hour) => hour > tableTime.firstHour);
   })();
   const startMinutes = getMinutesByUnit(10);
   const endMinutes = startMinutes;
 
-  const { endHour, endMinute, startHour, startMinute } = tableDuration;
+  const { lastHour, lastMinute, firstHour, firstMinute } = tableTime;
 
   const variants: Variants = {
     init: { x: 300 },
@@ -213,14 +183,14 @@ export default function TableOptionSelector() {
         className="flex items-center whitespace-nowrap border-b py-1"
       >
         <Selectbox
-          selectedValue={`${(startHour + '').padStart(2, '0')}`}
+          selectedValue={`${(firstHour + '').padStart(2, '0')}`}
           iconSize={8}
         >
           <Selectbox.Options>
             {startHours.map((hour) => (
               <Selectbox.Option
                 key={hour}
-                onClick={() => changeTableDurationTime('startHour', hour)}
+                onClick={() => changeTableTime('firstHour', hour)}
               >
                 {hour}
               </Selectbox.Option>
@@ -228,14 +198,14 @@ export default function TableOptionSelector() {
           </Selectbox.Options>
         </Selectbox>
         <Selectbox
-          selectedValue={`${(startMinute + '').padStart(2, '0')}`}
+          selectedValue={`${(firstMinute + '').padStart(2, '0')}`}
           iconSize={8}
         >
           <Selectbox.Options>
             {startMinutes.map((minute) => (
               <Selectbox.Option
                 key={minute}
-                onClick={() => changeTableDurationTime('startMinute', minute)}
+                onClick={() => changeTableTime('firstMinute', minute)}
               >
                 {minute}
               </Selectbox.Option>
@@ -244,14 +214,14 @@ export default function TableOptionSelector() {
         </Selectbox>
         ~
         <Selectbox
-          selectedValue={`${(endHour + '').padStart(2, '0')}`}
+          selectedValue={`${(lastHour + '').padStart(2, '0')}`}
           iconSize={8}
         >
           <Selectbox.Options>
             {endHours.map((hour) => (
               <Selectbox.Option
                 key={hour}
-                onClick={() => changeTableDurationTime('endHour', hour)}
+                onClick={() => changeTableTime('lastHour', hour)}
               >
                 {hour}
               </Selectbox.Option>
@@ -259,24 +229,20 @@ export default function TableOptionSelector() {
           </Selectbox.Options>
         </Selectbox>
         <Selectbox
-          selectedValue={`${(endMinute + '').padStart(2, '0')}`}
+          selectedValue={`${(lastMinute + '').padStart(2, '0')}`}
           iconSize={8}
         >
           <Selectbox.Options>
             {endMinutes.map((minute) => (
               <Selectbox.Option
                 key={minute}
-                onClick={() => changeTableDurationTime('endMinute', minute)}
+                onClick={() => changeTableTime('lastMinute', minute)}
               >
                 {minute}
               </Selectbox.Option>
             ))}
           </Selectbox.Options>
         </Selectbox>
-        <MenuButton enabled type="button" onClick={saveTableDuration}>
-          <FontAwesomeIcon icon={faExchange} fontSize={14} />
-          바꾸기
-        </MenuButton>
       </div>
       <div
         id="table-option-selector__toggle-visible-state"

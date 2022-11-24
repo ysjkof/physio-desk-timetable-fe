@@ -1,5 +1,6 @@
 import { makeVar } from '@apollo/client';
 import { VIEW_PERIOD } from './constants/constants';
+import { TableTime, TableTimeOptions } from './models/TableTime';
 import {
   IClinicList,
   IViewOption,
@@ -15,17 +16,12 @@ const defaultViewOptions: IViewOption = {
   seeList: false,
   seeActiveOption: false,
   navigationExpand: false,
-  tableDuration: {
-    startHour: 9,
-    startMinute: 0,
-    endHour: 19,
-    endMinute: 0,
-  },
 };
 
 // global state
 export const loggedInUserVar = makeVar<LoggedInUser>(undefined);
 export const viewOptionsVar = makeVar<IViewOption>(defaultViewOptions);
+export const tableTimeVar = makeVar<TableTimeOptions>(TableTime.time);
 export const clinicListsVar = makeVar<IClinicList[]>([]); // member의 activated key를 저장하기 위해서 필요함.
 
 export const selectedDateVar = makeVar(new Date());

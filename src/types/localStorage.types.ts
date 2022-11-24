@@ -1,8 +1,9 @@
 import { LOCAL_STORAGE_KEY } from '../utils/localStorageUtils';
+import type { UserIdAndName, Value } from './common.types';
 
 type PrivateLocalStorageKey = keyof Pick<
   typeof LOCAL_STORAGE_KEY,
-  'clinicLists' | 'selectedClinic' | 'viewOption'
+  'clinicLists' | 'selectedClinic' | 'viewOption' | 'tableTime'
 >;
 
 type PublicLocalStorageKey = keyof Pick<
@@ -23,14 +24,6 @@ export interface GenerateStorageKey extends Partial<UserIdAndName> {
 
 export interface CreatedAt {
   createdAt: Date;
-}
-interface Value {
-  value: any;
-}
-
-interface UserIdAndName {
-  userId: number;
-  userName: string;
 }
 
 // GET

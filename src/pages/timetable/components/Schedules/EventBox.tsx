@@ -13,7 +13,11 @@ import {
   compareTableEndtime,
   getTimeString,
 } from '../../../../services/dateServices';
-import { selectedInfoVar, viewOptionsVar } from '../../../../store';
+import {
+  selectedInfoVar,
+  tableTimeVar,
+  viewOptionsVar,
+} from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
@@ -52,6 +56,7 @@ export default function EventBox({
   } = event;
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const viewOptions = useReactiveVar(viewOptionsVar);
+  const tableTime = useReactiveVar(tableTimeVar);
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
 
@@ -64,8 +69,8 @@ export default function EventBox({
   if (height > maxTableHeight) height = maxTableHeight;
 
   const matchTableEndtime = compareTableEndtime(new Date(event.endDate), {
-    hour: viewOptions.tableDuration.endHour,
-    minute: viewOptions.tableDuration.endMinute,
+    hour: tableTime.lastHour,
+    minute: tableTime.lastMinute,
   });
   if (matchTableEndtime) height = height;
 

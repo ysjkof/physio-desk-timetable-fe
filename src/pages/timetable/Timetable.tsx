@@ -18,7 +18,7 @@ import {
 } from '../timetableServices';
 import { useMe } from '../../hooks/useMe';
 import useStore from '../../hooks/useStore';
-import { useListReservations, useViewOptions } from './hooks';
+import { useListReservations, useTableTime } from './hooks';
 import { MUOOL } from '../../constants/constants';
 import {
   Schedules,
@@ -38,7 +38,6 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
 } from '../../types/generated.types';
-
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export interface TimetableModalProps {
@@ -46,10 +45,11 @@ export interface TimetableModalProps {
 }
 
 export default function TimeTable() {
-  const { labels } = useViewOptions();
+  const { labels } = useTableTime();
   const { data: loginUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
   const { selectedInfo, viewOptions, clinicLists, selectedDate } = useStore();
+
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
 
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);

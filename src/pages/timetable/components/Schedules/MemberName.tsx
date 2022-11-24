@@ -11,7 +11,10 @@ function MemberName({ userLength, viewPeriodStyle, users }: MemberNameProps) {
       style={viewPeriodStyle}
     >
       {users.map((member) => (
-        <div className="rounded-sm border border-table-bg px-1 pb-0.5 pt-4 font-medium">
+        <div
+          key={member.id}
+          className="rounded-sm border border-table-bg px-1 pb-0.5 pt-4 font-medium"
+        >
           {member.user.name}
         </div>
       ))}

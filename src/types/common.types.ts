@@ -14,7 +14,7 @@ import {
 } from './generated.types';
 
 type ViewPeriodKey = keyof typeof VIEW_PERIOD;
-type ViewPeriod = typeof VIEW_PERIOD[ViewPeriodKey];
+export type ViewPeriod = typeof VIEW_PERIOD[ViewPeriodKey];
 export interface IViewOption {
   viewPeriod: ViewPeriod;
   seeCancel: boolean;
@@ -22,12 +22,6 @@ export interface IViewOption {
   seeList: boolean;
   seeActiveOption: boolean;
   navigationExpand: boolean;
-  tableDuration: {
-    startHour: number;
-    startMinute: number;
-    endHour: number;
-    endMinute: number;
-  };
 }
 
 // typescript type & interface
@@ -54,6 +48,10 @@ export interface ISelectedClinic extends Pick<Clinic, 'id' | 'name' | 'type'> {
   members: IMemberWithActivate[];
 }
 
+export interface isActive {
+  isActive: boolean;
+}
+
 // me
 
 interface ModifiedClinicMemberWithClinic
@@ -73,7 +71,14 @@ export interface IdAndName {
   id: number;
   name: string;
 }
+export interface UserIdAndName {
+  userId: number;
+  userName: string;
+}
 
+export interface Value {
+  value: unknown;
+}
 // statistics
 
 type IDailyReports = GetStatisticsQuery['getStatistics']['dailyReports'];

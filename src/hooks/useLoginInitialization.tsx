@@ -1,52 +1,64 @@
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { IsLoggedIn } from '../_legacy_components/templates/GlobalLayout';
-import { loggedInUserVar, viewOptionsVar } from '../store';
-import {
-  IClinic,
-  IClinicList,
-  ISelectedClinic,
-  IViewOption,
-  LoggedInUser,
-} from '../types/common.types';
+import { loggedInUserVar, tableTimeVar, viewOptionsVar } from '../store';
 import localStorageUtils from '../utils/localStorageUtils';
 import useStore, { makeSelectedClinic } from './useStore';
+import { ME_DOCUMENT, FIND_MY_CLINICS_DOCUMENT } from '../graphql';
+import { TableTime } from '../models/TableTime';
 import {
   ClinicType,
   FindMyClinicsQuery,
   MeQuery,
 } from '../types/generated.types';
-import { ME_DOCUMENT, FIND_MY_CLINICS_DOCUMENT } from '../graphql';
+import type {
+  IClinic,
+  IClinicList,
+  ISelectedClinic,
+  IViewOption,
+  UserIdAndName,
+} from '../types/common.types';
 
 function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
   const [loading, setLoading] = useState(true);
+
   const { setSelectedInfo, viewOptions, clinicListsVar } = useStore();
+
+  const tableTimeService = TableTime;
+
   const [meQuery, { data: meData }] = useLazyQuery<MeQuery>(ME_DOCUMENT);
+
   const [findMyClinicsQuery, { data: findMyClinicsData }] =
     useLazyQuery<FindMyClinicsQuery>(FIND_MY_CLINICS_DOCUMENT, {
       variables: { input: { includeInactivate: true } },
     });
 
-  const setViewOption = (meData: NonNullable<LoggedInUser>) => {
+  const setViewOption = (userIdAndName: UserIdAndName) => {
     const localViewOptions = localStorageUtils.get<IViewOption>({
       key: 'viewOption',
-      userId: meData.id,
-      userName: meData.name,
+      ...userIdAndName,
     });
 
     if (localViewOptions === null) {
       localStorageUtils.set({
         key: 'viewOption',
-        userId: meData.id,
-        userName: meData.name,
         value: viewOptions.get,
+        ...userIdAndName,
       });
     } else {
       viewOptionsVar(localViewOptions);
     }
   };
 
-  const setClinicLists = (meData: MeQuery, clinics: IClinic[]) => {
+  const initializeTableTime = () => {
+    const localTableTime = tableTimeService.getFromLocalStorage();
+    if (localTableTime === null) {
+      return tableTimeService.saveToLocalStorage(tableTimeService.time);
+    }
+    tableTimeVar(localTableTime);
+  };
+
+  const setClinicLists = (userIdAndName: UserIdAndName, clinics: IClinic[]) => {
     function injectKeyValue(clinics: IClinic[]): IClinicList[] {
       return clinics.map((clinic) => {
         const members = clinic.members.map((member) => ({
@@ -62,8 +74,7 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
 
     const localClinics = localStorageUtils.get<IClinicList[]>({
       key: 'clinicLists',
-      userId: meData.me.id,
-      userName: meData.me.name,
+      ...userIdAndName,
     });
 
     if (localClinics) {
@@ -94,9 +105,8 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
 
     localStorageUtils.set({
       key: 'clinicLists',
-      userId: meData.me.id,
-      userName: meData.me.name,
       value: updatedMyClinics,
+      ...userIdAndName,
     });
     clinicListsVar(updatedMyClinics);
 
@@ -136,7 +146,7 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
     );
   };
 
-  const checkLatestStorage = (loginUser: MeQuery['me']) => {
+  const checkLatestStorage = (userIdAndName: UserIdAndName) => {
     const localCreatedAt = localStorageUtils.get<string>({
       key: 'createdAt',
     });
@@ -148,10 +158,9 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
 
     if (createdAt && createdAt.getTime() >= latestCreatedAt.getTime()) return;
 
-    const user = { userId: loginUser.id, userName: loginUser.name };
-    localStorageUtils.remove({ ...user, key: 'clinicLists' });
-    localStorageUtils.remove({ ...user, key: 'viewOption' });
-    localStorageUtils.remove({ ...user, key: 'selectedClinic' });
+    localStorageUtils.remove({ ...userIdAndName, key: 'clinicLists' });
+    localStorageUtils.remove({ ...userIdAndName, key: 'viewOption' });
+    localStorageUtils.remove({ ...userIdAndName, key: 'selectedClinic' });
 
     localStorageUtils.set({
       key: 'createdAt',
@@ -166,19 +175,22 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
     meQuery();
     findMyClinicsQuery();
 
-    if (
-      !meData ||
-      !findMyClinicsData ||
-      !findMyClinicsData.findMyClinics.clinics
-    )
+    if (!meData || !findMyClinicsData?.findMyClinics.clinics) {
       return;
-    checkLatestStorage(meData.me);
-    setViewOption(meData.me);
+    }
+
+    const userIdAndName = { userId: meData.me.id, userName: meData.me.name };
+
+    checkLatestStorage(userIdAndName);
+    setViewOption(userIdAndName);
+    tableTimeService.initialize(userIdAndName);
+    initializeTableTime();
+    setSelectedClinic(
+      setClinicLists(userIdAndName, findMyClinicsData.findMyClinics.clinics)
+    );
 
     loggedInUserVar(meData.me);
-    setSelectedClinic(
-      setClinicLists(meData, findMyClinicsData.findMyClinics.clinics)
-    );
+
     setLoading(false);
   }, [meData, findMyClinicsData]);
 

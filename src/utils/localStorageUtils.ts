@@ -1,4 +1,4 @@
-import {
+import type {
   GenerateStorageKey,
   GetPrivateStorage,
   GetPublicLocalStorage,
@@ -9,18 +9,14 @@ import {
   SetPublicStorage,
 } from '../types/localStorage.types';
 
-export const LOCAL_STORAGE_KEY = {
-  token: 'muool-token',
-  createdAt: 'muool-local-storage-createdAt',
-  clinicLists: 'muool-clinic-lists-',
-  viewOption: 'muool-view-option-',
-  selectedClinic: 'muool-selected-clinic-',
-} as const;
-
 class LocalStorage {
-  constructor(private readonly storagekeys: LocalStorageKeysType) {}
+  #storageKeyObj;
 
-  private generateKey({ key, userId, userName }: GenerateStorageKey) {
+  constructor(storageKeyObj: LocalStorageKeysType) {
+    this.#storageKeyObj = storageKeyObj;
+  }
+
+  #generateKey({ key, userId, userName }: GenerateStorageKey) {
     if (userId && userName) {
       return key + userId + '-' + userName;
     }
@@ -32,8 +28,8 @@ class LocalStorage {
     userId,
     userName,
   }: GetPrivateStorage | GetPublicLocalStorage): T | null {
-    const storageKey = this.generateKey({
-      key: this.storagekeys[key],
+    const storageKey = this.#generateKey({
+      key: this.#storageKeyObj[key],
       userId,
       userName,
     });
@@ -44,8 +40,8 @@ class LocalStorage {
   }
 
   set({ key, userId, userName, value }: SetPrivateStorage | SetPublicStorage) {
-    const storageKey = this.generateKey({
-      key: this.storagekeys[key],
+    const storageKey = this.#generateKey({
+      key: this.#storageKeyObj[key],
       userId,
       userName,
     });
@@ -57,13 +53,22 @@ class LocalStorage {
     userId,
     userName,
   }: RemovePrivateLocalStorage | RemovePublicLocalStorage) {
-    const storageKey = this.generateKey({
-      key: this.storagekeys[key],
+    const storageKey = this.#generateKey({
+      key: this.#storageKeyObj[key],
       userId,
       userName,
     });
     localStorage.removeItem(storageKey)!;
   }
 }
+
+export const LOCAL_STORAGE_KEY = {
+  token: 'muool-token',
+  createdAt: 'muool-local-storage-createdAt',
+  clinicLists: 'muool-clinic-lists-',
+  viewOption: 'muool-view-option-',
+  tableTime: 'muool-table-time-',
+  selectedClinic: 'muool-selected-clinic-',
+} as const;
 
 export default new LocalStorage(LOCAL_STORAGE_KEY);

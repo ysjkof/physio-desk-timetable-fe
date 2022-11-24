@@ -2,12 +2,12 @@ import { useDayoff } from './useDayoff';
 import { useDeleteReservation } from './useDeleteReservation';
 import { useListReservations } from './useListReservations';
 import { useReserve } from './useReserve';
-import { useViewOptions } from './useViewOption';
+import { useTableTime } from './useTableTime';
 
 export {
   useDayoff,
   useDeleteReservation,
   useListReservations,
   useReserve,
-  useViewOptions,
+  useTableTime,
 };

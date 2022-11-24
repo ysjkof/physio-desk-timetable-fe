@@ -1,6 +1,12 @@
+import {
+  ButtonHTMLAttributes,
+  PropsWithChildren,
+  useReducer,
+  useRef,
+} from 'react';
+import { useReactiveVar } from '@apollo/client';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ButtonHTMLAttributes, useReducer, useRef } from 'react';
 import useStore from '../../../hooks/useStore';
 import {
   compareDateMatch,
@@ -8,15 +14,15 @@ import {
   getHoursByUnit,
   getMinutesByUnit,
 } from '../../../services/dateServices';
+import { tableTimeVar } from '../../../store';
 import Calendar from '../../../svgs/Calendar';
-import { ChildrenProps } from '../../../types/common.types';
 import { cls, getPositionRef } from '../../../utils/utils';
 import ModalPortal from '../../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './Datepicker';
 
 interface Attributes
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    ChildrenProps {
+    PropsWithChildren {
   inactivate?: boolean;
 }
 interface ButtonsProps {
@@ -159,6 +165,7 @@ export default function DatepickerCalendar({
   hasHour,
 }: DatePickerInterface) {
   const { viewOptions } = useStore();
+  const tableTime = useReactiveVar(tableTimeVar);
   const today = createDate();
 
   const changeShowMonthReducer = (
@@ -220,10 +227,7 @@ export default function DatepickerCalendar({
     return result;
   }
 
-  const listOfHours = getHoursByUnit(
-    viewOptions.get.tableDuration.startHour,
-    viewOptions.get.tableDuration.endHour
-  );
+  const listOfHours = getHoursByUnit(tableTime.firstHour, tableTime.lastHour);
 
   const minutesUnit = 10; // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
   const listOfMinutes = getMinutesByUnit(minutesUnit);
