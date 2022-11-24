@@ -5,7 +5,7 @@ function MemberName({ userLength, viewPeriodStyle, users }: MemberNameProps) {
   return (
     <div
       className={cls(
-        'USER_COLS relative mb-1 grid gap-2',
+        'USER_COLS relative mb-1 grid h-9 gap-2',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
       style={viewPeriodStyle}
