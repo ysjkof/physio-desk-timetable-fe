@@ -5,7 +5,7 @@ import { cls } from '../utils/utils';
  * heroicicons.com
  * bars-3-bottom-left
  */
-export default function BarBottomLeft({ ...args }: SVG) {
+export default function BarBottomLeft({ iconSize, ...args }: SVG) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

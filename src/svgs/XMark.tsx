@@ -5,7 +5,7 @@ import { cls } from '../utils/utils';
  * heroicicons.com
  * x-mark
  */
-export default function XMark({ ...args }: SVG) {
+export default function XMark({ iconSize, ...args }: SVG) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

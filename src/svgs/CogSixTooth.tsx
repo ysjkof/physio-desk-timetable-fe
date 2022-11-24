@@ -5,7 +5,7 @@ import { cls } from '../utils/utils';
  * heroicicons.com
  * cog-6-tooth > Outline
  */
-export default function CogSixTooth({ ...args }: SVG) {
+export default function CogSixTooth({ iconSize, ...args }: SVG) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -16,10 +16,10 @@ export default function CogSixTooth({ ...args }: SVG) {
       {...args}
       className={cls(
         args.className || '',
-        args.iconSize
-          ? args.iconSize === 'LG'
+        iconSize
+          ? iconSize === 'LG'
             ? 'h-5 w-5'
-            : args.iconSize === 'MD'
+            : iconSize === 'MD'
             ? 'h-4 w-4'
             : 'h-3 w-3'
           : 'h-4 w-4'

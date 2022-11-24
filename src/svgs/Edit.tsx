@@ -5,7 +5,7 @@ import { cls } from '../utils/utils';
  * heroicicons.com
  * pencil-square > outline
  */
-export default function Edit({ ...args }: SVG) {
+export default function Edit({ iconSize, ...args }: SVG) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
