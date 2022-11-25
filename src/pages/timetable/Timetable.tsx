@@ -18,7 +18,7 @@ import {
 } from '../timetableServices';
 import { useMe } from '../../hooks/useMe';
 import useStore from '../../hooks/useStore';
-import { useListReservations, useTableTime } from './hooks';
+import { useListReservations, useTableLabel } from './hooks';
 import { MUOOL } from '../../constants/constants';
 import {
   Schedules,
@@ -46,7 +46,7 @@ export interface TimetableModalProps {
 }
 
 export default function TimeTable() {
-  const { labels } = useTableTime();
+  const { labels } = useTableLabel();
   const { data: loginUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
   const { selectedInfo, clinicLists, selectedDate } = useStore();
