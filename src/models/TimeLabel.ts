@@ -1,39 +1,44 @@
 export class TimeLabel {
-  private color: string;
-  private isShow: boolean;
-  private minute: string;
+  #label: string;
+  #minute: string;
+  #color: string;
+  #isShow: boolean;
 
-  constructor(readonly label: string, private readonly showMinutes: string[]) {
-    this.minute = label.substring(3, 5);
-    this.isShow = this.setShow();
-    this.color = this.setColor();
+  #colors = {
+    '00': '#333779',
+    '30': '#DDDDEF',
+  };
+
+  constructor(label: string, private readonly showMinutes: string[]) {
+    this.#label = label;
+    this.#minute = label.substring(3, 5);
+    this.#color = this.#setColor();
+    this.#isShow = this.#setShow(showMinutes);
   }
 
-  private setShow() {
-    const [exist] = this.showMinutes.filter((_minute) =>
-      this.minute.endsWith(_minute)
+  #setShow(showMinutes: string[]) {
+    const [exist] = showMinutes.filter((_minute) =>
+      this.#minute.endsWith(_minute)
     );
-
     return !!exist;
   }
 
-  private setColor() {
-    const colors = {
-      '00': '#333779',
-      '30': '#DDDDEF',
-    };
-
-    if (this.minute === '00' || this.minute === '30') {
-      return colors[this.minute];
+  #setColor() {
+    if (this.#minute === '00' || this.#minute === '30') {
+      return this.#colors[this.#minute];
     }
-
     return '';
   }
 
-  getColor() {
-    return this.color;
+  get value() {
+    return this.#label;
   }
-  getIsShow() {
-    return this.isShow;
+
+  get color() {
+    return this.#color;
+  }
+
+  get isShow() {
+    return this.#isShow;
   }
 }

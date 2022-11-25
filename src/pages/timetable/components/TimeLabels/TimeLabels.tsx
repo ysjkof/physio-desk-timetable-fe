@@ -11,15 +11,15 @@ function TimeLabels({ labels }: TimeLabelsProps) {
 
   return (
     <>
-      {timeLabels.map((labelClass, i) => {
+      {timeLabels.map((label, i) => {
         return (
           <div key={i} className="h-[20px] bg-white pr-2 pl-4">
-            {labelClass.getIsShow() && (
+            {label.isShow && (
               <span
                 className="relative -top-2 h-full font-bold"
-                style={{ color: labelClass.getColor() }}
+                style={{ color: label.color }}
               >
-                {labelClass.label}
+                {label.value}
               </span>
             )}
           </div>
