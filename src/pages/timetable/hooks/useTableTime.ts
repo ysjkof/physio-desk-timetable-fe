@@ -5,18 +5,17 @@ import { tableTimeVar } from '../../../store';
 
 export function useTableTime() {
   const tableTimeOptions = useReactiveVar(tableTimeVar);
-  const tableTimeService = TableTime;
 
   // get4DigitHour가 ISO Date String을 반환해서 로컬시각으로 표현되지 않는다
   // 그러니 화면 출력할 때 local time으로 변환해야한다
-  const [labels, setLabels] = useState(tableTimeService.labels);
+  const [labels, setLabels] = useState(TableTime.labels);
 
   const changeTableTimeOptions = (options: TableTimeOptions) => {
-    tableTimeService.setTime(options);
+    TableTime.setTime(options);
   };
 
   const changeLabels = () => {
-    setLabels(tableTimeService.labels);
+    setLabels(TableTime.labels);
   };
 
   const isChanged = (
@@ -35,7 +34,7 @@ export function useTableTime() {
   };
 
   useEffect(() => {
-    if (isChanged(tableTimeOptions, tableTimeService.time)) {
+    if (isChanged(tableTimeOptions, TableTime.time)) {
       changeTableTimeOptions(tableTimeOptions);
       changeLabels();
     }

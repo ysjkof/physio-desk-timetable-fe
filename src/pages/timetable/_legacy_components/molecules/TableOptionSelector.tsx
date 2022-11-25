@@ -34,7 +34,6 @@ export default function TableOptionSelector() {
     selectedInfo,
   } = useStore();
   const tableTime = useReactiveVar(tableTimeVar);
-  const tableTimeService = TableTime;
 
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
@@ -137,7 +136,7 @@ export default function TableOptionSelector() {
       return;
     }
 
-    tableTimeService.saveToLocalStorage(tableTimeOptions);
+    TableTime.saveToLocalStorage(tableTimeOptions);
 
     tableTimeVar(tableTimeOptions);
   };

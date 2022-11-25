@@ -24,8 +24,6 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
 
   const { setSelectedInfo, viewOptions, clinicListsVar } = useStore();
 
-  const tableTimeService = TableTime;
-
   const [meQuery, { data: meData }] = useLazyQuery<MeQuery>(ME_DOCUMENT);
 
   const [findMyClinicsQuery, { data: findMyClinicsData }] =
@@ -51,9 +49,9 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
   };
 
   const initializeTableTime = () => {
-    const localTableTime = tableTimeService.getFromLocalStorage();
+    const localTableTime = TableTime.getFromLocalStorage();
     if (localTableTime === null) {
-      return tableTimeService.saveToLocalStorage(tableTimeService.time);
+      return TableTime.saveToLocalStorage(TableTime.time);
     }
     tableTimeVar(localTableTime);
   };
@@ -183,7 +181,7 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
 
     checkLatestStorage(userIdAndName);
     setViewOption(userIdAndName);
-    tableTimeService.initialize(userIdAndName);
+    TableTime.initialize(userIdAndName);
     initializeTableTime();
     setSelectedClinic(
       setClinicLists(userIdAndName, findMyClinicsData.findMyClinics.clinics)
