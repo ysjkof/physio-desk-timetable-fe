@@ -104,28 +104,11 @@ export default function TableOptionSelector() {
     toggleDisplayOption('seeNoshow');
   };
 
-  const changeTableTime = (type: keyof FirstAndLastTime, value: number) => {
+  const changeTableTime = (key: keyof FirstAndLastTime, value: number) => {
     if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
 
-    let tableTimeOptions = { ...tableTime, [type]: value };
-
-    if (type === 'firstHour' && value >= tableTime.lastHour) {
-      tableTimeOptions = {
-        ...tableTime,
-        firstHour: value,
-        lastHour: value + 1,
-      };
-
-      toastVar({
-        messages: ['시작 시간은 끝 시간보다 작게 해주세요'],
-        fade: true,
-        milliseconds: 2000,
-      });
-      return;
-    }
-
+    const tableTimeOptions = TableTime.createTimeOptions(key, value);
     TableTime.saveToLocalStorage(tableTimeOptions);
-
     tableTimeVar(tableTimeOptions);
   };
 

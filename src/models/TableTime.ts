@@ -5,7 +5,11 @@ import {
   get4DigitHour,
 } from '../services/dateServices';
 import localStorageUtils from '../utils/localStorageUtils';
-import type { TableTimeOptions, UserIdAndName } from '../types/common.types';
+import type {
+  FirstAndLastTime,
+  TableTimeOptions,
+  UserIdAndName,
+} from '../types/common.types';
 
 export class TableTime {
   static #options = {
@@ -112,5 +116,13 @@ export class TableTime {
     }
 
     return labels;
+  }
+
+  static createTimeOptions(key: keyof FirstAndLastTime, value: number) {
+    let result = { ...this.value, [key]: value };
+    if (key === 'firstHour' && value >= this.value.lastHour) {
+      result.lastHour++;
+    }
+    return result;
   }
 }
