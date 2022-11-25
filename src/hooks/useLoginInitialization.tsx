@@ -1,11 +1,11 @@
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { IsLoggedIn } from '../_legacy_components/templates/GlobalLayout';
-import { loggedInUserVar, tableTimeVar, viewOptionsVar } from '../store';
+import { loggedInUserVar, tableTimeVar, tableDisplayVar } from '../store';
 import localStorageUtils from '../utils/localStorageUtils';
 import useStore, { makeSelectedClinic } from './useStore';
 import { ME_DOCUMENT, FIND_MY_CLINICS_DOCUMENT } from '../graphql';
-import { TableTime } from '../models/TableTime';
+import { TableTime, TableDisplay } from '../models';
 import {
   ClinicType,
   FindMyClinicsQuery,
@@ -15,14 +15,13 @@ import type {
   IClinic,
   IClinicList,
   ISelectedClinic,
-  IViewOption,
   UserIdAndName,
 } from '../types/common.types';
 
 function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
   const [loading, setLoading] = useState(true);
 
-  const { setSelectedInfo, viewOptions, clinicListsVar } = useStore();
+  const { setSelectedInfo, clinicListsVar } = useStore();
 
   const [meQuery, { data: meData }] = useLazyQuery<MeQuery>(ME_DOCUMENT);
 
@@ -31,27 +30,21 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
       variables: { input: { includeInactivate: true } },
     });
 
-  const setViewOption = (userIdAndName: UserIdAndName) => {
-    const localViewOptions = localStorageUtils.get<IViewOption>({
-      key: 'viewOption',
-      ...userIdAndName,
-    });
+  const initTableDisplay = () => {
+    const localViewOptions = TableDisplay.getFromLocalStorage();
+    console.log('ini', localViewOptions);
 
     if (localViewOptions === null) {
-      localStorageUtils.set({
-        key: 'viewOption',
-        value: viewOptions.get,
-        ...userIdAndName,
-      });
-    } else {
-      viewOptionsVar(localViewOptions);
+      return TableDisplay.saveToLocalStorage(TableDisplay.value);
     }
+    TableDisplay.setValue(localViewOptions);
+    tableDisplayVar(localViewOptions);
   };
 
-  const initializeTableTime = () => {
+  const initTableTime = () => {
     const localTableTime = TableTime.getFromLocalStorage();
     if (localTableTime === null) {
-      return TableTime.saveToLocalStorage(TableTime.time);
+      return TableTime.saveToLocalStorage(TableTime.value);
     }
     tableTimeVar(localTableTime);
   };
@@ -180,9 +173,10 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
     const userIdAndName = { userId: meData.me.id, userName: meData.me.name };
 
     checkLatestStorage(userIdAndName);
-    setViewOption(userIdAndName);
+    TableDisplay.initialize(userIdAndName);
+    initTableDisplay();
     TableTime.initialize(userIdAndName);
-    initializeTableTime();
+    initTableTime();
     setSelectedClinic(
       setClinicLists(userIdAndName, findMyClinicsData.findMyClinics.clinics)
     );

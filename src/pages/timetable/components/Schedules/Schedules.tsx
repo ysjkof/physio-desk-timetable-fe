@@ -1,36 +1,31 @@
 import { ReactNode } from 'react';
 import { compareDateMatch } from '../../../../services/dateServices';
 import useStore from '../../../../hooks/useStore';
-import { VIEW_PERIOD } from '../../../../constants/constants';
 import { getGridTemplateColumns } from '../../../timetableServices';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
+import { TableDisplay } from '../../../../models';
 import { cls } from '../../../../utils/utils';
 import type { SchedulesProps } from '../../../../types/props.types';
 
 function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
   const today = new Date();
 
-  const { viewOptions, selectedDate } = useStore();
+  const { selectedDate } = useStore();
 
-  const labelMaxLength = labels.length;
-
-  const schedules =
-    viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY
-      ? weekEvents && [weekEvents[selectedDate.getDay()]]
-      : weekEvents;
+  const { hasWeekView } = TableDisplay.value;
 
   const userGridCol = getGridTemplateColumns(userLength);
 
   const viewPeriodStyle = {
-    [VIEW_PERIOD.ONE_DAY]: {
+    day: {
       template: {},
       userColumn: {
         gridTemplateColumns: userGridCol,
       },
     },
-    [VIEW_PERIOD.ONE_WEEK]: {
+    week: {
       template: {
         gridTemplateColumns: getGridTemplateColumns(7, userLength * 6),
       },
@@ -40,9 +35,17 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
     },
   };
 
-  const containerStyle = viewPeriodStyle[viewOptions.get.viewPeriod].template;
+  const containerStyle = hasWeekView
+    ? viewPeriodStyle.week.template
+    : viewPeriodStyle.day.template;
 
-  const columnStyle = viewPeriodStyle[viewOptions.get.viewPeriod].userColumn;
+  const columnStyle = hasWeekView
+    ? viewPeriodStyle.week.userColumn
+    : viewPeriodStyle.day.userColumn;
+
+  const schedules = hasWeekView
+    ? weekEvents
+    : weekEvents && [weekEvents[selectedDate.getDay()]];
 
   return (
     <div
@@ -72,7 +75,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
               <ScheduleBox
                 date={day.date}
                 labels={labels}
-                labelMaxLength={labelMaxLength}
+                labelMaxLength={labels.length}
                 users={filteredUsers}
                 viewPeriodStyle={columnStyle}
                 userLength={userLength}

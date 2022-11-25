@@ -1,7 +1,8 @@
 import { useReactiveVar } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { TableTime, TableTimeOptions } from '../../../models/TableTime';
+import { TableTime } from '../../../models/TableTime';
 import { tableTimeVar } from '../../../store';
+import type { TableTimeOptions } from '../../../types/common.types';
 
 export function useTableTime() {
   const tableTimeOptions = useReactiveVar(tableTimeVar);
@@ -11,7 +12,7 @@ export function useTableTime() {
   const [labels, setLabels] = useState(TableTime.labels);
 
   const changeTableTimeOptions = (options: TableTimeOptions) => {
-    TableTime.setTime(options);
+    TableTime.setValue(options);
   };
 
   const changeLabels = () => {
@@ -34,7 +35,7 @@ export function useTableTime() {
   };
 
   useEffect(() => {
-    if (isChanged(tableTimeOptions, TableTime.time)) {
+    if (isChanged(tableTimeOptions, TableTime.value)) {
       changeTableTimeOptions(tableTimeOptions);
       changeLabels();
     }

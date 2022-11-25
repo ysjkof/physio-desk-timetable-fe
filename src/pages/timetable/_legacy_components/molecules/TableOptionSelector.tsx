@@ -22,17 +22,19 @@ import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import Check from '../../../../svgs/Check';
-import { FirstAndLastTime, TableTime } from '../../../../models/TableTime';
-import type { IMemberWithActivate } from '../../../../types/common.types';
+import { useTableDisplay } from '../../hooks';
+import { TableDisplay, TableTime } from '../../../../models';
+import type {
+  FirstAndLastTime,
+  IMemberWithActivate,
+} from '../../../../types/common.types';
 
 export default function TableOptionSelector() {
-  const {
-    setSelectedInfo,
-    viewOptions,
-    clinicLists,
-    clinicListsVar,
-    selectedInfo,
-  } = useStore();
+  const { setSelectedInfo, clinicLists, clinicListsVar, selectedInfo } =
+    useStore();
+
+  const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
+
   const tableTime = useReactiveVar(tableTimeVar);
 
   const loggedInUser = useReactiveVar(loggedInUserVar);
@@ -95,25 +97,11 @@ export default function TableOptionSelector() {
     }
   };
 
-  const onClickChangeSeeActiveOption = () => {
-    if (viewOptions.get) {
-      viewOptions.set({
-        ...viewOptions.get,
-        seeActiveOption: !viewOptions.get.seeActiveOption,
-      });
-    }
+  const toggleSeeCancel = () => {
+    toggleDisplayOption('seeCancel');
   };
-
-  const invokeSaveViewOptions = (value: any) => {
-    if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
-    viewOptions.set(value, () =>
-      localStorageUtils.set({
-        key: 'viewOption',
-        userId: loggedInUser.id,
-        userName: loggedInUser.name,
-        value,
-      })
-    );
+  const toggleSeeNoshow = () => {
+    toggleDisplayOption('seeNoshow');
   };
 
   const changeTableTime = (type: keyof FirstAndLastTime, value: number) => {
@@ -175,7 +163,7 @@ export default function TableOptionSelector() {
             시간표에 표시할 병원이나 사용자를 선택합니다.
           </p>
         </span>
-        <BtnArrow direction={NEXT} onClick={onClickChangeSeeActiveOption} />
+        <BtnArrow direction={NEXT} onClick={toggleDisplayController} />
       </div>
       <div
         id="table-option-selector__view-time"
@@ -248,25 +236,15 @@ export default function TableOptionSelector() {
         className="flex items-center gap-2 border-b py-1 px-3"
       >
         <MenuButton
-          enabled={viewOptions.get.seeCancel}
-          onClick={() => {
-            invokeSaveViewOptions({
-              ...viewOptions.get,
-              seeCancel: !viewOptions.get.seeCancel,
-            });
-          }}
+          enabled={TableDisplay.value.seeCancel}
+          onClick={toggleSeeCancel}
         >
           <FontAwesomeIcon icon={faBan} fontSize={14} />
           취소
         </MenuButton>
         <MenuButton
-          enabled={viewOptions.get.seeNoshow}
-          onClick={() => {
-            invokeSaveViewOptions({
-              ...viewOptions.get,
-              seeNoshow: !viewOptions.get.seeNoshow,
-            });
-          }}
+          enabled={TableDisplay.value.seeNoshow}
+          onClick={toggleSeeNoshow}
         >
           <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />
           부도

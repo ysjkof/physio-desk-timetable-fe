@@ -5,10 +5,11 @@ import { getMonth, getWeekOfMonth } from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { USER_COLORS, VIEW_PERIOD } from '../../../../constants/constants';
+import { USER_COLORS } from '../../../../constants/constants';
 import useStore from '../../../../hooks/useStore';
 import {
   clinicListsVar,
+  hasTableDisplayVar,
   loggedInUserVar,
   selectedDateVar,
 } from '../../../../store';
@@ -29,83 +30,43 @@ import {
   MenuButton,
   TwoLabelSwitch,
 } from '../../../../components';
-import type { IViewOption } from '../../../../types/common.types';
+import { useTableDisplay } from '../../hooks';
+import { TableDisplay } from '../../../../models';
 
 export default function TableController() {
   const navigate = useNavigate();
   const today = new Date();
-  const {
-    setSelectedInfo,
-    selectedInfo,
-    selectedDate,
-    viewOptions,
-    clinicLists,
-  } = useStore();
+  const { setSelectedInfo, selectedInfo, selectedDate, clinicLists } =
+    useStore();
+
+  const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
   const loggedInUser = useReactiveVar(loggedInUserVar);
+  const hasTableDisplay = useReactiveVar(hasTableDisplayVar);
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
-    viewOptions.get.navigationExpand
+    TableDisplay.value.navigationExpand
       ? date.setMonth(date.getMonth() - 1)
       : date.setDate(date.getDate() - 7);
     selectedDateVar(date);
   };
   const handleDateNavMoveNext = () => {
     const date = new Date(selectedDate);
-    viewOptions.get.navigationExpand
+    TableDisplay.value.navigationExpand
       ? date.setMonth(date.getMonth() + 1)
       : date.setDate(date.getDate() + 7);
     selectedDateVar(date);
   };
 
-  const invokeSaveViewOptions = (value: any) => {
-    if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
-
-    localStorageUtils.set({
-      key: 'viewOption',
-      userId: loggedInUser.id,
-      userName: loggedInUser.name,
-      value,
-    });
-  };
-
-  useEffect(() => {
-    return viewOptions.set({
-      ...viewOptions.get,
-      seeActiveOption: false,
-    });
-  }, []);
-
   const settingRef = useRef<HTMLButtonElement>(null);
   const { top } = getPositionRef(settingRef);
-  const toggleViewPeriod = () => {
-    const newViewOptions: IViewOption = {
-      ...viewOptions.get,
-      viewPeriod:
-        viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_DAY
-          ? VIEW_PERIOD.ONE_WEEK
-          : VIEW_PERIOD.ONE_DAY,
-    };
-    viewOptions.set(newViewOptions);
-    invokeSaveViewOptions(newViewOptions);
+
+  const toggleWeekOrDay = () => {
+    toggleDisplayOption('hasWeekView');
   };
 
   const toggleCalender = () => {
-    const newViewOptions: IViewOption = {
-      ...viewOptions.get,
-      navigationExpand: !viewOptions.get.navigationExpand,
-    };
-    viewOptions.set(newViewOptions);
-    invokeSaveViewOptions(newViewOptions);
-  };
-
-  const toggleViewOptions = () => {
-    const newViewOptions = {
-      ...viewOptions.get,
-      seeActiveOption: !viewOptions.get.seeActiveOption,
-    };
-    viewOptions.set(newViewOptions);
-    // seeActiveOption은 로컬스토리지에 저장할 필요 없다
+    toggleDisplayOption('navigationExpand');
   };
 
   const clinic = clinicLists.find(({ id }) => id === selectedInfo.clinic?.id);
@@ -141,6 +102,10 @@ export default function TableController() {
   const weekNumber = getWeekOfMonth(selectedDate);
   const month = (getMonth(selectedDate) + 1 + '').padStart(2, '0');
 
+  useEffect(() => {
+    return () => toggleDisplayController(false);
+  }, []);
+
   return (
     <>
       <div className="flex w-full items-center justify-between border-b py-1">
@@ -165,14 +130,14 @@ export default function TableController() {
         <div className="flex gap-2">
           <TwoLabelSwitch
             labels={['하루', '주단위']}
-            onClick={toggleViewPeriod}
-            isActivated={viewOptions.get.viewPeriod === VIEW_PERIOD.ONE_WEEK}
+            onClick={toggleWeekOrDay}
+            isActivated={!TableDisplay.value.hasWeekView}
           />
           <MenuButton
             onClick={toggleCalender}
             label="달력보기"
             icon={<Calendar />}
-            isActivated={viewOptions.get.navigationExpand}
+            isActivated={TableDisplay.value.navigationExpand}
           />
         </div>
       </div>
@@ -221,24 +186,16 @@ export default function TableController() {
             icon={<EllipsisVertical />}
             backgroundColor="#6889BB"
             color="white"
-            onClick={toggleViewOptions}
+            onClick={toggleDisplayController}
             ref={settingRef}
           />
 
           <AnimatePresence>
-            {viewOptions.get.seeActiveOption && (
+            {hasTableDisplay && (
               <ModalPortal
                 top={top}
                 right={10}
-                closeAction={() => {
-                  if (viewOptions.get) {
-                    const newViewOptions = {
-                      ...viewOptions.get,
-                      seeActiveOption: !viewOptions.get.seeActiveOption,
-                    };
-                    viewOptions.set(newViewOptions);
-                  }
-                }}
+                closeAction={() => toggleDisplayController(false)}
               >
                 <TableOptionSelector />
               </ModalPortal>

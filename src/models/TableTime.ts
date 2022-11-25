@@ -5,18 +5,7 @@ import {
   get4DigitHour,
 } from '../services/dateServices';
 import localStorageUtils from '../utils/localStorageUtils';
-import type { UserIdAndName } from '../types/common.types';
-
-export interface FirstAndLastTime {
-  firstHour: number;
-  firstMinute: number;
-  lastHour: number;
-  lastMinute: number;
-}
-
-export interface TableTimeOptions extends FirstAndLastTime {
-  gap: number;
-}
+import type { TableTimeOptions, UserIdAndName } from '../types/common.types';
 
 export class TableTime {
   static #options = {
@@ -33,7 +22,7 @@ export class TableTime {
     this.#userIdAndName = userIdAndName;
   }
 
-  static setTime(tableTime: TableTimeOptions) {
+  static setValue(tableTime: TableTimeOptions) {
     this.#options = tableTime;
   }
 
@@ -67,7 +56,7 @@ export class TableTime {
     });
   }
 
-  static get time() {
+  static get value() {
     return this.#options;
   }
 

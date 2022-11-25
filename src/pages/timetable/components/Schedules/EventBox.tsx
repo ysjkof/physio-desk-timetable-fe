@@ -15,8 +15,8 @@ import {
 } from '../../../../services/dateServices';
 import {
   selectedInfoVar,
+  tableDisplayVar,
   tableTimeVar,
-  viewOptionsVar,
 } from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,
@@ -45,33 +45,26 @@ export default function EventBox({
   event,
   isSingleUser,
 }: EventBoxProps) {
-  const {
-    id: reservationId,
-    startDate,
-    endDate,
-    state,
-    memo,
-    prescriptions,
-    patient,
-  } = event;
-  const selectedInfo = useReactiveVar(selectedInfoVar);
-  const viewOptions = useReactiveVar(viewOptionsVar);
-  const tableTime = useReactiveVar(tableTimeVar);
   const navigate = useNavigate();
+  const selectedInfo = useReactiveVar(selectedInfoVar);
+  const tableDisplay = useReactiveVar(tableDisplayVar);
+  const tableTime = useReactiveVar(tableTimeVar);
   const [isHover, setIsHover] = useState(false);
 
-  const isDayOff = state === ReservationState.DayOff;
-  const isReserve = state === ReservationState.Reserved;
-  const isCancel = state === ReservationState.Canceled;
-  const isNoshow = state === ReservationState.NoShow;
+  const isDayOff = event.state === ReservationState.DayOff;
+  const isReserve = event.state === ReservationState.Reserved;
+  const isCancel = event.state === ReservationState.Canceled;
+  const isNoshow = event.state === ReservationState.NoShow;
 
   let height = numberOfCell * TABLE_CELL_HEIGHT;
+
   if (height > maxTableHeight) height = maxTableHeight;
 
   const matchTableEndtime = compareTableEndtime(new Date(event.endDate), {
     hour: tableTime.lastHour,
     minute: tableTime.lastMinute,
   });
+
   if (matchTableEndtime) height = height;
 
   const eventBox = useRef<HTMLDivElement>(null);
@@ -128,7 +121,7 @@ export default function EventBox({
   };
 
   function onClickBox() {
-    navigate(ROUTES.edit_reservation, { state: { reservationId } });
+    navigate(ROUTES.edit_reservation, { state: { reservationId: event.id } });
   }
   const setSelectedReservation = () => {
     selectedInfoVar({ ...selectedInfo, reservation: event });
@@ -148,9 +141,9 @@ export default function EventBox({
       onHoverEnd={() => setIsHover(false)}
       className={cls(
         'EVENT_BOX group absolute z-30 cursor-pointer',
-        !viewOptions.seeCancel && isCancel
+        !tableDisplay.seeCancel && isCancel
           ? 'hidden'
-          : !viewOptions.seeNoshow && isNoshow
+          : !tableDisplay.seeNoshow && isNoshow
           ? 'hidden'
           : '',
         isDayOff ? 'z-[31]' : ''
@@ -178,26 +171,26 @@ export default function EventBox({
           <span className="ml-0.5 w-full font-extralight">
             {isDayOff
               ? '예약잠금'
-              : patient?.registrationNumber + ':' + patient?.name}
+              : event.patient?.registrationNumber + ':' + event.patient?.name}
           </span>
-          {memo && (
+          {event.memo && (
             <div className="absolute right-0 top-0 border-4 border-t-red-500 border-r-red-500 border-l-transparent border-b-transparent" />
           )}
         </div>
-        {!isDayOff && prescriptions && numberOfCell !== 1 && (
+        {!isDayOff && event.prescriptions && numberOfCell !== 1 && (
           <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
-            {prescriptions.map((prescription) => prescription.name + ' ')}
+            {event.prescriptions.map((prescription) => prescription.name + ' ')}
           </div>
         )}
 
         {
           numberOfCell > 2 ? (
-            memo ? (
+            event.memo ? (
               <div
                 className="overflow-hidden break-all font-extralight leading-5"
                 style={{ height: (numberOfCell - 2) * TABLE_CELL_HEIGHT }}
               >
-                {memo}
+                {event.memo}
               </div>
             ) : null
           ) : null // 칸이 없어서 메모 생략
@@ -240,13 +233,13 @@ export default function EventBox({
             }}
           >
             <span className="mb-1 flex">
-              시간 : {getTimeString(new Date(startDate), false)} ~{' '}
-              {getTimeString(new Date(endDate), false)}
+              시간 : {getTimeString(new Date(event.startDate), false)} ~{' '}
+              {getTimeString(new Date(event.endDate), false)}
             </span>
             {!isDayOff && (
               <ul className="mb-1 flex flex-col">
                 처방 :
-                {prescriptions?.map((prescription, i) => (
+                {event.prescriptions?.map((prescription, i) => (
                   <li key={i} className="flex pl-2">
                     <span className="overflow-hidden text-ellipsis whitespace-nowrap">
                       {prescription.name}

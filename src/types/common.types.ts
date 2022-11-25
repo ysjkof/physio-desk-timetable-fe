@@ -1,5 +1,4 @@
 import { SVGProps } from 'react';
-import { VIEW_PERIOD } from '../constants/constants';
 import {
   Clinic,
   FindMyClinicsQuery,
@@ -13,14 +12,24 @@ import {
   User,
 } from './generated.types';
 
-type ViewPeriodKey = keyof typeof VIEW_PERIOD;
-export type ViewPeriod = typeof VIEW_PERIOD[ViewPeriodKey];
-export interface IViewOption {
-  viewPeriod: ViewPeriod;
+// models
+
+export interface FirstAndLastTime {
+  firstHour: number;
+  firstMinute: number;
+  lastHour: number;
+  lastMinute: number;
+}
+
+export interface TableTimeOptions extends FirstAndLastTime {
+  gap: number;
+}
+
+export interface TableDisplayOptions {
+  hasWeekView: boolean;
   seeCancel: boolean;
   seeNoshow: boolean;
   seeList: boolean;
-  seeActiveOption: boolean;
   navigationExpand: boolean;
 }
 

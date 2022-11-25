@@ -7,7 +7,6 @@ import {
 import { useReactiveVar } from '@apollo/client';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useStore from '../../../hooks/useStore';
 import {
   compareDateMatch,
   createDate,
@@ -164,7 +163,6 @@ export default function DatepickerCalendar({
   setOpen,
   hasHour,
 }: DatePickerInterface) {
-  const { viewOptions } = useStore();
   const tableTime = useReactiveVar(tableTimeVar);
   const today = createDate();
 

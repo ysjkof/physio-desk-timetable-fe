@@ -28,6 +28,7 @@ import {
   TimetableTemplate,
 } from './components';
 import TableModals from './_legacy_components/templates/TableModals';
+import { TableDisplay } from '../../models';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
@@ -48,7 +49,7 @@ export default function TimeTable() {
   const { labels } = useTableTime();
   const { data: loginUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
-  const { selectedInfo, viewOptions, clinicLists, selectedDate } = useStore();
+  const { selectedInfo, clinicLists, selectedDate } = useStore();
 
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
 
@@ -180,7 +181,7 @@ export default function TimeTable() {
       <Helmet>
         <title>시간표 | {MUOOL}</title>
       </Helmet>
-      {!viewOptions.get || !weekEvents ? (
+      {!TableDisplay.value || !weekEvents ? (
         <Loading />
       ) : (
         <TimetableTemplate
@@ -190,7 +191,7 @@ export default function TimeTable() {
           columns={
             <>
               <AnimatePresence>
-                {viewOptions.get.seeList === false && (
+                {TableDisplay.value.seeList === false && (
                   <Schedules
                     userLength={userLength}
                     labels={labels}
@@ -198,7 +199,7 @@ export default function TimeTable() {
                   />
                 )}
               </AnimatePresence>
-              {viewOptions.get.seeList === true && '준비 중'}
+              {TableDisplay.value.seeList === true && '준비 중'}
             </>
           }
         />

@@ -6,11 +6,6 @@ export const UTC_OPTION = {
   kor: UTC_OPTION_KST,
 };
 
-export const VIEW_PERIOD = {
-  ONE_DAY: 1,
-  ONE_WEEK: 7,
-} as const;
-
 export const TABLE_MAIN_COMPONENT_LAYOUT_PADDING_TOP = 50; // px
 export const TABLE_CELL_HEIGHT = 20; // px
 export const TABLE_CELL_HEIGHT_IN_ONE_MINUTE = 2; // px
