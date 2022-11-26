@@ -22,8 +22,8 @@ import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import Check from '../../../../svgs/Check';
-import { useTableDisplay } from '../../hooks';
-import { TableDisplay, TableTime } from '../../../../models';
+import { TableDisplay } from '../../../../models';
+import { useTableDisplay, useTableTime } from '../../hooks';
 import type {
   FirstAndLastTime,
   IMemberWithActivate,
@@ -34,6 +34,8 @@ export default function TableOptionSelector() {
     useStore();
 
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
+
+  const { changeTableTIme } = useTableTime();
 
   const tableTime = useReactiveVar(tableTimeVar);
 
@@ -105,11 +107,7 @@ export default function TableOptionSelector() {
   };
 
   const changeTableTime = (key: keyof FirstAndLastTime, value: number) => {
-    if (!loggedInUser) throw new Error('로그인 유저 정보가 없습니다');
-
-    const tableTimeOptions = TableTime.createTimeOptions(key, value);
-    TableTime.saveToLocalStorage(tableTimeOptions);
-    tableTimeVar(tableTimeOptions);
+    changeTableTIme(key, value);
   };
 
   const startHours = getHoursByUnit(0, 24);

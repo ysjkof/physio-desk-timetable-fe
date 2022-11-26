@@ -4,7 +4,7 @@ import { useListReservations } from './useListReservations';
 import { useReserve } from './useReserve';
 import { useTableDisplay } from './useTableDisplay';
 import { useTableLabel } from './useTableLabel';
-
+import { useTableTime } from './useTableTime';
 export {
   useDayoff,
   useDeleteReservation,
@@ -12,4 +12,5 @@ export {
   useReserve,
   useTableDisplay,
   useTableLabel,
+  useTableTime,
 };

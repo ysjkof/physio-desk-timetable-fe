@@ -19,26 +19,9 @@ export function useTableLabel() {
     setLabels(TableTime.labels);
   };
 
-  const isChanged = (
-    options1: typeof tableTimeOptions,
-    options2: typeof tableTimeOptions
-  ) => {
-    let result = false;
-    for (const _key in options1) {
-      const key = _key as keyof typeof tableTimeOptions;
-      if (options1[key] !== options2[key]) {
-        result = true;
-        break;
-      }
-    }
-    return result;
-  };
-
   useEffect(() => {
-    if (isChanged(tableTimeOptions, TableTime.value)) {
-      changeTableTimeOptions(tableTimeOptions);
-      changeLabels();
-    }
+    changeTableTimeOptions(tableTimeOptions);
+    changeLabels();
   }, [tableTimeOptions]);
 
   return { labels };
