@@ -28,7 +28,7 @@ import {
   TimetableTemplate,
 } from './components';
 import TableModals from './_legacy_components/templates/TableModals';
-import { TableDisplay } from '../../models';
+import { ClinicsOfClient, TableDisplay } from '../../models';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
@@ -49,7 +49,7 @@ export default function TimeTable() {
   const { labels } = useTableLabel();
   const { data: loginUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
-  const { selectedInfo, clinicLists, selectedDate } = useStore();
+  const { selectedInfo, selectedDate } = useStore();
 
   const userLength = getActiveUserLength(selectedInfo.clinic?.members);
 
@@ -76,7 +76,7 @@ export default function TimeTable() {
       prevSelectedClinicId = clinicId;
 
       const newUserFrameForWeek = makeUsersInDay(
-        spreadClinicMembers(clinicLists, selectedInfo.clinic.id),
+        spreadClinicMembers(ClinicsOfClient.value, selectedInfo.clinic.id),
         getWeeks(selectedSunday)
       );
       setUserFrameForWeek(newUserFrameForWeek);
@@ -174,7 +174,7 @@ export default function TimeTable() {
         },
       });
     }
-  }, [reservationData, clinicLists, selectedInfo.clinic]);
+  }, [reservationData, ClinicsOfClient.value, selectedInfo.clinic]);
 
   return (
     <>

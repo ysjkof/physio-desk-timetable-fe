@@ -1,6 +1,6 @@
 import {
+  ClinicOfClient,
   DayWithUsers,
-  IClinicList,
   IListReservation,
   IMember,
   IMemberWithActivate,
@@ -9,7 +9,7 @@ import {
 import { compareDateMatch } from '../services/dateServices';
 
 export const spreadClinicMembers = (
-  clinics: IClinicList[] | null,
+  clinics: ClinicOfClient[] | null,
   clinicId: number
 ) => {
   const result: IMemberWithActivate[] = [];
@@ -75,7 +75,7 @@ export const distributeReservation = ({
 };
 
 export const getActiveUserLength = (members?: IMemberWithActivate[]) =>
-  members?.filter((user) => user.isActivate).length || 0;
+  members?.filter((user) => user.canSee).length || 0;
 
 export const getTableCellWidth = (userLength: number) => {
   const widthValue = 6;

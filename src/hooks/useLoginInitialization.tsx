@@ -5,18 +5,20 @@ import { loggedInUserVar, tableTimeVar, tableDisplayVar } from '../store';
 import localStorageUtils from '../utils/localStorageUtils';
 import useStore, { makeSelectedClinic } from './useStore';
 import { ME_DOCUMENT, FIND_MY_CLINICS_DOCUMENT } from '../graphql';
-import { TableTime, TableDisplay } from '../models';
+import { TableTime, TableDisplay, ClinicsOfClient } from '../models';
 import {
   ClinicType,
   FindMyClinicsQuery,
   MeQuery,
 } from '../types/generated.types';
 import type {
-  IClinic,
+  MyClinic,
   IClinicList,
   ISelectedClinic,
   UserIdAndName,
+  ClinicOfClient,
 } from '../types/common.types';
+import { SelectedClinic } from '../models/SelectedClinic';
 
 function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
   const [loading, setLoading] = useState(true);
@@ -32,8 +34,6 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
 
   const initTableDisplay = () => {
     const localViewOptions = TableDisplay.getFromLocalStorage();
-    console.log('ini', localViewOptions);
-
     if (localViewOptions === null) {
       return TableDisplay.saveToLocalStorage(TableDisplay.value);
     }
@@ -46,59 +46,47 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
     if (localTableTime === null) {
       return TableTime.saveToLocalStorage(TableTime.value);
     }
+    TableTime.setValue(localTableTime);
     tableTimeVar(localTableTime);
   };
-
-  const setClinicLists = (userIdAndName: UserIdAndName, clinics: IClinic[]) => {
-    function injectKeyValue(clinics: IClinic[]): IClinicList[] {
-      return clinics.map((clinic) => {
-        const members = clinic.members.map((member) => ({
-          ...member,
-          isActivate: member.staying,
-        }));
-        return { ...clinic, members };
-      });
+  const initClinicsOfClient = (clinics: MyClinic[]) => {
+    const localClinics = ClinicsOfClient.getFromLocalStorage();
+    const myClinics = ClinicsOfClient.createClinicsOfClient(clinics);
+    if (localClinics === null) {
+      ClinicsOfClient.saveToLocalStorage(myClinics);
+      return;
     }
-
-    const myClinics = injectKeyValue(clinics);
-    let updatedMyClinics: IClinicList[] = myClinics;
-
-    const localClinics = localStorageUtils.get<IClinicList[]>({
-      key: 'clinicLists',
-      ...userIdAndName,
+    const updatedMyClinics = myClinics.map((clinic) => {
+      const myClinic = myClinics.find((myClinic) => myClinic.id === clinic.id);
+      return myClinic
+        ? ClinicsOfClient.combineClinic(clinic, myClinic)
+        : clinic;
     });
+    ClinicsOfClient.setValue(updatedMyClinics);
+    clinicListsVar(updatedMyClinics);
+  };
+
+  // 삭제할거임
+  const setClinicLists = (clinics: MyClinic[]) => {
+    const myClinics = ClinicsOfClient.createClinicsOfClient(clinics);
+
+    let updatedMyClinics: ClinicOfClient[] = myClinics;
+
+    const localClinics = ClinicsOfClient.getFromLocalStorage();
 
     if (localClinics) {
       updatedMyClinics = myClinics.map((clinic) => {
-        const localClinic = localClinics.find(
-          (localClinic) => localClinic.id === clinic.id
+        const myClinic = myClinics.find(
+          (myClinic) => myClinic.id === clinic.id
         );
-
-        if (!localClinic) return clinic;
-
-        return {
-          ...localClinic,
-          id: clinic.id,
-          name: clinic.name,
-          type: clinic.type,
-          members: clinic.members.map((member) => {
-            const sameMember = localClinic.members.find(
-              (localMember) => localMember.id === member.id
-            );
-            return {
-              ...member,
-              ...(sameMember && { isActivate: sameMember.isActivate }),
-            };
-          }),
-        };
+        return myClinic
+          ? ClinicsOfClient.combineClinic(clinic, myClinic)
+          : clinic;
       });
     }
 
-    localStorageUtils.set({
-      key: 'clinicLists',
-      value: updatedMyClinics,
-      ...userIdAndName,
-    });
+    ClinicsOfClient.saveToLocalStorage(updatedMyClinics);
+
     clinicListsVar(updatedMyClinics);
 
     return updatedMyClinics;
@@ -177,9 +165,11 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
     initTableDisplay();
     TableTime.initialize(userIdAndName);
     initTableTime();
-    setSelectedClinic(
-      setClinicLists(userIdAndName, findMyClinicsData.findMyClinics.clinics)
-    );
+    // 현재 미작동
+    setSelectedClinic(setClinicLists(findMyClinicsData.findMyClinics.clinics));
+
+    ClinicsOfClient.initialize(userIdAndName);
+    initClinicsOfClient(findMyClinicsData.findMyClinics.clinics);
 
     loggedInUserVar(meData.me);
 

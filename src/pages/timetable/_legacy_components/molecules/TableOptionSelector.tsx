@@ -30,8 +30,8 @@ import type {
 } from '../../../../types/common.types';
 
 export default function TableOptionSelector() {
-  const { setSelectedInfo, clinicLists, clinicListsVar, selectedInfo } =
-    useStore();
+  const { setSelectedInfo, clinicListsVar, selectedInfo } = useStore();
+  const clinicLists = useReactiveVar(clinicListsVar);
 
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
 
@@ -53,14 +53,14 @@ export default function TableOptionSelector() {
     if (memberIdx === -1) throw new Error('❌ member index가 -1입니다');
 
     const activateLength = clinicLists[clinicIdx].members.filter(
-      (member) => member.isActivate
+      (member) => member.canSee
     ).length;
-    let isActivate = clinicLists[clinicIdx].members[memberIdx].isActivate;
+    let isActivate = clinicLists[clinicIdx].members[memberIdx].canSee;
 
     if (isActivate && activateLength === 1) {
       return;
     }
-    clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
+    clinicLists[clinicIdx].members[memberIdx].canSee = !isActivate;
     localStorageUtils.set({
       key: 'clinicLists',
       userId: loggedInUser.id,
@@ -276,7 +276,7 @@ export default function TableOptionSelector() {
                     <Sidebar.Li
                       key={member.id}
                       onClick={() => onClickToggleUser(clinic.id, member.id)}
-                      selected={isSelectedClinic && member.isActivate}
+                      selected={isSelectedClinic && member.canSee}
                     >
                       {member.user.name}
                     </Sidebar.Li>

@@ -1,12 +1,13 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import useStore from '../../../hooks/useStore';
 import { getAfterDate, getSunday } from '../../../services/dateServices';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
+import { clinicListsVar } from '../../../store';
 import type { ListReservationsQuery } from '../../../types/generated.types';
 
 export const useListReservations = () => {
-  const { selectedInfo, selectedDate, clinicLists } = useStore();
-
+  const { selectedInfo, selectedDate } = useStore();
+  const clinicLists = useReactiveVar(clinicListsVar);
   const startDate = getSunday(selectedDate);
   const selectedClinic = clinicLists.find(
     (clinic) => clinic.id === selectedInfo.clinic?.id

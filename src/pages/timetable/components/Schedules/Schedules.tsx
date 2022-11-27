@@ -53,7 +53,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
       style={containerStyle}
     >
       {schedules.map((day, i) => {
-        const filteredUsers = day.users.filter((member) => member.isActivate);
+        const filteredUsers = day.users.filter((member) => member.canSee);
         return (
           <div key={i} className="flex flex-col">
             <PaddingWrapper>

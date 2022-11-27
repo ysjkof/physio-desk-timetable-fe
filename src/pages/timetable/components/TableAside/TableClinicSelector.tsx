@@ -1,16 +1,20 @@
+import { useReactiveVar } from '@apollo/client';
 import { renameUseSplit } from '../../../../utils/utils';
 import useStore from '../../../../hooks/useStore';
 import localStorageUtils from '../../../../utils/localStorageUtils';
 import { Selectbox } from '../../../../components';
 import { checkStay } from '../../../dashboard/Dashboard';
 import { useMe } from '../../../../hooks/useMe';
+import { clinicListsVar } from '../../../../store';
 import { ClinicType } from '../../../../types/generated.types';
 
 export default function TableClinicSelector() {
   const { data: meData } = useMe();
   if (!meData) return <></>;
 
-  const { clinicLists, setSelectedInfo, selectedInfo } = useStore();
+  const { setSelectedInfo, selectedInfo } = useStore();
+  const clinicLists = useReactiveVar(clinicListsVar);
+
   const clinicListsSelectMeMember = clinicLists.map((clinic) => {
     const idx = clinic.members.findIndex(
       (member) => member.user.id === meData.me.id

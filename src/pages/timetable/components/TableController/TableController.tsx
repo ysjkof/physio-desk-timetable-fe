@@ -36,8 +36,8 @@ import { TableDisplay } from '../../../../models';
 export default function TableController() {
   const navigate = useNavigate();
   const today = new Date();
-  const { setSelectedInfo, selectedInfo, selectedDate, clinicLists } =
-    useStore();
+  const { setSelectedInfo, selectedInfo, selectedDate } = useStore();
+  const clinicLists = useReactiveVar(clinicListsVar);
 
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
   const loggedInUser = useReactiveVar(loggedInUserVar);
@@ -83,14 +83,14 @@ export default function TableController() {
     if (memberIdx === -1) throw new Error('❌ member index가 -1입니다');
 
     const activateLength = clinicLists[clinicIdx].members.filter(
-      (member) => member.isActivate
+      (member) => member.canSee
     ).length;
-    let isActivate = clinicLists[clinicIdx].members[memberIdx].isActivate;
+    let isActivate = clinicLists[clinicIdx].members[memberIdx].canSee;
 
     if (isActivate && activateLength === 1) {
       return;
     }
-    clinicLists[clinicIdx].members[memberIdx].isActivate = !isActivate;
+    clinicLists[clinicIdx].members[memberIdx].canSee = !isActivate;
     localStorageUtils.set({
       key: 'clinicLists',
       userId: loggedInUser.id,
@@ -148,7 +148,7 @@ export default function TableController() {
               key={i}
               color={'black'}
               backgroundColor={USER_COLORS[i].deep}
-              isActivated={member.isActivate}
+              canSee={!!member.canSee}
               label={member.user.name}
               onClick={() => toggleUsers(clinic.id, member.id)}
             />

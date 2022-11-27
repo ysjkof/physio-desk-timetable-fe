@@ -5,13 +5,13 @@ export function CheckableButton({
   label,
   color,
   backgroundColor,
-  isActivated,
+  canSee,
   onClick,
 }: {
   label: string;
   color: string;
   backgroundColor: string;
-  isActivated: Boolean;
+  canSee: Boolean;
   onClick: () => void;
 }) {
   return (
@@ -19,17 +19,17 @@ export function CheckableButton({
       onClick={onClick}
       className={cls(
         'flex h-fit select-none items-center gap-2 whitespace-nowrap rounded-sm border border-gray-500 px-2 py-0.5',
-        isActivated ? 'text-white' : 'bg-white'
+        canSee ? 'text-white' : 'bg-white'
       )}
       style={{
-        ...(isActivated && { color, backgroundColor }),
+        ...(canSee && { color, backgroundColor }),
       }}
     >
       <Check
         className={cls('rounded-sm bg-gray-400 text-white')}
         iconSize="SM"
         style={{
-          ...(isActivated && {
+          ...(canSee && {
             color: backgroundColor,
             backgroundColor: color,
           }),

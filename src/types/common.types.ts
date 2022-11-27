@@ -35,12 +35,22 @@ export interface TableDisplayOptions {
 
 // typescript type & interface
 export type IFindMyClinics = FindMyClinicsQuery['findMyClinics']['clinics'];
-export type IClinic = NonNullable<FlatArray<IFindMyClinics, 0>>;
+export type MyClinic = NonNullable<FlatArray<IFindMyClinics, 0>>;
 
-export type IMember = IClinic['members'][0];
-export type IMemberWithActivate = IMember & { isActivate: boolean };
+// TODO : MyClinicMember로 이름 변경
+export type IMember = MyClinic['members'][0];
 
-export interface IClinicList extends Omit<IClinic, 'members'> {
+export interface IMemberWithActivate extends IMember {
+  // TODO : isActivate지우고 모두 canSee로 변경
+  // isActivate: boolean;
+  canSee?: boolean;
+}
+
+export interface ClinicOfClient extends Omit<MyClinic, 'members'> {
+  members: IMemberWithActivate[];
+}
+
+export interface IClinicList extends Omit<MyClinic, 'members'> {
   members: IMemberWithActivate[];
 }
 export type IListReservation = NonNullable<
@@ -137,9 +147,8 @@ export interface ReserveFormType {
 
 //
 
-export interface IUserWithEvent extends IMember {
+export interface IUserWithEvent extends IMemberWithActivate {
   events: IListReservation[];
-  isActivate?: boolean;
 }
 export interface DayWithUsers {
   date: Date;
