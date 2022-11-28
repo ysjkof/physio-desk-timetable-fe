@@ -40,18 +40,19 @@ export type MyClinic = NonNullable<FlatArray<IFindMyClinics, 0>>;
 // TODO : MyClinicMember로 이름 변경
 export type IMember = MyClinic['members'][0];
 
-export interface IMemberWithActivate extends IMember {
-  // TODO : isActivate지우고 모두 canSee로 변경
-  // isActivate: boolean;
+export interface MemberOfClient extends IMember {
   canSee?: boolean;
 }
 
 export interface ClinicOfClient extends Omit<MyClinic, 'members'> {
-  members: IMemberWithActivate[];
+  members: MemberOfClient[];
+  isSelected: boolean;
+  isManager: boolean;
+  isStayed: boolean;
 }
 
 export interface IClinicList extends Omit<MyClinic, 'members'> {
-  members: IMemberWithActivate[];
+  members: MemberOfClient[];
 }
 export type IListReservation = NonNullable<
   ListReservationsQuery['listReservations']['results']
@@ -59,12 +60,6 @@ export type IListReservation = NonNullable<
 
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
-}
-
-export interface ISelectedClinic extends Pick<Clinic, 'id' | 'name' | 'type'> {
-  isManager: IMember['manager'];
-  isStayed: IMember['staying'];
-  members: IMemberWithActivate[];
 }
 
 export interface isActive {
@@ -147,7 +142,7 @@ export interface ReserveFormType {
 
 //
 
-export interface IUserWithEvent extends IMemberWithActivate {
+export interface IUserWithEvent extends MemberOfClient {
   events: IListReservation[];
 }
 export interface DayWithUsers {
@@ -155,7 +150,6 @@ export interface DayWithUsers {
   users: IUserWithEvent[];
 }
 
-export interface SelectedClinic extends ISelectedClinic {}
 interface SelectedReservation extends IListReservation {}
 export interface SelectedPatient
   extends Pick<Patient, 'name' | 'gender' | 'registrationNumber' | 'birthday'> {
@@ -165,7 +159,6 @@ export interface SelectedPatient
 }
 
 export interface SelectedInfo {
-  clinic: SelectedClinic | null;
   patient: SelectedPatient | null;
   reservation: SelectedReservation | null;
 }

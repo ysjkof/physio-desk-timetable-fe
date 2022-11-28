@@ -7,14 +7,8 @@ import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { USER_COLORS } from '../../../../constants/constants';
 import useStore from '../../../../hooks/useStore';
-import {
-  clinicListsVar,
-  hasTableDisplayVar,
-  loggedInUserVar,
-  selectedDateVar,
-} from '../../../../store';
+import { hasTableDisplayVar, selectedDateVar } from '../../../../store';
 import { ROUTES } from '../../../../router/routes';
-import localStorageUtils from '../../../../utils/localStorageUtils';
 import { getPositionRef } from '../../../../utils/utils';
 import {
   Calendar,
@@ -30,18 +24,19 @@ import {
   MenuButton,
   TwoLabelSwitch,
 } from '../../../../components';
-import { useTableDisplay } from '../../hooks';
-import { TableDisplay } from '../../../../models';
+import { useSelectedClinic, useTableDisplay } from '../../hooks';
+import { ClinicsOfClient, TableDisplay } from '../../../../models';
 
 export default function TableController() {
+  const hasTableDisplay = useReactiveVar(hasTableDisplayVar);
   const navigate = useNavigate();
   const today = new Date();
+
   const { setSelectedInfo, selectedInfo, selectedDate } = useStore();
-  const clinicLists = useReactiveVar(clinicListsVar);
+
+  const { toggleUser } = useSelectedClinic();
 
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
-  const loggedInUser = useReactiveVar(loggedInUserVar);
-  const hasTableDisplay = useReactiveVar(hasTableDisplayVar);
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
@@ -69,35 +64,8 @@ export default function TableController() {
     toggleDisplayOption('navigationExpand');
   };
 
-  const clinic = clinicLists.find(({ id }) => id === selectedInfo.clinic?.id);
-
-  const toggleUsers = (clinicId: number, memberId: number) => {
-    if (!loggedInUser) throw new Error('❌ loginUser가 false입니다');
-    const clinicIdx = clinicLists.findIndex(
-      (prevClinic) => prevClinic.id === clinicId
-    );
-    if (clinicIdx === -1) throw new Error('❌ group index가 -1입니다');
-    const memberIdx = clinicLists[clinicIdx].members.findIndex(
-      (prevMember) => prevMember.id === memberId
-    );
-    if (memberIdx === -1) throw new Error('❌ member index가 -1입니다');
-
-    const activateLength = clinicLists[clinicIdx].members.filter(
-      (member) => member.canSee
-    ).length;
-    let isActivate = clinicLists[clinicIdx].members[memberIdx].canSee;
-
-    if (isActivate && activateLength === 1) {
-      return;
-    }
-    clinicLists[clinicIdx].members[memberIdx].canSee = !isActivate;
-    localStorageUtils.set({
-      key: 'clinicLists',
-      userId: loggedInUser.id,
-      userName: loggedInUser.name,
-      value: [...clinicLists],
-    });
-    clinicListsVar([...clinicLists]);
+  const toggleUsers = (memberId: number) => {
+    toggleUser(memberId);
   };
   const weekNumber = getWeekOfMonth(selectedDate);
   const month = (getMonth(selectedDate) + 1 + '').padStart(2, '0');
@@ -143,14 +111,14 @@ export default function TableController() {
       </div>
       <div className="flex w-full items-center justify-between pb-3">
         <div className="flex gap-2">
-          {clinic?.members.map((member, i) => (
+          {ClinicsOfClient.selectedClinic?.members.map((member, i) => (
             <CheckableButton
               key={i}
               color={'black'}
               backgroundColor={USER_COLORS[i].deep}
               canSee={!!member.canSee}
               label={member.user.name}
-              onClick={() => toggleUsers(clinic.id, member.id)}
+              onClick={() => toggleUsers(member.id)}
             />
           ))}
         </div>

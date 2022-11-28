@@ -1,8 +1,8 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
-import { IMemberWithActivate } from '../../../../types/common.types';
+import { MemberOfClient } from '../../../../types/common.types';
 
 interface SelectUserProps {
-  members: IMemberWithActivate[];
+  members: MemberOfClient[];
   register: UseFormRegisterReturn;
 }
 export default function SelectUser({ members, register }: SelectUserProps) {

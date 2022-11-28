@@ -11,6 +11,7 @@ import {
   FIND_ALL_PATIENTS_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
+import { ClinicsOfClient } from '../models';
 import type {
   CreateAccountMutation,
   CreateAtomPrescriptionMutation,
@@ -104,8 +105,9 @@ function CreateReservation() {
     totalCount: 0,
     thisCount: 0,
   });
-  const { clinic } = useReactiveVar(selectedInfoVar);
-  const clinicId = clinic?.id;
+
+  const { selectedClinic } = ClinicsOfClient;
+  const clinicId = selectedClinic.id;
   if (!clinicId) return <p>로그인 해야 됩니다.</p>;
 
   const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
@@ -160,10 +162,10 @@ function CreateReservation() {
           Math.random() * (patients?.length! ?? 0)
         );
         const memberRandom = Math.floor(
-          Math.random() * (clinic?.members.length ?? 0)
+          Math.random() * (selectedClinic.members.length ?? 0)
         );
         const patientId = patients[patientRandom].id;
-        const userId = clinic?.members[memberRandom].user.id!;
+        const userId = selectedClinic.members[memberRandom].user.id!;
 
         createReservationMutation({
           variables: {
@@ -209,9 +211,9 @@ function CreateReservation() {
         </button>
       </form>
       <p>
-        병원 id: {clinic?.id}
+        병원 id: {clinicId}
         <br />
-        병원이름 : {clinic?.name}
+        병원이름 : {selectedClinic.name}
         <br />
         예약한 수 : {createdReservation.thisCount}
         <br />총 예약한 수 : {createdReservation.totalCount}
@@ -221,10 +223,11 @@ function CreateReservation() {
 }
 
 function CreateDummyData() {
+  const { selectedClinic } = ClinicsOfClient;
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const [reserveDate, setReserveDate] = useState(new Date().getMonth() + 1);
 
-  const clinicId = selectedInfo.clinic?.id;
+  const clinicId = selectedClinic.id;
   if (!clinicId) return <p>Not Permission</p>;
 
   const [createAccount] = useMutation<CreateAccountMutation>(
@@ -247,9 +250,9 @@ function CreateDummyData() {
     <div className="px-4 ">
       <h1 className="text-base font-extrabold">Create Dummy Data</h1>
       <p>
-        병원 id: {selectedInfo.clinic?.id}
+        병원 id: {clinicId}
         <br />
-        병원이름 : {selectedInfo.clinic?.name}
+        병원이름 : {selectedClinic.name}
         <br />
         예약될 월 : {reserveDate}
         <br />

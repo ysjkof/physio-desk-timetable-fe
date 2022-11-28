@@ -1,9 +1,8 @@
 import { lazy, useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import useStore from '../../../../hooks/useStore';
 import { client } from '../../../../apollo';
 import Worning from '../../../../_legacy_components/atoms/Warning';
 import Input from '../../../../_legacy_components/molecules/Input';
@@ -14,6 +13,8 @@ import {
   FIND_MY_CLINICS_DOCUMENT,
   INVITE_USER_DOCUMENT,
 } from '../../../../graphql';
+import { ClinicsOfClient } from '../../../../models';
+import { clinicListsVar } from '../../../../store';
 import {
   ClinicType,
   InviteUserMutation,
@@ -24,8 +25,9 @@ const Loading = lazy(
 );
 
 export default function InviteClinic() {
-  const { selectedInfo } = useStore();
+  useReactiveVar(clinicListsVar); // ui 새로고침 용
   const [okMessage, setOkMessage] = useState('');
+  const { selectedClinic } = ClinicsOfClient;
 
   const {
     register,
@@ -41,19 +43,17 @@ export default function InviteClinic() {
 
   const inviteUser = () => {
     if (inviteUserLoading) return;
-    if (!selectedInfo.clinic) throw new Error('병원이 선택되지 않았습니다');
+    if (!selectedClinic) throw new Error('병원이 선택되지 않았습니다');
 
     const { name } = getValues();
 
-    if (confirm(`${name}을(를) 그룹에 초대합니까?`)) {
+    if (confirm(`${name}을(를) ${selectedClinic.name}에 초대합니까?`)) {
       inviteUserMutation({
-        variables: { input: { clinicId: selectedInfo.clinic.id, name } },
+        variables: { input: { clinicId: selectedClinic.id, name } },
         onCompleted(data) {
           if (data.inviteUser.ok) {
             setOkMessage(
-              `"${
-                selectedInfo.clinic?.name || '병원'
-              }"에 "${name}"님을 초대했습니다`
+              `"${selectedClinic.name || '병원'}"에 "${name}"님을 초대했습니다`
             );
             client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
           }
@@ -62,9 +62,11 @@ export default function InviteClinic() {
     }
   };
 
-  if (!selectedInfo.clinic) return <Loading />;
+  console.log(selectedClinic.name);
 
-  if (selectedInfo.clinic && selectedInfo.clinic.type === ClinicType.Personal)
+  if (!selectedClinic) return <Loading />;
+
+  if (selectedClinic.type === ClinicType.Personal)
     return (
       <Worning>
         {
@@ -73,41 +75,41 @@ export default function InviteClinic() {
       </Worning>
     );
 
-  if (selectedInfo.clinic.isStayed && selectedInfo.clinic.isManager)
-    return (
-      <FormSection>
-        <form onSubmit={handleSubmit(inviteUser)} className="mt-10 max-w-xs">
-          <div className="relative flex items-center shadow-sm">
-            <Input
-              id="invite-clinic__name"
-              label="이름*"
-              type="text"
-              required
-              placeholder="사용자 검색"
-              maxLength={REG_EXP.personName.maxLength}
-              register={register('name', {
-                required: '이름을 입력하세요',
-                pattern: REG_EXP.personName.pattern,
-              })}
-            >
-              {errors.name?.message ? (
-                <FormError errorMessage={errors.name.message} />
-              ) : (
-                errors.name?.type === 'pattern' && (
-                  <FormError errorMessage={REG_EXP.personName.condition} />
-                )
-              )}
-              <button className="absolute bottom-2.5 right-2" tabIndex={-1}>
-                <FontAwesomeIcon icon={faSearch} />
-              </button>
-            </Input>
-          </div>
-          {(data?.inviteUser.error || okMessage) && (
-            <Worning>{data?.inviteUser.error || okMessage}</Worning>
-          )}
-        </form>
-      </FormSection>
-    );
+  if (!selectedClinic.isStayed || !selectedClinic.isManager)
+    return <Worning type="hasNotPermission" />;
 
-  return <Worning type="hasNotPermission" />;
+  return (
+    <FormSection>
+      <form onSubmit={handleSubmit(inviteUser)} className="mt-10 max-w-xs">
+        <div className="relative flex items-center shadow-sm">
+          <Input
+            id="invite-clinic__name"
+            label="이름*"
+            type="text"
+            required
+            placeholder="사용자 검색"
+            maxLength={REG_EXP.personName.maxLength}
+            register={register('name', {
+              required: '이름을 입력하세요',
+              pattern: REG_EXP.personName.pattern,
+            })}
+          >
+            {errors.name?.message ? (
+              <FormError errorMessage={errors.name.message} />
+            ) : (
+              errors.name?.type === 'pattern' && (
+                <FormError errorMessage={REG_EXP.personName.condition} />
+              )
+            )}
+            <button className="absolute bottom-2.5 right-2" tabIndex={-1}>
+              <FontAwesomeIcon icon={faSearch} />
+            </button>
+          </Input>
+        </div>
+        {(data?.inviteUser.error || okMessage) && (
+          <Worning>{data?.inviteUser.error || okMessage}</Worning>
+        )}
+      </form>
+    </FormSection>
+  );
 }

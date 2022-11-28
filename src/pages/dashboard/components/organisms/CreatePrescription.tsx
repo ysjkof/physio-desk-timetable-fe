@@ -17,6 +17,7 @@ import {
   FIND_ATOM_PRESCRIPTIONS_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../../../../graphql';
+import { ClinicsOfClient } from '../../../../models';
 import type {
   CreatePrescriptionInput,
   CreatePrescriptionMutation,
@@ -25,7 +26,7 @@ import type {
 } from '../../../../types/generated.types';
 
 export default function CreatePrescription() {
-  const { selectedInfo } = useStore();
+  const { selectedClinic } = ClinicsOfClient;
   const { data: findAtomPrescriptions, loading: loadingAtom } =
     useQuery<FindAtomPrescriptionsQuery>(FIND_ATOM_PRESCRIPTIONS_DOCUMENT);
 
@@ -44,7 +45,7 @@ export default function CreatePrescription() {
             query: FIND_PRESCRIPTIONS_DOCUMENT,
             variables: {
               input: {
-                clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,
+                clinicId: selectedClinic.id || 0,
                 onlyLookUpActive: false,
               },
             },
@@ -93,19 +94,19 @@ export default function CreatePrescription() {
             price: +price,
             description,
             prescriptionAtomIds: prescriptionAtomIds.map((id) => +id),
-            clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,
+            clinicId: selectedClinic ? selectedClinic.id : 0,
           },
         },
       });
     }
   };
 
-  if (!selectedInfo.clinic?.isStayed || !selectedInfo.clinic.isManager)
+  if (!selectedClinic.isStayed || !selectedClinic.isManager)
     return <Worning type="hasNotPermission" />;
 
   return (
     <section className="px-10">
-      <details open={selectedInfo.clinic.isManager}>
+      <details open={selectedClinic.isManager}>
         <summary>처방 만들기</summary>
         <form
           onSubmit={handleSubmit(onSubmitCreatePresciption)}

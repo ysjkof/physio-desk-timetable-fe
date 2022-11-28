@@ -1,18 +1,17 @@
 import { useReactiveVar } from '@apollo/client';
 import { renameUseSplit } from '../../../../utils/utils';
-import useStore from '../../../../hooks/useStore';
-import localStorageUtils from '../../../../utils/localStorageUtils';
 import { Selectbox } from '../../../../components';
-import { checkStay } from '../../../dashboard/Dashboard';
 import { useMe } from '../../../../hooks/useMe';
 import { clinicListsVar } from '../../../../store';
+import { ClinicsOfClient } from '../../../../models';
+import { useSelectedClinic } from '../../hooks';
 import { ClinicType } from '../../../../types/generated.types';
 
 export default function TableClinicSelector() {
+  const { selectClinic } = useSelectedClinic();
   const { data: meData } = useMe();
   if (!meData) return <></>;
 
-  const { setSelectedInfo, selectedInfo } = useStore();
   const clinicLists = useReactiveVar(clinicListsVar);
 
   const clinicListsSelectMeMember = clinicLists.map((clinic) => {
@@ -28,28 +27,7 @@ export default function TableClinicSelector() {
   });
 
   const changeSelectedClinic = (id: number, name: string, type: ClinicType) => {
-    const newSelectedClinic = {
-      id,
-      name,
-      type,
-      members:
-        clinicLists.find((clinicInFind) => clinicInFind.id === id)?.members ??
-        [],
-      isManager: Boolean(
-        meData.me.members?.find(
-          (member) => member.clinic.id === id && member.manager
-        )
-      ),
-      isStayed: checkStay(id, meData),
-    };
-    setSelectedInfo('clinic', newSelectedClinic, () =>
-      localStorageUtils.set({
-        key: 'selectedClinic',
-        userId: meData.me.id,
-        userName: meData.me.name,
-        value: newSelectedClinic,
-      })
-    );
+    selectClinic(id);
   };
 
   const changeName = (name: string, isAccepted?: boolean) => {
@@ -62,12 +40,15 @@ export default function TableClinicSelector() {
   };
 
   const isAccepted = meData?.me.members?.find(
-    (member) => member.clinic.id === selectedInfo.clinic?.id
+    (member) => member.clinic.id === ClinicsOfClient.selectedClinic?.id
   )?.accepted;
 
   return (
     <Selectbox
-      selectedValue={changeName(selectedInfo.clinic!.name, isAccepted)}
+      selectedValue={changeName(
+        ClinicsOfClient.selectedClinic!.name,
+        isAccepted
+      )}
       hasBorder
       backgroundColor="#262850"
     >
@@ -75,7 +56,7 @@ export default function TableClinicSelector() {
         {clinicListsSelectMeMember.map((clinic) => (
           <Selectbox.Option
             key={clinic.id}
-            selected={clinic.id === selectedInfo.clinic?.id}
+            selected={clinic.id === ClinicsOfClient.selectedClinic?.id}
             onClick={() =>
               changeSelectedClinic(clinic.id, clinic.name, clinic.type)
             }

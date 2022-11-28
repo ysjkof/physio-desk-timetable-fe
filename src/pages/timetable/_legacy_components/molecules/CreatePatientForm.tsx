@@ -12,6 +12,7 @@ import Input from '../../../../_legacy_components/molecules/Input';
 import Textarea from '../../../../_legacy_components/molecules/Textarea';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
+import { ClinicsOfClient } from '../../../../models';
 import {
   CREATE_PATIENT_DOCUMENT,
   EDIT_PATIENT_DOCUMENT,
@@ -38,6 +39,7 @@ export default function CreatePatientForm({
   closeAction,
   patient,
 }: CreatePatientFormProps) {
+  const { selectedClinic } = ClinicsOfClient;
   const { selectedInfo, setSelectedInfo } = useStore();
 
   const {
@@ -85,7 +87,7 @@ export default function CreatePatientForm({
         });
       } else {
         // create
-        if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
+        if (!selectedClinic) throw new Error('선택된 병원이 없습니다');
 
         createPatientMutation({
           variables: {
@@ -93,7 +95,7 @@ export default function CreatePatientForm({
               name,
               gender,
               memo,
-              clinicId: selectedInfo.clinic.id,
+              clinicId: selectedClinic.id,
               ...(birthday && { birthday }),
             },
           },
@@ -110,7 +112,7 @@ export default function CreatePatientForm({
                 gender: patient?.gender!,
                 birthday: patient?.birthday,
                 registrationNumber: patient?.registrationNumber!,
-                clinicName: selectedInfo.clinic?.name ?? '',
+                clinicName: selectedClinic.name,
               });
             }
           },

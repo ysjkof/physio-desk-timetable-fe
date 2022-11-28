@@ -39,6 +39,8 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
 } from '../../types/generated.types';
+import { useReactiveVar } from '@apollo/client';
+import { clinicListsVar } from '../../store';
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export interface TimetableModalProps {
@@ -49,22 +51,25 @@ export default function TimeTable() {
   const { labels } = useTableLabel();
   const { data: loginUser } = useMe();
   const { data: reservationData, subscribeToMore } = useListReservations();
-  const { selectedInfo, selectedDate } = useStore();
+  const { selectedDate } = useStore();
 
-  const userLength = getActiveUserLength(selectedInfo.clinic?.members);
+  const clinicList = useReactiveVar(clinicListsVar);
+
+  const userLength = getActiveUserLength(
+    ClinicsOfClient.selectedClinic?.members
+  );
 
   const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
+
   const [userFrameForWeek, setUserFrameForWeek] = useState<DayWithUsers[]>([]);
+
   let prevSelectedClinicId = useRef(0).current;
 
   useEffect(() => {
-    if (
-      reservationData?.listReservations.results &&
-      loginUser &&
-      selectedInfo.clinic
-    ) {
+    const clinicId = ClinicsOfClient.selectedClinic!.id;
+
+    if (reservationData?.listReservations.results && loginUser) {
       const selectedSunday = getSunday(selectedDate);
-      const clinicId = selectedInfo.clinic.id;
 
       if (
         clinicId === prevSelectedClinicId &&
@@ -76,7 +81,7 @@ export default function TimeTable() {
       prevSelectedClinicId = clinicId;
 
       const newUserFrameForWeek = makeUsersInDay(
-        spreadClinicMembers(ClinicsOfClient.value, selectedInfo.clinic.id),
+        spreadClinicMembers(ClinicsOfClient.value, clinicId),
         getWeeks(selectedSunday)
       );
       setUserFrameForWeek(newUserFrameForWeek);
@@ -88,10 +93,10 @@ export default function TimeTable() {
       );
     }
 
-    if (reservationData?.listReservations.ok && selectedInfo.clinic?.id) {
+    if (reservationData?.listReservations.ok && clinicId) {
       subscribeToMore({
         document: LISTEN_DELETE_RESERVATION_DOCUMENT,
-        variables: { input: { clinicId: selectedInfo.clinic.id } },
+        variables: { input: { clinicId } },
         updateQuery(
           prev: ListReservationsQuery,
           {
@@ -123,7 +128,7 @@ export default function TimeTable() {
 
       subscribeToMore({
         document: LISTEN_UPDATE_RESERVATION_DOCUMENT,
-        variables: { input: { clinicId: selectedInfo.clinic.id } },
+        variables: { input: { clinicId } },
         // 웹소켓이 받는 updated 데이터와 listReservation의 데이터 형태가 달라 타입에러 발생
         // 하지만 id로 apollo cache가 필요한 값을 처리한다
         // 타입에러 해결방법은,
@@ -174,7 +179,7 @@ export default function TimeTable() {
         },
       });
     }
-  }, [reservationData, ClinicsOfClient.value, selectedInfo.clinic]);
+  }, [reservationData, clinicList]);
 
   return (
     <>

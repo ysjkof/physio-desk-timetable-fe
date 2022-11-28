@@ -26,7 +26,6 @@ export const tableDisplayVar = makeVar<TableDisplayOptions>(TableDisplay.value);
 export const tableTimeVar = makeVar<TableTimeOptions>(TableTime.value);
 
 export const selectedInfoVar = makeVar<SelectedInfo>({
-  clinic: null,
   patient: null,
   reservation: null,
 });

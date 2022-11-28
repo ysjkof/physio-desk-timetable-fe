@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { compareDateMatch } from '../../../../services/dateServices';
-import { IUserWithEvent } from '../../../../types/common.types';
 import { cls } from '../../../../utils/utils';
 import { getGridTemplateColumns } from '../../../timetableServices';
 import UserNameTitle from './UserNameTitle';
+import type { IUserWithEvent } from '../../../../types/common.types';
 
 interface UserNameTitlesProps {
   userLength: number;
@@ -31,7 +31,7 @@ function UserNameTitles({
     >
       {users.map(
         (member, userIndex) =>
-          member.isActivate && (
+          member.canSee && (
             <UserNameTitle
               key={userIndex}
               isMe={member.id === loginUser}
@@ -62,10 +62,7 @@ export default memo(UserNameTitles, (prevProps, nextProps) => {
     const updatedUser = nextProps.users.find(
       (nextUser) => nextUser.id === prevUser.id
     );
-    return (
-      isSameActivate(prevUser.isActivate, updatedUser?.isActivate) &&
-      updatedUser
-    );
+    return isSameActivate(prevUser.canSee, updatedUser?.canSee) && updatedUser;
   }).length;
 
   if (!(prevUsersLength === matchUsersLength)) return false;

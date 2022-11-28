@@ -5,14 +5,12 @@ import type {
   MyClinic,
   UserIdAndName,
 } from '../types/common.types';
+import { ClinicType } from '../types/generated.types';
 
 export class ClinicsOfClient {
   static #clinics: ClinicOfClient[];
   static #userIdAndName: UserIdAndName;
   static #localStorageUtil = localStorageUtils;
-  // db에서 받은 clinic에 로컬 전용 필드를 추가해야됨
-  // 로컬 전용 필드
-  // isActivate : display 활성 상태
 
   static initialize(userIdAndName: UserIdAndName) {
     this.#userIdAndName = userIdAndName;
@@ -24,14 +22,46 @@ export class ClinicsOfClient {
 
   static #createClinicOfClient(clinic: MyClinic): ClinicOfClient {
     const addCanSee = (member: IMember) => ({ ...member, canSee: true });
+
+    const property =
+      clinic.type === ClinicType.Personal
+        ? ClinicsOfClient.#getKeyForPersonal()
+        : ClinicsOfClient.#getKeyForGroup(clinic);
+
     return {
       ...clinic,
       members: clinic.members.map(addCanSee),
+      ...property,
+    };
+  }
+
+  static #getKeyForPersonal() {
+    return {
+      isSelected: true,
+      isManager: true,
+      isStayed: true,
+    };
+  }
+  static #getKeyForGroup(clinic: MyClinic) {
+    const userInClinic = clinic.members.find(
+      (member) => member.user.id === this.#userIdAndName.userId
+    );
+
+    if (!userInClinic)
+      throw new Error('', {
+        cause: 'user.id와 일치하는 clinic.member가 없습니다.',
+      });
+
+    return {
+      isSelected: false,
+      isManager: !!userInClinic?.manager,
+      isStayed: !!userInClinic?.staying,
     };
   }
 
   static saveToLocalStorage(value: ClinicOfClient[]) {
-    if (!this.#hasUserIdAndName) throw this.#initialError;
+    if (!this.#userIdAndName) throw this.#initialError;
+    console.log(value);
 
     this.#localStorageUtil.set({
       key: 'clinicLists',
@@ -41,16 +71,12 @@ export class ClinicsOfClient {
   }
 
   static getFromLocalStorage() {
-    if (!this.#hasUserIdAndName) throw this.#initialError;
+    if (!this.#userIdAndName) throw this.#initialError;
 
-    return this.#localStorageUtil.get<ClinicOfClient>({
+    return this.#localStorageUtil.get<ClinicOfClient[]>({
       key: 'clinicLists',
       ...this.#userIdAndName,
     });
-  }
-
-  static get #hasUserIdAndName() {
-    return !!this.#userIdAndName;
   }
 
   static get #initialError() {
@@ -81,6 +107,9 @@ export class ClinicsOfClient {
       members: clinicFromNetwork.members.map((member) =>
         combineCanSeeFromClient(member, clinicFromClient.members)
       ),
+      isSelected: clinicFromClient.isSelected,
+      isManager: clinicFromClient.isManager,
+      isStayed: clinicFromClient.isStayed,
     };
   }
 
@@ -88,7 +117,57 @@ export class ClinicsOfClient {
     return this.#clinics;
   }
 
+  static get personalClinic() {
+    const clinic = this.#clinics.find(
+      (clinic) => clinic.type === ClinicType.Personal
+    );
+
+    if (!clinic) throw new Error('Clinic Type이 personal인 Clinic이 없습니다.');
+
+    return clinic;
+  }
+
+  static get selectedClinic() {
+    const clinic = this.#clinics.find((clinic) => clinic.isSelected);
+    if (!clinic)
+      throw new Error('selectedClinic이 없습니다.', { cause: '없어!!' });
+    return clinic;
+  }
+
+  static get(id: Number) {
+    return this.#clinics.find((clinic) => clinic.id === id);
+  }
+
   static setValue(value: ClinicOfClient[]) {
     this.#clinics = value;
+  }
+
+  static selectClinic(id: number) {
+    this.#clinics = this.#clinics.map((clinic) => {
+      if (clinic.id === id) {
+        return { ...clinic, isSelected: true };
+      }
+      if (clinic.isSelected) {
+        return { ...clinic, isSelected: false };
+      }
+      return clinic;
+    });
+  }
+
+  static toggleUserCanSee(memberId: number) {
+    const { id, members } = ClinicsOfClient.selectedClinic;
+    const canSeeLength = members.filter((member) => member.canSee).length;
+
+    if (canSeeLength <= 1) return false;
+
+    const newMembers = members.map((member) => {
+      if (member.id !== memberId) return member;
+      return { ...member, canSee: !member.canSee };
+    });
+
+    return this.value.map((clinic) => {
+      if (clinic.id !== id) return clinic;
+      return { ...clinic, members: newMembers };
+    });
   }
 }

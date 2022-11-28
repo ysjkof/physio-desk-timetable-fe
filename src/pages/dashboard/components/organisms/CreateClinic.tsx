@@ -1,11 +1,11 @@
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
 import FormError from '../../../../_legacy_components/atoms/FormError';
 import Button from '../../../../_legacy_components/molecules/Button';
 import Input from '../../../../_legacy_components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
-import { selectedInfoVar, toastVar } from '../../../../store';
+import { toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
 import {
   ME_DOCUMENT,
@@ -16,9 +16,9 @@ import type {
   CreateClinicInput,
   CreateClinicMutation,
 } from '../../../../types/generated.types';
+import { ClinicsOfClient } from '../../../../models';
 
 export default function CreateClinic() {
-  const selectedInfo = useReactiveVar(selectedInfoVar);
   const {
     register,
     handleSubmit,
@@ -38,7 +38,8 @@ export default function CreateClinic() {
         variables: { input: { name } },
         onCompleted(data) {
           if (data.createClinic.ok) {
-            if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
+            if (!ClinicsOfClient.selectedClinic)
+              throw new Error('선택된 병원이 없습니다');
             toastVar({ messages: [`병원 "${name}"을 만들었습니다`] });
 
             const newClinic = {

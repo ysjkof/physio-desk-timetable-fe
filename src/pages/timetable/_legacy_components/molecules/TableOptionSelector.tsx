@@ -8,29 +8,34 @@ import {
   isStayMember,
   renameUseSplit,
 } from '../../../../utils/utils';
-import { loggedInUserVar, tableTimeVar, toastVar } from '../../../../store';
+import {
+  clinicListsVar,
+  loggedInUserVar,
+  tableTimeVar,
+} from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
-import useStore from '../../../../hooks/useStore';
+
 import { Selectbox } from '../../../../components/Selectbox';
 import {
   getHoursByUnit,
   getMinutesByUnit,
 } from '../../../../services/dateServices';
-import localStorageUtils from '../../../../utils/localStorageUtils';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import Check from '../../../../svgs/Check';
-import { TableDisplay } from '../../../../models';
+import { ClinicsOfClient, TableDisplay } from '../../../../models';
 import { useTableDisplay, useTableTime } from '../../hooks';
 import type {
   FirstAndLastTime,
-  IMemberWithActivate,
+  MemberOfClient,
 } from '../../../../types/common.types';
+import { useSelectedClinic } from '../../hooks/useSelectedClinic';
 
 export default function TableOptionSelector() {
-  const { setSelectedInfo, clinicListsVar, selectedInfo } = useStore();
+  const { selectClinic, toggleUser } = useSelectedClinic();
+
   const clinicLists = useReactiveVar(clinicListsVar);
 
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
@@ -41,62 +46,12 @@ export default function TableOptionSelector() {
 
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
-  const onClickToggleUser = (clinicId: number, memberId: number) => {
-    if (!loggedInUser) throw new Error('❌ loginUser가 false입니다');
-    const clinicIdx = clinicLists.findIndex(
-      (prevClinic) => prevClinic.id === clinicId
-    );
-    if (clinicIdx === -1) throw new Error('❌ group index가 -1입니다');
-    const memberIdx = clinicLists[clinicIdx].members.findIndex(
-      (prevMember) => prevMember.id === memberId
-    );
-    if (memberIdx === -1) throw new Error('❌ member index가 -1입니다');
-
-    const activateLength = clinicLists[clinicIdx].members.filter(
-      (member) => member.canSee
-    ).length;
-    let isActivate = clinicLists[clinicIdx].members[memberIdx].canSee;
-
-    if (isActivate && activateLength === 1) {
-      return;
-    }
-    clinicLists[clinicIdx].members[memberIdx].canSee = !isActivate;
-    localStorageUtils.set({
-      key: 'clinicLists',
-      userId: loggedInUser.id,
-      userName: loggedInUser.name,
-      value: [...clinicLists],
-    });
-    clinicListsVar([...clinicLists]);
+  const onClickToggleUser = (memberId: number) => {
+    toggleUser(memberId);
   };
 
   const onClickChangeSelectClinic = (clinicId: number) => {
-    if (!loggedInUser) throw new Error('❌ loginUser가 false입니다');
-    if (selectedInfo.clinic?.id !== clinicId) {
-      const clinic = clinicLists.find((clinic) => clinic.id === clinicId);
-      const me = loggedInUser.members?.find(
-        (member) => member.clinic.id === clinicId
-      );
-      if (clinic && me) {
-        const newSelectedClinic = {
-          id: clinicId,
-          name: clinic.name,
-          type: clinic.type,
-          isManager: me.manager,
-          isStayed: me.staying,
-          members: clinic.members,
-        };
-
-        setSelectedInfo('clinic', newSelectedClinic, () =>
-          localStorageUtils.set({
-            key: 'selectedClinic',
-            userId: loggedInUser.id,
-            userName: loggedInUser.name,
-            value: newSelectedClinic,
-          })
-        );
-      }
-    }
+    selectClinic(clinicId);
   };
 
   const toggleSeeCancel = () => {
@@ -238,18 +193,21 @@ export default function TableOptionSelector() {
           );
           if (!meMember) return null;
 
-          const isSelectedClinic = clinic.id === selectedInfo.clinic?.id;
+          const isSelectedClinic =
+            clinic.id === ClinicsOfClient.selectedClinic?.id;
 
           const { staying, accepted } = meMember;
           const memberState = getMemberState(staying, accepted);
           const isStay = isStayMember(memberState);
 
-          const sortMember = (members: IMemberWithActivate[]) =>
+          const sortMember = (members: MemberOfClient[]) =>
             members.sort((a, b) => {
               if (a.user.name > b.user.name) return 1;
               if (a.user.name < b.user.name) return -1;
               return 0;
             });
+
+          //  할일: selectedClinic을 CLinicsOfClient에 합치기.
 
           return (
             <Sidebar.Ul
@@ -275,7 +233,7 @@ export default function TableOptionSelector() {
                   return (
                     <Sidebar.Li
                       key={member.id}
-                      onClick={() => onClickToggleUser(clinic.id, member.id)}
+                      onClick={() => onClickToggleUser(member.id)}
                       selected={isSelectedClinic && member.canSee}
                     >
                       {member.user.name}

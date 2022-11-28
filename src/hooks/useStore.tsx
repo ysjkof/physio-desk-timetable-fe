@@ -1,27 +1,9 @@
 import { useReactiveVar } from '@apollo/client';
 import { clinicListsVar, selectedDateVar, selectedInfoVar } from '../store';
 import type {
-  IClinicList,
-  SelectedClinic,
   SetSelectedInfoKey,
   SetSelectedInfoValue,
 } from '../types/common.types';
-
-export function makeSelectedClinic(
-  clinic: IClinicList,
-  userId: number
-): SelectedClinic {
-  return {
-    id: clinic.id,
-    name: clinic.name,
-    type: clinic.type,
-    isManager: !!clinic.members.find((member) => member.user.id === userId)
-      ?.manager,
-    isStayed: !!clinic.members.find((member) => member.user.id === userId)
-      ?.staying,
-    members: clinic.members,
-  };
-}
 
 export default function useStore() {
   const selectedInfo = useReactiveVar(selectedInfoVar);

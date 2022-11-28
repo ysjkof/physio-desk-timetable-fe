@@ -3,7 +3,7 @@ import {
   DayWithUsers,
   IListReservation,
   IMember,
-  IMemberWithActivate,
+  MemberOfClient,
   IUserWithEvent,
 } from '../types/common.types';
 import { compareDateMatch } from '../services/dateServices';
@@ -12,7 +12,7 @@ export const spreadClinicMembers = (
   clinics: ClinicOfClient[] | null,
   clinicId: number
 ) => {
-  const result: IMemberWithActivate[] = [];
+  const result: MemberOfClient[] = [];
   const clinic = clinics?.find((clinic) => clinic.id === clinicId);
   if (clinic) {
     const newMember = clinic.members.map((member) => member);
@@ -74,7 +74,7 @@ export const distributeReservation = ({
   return dataForm;
 };
 
-export const getActiveUserLength = (members?: IMemberWithActivate[]) =>
+export const getActiveUserLength = (members?: MemberOfClient[]) =>
   members?.filter((user) => user.canSee).length || 0;
 
 export const getTableCellWidth = (userLength: number) => {

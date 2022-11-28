@@ -1,17 +1,16 @@
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import useStore from '../../../hooks/useStore';
 import { getAfterDate, getSunday } from '../../../services/dateServices';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
-import { clinicListsVar } from '../../../store';
 import type { ListReservationsQuery } from '../../../types/generated.types';
+import { ClinicsOfClient } from '../../../models';
 
 export const useListReservations = () => {
-  const { selectedInfo, selectedDate } = useStore();
-  const clinicLists = useReactiveVar(clinicListsVar);
+  const { selectedDate } = useStore();
+  const selectedClinic = ClinicsOfClient.selectedClinic;
+
+  // const clinicLists = useReactiveVar(clinicListsVar);
   const startDate = getSunday(selectedDate);
-  const selectedClinic = clinicLists.find(
-    (clinic) => clinic.id === selectedInfo.clinic?.id
-  );
 
   if (!selectedClinic) throw new Error('선택된 병원이 없습니다.');
 

@@ -8,10 +8,13 @@ import NameTag from './NameTag';
 import Worning from '../../../../_legacy_components/atoms/Warning';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { cls, renameUseSplit } from '../../../../utils/utils';
+import { ClinicsOfClient } from '../../../../models';
 import { SEARCH_PATIENT_DOCUMENT } from '../../../../graphql';
 import type { SearchPatientQuery } from '../../../../types/generated.types';
 
 export default function SearchPatient() {
+  const { selectedClinic } = ClinicsOfClient;
+
   const { selectedInfo, setSelectedInfo } = useStore();
 
   const { register, getValues, handleSubmit } = useForm({
@@ -23,7 +26,7 @@ export default function SearchPatient() {
     useLazyQuery<SearchPatientQuery>(SEARCH_PATIENT_DOCUMENT);
 
   const onSubmit = () => {
-    if (!loading && selectedInfo.clinic) {
+    if (!loading && selectedClinic) {
       const { patientName } = getValues();
       const patientNameTrim = patientName.trim();
 
@@ -32,7 +35,7 @@ export default function SearchPatient() {
           input: {
             page: queryPageNumber,
             query: patientNameTrim,
-            clinicIds: [selectedInfo.clinic.id],
+            clinicIds: [selectedClinic.id],
           },
         },
       });

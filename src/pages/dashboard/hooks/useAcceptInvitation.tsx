@@ -1,8 +1,8 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { client } from '../../../apollo';
-import useStore from '../../../hooks/useStore';
 import { changeValueInArray } from '../../../utils/utils';
-import { loggedInUserVar, toastVar } from '../../../store';
+import { clinicListsVar, loggedInUserVar, toastVar } from '../../../store';
+import { ClinicsOfClient } from '../../../models';
 import {
   ACCEPT_INVITATION_DOCUMENT,
   FIND_MY_CLINICS_DOCUMENT,
@@ -18,12 +18,14 @@ import {
 export default function useAcceptInvitation() {
   const [acceptInvitationMutation, { loading }] =
     useMutation<AcceptInvitationMutation>(ACCEPT_INVITATION_DOCUMENT);
-  const { selectedInfo, clinicLists } = useStore();
+
+  const clinicLists = useReactiveVar(clinicListsVar);
+  const { selectedClinic } = ClinicsOfClient;
 
   const loggedInUserId = loggedInUserVar()?.id;
-  const clinicName = selectedInfo.clinic?.name;
-  const selectdClinicId = selectedInfo.clinic?.id;
-  const memberId = selectedInfo.clinic?.members.find(
+  const clinicName = selectedClinic.name;
+  const selectedClinicId = selectedClinic.id;
+  const memberId = selectedClinic.members.find(
     (member) => member.user.id === loggedInUserId
   )?.id;
 
@@ -137,7 +139,7 @@ export default function useAcceptInvitation() {
     acceptInvitation,
     loading,
     clinicName,
-    selectdClinicId,
+    selectedClinicId,
     memberId,
   };
 }

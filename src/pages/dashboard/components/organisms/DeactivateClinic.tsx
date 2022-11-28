@@ -1,9 +1,9 @@
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { client } from '../../../../apollo';
-import { selectedInfoVar, toastVar } from '../../../../store';
+import { toastVar } from '../../../../store';
 import { IdAndName } from '../../../../types/common.types';
 import Worning from '../../../../_legacy_components/atoms/Warning';
 import Button from '../../../../_legacy_components/molecules/Button';
@@ -13,6 +13,7 @@ import {
   INACTIVATE_CLINIC_DOCUMENT,
 } from '../../../../graphql';
 import type { InactivateClinicMutation } from '../../../../types/generated.types';
+import { ClinicsOfClient } from '../../../../models';
 
 interface DeactivateClinicProps extends IdAndName {
   closeAction: () => void;
@@ -23,7 +24,8 @@ export default function DeactivateClinic({
   name,
   closeAction,
 }: DeactivateClinicProps) {
-  const selectedInfo = useReactiveVar(selectedInfoVar);
+  const { selectedClinic } = ClinicsOfClient;
+
   const [agree, setAgree] = useState(false);
 
   const [mutationInactivateClinic, { loading }] =
@@ -56,7 +58,10 @@ export default function DeactivateClinic({
     }
   };
 
-  return selectedInfo.clinic?.isStayed && selectedInfo.clinic.isManager ? (
+  if (!selectedClinic.isStayed || !selectedClinic.isManager)
+    return <Worning type="hasNotPermission" />;
+
+  return (
     <>
       <p>
         병원을 더 이상 사용하지 않기 때문에 비활성합니다. 비활성하면 정보의
@@ -75,7 +80,5 @@ export default function DeactivateClinic({
         비활성하기
       </Button>
     </>
-  ) : (
-    <Worning type="hasNotPermission" />
   );
 }

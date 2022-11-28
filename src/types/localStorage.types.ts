@@ -3,7 +3,7 @@ import type { UserIdAndName, Value } from './common.types';
 
 type PrivateLocalStorageKey = keyof Pick<
   typeof LOCAL_STORAGE_KEY,
-  'clinicLists' | 'selectedClinic' | 'viewOption' | 'tableTime'
+  'clinicLists' | 'viewOption' | 'tableTime'
 >;
 
 type PublicLocalStorageKey = keyof Pick<

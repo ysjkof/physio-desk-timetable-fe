@@ -68,7 +68,6 @@ export const LOCAL_STORAGE_KEY = {
   clinicLists: 'muool-clinic-lists-',
   viewOption: 'muool-view-option-',
   tableTime: 'muool-table-time-',
-  selectedClinic: 'muool-selected-clinic-',
 } as const;
 
 export default new LocalStorage(LOCAL_STORAGE_KEY);

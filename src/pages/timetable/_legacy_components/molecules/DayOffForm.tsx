@@ -9,6 +9,7 @@ import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Date
 import { TimetableModalProps } from '../../Timetable';
 import { useDayoff } from '../../hooks';
 import { createDate } from '../../../../services/dateServices';
+import { ClinicsOfClient } from '../../../../models';
 import type {
   IListReservation,
   ReserveFormType,
@@ -25,6 +26,7 @@ export default function DayOffForm({
   reservation,
   closeAction,
 }: DayOffFormNewProps) {
+  const { selectedClinic } = ClinicsOfClient;
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(
     reservation?.startDate ? new Date(reservation.startDate) : startDate
@@ -69,7 +71,7 @@ export default function DayOffForm({
       endDate: selectedEndDate,
       memo,
       userId,
-      clinicId: selectedInfo.clinic!.id,
+      clinicId: selectedClinic.id,
     });
   };
 
@@ -97,7 +99,7 @@ export default function DayOffForm({
       <label className="flex flex-col gap-2">
         치료사
         <SelectUser
-          members={selectedInfo.clinic?.members ?? []}
+          members={selectedClinic.members}
           register={register('userId')}
         />
       </label>

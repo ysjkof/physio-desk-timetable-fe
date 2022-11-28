@@ -4,7 +4,7 @@ import useAcceptInvitation from '../../hooks/useAcceptInvitation';
 import useCancelInvitation from '../../hooks/useCancelInvitation';
 
 export default function AcceptInvitation() {
-  const { acceptInvitation, clinicName, selectdClinicId, loading, memberId } =
+  const { acceptInvitation, clinicName, selectedClinicId, loading, memberId } =
     useAcceptInvitation();
 
   const { invokeCancelInvitation, loading: loadingCancel } =
@@ -21,7 +21,7 @@ export default function AcceptInvitation() {
           type="button"
           canClick={!loading}
           loading={loading}
-          onClick={() => acceptInvitation(selectdClinicId!)}
+          onClick={() => acceptInvitation(selectedClinicId)}
         >
           초대 수락
         </Button>

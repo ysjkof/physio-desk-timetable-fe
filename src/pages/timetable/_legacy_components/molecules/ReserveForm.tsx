@@ -13,6 +13,7 @@ import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
 import useStore from '../../../../hooks/useStore';
 import { useReserve } from '../../hooks';
+import { ClinicsOfClient } from '../../../../models';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
 import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 import type {
@@ -22,7 +23,7 @@ import type {
   ReserveFormType,
 } from '../../../../types/common.types';
 
-interface IReservaFromProps extends TimetableModalProps {
+interface IReserveFromProps extends TimetableModalProps {
   userId: number;
   startDate?: Date;
   reservation?: IListReservation;
@@ -35,7 +36,8 @@ export default function ReserveForm({
   startDate,
   userId,
   reservation,
-}: IReservaFromProps) {
+}: IReserveFromProps) {
+  const { selectedClinic } = ClinicsOfClient;
   const { selectedInfo, setSelectedInfo } = useStore();
   const {
     register,
@@ -53,7 +55,7 @@ export default function ReserveForm({
     {
       variables: {
         input: {
-          clinicId: selectedInfo.clinic?.id ?? 0,
+          clinicId: selectedClinic.id,
           onlyLookUpActive: false,
         },
       },
@@ -160,7 +162,7 @@ export default function ReserveForm({
         endDate,
         memo,
         userId: +userId!,
-        clinicId: selectedInfo.clinic!.id,
+        clinicId: selectedClinic.id,
         patientId: selectedInfo.patient!.id,
         prescriptionIds: selectedPrescription.prescriptions,
       });
@@ -237,7 +239,7 @@ export default function ReserveForm({
       <label className="flex flex-col gap-2">
         담당 치료사
         <SelectUser
-          members={selectedInfo.clinic?.members ?? []}
+          members={selectedClinic.members}
           register={register('userId')}
         />
       </label>

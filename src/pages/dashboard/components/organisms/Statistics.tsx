@@ -1,6 +1,6 @@
 import { lazy, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
@@ -17,13 +17,17 @@ import Button from '../../../../_legacy_components/molecules/Button';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
+import { clinicListsVar } from '../../../../store';
+import { ClinicsOfClient } from '../../../../models';
 import type { GetStatisticsQuery } from '../../../../types/generated.types';
 const Loading = lazy(
   () => import('../../../../_legacy_components/atoms/Loading')
 );
 
 export default function Statistics() {
-  const { selectedInfo, selectedDate } = useStore();
+  useReactiveVar(clinicListsVar); // ui 새로고침 용
+  const { selectedClinic } = ClinicsOfClient;
+  const { selectedDate } = useStore();
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);
@@ -46,7 +50,7 @@ export default function Statistics() {
     },
   });
 
-  const acceptedMember: MemberState[] | undefined = selectedInfo.clinic?.members
+  const acceptedMember: MemberState[] | undefined = selectedClinic.members
     .filter((member) => member.accepted)
     .map((member) => ({
       userId: member.user.id,
@@ -73,7 +77,7 @@ export default function Statistics() {
         input: {
           startDate,
           endDate,
-          clinicId: selectedInfo.clinic!.id,
+          clinicId: selectedClinic.id,
           userIds: Array.isArray(userIds)
             ? userIds.map((id) => +id)
             : [+userIds],

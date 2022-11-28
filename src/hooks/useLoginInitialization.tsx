@@ -1,29 +1,20 @@
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { IsLoggedIn } from '../_legacy_components/templates/GlobalLayout';
-import { loggedInUserVar, tableTimeVar, tableDisplayVar } from '../store';
+import {
+  loggedInUserVar,
+  tableTimeVar,
+  tableDisplayVar,
+  clinicListsVar,
+} from '../store';
 import localStorageUtils from '../utils/localStorageUtils';
-import useStore, { makeSelectedClinic } from './useStore';
 import { ME_DOCUMENT, FIND_MY_CLINICS_DOCUMENT } from '../graphql';
 import { TableTime, TableDisplay, ClinicsOfClient } from '../models';
-import {
-  ClinicType,
-  FindMyClinicsQuery,
-  MeQuery,
-} from '../types/generated.types';
-import type {
-  MyClinic,
-  IClinicList,
-  ISelectedClinic,
-  UserIdAndName,
-  ClinicOfClient,
-} from '../types/common.types';
-import { SelectedClinic } from '../models/SelectedClinic';
+import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
+import type { MyClinic, UserIdAndName } from '../types/common.types';
 
 function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
   const [loading, setLoading] = useState(true);
-
-  const { setSelectedInfo, clinicListsVar } = useStore();
 
   const [meQuery, { data: meData }] = useLazyQuery<MeQuery>(ME_DOCUMENT);
 
@@ -51,78 +42,23 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
   };
   const initClinicsOfClient = (clinics: MyClinic[]) => {
     const localClinics = ClinicsOfClient.getFromLocalStorage();
-    const myClinics = ClinicsOfClient.createClinicsOfClient(clinics);
+    const latestClinics = ClinicsOfClient.createClinicsOfClient(clinics);
     if (localClinics === null) {
-      ClinicsOfClient.saveToLocalStorage(myClinics);
+      ClinicsOfClient.saveToLocalStorage(latestClinics);
       return;
     }
-    const updatedMyClinics = myClinics.map((clinic) => {
-      const myClinic = myClinics.find((myClinic) => myClinic.id === clinic.id);
-      return myClinic
-        ? ClinicsOfClient.combineClinic(clinic, myClinic)
-        : clinic;
+
+    const updatedMyClinics = latestClinics.map((latestClinic) => {
+      const localClinic = localClinics.find(
+        (_localClinic) => _localClinic.id === latestClinic.id
+      );
+      return localClinic
+        ? ClinicsOfClient.combineClinic(latestClinic, localClinic)
+        : latestClinic;
     });
+
     ClinicsOfClient.setValue(updatedMyClinics);
     clinicListsVar(updatedMyClinics);
-  };
-
-  // 삭제할거임
-  const setClinicLists = (clinics: MyClinic[]) => {
-    const myClinics = ClinicsOfClient.createClinicsOfClient(clinics);
-
-    let updatedMyClinics: ClinicOfClient[] = myClinics;
-
-    const localClinics = ClinicsOfClient.getFromLocalStorage();
-
-    if (localClinics) {
-      updatedMyClinics = myClinics.map((clinic) => {
-        const myClinic = myClinics.find(
-          (myClinic) => myClinic.id === clinic.id
-        );
-        return myClinic
-          ? ClinicsOfClient.combineClinic(clinic, myClinic)
-          : clinic;
-      });
-    }
-
-    ClinicsOfClient.saveToLocalStorage(updatedMyClinics);
-
-    clinicListsVar(updatedMyClinics);
-
-    return updatedMyClinics;
-  };
-
-  const setSelectedClinic = (updatedMyClinics: IClinicList[]) => {
-    if (!meData) return console.error('loggedInUser가 없습니다');
-
-    const localSelectClinic = localStorageUtils.get<ISelectedClinic>({
-      key: 'selectedClinic',
-      userId: meData.me.id,
-      userName: meData.me.name,
-    });
-
-    const existInClinicList = () => {
-      return updatedMyClinics.find(
-        (clinic) => clinic.id === localSelectClinic?.id
-      );
-    };
-    let newSelectedClinic =
-      existInClinicList() ||
-      updatedMyClinics.find((clinic) => clinic.type === ClinicType.Personal);
-
-    if (!newSelectedClinic) throw new Error('선택된 병원이 없습니다');
-
-    setSelectedInfo(
-      'clinic',
-      makeSelectedClinic(newSelectedClinic, meData.me.id),
-      () =>
-        localStorageUtils.set({
-          key: 'selectedClinic',
-          userId: meData.me.id,
-          userName: meData.me.name,
-          value: newSelectedClinic,
-        })
-    );
   };
 
   const checkLatestStorage = (userIdAndName: UserIdAndName) => {
@@ -139,7 +75,6 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
 
     localStorageUtils.remove({ ...userIdAndName, key: 'clinicLists' });
     localStorageUtils.remove({ ...userIdAndName, key: 'viewOption' });
-    localStorageUtils.remove({ ...userIdAndName, key: 'selectedClinic' });
 
     localStorageUtils.set({
       key: 'createdAt',
@@ -161,12 +96,12 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
     const userIdAndName = { userId: meData.me.id, userName: meData.me.name };
 
     checkLatestStorage(userIdAndName);
+
     TableDisplay.initialize(userIdAndName);
     initTableDisplay();
+
     TableTime.initialize(userIdAndName);
     initTableTime();
-    // 현재 미작동
-    setSelectedClinic(setClinicLists(findMyClinicsData.findMyClinics.clinics));
 
     ClinicsOfClient.initialize(userIdAndName);
     initClinicsOfClient(findMyClinicsData.findMyClinics.clinics);

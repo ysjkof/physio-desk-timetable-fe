@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { selectedInfoVar } from '../../store';
+import { clinicListsVar, selectedInfoVar } from '../../store';
 import { cls, renameUseSplit } from '../../utils/utils';
 import useWindowSize from '../../hooks/useWindowSize';
 import useStore from '../../hooks/useStore';
@@ -16,17 +16,19 @@ import Checkbox from '../../_legacy_components/molecules/Checkbox';
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
 import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
 import type { SearchPatientQuery } from '../../types/generated.types';
+import { ClinicsOfClient } from '../../models';
 
 export default function Search() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { selectedClinic } = ClinicsOfClient;
 
   const [page, setPage] = useState(1);
   const [pageNumbers, setPageNumbers] = useState([1]);
   const selectedInfo = useReactiveVar(selectedInfoVar);
-  const { clinicLists } = useStore();
+  const clinicLists = useReactiveVar(clinicListsVar);
   const { register, getValues } = useForm<{ clinicIds: number[] }>({
-    defaultValues: { clinicIds: [selectedInfo.clinic?.id] },
+    defaultValues: { clinicIds: [selectedClinic.id] },
   });
 
   const [callQuery, { loading, data }] = useLazyQuery<SearchPatientQuery>(
@@ -100,7 +102,7 @@ export default function Search() {
                 register={register('clinicIds', {
                   required: true,
                 })}
-                defaultChecked={clinic.id === selectedInfo.clinic?.id}
+                defaultChecked={clinic.id === selectedClinic.id}
               />
             ))}
           </div>
