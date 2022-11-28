@@ -1,65 +1,28 @@
-import { useLazyQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
-import { IsLoggedIn } from '../_legacy_components/templates/GlobalLayout';
+import { useQuery } from '@apollo/client';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
+import { ClinicsOfClient, TableDisplay, TableTime } from '../models';
 import {
-  loggedInUserVar,
-  tableTimeVar,
-  tableDisplayVar,
   clinicListsVar,
+  loggedInUserVar,
+  tableDisplayVar,
+  tableTimeVar,
 } from '../store';
+import { MyClinic, UserIdAndName } from '../types/common.types';
+import { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
 import localStorageUtils from '../utils/localStorageUtils';
-import { ME_DOCUMENT, FIND_MY_CLINICS_DOCUMENT } from '../graphql';
-import { TableTime, TableDisplay, ClinicsOfClient } from '../models';
-import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
-import type { MyClinic, UserIdAndName } from '../types/common.types';
 
-function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
+export function Initialize({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
 
-  const [meQuery, { data: meData }] = useLazyQuery<MeQuery>(ME_DOCUMENT);
+  const { data: meData } = useQuery<MeQuery>(ME_DOCUMENT);
 
-  const [findMyClinicsQuery, { data: findMyClinicsData }] =
-    useLazyQuery<FindMyClinicsQuery>(FIND_MY_CLINICS_DOCUMENT, {
+  const { data: findMyClinicsData } = useQuery<FindMyClinicsQuery>(
+    FIND_MY_CLINICS_DOCUMENT,
+    {
       variables: { input: { includeInactivate: true } },
-    });
-
-  const initTableDisplay = () => {
-    const localViewOptions = TableDisplay.getFromLocalStorage();
-    if (localViewOptions === null) {
-      return TableDisplay.saveToLocalStorage(TableDisplay.value);
     }
-    TableDisplay.setValue(localViewOptions);
-    tableDisplayVar(localViewOptions);
-  };
-
-  const initTableTime = () => {
-    const localTableTime = TableTime.getFromLocalStorage();
-    if (localTableTime === null) {
-      return TableTime.saveToLocalStorage(TableTime.value);
-    }
-    TableTime.setValue(localTableTime);
-    tableTimeVar(localTableTime);
-  };
-  const initClinicsOfClient = (clinics: MyClinic[]) => {
-    const localClinics = ClinicsOfClient.getFromLocalStorage();
-    const latestClinics = ClinicsOfClient.createClinicsOfClient(clinics);
-    if (localClinics === null) {
-      ClinicsOfClient.saveToLocalStorage(latestClinics);
-      return;
-    }
-
-    const updatedMyClinics = latestClinics.map((latestClinic) => {
-      const localClinic = localClinics.find(
-        (_localClinic) => _localClinic.id === latestClinic.id
-      );
-      return localClinic
-        ? ClinicsOfClient.combineClinic(latestClinic, localClinic)
-        : latestClinic;
-    });
-
-    ClinicsOfClient.setValue(updatedMyClinics);
-    clinicListsVar(updatedMyClinics);
-  };
+  );
 
   const checkLatestStorage = (userIdAndName: UserIdAndName) => {
     const localCreatedAt = localStorageUtils.get<string>({
@@ -83,15 +46,49 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
     return console.info('Initialized Local Storage');
   };
 
-  useEffect(() => {
-    setLoading(true);
-    if (!isLoggedIn) return;
-    meQuery();
-    findMyClinicsQuery();
+  const initTableDisplay = () => {
+    const localViewOptions = TableDisplay.getFromLocalStorage();
+    if (localViewOptions === null) {
+      return TableDisplay.saveToLocalStorage(TableDisplay.value);
+    }
+    TableDisplay.setValue(localViewOptions);
+    tableDisplayVar(localViewOptions);
+  };
 
-    if (!meData || !findMyClinicsData?.findMyClinics.clinics) {
+  const initTableTime = () => {
+    const localTableTime = TableTime.getFromLocalStorage();
+    if (localTableTime === null) {
+      return TableTime.saveToLocalStorage(TableTime.value);
+    }
+    TableTime.setValue(localTableTime);
+    tableTimeVar(localTableTime);
+  };
+
+  const initClinicsOfClient = (clinics: MyClinic[]) => {
+    const localClinics = ClinicsOfClient.getFromLocalStorage();
+    const latestClinics = ClinicsOfClient.createClinicsOfClient(clinics);
+    if (localClinics === null) {
+      ClinicsOfClient.saveToLocalStorage(latestClinics);
       return;
     }
+
+    const updatedMyClinics = latestClinics.map((latestClinic) => {
+      const localClinic = localClinics.find(
+        (_localClinic) => _localClinic.id === latestClinic.id
+      );
+      return localClinic
+        ? ClinicsOfClient.combineClinic(latestClinic, localClinic)
+        : latestClinic;
+    });
+
+    ClinicsOfClient.setValue(updatedMyClinics);
+    clinicListsVar(updatedMyClinics);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+
+    if (!meData || !findMyClinicsData?.findMyClinics.clinics) return;
 
     const userIdAndName = { userId: meData.me.id, userName: meData.me.name };
 
@@ -111,7 +108,7 @@ function useLoginInitialization({ isLoggedIn }: IsLoggedIn) {
     setLoading(false);
   }, [meData, findMyClinicsData]);
 
-  return { loading };
-}
+  if (loading) return <></>;
 
-export default useLoginInitialization;
+  return <>{children}</>;
+}

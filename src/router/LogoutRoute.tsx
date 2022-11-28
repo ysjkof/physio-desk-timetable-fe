@@ -2,7 +2,6 @@ import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import GlobalLayout from '../_legacy_components/templates/GlobalLayout';
 import AuthContainer from '../pages/auth/components/AuthContainer';
-
 import { LoginRouteProps } from './LoginRoute';
 import { ROUTES } from './routes';
 

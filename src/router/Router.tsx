@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import { isLoggedInVar } from '../apollo';
 import { ENDPOINT, ROUTES } from './routes';
 import ChangeEmail from '../pages/auth/ChangeEmail/ChangeEmail';
+import { Initialize } from '../components';
 
 const LandingPage = lazy(
   () => import('../pages/home/components/organisms/LandingPage')
@@ -37,6 +38,7 @@ const Loading = lazy(() => import('../_legacy_components/atoms/Loading'));
 
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
+
   const { confirm_email, change_email, docs } = ROUTES;
   const {
     basic_patient_registration,
@@ -130,7 +132,9 @@ function Router() {
   return (
     <Suspense fallback={<Loading />}>
       {isLoggedIn ? (
-        <LoginRoute CommonRoute={CommonRoute} />
+        <Initialize>
+          <LoginRoute CommonRoute={CommonRoute} />
+        </Initialize>
       ) : (
         <LogoutRoute CommonRoute={CommonRoute} />
       )}

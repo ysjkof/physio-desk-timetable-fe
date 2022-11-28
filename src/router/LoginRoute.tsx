@@ -3,7 +3,7 @@ import { useMe } from '../hooks/useMe';
 import { ENDPOINT, ROUTES } from './routes';
 import { lazy } from 'react';
 import ProtectRoute from './ProtectRoute';
-import Worning from '../_legacy_components/atoms/Warning';
+import Warning from '../_legacy_components/atoms/Warning';
 import GlobalLayout from '../_legacy_components/templates/GlobalLayout';
 import CreatePrescription from '../pages/dashboard/components/organisms/CreatePrescription';
 
@@ -102,7 +102,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
 
   return (
     <Routes>
-      <Route path="/" element={<GlobalLayout isLoggedIn />}>
+      <Route path="/" element={<GlobalLayout />}>
         <Route index element={<Navigate to={ROUTES.timetable} />} />,
         <Route path={ROUTES.search} element={<Search />} />
         <Route
@@ -110,7 +110,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
           path={ROUTES.timetable}
           element={
             <ProtectRoute
-              failElement={<Worning type="verifyEmail" />}
+              failElement={<Warning type="verifyEmail" />}
               isPass={data?.me.verified}
             >
               <TimeTable />
@@ -126,7 +126,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
           path={ROUTES.dashboard}
           element={<Dashboard />}
         >
-          <Route index element={<Worning type="selectMenu" />} />
+          <Route index element={<Warning type="selectMenu" />} />
           {dashboardRoute.map((route) => {
             let {
               element,
@@ -138,7 +138,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
             if (protect) {
               element = (
                 <ProtectRoute
-                  failElement={<Worning type="verifyEmail" />}
+                  failElement={<Warning type="verifyEmail" />}
                   isPass={!!isPass}
                 >
                   {element}
