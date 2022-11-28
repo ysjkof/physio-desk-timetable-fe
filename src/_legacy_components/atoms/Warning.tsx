@@ -17,7 +17,7 @@ interface WarningProps {
   children?: null;
 }
 
-export default function Worning({
+export default function Warning({
   type,
   children,
 }: WarningProps | ChildrenProps) {

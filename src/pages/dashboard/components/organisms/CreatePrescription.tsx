@@ -8,7 +8,7 @@ import FormError from '../../../../_legacy_components/atoms/FormError';
 import { REG_EXP } from '../../../../constants/regex';
 import useStore from '../../../../hooks/useStore';
 import Textarea from '../../../../_legacy_components/molecules/Textarea';
-import Worning from '../../../../_legacy_components/atoms/Warning';
+import Warning from '../../../../_legacy_components/atoms/Warning';
 import { toastVar } from '../../../../store';
 import { client } from '../../../../apollo';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
@@ -102,7 +102,7 @@ export default function CreatePrescription() {
   };
 
   if (!selectedClinic.isStayed || !selectedClinic.isManager)
-    return <Worning type="hasNotPermission" />;
+    return <Warning type="hasNotPermission" />;
 
   return (
     <section className="px-10">

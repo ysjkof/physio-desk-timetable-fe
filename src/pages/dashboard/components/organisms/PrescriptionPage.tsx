@@ -1,7 +1,7 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import Worning from '../../../../_legacy_components/atoms/Warning';
+import Warning from '../../../../_legacy_components/atoms/Warning';
 import Button from '../../../../_legacy_components/molecules/Button';
 import CardContainer from '../../../../_legacy_components/templates/CardContainer';
 import PrescriptionCard from '../molecules/PrescriptionCard';
@@ -32,7 +32,7 @@ function PrescriptionList({ clinicId, showInactivate }: PrescriptionListProps) {
   return (
     <CardContainer>
       {data?.findPrescriptions.prescriptions?.length === 0 ? (
-        <Worning type="hasNotPrescription"></Worning>
+        <Warning type="hasNotPrescription"></Warning>
       ) : (
         data?.findPrescriptions.prescriptions?.map((presc) => {
           if (!showInactivate && !presc.activate) return null;
@@ -59,7 +59,7 @@ export default function PrescriptionPage() {
   const [showInactivate, setShowInactivate] = useState(true);
   const toggleShowInactivate = () => setShowInactivate((prev) => !prev);
   if (!ClinicsOfClient.selectedClinic.isStayed)
-    return <Worning type="hasNotPermission" />;
+    return <Warning type="hasNotPermission" />;
 
   return (
     <div className="flex h-full w-full flex-col gap-10">

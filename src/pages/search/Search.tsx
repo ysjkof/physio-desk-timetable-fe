@@ -11,7 +11,7 @@ import { getYMD } from '../../services/dateServices';
 import ListCell from './atoms/ListCell';
 import SearchList from './organisms/SearchList';
 import Button from '../../_legacy_components/molecules/Button';
-import Worning from '../../_legacy_components/atoms/Warning';
+import Warning from '../../_legacy_components/atoms/Warning';
 import Checkbox from '../../_legacy_components/molecules/Checkbox';
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
 import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
@@ -120,7 +120,7 @@ export default function Search() {
           {!data ||
           !data.searchPatient.patients ||
           data.searchPatient.patients.length === 0 ? (
-            <Worning type="emptySearch" />
+            <Warning type="emptySearch" />
           ) : (
             data.searchPatient.patients.map((patient, idx) => (
               <SearchList

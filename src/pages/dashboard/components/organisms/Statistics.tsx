@@ -12,7 +12,7 @@ import { IUserStatistics, MemberState } from '../../../../types/common.types';
 import useStore from '../../../../hooks/useStore';
 import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import Charts from '../molecules/Charts';
-import Worning from '../../../../_legacy_components/atoms/Warning';
+import Warning from '../../../../_legacy_components/atoms/Warning';
 import Button from '../../../../_legacy_components/molecules/Button';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
@@ -205,7 +205,7 @@ export default function Statistics() {
       data.getStatistics.dailyReports ? (
         <>
           {data.getStatistics.dailyReports.length < 1 ? (
-            <Worning type="hasNotStatistics" />
+            <Warning type="hasNotStatistics" />
           ) : (
             userStatistics.length > 0 && (
               <Charts
@@ -219,7 +219,7 @@ export default function Statistics() {
           )}
         </>
       ) : (
-        <Worning>사용자를 선택하고 조회하기를 눌러주세요</Worning>
+        <Warning>사용자를 선택하고 조회하기를 눌러주세요</Warning>
       )}
     </>
   );

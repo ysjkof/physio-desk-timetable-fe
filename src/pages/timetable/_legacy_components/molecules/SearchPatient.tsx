@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import useStore from '../../../../hooks/useStore';
 import NameTag from './NameTag';
-import Worning from '../../../../_legacy_components/atoms/Warning';
+import Warning from '../../../../_legacy_components/atoms/Warning';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { cls, renameUseSplit } from '../../../../utils/utils';
 import { ClinicsOfClient } from '../../../../models';
@@ -112,7 +112,7 @@ export default function SearchPatient() {
           </p>
         ) : (
           searchPatientResult?.searchPatient.patients?.length === 0 && (
-            <Worning type="emptySearch" />
+            <Warning type="emptySearch" />
           )
         )}
         {selectedInfo.patient && (

@@ -4,7 +4,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
-import Worning from '../../../../_legacy_components/atoms/Warning';
+import Warning from '../../../../_legacy_components/atoms/Warning';
 import Input from '../../../../_legacy_components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
 import FormError from '../../../../_legacy_components/atoms/FormError';
@@ -68,15 +68,15 @@ export default function InviteClinic() {
 
   if (selectedClinic.type === ClinicType.Personal)
     return (
-      <Worning>
+      <Warning>
         {
           '개인 전용 병원에는 사용자를 초대할 수 없습니다. 왼쪽 위쪽에 화살표 버튼으로 다른 병원을 선택하세요'
         }
-      </Worning>
+      </Warning>
     );
 
   if (!selectedClinic.isStayed || !selectedClinic.isManager)
-    return <Worning type="hasNotPermission" />;
+    return <Warning type="hasNotPermission" />;
 
   return (
     <FormSection>
@@ -107,7 +107,7 @@ export default function InviteClinic() {
           </Input>
         </div>
         {(data?.inviteUser.error || okMessage) && (
-          <Worning>{data?.inviteUser.error || okMessage}</Worning>
+          <Warning>{data?.inviteUser.error || okMessage}</Warning>
         )}
       </form>
     </FormSection>
