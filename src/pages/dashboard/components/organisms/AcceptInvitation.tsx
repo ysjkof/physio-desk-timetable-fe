@@ -1,7 +1,6 @@
 import Warning from '../../../../_legacy_components/atoms/Warning';
 import Button from '../../../../_legacy_components/molecules/Button';
-import useAcceptInvitation from '../../hooks/useAcceptInvitation';
-import useCancelInvitation from '../../hooks/useCancelInvitation';
+import { useAcceptInvitation, useCancelInvitation } from '../../hooks';
 
 export default function AcceptInvitation() {
   const { acceptInvitation, clinicName, selectedClinicId, loading, memberId } =

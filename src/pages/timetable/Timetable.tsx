@@ -1,4 +1,5 @@
 import { lazy, useEffect, useRef, useState } from 'react';
+import { useReactiveVar } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
 import {
@@ -39,7 +40,6 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
 } from '../../types/generated.types';
-import { useReactiveVar } from '@apollo/client';
 import { clinicListsVar } from '../../store';
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 

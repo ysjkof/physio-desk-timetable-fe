@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import useCancelInvitation from '../../hooks/useCancelInvitation';
+import { useCancelInvitation } from '../../hooks';
 import { ClinicsOfClient } from '../../../../models';
 import { clinicListsVar, loggedInUserVar } from '../../../../store';
 import { checkManager, getMemberState } from '../../../../utils/utils';
