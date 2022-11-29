@@ -9,8 +9,10 @@ import { TableDisplay } from '../../../../models';
 import { cls } from '../../../../utils/utils';
 import type { SchedulesProps } from '../../../../types/props.types';
 
-function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
+function Schedules({ weekEvents, labels }: SchedulesProps) {
   const today = new Date();
+
+  const userLength = weekEvents[0].users.filter((user) => user.canSee).length;
 
   const { selectedDate } = useStore();
 
@@ -53,7 +55,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
       style={containerStyle}
     >
       {schedules.map((day, i) => {
-        const filteredUsers = day.users.filter((member) => member.canSee);
+        const usersOfCanSee = day.users.filter((member) => member.canSee);
         return (
           <div key={i} className="flex flex-col">
             <PaddingWrapper>
@@ -66,7 +68,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
             </PaddingWrapper>
             <PaddingWrapper hasBorder>
               <MemberName
-                users={filteredUsers}
+                users={usersOfCanSee}
                 viewPeriodStyle={columnStyle}
                 userLength={userLength}
               />
@@ -76,7 +78,7 @@ function Schedules({ weekEvents, labels, userLength }: SchedulesProps) {
                 date={day.date}
                 labels={labels}
                 labelMaxLength={labels.length}
-                users={filteredUsers}
+                users={usersOfCanSee}
                 viewPeriodStyle={columnStyle}
                 userLength={userLength}
                 enableTimeIndicator={compareDateMatch(

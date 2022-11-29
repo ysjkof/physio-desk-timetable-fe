@@ -21,7 +21,7 @@ export interface TimetableTemplateProps {
   columns: ReactNode;
 }
 
-export interface SchedulesProps extends IUserLength, ILabels {
+export interface SchedulesProps extends ILabels {
   weekEvents: DayWithUsers[];
 }
 

@@ -61,7 +61,6 @@ export class ClinicsOfClient {
 
   static saveToLocalStorage(value: ClinicOfClient[]) {
     if (!this.#userIdAndName) throw this.#initialError;
-    console.log(value);
 
     this.#localStorageUtil.set({
       key: 'clinicLists',
@@ -118,7 +117,7 @@ export class ClinicsOfClient {
   }
 
   static get personalClinic() {
-    const clinic = this.#clinics.find(
+    const clinic = ClinicsOfClient.#clinics.find(
       (clinic) => clinic.type === ClinicType.Personal
     );
 
