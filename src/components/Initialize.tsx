@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { PropsWithChildren, useEffect, useState } from 'react';
+import { LATEST_STORAGE_VERSION } from '../constants/constants';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
 import { ClinicsOfClient, TableDisplay, TableTime } from '../models';
 import {
@@ -31,8 +32,7 @@ export function Initialize({ children }: PropsWithChildren) {
 
     const createdAt = localCreatedAt ? new Date(localCreatedAt) : null;
 
-    const latestDateString = '2022-09-08T09:25:00.000Z';
-    const latestCreatedAt = new Date(latestDateString);
+    const latestCreatedAt = new Date(LATEST_STORAGE_VERSION);
 
     if (createdAt && createdAt.getTime() >= latestCreatedAt.getTime()) return;
 
@@ -43,7 +43,7 @@ export function Initialize({ children }: PropsWithChildren) {
       key: 'createdAt',
       value: latestCreatedAt,
     });
-    return console.info('Initialized Local Storage');
+    return console.info('Initialized New Local Storage');
   };
 
   const initTableDisplay = () => {

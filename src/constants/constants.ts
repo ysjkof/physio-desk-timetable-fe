@@ -87,3 +87,5 @@ export const LOCALE = 'ko-KR';
 export const LABEL_VISIBLE_MINUTES = ['00', '30'];
 
 export const LABEL_COLORS = ['#333779', '#DDDDEF'];
+
+export const LATEST_STORAGE_VERSION = '2022-11-29T09:20:00.000Z';
