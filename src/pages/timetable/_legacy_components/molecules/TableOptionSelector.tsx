@@ -11,6 +11,7 @@ import {
 import {
   clinicListsVar,
   loggedInUserVar,
+  tableDisplayVar,
   tableTimeVar,
 } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
@@ -26,17 +27,18 @@ import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import Check from '../../../../svgs/Check';
 import { ClinicsOfClient, TableDisplay } from '../../../../models';
-import { useTableDisplay, useTableTime } from '../../hooks';
+import { useSelectedClinic, useTableDisplay, useTableTime } from '../../hooks';
 import type {
   FirstAndLastTime,
   MemberOfClient,
 } from '../../../../types/common.types';
-import { useSelectedClinic } from '../../hooks/useSelectedClinic';
 
 export default function TableOptionSelector() {
-  const { selectClinic, toggleUser } = useSelectedClinic();
+  useReactiveVar(tableDisplayVar); // ui 업데이트 전용
 
   const clinicLists = useReactiveVar(clinicListsVar);
+
+  const { selectClinic, toggleUser } = useSelectedClinic();
 
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
 
@@ -46,6 +48,9 @@ export default function TableOptionSelector() {
 
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
+  const closeOptionSelector = () => {
+    toggleDisplayController(false);
+  };
   const onClickToggleUser = (memberId: number) => {
     toggleUser(memberId);
   };
@@ -99,7 +104,7 @@ export default function TableOptionSelector() {
             시간표에 표시할 병원이나 사용자를 선택합니다.
           </p>
         </span>
-        <BtnArrow direction={NEXT} onClick={toggleDisplayController} />
+        <BtnArrow direction={NEXT} onClick={closeOptionSelector} />
       </div>
       <div
         id="table-option-selector__view-time"

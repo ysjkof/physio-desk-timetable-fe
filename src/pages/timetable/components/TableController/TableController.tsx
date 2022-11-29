@@ -161,7 +161,7 @@ export default function TableController() {
             icon={<EllipsisVertical />}
             backgroundColor="#6889BB"
             color="white"
-            onClick={toggleDisplayController}
+            onClick={() => toggleDisplayController()}
             ref={settingRef}
           />
 
