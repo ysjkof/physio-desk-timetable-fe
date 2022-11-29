@@ -14,7 +14,7 @@ import {
   getTimeString,
 } from '../../../../services/dateServices';
 import {
-  selectedInfoVar,
+  selectedReservationVar,
   tableDisplayVar,
   tableTimeVar,
 } from '../../../../store';
@@ -46,7 +46,6 @@ export default function EventBox({
   isSingleUser,
 }: EventBoxProps) {
   const navigate = useNavigate();
-  const selectedInfo = useReactiveVar(selectedInfoVar);
   const tableDisplay = useReactiveVar(tableDisplayVar);
   const tableTime = useReactiveVar(tableTimeVar);
   const [isHover, setIsHover] = useState(false);
@@ -123,8 +122,8 @@ export default function EventBox({
   function onClickBox() {
     navigate(ROUTES.edit_reservation, { state: { reservationId: event.id } });
   }
-  const setSelectedReservation = () => {
-    selectedInfoVar({ ...selectedInfo, reservation: event });
+  const selectReservation = () => {
+    selectedReservationVar(event);
   };
 
   useEffect(() => {
@@ -213,7 +212,7 @@ export default function EventBox({
                 icon={faCopy}
                 fontSize={16}
                 className="text-green-500 hover:scale-125"
-                onClick={setSelectedReservation}
+                onClick={selectReservation}
               />
               <EditReservationState reservation={event} />
             </motion.div>

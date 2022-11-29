@@ -9,7 +9,6 @@ import {
 import { getMonthStartEnd } from '../../../../services/dateServices';
 import combineUserStatistics from '../../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../../types/common.types';
-import { useStore } from '../../../../hooks';
 import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import Charts from '../molecules/Charts';
 import Warning from '../../../../_legacy_components/atoms/Warning';
@@ -17,7 +16,7 @@ import Button from '../../../../_legacy_components/molecules/Button';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
-import { clinicListsVar } from '../../../../store';
+import { clinicListsVar, selectedDateVar } from '../../../../store';
 import { ClinicsOfClient } from '../../../../models';
 import type { GetStatisticsQuery } from '../../../../types/generated.types';
 const Loading = lazy(
@@ -27,7 +26,7 @@ const Loading = lazy(
 export default function Statistics() {
   useReactiveVar(clinicListsVar); // ui 새로고침 용
   const { selectedClinic } = ClinicsOfClient;
-  const { selectedDate } = useStore();
+  const selectedDate = useReactiveVar(selectedDateVar);
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);

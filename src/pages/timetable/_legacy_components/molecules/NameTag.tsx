@@ -1,7 +1,7 @@
 import { faFemale, faMale } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useStore } from '../../../../hooks';
 import { getYMD } from '../../../../services/dateServices';
+import { selectedPatientVar } from '../../../../store';
 import { SelectedPatient } from '../../../../types/common.types';
 import { cls } from '../../../../utils/utils';
 
@@ -16,12 +16,11 @@ export default function NameTag({
   registrationNumber,
   birthday,
   clinicName,
-  canClick = false,
   user,
+  canClick = false,
 }: INameTagProps) {
-  const { setSelectedInfo } = useStore();
   const onClick = () =>
-    setSelectedInfo('patient', {
+    selectedPatientVar({
       id,
       gender,
       name,

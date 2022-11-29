@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
-import { useStore } from '../../../hooks';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
@@ -8,12 +7,12 @@ import {
 import { ClinicsOfClient, Schedules } from '../../../models';
 import { useListReservations } from './useListReservations';
 import { useMe } from '../../../hooks';
-import { clinicListsVar } from '../../../store';
+import { clinicListsVar, selectedDateVar } from '../../../store';
 import type { ISchedules } from '../../../types/common.types';
 
 export const useSchedules = () => {
   const clinicList = useReactiveVar(clinicListsVar);
-  const { selectedDate } = useStore();
+  const selectedDate = useReactiveVar(selectedDateVar);
   const [schedules, setSchedules] = useState<ISchedules[] | null>(null);
 
   const {

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
-import { useStore } from '../../../../hooks';
-import { toastVar } from '../../../../store';
+import { selectedPatientVar, toastVar } from '../../../../store';
 import { TimetableModalProps } from '../../Timetable';
 import { REG_EXP } from '../../../../constants/regex';
 import { GENDER_KOR } from '../../../../constants/constants';
@@ -40,7 +39,6 @@ export default function CreatePatientForm({
   patient,
 }: CreatePatientFormProps) {
   const { selectedClinic } = ClinicsOfClient;
-  const { selectedInfo, setSelectedInfo } = useStore();
 
   const {
     register,
@@ -106,7 +104,7 @@ export default function CreatePatientForm({
             if (ok) {
               closeAction();
               toastVar({ messages: [`"${patient?.name}"님을 등록했습니다`] });
-              setSelectedInfo('patient', {
+              selectedPatientVar({
                 id: patient?.id!,
                 name: patient?.name!,
                 gender: patient?.gender!,

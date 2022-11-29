@@ -156,21 +156,16 @@ export interface ISchedules {
   users: UserWithEvent[];
 }
 
-interface SelectedReservation extends Reservation {}
+export type SelectedReservationType = Reservation | undefined;
+
+export type SelectedPatientType = SelectedPatient | undefined;
+
 export interface SelectedPatient
   extends Pick<Patient, 'name' | 'gender' | 'registrationNumber' | 'birthday'> {
   id: number;
   clinicName: string;
   user?: { id: number; name: string };
 }
-
-export interface SelectedInfo {
-  patient: SelectedPatient | null;
-  reservation: SelectedReservation | null;
-}
-
-export type SetSelectedInfoKey = keyof SelectedInfo;
-export type SetSelectedInfoValue = SelectedInfo[SetSelectedInfoKey];
 
 // utils
 

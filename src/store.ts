@@ -4,9 +4,10 @@ import type {
   IClinicList,
   TableDisplayOptions,
   LoggedInUser,
-  SelectedInfo,
   ToastState,
   TableTimeOptions,
+  SelectedReservationType,
+  SelectedPatientType,
 } from './types/common.types';
 
 // global state
@@ -16,6 +17,11 @@ export const clinicListsVar = makeVar<IClinicList[]>([]); // member의 activated
 
 export const selectedDateVar = makeVar(new Date());
 
+export const selectedReservationVar =
+  makeVar<SelectedReservationType>(undefined);
+
+export const selectedPatientVar = makeVar<SelectedPatientType>(undefined);
+
 export const toastVar = makeVar<ToastState>({});
 
 // Timetable state
@@ -24,8 +30,3 @@ export const hasTableDisplayVar = makeVar(false);
 export const tableDisplayVar = makeVar<TableDisplayOptions>(TableDisplay.value);
 
 export const tableTimeVar = makeVar<TableTimeOptions>(TableTime.value);
-
-export const selectedInfoVar = makeVar<SelectedInfo>({
-  patient: null,
-  reservation: null,
-});

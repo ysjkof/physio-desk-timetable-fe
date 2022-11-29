@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { clinicListsVar, selectedInfoVar } from '../../store';
+import { clinicListsVar } from '../../store';
 import { cls, renameUseSplit } from '../../utils/utils';
 import { useWindowSize } from '../../hooks';
 import { getYMD } from '../../services/dateServices';
@@ -24,7 +24,7 @@ export default function Search() {
 
   const [page, setPage] = useState(1);
   const [pageNumbers, setPageNumbers] = useState([1]);
-  const selectedInfo = useReactiveVar(selectedInfoVar);
+
   const clinicLists = useReactiveVar(clinicListsVar);
   const { register, getValues } = useForm<{ clinicIds: number[] }>({
     defaultValues: { clinicIds: [selectedClinic.id] },

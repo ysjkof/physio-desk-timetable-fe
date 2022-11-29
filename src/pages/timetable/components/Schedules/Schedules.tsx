@@ -1,20 +1,20 @@
 import { ReactNode } from 'react';
+import { useReactiveVar } from '@apollo/client';
 import { compareDateMatch } from '../../../../services/dateServices';
-import { useStore } from '../../../../hooks';
 import { SchedulesStyle } from '../../../timetableServices';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
 import { TableDisplay } from '../../../../models';
 import { cls } from '../../../../utils/utils';
+import { selectedDateVar } from '../../../../store';
 import type { SchedulesProps } from '../../../../types/props.types';
 
 function Schedules({ weekEvents, labels }: SchedulesProps) {
   const today = new Date();
+  const selectedDate = useReactiveVar(selectedDateVar);
 
   const userLength = weekEvents[0].users.filter((user) => user.canSee).length;
-
-  const { selectedDate } = useStore();
 
   const { hasWeekView } = TableDisplay.value;
 

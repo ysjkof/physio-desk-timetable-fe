@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { TimetableModalProps } from '../../Timetable';
@@ -11,7 +11,6 @@ import Textarea from '../../../../_legacy_components/molecules/Textarea';
 import { ROUTES } from '../../../../router/routes';
 import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
-import { useStore } from '../../../../hooks';
 import { useReserve } from '../../hooks';
 import { ClinicsOfClient } from '../../../../models';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
@@ -22,14 +21,13 @@ import type {
   PrescriptionWithSelect,
   ReserveFormType,
 } from '../../../../types/common.types';
+import { selectedPatientVar } from '../../../../store';
 
 interface IReserveFromProps extends TimetableModalProps {
   userId: number;
   startDate?: Date;
   reservation?: Reservation;
 }
-
-const isCreate = (reservation: Reservation | undefined) => !!!reservation;
 
 export default function ReserveForm({
   closeAction,
@@ -38,7 +36,8 @@ export default function ReserveForm({
   reservation,
 }: IReserveFromProps) {
   const { selectedClinic } = ClinicsOfClient;
-  const { selectedInfo, setSelectedInfo } = useStore();
+  const selectedPatient = useReactiveVar(selectedPatientVar);
+
   const {
     register,
     getValues,
@@ -143,27 +142,29 @@ export default function ReserveForm({
   );
 
   const { createReservation, editReservation, loading } = useReserve({
-    isCreate: isCreate(reservation),
+    isCreate: !reservation,
     closeAction,
   });
 
   const onSubmit = () => {
     if (loading) return;
     if (!selectedStartDate) throw new Error('시작날짜가 없습니다.');
+    if (!selectedPatient) throw new Error('선택된 환자가 없습니다.');
+
     const endDate = new Date(selectedStartDate);
     // startDate와 같은 값인 endDate에 치료시간을 분으로 더함
     endDate.setMinutes(endDate.getMinutes() + selectedPrescription.minute);
 
     const { memo, userId } = getValues();
 
-    if (isCreate(reservation)) {
+    if (!reservation) {
       createReservation({
         startDate: selectedStartDate,
         endDate,
         memo,
-        userId: +userId!,
+        userId: +userId,
         clinicId: selectedClinic.id,
-        patientId: selectedInfo.patient!.id,
+        patientId: selectedPatient.id,
         prescriptionIds: selectedPrescription.prescriptions,
       });
       return;
@@ -173,8 +174,8 @@ export default function ReserveForm({
       startDate: selectedStartDate,
       endDate,
       memo,
-      userId: +userId!,
-      reservationId: reservation!.id,
+      userId: +userId,
+      reservationId: reservation.id,
       prescriptionIds: selectedPrescription.prescriptions,
     });
   };
@@ -182,7 +183,7 @@ export default function ReserveForm({
   //
   useEffect(() => {
     return () => {
-      setSelectedInfo('patient', null);
+      selectedPatientVar(undefined);
     };
   }, []);
 
@@ -314,7 +315,7 @@ export default function ReserveForm({
       <Button
         type="submit"
         canClick={
-          selectedInfo.patient &&
+          selectedPatient &&
           isValid &&
           selectedPrescription.prescriptions.length >= 1
         }

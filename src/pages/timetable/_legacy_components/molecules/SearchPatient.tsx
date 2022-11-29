@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { useStore } from '../../../../hooks';
 import NameTag from './NameTag';
 import Warning from '../../../../_legacy_components/atoms/Warning';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
@@ -11,11 +10,12 @@ import { cls, renameUseSplit } from '../../../../utils/utils';
 import { ClinicsOfClient } from '../../../../models';
 import { SEARCH_PATIENT_DOCUMENT } from '../../../../graphql';
 import type { SearchPatientQuery } from '../../../../types/generated.types';
+import { selectedPatientVar } from '../../../../store';
 
 export default function SearchPatient() {
   const { selectedClinic } = ClinicsOfClient;
-
-  const { selectedInfo, setSelectedInfo } = useStore();
+  const selectedPatient = useReactiveVar(selectedPatientVar);
+  // const { selectedInfo, setSelectedInfo } = useStore();
 
   const { register, getValues, handleSubmit } = useForm({
     mode: 'onChange',
@@ -49,8 +49,8 @@ export default function SearchPatient() {
     }
     return arr;
   };
-  const removeSelectedPatient = () => {
-    setSelectedInfo('patient', null);
+  const clearSelectedPatient = () => {
+    selectedPatientVar(undefined);
   };
 
   return (
@@ -66,7 +66,7 @@ export default function SearchPatient() {
           placeholder="이름을 입력하세요"
           className="input"
           autoComplete="off"
-          onFocus={removeSelectedPatient}
+          onFocus={clearSelectedPatient}
           autoFocus
         />
         <label
@@ -86,10 +86,10 @@ export default function SearchPatient() {
       <div
         className={cls(
           'search-list mt-4 h-36 divide-y overflow-y-scroll border',
-          selectedInfo.patient ? 'border-none' : ''
+          selectedPatient ? 'border-none' : ''
         )}
       >
-        {!selectedInfo.patient &&
+        {!selectedPatient &&
           searchPatientResult?.searchPatient.patients?.map((patient, index) => (
             <div key={index} className="btn-menu rounded-none">
               <NameTag
@@ -104,7 +104,7 @@ export default function SearchPatient() {
               />
             </div>
           ))}
-        {!selectedInfo.patient && !searchPatientResult ? (
+        {!selectedPatient && !searchPatientResult ? (
           <p className="text-center">
             환자 목록
             <br />
@@ -115,18 +115,18 @@ export default function SearchPatient() {
             <Warning type="emptySearch" />
           )
         )}
-        {selectedInfo.patient && (
+        {selectedPatient && (
           <div className="mx-auto flex h-5/6 items-center justify-between rounded-md border border-green-500 px-2 shadow-cst">
             <NameTag
-              id={selectedInfo.patient.id}
-              gender={selectedInfo.patient.gender}
-              name={selectedInfo.patient.name}
-              registrationNumber={selectedInfo.patient.registrationNumber}
-              birthday={selectedInfo.patient.birthday}
-              clinicName={selectedInfo.patient.clinicName}
-              user={selectedInfo.patient.user}
+              id={selectedPatient.id}
+              gender={selectedPatient.gender}
+              name={selectedPatient.name}
+              registrationNumber={selectedPatient.registrationNumber}
+              birthday={selectedPatient.birthday}
+              clinicName={selectedPatient.clinicName}
+              user={selectedPatient.user}
             />
-            <MenuButton onClick={removeSelectedPatient} enabled>
+            <MenuButton onClick={clearSelectedPatient} enabled>
               <FontAwesomeIcon icon={faXmark} fontSize={14} />
             </MenuButton>
           </div>
@@ -145,7 +145,7 @@ export default function SearchPatient() {
                     : ''
                 )}
                 onClick={() => {
-                  removeSelectedPatient();
+                  clearSelectedPatient();
                   setQueryPageNumber(pageNumber + 1);
                 }}
               >

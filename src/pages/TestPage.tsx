@@ -1,7 +1,6 @@
 import type { PrescriptionWithSelect } from '../types/common.types';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { FormEvent, useState } from 'react';
-import { selectedInfoVar } from '../store';
 import {
   CREATE_ACCOUNT_DOCUMENT,
   CREATE_ATOM_PRESCRIPTION_DOCUMENT,
@@ -224,7 +223,6 @@ function CreateReservation() {
 
 function CreateDummyData() {
   const { selectedClinic } = ClinicsOfClient;
-  const selectedInfo = useReactiveVar(selectedInfoVar);
   const [reserveDate, setReserveDate] = useState(new Date().getMonth() + 1);
 
   const clinicId = selectedClinic.id;

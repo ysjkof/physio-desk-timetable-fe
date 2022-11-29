@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { useForm } from 'react-hook-form';
-import { selectedInfoVar } from '../../../../store';
 import SelectUser from './SelectUser';
 import Button from '../../../../_legacy_components/molecules/Button';
 import Input from '../../../../_legacy_components/molecules/Input';
@@ -27,7 +25,6 @@ export default function DayOffForm({
   closeAction,
 }: DayOffFormNewProps) {
   const { selectedClinic } = ClinicsOfClient;
-  const selectedInfo = useReactiveVar(selectedInfoVar);
   const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(
     reservation?.startDate ? new Date(reservation.startDate) : startDate
   );

@@ -5,7 +5,7 @@ import { ClassNameProps } from '../../types/common.types';
 import { cls } from '../../utils/utils';
 
 interface ButtonProps extends ClassNameProps {
-  canClick: boolean | null;
+  canClick: boolean | null | undefined;
   loading: boolean;
   children: ReactNode;
   isSmall?: boolean;

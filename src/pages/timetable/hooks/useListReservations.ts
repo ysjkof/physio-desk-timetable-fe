@@ -1,5 +1,4 @@
-import { useQuery } from '@apollo/client';
-import { useStore } from '../../../hooks';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import { getAfterDate, getSunday } from '../../../services/dateServices';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
 import { ClinicsOfClient } from '../../../models';
@@ -12,9 +11,10 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery,
 } from '../../../types/generated.types';
+import { selectedDateVar } from '../../../store';
 
 export const useListReservations = () => {
-  const { selectedDate } = useStore();
+  const selectedDate = useReactiveVar(selectedDateVar);
 
   const { selectedClinic } = ClinicsOfClient;
 

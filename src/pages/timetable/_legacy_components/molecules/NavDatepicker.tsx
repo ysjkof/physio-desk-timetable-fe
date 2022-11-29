@@ -4,11 +4,11 @@ import {
   compareDateMatch,
   getWeeksOfMonth,
 } from '../../../../services/dateServices';
-import { useStore } from '../../../../hooks';
 import { cls } from '../../../../utils/utils';
 import { selectedDateVar } from '../../../../store';
 import { NEXT, PREV } from '../../../../constants/constants';
 import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
+import { useReactiveVar } from '@apollo/client';
 
 interface Calendar {
   selectedMonth: { date: Date }[];
@@ -20,7 +20,7 @@ interface NavDatepickerProps {
 }
 
 export default function NavDatepicker({ variants }: NavDatepickerProps) {
-  const { selectedDate } = useStore();
+  const selectedDate = useReactiveVar(selectedDateVar);
   const [calendar, setCalendar] = useState<Calendar>({
     selectedMonth: getWeeksOfMonth(selectedDate),
     threeMonth: getThreeMonth(selectedDate),

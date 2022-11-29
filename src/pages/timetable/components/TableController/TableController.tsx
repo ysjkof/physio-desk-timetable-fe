@@ -6,8 +6,11 @@ import { AnimatePresence } from 'framer-motion';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { USER_COLORS } from '../../../../constants/constants';
-import { useStore } from '../../../../hooks';
-import { hasTableDisplayVar, selectedDateVar } from '../../../../store';
+import {
+  hasTableDisplayVar,
+  selectedDateVar,
+  selectedReservationVar,
+} from '../../../../store';
 import { ROUTES } from '../../../../router/routes';
 import { getPositionRef } from '../../../../utils/utils';
 import {
@@ -29,10 +32,11 @@ import { ClinicsOfClient, TableDisplay } from '../../../../models';
 
 export default function TableController() {
   const hasTableDisplay = useReactiveVar(hasTableDisplayVar);
+  const selectedReservation = useReactiveVar(selectedReservationVar);
+  const selectedDate = useReactiveVar(selectedDateVar);
+
   const navigate = useNavigate();
   const today = new Date();
-
-  const { setSelectedInfo, selectedInfo, selectedDate } = useStore();
 
   const { toggleUser } = useSelectedClinic();
 
@@ -70,6 +74,9 @@ export default function TableController() {
   const weekNumber = getWeekOfMonth(selectedDate);
   const month = (getMonth(selectedDate) + 1 + '').padStart(2, '0');
 
+  const clearSelectedReservation = () => {
+    selectedReservationVar(undefined);
+  };
   useEffect(() => {
     return () => toggleDisplayController(false);
   }, []);
@@ -122,20 +129,20 @@ export default function TableController() {
             />
           ))}
         </div>
-        {selectedInfo.reservation && (
+        {selectedReservation && (
           <div className="flex w-full items-center justify-center">
             <span className="mr-4 flex">
               <span className="absolute inline-flex h-2.5 w-2.5 animate-ping rounded-full bg-blue-700 opacity-75"></span>
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-blue-800"></span>
             </span>
             <span className="mr-2 scale-150 font-bold">
-              {selectedInfo.reservation.patient?.name}
+              {selectedReservation.patient?.name}
             </span>
             님의 예약을 복사했습니다
             <FontAwesomeIcon
               icon={faRectangleXmark}
               fontSize={14}
-              onClick={() => setSelectedInfo('reservation', null)}
+              onClick={clearSelectedReservation}
               className="ml-2 cursor-pointer hover:scale-125"
             />
           </div>
