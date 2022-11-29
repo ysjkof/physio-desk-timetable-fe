@@ -10,7 +10,7 @@ import { selectedInfoVar, toastVar } from '../../../../store';
 import ReserveButton from './ReserveButton';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
 import type { CreateReservationMutation } from '../../../../types/generated.types';
-import type { IListReservation } from '../../../../types/common.types';
+import type { Reservation } from '../../../../types/common.types';
 
 interface ReservationButtonsProps {
   userIndex: number;
@@ -28,7 +28,7 @@ function ReservationButtons({
 }: ReservationButtonsProps) {
   const selectedInfo = useReactiveVar(selectedInfoVar);
 
-  function getPrescriptionInfo(reservation: IListReservation) {
+  function getPrescriptionInfo(reservation: Reservation) {
     type ReturnType = {
       prescriptionIds: number[];
       requiredTime: number;

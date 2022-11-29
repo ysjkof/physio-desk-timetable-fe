@@ -26,14 +26,14 @@ import EditReservationState from '../../_legacy_components/molecules/EditReserva
 import { cls } from '../../../../utils/utils';
 import { ROUTES } from '../../../../router/routes';
 import { ReservationState } from '../../../../types/generated.types';
-import type { IListReservation } from '../../../../types/common.types';
+import type { Reservation } from '../../../../types/common.types';
 
 interface EventBoxProps {
   userIndex: number;
   inset: string;
   maxTableHeight: number;
   numberOfCell: number;
-  event: IListReservation;
+  event: Reservation;
   isSingleUser: boolean;
 }
 

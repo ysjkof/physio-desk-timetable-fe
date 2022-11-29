@@ -3,11 +3,11 @@ import { compareDateMatch } from '../../../../services/dateServices';
 import { cls } from '../../../../utils/utils';
 import { getGridTemplateColumns } from '../../../timetableServices';
 import UserNameTitle from './UserNameTitle';
-import type { IUserWithEvent } from '../../../../types/common.types';
+import type { UserWithEvent } from '../../../../types/common.types';
 
 interface UserNameTitlesProps {
   userLength: number;
-  users: IUserWithEvent[];
+  users: UserWithEvent[];
   clinicId: number;
   loginUser: number;
   date: Date;

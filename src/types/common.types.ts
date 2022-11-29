@@ -54,7 +54,7 @@ export interface ClinicOfClient extends Omit<MyClinic, 'members'> {
 export interface IClinicList extends Omit<MyClinic, 'members'> {
   members: MemberOfClient[];
 }
-export type IListReservation = NonNullable<
+export type Reservation = NonNullable<
   ListReservationsQuery['listReservations']['results']
 >[0];
 
@@ -142,15 +142,15 @@ export interface ReserveFormType {
 
 //
 
-export interface IUserWithEvent extends MemberOfClient {
-  events: IListReservation[];
+export interface UserWithEvent extends MemberOfClient {
+  events: Reservation[];
 }
 export interface DayWithUsers {
   date: Date;
-  users: IUserWithEvent[];
+  users: UserWithEvent[];
 }
 
-interface SelectedReservation extends IListReservation {}
+interface SelectedReservation extends Reservation {}
 export interface SelectedPatient
   extends Pick<Patient, 'name' | 'gender' | 'registrationNumber' | 'birthday'> {
   id: number;

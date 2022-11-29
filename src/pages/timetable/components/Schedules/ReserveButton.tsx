@@ -10,7 +10,7 @@ import {
 } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
 import { cls } from '../../../../utils/utils';
-import type { IListReservation } from '../../../../types/common.types';
+import type { Reservation } from '../../../../types/common.types';
 
 interface ReserveBtnProps {
   label: string;
@@ -18,7 +18,7 @@ interface ReserveBtnProps {
   userId: number;
   userIndex: number;
   isActiveBorderTop?: boolean;
-  selectedReservation: IListReservation | null;
+  selectedReservation: Reservation | null;
   quickCreateReservation: () => void;
 }
 

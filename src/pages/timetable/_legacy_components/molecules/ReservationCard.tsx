@@ -11,10 +11,10 @@ import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { GENDER_KOR } from '../../../../constants/constants';
 import { useDeleteReservation } from '../../hooks';
 import Loading from '../../../../_legacy_components/atoms/Loading';
-import type { IListReservation } from '../../../../types/common.types';
+import type { Reservation } from '../../../../types/common.types';
 
 interface ReservationCardProps extends TimetableModalProps {
-  reservation: IListReservation;
+  reservation: Reservation;
 }
 
 export default function ReservationCard({

@@ -11,14 +11,14 @@ import { useDayoff } from '../../hooks';
 import { createDate } from '../../../../services/dateServices';
 import { ClinicsOfClient } from '../../../../models';
 import type {
-  IListReservation,
+  Reservation,
   ReserveFormType,
 } from '../../../../types/common.types';
 
 interface DayOffFormNewProps extends TimetableModalProps {
   userId: number;
   startDate?: Date;
-  reservation?: IListReservation;
+  reservation?: Reservation;
 }
 export default function DayOffForm({
   userId,

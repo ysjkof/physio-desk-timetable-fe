@@ -17,7 +17,7 @@ import { ClinicsOfClient } from '../../../../models';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
 import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 import type {
-  IListReservation,
+  Reservation,
   ISelectedPrescription,
   PrescriptionWithSelect,
   ReserveFormType,
@@ -26,10 +26,10 @@ import type {
 interface IReserveFromProps extends TimetableModalProps {
   userId: number;
   startDate?: Date;
-  reservation?: IListReservation;
+  reservation?: Reservation;
 }
 
-const isCreate = (reservation: IListReservation | undefined) => !!!reservation;
+const isCreate = (reservation: Reservation | undefined) => !!!reservation;
 
 export default function ReserveForm({
   closeAction,

@@ -7,10 +7,10 @@ import DayOffForm from './DayOffForm';
 import CardDetail from './CardDetail';
 import { getTimeLength } from '../../../../services/dateServices';
 import type { TimetableModalProps } from '../../Timetable';
-import type { IListReservation } from '../../../../types/common.types';
+import type { Reservation } from '../../../../types/common.types';
 
 interface DayOffCardProps extends TimetableModalProps {
-  reservation: IListReservation;
+  reservation: Reservation;
 }
 
 export default function DayOffCard({
