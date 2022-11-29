@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { compareDateMatch } from '../../../../services/dateServices';
 import { useStore } from '../../../../hooks';
-import { getGridTemplateColumns } from '../../../timetableServices';
+import { SchedulesStyle } from '../../../timetableServices';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
@@ -18,32 +18,13 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
 
   const { hasWeekView } = TableDisplay.value;
 
-  const userGridCol = getGridTemplateColumns(userLength);
-
-  const viewPeriodStyle = {
-    day: {
-      template: {},
-      userColumn: {
-        gridTemplateColumns: userGridCol,
-      },
-    },
-    week: {
-      template: {
-        gridTemplateColumns: getGridTemplateColumns(7, userLength * 6),
-      },
-      userColumn: {
-        gridTemplateColumns: userGridCol,
-      },
-    },
-  };
-
   const containerStyle = hasWeekView
-    ? viewPeriodStyle.week.template
-    : viewPeriodStyle.day.template;
+    ? SchedulesStyle.week.template(userLength)
+    : SchedulesStyle.day.template();
 
   const columnStyle = hasWeekView
-    ? viewPeriodStyle.week.userColumn
-    : viewPeriodStyle.day.userColumn;
+    ? SchedulesStyle.week.userColumn(userLength)
+    : SchedulesStyle.day.userColumn(userLength);
 
   const schedules = hasWeekView
     ? weekEvents
