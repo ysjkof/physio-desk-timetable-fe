@@ -1,11 +1,21 @@
 import { memo } from 'react';
-import { SHOW_MINUTES } from '../../../../constants/constants';
+import {
+  LABEL_COLORS,
+  LABEL_VISIBLE_MINUTES,
+} from '../../../../constants/constants';
 import { TimeLabel } from '../../../../models';
 import type { TimeLabelsProps } from '../../../../types/props.types';
 
 function TimeLabels({ labels }: TimeLabelsProps) {
   const getTimeLabels = (_labels: string[]) =>
-    _labels.map((label) => new TimeLabel(label, SHOW_MINUTES));
+    _labels.map(
+      (label) =>
+        new TimeLabel({
+          label,
+          visibleMinute: LABEL_VISIBLE_MINUTES,
+          colors: LABEL_COLORS,
+        })
+    );
 
   const timeLabels = getTimeLabels(labels);
 

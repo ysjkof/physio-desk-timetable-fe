@@ -1,37 +1,32 @@
+import { TimeLabelArg } from '../types/common.types';
+
 export class TimeLabel {
-  #label: string;
-  #minute: string;
+  #value: string;
   #color: string;
   #isShow: boolean;
 
-  #colors = {
-    '00': '#333779',
-    '30': '#DDDDEF',
-  };
-
-  constructor(label: string, private readonly showMinutes: string[]) {
-    this.#label = label;
-    this.#minute = label.substring(3, 5);
-    this.#color = this.#setColor();
-    this.#isShow = this.#setShow(showMinutes);
+  constructor({ label, visibleMinute, colors }: TimeLabelArg) {
+    this.#value = label;
+    this.#isShow = this.#setShow(visibleMinute);
+    this.#color = this.#isShow ? this.#setColor(visibleMinute, colors) : '';
   }
 
-  #setShow(showMinutes: string[]) {
-    const [exist] = showMinutes.filter((_minute) =>
-      this.#minute.endsWith(_minute)
+  #setShow(visibleMinute: TimeLabelArg['visibleMinute']) {
+    return !!visibleMinute.find((minute) => this.#value.endsWith(minute));
+  }
+
+  #setColor(
+    visibleMinute: TimeLabelArg['visibleMinute'],
+    colors: TimeLabelArg['colors']
+  ) {
+    const index = visibleMinute.findIndex((minute) =>
+      this.#value.endsWith(minute)
     );
-    return !!exist;
-  }
-
-  #setColor() {
-    if (this.#minute === '00' || this.#minute === '30') {
-      return this.#colors[this.#minute];
-    }
-    return '';
+    return colors[index];
   }
 
   get value() {
-    return this.#label;
+    return this.#value;
   }
 
   get color() {

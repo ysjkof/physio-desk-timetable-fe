@@ -14,6 +14,12 @@ import {
 
 // models
 
+export interface TimeLabelArg {
+  readonly label: string;
+  readonly visibleMinute: string[];
+  readonly colors: string[];
+}
+
 export interface FirstAndLastTime {
   firstHour: number;
   firstMinute: number;

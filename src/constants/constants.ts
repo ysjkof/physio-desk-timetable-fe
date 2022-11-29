@@ -84,4 +84,6 @@ export const GENDER_KOR = {
 
 export const LOCALE = 'ko-KR';
 
-export const SHOW_MINUTES = ['00', '30'];
+export const LABEL_VISIBLE_MINUTES = ['00', '30'];
+
+export const LABEL_COLORS = ['#333779', '#DDDDEF'];
