@@ -1,9 +1,7 @@
-export const getSunday = (date: Date) => {
-  const returnDate = new Date(date);
-  returnDate.setHours(0, 0, 0, 0);
-  returnDate.setDate(date.getDate() - date.getDay());
-  return returnDate;
-};
+import { isSunday, previousSunday } from 'date-fns';
+
+export const getSunday = (date: Date) =>
+  isSunday(date) ? date : previousSunday(date);
 
 export function getAfterDate(startDate: Date, afterDay: number) {
   const returnDate = new Date(startDate);
