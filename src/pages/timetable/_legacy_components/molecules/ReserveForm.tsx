@@ -11,7 +11,7 @@ import Textarea from '../../../../_legacy_components/molecules/Textarea';
 import { ROUTES } from '../../../../router/routes';
 import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
-import useStore from '../../../../hooks/useStore';
+import { useStore } from '../../../../hooks';
 import { useReserve } from '../../hooks';
 import { ClinicsOfClient } from '../../../../models';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';

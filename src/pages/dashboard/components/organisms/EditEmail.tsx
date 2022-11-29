@@ -5,7 +5,7 @@ import Button from '../../../../_legacy_components/molecules/Button';
 import Input from '../../../../_legacy_components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
 import { SEND_CHANGE_EMAIL_DOCUMENT } from '../../../../graphql';
-import { useMe } from '../../../../hooks/useMe';
+import { useMe } from '../../../../hooks';
 import { toastVar } from '../../../../store';
 import type { SendChangeEmailMutation } from '../../../../types/generated.types';
 

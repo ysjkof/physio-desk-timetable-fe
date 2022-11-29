@@ -5,7 +5,7 @@ import type {
   SetSelectedInfoValue,
 } from '../types/common.types';
 
-export default function useStore() {
+export function useStore() {
   const selectedInfo = useReactiveVar(selectedInfoVar);
   const selectedDate = useReactiveVar(selectedDateVar);
 

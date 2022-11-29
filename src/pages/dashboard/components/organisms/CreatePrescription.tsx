@@ -6,7 +6,6 @@ import Button from '../../../../_legacy_components/molecules/Button';
 import Input from '../../../../_legacy_components/molecules/Input';
 import FormError from '../../../../_legacy_components/atoms/FormError';
 import { REG_EXP } from '../../../../constants/regex';
-import useStore from '../../../../hooks/useStore';
 import Textarea from '../../../../_legacy_components/molecules/Textarea';
 import Warning from '../../../../_legacy_components/atoms/Warning';
 import { toastVar } from '../../../../store';

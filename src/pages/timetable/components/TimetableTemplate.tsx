@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import useWindowSize from '../../../hooks/useWindowSize';
+import { useWindowSize } from '../../../hooks';
 import type { TimetableTemplateProps } from '../../../types/props.types';
 
 export default function TimetableTemplate({

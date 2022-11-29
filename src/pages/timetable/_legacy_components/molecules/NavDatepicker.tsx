@@ -4,7 +4,7 @@ import {
   compareDateMatch,
   getWeeksOfMonth,
 } from '../../../../services/dateServices';
-import useStore from '../../../../hooks/useStore';
+import { useStore } from '../../../../hooks';
 import { cls } from '../../../../utils/utils';
 import { selectedDateVar } from '../../../../store';
 import { NEXT, PREV } from '../../../../constants/constants';

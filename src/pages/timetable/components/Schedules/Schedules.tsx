@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { compareDateMatch } from '../../../../services/dateServices';
-import useStore from '../../../../hooks/useStore';
+import { useStore } from '../../../../hooks';
 import { getGridTemplateColumns } from '../../../timetableServices';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
-import useStore from '../../../../hooks/useStore';
+import { useStore } from '../../../../hooks';
 import { toastVar } from '../../../../store';
 import { TimetableModalProps } from '../../Timetable';
 import { REG_EXP } from '../../../../constants/regex';

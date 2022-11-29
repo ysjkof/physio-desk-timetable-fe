@@ -9,7 +9,7 @@ interface useMediaQueryProps {
  * 640px : 너비가 640px이상이면 태블릿
  * 768px : 너비가 768px이상이면 데스크톱
  */
-export default function useMediaQuery({ minWidth }: useMediaQueryProps) {
+export function useMediaQuery({ minWidth }: useMediaQueryProps) {
   const [isMatch, setIsMatch] = useState(true);
   const [loading, setLoading] = useState(true);
 

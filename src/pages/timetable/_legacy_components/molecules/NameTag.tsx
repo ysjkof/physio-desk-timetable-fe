@@ -1,6 +1,6 @@
 import { faFemale, faMale } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useStore from '../../../../hooks/useStore';
+import { useStore } from '../../../../hooks';
 import { getYMD } from '../../../../services/dateServices';
 import { SelectedPatient } from '../../../../types/common.types';
 import { cls } from '../../../../utils/utils';

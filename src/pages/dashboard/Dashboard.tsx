@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useMe } from '../../hooks/useMe';
+import { useMe } from '../../hooks';
 import { DashboardEndpoint } from '../../router/routes';
 import { MUOOL } from '../../constants/constants';
 import AcceptInvitation from './components/organisms/AcceptInvitation';

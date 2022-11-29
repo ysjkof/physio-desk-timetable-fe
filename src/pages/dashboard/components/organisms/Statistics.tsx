@@ -9,7 +9,7 @@ import {
 import { getMonthStartEnd } from '../../../../services/dateServices';
 import combineUserStatistics from '../../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../../types/common.types';
-import useStore from '../../../../hooks/useStore';
+import { useStore } from '../../../../hooks';
 import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import Charts from '../molecules/Charts';
 import Warning from '../../../../_legacy_components/atoms/Warning';

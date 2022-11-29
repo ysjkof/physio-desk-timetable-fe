@@ -11,7 +11,7 @@ import {
   faBan,
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import useMediaQuery from '../../../../hooks/useMediaQuery';
+import { useMediaQuery } from '../../../../hooks';
 import DocsEventBox from '../molecules/DocsEventBox';
 import Check from '../../../../svgs/Check';
 import H1 from '../atoms/H1';

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
-import useStore from '../../../hooks/useStore';
+import { useStore } from '../../../hooks';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
 } from '../../../graphql';
 import { ClinicsOfClient, Schedules } from '../../../models';
 import { useListReservations } from './useListReservations';
-import { useMe } from '../../../hooks/useMe';
+import { useMe } from '../../../hooks';
 import { clinicListsVar } from '../../../store';
 import type { ISchedules } from '../../../types/common.types';
 

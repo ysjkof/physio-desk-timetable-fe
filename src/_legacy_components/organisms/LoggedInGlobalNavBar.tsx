@@ -1,4 +1,4 @@
-import { useMe } from '../../hooks/useMe';
+import { useMe } from '../../hooks';
 import { useState } from 'react';
 import Banner from '../molecules/Banner';
 import GlobalNavigationBarLayout from '../templates/GlobalNavigationBarLayout';

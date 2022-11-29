@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useMe } from '../hooks/useMe';
+import { useMe } from '../hooks';
 import { ENDPOINT, ROUTES } from './routes';
 import { lazy } from 'react';
 import ProtectRoute from './ProtectRoute';

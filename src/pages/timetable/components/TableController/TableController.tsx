@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { USER_COLORS } from '../../../../constants/constants';
-import useStore from '../../../../hooks/useStore';
+import { useStore } from '../../../../hooks';
 import { hasTableDisplayVar, selectedDateVar } from '../../../../store';
 import { ROUTES } from '../../../../router/routes';
 import { getPositionRef } from '../../../../utils/utils';

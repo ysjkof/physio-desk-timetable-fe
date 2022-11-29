@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import useStore from '../../../hooks/useStore';
+import { useStore } from '../../../hooks';
 import { getAfterDate, getSunday } from '../../../services/dateServices';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
 import { ClinicsOfClient } from '../../../models';

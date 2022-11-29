@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import useMediaQuery from '../../../../hooks/useMediaQuery';
-import useWindowSize from '../../../../hooks/useWindowSize';
+import { useMediaQuery, useWindowSize } from '../../../../hooks';
 import BarBottomLeft from '../../../../svgs/BarBottomLeft';
 import DocsSidebarModal from '../../../docs/components/molecules/DocsSidebarModal';
 

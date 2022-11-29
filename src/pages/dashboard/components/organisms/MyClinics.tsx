@@ -1,7 +1,7 @@
 import { lazy, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { getMemberState, renameUseSplit } from '../../../../utils/utils';
-import { useMe } from '../../../../hooks/useMe';
+import { useMe } from '../../../../hooks';
 import { useAcceptInvitation, useCancelInvitation } from '../../hooks';
 import DeactivateClinic from './DeactivateClinic';
 import ClinicCard from '../molecules/ClinicCard';

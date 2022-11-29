@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useLazyQuery } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
-import useStore from '../../../../hooks/useStore';
+import { useStore } from '../../../../hooks';
 import NameTag from './NameTag';
 import Warning from '../../../../_legacy_components/atoms/Warning';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';

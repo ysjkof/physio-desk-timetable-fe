@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useMe } from '../../hooks/useMe';
+import { useMe } from '../../hooks';
 import { clinicMenu, personalMenu, ROUTES } from '../../router/routes';
 import Dropdown from './Dropdown';
 import { logout } from '../../pages/auth/authServices';
