@@ -1,5 +1,5 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
-import { getAfterDate, getSunday } from '../../../services/dateServices';
+import { getSunday } from '../../../services/dateServices';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
 import { ClinicsOfClient } from '../../../models';
 import {
@@ -12,6 +12,7 @@ import type {
   ListReservationsQuery,
 } from '../../../types/generated.types';
 import { selectedDateVar } from '../../../store';
+import { endOfDay, nextSaturday } from 'date-fns';
 
 export const useListReservations = () => {
   const selectedDate = useReactiveVar(selectedDateVar);
@@ -19,6 +20,7 @@ export const useListReservations = () => {
   const { selectedClinic } = ClinicsOfClient;
 
   const startDate = getSunday(selectedDate);
+  const endDate = endOfDay(nextSaturday(startDate));
 
   if (!selectedClinic) throw new Error('선택된 병원이 없습니다.');
 
@@ -89,7 +91,7 @@ export const useListReservations = () => {
       variables: {
         input: {
           startDate,
-          endDate: getAfterDate(startDate, 7), // sunday가 1일이면 endDate는 8일 0시 00분이다. 그래서 1일~7일까지 쿼리된다.
+          endDate,
           userIds: selectedClinic.members.map((m) => m.user.id),
           clinicId: selectedClinic.id,
         },

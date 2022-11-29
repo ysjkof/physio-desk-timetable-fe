@@ -1,14 +1,6 @@
-import { isSunday, previousSunday } from 'date-fns';
+import { setDay, startOfDay } from 'date-fns';
 
-export const getSunday = (date: Date) =>
-  isSunday(date) ? date : previousSunday(date);
-
-export function getAfterDate(startDate: Date, afterDay: number) {
-  const returnDate = new Date(startDate);
-  returnDate.setHours(0, 0, 0, 0);
-  returnDate.setDate(startDate.getDate() + afterDay);
-  return returnDate;
-}
+export const getSunday = (date: Date) => startOfDay(setDay(date, 0));
 
 export const getWeeks = (dateOfSunday: Date) => {
   let result: { date: Date }[] = [];

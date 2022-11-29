@@ -1,10 +1,9 @@
 import {
   eachDayOfInterval,
   isSameDay,
-  isSunday,
   nextSaturday,
   parseISO,
-  previousSunday,
+  setDay,
 } from 'date-fns';
 import { ClinicsOfClient } from './ClinicsOfClient';
 import type {
@@ -44,7 +43,7 @@ export class Schedules {
   }
 
   #getIntervalOfDate(date: Date) {
-    const start = isSunday(date) ? date : previousSunday(date);
+    const start = setDay(date, 0);
     const end = nextSaturday(start);
     return { start, end };
   }
