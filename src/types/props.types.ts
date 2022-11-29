@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { DayWithUsers, IUserWithEvent } from './common.types';
+import type { ISchedules, UserWithEvent } from './common.types';
 
 // TimeTable
 export interface IUserLength {
@@ -22,7 +22,7 @@ export interface TimetableTemplateProps {
 }
 
 export interface SchedulesProps extends ILabels {
-  weekEvents: DayWithUsers[];
+  weekEvents: ISchedules[];
 }
 
 export interface DateTitleProps extends IUserLength, IDate {
@@ -30,7 +30,7 @@ export interface DateTitleProps extends IUserLength, IDate {
   isSelectedMonth: boolean;
 }
 export interface MemberNameProps extends IUserLength {
-  users: IUserWithEvent[];
+  users: UserWithEvent[];
   viewPeriodStyle: { gridTemplateColumns: string };
 }
 

@@ -145,7 +145,7 @@ export interface ReserveFormType {
 export interface UserWithEvent extends MemberOfClient {
   events: Reservation[];
 }
-export interface DayWithUsers {
+export interface ISchedules {
   date: Date;
   users: UserWithEvent[];
 }

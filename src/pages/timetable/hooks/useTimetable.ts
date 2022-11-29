@@ -1,26 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import useStore from '../../../hooks/useStore';
-import { getSunday, getWeeks } from '../../../services/dateServices';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
 } from '../../../graphql';
-import { ClinicsOfClient } from '../../../models';
+import { ClinicsOfClient, Schedules } from '../../../models';
 import { useListReservations } from './useListReservations';
 import { useMe } from '../../../hooks/useMe';
-import {
-  distributeReservation,
-  makeUsersInDay,
-  spreadClinicMembers,
-} from '../../timetableServices';
 import { clinicListsVar } from '../../../store';
-import type { DayWithUsers } from '../../../types/common.types';
+import type { ISchedules } from '../../../types/common.types';
 
-export const useTimetable = () => {
+export const useSchedules = () => {
   const clinicList = useReactiveVar(clinicListsVar);
   const { selectedDate } = useStore();
-  const [weekEvents, setWeekEvents] = useState<DayWithUsers[] | null>(null);
+  const [schedules, setSchedules] = useState<ISchedules[] | null>(null);
 
   const {
     data: reservationData,
@@ -36,18 +30,9 @@ export const useTimetable = () => {
 
     if (!reservationData?.listReservations.results || !loginUser) return;
 
-    const selectedSunday = getSunday(selectedDate);
-
-    const newUserFrameForWeek = makeUsersInDay(
-      spreadClinicMembers(ClinicsOfClient.value, clinicId),
-      getWeeks(selectedSunday)
-    );
-
-    setWeekEvents(
-      distributeReservation({
-        events: reservationData.listReservations.results,
-        dataForm: newUserFrameForWeek,
-      })
+    setSchedules(
+      new Schedules(reservationData.listReservations.results, selectedDate)
+        .value
     );
 
     subscribeToMore({
@@ -70,5 +55,5 @@ export const useTimetable = () => {
     });
   }, [reservationData, clinicList]);
 
-  return { weekEvents };
+  return { schedules };
 };
