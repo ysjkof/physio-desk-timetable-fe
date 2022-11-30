@@ -6,7 +6,7 @@ import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import NameTag from './NameTag';
 import Warning from '../../../../_legacy_components/atoms/Warning';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
-import { cls, renameUseSplit } from '../../../../utils/utils';
+import { cls } from '../../../../utils/utils';
 import { ClinicsOfClient } from '../../../../models';
 import { SEARCH_PATIENT_DOCUMENT } from '../../../../graphql';
 import type { SearchPatientQuery } from '../../../../types/generated.types';
@@ -15,7 +15,6 @@ import { selectedPatientVar } from '../../../../store';
 export default function SearchPatient() {
   const { selectedClinic } = ClinicsOfClient;
   const selectedPatient = useReactiveVar(selectedPatientVar);
-  // const { selectedInfo, setSelectedInfo } = useStore();
 
   const { register, getValues, handleSubmit } = useForm({
     mode: 'onChange',
@@ -93,14 +92,12 @@ export default function SearchPatient() {
           searchPatientResult?.searchPatient.patients?.map((patient, index) => (
             <div key={index} className="btn-menu rounded-none">
               <NameTag
-                id={patient.id}
-                gender={patient.gender}
-                name={patient.name}
-                registrationNumber={patient.registrationNumber}
-                birthday={patient.birthday}
+                patient={{
+                  // 할일: 선택된환자 형태로 가공하는 메서드
+                  ...patient,
+                  user: patient.users[patient.users.length - 1],
+                }}
                 canClick
-                clinicName={renameUseSplit(patient.clinic?.name || '')}
-                user={patient.users[patient.users.length - 1]}
               />
             </div>
           ))}
@@ -117,15 +114,7 @@ export default function SearchPatient() {
         )}
         {selectedPatient && (
           <div className="mx-auto flex h-5/6 items-center justify-between rounded-md border border-green-500 px-2 shadow-cst">
-            <NameTag
-              id={selectedPatient.id}
-              gender={selectedPatient.gender}
-              name={selectedPatient.name}
-              registrationNumber={selectedPatient.registrationNumber}
-              birthday={selectedPatient.birthday}
-              clinicName={selectedPatient.clinicName}
-              user={selectedPatient.user}
-            />
+            <NameTag patient={selectedPatient} />
             <MenuButton onClick={clearSelectedPatient} enabled>
               <FontAwesomeIcon icon={faXmark} fontSize={14} />
             </MenuButton>

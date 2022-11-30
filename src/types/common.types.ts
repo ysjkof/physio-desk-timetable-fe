@@ -61,6 +61,10 @@ export type Reservation = NonNullable<
   ListReservationsQuery['listReservations']['results']
 >[0];
 
+export type PatientInReservation = NonNullable<Reservation['patient']>;
+export type ClinicInReservation = NonNullable<Reservation['clinic']>;
+export type UserInReservation = NonNullable<Reservation['user']>;
+
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
 }
@@ -155,13 +159,10 @@ export interface ISchedules {
 
 export type SelectedReservationType = Reservation | undefined;
 
-export type SelectedPatientType = SelectedPatient | undefined;
-
-export interface SelectedPatient
-  extends Pick<Patient, 'name' | 'gender' | 'registrationNumber' | 'birthday'> {
-  id: number;
-  clinicName: string;
-  user?: { id: number; name: string };
+export type SelectedPatientType = SelectedPatient | undefined | null;
+export interface SelectedPatient extends PatientInReservation {
+  clinic: ClinicInReservation;
+  user: UserInReservation;
 }
 
 // utils

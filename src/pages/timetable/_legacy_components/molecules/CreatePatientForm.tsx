@@ -21,17 +21,10 @@ import type {
   CreatePatientMutation,
   EditPatientOutput,
 } from '../../../../types/generated.types';
+import type { SelectedPatientType } from '../../../../types/common.types';
 
 interface CreatePatientFormProps extends TimetableModalProps {
-  patient?: {
-    __typename?: 'Patient' | undefined;
-    id: number;
-    name: string;
-    gender: string;
-    registrationNumber: number;
-    birthday?: any;
-    memo?: string | null | undefined;
-  };
+  patient?: SelectedPatientType;
 }
 
 export default function CreatePatientForm({
@@ -101,23 +94,18 @@ export default function CreatePatientForm({
             const {
               createPatient: { ok, patient },
             } = data;
-            if (ok) {
+            if (ok && patient) {
               closeAction();
               toastVar({ messages: [`"${patient?.name}"님을 등록했습니다`] });
-              selectedPatientVar({
-                id: patient?.id!,
-                name: patient?.name!,
-                gender: patient?.gender!,
-                birthday: patient?.birthday,
-                registrationNumber: patient?.registrationNumber!,
-                clinicName: selectedClinic.name,
-              });
+              // 할일: 선택된환자 형태로 가공하고 적용하기
+              selectedPatientVar({ ...patient, user: patient.users[0] });
             }
           },
         });
       }
     }
   };
+
   useEffect(() => {
     if (patient) {
       setBirthday(patient.birthday);

@@ -22,7 +22,7 @@ export interface DatepickerInputState {
 }
 interface IDatepickerWithInputProps extends HasDateOption {
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-  defaultDate?: Date;
+  defaultDate?: Date | null;
   textColor?: string;
 }
 

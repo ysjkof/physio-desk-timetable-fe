@@ -20,6 +20,7 @@ import type {
   ISelectedPrescription,
   PrescriptionWithSelect,
   ReserveFormType,
+  SelectedPatientType,
 } from '../../../../types/common.types';
 import { selectedPatientVar } from '../../../../store';
 
@@ -209,16 +210,17 @@ export default function ReserveForm({
     if (processedPrescriptions && reservation) {
       const {
         memo,
-        user,
         patient,
+        user,
+        clinic,
         prescriptions: prevPrescriptions,
       } = reservation;
       if (!prevPrescriptions) throw new Error('처방이 없다');
 
       setValue('memo', memo || '');
       setValue('userId', user.id);
-      // @ts-ignore
-      setSelectedInfo('patient', patient);
+      // 할일: 선택된환자 형태로 가공하는 메서드
+      selectedPatientVar({ ...patient, user, clinic });
 
       const selectedPrescription = prevPrescriptions.map((prev) => ({
         ...prev,

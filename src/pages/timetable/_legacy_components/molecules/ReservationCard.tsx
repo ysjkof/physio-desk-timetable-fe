@@ -41,7 +41,7 @@ export default function ReservationCard({
   };
 
   if (!reservation.patient) return <Loading />;
-  const { patient, user, memo } = reservation;
+  const { patient, user, clinic, memo } = reservation;
   return (
     <div className="space-y-4">
       <h4 className="mb-5 text-left font-medium"></h4>
@@ -92,7 +92,11 @@ export default function ReservationCard({
           </div>
         )}
         {menu === 'patient' && isEdit && (
-          <CreatePatientForm patient={patient} closeAction={() => null} />
+          // 할일: 선택된환자 형태로 가공하는 메서드
+          <CreatePatientForm
+            patient={{ ...patient, user, clinic }}
+            closeAction={() => null}
+          />
         )}
       </div>
     </div>
