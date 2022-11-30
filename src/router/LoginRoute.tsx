@@ -102,7 +102,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
 
   return (
     <Routes>
-      <Route path="/" element={<GlobalLayout />}>
+      <Route path="/" element={<GlobalLayout isLoggedIn />}>
         <Route index element={<Navigate to={ROUTES.timetable} />} />,
         <Route path={ROUTES.search} element={<Search />} />
         <Route
