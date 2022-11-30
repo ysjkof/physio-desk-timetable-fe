@@ -3,7 +3,10 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { createArrayFromLength, renameUseSplit } from '../../utils/utils';
+import {
+  createArrayFromLength,
+  renameUseSplit,
+} from '../../utils/common.utils';
 import { useWindowSize } from '../../hooks';
 import { getYMD } from '../../utils/date.utils';
 import { ButtonOfPages } from '../../components';

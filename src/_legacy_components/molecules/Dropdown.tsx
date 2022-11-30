@@ -1,6 +1,6 @@
 import { PropsWithChildren, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getPositionRef } from '../../utils/utils';
+import { getPositionRef } from '../../utils/common.utils';
 import ModalPortal from '../templates/ModalPortal';
 
 interface ButtonProps extends PropsWithChildren {

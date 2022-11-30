@@ -9,7 +9,7 @@ import Button from '../../../../_legacy_components/molecules/Button';
 import SelectUser from './SelectUser';
 import Textarea from '../../../../_legacy_components/molecules/Textarea';
 import { ROUTES } from '../../../../router/routes';
-import { checkArrayIncludeValue, cls } from '../../../../utils/utils';
+import { checkArrayIncludeValue, cls } from '../../../../utils/common.utils';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
 import { useReserve } from '../../hooks';
 import { ClinicsOfClient } from '../../../../models';

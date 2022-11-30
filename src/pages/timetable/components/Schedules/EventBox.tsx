@@ -19,7 +19,7 @@ import {
   USER_COLORS,
 } from '../../../../constants/constants';
 import EditReservationState from '../../_legacy_components/molecules/EditReservationState';
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import { ROUTES } from '../../../../router/routes';
 import { TableTime } from '../../../../models';
 import { ReservationState } from '../../../../types/generated.types';

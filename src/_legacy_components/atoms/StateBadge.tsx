@@ -1,5 +1,5 @@
 import type { HTMLAttributes, PropsWithChildren } from 'react';
-import { cls, StayingState } from '../../utils/utils';
+import { cls, StayingState } from '../../utils/common.utils';
 
 interface StateBadgeProps
   extends HTMLAttributes<HTMLSpanElement>,

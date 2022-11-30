@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE_KEY } from '../utils/localStorageUtils';
+import { LOCAL_STORAGE_KEY } from '../utils/localStorage.utils';
 import type { UserIdAndName, Value } from './common.types';
 
 type PrivateLocalStorageKey = keyof Pick<

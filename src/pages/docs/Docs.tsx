@@ -3,7 +3,7 @@ import { Outlet, useMatch } from 'react-router-dom';
 import DocsSidebar from './components/organisms/DocsSidebar';
 import BarBottomLeft from '../../svgs/BarBottomLeft';
 import XMark from '../../svgs/XMark';
-import { cls } from '../../utils/utils';
+import { cls } from '../../utils/common.utils';
 import { useMediaQuery, useWindowSize } from '../../hooks';
 
 const DocsSidebarModal = lazy(

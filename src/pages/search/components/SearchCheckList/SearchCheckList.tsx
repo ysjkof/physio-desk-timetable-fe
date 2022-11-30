@@ -1,7 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { UseFormRegister } from 'react-hook-form';
 import { clinicListsVar } from '../../../../store';
-import { renameUseSplit } from '../../../../utils/utils';
+import { renameUseSplit } from '../../../../utils/common.utils';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 
 export const SearchCheckList = ({

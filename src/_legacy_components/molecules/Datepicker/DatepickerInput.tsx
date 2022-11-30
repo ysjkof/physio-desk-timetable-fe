@@ -5,7 +5,7 @@ import {
 } from './Datepicker';
 import { ChangeEvent, InputHTMLAttributes } from 'react';
 import { REG_EXP_DATEPICKER } from '../../../constants/regex';
-import { cls } from '../../../utils/utils';
+import { cls } from '../../../utils/common.utils';
 import FormError from '../../atoms/FormError';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {

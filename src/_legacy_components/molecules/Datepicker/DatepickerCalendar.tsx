@@ -13,7 +13,7 @@ import {
   getMinutesByUnit,
 } from '../../../utils/date.utils';
 import Calendar from '../../../svgs/Calendar';
-import { cls, getPositionRef } from '../../../utils/utils';
+import { cls, getPositionRef } from '../../../utils/common.utils';
 import ModalPortal from '../../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './Datepicker';
 import { TableTime } from '../../../models';

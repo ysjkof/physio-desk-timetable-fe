@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { cls } from '../utils/utils';
+import { cls } from '../utils/common.utils';
 
 interface MenuButtonProps {
   icon?: React.ReactNode;

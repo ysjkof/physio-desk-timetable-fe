@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { cls } from '../../utils/utils';
+import { cls } from '../../utils/common.utils';
 
 interface IModalPortal {
   closeAction: () => void;

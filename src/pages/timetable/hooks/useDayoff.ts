@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { TimetableModalProps } from '../Timetable';
-import { simpleCheckGQLError } from '../../../utils/utils';
+import { simpleCheckGQLError } from '../../../utils/common.utils';
 import {
   CREATE_RESERVATION_DOCUMENT,
   EDIT_RESERVATION_DOCUMENT,

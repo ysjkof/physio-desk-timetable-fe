@@ -1,6 +1,6 @@
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { client } from '../../../apollo';
-import { changeValueInArray } from '../../../utils/utils';
+import { changeValueInArray } from '../../../utils/common.utils';
 import { clinicListsVar, loggedInUserVar, toastVar } from '../../../store';
 import { ClinicsOfClient } from '../../../models';
 import {

@@ -5,7 +5,7 @@ import { ClinicsOfClient } from '../../../models';
 import {
   changeValueInArray,
   removeItemInArrayByIndex,
-} from '../../../utils/utils';
+} from '../../../utils/common.utils';
 import type {
   ListenDeleteReservationSubscription,
   ListenUpdateReservationSubscription,

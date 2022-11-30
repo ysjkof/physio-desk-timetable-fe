@@ -3,7 +3,7 @@ import {
   IDailyReport,
   IUserStatistics,
 } from '../../../../types/common.types';
-import { makeArrFromLength } from '../../../../utils/utils';
+import { makeArrFromLength } from '../../../../utils/common.utils';
 import DashboardLi from './DashboardLi';
 import TableChartCol from './TableChartCol';
 

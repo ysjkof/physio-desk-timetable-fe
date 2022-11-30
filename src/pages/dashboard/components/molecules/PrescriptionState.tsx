@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { client } from '../../../../apollo';
 import { toastVar } from '../../../../store';
-import { changeValueInArray, cls } from '../../../../utils/utils';
+import { changeValueInArray, cls } from '../../../../utils/common.utils';
 import { CardProps } from './PrescriptionCard';
 import {
   EDIT_PRESCRIPTION_DOCUMENT,

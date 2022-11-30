@@ -1,5 +1,5 @@
 import Check from '../svgs/Check';
-import { cls } from '../utils/utils';
+import { cls } from '../utils/common.utils';
 
 interface CheckableButtonProps {
   label: string;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import { PrescriptionListProps } from '../organisms/PrescriptionPage';
 import PrescriptionEdit from './PrescriptionEdit';
 import PrescriptionState from './PrescriptionState';

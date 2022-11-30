@@ -1,4 +1,4 @@
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 
 interface DashboardLiProps {
   textContents: string;

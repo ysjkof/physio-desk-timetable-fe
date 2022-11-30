@@ -5,7 +5,7 @@ import {
   faBan,
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import { Reservation } from '../../../../types/common.types';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { EDIT_RESERVATION_DOCUMENT } from '../../../../graphql';

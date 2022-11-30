@@ -1,6 +1,6 @@
 import { GENDER_KOR } from '../../../../constants/constants';
 import { getYMD } from '../../../../utils/date.utils';
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 
 interface ReservationCardNameProps {
   gender: keyof typeof GENDER_KOR;

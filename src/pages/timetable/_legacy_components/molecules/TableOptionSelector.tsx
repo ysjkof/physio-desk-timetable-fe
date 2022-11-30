@@ -7,7 +7,7 @@ import {
   getMemberState,
   isStayMember,
   renameUseSplit,
-} from '../../../../utils/utils';
+} from '../../../../utils/common.utils';
 import {
   clinicListsVar,
   loggedInUserVar,

@@ -2,7 +2,7 @@ import { useReactiveVar } from '@apollo/client';
 import { useEffect } from 'react';
 import { defaultToastTimeout } from '../../constants/constants';
 import { toastVar } from '../../store';
-import { cls } from '../../utils/utils';
+import { cls } from '../../utils/common.utils';
 
 export default function Toast() {
   const { messages, fade, milliseconds, bgColor } = useReactiveVar(toastVar);

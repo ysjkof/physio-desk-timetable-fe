@@ -12,7 +12,7 @@ import {
   selectedReservationVar,
 } from '../../../../store';
 import { ROUTES } from '../../../../router/routes';
-import { getPositionRef } from '../../../../utils/utils';
+import { getPositionRef } from '../../../../utils/common.utils';
 import {
   Calendar,
   ChevronLeft,

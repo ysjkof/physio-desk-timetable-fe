@@ -1,5 +1,5 @@
 import { SVG } from '../types/common.types';
-import { cls } from '../utils/utils';
+import { cls } from '../utils/common.utils';
 
 /**
  * heroicicons.com

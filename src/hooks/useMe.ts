@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../pages/auth/authServices';
-import localStorageUtils from '../utils/localStorageUtils';
+import localStorageUtils from '../utils/localStorage.utils';
 import { ME_DOCUMENT } from '../graphql';
 import type { MeQuery } from '../types/generated.types';
 

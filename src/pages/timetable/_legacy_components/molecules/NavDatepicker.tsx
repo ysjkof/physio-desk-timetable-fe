@@ -4,7 +4,7 @@ import {
   compareDateMatch,
   getWeeksOfMonth,
 } from '../../../../utils/date.utils';
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import { selectedDateVar } from '../../../../store';
 import { NEXT, PREV } from '../../../../constants/constants';
 import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';

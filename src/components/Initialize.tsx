@@ -3,7 +3,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { LATEST_STORAGE_VERSION } from '../constants/constants';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
 import { ClinicsOfClient, TableDisplay, TableTime } from '../models';
-import localStorageUtils from '../utils/localStorageUtils';
+import localStorageUtils from '../utils/localStorage.utils';
 import {
   clinicListsVar,
   loggedInUserVar,

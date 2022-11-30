@@ -1,7 +1,7 @@
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { cls, simpleCheckGQLError } from '../../../../utils/utils';
+import { cls, simpleCheckGQLError } from '../../../../utils/common.utils';
 import { USER_COLORS, UTC_OPTION_KST } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
 import { createDate } from '../../../../utils/date.utils';

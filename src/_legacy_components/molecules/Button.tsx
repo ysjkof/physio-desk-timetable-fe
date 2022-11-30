@@ -2,7 +2,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode } from 'react';
 import { ClassNameProps } from '../../types/common.types';
-import { cls } from '../../utils/utils';
+import { cls } from '../../utils/common.utils';
 
 interface ButtonProps extends ClassNameProps {
   canClick: boolean | null | undefined;

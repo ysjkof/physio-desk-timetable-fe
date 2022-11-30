@@ -6,7 +6,7 @@ import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
 import { TableDisplay } from '../../../../models';
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import { selectedDateVar } from '../../../../store';
 import type { SchedulesProps } from '../../../../types/props.types';
 

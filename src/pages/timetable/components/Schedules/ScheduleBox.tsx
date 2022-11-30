@@ -1,4 +1,4 @@
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import TimeIndicatorBar from '../../_legacy_components/organisms/TimeIndicatorBar';
 import ReservationButtons from './ReserveButtons';
 import EventBoxContainer from './EventBoxContainer';

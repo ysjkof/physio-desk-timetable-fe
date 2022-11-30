@@ -9,7 +9,7 @@ import {
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../../../../graphql';
 import { toastVar } from '../../../../store';
-import { changeValueInArray, cls } from '../../../../utils/utils';
+import { changeValueInArray, cls } from '../../../../utils/common.utils';
 import { CardProps } from './PrescriptionCard';
 import type {
   EditPrescriptionInput,

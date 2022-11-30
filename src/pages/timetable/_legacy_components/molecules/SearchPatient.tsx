@@ -6,7 +6,7 @@ import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import NameTag from './NameTag';
 import Warning from '../../../../_legacy_components/atoms/Warning';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import { ClinicsOfClient } from '../../../../models';
 import { SEARCH_PATIENT_DOCUMENT } from '../../../../graphql';
 import type { SearchPatientQuery } from '../../../../types/generated.types';

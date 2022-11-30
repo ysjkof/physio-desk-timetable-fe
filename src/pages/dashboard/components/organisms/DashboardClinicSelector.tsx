@@ -1,4 +1,4 @@
-import { renameUseSplit } from '../../../../utils/utils';
+import { renameUseSplit } from '../../../../utils/common.utils';
 import { Selectbox } from '../../../../components';
 import { useReactiveVar } from '@apollo/client';
 import { clinicListsVar } from '../../../../store';

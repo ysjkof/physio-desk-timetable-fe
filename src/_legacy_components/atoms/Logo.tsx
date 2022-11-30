@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import { cls } from '../../utils/utils';
+import { cls } from '../../utils/common.utils';
 
 interface LogoProps extends HTMLAttributes<HTMLHeadElement> {
   size?: 1 | 2;

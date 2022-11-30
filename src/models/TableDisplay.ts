@@ -1,4 +1,4 @@
-import localStorageUtils from '../utils/localStorageUtils';
+import localStorageUtils from '../utils/localStorage.utils';
 import type { TableDisplayOptions, UserIdAndName } from '../types/common.types';
 
 export class TableDisplay {

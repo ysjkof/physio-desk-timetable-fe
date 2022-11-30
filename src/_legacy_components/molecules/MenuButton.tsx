@@ -1,5 +1,5 @@
 import { forwardRef, HtmlHTMLAttributes, ReactNode } from 'react';
-import { cls } from '../../utils/utils';
+import { cls } from '../../utils/common.utils';
 
 interface BtnMenuProps {
   onClick?: any;

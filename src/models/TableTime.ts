@@ -4,7 +4,7 @@ import {
   createDate,
   get4DigitHour,
 } from '../utils/date.utils';
-import localStorageUtils from '../utils/localStorageUtils';
+import localStorageUtils from '../utils/localStorage.utils';
 import type {
   FirstAndLastTime,
   TableTimeOptions,

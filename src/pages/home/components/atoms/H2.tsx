@@ -1,4 +1,4 @@
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import { HeadingProps } from './H1';
 
 export default function H2({ children, ...args }: HeadingProps) {

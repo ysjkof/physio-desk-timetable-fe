@@ -2,7 +2,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Helmet } from 'react-helmet-async';
 import { ClinicsOfClient } from '../../models';
-import { renameUseSplit } from '../../utils/utils';
+import { renameUseSplit } from '../../utils/common.utils';
 
 interface ModalContentLayoutProps {
   title: string;

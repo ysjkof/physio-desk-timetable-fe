@@ -1,6 +1,6 @@
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cls } from '../../utils/utils';
+import { cls } from '../../utils/common.utils';
 import { NEXT, PREV } from '../../constants/constants';
 
 interface BtnArrowProps {

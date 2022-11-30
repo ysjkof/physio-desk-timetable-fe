@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import { renameUseSplit } from '../../../../utils/utils';
+import { renameUseSplit } from '../../../../utils/common.utils';
 import { Selectbox } from '../../../../components';
 import { useMe } from '../../../../hooks';
 import { clinicListsVar } from '../../../../store';

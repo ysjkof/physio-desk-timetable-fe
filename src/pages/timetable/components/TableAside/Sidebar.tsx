@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 interface ClassNameProps {

@@ -1,4 +1,4 @@
-import { cls } from '../../../../utils/utils';
+import { cls } from '../../../../utils/common.utils';
 import type { MemberNameProps } from '../../../../types/props.types';
 
 function MemberName({ userLength, viewPeriodStyle, users }: MemberNameProps) {

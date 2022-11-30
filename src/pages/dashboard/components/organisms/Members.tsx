@@ -2,7 +2,7 @@ import { useReactiveVar } from '@apollo/client';
 import { useCancelInvitation } from '../../hooks';
 import { ClinicsOfClient } from '../../../../models';
 import { clinicListsVar, loggedInUserVar } from '../../../../store';
-import { checkManager, getMemberState } from '../../../../utils/utils';
+import { checkManager, getMemberState } from '../../../../utils/common.utils';
 import UserCard from '../molecules/UserCard';
 
 export default function Members() {

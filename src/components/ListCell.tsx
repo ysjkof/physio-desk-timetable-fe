@@ -1,4 +1,4 @@
-import { cls } from '../utils/utils';
+import { cls } from '../utils/common.utils';
 import type { PropsWithChildren } from 'react';
 import type { ClassNameProps } from '../types/common.types';
 

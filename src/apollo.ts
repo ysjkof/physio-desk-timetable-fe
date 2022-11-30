@@ -11,8 +11,8 @@ import { onError } from '@apollo/client/link/error';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
-import localStorageUtils from './utils/localStorageUtils';
-import { printNetworkError } from './utils/errorUtils';
+import localStorageUtils from './utils/localStorage.utils';
+import { printNetworkError } from './utils/error.utils';
 
 const token = localStorageUtils.get<string>({ key: 'token' });
 export const isLoggedInVar = makeVar(Boolean(token));

@@ -2,7 +2,7 @@ import { faFemale, faMale } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getYMD } from '../../../../utils/date.utils';
 import { selectedPatientVar } from '../../../../store';
-import { cls, renameUseSplit } from '../../../../utils/utils';
+import { cls, renameUseSplit } from '../../../../utils/common.utils';
 import type { SelectedPatient } from '../../../../types/common.types';
 
 export interface INameTagProps {
