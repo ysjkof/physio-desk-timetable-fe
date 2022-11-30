@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { compareDateMatch } from '../../../../utils/date.utils';
 import { cls } from '../../../../utils/utils';
-import { getGridTemplateColumns } from '../../../timetableServices';
+import { getGridTemplateColumns } from '../../../../styles/timetable.styles';
 import UserNameTitle from './UserNameTitle';
 import type { UserWithEvent } from '../../../../types/common.types';
 
