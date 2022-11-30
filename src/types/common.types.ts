@@ -57,9 +57,6 @@ export interface ClinicOfClient extends Omit<MyClinic, 'members'> {
   isStayed: boolean;
 }
 
-export interface IClinicList extends Omit<MyClinic, 'members'> {
-  members: MemberOfClient[];
-}
 export type Reservation = NonNullable<
   ListReservationsQuery['listReservations']['results']
 >[0];

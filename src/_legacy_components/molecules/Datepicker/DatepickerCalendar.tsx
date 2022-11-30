@@ -4,7 +4,6 @@ import {
   useReducer,
   useRef,
 } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -13,11 +12,11 @@ import {
   getHoursByUnit,
   getMinutesByUnit,
 } from '../../../services/dateServices';
-import { tableTimeVar } from '../../../store';
 import Calendar from '../../../svgs/Calendar';
 import { cls, getPositionRef } from '../../../utils/utils';
 import ModalPortal from '../../templates/ModalPortal';
 import { DatepickerInputState, HasDateOption } from './Datepicker';
+import { TableTime } from '../../../models';
 
 interface Attributes
   extends ButtonHTMLAttributes<HTMLButtonElement>,
@@ -163,7 +162,6 @@ export default function DatepickerCalendar({
   setOpen,
   hasHour,
 }: DatePickerInterface) {
-  const tableTime = useReactiveVar(tableTimeVar);
   const today = createDate();
 
   const changeShowMonthReducer = (
@@ -225,7 +223,10 @@ export default function DatepickerCalendar({
     return result;
   }
 
-  const listOfHours = getHoursByUnit(tableTime.firstHour, tableTime.lastHour);
+  const listOfHours = getHoursByUnit(
+    TableTime.value.firstHour,
+    TableTime.value.lastHour
+  );
 
   const minutesUnit = 10; // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
   const listOfMinutes = getMinutesByUnit(minutesUnit);

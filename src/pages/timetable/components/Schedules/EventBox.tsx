@@ -13,11 +13,7 @@ import {
   compareTableEndtime,
   getTimeString,
 } from '../../../../services/dateServices';
-import {
-  selectedReservationVar,
-  tableDisplayVar,
-  tableTimeVar,
-} from '../../../../store';
+import { selectedReservationVar, tableDisplayVar } from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
@@ -25,6 +21,7 @@ import {
 import EditReservationState from '../../_legacy_components/molecules/EditReservationState';
 import { cls } from '../../../../utils/utils';
 import { ROUTES } from '../../../../router/routes';
+import { TableTime } from '../../../../models';
 import { ReservationState } from '../../../../types/generated.types';
 import type { Reservation } from '../../../../types/common.types';
 
@@ -47,7 +44,6 @@ export default function EventBox({
 }: EventBoxProps) {
   const navigate = useNavigate();
   const tableDisplay = useReactiveVar(tableDisplayVar);
-  const tableTime = useReactiveVar(tableTimeVar);
   const [isHover, setIsHover] = useState(false);
 
   const isDayOff = event.state === ReservationState.DayOff;
@@ -60,8 +56,8 @@ export default function EventBox({
   if (height > maxTableHeight) height = maxTableHeight;
 
   const matchTableEndtime = compareTableEndtime(new Date(event.endDate), {
-    hour: tableTime.lastHour,
-    minute: tableTime.lastMinute,
+    hour: TableTime.value.lastHour,
+    minute: TableTime.value.lastMinute,
   });
 
   if (matchTableEndtime) height = height;

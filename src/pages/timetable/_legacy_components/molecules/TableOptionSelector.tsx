@@ -12,7 +12,6 @@ import {
   clinicListsVar,
   loggedInUserVar,
   tableDisplayVar,
-  tableTimeVar,
 } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
 
@@ -26,7 +25,7 @@ import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import Check from '../../../../svgs/Check';
-import { ClinicsOfClient, TableDisplay } from '../../../../models';
+import { ClinicsOfClient, TableDisplay, TableTime } from '../../../../models';
 import { useSelectedClinic, useTableDisplay, useTableTime } from '../../hooks';
 import type {
   FirstAndLastTime,
@@ -43,8 +42,6 @@ export default function TableOptionSelector() {
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
 
   const { changeTableTIme } = useTableTime();
-
-  const tableTime = useReactiveVar(tableTimeVar);
 
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
@@ -70,14 +67,12 @@ export default function TableOptionSelector() {
     changeTableTIme(key, value);
   };
 
+  const { lastHour, lastMinute, firstHour, firstMinute } = TableTime.value;
+
   const startHours = getHoursByUnit(0, 24);
-  const endHours = (() => {
-    return startHours.filter((hour) => hour > tableTime.firstHour);
-  })();
+  const endHours = startHours.filter((hour) => hour > firstHour);
   const startMinutes = getMinutesByUnit(10);
   const endMinutes = startMinutes;
-
-  const { lastHour, lastMinute, firstHour, firstMinute } = tableTime;
 
   const variants: Variants = {
     init: { x: 300 },
