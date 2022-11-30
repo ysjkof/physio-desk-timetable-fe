@@ -5,12 +5,12 @@ import {
   createDate,
   getFrom4DigitTime,
 } from '../../../../utils/date.utils';
-import { checkMatchMinute } from '../../../timetableServices';
 import { selectedReservationVar, toastVar } from '../../../../store';
 import ReserveButton from './ReserveButton';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
 import type { CreateReservationMutation } from '../../../../types/generated.types';
 import type { Reservation } from '../../../../types/common.types';
+import { LABEL_VISIBLE_MINUTES } from '../../../../constants/constants';
 
 interface ReservationButtonsProps {
   userIndex: number;
@@ -94,6 +94,9 @@ function ReservationButtons({
 
   const dayIndex = date.getDay();
 
+  const hasBorder = (label: string) =>
+    !!LABEL_VISIBLE_MINUTES.find((match) => label.endsWith(match));
+
   return (
     <>
       {labels.map((label, idx) =>
@@ -103,7 +106,7 @@ function ReservationButtons({
             label={label}
             dayIndex={dayIndex}
             userId={userId}
-            isActiveBorderTop={checkMatchMinute(label, [0, 30])}
+            isActiveBorderTop={hasBorder(label)}
             userIndex={userIndex}
             selectedReservation={selectedReservation}
             quickCreateReservation={() => invokeQuickCreateReservation(label)}

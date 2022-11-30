@@ -14,7 +14,7 @@ interface ReserveBtnProps {
   dayIndex: number;
   userId: number;
   userIndex: number;
-  isActiveBorderTop?: boolean;
+  isActiveBorderTop: boolean;
   selectedReservation: SelectedReservationType;
   quickCreateReservation: () => void;
 }

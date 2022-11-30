@@ -1,12 +1,3 @@
-export const checkMatchMinute = (
-  date: Date | string,
-  minutes: number[]
-): boolean => {
-  const targetDate = typeof date === 'string' ? new Date(date) : date;
-  const targetMinute = targetDate.getMinutes();
-  return minutes.includes(targetMinute);
-};
-
 export const SchedulesStyle = {
   week: {
     template(userLength: number) {
