@@ -14,7 +14,7 @@ import {
   compareDateMatch,
   getHowManyDayFromMillisec,
   getYMD,
-} from '../../../../services/dateServices';
+} from '../../../../utils/date.utils';
 import TableChartColLayout from './TableChartColLayout';
 
 import {

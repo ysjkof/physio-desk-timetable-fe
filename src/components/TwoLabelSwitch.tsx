@@ -6,6 +6,7 @@ interface SwitchProps {
   labels: [Label, Label];
   onClick: () => void;
 }
+
 interface SwitchLabelType {
   label: Label;
 }
@@ -22,6 +23,7 @@ function SwitchLabel({ label }: SwitchLabelType) {
     </button>
   );
 }
+
 function MovingBox({ isActivated }: Pick<SwitchProps, 'isActivated'>) {
   return (
     <div
@@ -40,7 +42,11 @@ function MovingBox({ isActivated }: Pick<SwitchProps, 'isActivated'>) {
   );
 }
 
-export function TwoLabelSwitch({ isActivated, labels, onClick }: SwitchProps) {
+export default function TwoLabelSwitch({
+  isActivated,
+  labels,
+  onClick,
+}: SwitchProps) {
   return (
     <div
       className="relative flex h-8 w-fit cursor-pointer select-none items-center justify-center rounded-sm border border-gray-200 bg-gray-200"

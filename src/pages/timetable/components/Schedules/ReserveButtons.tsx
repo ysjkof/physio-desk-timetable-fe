@@ -4,7 +4,7 @@ import {
   compareDateMatch,
   createDate,
   getFrom4DigitTime,
-} from '../../../../services/dateServices';
+} from '../../../../utils/date.utils';
 import { checkMatchMinute } from '../../../timetableServices';
 import { selectedReservationVar, toastVar } from '../../../../store';
 import ReserveButton from './ReserveButton';

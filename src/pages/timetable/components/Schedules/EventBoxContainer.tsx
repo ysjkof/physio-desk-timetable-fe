@@ -3,7 +3,7 @@ import {
   createDate,
   get4DigitHour,
   getTimeLength,
-} from '../../../../services/dateServices';
+} from '../../../../utils/date.utils';
 import EventBox from './EventBox';
 import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
 import { ReservationState } from '../../../../types/generated.types';

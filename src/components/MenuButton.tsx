@@ -9,7 +9,7 @@ interface MenuButtonProps {
   label: string;
   onClick: () => void;
 }
-export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
+export default forwardRef<HTMLButtonElement, MenuButtonProps>(
   function MenuButton(
     { icon, isActivated, color, backgroundColor, label, onClick },
     ref

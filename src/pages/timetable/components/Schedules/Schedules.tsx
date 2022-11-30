@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useReactiveVar } from '@apollo/client';
-import { compareDateMatch } from '../../../../services/dateServices';
+import { compareDateMatch } from '../../../../utils/date.utils';
 import { SchedulesStyle } from '../../../timetableServices';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';

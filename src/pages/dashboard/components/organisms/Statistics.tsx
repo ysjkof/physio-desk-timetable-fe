@@ -6,7 +6,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { getMonthStartEnd } from '../../../../services/dateServices';
+import { getMonthStartEnd } from '../../../../utils/date.utils';
 import combineUserStatistics from '../../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../../types/common.types';
 import DashboardSectionLayout from '../template/DashboardSectionLayout';

@@ -3,7 +3,7 @@ import {
   convertMinuteFromDate,
   createDate,
   get4DigitHour,
-} from '../services/dateServices';
+} from '../utils/date.utils';
 import localStorageUtils from '../utils/localStorageUtils';
 import type {
   FirstAndLastTime,

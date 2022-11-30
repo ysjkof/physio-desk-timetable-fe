@@ -1,9 +1,6 @@
 import { TimetableModalProps } from '../../Timetable';
 import { useLocation } from 'react-router-dom';
-import {
-  createDate,
-  createDateFromDay,
-} from '../../../../services/dateServices';
+import { createDate, createDateFromDay } from '../../../../utils/date.utils';
 import { useReactiveVar } from '@apollo/client';
 import { selectedDateVar } from '../../../../store';
 import ModalContentsLayout from '../../../../_legacy_components/templates/ModalContentsLayout';

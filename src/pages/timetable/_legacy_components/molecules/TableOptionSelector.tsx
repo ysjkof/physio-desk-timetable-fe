@@ -14,12 +14,8 @@ import {
   tableDisplayVar,
 } from '../../../../store';
 import { NEXT } from '../../../../constants/constants';
-
-import { Selectbox } from '../../../../components/Selectbox';
-import {
-  getHoursByUnit,
-  getMinutesByUnit,
-} from '../../../../services/dateServices';
+import { Selectbox } from '../../../../components';
+import { getHoursByUnit, getMinutesByUnit } from '../../../../utils/date.utils';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';

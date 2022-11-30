@@ -3,17 +3,17 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { LATEST_STORAGE_VERSION } from '../constants/constants';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
 import { ClinicsOfClient, TableDisplay, TableTime } from '../models';
+import localStorageUtils from '../utils/localStorageUtils';
 import {
   clinicListsVar,
   loggedInUserVar,
   tableDisplayVar,
   tableTimeVar,
 } from '../store';
-import { MyClinic, UserIdAndName } from '../types/common.types';
-import { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
-import localStorageUtils from '../utils/localStorageUtils';
+import type { MyClinic, UserIdAndName } from '../types/common.types';
+import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
 
-export function Initialize({ children }: PropsWithChildren) {
+export default function Initialize({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
 
   const { data: meData } = useQuery<MeQuery>(ME_DOCUMENT);

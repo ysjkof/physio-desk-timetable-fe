@@ -1,5 +1,5 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
-import { getSunday } from '../../../services/dateServices';
+import { getSunday } from '../../../utils/date.utils';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
 import { ClinicsOfClient } from '../../../models';
 import {

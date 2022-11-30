@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  getFrom4DigitTime,
-  getTimeLength,
-} from '../../../../services/dateServices';
+import { getFrom4DigitTime, getTimeLength } from '../../../../utils/date.utils';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,

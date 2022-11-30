@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { compareDateMatch } from '../../../../services/dateServices';
+import { compareDateMatch } from '../../../../utils/date.utils';
 import { cls } from '../../../../utils/utils';
 import { LOCALE, SCROLL_ADDRESS } from '../../../../constants/constants';
 import type { DateTitleProps } from '../../../../types/props.types';

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { cls, simpleCheckGQLError } from '../../../../utils/utils';
 import { USER_COLORS, UTC_OPTION_KST } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
-import { createDate } from '../../../../services/dateServices';
+import { createDate } from '../../../../utils/date.utils';
 import { useMutation } from '@apollo/client';
 import { CREATE_DAY_OFF_DOCUMENT } from '../../../../graphql';
 import type { CreateDayOffMutation } from '../../../../types/generated.types';

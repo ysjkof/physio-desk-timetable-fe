@@ -4,7 +4,7 @@ import {
   TABLE_TIME_GAP,
 } from '../../../../constants/constants';
 import { TableTime } from '../../../../models/TableTime';
-import { getTimeString } from '../../../../services/dateServices';
+import { getTimeString } from '../../../../utils/date.utils';
 import type { isActive } from '../../../../types/common.types';
 
 export default function TimeIndicatorBar({ isActive }: isActive) {

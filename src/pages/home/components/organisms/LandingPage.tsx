@@ -25,7 +25,6 @@ export default function LandingPage() {
   const tableWide = '/images/landing-page/table-wide.webp';
   const myFourClinicsMobil = '/images/landing-page/my-four-clinics_mobil.webp';
   const myFourClinicsDesk = '/images/landing-page/my-four-clinics_desk.webp';
-
   const features = [
     '한 눈에 일정 파악',
     '팀원 색깔 구별',

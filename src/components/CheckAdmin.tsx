@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import NotFound from '../_legacy_components/404';
 import { CHECK_ADMIN_DOCUMENT } from '../graphql';
 import type { CheckAdminQuery } from '../types/generated.types';
 
-interface CheckAdminProps {
-  children: React.ReactNode;
-}
-export default function CheckAdmin({ children }: CheckAdminProps) {
+export default function CheckAdmin({ children }: PropsWithChildren) {
   const [callCheckAdmin, { data }] =
     useLazyQuery<CheckAdminQuery>(CHECK_ADMIN_DOCUMENT);
+
   const [hasInput, setHasInput] = useState(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -31,6 +30,7 @@ export default function CheckAdmin({ children }: CheckAdminProps) {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
   return (
     <>
       {data?.checkAdmin.ok ? (

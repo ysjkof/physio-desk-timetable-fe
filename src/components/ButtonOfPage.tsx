@@ -1,14 +1,16 @@
 import { cls } from '../utils/utils';
 
-export const ButtonOfPages = ({
-  changePage,
-  page,
-  hasBorder,
-}: {
+interface ButtonOfPagesProps {
   changePage: (page: number) => void;
   page: number;
   hasBorder?: boolean;
-}) => {
+}
+
+export default function ButtonOfPages({
+  changePage,
+  page,
+  hasBorder,
+}: ButtonOfPagesProps) {
   return (
     <button
       key={page}
@@ -23,4 +25,4 @@ export const ButtonOfPages = ({
       {page}
     </button>
   );
-};
+}

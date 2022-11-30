@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { createArrayFromLength, renameUseSplit } from '../../utils/utils';
 import { useWindowSize } from '../../hooks';
-import { getYMD } from '../../services/dateServices';
+import { getYMD } from '../../utils/date.utils';
 import { ButtonOfPages } from '../../components';
 import {
   SearchCheckList,

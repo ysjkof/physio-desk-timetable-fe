@@ -1,19 +1,21 @@
 import Check from '../svgs/Check';
 import { cls } from '../utils/utils';
 
-export function CheckableButton({
-  label,
-  color,
-  backgroundColor,
-  canSee,
-  onClick,
-}: {
+interface CheckableButtonProps {
   label: string;
   color: string;
   backgroundColor: string;
   canSee: Boolean;
   onClick: () => void;
-}) {
+}
+
+export default function CheckableButton({
+  label,
+  color,
+  backgroundColor,
+  canSee,
+  onClick,
+}: CheckableButtonProps) {
   return (
     <div
       onClick={onClick}

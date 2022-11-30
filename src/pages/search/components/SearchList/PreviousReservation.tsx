@@ -1,5 +1,5 @@
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
-import { getDateAndDifference } from '../../../../services/dateServices';
+import { getDateAndDifference } from '../../../../utils/date.utils';
 import { createArrayFromLength } from '../../../../utils/utils';
 import { ButtonOfPages, ListCell } from '../../../../components';
 import type { GetReservationsByPatientQuery } from '../../../../types/generated.types';

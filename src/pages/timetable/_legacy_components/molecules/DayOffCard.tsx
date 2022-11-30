@@ -5,7 +5,7 @@ import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { useDeleteReservation } from '../../hooks';
 import DayOffForm from './DayOffForm';
 import CardDetail from './CardDetail';
-import { getTimeLength } from '../../../../services/dateServices';
+import { getTimeLength } from '../../../../utils/date.utils';
 import type { TimetableModalProps } from '../../Timetable';
 import type { Reservation } from '../../../../types/common.types';
 

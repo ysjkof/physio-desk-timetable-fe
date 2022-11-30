@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { compareDateMatch } from '../../../../services/dateServices';
+import { compareDateMatch } from '../../../../utils/date.utils';
 import { cls } from '../../../../utils/utils';
 import { getGridTemplateColumns } from '../../../timetableServices';
 import UserNameTitle from './UserNameTitle';

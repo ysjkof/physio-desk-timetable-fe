@@ -1,4 +1,4 @@
-import { getTimeLength } from '../../../../services/dateServices';
+import { getTimeLength } from '../../../../utils/date.utils';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { Reservation } from '../../../../types/common.types';
 import EditReservationState from './EditReservationState';

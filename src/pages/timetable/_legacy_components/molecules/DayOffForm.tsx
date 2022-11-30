@@ -6,7 +6,7 @@ import Input from '../../../../_legacy_components/molecules/Input';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
 import { TimetableModalProps } from '../../Timetable';
 import { useDayoff } from '../../hooks';
-import { createDate } from '../../../../services/dateServices';
+import { createDate } from '../../../../utils/date.utils';
 import { ClinicsOfClient } from '../../../../models';
 import type {
   Reservation,

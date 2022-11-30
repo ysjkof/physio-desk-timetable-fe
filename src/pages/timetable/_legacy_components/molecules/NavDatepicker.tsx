@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   compareDateMatch,
   getWeeksOfMonth,
-} from '../../../../services/dateServices';
+} from '../../../../utils/date.utils';
 import { cls } from '../../../../utils/utils';
 import { selectedDateVar } from '../../../../store';
 import { NEXT, PREV } from '../../../../constants/constants';

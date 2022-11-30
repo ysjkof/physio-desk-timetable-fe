@@ -12,7 +12,7 @@ import {
 import {
   compareTableEndtime,
   getTimeString,
-} from '../../../../services/dateServices';
+} from '../../../../utils/date.utils';
 import { selectedReservationVar, tableDisplayVar } from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,

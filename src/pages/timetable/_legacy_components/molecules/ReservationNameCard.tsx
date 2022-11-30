@@ -1,5 +1,5 @@
 import { GENDER_KOR } from '../../../../constants/constants';
-import { getYMD } from '../../../../services/dateServices';
+import { getYMD } from '../../../../utils/date.utils';
 import { cls } from '../../../../utils/utils';
 
 interface ReservationCardNameProps {

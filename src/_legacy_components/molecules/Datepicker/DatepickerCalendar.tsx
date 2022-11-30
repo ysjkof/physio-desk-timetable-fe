@@ -11,7 +11,7 @@ import {
   createDate,
   getHoursByUnit,
   getMinutesByUnit,
-} from '../../../services/dateServices';
+} from '../../../utils/date.utils';
 import Calendar from '../../../svgs/Calendar';
 import { cls, getPositionRef } from '../../../utils/utils';
 import ModalPortal from '../../templates/ModalPortal';

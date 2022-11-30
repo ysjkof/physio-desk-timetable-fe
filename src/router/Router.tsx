@@ -11,7 +11,7 @@ const LandingPage = lazy(
 );
 const TestPage = lazy(() => import('../pages/TestPage'));
 const NotFound = lazy(() => import('../_legacy_components/404'));
-const CheckAdmin = lazy(() => import('../utils/CheckAdmin'));
+const CheckAdmin = lazy(() => import('../components/CheckAdmin'));
 
 const Docs = lazy(() => import('../pages/docs/Docs'));
 const DocsIndex = lazy(() => import('../pages/docs/mdx/DocsIndex.mdx'));
