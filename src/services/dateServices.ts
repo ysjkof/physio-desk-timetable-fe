@@ -1,4 +1,10 @@
-import { setDay, startOfDay } from 'date-fns';
+import {
+  differenceInMinutes,
+  intlFormat,
+  parseISO,
+  setDay,
+  startOfDay,
+} from 'date-fns';
 
 export const getSunday = (date: Date) => startOfDay(setDay(date, 0));
 
@@ -46,10 +52,22 @@ export const getYMD = (
  * @returns
  */
 export const getTimeString = (date: Date, prefix?: boolean) =>
-  new Intl.DateTimeFormat('ko', {
-    timeStyle: 'short',
-    hour12: !!prefix,
-  }).format(date);
+  intlFormat(date, { hour: '2-digit', hour12: !!prefix, minute: '2-digit' });
+
+export const getDateOfNumeric = (date: Date) =>
+  intlFormat(date, {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+  });
+
+export const getDateAndDifference = (start: string, end: string) => {
+  const startDate = parseISO(start);
+  const date = getDateOfNumeric(startDate);
+  const difference = differenceInMinutes(parseISO(end), startDate);
+  return `${date} (${difference}분)`;
+};
 
 export function addHourToDate(fromDate: Date, hours: Date) {
   const year = fromDate.getFullYear();

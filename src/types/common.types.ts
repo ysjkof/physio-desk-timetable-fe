@@ -2,12 +2,12 @@ import { SVGProps } from 'react';
 import {
   Clinic,
   FindMyClinicsQuery,
+  GetReservationsByPatientQuery,
   GetStatisticsQuery,
   ListReservationsQuery,
   Member,
   MeQuery,
   Notice,
-  Patient,
   Prescription,
   User,
 } from './generated.types';
@@ -64,6 +64,10 @@ export type Reservation = NonNullable<
 export type PatientInReservation = NonNullable<Reservation['patient']>;
 export type ClinicInReservation = NonNullable<Reservation['clinic']>;
 export type UserInReservation = NonNullable<Reservation['user']>;
+
+export type ReservationInPatient = NonNullable<
+  GetReservationsByPatientQuery['getReservationsByPatient']['results']
+>[0];
 
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;

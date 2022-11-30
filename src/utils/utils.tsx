@@ -110,3 +110,11 @@ export function checkArrayIncludeValue<T>(arr: T[] | undefined | null) {
   if (!arr) return false;
   return arr.length >= 1 ? arr : false;
 }
+
+export const createArrayFromLength = (length: number) => {
+  const numbers = [1];
+  while (numbers.length < length) {
+    numbers.push(numbers.length + 1);
+  }
+  return numbers;
+};
