@@ -1,23 +1,19 @@
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
 import { cls } from '../utils/utils';
 
-interface ChildrenProps {
-  children: React.ReactNode;
-}
-
-interface ButtonProps extends ChildrenProps {
+interface ButtonProps extends PropsWithChildren {
   onClick: () => void;
   iconSize?: number;
 }
-interface OptionProps extends ChildrenProps {
+interface OptionProps extends PropsWithChildren {
   onClick: () => void;
   selected?: boolean;
   suffix?: string;
 }
-interface OptionsProps extends ChildrenProps {}
-interface SelectboxProps extends ChildrenProps {
+interface OptionsProps extends PropsWithChildren {}
+interface SelectboxProps extends PropsWithChildren {
   selectedValue: string;
   width?: string;
   iconSize?: number;

@@ -1,28 +1,24 @@
-import { useRef, useState } from 'react';
+import { PropsWithChildren, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPositionRef } from '../../utils/utils';
 import ModalPortal from '../templates/ModalPortal';
 
-interface ChildrenProps {
-  children: React.ReactNode;
-}
-
-interface ButtonProps extends ChildrenProps {
+interface ButtonProps extends PropsWithChildren {
   onClick: () => void;
 }
-interface LiProps extends ChildrenProps {
+interface LiProps extends PropsWithChildren {
   to: string;
 }
-interface UlProps extends ChildrenProps {}
-interface ContainerProps extends ChildrenProps {
+interface UlProps extends PropsWithChildren {}
+interface ContainerProps extends PropsWithChildren {
   width: string;
 }
 
-interface DropdownProps extends ChildrenProps {
+interface DropdownProps extends PropsWithChildren {
   title: React.ReactNode;
 }
 
-function Span({ children }: ChildrenProps) {
+function Span({ children }: PropsWithChildren) {
   return (
     <span className="flex overflow-hidden text-ellipsis whitespace-nowrap py-1 px-2 text-center hover:bg-blue-200">
       {children}

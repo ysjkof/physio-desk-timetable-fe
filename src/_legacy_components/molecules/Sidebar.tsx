@@ -1,10 +1,7 @@
-import { ButtonHTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
 import { cls } from '../../utils/utils';
+import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
-interface ChildrenProps {
-  children: React.ReactNode;
-}
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 interface ClassNameProps {
   className?: string;
@@ -14,21 +11,21 @@ interface SelectedProps {
   selected?: boolean;
 }
 
-interface ToProps extends ChildrenProps, SelectedProps {
+interface ToProps extends PropsWithChildren, SelectedProps {
   to: string;
   onClick?: () => void;
 }
-interface OnClickProps extends ChildrenProps, SelectedProps {
+interface OnClickProps extends PropsWithChildren, SelectedProps {
   onClick: () => void;
   to?: string;
 }
 
-interface UlProps extends ChildrenProps {
+interface UlProps extends PropsWithChildren {
   title?: React.ReactNode;
   removePadding?: boolean;
   opacity?: boolean;
 }
-interface SidebarPoprs extends ChildrenProps, ClassNameProps {
+interface SidebarPoprs extends PropsWithChildren, ClassNameProps {
   disable?: boolean;
   noGap?: boolean;
 }

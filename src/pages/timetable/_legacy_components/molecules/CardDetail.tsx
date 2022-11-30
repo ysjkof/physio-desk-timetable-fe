@@ -1,15 +1,17 @@
-import { ChildrenProps } from '../../../../types/common.types';
+import type { PropsWithChildren } from 'react';
 
 interface TimeProps {
   totalTime: number;
   startTime: string;
   endTime?: string;
 }
+
 interface LastUpdate {
   name: string;
   updatedAt: string;
 }
-function Therapist({ children }: ChildrenProps) {
+
+function Therapist({ children }: PropsWithChildren) {
   return (
     <div className="relative grid grid-cols-[5rem,1fr] items-center">
       <span>치료사</span>
@@ -28,7 +30,7 @@ function Time({ startTime, endTime, totalTime }: TimeProps) {
     </div>
   );
 }
-function Prescription({ children }: ChildrenProps) {
+function Prescription({ children }: PropsWithChildren) {
   return (
     <div className="grid grid-cols-[5rem,1fr] items-center">
       <span className="">처방</span>
@@ -36,7 +38,7 @@ function Prescription({ children }: ChildrenProps) {
     </div>
   );
 }
-function State({ children }: ChildrenProps) {
+function State({ children }: PropsWithChildren) {
   return (
     <div className="grid grid-cols-[5rem,1fr] items-center">
       <span className="">상태</span>
@@ -53,7 +55,7 @@ function LastUpdate({ name, updatedAt }: LastUpdate) {
     </div>
   );
 }
-function Memo({ children }: ChildrenProps) {
+function Memo({ children }: PropsWithChildren) {
   return (
     <div>
       <span className="">메모</span>
@@ -62,7 +64,7 @@ function Memo({ children }: ChildrenProps) {
   );
 }
 
-function CardDetail({ children }: ChildrenProps) {
+function CardDetail({ children }: PropsWithChildren) {
   return <div className="flex flex-col gap-6">{children}</div>;
 }
 

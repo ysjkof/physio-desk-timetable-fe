@@ -1,9 +1,10 @@
-import { ChildrenProps, ClassNameProps } from '../../../../types/common.types';
 import { cls } from '../../../../utils/utils';
+import type { PropsWithChildren } from 'react';
+import type { ClassNameProps } from '../../../../types/common.types';
 
-export interface HeadingPoprs extends ChildrenProps, ClassNameProps {}
+export interface HeadingProps extends PropsWithChildren, ClassNameProps {}
 
-export default function H1({ children, ...args }: HeadingPoprs) {
+export default function H1({ children, ...args }: HeadingProps) {
   return (
     <h1
       {...args}

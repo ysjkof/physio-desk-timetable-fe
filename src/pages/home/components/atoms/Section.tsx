@@ -1,7 +1,8 @@
-import { ChildrenProps, ClassNameProps } from '../../../../types/common.types';
 import { cls } from '../../../../utils/utils';
+import type { PropsWithChildren } from 'react';
+import type { ClassNameProps } from '../../../../types/common.types';
 
-interface SectionProps extends ChildrenProps, ClassNameProps {
+interface SectionProps extends PropsWithChildren, ClassNameProps {
   bgColor?: 'white';
   widthFull?: boolean;
 }

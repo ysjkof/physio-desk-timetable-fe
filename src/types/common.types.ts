@@ -176,10 +176,6 @@ export interface ToastState {
   bgColor?: boolean;
 }
 
-export interface ChildrenProps {
-  children?: React.ReactNode;
-}
-
 export interface SVG extends SVGProps<SVGSVGElement> {
   iconSize?: 'LG' | 'MD' | 'SM';
 }
