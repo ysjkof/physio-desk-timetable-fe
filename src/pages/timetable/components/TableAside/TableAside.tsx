@@ -1,11 +1,18 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../../../router/routes';
 import { cls } from '../../../../utils/common.utils';
 import { CogSixTooth, Building, Table } from '../../../../svgs';
 import TableClinicSelector from './TableClinicSelector';
 
-function TableAside() {
+export interface UlProps extends PropsWithChildren {}
+
+interface LiProps extends PropsWithChildren {
+  to: string;
+  selected?: boolean;
+}
+
+const TableAside = () => {
   return (
     <aside
       id="timetable__aside-nav"
@@ -36,29 +43,25 @@ function TableAside() {
       </div>
     </aside>
   );
-}
+};
 
-function Logo() {
+const Logo = () => {
   return (
     <h1 className="cursor-pointer whitespace-nowrap text-xl font-bold">
       MUOOL
     </h1>
   );
-}
-export interface UlProps extends PropsWithChildren {}
-function Ul({ children }: UlProps) {
+};
+
+const Ul = ({ children }: UlProps) => {
   return (
     <div className={cls('flex h-full flex-col')}>
       <ul>{children}</ul>
     </div>
   );
-}
+};
 
-interface LiProps extends PropsWithChildren {
-  to: string;
-  selected?: boolean;
-}
-function Li({ to, children, selected }: LiProps) {
+const Li = ({ to, children, selected }: LiProps) => {
   return (
     <li
       className={cls(
@@ -76,6 +79,6 @@ function Li({ to, children, selected }: LiProps) {
       </Link>
     </li>
   );
-}
+};
 
 export default TableAside;

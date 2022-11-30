@@ -21,7 +21,7 @@ interface SelectboxProps extends PropsWithChildren {
   backgroundColor?: string;
 }
 
-function Button({ children, onClick, iconSize = 14 }: ButtonProps) {
+const Button = ({ children, onClick, iconSize = 14 }: ButtonProps) => {
   return (
     <button
       type="button"
@@ -36,9 +36,9 @@ function Button({ children, onClick, iconSize = 14 }: ButtonProps) {
       />
     </button>
   );
-}
+};
 
-function Option({ children, selected, suffix, onClick }: OptionProps) {
+const Option = ({ children, selected, suffix, onClick }: OptionProps) => {
   return (
     <span
       onClick={onClick}
@@ -51,24 +51,24 @@ function Option({ children, selected, suffix, onClick }: OptionProps) {
       <span>{suffix || ''}</span>
     </span>
   );
-}
+};
 
-function Options({ children }: OptionsProps) {
+const Options = ({ children }: OptionsProps) => {
   return (
     <ul className="absolute right-0 z-50 flex w-full flex-col border border-inherit bg-inherit shadow-cst">
       {children}
     </ul>
   );
-}
+};
 
-function Selectbox({
+const Selectbox = ({
   children,
   selectedValue,
   width,
   iconSize,
   hasBorder,
   backgroundColor = 'white',
-}: SelectboxProps) {
+}: SelectboxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((prevState) => !prevState);
   const closeMenu = () => setIsOpen(false);
@@ -99,7 +99,7 @@ function Selectbox({
       )}
     </div>
   );
-}
+};
 
 Selectbox.Option = Option;
 Selectbox.Options = Options;

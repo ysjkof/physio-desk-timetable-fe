@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * EllipsisVertical > Outline
  */
-export default function EllipsisVertical({ iconSize, ...args }: SVG) {
+const EllipsisVertical = ({ iconSize, ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -32,4 +32,6 @@ export default function EllipsisVertical({ iconSize, ...args }: SVG) {
       />
     </svg>
   );
-}
+};
+
+export default EllipsisVertical;

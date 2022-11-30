@@ -1,8 +1,9 @@
-import { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { cls } from '../../../../utils/common.utils';
+import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
+
 interface ClassNameProps {
   className?: string;
 }
@@ -15,32 +16,53 @@ interface ToProps extends PropsWithChildren, SelectedProps {
   to: string;
   onClick?: () => void;
 }
+
 export interface UlProps extends PropsWithChildren {
   title?: React.ReactNode;
   removePadding?: boolean;
   opacity?: boolean;
 }
+
 interface SidebarProps extends PropsWithChildren, ClassNameProps {
   disable?: boolean;
   noGap?: boolean;
 }
 
-function Button({ children, ...args }: ButtonProps) {
+const Sidebar = ({ children, className, disable, noGap }: SidebarProps) => {
   return (
-    <button
-      type="button"
-      {...args}
+    <div
       className={cls(
-        'flex h-full w-full cursor-pointer items-center',
-        args.className || ''
+        'SIDE-BAR flex flex-col',
+        disable ? 'pointer-events-none opacity-25' : '',
+        noGap ? '' : 'space-y-10',
+        className || ''
       )}
     >
       {children}
-    </button>
+    </div>
   );
-}
+};
 
-function Li({ to, children, selected }: ToProps) {
+const Ul = ({ children, title, removePadding, opacity }: UlProps) => {
+  return (
+    <div
+      className={cls(
+        'flex flex-col pl-4',
+        removePadding ? '' : 'pr-16',
+        opacity ? 'opacity-50' : ''
+      )}
+    >
+      {title && (
+        <h1 className="whitespace-nowrap pt-4 pb-2 text-sm font-semibold">
+          {title}
+        </h1>
+      )}
+      <ul>{children}</ul>
+    </div>
+  );
+};
+
+const Li = ({ to, children, selected }: ToProps) => {
   return (
     <li
       className={cls(
@@ -59,44 +81,25 @@ function Li({ to, children, selected }: ToProps) {
       </Link>
     </li>
   );
-}
+};
 
-function Ul({ children, title, removePadding, opacity }: UlProps) {
+const Button = ({ children, ...args }: ButtonProps) => {
   return (
-    <div
+    <button
+      type="button"
+      {...args}
       className={cls(
-        'flex flex-col pl-4',
-        removePadding ? '' : 'pr-16',
-        opacity ? 'opacity-50' : ''
-      )}
-    >
-      {title && (
-        <h1 className="whitespace-nowrap pt-4 pb-2 text-sm font-semibold">
-          {title}
-        </h1>
-      )}
-      <ul>{children}</ul>
-    </div>
-  );
-}
-
-function Sidebar({ children, className, disable, noGap }: SidebarProps) {
-  return (
-    <div
-      className={cls(
-        'SIDE-BAR flex flex-col',
-        disable ? 'pointer-events-none opacity-25' : '',
-        noGap ? '' : 'space-y-10',
-        className || ''
+        'flex h-full w-full cursor-pointer items-center',
+        args.className || ''
       )}
     >
       {children}
-    </div>
+    </button>
   );
-}
+};
 
-Sidebar.Button = Button;
-Sidebar.Li = Li;
 Sidebar.Ul = Ul;
+Sidebar.Li = Li;
+Sidebar.Button = Button;
 
 export default Sidebar;

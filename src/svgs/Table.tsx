@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * table-cells > Outline
  */
-export default function Table({ iconSize, ...args }: SVG) {
+const Table = ({ iconSize, ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -32,4 +32,6 @@ export default function Table({ iconSize, ...args }: SVG) {
       />
     </svg>
   );
-}
+};
+
+export default Table;

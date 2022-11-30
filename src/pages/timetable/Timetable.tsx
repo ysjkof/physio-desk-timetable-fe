@@ -19,7 +19,7 @@ export interface TimetableModalProps {
   closeAction: () => void;
 }
 
-export default function TimeTable() {
+const TimeTable = () => {
   const { labels } = useTableLabel();
   const { schedules } = useSchedules();
 
@@ -50,4 +50,6 @@ export default function TimeTable() {
       <TableModals />
     </>
   );
-}
+};
+
+export default TimeTable;

@@ -6,9 +6,11 @@ import {
   startOfDay,
 } from 'date-fns';
 
-export const getSunday = (date: Date) => startOfDay(setDay(date, 0));
+export function getSunday(date: Date) {
+  return startOfDay(setDay(date, 0));
+}
 
-export const getWeeks = (dateOfSunday: Date) => {
+export function getWeeks(dateOfSunday: Date) {
   let result: { date: Date }[] = [];
   for (let i = 0; i < 7; i++) {
     const sunday = new Date(dateOfSunday);
@@ -16,13 +18,13 @@ export const getWeeks = (dateOfSunday: Date) => {
     result.push({ date: sunday });
   }
   return result;
-};
+}
 
-export const getYMD = (
+export function getYMD(
   inputDate: string | Date,
   option: 'yyyymmdd' | 'yymmdd' | 'mmdd',
   separator?: '-' | '/'
-) => {
+) {
   const localDate = new Date(inputDate);
 
   let year = '';
@@ -44,30 +46,36 @@ export const getYMD = (
       ? `${year}${separator}${month}${separator}${date}`
       : `${month}${separator}${date}`;
   return year ? `${year}${month}${date}` : `${month}${date}`;
-};
+}
 
 /**
  * 다음 형태로 시각 반환한다. 다음: 오전 11:38
  * @param date
  * @returns
  */
-export const getTimeString = (date: Date, prefix?: boolean) =>
-  intlFormat(date, { hour: '2-digit', hour12: !!prefix, minute: '2-digit' });
+export function getTimeString(date: Date, prefix?: boolean) {
+  return intlFormat(date, {
+    hour: '2-digit',
+    hour12: !!prefix,
+    minute: '2-digit',
+  });
+}
 
-export const getDateOfNumeric = (date: Date) =>
-  intlFormat(date, {
+export function getDateOfNumeric(date: Date) {
+  return intlFormat(date, {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
     hour: 'numeric',
   });
+}
 
-export const getDateAndDifference = (start: string, end: string) => {
+export function getDateAndDifference(start: string, end: string) {
   const startDate = parseISO(start);
   const date = getDateOfNumeric(startDate);
   const difference = differenceInMinutes(parseISO(end), startDate);
   return `${date} (${difference}분)`;
-};
+}
 
 export function addHourToDate(fromDate: Date, hours: Date) {
   const year = fromDate.getFullYear();
@@ -79,11 +87,11 @@ export function addHourToDate(fromDate: Date, hours: Date) {
   return new Date(year, month, date, hour, minute);
 }
 
-export const getTimeLength = (
+export function getTimeLength(
   startDate: Date,
   endDate: Date,
   unit: 'minute' | '20minute'
-) => {
+) {
   const sd = new Date(startDate);
   const ed = new Date(endDate);
   let seconds = 60;
@@ -97,9 +105,9 @@ export const getTimeLength = (
       break;
   }
   return (ed.getTime() - sd.getTime()) / 1000 / seconds / minutes;
-};
+}
 
-export const getWeeksOfMonth = (date: Date) => {
+export function getWeeksOfMonth(date: Date) {
   let result = [];
   const firstDate = new Date(date);
   const lastDate = new Date(firstDate);
@@ -118,13 +126,13 @@ export const getWeeksOfMonth = (date: Date) => {
       break;
   }
   return result;
-};
+}
 
-export const compareDateMatch = (
+export function compareDateMatch(
   inputDate: Date,
   comparisonDate: Date,
   option: 'ymd' | 'ym' | 'd' | 'hm'
-): boolean => {
+): boolean {
   switch (option) {
     case 'ymd':
       return (
@@ -145,13 +153,13 @@ export const compareDateMatch = (
         inputDate.getHours() === comparisonDate.getHours()
       );
   }
-};
+}
 
-export const compareSameWeek = (date: Date, secondDate: Date): boolean => {
+export function compareSameWeek(date: Date, secondDate: Date): boolean {
   return compareDateMatch(getSunday(date), getSunday(secondDate), 'ymd');
-};
+}
 
-export const get4DigitHour = (date: Date | string) => {
+export function get4DigitHour(date: Date | string) {
   if (typeof date === 'string') {
     date = new Date(date);
   }
@@ -160,10 +168,11 @@ export const get4DigitHour = (date: Date | string) => {
     ':' +
     (date.getMinutes() + '').padStart(2, '0')
   );
-};
+}
 
-export const getFrom4DigitTime = (time: string, what: 'hour' | 'minute') =>
-  what === 'hour' ? +time.substring(0, 2) : time.substring(3, 5);
+export function getFrom4DigitTime(time: string, what: 'hour' | 'minute') {
+  return what === 'hour' ? +time.substring(0, 2) : time.substring(3, 5);
+}
 
 /**
  * Date를 받고 그 달의 첫날짜와 끝날짜를 반환한다
@@ -223,18 +232,18 @@ export function getHowManyDayFromMillisec(millisecond: number) {
 }
 
 /** date가 속한 주의 요일 인덱스에 맞는 날짜를 반환*/
-export const createDateFromDay = (date: Date, dayIdx: number) => {
+export function createDateFromDay(date: Date, dayIdx: number) {
   const newDate = new Date(date);
   const dayGap = dayIdx - newDate.getDay();
   newDate.setDate(newDate.getDate() + dayGap);
   return newDate;
-};
+}
 
 /** 새 날짜를 생성하면서 시, 분, 초, 밀리초를 초기화 한다. 초와 밀리초는 무조건 0이다. */
-export const createDate = (
+export function createDate(
   date?: string | Date,
   option?: { hour: number; minute: number }
-) => {
+) {
   const newDate = date ? new Date(date) : new Date();
   if (option) {
     const { hour, minute } = option;
@@ -243,7 +252,7 @@ export const createDate = (
   }
   newDate.setHours(0, 0, 0, 0);
   return newDate;
-};
+}
 
 export function getHoursByUnit(start: number, end: number) {
   const hours = [];

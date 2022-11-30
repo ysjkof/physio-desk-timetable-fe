@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { useWindowSize } from '../../../hooks';
 import type { TimetableTemplateProps } from '../../../types/props.types';
 
-export default function TimetableTemplate({
+const TimetableTemplate = ({
   aside,
   nav,
   labels,
   columns,
-}: TimetableTemplateProps) {
+}: TimetableTemplateProps) => {
   const { height, changeMinus } = useWindowSize(true);
   const headerRef = useRef<HTMLDivElement>(null);
   const extraMargin = 20;
@@ -50,4 +50,6 @@ export default function TimetableTemplate({
       </div>
     </motion.div>
   );
-}
+};
+
+export default TimetableTemplate;

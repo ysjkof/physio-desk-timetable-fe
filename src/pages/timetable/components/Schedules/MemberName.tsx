@@ -1,7 +1,11 @@
 import { cls } from '../../../../utils/common.utils';
 import type { MemberNameProps } from '../../../../types/props.types';
 
-function MemberName({ userLength, viewPeriodStyle, users }: MemberNameProps) {
+const MemberName = ({
+  userLength,
+  viewPeriodStyle,
+  users,
+}: MemberNameProps) => {
   return (
     <div
       className={cls(
@@ -20,6 +24,6 @@ function MemberName({ userLength, viewPeriodStyle, users }: MemberNameProps) {
       ))}
     </div>
   );
-}
+};
 
 export default MemberName;

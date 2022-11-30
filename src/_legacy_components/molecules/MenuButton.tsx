@@ -1,4 +1,4 @@
-import { forwardRef, HtmlHTMLAttributes, ReactNode } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import { cls } from '../../utils/common.utils';
 
 interface BtnMenuProps {

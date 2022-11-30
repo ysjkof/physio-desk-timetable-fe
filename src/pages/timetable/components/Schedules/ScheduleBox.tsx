@@ -4,7 +4,7 @@ import ReservationButtons from './ReserveButtons';
 import EventBoxContainer from './EventBoxContainer';
 import type { ScheduleBoxProps } from '../../../../types/props.types';
 
-function ScheduleBox({
+const ScheduleBox = ({
   userLength,
   enableTimeIndicator,
   viewPeriodStyle,
@@ -12,7 +12,7 @@ function ScheduleBox({
   date,
   labelMaxLength,
   labels,
-}: ScheduleBoxProps) {
+}: ScheduleBoxProps) => {
   return (
     <div
       className={cls(
@@ -45,6 +45,6 @@ function ScheduleBox({
       ))}
     </div>
   );
-}
+};
 
 export default ScheduleBox;

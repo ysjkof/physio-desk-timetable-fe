@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * chevron-up > mini
  */
-export default function ChevronDown({ iconSize, ...args }: SVG) {
+const ChevronDown = ({ iconSize, ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -21,4 +21,6 @@ export default function ChevronDown({ iconSize, ...args }: SVG) {
       />
     </svg>
   );
-}
+};
+
+export default ChevronDown;

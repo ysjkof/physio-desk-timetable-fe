@@ -4,12 +4,12 @@ import { cls } from '../../../../utils/common.utils';
 import { LOCALE, SCROLL_ADDRESS } from '../../../../constants/constants';
 import type { DateTitleProps } from '../../../../types/props.types';
 
-function DateTitle({
+const DateTitle = ({
   userLength,
   date,
   isToday,
   isSelectedMonth,
-}: DateTitleProps) {
+}: DateTitleProps) => {
   const dayNumber = date.getDay();
   const dayString = new Intl.DateTimeFormat(LOCALE, { day: 'numeric' }).format(
     date
@@ -56,7 +56,7 @@ function DateTitle({
       </div>
     </div>
   );
-}
+};
 
 export default memo(DateTitle, (prevProps, nextProps) => {
   return (

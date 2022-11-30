@@ -7,7 +7,7 @@ import { ClinicsOfClient } from '../../../../models';
 import { useSelectedClinic } from '../../hooks';
 import { ClinicType } from '../../../../types/generated.types';
 
-export default function TableClinicSelector() {
+const TableClinicSelector = () => {
   const { selectClinic } = useSelectedClinic();
   const { data: meData } = useMe();
   if (!meData) return <></>;
@@ -67,4 +67,6 @@ export default function TableClinicSelector() {
       </Selectbox.Options>
     </Selectbox>
   );
-}
+};
+
+export default TableClinicSelector;

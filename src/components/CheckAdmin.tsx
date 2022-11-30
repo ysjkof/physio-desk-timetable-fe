@@ -4,7 +4,7 @@ import NotFound from '../_legacy_components/404';
 import { CHECK_ADMIN_DOCUMENT } from '../graphql';
 import type { CheckAdminQuery } from '../types/generated.types';
 
-export default function CheckAdmin({ children }: PropsWithChildren) {
+const CheckAdmin = ({ children }: PropsWithChildren) => {
   const [callCheckAdmin, { data }] =
     useLazyQuery<CheckAdminQuery>(CHECK_ADMIN_DOCUMENT);
 
@@ -52,4 +52,5 @@ export default function CheckAdmin({ children }: PropsWithChildren) {
       )}
     </>
   );
-}
+};
+export default CheckAdmin;

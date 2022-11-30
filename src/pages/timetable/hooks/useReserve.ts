@@ -17,7 +17,7 @@ interface UseDayoffProps extends TimetableModalProps {
   isCreate: boolean;
 }
 
-export function useReserve({ isCreate, closeAction }: UseDayoffProps) {
+export const useReserve = ({ isCreate, closeAction }: UseDayoffProps) => {
   const [loading, setLoading] = useState(false);
 
   const [createReservationMutation, { loading: createLoading }] =
@@ -85,4 +85,4 @@ export function useReserve({ isCreate, closeAction }: UseDayoffProps) {
   }, [createLoading, editLoading]);
 
   return { createReservation, editReservation, loading };
-}
+};

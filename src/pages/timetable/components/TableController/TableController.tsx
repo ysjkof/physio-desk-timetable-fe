@@ -30,7 +30,7 @@ import {
 import { useSelectedClinic, useTableDisplay } from '../../hooks';
 import { ClinicsOfClient, TableDisplay } from '../../../../models';
 
-export default function TableController() {
+const TableController = () => {
   const hasTableDisplay = useReactiveVar(hasTableDisplayVar);
   const selectedReservation = useReactiveVar(selectedReservationVar);
   const selectedDate = useReactiveVar(selectedDateVar);
@@ -180,4 +180,6 @@ export default function TableController() {
       </div>
     </>
   );
-}
+};
+
+export default TableController;

@@ -9,13 +9,13 @@ interface CheckableButtonProps {
   onClick: () => void;
 }
 
-export default function CheckableButton({
+const CheckableButton = ({
   label,
   color,
   backgroundColor,
   canSee,
   onClick,
-}: CheckableButtonProps) {
+}: CheckableButtonProps) => {
   return (
     <div
       onClick={onClick}
@@ -40,4 +40,6 @@ export default function CheckableButton({
       {label}
     </div>
   );
-}
+};
+
+export default CheckableButton;

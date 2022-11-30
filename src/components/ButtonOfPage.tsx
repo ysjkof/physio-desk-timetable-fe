@@ -6,11 +6,7 @@ interface ButtonOfPagesProps {
   hasBorder?: boolean;
 }
 
-export default function ButtonOfPages({
-  changePage,
-  page,
-  hasBorder,
-}: ButtonOfPagesProps) {
+const ButtonOfPages = ({ changePage, page, hasBorder }: ButtonOfPagesProps) => {
   return (
     <button
       key={page}
@@ -25,4 +21,6 @@ export default function ButtonOfPages({
       {page}
     </button>
   );
-}
+};
+
+export default ButtonOfPages;

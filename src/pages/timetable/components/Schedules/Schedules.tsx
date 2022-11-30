@@ -10,7 +10,7 @@ import { cls } from '../../../../utils/common.utils';
 import { selectedDateVar } from '../../../../store';
 import type { SchedulesProps } from '../../../../types/props.types';
 
-function Schedules({ weekEvents, labels }: SchedulesProps) {
+const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
   const today = new Date();
   const selectedDate = useReactiveVar(selectedDateVar);
 
@@ -74,7 +74,7 @@ function Schedules({ weekEvents, labels }: SchedulesProps) {
       })}
     </div>
   );
-}
+};
 
 export default Schedules;
 

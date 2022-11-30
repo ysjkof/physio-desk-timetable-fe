@@ -1,7 +1,7 @@
 import { SVG } from '../types/common.types';
 import { cls } from '../utils/common.utils';
 
-export default function Calendar({ iconSize, ...args }: SVG) {
+const Calendar = ({ iconSize, ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -19,4 +19,6 @@ export default function Calendar({ iconSize, ...args }: SVG) {
       />
     </svg>
   );
-}
+};
+
+export default Calendar;

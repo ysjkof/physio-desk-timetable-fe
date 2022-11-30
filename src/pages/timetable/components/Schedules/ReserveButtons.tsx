@@ -19,16 +19,16 @@ interface ReservationButtonsProps {
   labels: string[];
   labelMaxLength: number;
 }
-function ReservationButtons({
+const ReservationButtons = ({
   userIndex,
   date,
   userId,
   labels,
   labelMaxLength,
-}: ReservationButtonsProps) {
+}: ReservationButtonsProps) => {
   const selectedReservation = useReactiveVar(selectedReservationVar);
 
-  function getPrescriptionInfo(reservation: Reservation) {
+  const getPrescriptionInfo = (reservation: Reservation) => {
     type ReturnType = {
       prescriptionIds: number[];
       requiredTime: number;
@@ -48,7 +48,8 @@ function ReservationButtons({
       reduceReturnType
     );
     return { prescriptionIds, requiredTime };
-  }
+  };
+
   const [createReservationMutation, { loading }] =
     useMutation<CreateReservationMutation>(CREATE_RESERVATION_DOCUMENT);
 
@@ -115,7 +116,7 @@ function ReservationButtons({
       )}
     </>
   );
-}
+};
 
 export default memo(ReservationButtons, (prevProps, nextProps) => {
   const isSameLabels = () =>

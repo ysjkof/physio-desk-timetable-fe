@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * pencil-square > outline
  */
-export default function Edit({ iconSize, ...args }: SVG) {
+const Edit = ({ iconSize, ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,4 +18,6 @@ export default function Edit({ iconSize, ...args }: SVG) {
       <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
     </svg>
   );
-}
+};
+
+export default Edit;

@@ -4,7 +4,7 @@ import { TableTime } from '../../../models/TableTime';
 import { tableTimeVar } from '../../../store';
 import type { TableTimeOptions } from '../../../types/common.types';
 
-export function useTableLabel() {
+export const useTableLabel = () => {
   const tableTimeOptions = useReactiveVar(tableTimeVar);
 
   // get4DigitHour가 ISO Date String을 반환해서 로컬시각으로 표현되지 않는다
@@ -25,4 +25,4 @@ export function useTableLabel() {
   }, [tableTimeOptions]);
 
   return { labels };
-}
+};

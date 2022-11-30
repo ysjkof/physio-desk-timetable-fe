@@ -6,7 +6,7 @@ import {
 import { TimeLabel } from '../../../../models';
 import type { TimeLabelsProps } from '../../../../types/props.types';
 
-function TimeLabels({ labels }: TimeLabelsProps) {
+const TimeLabels = ({ labels }: TimeLabelsProps) => {
   const getTimeLabels = (_labels: string[]) =>
     _labels.map(
       (label) =>
@@ -37,6 +37,6 @@ function TimeLabels({ labels }: TimeLabelsProps) {
       })}
     </>
   );
-}
+};
 
 export default memo(TimeLabels);

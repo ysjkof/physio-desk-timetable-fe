@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * building-office-2 > Outline
  */
-export default function Building({ iconSize, ...args }: SVG) {
+const Building = ({ iconSize, ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -32,4 +32,6 @@ export default function Building({ iconSize, ...args }: SVG) {
       />
     </svg>
   );
-}
+};
+
+export default Building;

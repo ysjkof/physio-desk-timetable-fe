@@ -11,7 +11,7 @@ interface SwitchLabelType {
   label: Label;
 }
 
-function SwitchLabel({ label }: SwitchLabelType) {
+const SwitchLabel = ({ label }: SwitchLabelType) => {
   return (
     <button
       className={cls(
@@ -22,9 +22,9 @@ function SwitchLabel({ label }: SwitchLabelType) {
       {label}
     </button>
   );
-}
+};
 
-function MovingBox({ isActivated }: Pick<SwitchProps, 'isActivated'>) {
+const MovingBox = ({ isActivated }: Pick<SwitchProps, 'isActivated'>) => {
   return (
     <div
       className={cls(
@@ -40,13 +40,9 @@ function MovingBox({ isActivated }: Pick<SwitchProps, 'isActivated'>) {
       />
     </div>
   );
-}
+};
 
-export default function TwoLabelSwitch({
-  isActivated,
-  labels,
-  onClick,
-}: SwitchProps) {
+const TwoLabelSwitch = ({ isActivated, labels, onClick }: SwitchProps) => {
   return (
     <div
       className="relative flex h-8 w-fit cursor-pointer select-none items-center justify-center rounded-sm border border-gray-200 bg-gray-200"
@@ -58,4 +54,6 @@ export default function TwoLabelSwitch({
       <MovingBox isActivated={isActivated} />
     </div>
   );
-}
+};
+
+export default TwoLabelSwitch;

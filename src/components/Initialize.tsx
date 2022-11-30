@@ -13,7 +13,7 @@ import {
 import type { MyClinic, UserIdAndName } from '../types/common.types';
 import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
 
-export default function Initialize({ children }: PropsWithChildren) {
+const Initialize = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(true);
 
   const { data: meData } = useQuery<MeQuery>(ME_DOCUMENT);
@@ -111,4 +111,6 @@ export default function Initialize({ children }: PropsWithChildren) {
   if (loading) return <></>;
 
   return <>{children}</>;
-}
+};
+
+export default Initialize;

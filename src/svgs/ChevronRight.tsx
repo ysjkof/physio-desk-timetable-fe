@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * ChevronRight > Outline
  */
-export default function ChevronRight({ iconSize, ...args }: SVG) {
+const ChevronRight = ({ iconSize, ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -32,4 +32,6 @@ export default function ChevronRight({ iconSize, ...args }: SVG) {
       />
     </svg>
   );
-}
+};
+
+export default ChevronRight;

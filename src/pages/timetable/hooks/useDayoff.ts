@@ -28,7 +28,7 @@ interface EditDayoffInput
   extends DayoffInput,
     Pick<EditReservationInput, 'reservationId'> {}
 
-export function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
+export const useDayoff = ({ isCreate, closeAction }: UseDayoffProps) => {
   const [loading, setLoading] = useState(false);
 
   const [createDayoffMutation, { loading: createLoading }] =
@@ -91,4 +91,4 @@ export function useDayoff({ isCreate, closeAction }: UseDayoffProps) {
   }, [createLoading, editLoading]);
 
   return { editDayoff, createDayoff, loading };
-}
+};

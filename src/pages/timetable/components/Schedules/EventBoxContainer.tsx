@@ -16,13 +16,14 @@ interface EventBoxContainerProps {
   labelMaxLength: number;
   isSingleUser: boolean;
 }
-function EventBoxContainer({
+
+const EventBoxContainer = ({
   userIndex,
   events,
   labels,
   labelMaxLength,
   isSingleUser,
-}: EventBoxContainerProps) {
+}: EventBoxContainerProps) => {
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
   const [hour, minute] = labels[0].split(':');
@@ -78,7 +79,7 @@ function EventBoxContainer({
       })}
     </>
   );
-}
+};
 
 export default memo(EventBoxContainer, (prevProps, nextProps) => {
   return (

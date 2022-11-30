@@ -2,7 +2,7 @@ import { TableDisplay } from '../../../models/TableDisplay';
 import { hasTableDisplayVar, tableDisplayVar } from '../../../store';
 import type { TableDisplayOptions } from '../../../types/common.types';
 
-export function useTableDisplay() {
+export const useTableDisplay = () => {
   const toggleDisplayController = (value?: boolean) => {
     const option = value ?? !hasTableDisplayVar();
     hasTableDisplayVar(option);
@@ -16,4 +16,4 @@ export function useTableDisplay() {
   };
 
   return { toggleDisplayController, toggleDisplayOption };
-}
+};

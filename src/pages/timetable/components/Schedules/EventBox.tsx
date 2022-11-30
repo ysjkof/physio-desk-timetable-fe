@@ -34,14 +34,14 @@ interface EventBoxProps {
   isSingleUser: boolean;
 }
 
-export default function EventBox({
+const EventBox = ({
   userIndex,
   inset,
   maxTableHeight,
   numberOfCell,
   event,
   isSingleUser,
-}: EventBoxProps) {
+}: EventBoxProps) => {
   const navigate = useNavigate();
   const tableDisplay = useReactiveVar(tableDisplayVar);
   const [isHover, setIsHover] = useState(false);
@@ -251,4 +251,6 @@ export default function EventBox({
       )}
     </motion.div>
   );
-}
+};
+
+export default EventBox;

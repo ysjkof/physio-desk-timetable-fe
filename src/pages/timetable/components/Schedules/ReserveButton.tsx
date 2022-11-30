@@ -19,7 +19,7 @@ interface ReserveBtnProps {
   quickCreateReservation: () => void;
 }
 
-function ReserveButton({
+const ReserveButton = ({
   label,
   dayIndex,
   userId,
@@ -27,7 +27,7 @@ function ReserveButton({
   isActiveBorderTop = false,
   selectedReservation,
   quickCreateReservation,
-}: ReserveBtnProps) {
+}: ReserveBtnProps) => {
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
 
@@ -85,6 +85,6 @@ function ReserveButton({
       )}
     </div>
   );
-}
+};
 
 export default ReserveButton;

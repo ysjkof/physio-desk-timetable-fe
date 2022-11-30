@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * Check > mini
  */
-export default function Check({ iconSize, ...args }: SVG) {
+const Check = ({ iconSize, ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -30,4 +30,6 @@ export default function Check({ iconSize, ...args }: SVG) {
       />
     </svg>
   );
-}
+};
+
+export default Check;
