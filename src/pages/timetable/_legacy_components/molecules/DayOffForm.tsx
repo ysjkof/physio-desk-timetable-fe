@@ -4,7 +4,6 @@ import SelectUser from './SelectUser';
 import Button from '../../../../_legacy_components/molecules/Button';
 import Input from '../../../../_legacy_components/molecules/Input';
 import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Datepicker';
-import { TimetableModalProps } from '../../Timetable';
 import { useDayoff } from '../../hooks';
 import { createDate } from '../../../../utils/date.utils';
 import { ClinicsOfClient } from '../../../../models';
@@ -12,8 +11,9 @@ import type {
   Reservation,
   ReserveFormType,
 } from '../../../../types/common.types';
+import { CloseAction } from '../../../../types/props.types';
 
-interface DayOffFormNewProps extends TimetableModalProps {
+interface DayOffFormNewProps extends CloseAction {
   userId: number;
   startDate?: Date;
   reservation?: Reservation;
@@ -84,7 +84,7 @@ export default function DayOffForm({
   }, [userId, reservation]);
 
   const createDefaultEndDate = () => {
-    if (!startDate) return;
+    if (!startDate) return undefined;
     const time = {
       hour: startDate.getHours() + 3,
       minute: 0,
@@ -124,7 +124,7 @@ export default function DayOffForm({
         register={register('memo', {
           maxLength: { value: 200, message: '최대 200자입니다' },
         })}
-        type={'textarea'}
+        type="textarea"
       />
       <Button type="submit" canClick={isValid} loading={loading}>
         잠금 수정

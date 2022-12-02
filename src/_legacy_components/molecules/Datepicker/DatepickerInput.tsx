@@ -1,17 +1,17 @@
-import {
-  DatepickerErrorState,
-  DatepickerInputState,
-  HasDateOption,
-} from './Datepicker';
-import { ChangeEvent, InputHTMLAttributes } from 'react';
+import type { ChangeEvent, InputHTMLAttributes } from 'react';
 import { REG_EXP_DATEPICKER } from '../../../constants/regex';
 import { cls } from '../../../utils/common.utils';
 import FormError from '../../atoms/FormError';
+import type {
+  DatepickerErrorState,
+  DatepickerInputState,
+  HasDateOption,
+} from '../../../types/datepicker.types';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
 }
-interface Inputs {
+interface InputsProps {
   attributes: InputProps[];
 }
 interface InputInDatepickerProps
@@ -23,13 +23,16 @@ interface InputInDatepickerProps
 
 function Input({ label, ...args }: InputProps) {
   return (
-    <label className="relative flex flex-col">
+    <label
+      className="relative flex flex-col"
+      htmlFor={`datepicker-input__input${label}`}
+    >
       <span className="position-center-y absolute right-2">{label}</span>
-      <input {...args} />
+      <input {...args} id={`datepicker-input__input${label}`} />
     </label>
   );
 }
-function Inputs({ attributes }: Inputs) {
+function Inputs({ attributes }: InputsProps) {
   return (
     <>
       {attributes.map((attribute) => {
@@ -49,7 +52,7 @@ const DATEPICKER_ERROR = {
   minute: '분은 00~50분까지 입력할 수 있습니다',
 };
 
-export default function DatepickerInput({
+export function DatepickerInput({
   inputDate,
   setInputDate,
   error,
@@ -110,8 +113,7 @@ export default function DatepickerInput({
       )}
       style={{ ...(textColor && { color: textColor }) }}
     >
-      {error && <FormError errorMessage={error} isHighter />}
-
+      {error && <FormError errorMessage={error} isHigher />}
       <Inputs
         attributes={[
           {

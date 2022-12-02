@@ -64,6 +64,9 @@ export type Reservation = NonNullable<
 export type PatientInReservation = NonNullable<Reservation['patient']>;
 export type ClinicInReservation = NonNullable<Reservation['clinic']>;
 export type UserInReservation = NonNullable<Reservation['user']>;
+export type PrescriptionsInReservation = NonNullable<
+  Reservation['prescriptions']
+>;
 
 export type ReservationInPatient = NonNullable<
   GetReservationsByPatientQuery['getReservationsByPatient']['results']
@@ -73,7 +76,7 @@ export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
 }
 
-export interface isActive {
+export interface IsActive {
   isActive: boolean;
 }
 
@@ -83,7 +86,7 @@ interface ModifiedClinicMemberWithClinic
   extends Pick<Member, 'id' | 'staying' | 'manager' | 'accepted'> {
   clinic: Pick<Clinic, 'id' | 'name' | 'isActivated'>;
 }
-interface ModifiedNotice extends Pick<Notice, 'message' | 'read'> {}
+type ModifiedNotice = Pick<Notice, 'message' | 'read'>;
 export interface ModifiedLoginUser
   extends Pick<User, 'id' | 'name' | 'email' | 'role' | 'verified'> {
   members?: ModifiedClinicMemberWithClinic[] | null;

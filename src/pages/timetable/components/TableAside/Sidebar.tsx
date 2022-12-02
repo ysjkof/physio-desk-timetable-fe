@@ -1,8 +1,8 @@
+import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { cls } from '../../../../utils/common.utils';
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 interface ClassNameProps {
   className?: string;
@@ -14,7 +14,6 @@ interface SelectedProps {
 
 interface ToProps extends PropsWithChildren, SelectedProps {
   to: string;
-  onClick?: () => void;
 }
 
 export interface UlProps extends PropsWithChildren {

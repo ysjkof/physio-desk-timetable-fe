@@ -1,9 +1,9 @@
+import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import CardContainer from '../../../../_legacy_components/templates/CardContainer';
 import { cls, StayingState } from '../../../../utils/common.utils';
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
@@ -20,6 +20,7 @@ function Button({ loading, children, ...args }: ButtonProps) {
           'flex w-full items-center justify-center hover:cursor-pointer hover:font-semibold',
           loading ? 'pointer-events-none' : ''
         )}
+        type="button"
       >
         {loading ? (
           <FontAwesomeIcon

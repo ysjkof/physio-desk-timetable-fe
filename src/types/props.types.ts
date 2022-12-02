@@ -1,12 +1,14 @@
 import type { ReactNode } from 'react';
+import { PrescriptionListProps } from '../pages/dashboard/components/organisms/PrescriptionPage';
 import type { ISchedules, UserWithEvent } from './common.types';
+import { FindPrescriptionsQuery } from './generated.types';
 
 // TimeTable
 export interface IUserLength {
   userLength: number;
 }
 
-interface ILabels {
+export interface ILabels {
   labels: string[];
 }
 
@@ -39,4 +41,16 @@ export interface ScheduleBoxProps extends MemberNameProps, ILabels, IDate {
   enableTimeIndicator: boolean;
 }
 
-export interface TimeLabelsProps extends ILabels {}
+// Dashboard
+
+export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
+  prescription: NonNullable<
+    FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
+  >;
+}
+
+// Common
+
+export interface CloseAction {
+  closeAction: () => void;
+}

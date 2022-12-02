@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { TimetableModalProps } from '../Timetable';
 import { simpleCheckGQLError } from '../../../utils/common.utils';
 import {
   CREATE_RESERVATION_DOCUMENT,
@@ -12,15 +11,15 @@ import type {
   EditReservationInput,
   EditReservationMutation,
 } from '../../../types/generated.types';
+import type { CloseAction } from '../../../types/props.types';
 
-interface UseDayoffProps extends TimetableModalProps {
+interface UseDayoffProps extends CloseAction {
   isCreate: boolean;
 }
-interface DayoffInput
-  extends Pick<
-    CreateReservationInput,
-    'startDate' | 'endDate' | 'memo' | 'userId'
-  > {}
+type DayoffInput = Pick<
+  CreateReservationInput,
+  'startDate' | 'endDate' | 'memo' | 'userId'
+>;
 interface CreateDayoffInput
   extends DayoffInput,
     Pick<CreateReservationInput, 'clinicId'> {}

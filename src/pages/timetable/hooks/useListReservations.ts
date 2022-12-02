@@ -1,4 +1,5 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
+import { endOfDay, nextSaturday } from 'date-fns';
 import { getSunday } from '../../../utils/date.utils';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
 import { ClinicsOfClient } from '../../../models';
@@ -12,7 +13,6 @@ import type {
   ListReservationsQuery,
 } from '../../../types/generated.types';
 import { selectedDateVar } from '../../../store';
-import { endOfDay, nextSaturday } from 'date-fns';
 
 export const useListReservations = () => {
   const selectedDate = useReactiveVar(selectedDateVar);
@@ -67,11 +67,11 @@ export const useListReservations = () => {
 
     if (reservationIdx !== -1) {
       newReservation = {
-        ...prev.listReservations.results![reservationIdx],
+        ...prev.listReservations.results[reservationIdx],
         ...listenUpdateReservation,
       };
       results = changeValueInArray(
-        prev.listReservations.results!,
+        prev.listReservations.results,
         newReservation,
         reservationIdx
       );

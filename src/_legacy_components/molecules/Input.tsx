@@ -5,7 +5,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   register: UseFormRegisterReturn;
   label?: string | null;
-  value?: any;
+  value?: never;
   children?: ReactNode;
 }
 

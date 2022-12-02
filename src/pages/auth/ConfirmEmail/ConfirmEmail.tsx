@@ -30,7 +30,7 @@ export default function ConfirmEmail() {
     let i = 5;
     setMessage(`${error} ${i}초 뒤에 홈으로 이동합니다.`);
     const errorMessage = () => {
-      i--;
+      i -= 1;
       setMessage(`${error} ${i}초 뒤에 홈으로 이동합니다.`);
       if (i < 1) {
         clearInterval(interval);
@@ -40,7 +40,7 @@ export default function ConfirmEmail() {
   };
 
   useEffect(() => {
-    const [_, code] = window.location.href.split('code=');
+    const code = window.location.href.split('code=')[1];
 
     if (code) {
       verifyEmail({
@@ -51,7 +51,7 @@ export default function ConfirmEmail() {
         },
         onCompleted(data) {
           const {
-            verifyEmail: { ok, error },
+            verifyEmail: { error },
           } = data;
 
           if (error) {
@@ -78,7 +78,7 @@ export default function ConfirmEmail() {
           }
           const successMessage = '이메일 인증됐습니다.';
 
-          if (confirm(successMessage + '확인을 누르면 시간표로 이동합니다.')) {
+          if (confirm(`${successMessage}확인을 누르면 시간표로 이동합니다.`)) {
             navigate('/');
           }
         },
@@ -89,7 +89,7 @@ export default function ConfirmEmail() {
     intervalUpdateMessage('코드가 없습니다. 잘못된 접근입니다.');
     const timeoutId = setTimeout(navigate, 5000, '/');
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [loggedInUser?.id]);
 
   return (
     <div className="mt-52 flex flex-col items-center justify-center">

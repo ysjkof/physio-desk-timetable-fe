@@ -12,11 +12,11 @@ import {
   CREATE_CLINIC_DOCUMENT,
   FIND_MY_CLINICS_DOCUMENT,
 } from '../../../../graphql';
+import { ClinicsOfClient } from '../../../../models';
 import type {
   CreateClinicInput,
   CreateClinicMutation,
 } from '../../../../types/generated.types';
-import { ClinicsOfClient } from '../../../../models';
 
 export default function CreateClinic() {
   const {
@@ -49,12 +49,11 @@ export default function CreateClinic() {
                 name: data.createClinic.clinic?.name,
               },
             };
-            const newMember = { ...newClinic };
-            // @ts-ignore
-            newMember.clinic.isActivated =
-              data.createClinic.clinic?.isActivated;
-            // @ts-ignore
-            newMember.clinic.type = data.createClinic.clinic?.type;
+            const newMember = {
+              ...newClinic,
+              isActivated: data.createClinic.clinic?.isActivated,
+              type: data.createClinic.clinic?.type,
+            };
 
             client.cache.updateQuery(
               {
@@ -110,7 +109,7 @@ export default function CreateClinic() {
           id="create-clinic__name"
           label="이름*"
           type="text"
-          placeholder={'병원 이름'}
+          placeholder="병원 이름"
           maxLength={REG_EXP.clinicName.maxLength}
           onChange={invokeClearErrors}
           register={register('name', {
@@ -120,12 +119,13 @@ export default function CreateClinic() {
         >
           {errors.name?.message ? (
             <FormError errorMessage={errors.name.message} />
-          ) : errors.name?.type === 'pattern' ? (
-            <FormError errorMessage={REG_EXP.clinicName.condition} />
           ) : (
-            data?.createClinic.error && (
-              <FormError errorMessage={data.createClinic.error} />
+            errors.name?.type === 'pattern' && (
+              <FormError errorMessage={REG_EXP.clinicName.condition} />
             )
+          )}
+          {!errors.name && data?.createClinic.error && (
+            <FormError errorMessage={data.createClinic.error} />
           )}
         </Input>
         <Button type="submit" canClick={isValid} loading={loading} isWidthFull>

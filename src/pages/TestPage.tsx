@@ -1,5 +1,4 @@
-import type { PrescriptionWithSelect } from '../types/common.types';
-import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { FormEvent, useState } from 'react';
 import {
   CREATE_ACCOUNT_DOCUMENT,
@@ -11,6 +10,7 @@ import {
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
 import { ClinicsOfClient } from '../models';
+import { PrescriptionWithSelect } from '../types/common.types';
 import type {
   CreateAccountMutation,
   CreateAtomPrescriptionMutation,
@@ -26,7 +26,7 @@ export default function TestPage() {
   return (
     <div className="px-4 ">
       <h1 className="text-base font-extrabold">TEST PAGE</h1>
-      <div className="flex h-[500px]"></div>
+      <div className="flex h-[500px]" />
 
       {/* 이하 더미 자료 만드는 곳 */}
       <CreateDummyData />
@@ -47,7 +47,7 @@ const makePatient = (name: string, clinicId: number) => ({
 });
 
 const length = 10;
-const arr: any[] = [];
+const arr: unknown[] = [];
 arr.length = length;
 arr.fill(0);
 const accountArr = arr.map((_, idx) =>
@@ -68,7 +68,7 @@ const newPrescriptions = [
 
 function getOneDayReservationInputDateForTest(
   inputStartDate: Date,
-  inputPresc: { id: number; requiredTime: number; name: string }
+  inputPrescription: { id: number; requiredTime: number; name: string }
 ) {
   const numberOfReservationsPerDay = Math.floor(Math.random() * 8);
   const startDate = new Date(inputStartDate);
@@ -84,14 +84,17 @@ function getOneDayReservationInputDateForTest(
     while (dates.find((dateInWhile) => dateInWhile.getHours() === th)) {
       th = Math.floor(Math.random() * (19 - 9) + 9);
     }
-    tm === 6 ? (tm = 0) : '';
+    if (tm === 6) tm = 0;
     sd.setHours(th, tm, 0, 0);
-    ed.setHours(th, tm + inputPresc.requiredTime, 0, 0);
+    ed.setHours(th, tm + inputPrescription.requiredTime, 0, 0);
     return [sd, ed];
   });
 }
-function selectPrescriptionForTest(inputPresc: PrescriptionWithSelect[]) {
-  const selected = inputPresc[Math.floor(Math.random() * inputPresc.length)];
+function selectPrescriptionForTest(
+  inputPrescription: PrescriptionWithSelect[]
+) {
+  const selected =
+    inputPrescription[Math.floor(Math.random() * inputPrescription.length)];
   return {
     id: selected?.id,
     name: selected?.name,
@@ -104,10 +107,8 @@ function CreateReservation() {
     totalCount: 0,
     thisCount: 0,
   });
-
   const { selectedClinic } = ClinicsOfClient;
   const clinicId = selectedClinic.id;
-  if (!clinicId) return <p>로그인 해야 됩니다.</p>;
 
   const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
     FIND_PRESCRIPTIONS_DOCUMENT,
@@ -130,6 +131,8 @@ function CreateReservation() {
     CREATE_RESERVATION_DOCUMENT
   );
 
+  if (!clinicId) return <p>로그인 해야 됩니다.</p>;
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -139,32 +142,39 @@ function CreateReservation() {
 
     const [year, month] = date.split('-');
 
-    let prescriptions: PrescriptionWithSelect[] =
-      prescriptionsData?.findPrescriptions.prescriptions!.map((presc) => ({
-        ...presc,
-        isSelect: false,
-      })) ?? [];
+    const prescriptions: PrescriptionWithSelect[] =
+      prescriptionsData?.findPrescriptions.prescriptions?.map(
+        (prescription) => ({
+          ...prescription,
+          isSelect: false,
+        })
+      ) || [];
 
     const firstDate = new Date(`${year}-${month}-1`);
 
     let count = 0;
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 30; i += 1) {
       firstDate.setDate(i + 1);
-      const presc = selectPrescriptionForTest(prescriptions);
-      const times = getOneDayReservationInputDateForTest(firstDate, presc);
+      const prescription = selectPrescriptionForTest(prescriptions);
+      const times = getOneDayReservationInputDateForTest(
+        firstDate,
+        prescription
+      );
       count = count + times.length;
 
-      const patients = allPatients?.findAllPatients.results!;
+      const patients = allPatients?.findAllPatients.results;
+
+      if (!patients) throw new Error('patients가 없습니다.');
 
       times.forEach((time) => {
         const patientRandom = Math.floor(
-          Math.random() * (patients?.length! ?? 0)
+          Math.random() * (patients.length || 0)
         );
         const memberRandom = Math.floor(
-          Math.random() * (selectedClinic.members.length ?? 0)
+          Math.random() * (selectedClinic.members.length || 0)
         );
         const patientId = patients[patientRandom].id;
-        const userId = selectedClinic.members[memberRandom].user.id!;
+        const userId = selectedClinic.members[memberRandom].user.id;
 
         createReservationMutation({
           variables: {
@@ -173,8 +183,8 @@ function CreateReservation() {
               endDate: time[1],
               patientId,
               userId,
-              clinicId: +clinicId,
-              prescriptionIds: [presc.id],
+              clinicId: Number(clinicId),
+              prescriptionIds: [prescription.id],
             },
           },
         });
@@ -190,9 +200,10 @@ function CreateReservation() {
     <div className="border p-2">
       <form className="mb-4 flex flex-col px-4" onSubmit={handleSubmit}>
         <h2>무작위 예약 만들기</h2>
-        <label>
+        <label htmlFor="test-page-date">
           날짜
           <input
+            id="test-page-date"
             name="date"
             className="rounded-md border px-1"
             type="date"
@@ -200,7 +211,7 @@ function CreateReservation() {
               .format(new Date())
               .replaceAll('. ', '-')
               .replace('.', '')}
-          ></input>
+          />
         </label>
         <button
           className="w-fit rounded-sm bg-gray-500 px-2 text-white"
@@ -223,10 +234,7 @@ function CreateReservation() {
 
 function CreateDummyData() {
   const { selectedClinic } = ClinicsOfClient;
-  const [reserveDate, setReserveDate] = useState(new Date().getMonth() + 1);
-
-  const clinicId = selectedClinic.id;
-  if (!clinicId) return <p>Not Permission</p>;
+  const [reserveDate] = useState(new Date().getMonth() + 1);
 
   const [createAccount] = useMutation<CreateAccountMutation>(
     CREATE_ACCOUNT_DOCUMENT
@@ -244,6 +252,8 @@ function CreateDummyData() {
     CREATE_ATOM_PRESCRIPTION_DOCUMENT
   );
 
+  const clinicId = selectedClinic.id;
+  if (!clinicId) return <p>Not Permission</p>;
   return (
     <div className="px-4 ">
       <h1 className="text-base font-extrabold">Create Dummy Data</h1>
@@ -272,6 +282,7 @@ function CreateDummyData() {
               });
             })
           }
+          type="button"
         >
           계정생성
         </button>
@@ -285,6 +296,7 @@ function CreateDummyData() {
               },
             })
           }
+          type="button"
         >
           병원생성
         </button>
@@ -308,10 +320,13 @@ function CreateDummyData() {
                 });
               });
           }}
+          type="button"
         >
           환자생성
         </button>
-        <button onClick={() => {}}>치료사 초대</button>
+        <button onClick={() => {}} type="button">
+          치료사 초대
+        </button>
         <button
           onClick={() =>
             ['도수치료', '충격파'].forEach((name) =>
@@ -324,6 +339,7 @@ function CreateDummyData() {
               })
             )
           }
+          type="button"
         >
           아톰 만들기
         </button>
@@ -345,6 +361,7 @@ function CreateDummyData() {
                 })
             );
           }}
+          type="button"
         >
           처방 만들기
         </button>

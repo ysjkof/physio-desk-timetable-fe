@@ -41,8 +41,8 @@ export default function SearchPatient() {
     }
   };
   const pageNumbers = (total: number): number[] => {
-    let arr = [];
-    for (let i = 0; i < total; i++) {
+    const arr = [];
+    for (let i = 0; i < total; i += 1) {
       arr.push(i);
       if (i > 100) break;
     }
@@ -66,7 +66,6 @@ export default function SearchPatient() {
           className="input"
           autoComplete="off"
           onFocus={clearSelectedPatient}
-          autoFocus
         />
         <label
           htmlFor="search-patient__icon-search"
@@ -75,7 +74,7 @@ export default function SearchPatient() {
           <input
             id="search-patient__icon-search"
             type="submit"
-            value={''}
+            value=""
             tabIndex={-1}
             className="absolute"
           />
@@ -137,6 +136,7 @@ export default function SearchPatient() {
                   clearSelectedPatient();
                   setQueryPageNumber(pageNumber + 1);
                 }}
+                type="button"
               >
                 {pageNumber + 1}
               </button>

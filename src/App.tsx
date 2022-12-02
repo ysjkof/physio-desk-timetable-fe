@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client';
-import { client } from './apollo';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { client } from './apollo';
 import Router from './router/Router';
 
 function App() {

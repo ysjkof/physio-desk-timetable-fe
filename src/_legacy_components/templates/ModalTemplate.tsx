@@ -1,9 +1,9 @@
+import type { PropsWithChildren } from 'react';
 import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
 import { cls } from '../../utils/common.utils';
+import type { CloseAction } from '../../types/props.types';
 
-interface ModalTemplateProps {
-  children: ReactNode;
+interface ModalTemplateProps extends CloseAction, PropsWithChildren {
   closeAction: () => void;
   top?: number;
   left?: number;
@@ -33,6 +33,9 @@ export default function ModalTemplate({
           top ? 'bg-transparent opacity-100' : ''
         )}
         onClick={closeAction}
+        onKeyDown={closeAction}
+        role="button"
+        tabIndex={-1}
       />
       <motion.div
         drag

@@ -7,8 +7,8 @@ interface TableChartColProps {
   children: ReactNode;
 }
 export default function TableChartCol({
-  title,
-  titleBorderRight,
+  title = '',
+  titleBorderRight = false,
   children,
 }: TableChartColProps) {
   return (

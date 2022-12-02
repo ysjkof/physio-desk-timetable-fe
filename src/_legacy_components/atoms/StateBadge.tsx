@@ -16,11 +16,9 @@ export default function StateBadge({
       {...args}
       className={cls(
         'w-fit whitespace-nowrap',
-        state === '탈퇴'
-          ? 'badge-gray'
-          : state === '승인대기'
-          ? 'badge-red '
-          : 'badge-green',
+        state === '탈퇴' ? 'badge-gray' : '',
+        state === '승인대기' ? 'badge-red ' : '',
+        state === '직원' || state === '관리자' ? 'badge-green' : '',
         args.className || ''
       )}
     >

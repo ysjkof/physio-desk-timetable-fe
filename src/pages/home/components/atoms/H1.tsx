@@ -1,5 +1,5 @@
-import { cls } from '../../../../utils/common.utils';
 import type { PropsWithChildren } from 'react';
+import { cls } from '../../../../utils/common.utils';
 import type { ClassNameProps } from '../../../../types/common.types';
 
 export interface HeadingProps extends PropsWithChildren, ClassNameProps {}

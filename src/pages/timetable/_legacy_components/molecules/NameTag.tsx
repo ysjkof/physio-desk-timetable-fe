@@ -18,6 +18,9 @@ export default function NameTag({ patient, canClick = false }: INameTagProps) {
   return (
     <div
       onClick={canClick ? onClick : undefined}
+      onKeyDown={canClick ? onClick : undefined}
+      role="button"
+      tabIndex={0}
       className={cls(
         'grid w-full cursor-pointer grid-cols-3',
         canClick ? '' : 'pointer-events-none'
@@ -33,7 +36,7 @@ export default function NameTag({ patient, canClick = false }: INameTagProps) {
           {name.length > 8 ? `${name.substring(0, 8)}...` : name}
         </span>
       </div>
-      <span>R.No : {registrationNumber ? registrationNumber : '미등록'}</span>
+      <span>R.No : {registrationNumber || '미등록'}</span>
       <span>B : {birthday ? getYMD(birthday, 'yymmdd') : '미등록'}</span>
       <span className="pl-3">{user.name}</span>
       <span className="col-span-2">{renameUseSplit(clinic.name)}</span>

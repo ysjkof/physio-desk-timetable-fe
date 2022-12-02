@@ -26,4 +26,3 @@ export const getGridTemplateColumns = (repeat: number, minWidth?: number) => {
     ? `repeat(${repeat}, minmax(${minWidth}rem, 1fr))`
     : `repeat(${repeat}, minmax(0, 1fr))`;
 };
-``;

@@ -15,7 +15,7 @@ export const useMe = () => {
 
   return useQuery<MeQuery>(ME_DOCUMENT, {
     onError(error) {
-      console.info('Error on useMe');
+      console.info('Error on useMe : ', error);
       logout(() => navigation('/'));
     },
   });

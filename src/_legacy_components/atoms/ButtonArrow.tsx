@@ -5,7 +5,7 @@ import { NEXT, PREV } from '../../constants/constants';
 
 interface BtnArrowProps {
   direction: typeof PREV | typeof NEXT;
-  onClick: any;
+  onClick: () => void;
   className?: string;
 }
 
@@ -21,6 +21,7 @@ export default function BtnArrow({
         className ?? ''
       )}
       onClick={onClick}
+      type="button"
     >
       {direction === PREV ? (
         <FontAwesomeIcon icon={faArrowLeft} fontSize={14} />

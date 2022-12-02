@@ -16,13 +16,9 @@ const ChevronRight = ({ iconSize, ...args }: SVG) => {
       {...args}
       className={cls(
         args.className || '',
-        iconSize
-          ? iconSize === 'LG'
-            ? 'h-5 w-5'
-            : iconSize === 'MD'
-            ? 'h-4 w-4'
-            : 'h-3 w-3'
-          : 'h-4 w-4'
+        iconSize === 'LG' ? 'h-5 w-5' : '',
+        iconSize === 'MD' ? 'h-4 w-4' : '',
+        iconSize === 'SM' ? 'h-3 w-3' : ''
       )}
     >
       <path

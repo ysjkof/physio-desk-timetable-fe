@@ -19,7 +19,9 @@ export class TableTime {
     lastMinute: 0,
     gap: TABLE_TIME_GAP,
   };
+
   static #userIdAndName: UserIdAndName;
+
   static #localStorageUtil = localStorageUtils;
 
   static initialize(userIdAndName: UserIdAndName) {
@@ -119,16 +121,16 @@ export class TableTime {
       labels.push(labelRow);
       const getMinutes = start.getMinutes();
       start.setMinutes(getMinutes + this.#options.gap);
-      i++;
+      i += 1;
     }
 
     return labels;
   }
 
   static createTimeOptions(key: keyof FirstAndLastTime, value: number) {
-    let result = { ...this.#options, [key]: value };
+    const result = { ...this.#options, [key]: value };
     if (key === 'firstHour' && value >= this.#options.lastHour) {
-      result.lastHour++;
+      result.lastHour += 1;
     }
     return result;
   }

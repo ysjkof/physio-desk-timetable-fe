@@ -20,7 +20,7 @@ export const SearchCheckList = ({
       {clinicLists.map((clinic) => (
         <Checkbox
           key={clinic.id}
-          id={'search__clinic-' + clinic.id}
+          id={`search__clinic-${clinic.id}`}
           label={renameUseSplit(clinic.name)}
           type="checkbox"
           value={clinic.id}

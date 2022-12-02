@@ -17,7 +17,7 @@ export const useDeleteReservation = () => {
     reservationId,
     closeAction,
   }: DeleteReservation) => {
-    const confirmDelete = window.confirm('예약을 지웁니다.');
+    const confirmDelete = confirm('예약을 지웁니다.');
     if (confirmDelete) {
       deleteReservationMutation({
         variables: { input: { reservationId } },

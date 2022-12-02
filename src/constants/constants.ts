@@ -43,7 +43,7 @@ export const DASHBOARD_MENU_KR = {
   statistics: '통계',
   create: '병원 만들기',
   clinics: '나의 병원',
-  edit_profile: '나의 정보',
+  editProfile: '나의 정보',
 };
 
 export const STATISTICS_LABEL_COLORS = [

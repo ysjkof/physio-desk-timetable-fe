@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { TimetableModalProps } from '../../Timetable';
 import ReserveForm from './ReserveForm';
 import CreatePatientForm from './CreatePatientForm';
 import ReservationNameCard from './ReservationNameCard';
@@ -12,8 +11,9 @@ import { GENDER_KOR } from '../../../../constants/constants';
 import { useDeleteReservation } from '../../hooks';
 import Loading from '../../../../_legacy_components/atoms/Loading';
 import type { Reservation } from '../../../../types/common.types';
+import type { CloseAction } from '../../../../types/props.types';
 
-interface ReservationCardProps extends TimetableModalProps {
+interface ReservationCardProps extends CloseAction {
   reservation: Reservation;
 }
 
@@ -44,7 +44,6 @@ export default function ReservationCard({
   const { patient, user, clinic, memo } = reservation;
   return (
     <div className="space-y-4">
-      <h4 className="mb-5 text-left font-medium"></h4>
       <ReservationNameCard
         birthday={patient.birthday}
         gender={patient.gender as keyof typeof GENDER_KOR}
@@ -55,7 +54,7 @@ export default function ReservationCard({
         firstEnabled={menu === 'reservation'}
         secondEnabled={menu === 'patient'}
         label={['예약', '환자정보']}
-        width={'full'}
+        width="full"
         onClick={toggleMenu}
       />
       <div className="reservation-editor flex justify-around">

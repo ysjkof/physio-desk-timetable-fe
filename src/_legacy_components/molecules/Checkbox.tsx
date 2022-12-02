@@ -8,7 +8,7 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string | null;
 }
 
-/**Input type "checkbox"나 "radio" 전용 컴포넌트 */
+/** Input type "checkbox"나 "radio" 전용 컴포넌트 */
 export default function Checkbox({
   id,
   register,

@@ -12,10 +12,9 @@ export default function Members() {
   const { invokeCancelInvitation, loading: loadingCancel } =
     useCancelInvitation();
 
-  const isManager = checkManager(
-    ClinicsOfClient.selectedClinic?.members,
-    loggedInUser!.id
-  );
+  const isManager = loggedInUser
+    ? checkManager(ClinicsOfClient.selectedClinic?.members, loggedInUser.id)
+    : false;
 
   return (
     <section className="px-10 py-8">

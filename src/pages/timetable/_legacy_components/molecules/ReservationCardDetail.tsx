@@ -6,7 +6,6 @@ import CardDetail from './CardDetail';
 
 interface ReservationCardDetailProps {
   reservation: Reservation;
-  hasEndDate?: boolean;
 }
 
 export default function ReservationCardDetail({

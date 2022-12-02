@@ -34,4 +34,6 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   )
 );
 
+MenuButton.displayName = 'asdMenuButton';
+
 export default MenuButton;

@@ -60,7 +60,7 @@ const EventBoxContainer = ({
            * 시작시간이 마지막 시작 시간과 같으면 화면을 벗어나기 때문에 리턴
            * labelIdx가 없으면 화면을 벗어나기 때문에 한 번 더 확인하고 리턴
            */
-          if (labelIdx === endLabelIdx || labelIdx === -1) return;
+          if (labelIdx === endLabelIdx || labelIdx === -1) return false;
 
           inset = `${labelIdx * TABLE_CELL_HEIGHT}px 0`;
         }

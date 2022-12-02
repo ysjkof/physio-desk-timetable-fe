@@ -1,15 +1,17 @@
 import localStorageUtils from '../utils/localStorage.utils';
+import { ClinicType } from '../types/generated.types';
 import type {
   ClinicOfClient,
   IMember,
   MyClinic,
   UserIdAndName,
 } from '../types/common.types';
-import { ClinicType } from '../types/generated.types';
 
 export class ClinicsOfClient {
   static #clinics: ClinicOfClient[];
+
   static #userIdAndName: UserIdAndName;
+
   static #localStorageUtil = localStorageUtils;
 
   static initialize(userIdAndName: UserIdAndName, clinics: MyClinic[]) {
@@ -61,6 +63,7 @@ export class ClinicsOfClient {
       isStayed: true,
     };
   }
+
   static #getKeyForGroup(clinic: MyClinic) {
     const userInClinic = clinic.members.find(
       (member) => member.user.id === this.#userIdAndName.userId
@@ -136,23 +139,24 @@ export class ClinicsOfClient {
   }
 
   static get personalClinic() {
-    const clinic = ClinicsOfClient.#clinics.find(
+    const personalClinic = ClinicsOfClient.#clinics.find(
       (clinic) => clinic.type === ClinicType.Personal
     );
 
-    if (!clinic) throw new Error('Clinic Type이 personal인 Clinic이 없습니다.');
+    if (!personalClinic)
+      throw new Error('Clinic Type이 personal인 Clinic이 없습니다.');
 
-    return clinic;
+    return personalClinic;
   }
 
   static get selectedClinic() {
-    const clinic = this.#clinics.find((clinic) => clinic.isSelected);
-    if (!clinic)
+    const selectedClinic = this.#clinics.find((clinic) => clinic.isSelected);
+    if (!selectedClinic)
       throw new Error('selectedClinic이 없습니다.', { cause: '없어!!' });
-    return clinic;
+    return selectedClinic;
   }
 
-  static getById(id: Number) {
+  static getById(id: number) {
     return this.#clinics.find((clinic) => clinic.id === id);
   }
 

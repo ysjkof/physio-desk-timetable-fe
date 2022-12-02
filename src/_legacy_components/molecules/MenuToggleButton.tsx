@@ -5,7 +5,7 @@ interface BtnMenuToggleProps {
   secondEnabled: boolean;
   label: [string, string];
   width?: 'full';
-  onClick: any;
+  onClick: () => void;
 }
 
 export default function BtnMenuToggle({
@@ -22,6 +22,7 @@ export default function BtnMenuToggle({
         width ? 'w-full justify-around space-x-20' : 'space-x-2'
       )}
       onClick={onClick}
+      type="button"
     >
       <span className={firstEnabled ? 'font-semibold' : 'opacity-50'}>
         {label[0]}

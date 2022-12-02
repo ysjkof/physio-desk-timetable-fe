@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useReactiveVar } from '@apollo/client';
+import { motion, Variants } from 'framer-motion';
 import {
   compareDateMatch,
   getWeeksOfMonth,
@@ -8,7 +9,6 @@ import { cls } from '../../../../utils/common.utils';
 import { selectedDateVar } from '../../../../store';
 import { NEXT, PREV } from '../../../../constants/constants';
 import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
-import { useReactiveVar } from '@apollo/client';
 
 interface Calendar {
   selectedMonth: { date: Date }[];
@@ -16,7 +16,7 @@ interface Calendar {
 }
 
 interface NavDatepickerProps {
-  variants: any;
+  variants: Variants;
 }
 
 export default function NavDatepicker({ variants }: NavDatepickerProps) {
@@ -50,7 +50,7 @@ export default function NavDatepicker({ variants }: NavDatepickerProps) {
   return (
     <motion.div
       className="TABLE_NAV relative flex bg-white px-2 pt-6"
-      custom={true}
+      custom
       variants={variants}
       initial="ini"
       animate="start"
@@ -64,13 +64,13 @@ export default function NavDatepicker({ variants }: NavDatepickerProps) {
           <div
             key={i}
             onClick={() => selectedDateVar(day.date)}
+            onKeyDown={() => selectedDateVar(day.date)}
+            role="button"
+            tabIndex={0}
             className={cls(
               'btn-menu cursor-pointer py-0.5 text-center',
-              day.date.getDay() === 0
-                ? 'sunday'
-                : day.date.getDay() === 6
-                ? 'saturday'
-                : '',
+              day.date.getDay() === 0 ? 'sunday' : '',
+              day.date.getDay() === 6 ? 'saturday' : '',
               compareDateMatch(day.date, selectedDate, 'ymd')
                 ? 'bg-black text-white'
                 : ''

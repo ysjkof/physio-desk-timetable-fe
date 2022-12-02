@@ -26,8 +26,9 @@ import type {
 
 export default function CreatePrescription() {
   const { selectedClinic } = ClinicsOfClient;
-  const { data: findAtomPrescriptions, loading: loadingAtom } =
-    useQuery<FindAtomPrescriptionsQuery>(FIND_ATOM_PRESCRIPTIONS_DOCUMENT);
+  const { data: findAtomPrescriptions } = useQuery<FindAtomPrescriptionsQuery>(
+    FIND_ATOM_PRESCRIPTIONS_DOCUMENT
+  );
 
   const [createPrescription, { loading: loadingCreatePrescriptionOption }] =
     useMutation<CreatePrescriptionMutation>(CREATE_PRESCRIPTION_DOCUMENT, {
@@ -80,7 +81,7 @@ export default function CreatePrescription() {
     formState: { isValid, errors },
   } = useForm<CreatePrescriptionInput>({ mode: 'onChange' });
 
-  const onSubmitCreatePresciption = () => {
+  const onSubmitCreatePrescription = () => {
     if (!loadingCreatePrescriptionOption) {
       const { name, requiredTime, price, prescriptionAtomIds, description } =
         getValues();
@@ -108,7 +109,7 @@ export default function CreatePrescription() {
       <details open={selectedClinic.isManager}>
         <summary>처방 만들기</summary>
         <form
-          onSubmit={handleSubmit(onSubmitCreatePresciption)}
+          onSubmit={handleSubmit(onSubmitCreatePrescription)}
           className="space-y-8 pt-4 pb-2"
         >
           <div className="prescription-selector flex items-center">
@@ -200,8 +201,8 @@ export default function CreatePrescription() {
           </Input>
           <Textarea
             id="create-prescription__description"
-            label={'설명'}
-            placeholder={'처방에 대한 설명'}
+            label="설명"
+            placeholder="처방에 대한 설명"
             register={register('description', {
               maxLength: { value: 200, message: '최대 200자입니다' },
             })}

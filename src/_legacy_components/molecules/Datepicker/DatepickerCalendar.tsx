@@ -1,9 +1,4 @@
-import {
-  ButtonHTMLAttributes,
-  PropsWithChildren,
-  useReducer,
-  useRef,
-} from 'react';
+import { useReducer, useRef } from 'react';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,42 +7,19 @@ import {
   getHoursByUnit,
   getMinutesByUnit,
 } from '../../../utils/date.utils';
-import Calendar from '../../../svgs/Calendar';
+import { Calendar } from '../../../svgs';
 import { cls, getPositionRef } from '../../../utils/common.utils';
 import ModalPortal from '../../templates/ModalPortal';
-import { DatepickerInputState, HasDateOption } from './Datepicker';
 import { TableTime } from '../../../models';
+import {
+  DatepickerCalendarButtonsProps,
+  DatePickerInterface,
+  DayProps,
+  TimeSelectorProps,
+} from '../../../types/datepicker.types';
 
-interface Attributes
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    PropsWithChildren {
-  inactivate?: boolean;
-}
-interface ButtonsProps {
-  attributes: Attributes[];
-}
-interface DayProps {
-  day: number;
-  isSunday: boolean;
-  isSaturday: boolean;
-  isThisMonth: boolean;
-  isToday: boolean;
-  isSelect: boolean;
-  inactivate: boolean;
-  onClick: () => void;
-}
-type Time = '시' | '분';
-interface TimeSelectorProps extends DatepickerInputState {
-  type: Time;
-  numbers: number[];
-  closeDatepicker: () => void;
-}
-interface DatePickerInterface extends HasDateOption, DatepickerInputState {
-  isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function Buttons({ attributes }: ButtonsProps) {
+// TODO: 완전 새로 만들어야해
+function Buttons({ attributes }: DatepickerCalendarButtonsProps) {
   return (
     <>
       {attributes.map((attribute, idx) => {
@@ -85,7 +57,8 @@ function Day({
         type="button"
         className={cls(
           'pointer-events-none px-1.5 py-1 line-through opacity-50',
-          isSunday ? 'sunday' : isSaturday ? 'saturday' : ''
+          isSunday ? 'sunday' : '',
+          isSaturday ? 'saturday' : ''
         )}
       >
         {day}
@@ -98,7 +71,8 @@ function Day({
       type="button"
       className={cls(
         'cursor-pointer px-1.5 py-1',
-        isSunday ? 'sunday' : isSaturday ? 'saturday' : '',
+        isSunday ? 'sunday' : '',
+        isSaturday ? 'saturday' : '',
         isThisMonth ? 'opacity-50' : '',
         isSelect ? 'rounded-md  ring-2 ring-red-500' : '',
         isToday ? 'rounded-md bg-red-400 text-white' : ''
@@ -134,7 +108,8 @@ function TimeSelector({
     <div className="hidden-scrollbar flex flex-col overflow-y-scroll">
       <span>{type}</span>
       {numbers.map((number) => (
-        <span
+        <button
+          type="button"
           key={`time-selector-${type}-${number}`}
           className={cls(
             'cursor-pointer px-1.5',
@@ -144,18 +119,18 @@ function TimeSelector({
           )}
           onClick={
             type === '시'
-              ? () => selectHour('' + number)
-              : () => selectMinute('' + number)
+              ? () => selectHour(`${number}`)
+              : () => selectMinute(`${number}`)
           }
         >
-          {('' + number).padStart(2, '0')}
-        </span>
+          {`${number}`.padStart(2, '0')}
+        </button>
       ))}
     </div>
   );
 }
 
-export default function DatepickerCalendar({
+export function DatepickerCalendar({
   inputDate,
   setInputDate,
   isOpen,
@@ -188,18 +163,18 @@ export default function DatepickerCalendar({
     getWeeksOfMonth(today)
   );
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
   const { top, left } = getPositionRef(ref, 2);
 
   function getWeeks(value: Date, option?: 'sunday') {
-    let result: Date[] = [];
+    const result: Date[] = [];
     const date = new Date(value);
     const day = date.getDay();
     const sunday = new Date(date.setDate(date.getDate() - day));
     if (option === 'sunday') {
       return result.concat(sunday);
     }
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 7; i += 1) {
       const aDay = new Date(sunday);
       aDay.setDate(sunday.getDate() + i);
       result.push(aDay);
@@ -208,13 +183,13 @@ export default function DatepickerCalendar({
   }
 
   function getWeeksOfMonth(value: Date) {
-    let result = [];
+    const result = [];
     const firstDate = new Date(value);
     const lastDate = new Date(firstDate);
     firstDate.setDate(1);
     lastDate.setMonth(lastDate.getMonth() + 1);
     lastDate.setDate(0);
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i += 1) {
       const date = new Date(firstDate);
       date.setDate(i * 7 + 1);
       const week = getWeeks(date);
@@ -242,9 +217,9 @@ export default function DatepickerCalendar({
 
     setInputDate((prevState) => ({
       ...prevState,
-      year: '' + date.getFullYear(),
-      month: '' + (date.getMonth() + 1),
-      day: '' + date.getDate(),
+      year: `${date.getFullYear()}`,
+      month: `${date.getMonth() + 1}`,
+      day: `${date.getDate()}`,
     }));
   };
 
@@ -261,104 +236,98 @@ export default function DatepickerCalendar({
 
   return (
     <div className="datepicker__calendar relative">
-      <div
+      <button
         onClick={toggleDatepicker}
         className="datepicker__calendar-icon cursor-pointer"
         ref={ref}
+        type="button"
       >
         <Calendar />
-      </div>
+      </button>
       {isOpen && (
-        <ModalPortal
-          left={left}
-          top={top}
-          closeAction={closeDatepicker}
-          children={
-            <div className="datepicker__calendar-body absolute bottom-0 z-50 w-[440px]">
-              <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
-                <div className="mb-1 flex justify-between border-b pb-2">
-                  <div>{displayedYearMonth}</div>
-                  <div className="space-x-6">
-                    {
-                      <Buttons
-                        attributes={[
-                          {
-                            onClick: () => changeShowMonth('decrement'),
-                            children: <FontAwesomeIcon icon={faArrowUp} />,
-                            inactivate: compareDateMatch(
-                              showMonthCalendar[15],
-                              today,
-                              'ym'
-                            ),
-                          },
-                          {
-                            onClick: () => changeShowMonth('increment'),
-                            children: <FontAwesomeIcon icon={faArrowDown} />,
-                          },
-                          {
-                            onClick: () => changeShowMonth('thisMonth'),
-                            children: '오늘',
-                          },
-                          {
-                            onClick: () => setOpen(false),
-                            children: '닫기',
-                          },
-                        ]}
-                      />
-                    }
-                  </div>
-                </div>
-                <div className="flex divide-x">
-                  <div className="grid w-full grid-cols-7 pr-1.5 text-center">
-                    {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
-                      <div key={`datepicker__calendar-day${day}`}>{day}</div>
-                    ))}
-                    {showMonthCalendar.map((day) => {
-                      const dayNumber = day.getDay();
-                      const selectedDate = new Date(
-                        `${inputDate.year}-${inputDate.month}-${inputDate.day}`
-                      );
-                      const inactivate = day.getTime() < today.getTime();
-                      return (
-                        <Day
-                          inactivate={inactivate}
-                          key={day.valueOf()}
-                          day={day.getDate()}
-                          isToday={compareDateMatch(day, today, 'ymd')}
-                          isSunday={dayNumber === 0}
-                          isSaturday={dayNumber === 6}
-                          isThisMonth={
-                            day.getMonth() !== showMonthCalendar[15].getMonth()
-                          }
-                          isSelect={compareDateMatch(day, selectedDate, 'ymd')}
-                          onClick={() => selectDay(day, closeDatepicker)}
-                        />
-                      );
-                    })}
-                  </div>
-                  {hasHour && (
-                    <div className="flex h-32 space-x-2 pl-2 text-center">
-                      <TimeSelector
-                        type="시"
-                        numbers={listOfHours}
-                        inputDate={inputDate}
-                        setInputDate={setInputDate}
-                        closeDatepicker={closeDatepicker}
-                      />
-                      <TimeSelector
-                        type="분"
-                        numbers={listOfMinutes}
-                        inputDate={inputDate}
-                        setInputDate={setInputDate}
-                        closeDatepicker={closeDatepicker}
-                      />
-                    </div>
-                  )}
+        <ModalPortal left={left} top={top} closeAction={closeDatepicker}>
+          <div className="datepicker__calendar-body absolute bottom-0 z-50 w-[440px]">
+            <div className="absolute flex w-full flex-col rounded-md border bg-white p-3">
+              <div className="mb-1 flex justify-between border-b pb-2">
+                <div>{displayedYearMonth}</div>
+                <div className="space-x-6">
+                  <Buttons
+                    attributes={[
+                      {
+                        onClick: () => changeShowMonth('decrement'),
+                        children: <FontAwesomeIcon icon={faArrowUp} />,
+                        inactivate: compareDateMatch(
+                          showMonthCalendar[15],
+                          today,
+                          'ym'
+                        ),
+                      },
+                      {
+                        onClick: () => changeShowMonth('increment'),
+                        children: <FontAwesomeIcon icon={faArrowDown} />,
+                      },
+                      {
+                        onClick: () => changeShowMonth('thisMonth'),
+                        children: '오늘',
+                      },
+                      {
+                        onClick: () => setOpen(false),
+                        children: '닫기',
+                      },
+                    ]}
+                  />
                 </div>
               </div>
+              <div className="flex divide-x">
+                <div className="grid w-full grid-cols-7 pr-1.5 text-center">
+                  {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
+                    <div key={`datepicker__calendar-day${day}`}>{day}</div>
+                  ))}
+                  {showMonthCalendar.map((day) => {
+                    const dayNumber = day.getDay();
+                    const selectedDate = new Date(
+                      `${inputDate.year}-${inputDate.month}-${inputDate.day}`
+                    );
+                    const inactivate = day.getTime() < today.getTime();
+                    return (
+                      <Day
+                        inactivate={inactivate}
+                        key={day.valueOf()}
+                        day={day.getDate()}
+                        isToday={compareDateMatch(day, today, 'ymd')}
+                        isSunday={dayNumber === 0}
+                        isSaturday={dayNumber === 6}
+                        isThisMonth={
+                          day.getMonth() !== showMonthCalendar[15].getMonth()
+                        }
+                        isSelect={compareDateMatch(day, selectedDate, 'ymd')}
+                        onClick={() => selectDay(day, closeDatepicker)}
+                      />
+                    );
+                  })}
+                </div>
+                {hasHour && (
+                  <div className="flex h-32 space-x-2 pl-2 text-center">
+                    <TimeSelector
+                      type="시"
+                      numbers={listOfHours}
+                      inputDate={inputDate}
+                      setInputDate={setInputDate}
+                      closeDatepicker={closeDatepicker}
+                    />
+                    <TimeSelector
+                      type="분"
+                      numbers={listOfMinutes}
+                      inputDate={inputDate}
+                      setInputDate={setInputDate}
+                      closeDatepicker={closeDatepicker}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          }
-        />
+          </div>
+        </ModalPortal>
       )}
     </div>
   );

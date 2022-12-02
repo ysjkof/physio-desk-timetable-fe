@@ -39,6 +39,7 @@ export const useSchedules = () => {
     subscribeToMore({
       document: LISTEN_DELETE_RESERVATION_DOCUMENT,
       variables: { input: { clinicId } },
+      // @ts-ignore
       updateQuery: updateQueryOfListenDelete,
     });
 
@@ -51,6 +52,7 @@ export const useSchedules = () => {
       // 1. listReservation의 에러필드를 선택적필드로 바꿈
       // 2. 웹소켓이 listReservation처럼 모든 필드를 보냄
       // 웹소켓이 보내는 데이터량을 줄이기 위해 ts-ignore하고 문제시 바꾸기로함
+      // TODO: remove ts-ignore
       // @ts-ignore
       updateQuery: updateQueryOfListenUpdate,
     });

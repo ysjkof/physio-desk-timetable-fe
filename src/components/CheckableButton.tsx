@@ -1,11 +1,11 @@
-import Check from '../svgs/Check';
+import { Check } from '../svgs';
 import { cls } from '../utils/common.utils';
 
 interface CheckableButtonProps {
   label: string;
   color: string;
   backgroundColor: string;
-  canSee: Boolean;
+  canSee: boolean;
   onClick: () => void;
 }
 
@@ -19,6 +19,9 @@ const CheckableButton = ({
   return (
     <div
       onClick={onClick}
+      onKeyDown={onClick}
+      role="button"
+      tabIndex={0}
       className={cls(
         'flex h-fit select-none items-center gap-2 whitespace-nowrap rounded-sm border border-gray-500 px-2 py-0.5',
         canSee ? 'text-white' : 'bg-white'

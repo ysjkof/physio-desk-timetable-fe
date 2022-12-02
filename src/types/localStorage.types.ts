@@ -17,7 +17,7 @@ export type LocalStorageValue = typeof LOCAL_STORAGE_KEY[LocalStorageKey];
 
 // CREATE
 export interface GenerateStorageKey extends Partial<UserIdAndName> {
-  key: LocalStorageValue;
+  key: PrivateLocalStorageKey | PublicLocalStorageKey;
 }
 
 //
@@ -41,5 +41,5 @@ export interface SetPublicStorage extends GetPublicLocalStorage, Value {}
 
 // DELETE
 
-export interface RemovePrivateLocalStorage extends GetPrivateStorage {}
-export interface RemovePublicLocalStorage extends GetPublicLocalStorage {}
+export type RemovePrivateLocalStorage = GetPrivateStorage;
+export type RemovePublicLocalStorage = GetPublicLocalStorage;

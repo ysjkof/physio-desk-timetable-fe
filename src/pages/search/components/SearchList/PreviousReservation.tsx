@@ -1,13 +1,15 @@
+import { useLazyQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { getDateAndDifference } from '../../../../utils/date.utils';
 import { createArrayFromLength } from '../../../../utils/common.utils';
 import { ButtonOfPages, ListCell } from '../../../../components';
 import type { GetReservationsByPatientQuery } from '../../../../types/generated.types';
 import type { ReservationInPatient } from '../../../../types/common.types';
+import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from '../../../../graphql';
 
 interface PreviousReservationProps {
-  data: GetReservationsByPatientQuery | undefined;
-  changePage: (page: number) => void;
+  userId: number;
 }
 
 interface TitleProps {
@@ -20,13 +22,31 @@ interface ReservationsProps {
 
 interface NumberOfPagesProps {
   totalPages: number;
+  page: number;
   changePage: (page: number) => void;
 }
 
-export function PreviousReservation({
-  changePage,
-  data,
-}: PreviousReservationProps) {
+export function PreviousReservation({ userId }: PreviousReservationProps) {
+  const [page, setPage] = useState(1);
+
+  const [callQuery, { data }] = useLazyQuery<GetReservationsByPatientQuery>(
+    GET_RESERVATIONS_BY_PATIENT_DOCUMENT,
+    {
+      fetchPolicy: 'cache-and-network',
+    }
+  );
+
+  const changePage = (pageNumber: number) => {
+    if (page === pageNumber) return;
+    setPage(pageNumber);
+  };
+
+  useEffect(() => {
+    callQuery({
+      variables: { input: { page, id: userId } },
+    });
+  }, [page, userId]);
+
   return (
     <div className="flex flex-col items-center justify-center bg-gray-200 p-6 pb-2">
       <div className="w-full rounded-md bg-white">
@@ -37,6 +57,7 @@ export function PreviousReservation({
         <Reservations reservations={data?.getReservationsByPatient.results} />
         <NumberOfPages
           totalPages={data?.getReservationsByPatient.totalPages || 1}
+          page={page}
           changePage={changePage}
         />
       </div>
@@ -74,13 +95,18 @@ function Reservations({ reservations }: ReservationsProps) {
   );
 }
 
-function NumberOfPages({ totalPages, changePage }: NumberOfPagesProps) {
+function NumberOfPages({ totalPages, page, changePage }: NumberOfPagesProps) {
   const numberOfPages = createArrayFromLength(totalPages || 1);
 
   return (
     <div className="flex w-full items-center justify-center border-t">
-      {numberOfPages.map((page) => (
-        <ButtonOfPages page={page} changePage={changePage} />
+      {numberOfPages.map((pageNumber) => (
+        <ButtonOfPages
+          key={pageNumber}
+          page={pageNumber}
+          changePage={changePage}
+          isActive={pageNumber === page}
+        />
       ))}
     </div>
   );

@@ -9,7 +9,9 @@ export class TableDisplay {
     seeList: false,
     navigationExpand: false,
   };
+
   static #userIdAndName: UserIdAndName;
+
   static #localStorageUtil = localStorageUtils;
 
   static initialize(userIdAndName: UserIdAndName) {

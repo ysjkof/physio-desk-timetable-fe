@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { selectedPatientVar, toastVar } from '../../../../store';
-import { TimetableModalProps } from '../../Timetable';
 import { REG_EXP } from '../../../../constants/regex';
 import { GENDER_KOR } from '../../../../constants/constants';
 import FormError from '../../../../_legacy_components/atoms/FormError';
@@ -22,8 +21,9 @@ import type {
   EditPatientOutput,
 } from '../../../../types/generated.types';
 import type { SelectedPatientType } from '../../../../types/common.types';
+import type { CloseAction } from '../../../../types/props.types';
 
-interface CreatePatientFormProps extends TimetableModalProps {
+interface CreatePatientFormProps extends CloseAction {
   patient?: SelectedPatientType;
 }
 
@@ -51,7 +51,7 @@ export default function CreatePatientForm({
 
   const [
     createPatientMutation,
-    { loading, data: createaPatientMutationResult },
+    { loading, data: createdPatientMutationResult },
   ] = useMutation<CreatePatientMutation>(CREATE_PATIENT_DOCUMENT);
 
   const [editPatientMutation, { loading: editLoading }] =
@@ -119,7 +119,7 @@ export default function CreatePatientForm({
         label="이름*"
         type="text"
         placeholder="이름을 입력하세요"
-        required={true}
+        required
         autoFocus
         maxLength={REG_EXP.personName.maxLength}
         register={register('name', {
@@ -139,7 +139,7 @@ export default function CreatePatientForm({
         {['male', 'female'].map((gender) => (
           <Checkbox
             key={gender}
-            id={'create-patient-form__gender-' + gender}
+            id={`create-patient-form__gender-${gender}`}
             label={GENDER_KOR[gender as 'male' | 'female']}
             type="radio"
             value={gender}
@@ -177,11 +177,12 @@ export default function CreatePatientForm({
         type="submit"
         canClick={!!birthday && isValid}
         loading={loading || editLoading}
-        children={patient ? '환자수정' : '환자등록'}
-      />
-      {createaPatientMutationResult?.createPatient.error && (
+      >
+        {patient ? '환자수정' : '환자등록'}
+      </Button>
+      {createdPatientMutationResult?.createPatient.error && (
         <FormError
-          errorMessage={createaPatientMutationResult.createPatient.error}
+          errorMessage={createdPatientMutationResult.createPatient.error}
         />
       )}
     </form>

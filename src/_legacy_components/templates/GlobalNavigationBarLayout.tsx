@@ -4,13 +4,11 @@ import { ROUTES } from '../../router/routes';
 import { cls } from '../../utils/common.utils';
 import Logo from '../atoms/Logo';
 
-interface GlobalNavigationBar extends PropsWithChildren {}
-
 export default function GlobalNavigationBarLayout({
   children,
-}: GlobalNavigationBar) {
+}: PropsWithChildren) {
   const location = useLocation();
-  const pathname = location.pathname;
+  const { pathname } = location;
 
   const isTimetable = pathname.startsWith(ROUTES.timetable);
   const isDashboard = pathname.startsWith(ROUTES.dashboard);

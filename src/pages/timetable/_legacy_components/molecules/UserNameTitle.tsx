@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
@@ -5,7 +6,6 @@ import { cls, simpleCheckGQLError } from '../../../../utils/common.utils';
 import { USER_COLORS, UTC_OPTION_KST } from '../../../../constants/constants';
 import { ROUTES } from '../../../../router/routes';
 import { createDate } from '../../../../utils/date.utils';
-import { useMutation } from '@apollo/client';
 import { CREATE_DAY_OFF_DOCUMENT } from '../../../../graphql';
 import type { CreateDayOffMutation } from '../../../../types/generated.types';
 
@@ -85,6 +85,9 @@ export default function UserNameTitle({
           <div
             className="flex cursor-pointer items-center gap-1 py-1 px-2 hover:bg-gray-200"
             onClick={closeDay}
+            onKeyDown={closeDay}
+            role="button"
+            tabIndex={0}
           >
             <FontAwesomeIcon icon={faLock} />
             <span>예약잠금(종일)</span>
@@ -92,6 +95,9 @@ export default function UserNameTitle({
           <div
             className="flex cursor-pointer items-center gap-1 py-1 px-2 hover:bg-gray-200"
             onClick={closePartTime}
+            onKeyDown={closePartTime}
+            role="button"
+            tabIndex={0}
           >
             <FontAwesomeIcon icon={faLock} />
             <span>예약잠금</span>

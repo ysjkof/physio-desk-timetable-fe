@@ -20,7 +20,7 @@ import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
-import Check from '../../../../svgs/Check';
+import { Check } from '../../../../svgs';
 import { ClinicsOfClient, TableDisplay, TableTime } from '../../../../models';
 import { useSelectedClinic, useTableDisplay, useTableTime } from '../../hooks';
 import type {
@@ -102,7 +102,7 @@ export default function TableOptionSelector() {
         className="flex items-center whitespace-nowrap border-b py-1"
       >
         <Selectbox
-          selectedValue={`${(firstHour + '').padStart(2, '0')}`}
+          selectedValue={`${String(firstHour).padStart(2, '0')}`}
           iconSize={8}
         >
           <Selectbox.Options>
@@ -117,7 +117,7 @@ export default function TableOptionSelector() {
           </Selectbox.Options>
         </Selectbox>
         <Selectbox
-          selectedValue={`${(firstMinute + '').padStart(2, '0')}`}
+          selectedValue={`${String(firstMinute).padStart(2, '0')}`}
           iconSize={8}
         >
           <Selectbox.Options>
@@ -133,7 +133,7 @@ export default function TableOptionSelector() {
         </Selectbox>
         ~
         <Selectbox
-          selectedValue={`${(lastHour + '').padStart(2, '0')}`}
+          selectedValue={`${String(lastHour).padStart(2, '0')}`}
           iconSize={8}
         >
           <Selectbox.Options>
@@ -148,7 +148,7 @@ export default function TableOptionSelector() {
           </Selectbox.Options>
         </Selectbox>
         <Selectbox
-          selectedValue={`${(lastMinute + '').padStart(2, '0')}`}
+          selectedValue={`${String(lastMinute).padStart(2, '0')}`}
           iconSize={8}
         >
           <Selectbox.Options>
@@ -203,7 +203,8 @@ export default function TableOptionSelector() {
               return 0;
             });
 
-          //  할일: selectedClinic을 CLinicsOfClient에 합치기.
+          // 할일: selectedClinic을 CLinicsOfClient에 합치기.
+          // TODO: selectedClinic을 CLinicsOfClient에 합치기.
 
           return (
             <Sidebar.Ul

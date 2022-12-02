@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useMediaQuery, useWindowSize } from '../../../../hooks';
-import BarBottomLeft from '../../../../svgs/BarBottomLeft';
+import { BarBottomLeft } from '../../../../svgs';
 import DocsSidebarModal from '../../../docs/components/molecules/DocsSidebarModal';
 
 interface DashboardTemplateProps {
@@ -9,6 +9,7 @@ interface DashboardTemplateProps {
   clinicSelector: ReactNode;
   children: ReactNode;
 }
+
 export default function DashboardTemplate({
   sidebar,
   breadcrumb,

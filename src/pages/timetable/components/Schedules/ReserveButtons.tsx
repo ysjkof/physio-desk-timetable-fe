@@ -9,7 +9,7 @@ import { selectedReservationVar, toastVar } from '../../../../store';
 import ReserveButton from './ReserveButton';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
 import type { CreateReservationMutation } from '../../../../types/generated.types';
-import type { Reservation } from '../../../../types/common.types';
+import type { PrescriptionsInReservation } from '../../../../types/common.types';
 import { LABEL_VISIBLE_MINUTES } from '../../../../constants/constants';
 
 interface ReservationButtonsProps {
@@ -28,7 +28,7 @@ const ReservationButtons = ({
 }: ReservationButtonsProps) => {
   const selectedReservation = useReactiveVar(selectedReservationVar);
 
-  const getPrescriptionInfo = (reservation: Reservation) => {
+  const getPrescriptionInfo = (prescriptions: PrescriptionsInReservation) => {
     type ReturnType = {
       prescriptionIds: number[];
       requiredTime: number;
@@ -38,7 +38,7 @@ const ReservationButtons = ({
       requiredTime: 0,
     };
 
-    const { prescriptionIds, requiredTime } = reservation.prescriptions!.reduce(
+    const { prescriptionIds, requiredTime } = prescriptions.reduce(
       (acc, prescription) => {
         return {
           prescriptionIds: [...acc.prescriptionIds, prescription.id],
@@ -55,11 +55,12 @@ const ReservationButtons = ({
 
   const invokeQuickCreateReservation = (label: string) => {
     if (loading) return;
-    if (!selectedReservation)
+    if (!selectedReservation?.prescriptions)
       throw new Error('복사할 예약이 선택되지 않았습니다');
 
-    const { prescriptionIds, requiredTime } =
-      getPrescriptionInfo(selectedReservation);
+    const { prescriptionIds, requiredTime } = getPrescriptionInfo(
+      selectedReservation.prescriptions
+    );
 
     const startDate = createDate(date, {
       hour: +getFrom4DigitTime(label, 'hour'),
@@ -72,7 +73,7 @@ const ReservationButtons = ({
       variables: {
         input: {
           clinicId: selectedReservation.clinic.id,
-          patientId: selectedReservation.patient!.id,
+          patientId: selectedReservation.patient.id,
           memo: selectedReservation.memo,
           userId,
           startDate,

@@ -28,7 +28,7 @@ export default function AcceptInvitation() {
           type="button"
           canClick={!loadingCancel}
           loading={loadingCancel}
-          onClick={() => invokeCancelInvitation(memberId!)}
+          onClick={() => invokeCancelInvitation(memberId)}
         >
           거절
         </Button>

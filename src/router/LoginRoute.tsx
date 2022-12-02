@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { lazy } from 'react';
 import { useMe } from '../hooks';
 import { ENDPOINT, ROUTES } from './routes';
-import { lazy } from 'react';
 import ProtectRoute from './ProtectRoute';
 import Warning from '../_legacy_components/atoms/Warning';
 import GlobalLayout from '../_legacy_components/templates/GlobalLayout';
@@ -46,12 +46,12 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
     },
     {
       protectRoute: false,
-      path: ENDPOINT.edit_reservation,
+      path: ENDPOINT.editReservation,
       element: <TimeTable />,
     },
     {
       protectRoute: false,
-      path: ENDPOINT.create_patient,
+      path: ENDPOINT.createPatient,
       element: <TimeTable />,
     },
   ];
@@ -82,7 +82,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
       element: <PrescriptionPage />,
       outlet: [
         <Route
-          key={'CreatePrescription'}
+          key="CreatePrescription"
           path="create-prescription"
           element={<CreatePrescription />}
         />,
@@ -95,7 +95,7 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
     },
     {
       protectRoute: { protect: false, isPass: null },
-      path: ENDPOINT.dashboard.edit_profile,
+      path: ENDPOINT.dashboard.editProfile,
       element: <EditProfile />,
     },
   ];
@@ -128,12 +128,12 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
         >
           <Route index element={<Warning type="selectMenu" />} />
           {dashboardRoute.map((route) => {
-            let {
-              element,
+            const {
               path,
               protectRoute: { protect, isPass },
               outlet,
             } = route;
+            let { element } = route;
 
             if (protect) {
               element = (
@@ -146,13 +146,12 @@ function LoginRoute({ CommonRoute }: LoginRouteProps) {
               );
             }
 
-            if (outlet) {
+            if (outlet)
               return (
                 <Route key={path} path={path} element={element}>
                   {outlet}
                 </Route>
               );
-            }
 
             return <Route key={path} path={path} element={element} />;
           })}

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
-import { TimetableModalProps } from '../../Timetable';
 import Button from '../../../../_legacy_components/molecules/Button';
 import SelectUser from './SelectUser';
 import Textarea from '../../../../_legacy_components/molecules/Textarea';
@@ -14,17 +13,17 @@ import Datepicker from '../../../../_legacy_components/molecules/Datepicker/Date
 import { useReserve } from '../../hooks';
 import { ClinicsOfClient } from '../../../../models';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
+import { selectedPatientVar } from '../../../../store';
 import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 import type {
   Reservation,
   ISelectedPrescription,
   PrescriptionWithSelect,
   ReserveFormType,
-  SelectedPatientType,
 } from '../../../../types/common.types';
-import { selectedPatientVar } from '../../../../store';
+import type { CloseAction } from '../../../../types/props.types';
 
-interface IReserveFromProps extends TimetableModalProps {
+interface IReserveFromProps extends CloseAction {
   userId: number;
   startDate?: Date;
   reservation?: Reservation;
@@ -163,7 +162,7 @@ export default function ReserveForm({
         startDate: selectedStartDate,
         endDate,
         memo,
-        userId: +userId,
+        userId: Number(userId),
         clinicId: selectedClinic.id,
         patientId: selectedPatient.id,
         prescriptionIds: selectedPrescription.prescriptions,
@@ -199,8 +198,7 @@ export default function ReserveForm({
       prescriptionsData?.findPrescriptions.prescriptions
     );
 
-    let processedPrescriptions: PrescriptionWithSelect[] | undefined =
-      undefined;
+    let processedPrescriptions: PrescriptionWithSelect[] | undefined;
     if (existPrescriptions) {
       processedPrescriptions = injectSelectIntoPrescription(
         existPrescriptions.filter((prescription) => prescription.activate)
@@ -286,7 +284,6 @@ export default function ReserveForm({
                 <li
                   key={index}
                   value={prescription.id}
-                  onClick={() => selectPrescription(prescription.id)}
                   className={cls(
                     'btn-menu overflow-hidden rounded-md border text-center',
                     prescription.isSelect
@@ -294,7 +291,14 @@ export default function ReserveForm({
                       : 'opacity-50'
                   )}
                 >
-                  {prescription.name}
+                  <div
+                    onClick={() => selectPrescription(prescription.id)}
+                    onKeyDown={() => selectPrescription(prescription.id)}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    {prescription.name}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -307,8 +311,8 @@ export default function ReserveForm({
       </label>
       <Textarea
         id="reserve-form__memo"
-        label={'메모'}
-        placeholder={'처방에 대한 설명'}
+        label="메모"
+        placeholder="처방에 대한 설명"
         register={register('memo', {
           maxLength: { value: 200, message: '최대 200자입니다' },
         })}

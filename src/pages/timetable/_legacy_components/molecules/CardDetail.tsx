@@ -6,7 +6,7 @@ interface TimeProps {
   endTime?: string;
 }
 
-interface LastUpdate {
+interface LastUpdateProps {
   name: string;
   updatedAt: string;
 }
@@ -46,7 +46,7 @@ function State({ children }: PropsWithChildren) {
     </div>
   );
 }
-function LastUpdate({ name, updatedAt }: LastUpdate) {
+function LastUpdate({ name, updatedAt }: LastUpdateProps) {
   return (
     <div className="grid grid-cols-[5rem,1fr] items-center">
       <span className="">마지막 수정</span>

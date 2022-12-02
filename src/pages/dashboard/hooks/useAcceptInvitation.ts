@@ -29,6 +29,8 @@ export default function useAcceptInvitation() {
     (member) => member.user.id === loggedInUserId
   )?.id;
 
+  if (!memberId) throw new Error('memberId가 없습니다');
+
   const acceptInvitation = (clinicId: number) => {
     if (!loading && confirm('초대를 수락합니다')) {
       const acceptedClinic = clinicLists.find(
@@ -114,7 +116,7 @@ export default function useAcceptInvitation() {
                 if (!cacheData || !cacheData.me || !cacheData.me.members)
                   return cacheData;
 
-                const memberIdx = cacheData.me.members!.findIndex(
+                const memberIdx = cacheData.me.members.findIndex(
                   (member) => member.id === updatedMember.id
                 );
                 return {

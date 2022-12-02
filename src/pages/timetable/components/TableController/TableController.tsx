@@ -1,7 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
-import { getMonth, getWeekOfMonth } from 'date-fns';
+import {
+  addDays,
+  addMonths,
+  getMonth,
+  getWeekOfMonth,
+  subDays,
+  subMonths,
+} from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -43,17 +50,17 @@ const TableController = () => {
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
 
   const handleDateNavMovePrev = () => {
-    const date = new Date(selectedDate);
-    TableDisplay.get().navigationExpand
-      ? date.setMonth(date.getMonth() - 1)
-      : date.setDate(date.getDate() - 7);
+    const date = TableDisplay.get().navigationExpand
+      ? subMonths(selectedDate, 1)
+      : subDays(selectedDate, 7);
+
     selectedDateVar(date);
   };
   const handleDateNavMoveNext = () => {
-    const date = new Date(selectedDate);
-    TableDisplay.get().navigationExpand
-      ? date.setMonth(date.getMonth() + 1)
-      : date.setDate(date.getDate() + 7);
+    const date = TableDisplay.get().navigationExpand
+      ? addMonths(selectedDate, 1)
+      : addDays(selectedDate, 7);
+
     selectedDateVar(date);
   };
 
@@ -72,7 +79,7 @@ const TableController = () => {
     toggleUser(memberId);
   };
   const weekNumber = getWeekOfMonth(selectedDate);
-  const month = (getMonth(selectedDate) + 1 + '').padStart(2, '0');
+  const month = `${getMonth(selectedDate) + 1}`.padStart(2, '0');
 
   const clearSelectedReservation = () => {
     selectedReservationVar(undefined);
@@ -93,6 +100,7 @@ const TableController = () => {
           <button
             className="w-32 whitespace-nowrap text-3xl font-medium hover:font-bold"
             onClick={() => selectedDateVar(today)}
+            type="button"
           >
             {`${month}월 ${weekNumber}주차`}
           </button>
@@ -121,7 +129,7 @@ const TableController = () => {
           {ClinicsOfClient.selectedClinic?.members.map((member, i) => (
             <CheckableButton
               key={i}
-              color={'black'}
+              color="black"
               backgroundColor={USER_COLORS[i].deep}
               canSee={!!member.canSee}
               label={member.user.name}
@@ -132,8 +140,8 @@ const TableController = () => {
         {selectedReservation && (
           <div className="flex w-full items-center justify-center">
             <span className="mr-4 flex">
-              <span className="absolute inline-flex h-2.5 w-2.5 animate-ping rounded-full bg-blue-700 opacity-75"></span>
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-blue-800"></span>
+              <span className="absolute inline-flex h-2.5 w-2.5 animate-ping rounded-full bg-blue-700 opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-blue-800" />
             </span>
             <span className="mr-2 scale-150 font-bold">
               {selectedReservation.patient?.name}
@@ -153,7 +161,7 @@ const TableController = () => {
             icon={<UserPlus />}
             backgroundColor="#6BA6FF"
             color="white"
-            onClick={() => navigate(ROUTES.create_patient)}
+            onClick={() => navigate(ROUTES.createPatient)}
             ref={settingRef}
           />
           <MenuButton

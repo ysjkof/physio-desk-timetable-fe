@@ -1,6 +1,6 @@
+import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { cls } from '../../utils/common.utils';
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 interface ClassNameProps {
@@ -25,7 +25,7 @@ interface UlProps extends PropsWithChildren {
   removePadding?: boolean;
   opacity?: boolean;
 }
-interface SidebarPoprs extends PropsWithChildren, ClassNameProps {
+interface SidebarProps extends PropsWithChildren, ClassNameProps {
   disable?: boolean;
   noGap?: boolean;
 }
@@ -74,6 +74,7 @@ function Li({ to, onClick, children, selected }: ToProps | OnClickProps) {
               ? 'before:pointer-events-none before:absolute before:left-1.5 before:top-1/2 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full before:bg-green-500'
               : ''
           )}
+          type="button"
         >
           {children}
         </button>
@@ -101,7 +102,7 @@ function Ul({ children, title, removePadding, opacity }: UlProps) {
   );
 }
 
-function Sidebar({ children, className, disable, noGap }: SidebarPoprs) {
+function Sidebar({ children, className, disable, noGap }: SidebarProps) {
   return (
     <div
       className={cls(

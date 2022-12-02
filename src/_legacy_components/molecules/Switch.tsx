@@ -3,12 +3,16 @@ import { cls } from '../../utils/common.utils';
 interface SwitchProps {
   enabled: boolean;
   label: string;
-  onClick: any;
+  onClick: () => void;
 }
 
 export default function Switch({ enabled, label, onClick }: SwitchProps) {
   return (
-    <div className="flex cursor-pointer items-center" onClick={onClick}>
+    <button
+      className="flex cursor-pointer items-center"
+      onClick={onClick}
+      type="button"
+    >
       <span className={cls(enabled ? '' : '', 'mr-0.5 hover:font-bold')}>
         {label}
       </span>
@@ -26,6 +30,6 @@ export default function Switch({ enabled, label, onClick }: SwitchProps) {
           )}
         />
       </div>
-    </div>
+    </button>
   );
 }

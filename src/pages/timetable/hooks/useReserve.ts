@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { simpleCheckGQLError } from '../../../utils/common.utils';
-import { TimetableModalProps } from '../Timetable';
 import {
   CREATE_RESERVATION_DOCUMENT,
   EDIT_RESERVATION_DOCUMENT,
@@ -12,8 +11,9 @@ import type {
   EditReservationInput,
   EditReservationMutation,
 } from '../../../types/generated.types';
+import type { CloseAction } from '../../../types/props.types';
 
-interface UseDayoffProps extends TimetableModalProps {
+interface UseDayoffProps extends CloseAction {
   isCreate: boolean;
 }
 
@@ -82,7 +82,7 @@ export const useReserve = ({ isCreate, closeAction }: UseDayoffProps) => {
 
   useEffect(() => {
     setLoading(isCreate ? createLoading : editLoading);
-  }, [createLoading, editLoading]);
+  }, [createLoading, editLoading, isCreate]);
 
   return { createReservation, editReservation, loading };
 };

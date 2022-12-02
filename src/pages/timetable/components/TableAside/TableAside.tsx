@@ -5,8 +5,6 @@ import { cls } from '../../../../utils/common.utils';
 import { CogSixTooth, Building, Table } from '../../../../svgs';
 import TableClinicSelector from './TableClinicSelector';
 
-export interface UlProps extends PropsWithChildren {}
-
 interface LiProps extends PropsWithChildren {
   to: string;
   selected?: boolean;
@@ -32,7 +30,7 @@ const TableAside = () => {
         <Li to={ROUTES.clinics}>
           <Building /> 병원
         </Li>
-        <Li to={ROUTES.edit_profile}>
+        <Li to={ROUTES.editProfile}>
           <CogSixTooth /> 프로필
         </Li>
       </Ul>
@@ -53,7 +51,7 @@ const Logo = () => {
   );
 };
 
-const Ul = ({ children }: UlProps) => {
+const Ul = ({ children }: PropsWithChildren) => {
   return (
     <div className={cls('flex h-full flex-col')}>
       <ul>{children}</ul>

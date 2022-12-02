@@ -2,7 +2,9 @@ import { TimeLabelArg } from '../types/common.types';
 
 export class TimeLabel {
   value: string;
+
   color: string;
+
   isShow: boolean;
 
   constructor({ label, visibleMinute, colors }: TimeLabelArg) {

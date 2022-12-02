@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-interface useMediaQueryProps {
+interface UseMediaQueryProps {
   minWidth: string;
 }
 
@@ -9,7 +9,7 @@ interface useMediaQueryProps {
  * 640px : 너비가 640px이상이면 태블릿
  * 768px : 너비가 768px이상이면 데스크톱
  */
-export const useMediaQuery = ({ minWidth }: useMediaQueryProps) => {
+export const useMediaQuery = ({ minWidth }: UseMediaQueryProps) => {
   const [isMatch, setIsMatch] = useState(true);
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +28,7 @@ export const useMediaQuery = ({ minWidth }: useMediaQueryProps) => {
     mediaQuery.addEventListener('change', senseScreen);
     setLoading(false);
     return () => mediaQuery.removeEventListener('change', senseScreen);
-  }, []);
+  }, [minWidth]);
 
   return [isMatch, loading];
 };

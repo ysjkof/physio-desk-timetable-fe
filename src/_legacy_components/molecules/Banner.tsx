@@ -11,6 +11,7 @@ export default function Banner({ close }: BannerProps) {
       <button
         onClick={close}
         className="position-center-y absolute right-10 text-sm text-white hover:font-semibold"
+        type="button"
       >
         닫기
       </button>

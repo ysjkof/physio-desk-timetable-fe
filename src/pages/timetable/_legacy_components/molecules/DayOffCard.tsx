@@ -6,10 +6,10 @@ import { useDeleteReservation } from '../../hooks';
 import DayOffForm from './DayOffForm';
 import CardDetail from './CardDetail';
 import { getTimeLength } from '../../../../utils/date.utils';
-import type { TimetableModalProps } from '../../Timetable';
 import type { Reservation } from '../../../../types/common.types';
+import type { CloseAction } from '../../../../types/props.types';
 
-interface DayOffCardProps extends TimetableModalProps {
+interface DayOffCardProps extends CloseAction {
   reservation: Reservation;
 }
 
@@ -27,8 +27,6 @@ export default function DayOffCard({
 
   return (
     <div className="space-y-4">
-      <h4 className="mb-5 text-left font-medium"></h4>
-
       <div className="reservation-editor flex justify-around">
         <MenuButton enabled onClick={invokeDelete}>
           <FontAwesomeIcon icon={faTrashCan} fontSize={14} />

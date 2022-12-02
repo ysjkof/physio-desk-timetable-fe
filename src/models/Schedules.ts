@@ -14,6 +14,7 @@ import type {
 
 export class Schedules {
   #value: ISchedules[];
+
   #clinic = ClinicsOfClient.selectedClinic;
 
   constructor(data: Reservation[], date: Date) {
@@ -32,8 +33,8 @@ export class Schedules {
 
   #createForm(date: Date) {
     const week = this.#createWeek(date);
-    return week.map((date) => ({
-      date,
+    return week.map((dateInWeek) => ({
+      date: dateInWeek,
       users: this.#createMembersForTable(),
     }));
   }

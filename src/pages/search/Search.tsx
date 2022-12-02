@@ -39,7 +39,7 @@ export default function Search() {
   const { height } = useWindowSize(true);
 
   const invokeQuery = () => {
-    const [_, queryName] = location.search.split('?name=');
+    const queryName = location.search.split('?name=')[1];
     if (!queryName) return navigate(-1);
 
     const { clinicIds } = getValues();
@@ -108,8 +108,14 @@ export default function Search() {
           id="search__footer"
           className="absolute bottom-0 flex h-16 w-full items-center justify-center gap-2 border-t-2 bg-white text-sm"
         >
-          {numberOfPages.map((page) => (
-            <ButtonOfPages page={page} changePage={changePage} hasBorder />
+          {numberOfPages.map((pageNumber) => (
+            <ButtonOfPages
+              key={pageNumber}
+              page={pageNumber}
+              isActive={pageNumber === page}
+              changePage={changePage}
+              hasBorder
+            />
           ))}
         </div>
       </div>

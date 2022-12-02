@@ -1,40 +1,33 @@
+import type { ButtonHTMLAttributes } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode } from 'react';
-import { ClassNameProps } from '../../types/common.types';
 import { cls } from '../../utils/common.utils';
 
-interface ButtonProps extends ClassNameProps {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   canClick: boolean | null | undefined;
   loading: boolean;
-  children: ReactNode;
   isSmall?: boolean;
   isWidthFull?: boolean;
-  type?: 'button' | 'reset' | 'submit';
-  onClick?: () => void;
 }
 
 export default function Button({
   canClick,
   loading,
-  children,
   isSmall,
   isWidthFull,
-  type = 'button',
-  onClick,
-  className,
+  ...args
 }: ButtonProps) {
   return (
     <button
-      type={type}
+      type="button"
+      {...args}
       className={cls(
         'flex items-center justify-center rounded-md bg-green-600 py-1 px-2 tracking-widest text-white transition-colors focus:outline-none',
         isSmall ? 'text-xs' : 'text-base',
         isWidthFull ? 'w-full' : '',
         canClick ? 'bg-green-600' : 'pointer-events-none opacity-50',
-        className || ''
+        args.className || ''
       )}
-      onClick={onClick}
     >
       {loading ? (
         <FontAwesomeIcon
@@ -47,9 +40,7 @@ export default function Button({
       )}
       <span
         className={cls('whitespace-nowrap', loading ? 'text-transparent' : '')}
-      >
-        {children}
-      </span>
+      />
     </button>
   );
 }

@@ -39,14 +39,14 @@ const Loading = lazy(() => import('../_legacy_components/atoms/Loading'));
 function Router() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
-  const { confirm_email, change_email, docs } = ROUTES;
+  const { confirmEmail, changeEmail, docs } = ROUTES;
   const {
-    basic_patient_registration,
-    basic_prescription_registration,
-    basic_reserve,
-    view_duration,
-    view_state,
-    view_clinic,
+    basicPatientRegistration,
+    basicPrescriptionRegistration,
+    basicReserve,
+    viewDuration,
+    viewState,
+    viewClinic,
     roadmap,
     contacts,
     overview,
@@ -60,33 +60,33 @@ function Router() {
     },
     /** */
     {
-      path: basic_patient_registration,
+      path: basicPatientRegistration,
       element: <BasicPatientRegistration />,
     },
     {
-      path: basic_prescription_registration,
+      path: basicPrescriptionRegistration,
       element: <BasicPrescriptionRegistration />,
     },
     {
-      path: basic_reserve,
+      path: basicReserve,
       element: (
         <BasicReserve
-          createPatientUrl={ROUTES.create_patient}
+          createPatientUrl={ROUTES.createPatient}
           createPrescriptionUrl={ROUTES.prescription}
         />
       ),
     },
     /** */
     {
-      path: view_duration,
+      path: viewDuration,
       element: <ViewDuration />,
     },
     {
-      path: view_state,
+      path: viewState,
       element: <ViewState />,
     },
     {
-      path: view_clinic,
+      path: viewClinic,
       element: <ViewClinic />,
     },
     /** */
@@ -115,12 +115,8 @@ function Router() {
       }
     />,
     <Route key="notFound" path="*" element={<NotFound />} />,
-    <Route
-      key={confirm_email}
-      path={confirm_email}
-      element={<ConfirmEmail />}
-    />,
-    <Route key={change_email} path={change_email} element={<ChangeEmail />} />,
+    <Route key={confirmEmail} path={confirmEmail} element={<ConfirmEmail />} />,
+    <Route key={changeEmail} path={changeEmail} element={<ChangeEmail />} />,
     <Route key="UserDocuments" path={docs} element={<Docs />}>
       <Route index element={<DocsIndex />} />
       {docsRoute.map((route) => (

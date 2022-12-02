@@ -27,7 +27,7 @@ export default function Toast() {
             )}
             style={{
               ...(milliseconds && {
-                animationDuration: milliseconds / 1000 + 's',
+                animationDuration: `${milliseconds / 1000}s`,
               }),
             }}
           >
@@ -36,8 +36,8 @@ export default function Toast() {
             ))}
             <button
               onClick={closeToast}
-              autoFocus
               className="rounded-md border-2 border-white px-1 outline-none focus:border-green-400"
+              type="button"
             >
               확인
             </button>
@@ -48,6 +48,9 @@ export default function Toast() {
               bgColor ? 'bg-black/30' : ''
             )}
             onClick={closeToast}
+            onKeyDown={closeToast}
+            role="button"
+            tabIndex={0}
           />
         </>
       )}

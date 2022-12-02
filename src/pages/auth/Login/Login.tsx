@@ -69,7 +69,7 @@ export default function Login() {
       >
         <Input
           id="login__email"
-          label={'Email'}
+          label="Email"
           type="email"
           placeholder="Email"
           maxLength={REG_EXP.email.maxLength}
@@ -77,18 +77,17 @@ export default function Login() {
             required: 'Email을 입력하세요',
             pattern: REG_EXP.email.pattern,
           })}
-          children={
-            <>
-              {errors.email?.message ? (
-                <FormError errorMessage={errors.email.message} />
-              ) : (
-                errors.email?.type === 'pattern' && (
-                  <FormError errorMessage={REG_EXP.email.condition} />
-                )
-              )}
-            </>
-          }
-        />
+        >
+          <>
+            {errors.email?.message ? (
+              <FormError errorMessage={errors.email.message} />
+            ) : (
+              errors.email?.type === 'pattern' && (
+                <FormError errorMessage={REG_EXP.email.condition} />
+              )
+            )}
+          </>
+        </Input>
         <Input
           id="login__password"
           label="비밀번호"

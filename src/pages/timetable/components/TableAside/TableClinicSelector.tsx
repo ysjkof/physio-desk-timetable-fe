@@ -5,14 +5,12 @@ import { useMe } from '../../../../hooks';
 import { clinicListsVar } from '../../../../store';
 import { ClinicsOfClient } from '../../../../models';
 import { useSelectedClinic } from '../../hooks';
-import { ClinicType } from '../../../../types/generated.types';
 
 const TableClinicSelector = () => {
+  const clinicLists = useReactiveVar(clinicListsVar);
   const { selectClinic } = useSelectedClinic();
   const { data: meData } = useMe();
   if (!meData) return <></>;
-
-  const clinicLists = useReactiveVar(clinicListsVar);
 
   const clinicListsSelectMeMember = clinicLists.map((clinic) => {
     const idx = clinic.members.findIndex(
@@ -26,7 +24,7 @@ const TableClinicSelector = () => {
     };
   });
 
-  const changeSelectedClinic = (id: number, name: string, type: ClinicType) => {
+  const changeSelectedClinic = (id: number) => {
     selectClinic(id);
   };
 
@@ -46,7 +44,7 @@ const TableClinicSelector = () => {
   return (
     <Selectbox
       selectedValue={changeName(
-        ClinicsOfClient.selectedClinic!.name,
+        ClinicsOfClient.selectedClinic.name,
         isAccepted
       )}
       hasBorder
@@ -57,9 +55,7 @@ const TableClinicSelector = () => {
           <Selectbox.Option
             key={clinic.id}
             selected={clinic.id === ClinicsOfClient.selectedClinic?.id}
-            onClick={() =>
-              changeSelectedClinic(clinic.id, clinic.name, clinic.type)
-            }
+            onClick={() => changeSelectedClinic(clinic.id)}
           >
             {changeName(clinic.name, clinic.member.accepted)}
           </Selectbox.Option>

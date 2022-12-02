@@ -1,48 +1,29 @@
 import { useEffect, useState } from 'react';
-import DatepickerCalendar from './DatepickerCalendar';
-import DatepickerInput from './DatepickerInput';
+import {
+  DatepickerWithInputProps,
+  InputDate,
+} from '../../../types/datepicker.types';
+import { DatepickerCalendar } from './DatepickerCalendar';
+import { DatepickerInput } from './DatepickerInput';
 
-export interface HasDateOption {
-  hasHour?: boolean;
-}
-export interface DatepickerErrorState {
-  error: string;
-  setError: React.Dispatch<React.SetStateAction<string>>;
-}
-export interface InputDate {
-  year: string;
-  month: string;
-  day: string;
-  hour: string;
-  minute: string;
-}
-export interface DatepickerInputState {
-  inputDate: InputDate;
-  setInputDate: React.Dispatch<React.SetStateAction<InputDate>>;
-}
-interface IDatepickerWithInputProps extends HasDateOption {
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-  defaultDate?: Date | null;
-  textColor?: string;
-}
-
+// TODO: 완전 새로 만들어야해
 export default function Datepicker({
   setSelectedDate,
   defaultDate,
   textColor,
   hasHour = false,
-}: IDatepickerWithInputProps) {
+}: DatepickerWithInputProps) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
 
   const [inputDate, setInputDate] = useState<InputDate>(
     defaultDate
       ? {
-          year: '' + defaultDate.getFullYear(),
-          month: '' + (defaultDate.getMonth() + 1),
-          day: '' + defaultDate.getDate(),
-          hour: '' + defaultDate.getHours(),
-          minute: '' + defaultDate.getMinutes(),
+          year: `${defaultDate.getFullYear()}`,
+          month: `${defaultDate.getMonth() + 1}`,
+          day: `${defaultDate.getDate()}`,
+          hour: `${defaultDate.getHours()}`,
+          minute: `${defaultDate.getMinutes()}`,
         }
       : {
           year: '',

@@ -13,24 +13,24 @@ export default function DocsSidebar() {
       route: `${ROUTES.docs}/`,
       name: '처음 예약하기',
       children: [
-        { route: ENDPOINT.docs.basic_patient_registration, name: '환자 등록' },
+        { route: ENDPOINT.docs.basicPatientRegistration, name: '환자 등록' },
         {
-          route: ENDPOINT.docs.basic_prescription_registration,
+          route: ENDPOINT.docs.basicPrescriptionRegistration,
           name: '처방 등록',
         },
-        { route: ENDPOINT.docs.basic_reserve, name: '예약하기' },
+        { route: ENDPOINT.docs.basicReserve, name: '예약하기' },
       ],
     },
     {
       route: `${ROUTES.docs}/`,
       name: '시간표 보기 설정',
       children: [
-        { route: ENDPOINT.docs.view_duration, name: '표시 시간' },
+        { route: ENDPOINT.docs.viewDuration, name: '표시 시간' },
         {
-          route: ENDPOINT.docs.view_state,
+          route: ENDPOINT.docs.viewState,
           name: '취소, 부도 숨기기',
         },
-        { route: ENDPOINT.docs.view_clinic, name: '병원 선택' },
+        { route: ENDPOINT.docs.viewClinic, name: '병원 선택' },
       ],
     },
 

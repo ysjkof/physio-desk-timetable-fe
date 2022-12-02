@@ -12,8 +12,8 @@ import {
   FIND_MY_CLINICS_DOCUMENT,
   INACTIVATE_CLINIC_DOCUMENT,
 } from '../../../../graphql';
-import type { InactivateClinicMutation } from '../../../../types/generated.types';
 import { ClinicsOfClient } from '../../../../models';
+import type { InactivateClinicMutation } from '../../../../types/generated.types';
 
 interface DeactivateClinicProps extends IdAndName {
   closeAction: () => void;
@@ -32,11 +32,7 @@ export default function DeactivateClinic({
     useMutation<InactivateClinicMutation>(INACTIVATE_CLINIC_DOCUMENT);
 
   const onClick = () => {
-    if (
-      !loading &&
-      confirm(`다음 병원을 비활성하시겠습니까?
-                          ${name}`)
-    ) {
+    if (!loading && confirm(`다음 병원을 비활성하시겠습니까?\n${name}`)) {
       mutationInactivateClinic({
         variables: { input: { clinicId: id } },
         onCompleted(data) {

@@ -59,10 +59,10 @@ export default function EditProfile() {
         }
         if (ok && userData) {
           toastVar({ messages: ['사용자 정보 수정완료'], fade: true });
-          const { name: prevName, id } = userData.me;
+          const { name: freshName, id } = userData.me;
 
-          const { name } = getValues();
-          if (prevName === name) return;
+          const { name: nameOfForm } = getValues();
+          if (freshName === nameOfForm) return;
 
           client.writeFragment({
             id: `User:${id}`,
@@ -72,8 +72,8 @@ export default function EditProfile() {
               }
             `,
             data: {
-              ...(prevName !== name && {
-                name,
+              ...(freshName !== nameOfForm && {
+                name: nameOfForm,
               }),
             },
           });

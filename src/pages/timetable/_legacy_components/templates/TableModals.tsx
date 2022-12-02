@@ -8,24 +8,24 @@ export default function TableModals() {
   const navigate = useNavigate();
 
   const isReserve = useMatch(ROUTES.reserve);
-  const isEdit = useMatch(ROUTES.edit_reservation);
-  const isCreatePatient = useMatch(ROUTES.create_patient);
+  const isEdit = useMatch(ROUTES.editReservation);
+  const isCreatePatient = useMatch(ROUTES.createPatient);
   return (
     <>
-      {isEdit ? (
+      {isEdit && (
         <ReservationModal
           closeAction={() => isEdit && navigate(ROUTES.timetable)}
         />
-      ) : isReserve ? (
+      )}
+      {isReserve && (
         <ReserveModal
           closeAction={() => isReserve && navigate(ROUTES.timetable)}
         />
-      ) : (
-        isCreatePatient && (
-          <CreatePatientModal
-            closeAction={() => isCreatePatient && navigate(ROUTES.timetable)}
-          />
-        )
+      )}
+      {isCreatePatient && (
+        <CreatePatientModal
+          closeAction={() => isCreatePatient && navigate(ROUTES.timetable)}
+        />
       )}
     </>
   );

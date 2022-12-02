@@ -69,11 +69,16 @@ function Dropdown({ title, children }: DropdownProps) {
     setIsOpen((prevState) => !prevState);
   };
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
   const { top } = getPositionRef(ref, 3);
 
   return (
-    <div className="relative cursor-pointer" onClick={toggleMenu} ref={ref}>
+    <button
+      className="relative cursor-pointer"
+      onClick={toggleMenu}
+      ref={ref}
+      type="button"
+    >
       <div className="max-w-[10rem] overflow-hidden text-ellipsis whitespace-nowrap font-extrabold">
         {title}
       </div>
@@ -82,7 +87,7 @@ function Dropdown({ title, children }: DropdownProps) {
           {children}
         </ModalPortal>
       )}
-    </div>
+    </button>
   );
 }
 

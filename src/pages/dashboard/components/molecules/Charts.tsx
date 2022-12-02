@@ -1,32 +1,28 @@
-import React, { lazy } from 'react';
-import DashboardSectionLayout from '../template/DashboardSectionLayout';
+import React, { lazy, useEffect, useState } from 'react';
 import {
   VictoryAxis,
   VictoryBar,
   VictoryChart,
   VictoryLabel,
   VictoryLegend,
-  VictoryPie,
   VictoryTheme,
   VictoryTooltip,
 } from 'victory';
+import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import {
   compareDateMatch,
-  getHowManyDayFromMillisec,
+  getHowManyDayFromMillisecond,
   getYMD,
 } from '../../../../utils/date.utils';
 import TableChartColLayout from './TableChartColLayout';
 
-import {
-  STATISTICS_LABEL,
-  STATISTICS_LABEL_COLORS,
-} from '../../../../constants/constants';
-import { useEffect, useState } from 'react';
+import { STATISTICS_LABEL } from '../../../../constants/constants';
 import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
 } from '../../../../types/common.types';
+
 const Loading = lazy(
   () => import('../../../../_legacy_components/atoms/Loading')
 );
@@ -39,17 +35,17 @@ interface IChartsProps {
   endDate: Date;
 }
 
-function injectEveryDayToDailyRreports(
+function injectEveryDayToDailyReports(
   dailyReports: IDailyReport[],
   startD: Date,
   endD: Date
 ) {
   function getEveryDay(std: Date, edd: Date) {
-    let arr: number[] = [];
+    const arr: number[] = [];
     const start = std.getTime();
     const end = edd.getTime();
     const duration = end - start;
-    const days = Math.ceil(getHowManyDayFromMillisec(duration));
+    const days = Math.ceil(getHowManyDayFromMillisecond(duration));
     arr.length = days;
     arr.fill(0);
     return arr.map((v, idx) => {
@@ -70,7 +66,7 @@ function injectEveryDayToDailyRreports(
     users: [],
   }));
 
-  dailyReports.forEach((day, i) => {
+  dailyReports.forEach((day) => {
     const dateObj = new Date(day.date);
     const idx = everyDay.findIndex((everyDate) =>
       compareDateMatch(dateObj, everyDate, 'ymd')
@@ -97,19 +93,19 @@ function Charts({
   endDate,
 }: IChartsProps) {
   const [finalDailyReports, setFinalDailyReports] = useState<ReturnType<
-    typeof injectEveryDayToDailyRreports
+    typeof injectEveryDayToDailyReports
   > | null>(null);
   const [userReports, setUserReports] = useState<ReturnType<
     typeof getUserReports
   > | null>(null);
 
   const userLength = userStatistics.length;
-  const userLengthArr: any[] = [];
+  const userLengthArr: unknown[] = [];
   userLengthArr.length = userLength;
   userLengthArr.fill(0);
 
   useEffect(() => {
-    const finalDailyReportsValue = injectEveryDayToDailyRreports(
+    const finalDailyReportsValue = injectEveryDayToDailyReports(
       dailyReports,
       startDate,
       endDate
@@ -117,56 +113,32 @@ function Charts({
     const userReportsValue = getUserReports(userStatistics);
     setFinalDailyReports(finalDailyReportsValue);
     setUserReports(userReportsValue);
-  }, [dailyReports, userStatistics]);
+  }, [dailyReports, endDate, startDate, userStatistics]);
 
-  const a = finalDailyReports?.map((a) =>
-    a.users.map((b) => [a.date.getDate() + '일', b.reservationCount])
-  );
+  if (!finalDailyReports || !userReports) return <Loading />;
 
-  // if (a) {
-  //   console.log(a[0].flat(1));
-  //   console.log(a[1].flat(1));
-  //   console.log(a[2].flat(1));
-  //   console.log(a[a.length - 3].flat(1));
-  //   console.log(a[a.length - 2].flat(1));
-  //   console.log(a[a.length - 1].flat(1));
-  // }
-  console.log('userLength', userLength);
-
-  return finalDailyReports && userReports ? (
+  return (
     <>
       <div className="PRESCRIPTION_COUNTS flex flex-col">
-        <DashboardSectionLayout
-          elementName="TABLE_PRESCRIPTION_COUNTS"
-          padding
-          children={
-            <>
-              <TableChartColLayout
-                userStatistics={userStatistics}
-                prescriptionInfo={prescriptions}
-                renderIt={'prescriptions'}
-                hasTotalInRow
-                hasTotalInColumn
-              />
-            </>
-          }
-        />
-        <DashboardSectionLayout
-          elementName="TABLE_PRESCRIPTION_PRICE"
-          padding
-          children={
-            <>
-              <TableChartColLayout
-                userStatistics={userStatistics}
-                prescriptionInfo={prescriptions}
-                renderIt={'prescriptions'}
-                hasTotalInRow
-                hasTotalInColumn
-                showPrice
-              />
-            </>
-          }
-        />
+        <DashboardSectionLayout elementName="TABLE_PRESCRIPTION_COUNTS" padding>
+          <TableChartColLayout
+            userStatistics={userStatistics}
+            prescriptionInfo={prescriptions}
+            renderIt="prescriptions"
+            hasTotalInRow
+            hasTotalInColumn
+          />
+        </DashboardSectionLayout>
+        <DashboardSectionLayout elementName="TABLE_PRESCRIPTION_PRICE" padding>
+          <TableChartColLayout
+            userStatistics={userStatistics}
+            prescriptionInfo={prescriptions}
+            renderIt="prescriptions"
+            hasTotalInRow
+            hasTotalInColumn
+            showPrice
+          />
+        </DashboardSectionLayout>
       </div>
       <div className="EVERYDAY_COUNTS">
         {Object.values(STATISTICS_LABEL).map(({ eng, kor }, i) => (
@@ -174,67 +146,64 @@ function Charts({
             key={i}
             padding
             elementName="GRAPH_EVERYDAY_RESERVATION"
-            children={
-              <div className="position-center-x relative">
-                <VictoryChart
-                  height={200}
-                  width={1000}
-                  minDomain={{ y: 0 }}
-                  domainPadding={{ x: 20 }}
-                  theme={VictoryTheme.material}
-                  // containerComponent={<VictoryContainer responsive={false} />}
-                >
-                  <VictoryLegend
-                    x={80}
-                    title={`일별 ${kor}`}
-                    centerTitle
-                    style={{ title: { fontSize: 14 } }}
-                    data={[]}
-                  />
-                  <VictoryBar
-                    // alignment="start"
-                    // barRatio={1}
-                    data={finalDailyReports.map((day) => ({
-                      x: day.date,
-                      y: day.users.reduce((acc, cur) => {
-                        return acc + cur[eng];
-                      }, 0),
-                    }))}
-                    labels={({ datum }) => datum.y}
-                    labelComponent={<VictoryTooltip />}
-                  />
+          >
+            <div className="position-center-x relative">
+              <VictoryChart
+                height={200}
+                width={1000}
+                minDomain={{ y: 0 }}
+                domainPadding={{ x: 20 }}
+                theme={VictoryTheme.material}
+                // containerComponent={<VictoryContainer responsive={false} />}
+              >
+                <VictoryLegend
+                  x={80}
+                  title={`일별 ${kor}`}
+                  centerTitle
+                  style={{ title: { fontSize: 14 } }}
+                  data={[]}
+                />
+                <VictoryBar
+                  // alignment="start"
+                  // barRatio={1}
+                  data={finalDailyReports.map((day) => ({
+                    x: day.date,
+                    y: day.users.reduce((acc, cur) => {
+                      return acc + cur[eng];
+                    }, 0),
+                  }))}
+                  labels={({ datum }) => datum.y}
+                  labelComponent={<VictoryTooltip />}
+                />
 
-                  <VictoryAxis
-                    dependentAxis
-                    style={{
-                      tickLabels: {
-                        fontSize: 12,
-                      },
-                    }}
-                    //@ts-ignore
-                    tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : '')}
-                  />
-                  <VictoryAxis
-                    style={{
-                      tickLabels: {
-                        fontSize: 12,
-                        angle: 90,
-                        padding: 18,
-                      },
-                      axisLabel: { padding: 39 },
-                    }}
-                    tickValues={finalDailyReports.map((day) => day.date)}
-                    //@ts-ignore
-                    tickFormat={(tick) => {
-                      return getYMD(tick, 'mmdd', '-');
-                    }}
-                    tickLabelComponent={<VictoryLabel dy={-5.5} />}
-                    label="(월/일)"
-                  />
-                </VictoryChart>
-              </div>
-            }
-          />
+                <VictoryAxis
+                  dependentAxis
+                  style={{
+                    tickLabels: {
+                      fontSize: 12,
+                    },
+                  }}
+                  tickFormat={(tick) => (tick % 1 === 0 ? `${tick}명` : '')}
+                />
+                <VictoryAxis
+                  style={{
+                    tickLabels: {
+                      fontSize: 12,
+                      angle: 90,
+                      padding: 18,
+                    },
+                    axisLabel: { padding: 39 },
+                  }}
+                  tickValues={finalDailyReports.map((day) => day.date)}
+                  tickFormat={(tick) => {
+                    return getYMD(tick, 'mmdd', '-');
+                  }}
+                  tickLabelComponent={<VictoryLabel dy={-5.5} />}
+                  label="(월/일)"
+                />
+              </VictoryChart>
+            </div>
+          </DashboardSectionLayout>
         ))}
       </div>
 
@@ -243,21 +212,16 @@ function Charts({
         <DashboardSectionLayout
           elementName="TABLE_EACH_USER_TOTAL_COUNTS"
           padding
-          children={
-            <>
-              <TableChartColLayout
-                userStatistics={userStatistics}
-                prescriptionInfo={prescriptions}
-                dailyReports={dailyReports}
-                renderIt={'counts'}
-                labelNames={Object.values(STATISTICS_LABEL).map(
-                  ({ kor }) => kor
-                )}
-                hasTotalInRow
-              />
-            </>
-          }
-        />
+        >
+          <TableChartColLayout
+            userStatistics={userStatistics}
+            prescriptionInfo={prescriptions}
+            dailyReports={dailyReports}
+            renderIt="counts"
+            labelNames={Object.values(STATISTICS_LABEL).map(({ kor }) => kor)}
+            hasTotalInRow
+          />
+        </DashboardSectionLayout>
 
         {/* <DashboardSectionLayout
           elementName="GRAPH_EACH_USER_TOTAL_COUNTS_CIRCLES"
@@ -291,8 +255,6 @@ function Charts({
         /> */}
       </div>
     </>
-  ) : (
-    <Loading />
   );
 }
 

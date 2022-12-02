@@ -39,20 +39,13 @@ export function getMemberState(
 export type StayingState = ReturnType<typeof getMemberState>;
 
 export function isStayMember(state: StayingState) {
-  let result = false;
-  switch (state) {
-    case '승인대기':
-      break;
-    case '관리자':
-      result = true;
-      break;
-    case '직원':
-      result = true;
-      break;
-    case '탈퇴':
-      break;
-  }
-  return result;
+  const memberState = {
+    승인대기: false,
+    관리자: true,
+    직원: true,
+    탈퇴: false,
+  };
+  return memberState[state];
 }
 
 interface CheckManager {
@@ -74,10 +67,10 @@ export function makeArrFromLength(length: number) {
 }
 
 export function getRandomColor() {
-  return '#' + Math.floor(Math.random() * 16777215).toString(16);
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
 
-export function removeItemInArrayByIndex(index: number, array: any[]) {
+export function removeItemInArrayByIndex(index: number, array: unknown[]) {
   return [...array.slice(0, index), ...array.slice(index + 1)];
 }
 
@@ -87,12 +80,12 @@ export function changeValueInArray<T>(array: T[], value: T, index: number) {
 
 export function renameUseSplit(name: string) {
   const isSplit = removePersonalClinicNumber(name);
-  return isSplit ? '전용 : ' + isSplit : name;
+  return isSplit ? `전용 : ${isSplit}` : name;
 }
 
 function removePersonalClinicNumber(name: string) {
-  const splitted = name.split(':');
-  return splitted.length < 2 ? null : splitted[0];
+  const splinted = name.split(':');
+  return splinted.length < 2 ? null : splinted[0];
 }
 
 /** ok, error만 있는 GraphQL 응답을 받고 토스트 출력이나 콜백 실행 */

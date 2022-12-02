@@ -16,49 +16,48 @@ class LocalStorage {
     this.#storageKeyObj = storageKeyObj;
   }
 
-  #generateKey({ key, userId, userName }: GenerateStorageKey) {
-    if (userId && userName) {
-      return key + userId + '-' + userName;
-    }
-    return key;
-  }
-
   get<T>({
     key,
     userId,
     userName,
   }: GetPrivateStorage | GetPublicLocalStorage): T | null {
     const storageKey = this.#generateKey({
-      key: this.#storageKeyObj[key],
+      key,
       userId,
       userName,
     });
     const item = localStorage.getItem(storageKey);
     if (!item || item === 'undefined') return null;
-
     return JSON.parse(item);
   }
 
   set({ key, userId, userName, value }: SetPrivateStorage | SetPublicStorage) {
     const storageKey = this.#generateKey({
-      key: this.#storageKeyObj[key],
+      key,
       userId,
       userName,
     });
     localStorage.setItem(storageKey, JSON.stringify(value));
   }
 
-  remove<T>({
+  remove({
     key,
     userId,
     userName,
   }: RemovePrivateLocalStorage | RemovePublicLocalStorage) {
     const storageKey = this.#generateKey({
-      key: this.#storageKeyObj[key],
+      key,
       userId,
       userName,
     });
-    localStorage.removeItem(storageKey)!;
+    localStorage.removeItem(storageKey);
+  }
+
+  #generateKey({ key, userId, userName }: GenerateStorageKey) {
+    if (userId && userName) {
+      return `${this.#storageKeyObj[key] + userId}-${userName}`;
+    }
+    return key;
   }
 }
 

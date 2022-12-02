@@ -10,7 +10,7 @@ const Login = lazy(() => import('../pages/auth/Login/Login'));
 const SignUp = lazy(() => import('../pages/auth/SignUp/SignUp'));
 
 function LogoutRoute({ CommonRoute }: LoginRouteProps) {
-  const { login, sign_up } = ROUTES;
+  const { login, signUp } = ROUTES;
 
   return (
     <Routes>
@@ -25,7 +25,7 @@ function LogoutRoute({ CommonRoute }: LoginRouteProps) {
           }
         />
         <Route
-          path={sign_up}
+          path={signUp}
           element={
             <AuthContainer>
               <SignUp />

@@ -29,7 +29,7 @@ export default function ReservationNameCard({
           registrationNumber ? 'text-right' : 'text-center'
         )}
       >
-        {registrationNumber ? registrationNumber : '-'}
+        {registrationNumber || '-'}
       </span>
       <span className="col-span-2 py-2 text-center">{name}</span>
       <div className="col-span-2 flex flex-row items-center justify-between space-x-2 py-2 pr-4">

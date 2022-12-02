@@ -32,7 +32,7 @@ function PrescriptionList({ clinicId, showInactivate }: PrescriptionListProps) {
   return (
     <CardContainer>
       {data?.findPrescriptions.prescriptions?.length === 0 ? (
-        <Warning type="hasNotPrescription"></Warning>
+        <Warning type="hasNotPrescription" />
       ) : (
         data?.findPrescriptions.prescriptions?.map((presc) => {
           if (!showInactivate && !presc.activate) return null;

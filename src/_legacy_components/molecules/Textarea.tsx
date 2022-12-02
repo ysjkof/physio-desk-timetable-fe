@@ -5,7 +5,6 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string | null;
   id: string;
   register: UseFormRegisterReturn;
-  value?: any;
   children?: ReactNode;
   rows?: number;
 }
@@ -15,7 +14,6 @@ export default function Textarea({
   id,
   placeholder,
   register,
-  value,
   children,
   rows,
   ...args
@@ -23,13 +21,7 @@ export default function Textarea({
   return (
     <label className="relative flex w-full flex-col gap-2" htmlFor={id}>
       {label}
-      <textarea
-        id={id}
-        className="input"
-        value={value}
-        {...args}
-        {...register}
-      />
+      <textarea id={id} className="input" {...args} {...register} />
       {children}
     </label>
   );

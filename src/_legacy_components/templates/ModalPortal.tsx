@@ -1,8 +1,8 @@
 import { createPortal } from 'react-dom';
 import { cls } from '../../utils/common.utils';
+import type { CloseAction } from '../../types/props.types';
 
-interface IModalPortal {
-  closeAction: () => void;
+interface IModalPortal extends CloseAction {
   children?: React.ReactNode;
   left?: number;
   right?: number;
@@ -10,7 +10,7 @@ interface IModalPortal {
 }
 
 export default function ModalPortal({
-  closeAction,
+  closeAction: closeModal,
   children,
   left,
   right,
@@ -22,10 +22,13 @@ export default function ModalPortal({
     <div className="modal-parents">
       <div
         className={cls(
-          'modal-background',
+          'modal-background foo',
           top ? 'bg-transparent opacity-100' : ''
         )}
-        onClick={closeAction}
+        onClick={closeModal}
+        onKeyDown={closeModal}
+        role="button"
+        tabIndex={-1}
       />
       <div
         className={top ? 'absolute' : 'modal-content'}

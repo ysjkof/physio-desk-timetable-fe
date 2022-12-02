@@ -20,6 +20,7 @@ import {
   InviteUserMutation,
   SearchUsersInput,
 } from '../../../../types/generated.types';
+
 const Loading = lazy(
   () => import('../../../../_legacy_components/atoms/Loading')
 );
@@ -62,16 +63,13 @@ export default function InviteClinic() {
     }
   };
 
-  console.log(selectedClinic.name);
-
   if (!selectedClinic) return <Loading />;
 
   if (selectedClinic.type === ClinicType.Personal)
     return (
       <Warning>
-        {
-          '개인 전용 병원에는 사용자를 초대할 수 없습니다. 왼쪽 위쪽에 화살표 버튼으로 다른 병원을 선택하세요'
-        }
+        개인 전용 병원에는 사용자를 초대할 수 없습니다. 왼쪽 위쪽에 화살표
+        버튼으로 다른 병원을 선택하세요
       </Warning>
     );
 
@@ -101,7 +99,11 @@ export default function InviteClinic() {
                 <FormError errorMessage={REG_EXP.personName.condition} />
               )
             )}
-            <button className="absolute bottom-2.5 right-2" tabIndex={-1}>
+            <button
+              className="absolute bottom-2.5 right-2"
+              tabIndex={-1}
+              type="button"
+            >
               <FontAwesomeIcon icon={faSearch} />
             </button>
           </Input>

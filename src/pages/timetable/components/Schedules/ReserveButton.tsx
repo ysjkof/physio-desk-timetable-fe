@@ -52,19 +52,23 @@ const ReserveButton = ({
     }
   };
 
+  const activateHover = () => setIsHover(true);
+  const deactivateHover = () => setIsHover(false);
+
   return (
     <div
       className={cls(
         'reserve-btn-box group',
         isActiveBorderTop ? ' border-t border-gray-200 first:border-t-0' : ''
       )}
-      onMouseOver={(e) => {
-        if (selectedReservation) setIsHover(true);
-      }}
-      onMouseLeave={(e) => {
-        if (selectedReservation) setIsHover(false);
-      }}
+      onMouseOver={activateHover}
+      onFocus={activateHover}
+      onMouseLeave={deactivateHover}
+      onBlur={deactivateHover}
       onClick={handleClickButton}
+      onKeyDown={handleClickButton}
+      tabIndex={0}
+      role="button"
     >
       <span className="reserve-btn">+ {label}</span>
       {selectedReservation && isHover && (
@@ -72,14 +76,13 @@ const ReserveButton = ({
           className="absolute top-0 w-full border-2"
           style={{
             borderColor: USER_COLORS[userIndex]?.deep ?? 'black',
-            height:
+            height: `${
               getTimeLength(
                 selectedReservation.startDate,
                 selectedReservation.endDate,
                 '20minute'
-              ) *
-                TABLE_CELL_HEIGHT +
-              'px',
+              ) * TABLE_CELL_HEIGHT
+            }px`,
           }}
         />
       )}

@@ -12,7 +12,7 @@ interface OptionProps extends PropsWithChildren {
   selected?: boolean;
   suffix?: string;
 }
-interface OptionsProps extends PropsWithChildren {}
+
 interface SelectboxProps extends PropsWithChildren {
   selectedValue: string;
   width?: string;
@@ -42,6 +42,9 @@ const Option = ({ children, selected, suffix, onClick }: OptionProps) => {
   return (
     <span
       onClick={onClick}
+      onKeyDown={onClick}
+      role="button"
+      tabIndex={0}
       className={cls(
         'flex w-full items-center justify-between overflow-hidden text-ellipsis whitespace-nowrap bg-inherit px-2 py-1 hover:bg-blue-200',
         selected ? 'font-semibold' : ''
@@ -53,7 +56,7 @@ const Option = ({ children, selected, suffix, onClick }: OptionProps) => {
   );
 };
 
-const Options = ({ children }: OptionsProps) => {
+const Options = ({ children }: PropsWithChildren) => {
   return (
     <ul className="absolute right-0 z-50 flex w-full flex-col border border-inherit bg-inherit shadow-cst">
       {children}
@@ -94,6 +97,9 @@ const Selectbox = ({
           <div
             className="fixed top-0 z-40 h-screen w-screen"
             onClick={closeMenu}
+            onKeyDown={closeMenu}
+            role="button"
+            tabIndex={0}
           />
         </>
       )}

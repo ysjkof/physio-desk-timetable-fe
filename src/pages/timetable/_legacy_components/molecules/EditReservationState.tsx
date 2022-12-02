@@ -6,9 +6,9 @@ import {
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { cls } from '../../../../utils/common.utils';
-import { Reservation } from '../../../../types/common.types';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { EDIT_RESERVATION_DOCUMENT } from '../../../../graphql';
+import { Reservation } from '../../../../types/common.types';
 import {
   EditReservationMutation,
   ReservationState,
@@ -16,7 +16,6 @@ import {
 
 interface EditReservationStateProps {
   reservation: Reservation;
-  redirect?: () => void;
 }
 
 export default function EditReservationState({

@@ -92,7 +92,7 @@ export default function DocsEventBox({ height, width, state }: EventBoxProps) {
           <span className="ml-0.5 w-full font-extralight">
             {isDayOff
               ? '예약잠금'
-              : patient?.registrationNumber + ':' + patient?.name}
+              : `${patient.registrationNumber}:${patient?.name}`}
           </span>
           {memo && (
             <div className="absolute right-0 top-0 border-4 border-t-red-500 border-r-red-500 border-l-transparent border-b-transparent" />
@@ -100,7 +100,7 @@ export default function DocsEventBox({ height, width, state }: EventBoxProps) {
         </div>
         {!isDayOff && prescriptions && (
           <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
-            {prescriptions.map((prescription) => prescription.name + ' ')}
+            {prescriptions.map((prescription) => `${prescription.name} `)}
           </div>
         )}
 

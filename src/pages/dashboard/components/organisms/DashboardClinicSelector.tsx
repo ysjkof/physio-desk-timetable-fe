@@ -1,6 +1,6 @@
+import { useReactiveVar } from '@apollo/client';
 import { renameUseSplit } from '../../../../utils/common.utils';
 import { Selectbox } from '../../../../components';
-import { useReactiveVar } from '@apollo/client';
 import { clinicListsVar } from '../../../../store';
 import { useSelectedClinic } from '../../../timetable/hooks';
 import { ClinicsOfClient } from '../../../../models';
@@ -46,7 +46,7 @@ export default function DashboardClinicSelector({
   return (
     <Selectbox
       selectedValue={changeName(
-        ClinicsOfClient.selectedClinic!.name,
+        ClinicsOfClient.selectedClinic.name,
         isAccepted
       )}
     >

@@ -19,7 +19,7 @@ export default function AuthContainer({
         {children}
 
         <NavLink
-          to={ROUTES.sign_up}
+          to={ROUTES.signUp}
           className={
             location.pathname === '/create-account'
               ? 'font-bold text-sky-500 hover:underline'

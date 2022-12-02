@@ -10,14 +10,10 @@ import {
   TimeLabels,
   TimetableTemplate,
 } from './components';
-import TableModals from './_legacy_components/templates/TableModals';
 import { TableDisplay } from '../../models';
+import TableModals from './_legacy_components/templates/TableModals';
 
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
-
-export interface TimetableModalProps {
-  closeAction: () => void;
-}
 
 const TimeTable = () => {
   const { labels } = useTableLabel();

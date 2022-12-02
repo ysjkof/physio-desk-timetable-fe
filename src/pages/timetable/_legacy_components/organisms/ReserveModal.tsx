@@ -1,13 +1,13 @@
-import { TimetableModalProps } from '../../Timetable';
 import { useLocation } from 'react-router-dom';
-import { createDate, createDateFromDay } from '../../../../utils/date.utils';
 import { useReactiveVar } from '@apollo/client';
+import { createDate, createDateFromDay } from '../../../../utils/date.utils';
 import { selectedDateVar } from '../../../../store';
 import ModalContentsLayout from '../../../../_legacy_components/templates/ModalContentsLayout';
 import SearchPatient from '../molecules/SearchPatient';
 import ModalTemplate from '../../../../_legacy_components/templates/ModalTemplate';
 import DayOffForm from '../molecules/DayOffForm';
 import ReserveForm from '../molecules/ReserveForm';
+import type { CloseAction } from '../../../../types/props.types';
 
 interface LocationState {
   startDate: {
@@ -19,7 +19,7 @@ interface LocationState {
   isDayOff?: boolean;
 }
 
-export default function ReserveModal({ closeAction }: TimetableModalProps) {
+export default function ReserveModal({ closeAction }: CloseAction) {
   const location = useLocation();
   const selectedDate = useReactiveVar(selectedDateVar);
 
@@ -35,34 +35,30 @@ export default function ReserveModal({ closeAction }: TimetableModalProps) {
   });
 
   return (
-    <ModalTemplate
-      closeAction={closeAction}
-      children={
-        <ModalContentsLayout
-          title={isDayOff ? '예약잠금' : '예약하기'}
-          closeAction={closeAction}
-          children={
+    <ModalTemplate closeAction={closeAction}>
+      <ModalContentsLayout
+        title={isDayOff ? '예약잠금' : '예약하기'}
+        closeAction={closeAction}
+      >
+        <>
+          {isDayOff ? (
+            <DayOffForm
+              userId={userId}
+              startDate={startDate}
+              closeAction={closeAction}
+            />
+          ) : (
             <>
-              {isDayOff ? (
-                <DayOffForm
-                  userId={userId}
-                  startDate={startDate}
-                  closeAction={closeAction}
-                />
-              ) : (
-                <>
-                  <SearchPatient />
-                  <ReserveForm
-                    userId={userId}
-                    startDate={startDate}
-                    closeAction={closeAction}
-                  />
-                </>
-              )}
+              <SearchPatient />
+              <ReserveForm
+                userId={userId}
+                startDate={startDate}
+                closeAction={closeAction}
+              />
             </>
-          }
-        />
-      }
-    />
+          )}
+        </>
+      </ModalContentsLayout>
+    </ModalTemplate>
   );
 }

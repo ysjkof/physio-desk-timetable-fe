@@ -5,9 +5,9 @@ import {
 } from '../../../../constants/constants';
 import { TableTime } from '../../../../models/TableTime';
 import { getTimeString } from '../../../../utils/date.utils';
-import type { isActive } from '../../../../types/common.types';
+import type { IsActive } from '../../../../types/common.types';
 
-export default function TimeIndicatorBar({ isActive }: isActive) {
+export default function TimeIndicatorBar({ isActive }: IsActive) {
   const { firstTimeInMinute, lastTimeInMinute } = TableTime;
 
   const [time, setTime] = useState(getTimeString(new Date()));
@@ -36,7 +36,7 @@ export default function TimeIndicatorBar({ isActive }: isActive) {
       return;
     }
     setPosition();
-    let id = setInterval(setPosition, 30000);
+    const id = setInterval(setPosition, 30000);
     return () => clearInterval(id);
   }, []);
 

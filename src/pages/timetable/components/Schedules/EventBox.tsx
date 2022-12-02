@@ -9,10 +9,7 @@ import {
   faCopy,
   faLock,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  compareTableEndtime,
-  getTimeString,
-} from '../../../../utils/date.utils';
+import { getTimeString } from '../../../../utils/date.utils';
 import { selectedReservationVar, tableDisplayVar } from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,
@@ -21,7 +18,6 @@ import {
 import EditReservationState from '../../_legacy_components/molecules/EditReservationState';
 import { cls } from '../../../../utils/common.utils';
 import { ROUTES } from '../../../../router/routes';
-import { TableTime } from '../../../../models';
 import { ReservationState } from '../../../../types/generated.types';
 import type { Reservation } from '../../../../types/common.types';
 
@@ -54,13 +50,6 @@ const EventBox = ({
   let height = numberOfCell * TABLE_CELL_HEIGHT;
 
   if (height > maxTableHeight) height = maxTableHeight;
-
-  const matchTableEndtime = compareTableEndtime(new Date(event.endDate), {
-    hour: TableTime.get().lastHour,
-    minute: TableTime.get().lastMinute,
-  });
-
-  if (matchTableEndtime) height = height;
 
   const eventBox = useRef<HTMLDivElement>(null);
   const eventController = useRef<HTMLDivElement>(null);
@@ -116,7 +105,7 @@ const EventBox = ({
   };
 
   function onClickBox() {
-    navigate(ROUTES.edit_reservation, { state: { reservationId: event.id } });
+    navigate(ROUTES.editReservation, { state: { reservationId: event.id } });
   }
   const selectReservation = () => {
     selectedReservationVar(event);
@@ -136,17 +125,17 @@ const EventBox = ({
       onHoverEnd={() => setIsHover(false)}
       className={cls(
         'EVENT_BOX group absolute z-30 cursor-pointer',
-        !tableDisplay.seeCancel && isCancel
-          ? 'hidden'
-          : !tableDisplay.seeNoshow && isNoshow
-          ? 'hidden'
-          : '',
+        !tableDisplay.seeCancel && isCancel ? 'hidden' : '',
+        !tableDisplay.seeNoshow && isNoshow ? 'hidden' : '',
         isDayOff ? 'z-[31]' : ''
       )}
       style={{ inset, height }}
     >
       <div
         onClick={onClickBox}
+        onKeyDown={onClickBox}
+        role="button"
+        tabIndex={0}
         className={cls(
           'relative h-full overflow-hidden border-l-8 bg-white px-1',
           !isReserve ? 'no-reserved' : ''
@@ -166,7 +155,7 @@ const EventBox = ({
           <span className="ml-0.5 w-full font-extralight">
             {isDayOff
               ? '예약잠금'
-              : event.patient?.registrationNumber + ':' + event.patient?.name}
+              : `${event.patient?.registrationNumber}:${event.patient?.name}`}
           </span>
           {event.memo && (
             <div className="absolute right-0 top-0 border-4 border-t-red-500 border-r-red-500 border-l-transparent border-b-transparent" />
@@ -174,21 +163,19 @@ const EventBox = ({
         </div>
         {!isDayOff && event.prescriptions && numberOfCell !== 1 && (
           <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
-            {event.prescriptions.map((prescription) => prescription.name + ' ')}
+            {event.prescriptions.map((prescription) => `${prescription.name} `)}
           </div>
         )}
 
         {
-          numberOfCell > 2 ? (
-            event.memo ? (
-              <div
-                className="overflow-hidden break-all font-extralight leading-5"
-                style={{ height: (numberOfCell - 2) * TABLE_CELL_HEIGHT }}
-              >
-                {event.memo}
-              </div>
-            ) : null
-          ) : null // 칸이 없어서 메모 생략
+          numberOfCell > 2 && event.memo && (
+            <div
+              className="overflow-hidden break-all font-extralight leading-5"
+              style={{ height: (numberOfCell - 2) * TABLE_CELL_HEIGHT }}
+            >
+              {event.memo}
+            </div>
+          ) // 칸이 없어서 메모 생략
         }
       </div>
 

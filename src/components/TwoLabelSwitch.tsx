@@ -47,6 +47,9 @@ const TwoLabelSwitch = ({ isActivated, labels, onClick }: SwitchProps) => {
     <div
       className="relative flex h-8 w-fit cursor-pointer select-none items-center justify-center rounded-sm border border-gray-200 bg-gray-200"
       onClick={onClick}
+      onKeyDown={onClick}
+      role="button"
+      tabIndex={0}
     >
       {labels.map((label) => (
         <SwitchLabel key={label} label={label} />

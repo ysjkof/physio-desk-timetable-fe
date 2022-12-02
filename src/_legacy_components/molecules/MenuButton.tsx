@@ -1,45 +1,38 @@
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef, PropsWithChildren } from 'react';
 import { cls } from '../../utils/common.utils';
 
-interface BtnMenuProps {
-  onClick?: any;
-  children?: ReactNode;
+interface BtnMenuProps extends PropsWithChildren {
   enabled?: boolean;
   isWidthFull?: boolean;
   hasBorder?: boolean;
   hasActiveRing?: boolean;
   hasFocus?: boolean;
   thinFont?: boolean;
-  type?: 'button' | 'reset' | 'submit';
   isCenter?: boolean;
+  onClick?: () => void;
 }
 
 export default forwardRef<HTMLButtonElement, BtnMenuProps>(function MenuButton(
   {
-    onClick,
-    children,
     enabled,
     isWidthFull,
     hasBorder,
     hasActiveRing,
     hasFocus,
     thinFont,
-    type = 'button',
     isCenter,
+    onClick,
+    children,
   },
   ref
 ) {
   return (
     <button
-      type={type}
       className={cls(
         'btn-menu flex items-center gap-1 whitespace-nowrap',
         hasBorder ? 'border-gray-300' : '',
-        enabled
-          ? hasActiveRing
-            ? 'emphasize-ring  border-transparent font-semibold'
-            : 'font-semibold'
-          : 'opacity-50',
+        enabled ? 'font-semibold' : 'opacity-50',
+        hasActiveRing ? 'emphasize-ring  border-transparent' : '',
         isWidthFull ? 'w-full' : '',
         thinFont ? 'py-0 text-[0.7rem] font-normal' : '',
         isCenter ? 'mx-auto text-center' : '',
@@ -48,6 +41,7 @@ export default forwardRef<HTMLButtonElement, BtnMenuProps>(function MenuButton(
       )}
       onClick={onClick}
       ref={ref}
+      type="button"
     >
       {children}
     </button>

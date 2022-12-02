@@ -13,6 +13,7 @@ import {
   ClinicType,
 } from '../../../../types/generated.types';
 import type { IdAndName } from '../../../../types/common.types';
+
 const Loading = lazy(
   () => import('../../../../_legacy_components/atoms/Loading')
 );
@@ -45,15 +46,19 @@ export default function MyClinics() {
   const clinicsExcludeOtherMember =
     findMyClinicsData?.findMyClinics.clinics?.map((clinic) => {
       const { id, isActivated, name, type } = clinic;
+      const member = clinic.members
+        .flat(1)
+        .flat(1)
+        .find((member) => member.user.id === data?.me.id);
+
+      if (!member) throw new Error('멤버를 찾을 수 없습니다.');
+
       return {
         id,
         isActivated,
         name,
         type,
-        member: clinic.members
-          .flat(1)
-          .flat(1)
-          .find((member) => member.user.id === data?.me.id)!,
+        member,
       };
     });
 
@@ -127,20 +132,18 @@ export default function MyClinics() {
         <ModalTemplate
           isSmallChildren
           closeAction={() => setHasDeactivate(false)}
-          children={
-            <ModalContentsLayout
-              title="병원 비활성하기"
+        >
+          <ModalContentsLayout
+            title="병원 비활성하기"
+            closeAction={() => setHasDeactivate(false)}
+          >
+            <DeactivateClinic
+              id={deactivateClinic.id}
+              name={deactivateClinic.name}
               closeAction={() => setHasDeactivate(false)}
-              children={
-                <DeactivateClinic
-                  id={deactivateClinic.id}
-                  name={deactivateClinic.name}
-                  closeAction={() => setHasDeactivate(false)}
-                />
-              }
             />
-          }
-        />
+          </ModalContentsLayout>
+        </ModalTemplate>
       )}
     </section>
   );

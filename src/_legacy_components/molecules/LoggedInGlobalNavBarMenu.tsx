@@ -35,7 +35,7 @@ export default function LoggedInGlobalNavBarMenu() {
         <span className="whitespace-nowrap">시간표</span>
       </Link>
       <Dropdown title={meData?.me.name}>
-        <Dropdown.Container width={'12rem'}>
+        <Dropdown.Container width="12rem">
           <Dropdown.Ul>
             {clinicMenu.map((menu, idx) => (
               <Dropdown.Li key={idx} to={ROUTES[menu.route]}>
@@ -45,7 +45,7 @@ export default function LoggedInGlobalNavBarMenu() {
           </Dropdown.Ul>
           <Dropdown.Ul>
             {personalMenu.map((menu, idx) => (
-              <Dropdown.Li key={idx} to={ROUTES[menu.route]}>
+              <Dropdown.Li key={idx} to={menu.route}>
                 {menu.name}
               </Dropdown.Li>
             ))}

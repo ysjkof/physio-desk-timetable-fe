@@ -38,7 +38,7 @@ const TimetableTemplate = ({
       <div
         id="timetable__body"
         className="flex h-screen w-full overflow-scroll"
-        style={{ height: height - extraMargin + 'px' }}
+        style={{ height: `${height - extraMargin}px` }}
       >
         <div
           id="timetable__labels"
