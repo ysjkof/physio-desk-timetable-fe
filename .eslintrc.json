@@ -31,5 +31,24 @@
     "jsx-a11y",
     "import"
   ],
-  "rules": { "prettier/prettier": 0 } // prettier error는 출력하지 않는다
+  "rules": {
+    "prettier/prettier": 0, // prettier error는 출력하지 않는다
+    "@typescript-eslint/no-empty-interface": "off",
+    "react/require-default-props": "off",
+    "import/prefer-default-export": "off",
+    "class-methods-use-this": "off",
+    "react/function-component-definition": "off",
+    "operator-assignment": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-array-index-key": "off",
+    "no-restricted-globals": "off",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "@typescript-eslint/no-shadow": "off",
+    "react/jsx-no-useless-fragment": "off",
+    "no-alert": "off",
+    "consistent-return": "off",
+    "no-console": "off",
+    "react-hooks/exhaustive-deps": "off"
+  }
 }
