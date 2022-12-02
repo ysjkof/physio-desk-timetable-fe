@@ -24,6 +24,13 @@ export class TableTime {
 
   static initialize(userIdAndName: UserIdAndName) {
     this.#userIdAndName = userIdAndName;
+    const localViewOptions = this.#getFromLocalStorage();
+    if (localViewOptions === null) {
+      this.saveToLocalStorage(this.#options);
+      return this.value;
+    }
+    this.setValue(localViewOptions);
+    return this.value;
   }
 
   static setValue(tableTime: TableTimeOptions) {
@@ -40,7 +47,7 @@ export class TableTime {
     });
   }
 
-  static getFromLocalStorage() {
+  static #getFromLocalStorage() {
     if (!this.#hasUserIdAndName) throw this.#initialError;
 
     return this.#localStorageUtil.get<TableTimeOptions>({

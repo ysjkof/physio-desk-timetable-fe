@@ -46,43 +46,22 @@ const Initialize = ({ children }: PropsWithChildren) => {
     return console.info('Initialized New Local Storage');
   };
 
-  const initTableDisplay = () => {
-    const localViewOptions = TableDisplay.getFromLocalStorage();
-    if (localViewOptions === null) {
-      return TableDisplay.saveToLocalStorage(TableDisplay.value);
-    }
-    TableDisplay.setValue(localViewOptions);
-    tableDisplayVar(localViewOptions);
+  const initTableDisplay = (userIdAndName: UserIdAndName) => {
+    const tableDisplayOptions = TableDisplay.initialize(userIdAndName);
+    tableDisplayVar(tableDisplayOptions);
   };
 
-  const initTableTime = () => {
-    const localTableTime = TableTime.getFromLocalStorage();
-    if (localTableTime === null) {
-      return TableTime.saveToLocalStorage(TableTime.value);
-    }
-    TableTime.setValue(localTableTime);
-    tableTimeVar(localTableTime);
+  const initTableTime = (userIdAndName: UserIdAndName) => {
+    const tableTimeOptions = TableTime.initialize(userIdAndName);
+    tableTimeVar(tableTimeOptions);
   };
 
-  const initClinicsOfClient = (clinics: MyClinic[]) => {
-    const localClinics = ClinicsOfClient.getFromLocalStorage();
-    const latestClinics = ClinicsOfClient.createClinicsOfClient(clinics);
-    if (localClinics === null) {
-      ClinicsOfClient.saveToLocalStorage(latestClinics);
-      return;
-    }
-
-    const updatedMyClinics = latestClinics.map((latestClinic) => {
-      const localClinic = localClinics.find(
-        (_localClinic) => _localClinic.id === latestClinic.id
-      );
-      return localClinic
-        ? ClinicsOfClient.combineClinic(latestClinic, localClinic)
-        : latestClinic;
-    });
-
-    ClinicsOfClient.setValue(updatedMyClinics);
-    clinicListsVar(updatedMyClinics);
+  const initClinicsOfClient = (
+    userIdAndName: UserIdAndName,
+    clinics: MyClinic[]
+  ) => {
+    const myClinics = ClinicsOfClient.initialize(userIdAndName, clinics);
+    clinicListsVar(myClinics);
   };
 
   useEffect(() => {
@@ -94,14 +73,9 @@ const Initialize = ({ children }: PropsWithChildren) => {
 
     checkLatestStorage(userIdAndName);
 
-    TableDisplay.initialize(userIdAndName);
-    initTableDisplay();
-
-    TableTime.initialize(userIdAndName);
-    initTableTime();
-
-    ClinicsOfClient.initialize(userIdAndName);
-    initClinicsOfClient(findMyClinicsData.findMyClinics.clinics);
+    initTableDisplay(userIdAndName);
+    initTableTime(userIdAndName);
+    initClinicsOfClient(userIdAndName, findMyClinicsData.findMyClinics.clinics);
 
     loggedInUserVar(meData.me);
 

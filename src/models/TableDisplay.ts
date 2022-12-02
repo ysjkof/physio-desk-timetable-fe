@@ -14,6 +14,13 @@ export class TableDisplay {
 
   static initialize(userIdAndName: UserIdAndName) {
     this.#userIdAndName = userIdAndName;
+    const localViewOptions = this.#getFromLocalStorage();
+    if (localViewOptions === null) {
+      this.saveToLocalStorage(this.#options);
+      return this.value;
+    }
+    this.setValue(localViewOptions);
+    return this.value;
   }
 
   static setValue(options: TableDisplayOptions) {
@@ -30,7 +37,7 @@ export class TableDisplay {
     });
   }
 
-  static getFromLocalStorage() {
+  static #getFromLocalStorage() {
     if (!this.#hasUserIdAndName) throw this.#initialError;
 
     return this.#localStorageUtil.get<TableDisplayOptions>({

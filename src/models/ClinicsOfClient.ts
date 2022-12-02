@@ -12,8 +12,27 @@ export class ClinicsOfClient {
   static #userIdAndName: UserIdAndName;
   static #localStorageUtil = localStorageUtils;
 
-  static initialize(userIdAndName: UserIdAndName) {
+  static initialize(userIdAndName: UserIdAndName, clinics: MyClinic[]) {
     this.#userIdAndName = userIdAndName;
+
+    const localClinics = this.#getFromLocalStorage();
+    const latestClinics = this.createClinicsOfClient(clinics);
+    if (localClinics === null) {
+      this.saveToLocalStorage(latestClinics);
+      return this.value;
+    }
+
+    const updatedMyClinics = latestClinics.map((latestClinic) => {
+      const localClinic = localClinics.find(
+        (_localClinic) => _localClinic.id === latestClinic.id
+      );
+      return localClinic
+        ? this.combineClinic(latestClinic, localClinic)
+        : latestClinic;
+    });
+
+    this.setValue(updatedMyClinics);
+    return this.value;
   }
 
   static createClinicsOfClient(clinics: MyClinic[]) {
@@ -69,7 +88,7 @@ export class ClinicsOfClient {
     });
   }
 
-  static getFromLocalStorage() {
+  static #getFromLocalStorage() {
     if (!this.#userIdAndName) throw this.#initialError;
 
     return this.#localStorageUtil.get<ClinicOfClient[]>({
