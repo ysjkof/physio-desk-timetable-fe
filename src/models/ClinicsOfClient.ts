@@ -19,7 +19,7 @@ export class ClinicsOfClient {
     const latestClinics = this.createClinicsOfClient(clinics);
     if (localClinics === null) {
       this.saveToLocalStorage(latestClinics);
-      return this.value;
+      return this.get();
     }
 
     const updatedMyClinics = latestClinics.map((latestClinic) => {
@@ -31,8 +31,8 @@ export class ClinicsOfClient {
         : latestClinic;
     });
 
-    this.setValue(updatedMyClinics);
-    return this.value;
+    this.set(updatedMyClinics);
+    return this.get();
   }
 
   static createClinicsOfClient(clinics: MyClinic[]) {
@@ -131,7 +131,7 @@ export class ClinicsOfClient {
     };
   }
 
-  static get value() {
+  static get() {
     return this.#clinics;
   }
 
@@ -152,11 +152,11 @@ export class ClinicsOfClient {
     return clinic;
   }
 
-  static get(id: Number) {
+  static getById(id: Number) {
     return this.#clinics.find((clinic) => clinic.id === id);
   }
 
-  static setValue(value: ClinicOfClient[]) {
+  static set(value: ClinicOfClient[]) {
     this.#clinics = value;
   }
 
@@ -183,7 +183,7 @@ export class ClinicsOfClient {
       return { ...member, canSee: !member.canSee };
     });
 
-    return this.value.map((clinic) => {
+    return this.#clinics.map((clinic) => {
       if (clinic.id !== id) return clinic;
       return { ...clinic, members: newMembers };
     });

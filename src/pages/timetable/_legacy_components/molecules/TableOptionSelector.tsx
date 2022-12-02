@@ -63,7 +63,7 @@ export default function TableOptionSelector() {
     changeTableTIme(key, value);
   };
 
-  const { lastHour, lastMinute, firstHour, firstMinute } = TableTime.value;
+  const { lastHour, lastMinute, firstHour, firstMinute } = TableTime.get();
 
   const startHours = getHoursByUnit(0, 24);
   const endHours = startHours.filter((hour) => hour > firstHour);
@@ -168,14 +168,14 @@ export default function TableOptionSelector() {
         className="flex items-center gap-2 border-b py-1 px-3"
       >
         <MenuButton
-          enabled={TableDisplay.value.seeCancel}
+          enabled={TableDisplay.get().seeCancel}
           onClick={toggleSeeCancel}
         >
           <FontAwesomeIcon icon={faBan} fontSize={14} />
           취소
         </MenuButton>
         <MenuButton
-          enabled={TableDisplay.value.seeNoshow}
+          enabled={TableDisplay.get().seeNoshow}
           onClick={toggleSeeNoshow}
         >
           <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />

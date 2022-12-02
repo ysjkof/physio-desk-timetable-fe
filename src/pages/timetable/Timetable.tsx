@@ -28,7 +28,7 @@ const TimeTable = () => {
       <Helmet>
         <title>시간표 | {MUOOL}</title>
       </Helmet>
-      {!TableDisplay.value || !schedules ? (
+      {!TableDisplay.get() || !schedules ? (
         <Loading />
       ) : (
         <TimetableTemplate
@@ -38,11 +38,11 @@ const TimeTable = () => {
           columns={
             <>
               <AnimatePresence>
-                {TableDisplay.value.seeList === false && (
+                {TableDisplay.get().seeList === false && (
                   <Schedules labels={labels} weekEvents={schedules} />
                 )}
               </AnimatePresence>
-              {TableDisplay.value.seeList === true && '준비 중'}
+              {TableDisplay.get().seeList === true && '준비 중'}
             </>
           }
         />

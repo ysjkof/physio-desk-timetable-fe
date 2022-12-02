@@ -26,7 +26,7 @@ export class Schedules {
     this.#value = this.#addEventToForm(form, data);
   }
 
-  get value() {
+  get() {
     return this.#value;
   }
 

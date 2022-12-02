@@ -12,7 +12,7 @@ export const useTableLabel = () => {
   const [labels, setLabels] = useState(TableTime.labels);
 
   const changeTableTimeOptions = (options: TableTimeOptions) => {
-    TableTime.setValue(options);
+    TableTime.set(options);
   };
 
   const changeLabels = () => {

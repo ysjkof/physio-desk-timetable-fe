@@ -44,14 +44,14 @@ const TableController = () => {
 
   const handleDateNavMovePrev = () => {
     const date = new Date(selectedDate);
-    TableDisplay.value.navigationExpand
+    TableDisplay.get().navigationExpand
       ? date.setMonth(date.getMonth() - 1)
       : date.setDate(date.getDate() - 7);
     selectedDateVar(date);
   };
   const handleDateNavMoveNext = () => {
     const date = new Date(selectedDate);
-    TableDisplay.value.navigationExpand
+    TableDisplay.get().navigationExpand
       ? date.setMonth(date.getMonth() + 1)
       : date.setDate(date.getDate() + 7);
     selectedDateVar(date);
@@ -106,13 +106,13 @@ const TableController = () => {
           <TwoLabelSwitch
             labels={['하루', '주단위']}
             onClick={toggleWeekOrDay}
-            isActivated={!TableDisplay.value.hasWeekView}
+            isActivated={!TableDisplay.get().hasWeekView}
           />
           <MenuButton
             onClick={toggleCalender}
             label="달력보기"
             icon={<Calendar />}
-            isActivated={TableDisplay.value.navigationExpand}
+            isActivated={TableDisplay.get().navigationExpand}
           />
         </div>
       </div>

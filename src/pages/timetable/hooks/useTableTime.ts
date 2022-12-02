@@ -5,7 +5,7 @@ import type { FirstAndLastTime } from '../../../types/common.types';
 export const useTableTime = () => {
   const changeTableTIme = (key: keyof FirstAndLastTime, value: number) => {
     const options = TableTime.createTimeOptions(key, value);
-    TableTime.setValue(options);
+    TableTime.set(options);
     TableTime.saveToLocalStorage(options);
     tableTimeVar(options);
   };

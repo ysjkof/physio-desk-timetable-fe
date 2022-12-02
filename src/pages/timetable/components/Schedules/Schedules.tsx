@@ -16,7 +16,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
 
   const userLength = weekEvents[0].users.filter((user) => user.canSee).length;
 
-  const { hasWeekView } = TableDisplay.value;
+  const { hasWeekView } = TableDisplay.get();
 
   const containerStyle = hasWeekView
     ? SchedulesStyle.week.template(userLength)

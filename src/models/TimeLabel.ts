@@ -1,18 +1,18 @@
 import { TimeLabelArg } from '../types/common.types';
 
 export class TimeLabel {
-  #value: string;
-  #color: string;
-  #isShow: boolean;
+  value: string;
+  color: string;
+  isShow: boolean;
 
   constructor({ label, visibleMinute, colors }: TimeLabelArg) {
-    this.#value = label;
-    this.#isShow = this.#setShow(visibleMinute);
-    this.#color = this.#isShow ? this.#setColor(visibleMinute, colors) : '';
+    this.value = label;
+    this.isShow = this.#setShow(visibleMinute);
+    this.color = this.isShow ? this.#setColor(visibleMinute, colors) : '';
   }
 
   #setShow(visibleMinute: TimeLabelArg['visibleMinute']) {
-    return !!visibleMinute.find((minute) => this.#value.endsWith(minute));
+    return !!visibleMinute.find((minute) => this.value.endsWith(minute));
   }
 
   #setColor(
@@ -20,20 +20,8 @@ export class TimeLabel {
     colors: TimeLabelArg['colors']
   ) {
     const index = visibleMinute.findIndex((minute) =>
-      this.#value.endsWith(minute)
+      this.value.endsWith(minute)
     );
     return colors[index];
-  }
-
-  get value() {
-    return this.#value;
-  }
-
-  get color() {
-    return this.#color;
-  }
-
-  get isShow() {
-    return this.#isShow;
   }
 }

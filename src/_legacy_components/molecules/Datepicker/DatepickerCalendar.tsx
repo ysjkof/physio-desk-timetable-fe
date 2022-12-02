@@ -224,8 +224,8 @@ export default function DatepickerCalendar({
   }
 
   const listOfHours = getHoursByUnit(
-    TableTime.value.firstHour,
-    TableTime.value.lastHour
+    TableTime.get().firstHour,
+    TableTime.get().lastHour
   );
 
   const minutesUnit = 10; // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능

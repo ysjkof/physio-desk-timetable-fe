@@ -27,13 +27,13 @@ export class TableTime {
     const localViewOptions = this.#getFromLocalStorage();
     if (localViewOptions === null) {
       this.saveToLocalStorage(this.#options);
-      return this.value;
+      return this.get();
     }
-    this.setValue(localViewOptions);
-    return this.value;
+    this.set(localViewOptions);
+    return this.get();
   }
 
-  static setValue(tableTime: TableTimeOptions) {
+  static set(tableTime: TableTimeOptions) {
     this.#options = tableTime;
   }
 
@@ -67,18 +67,18 @@ export class TableTime {
     });
   }
 
-  static get value() {
+  static get() {
     return this.#options;
   }
 
-  static get firstTime() {
+  static getFirstTime() {
     return this.createSpecificTime(
       this.#options.firstHour,
       this.#options.firstMinute
     );
   }
 
-  static get lastTime() {
+  static getLastTime() {
     return this.createSpecificTime(
       this.#options.lastHour,
       this.#options.lastMinute
@@ -93,11 +93,11 @@ export class TableTime {
   }
 
   static get firstTimeInMinute() {
-    return convertMinuteFromDate(this.firstTime);
+    return convertMinuteFromDate(this.getFirstTime());
   }
 
   static get lastTimeInMinute() {
-    return convertMinuteFromDate(this.lastTime);
+    return convertMinuteFromDate(this.getLastTime());
   }
 
   static get labels() {
@@ -107,8 +107,8 @@ export class TableTime {
   // 시작시각부터 끝시각까지 timeGap의 차이가 나는 Date배열을 만든다
   static #timeGap() {
     const labels = [];
-    const start = this.firstTime;
-    const end = this.lastTime;
+    const start = this.getFirstTime();
+    const end = this.getLastTime();
 
     let i = 0;
     while (i < 1500) {
@@ -126,8 +126,8 @@ export class TableTime {
   }
 
   static createTimeOptions(key: keyof FirstAndLastTime, value: number) {
-    let result = { ...this.value, [key]: value };
-    if (key === 'firstHour' && value >= this.value.lastHour) {
+    let result = { ...this.#options, [key]: value };
+    if (key === 'firstHour' && value >= this.#options.lastHour) {
       result.lastHour++;
     }
     return result;

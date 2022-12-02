@@ -17,10 +17,10 @@ export class TableDisplay {
     const localViewOptions = this.#getFromLocalStorage();
     if (localViewOptions === null) {
       this.saveToLocalStorage(this.#options);
-      return this.value;
+      return this.get();
     }
     this.setValue(localViewOptions);
-    return this.value;
+    return this.get();
   }
 
   static setValue(options: TableDisplayOptions) {
@@ -57,7 +57,7 @@ export class TableDisplay {
     });
   }
 
-  static get value() {
+  static get() {
     return this.#options;
   }
 

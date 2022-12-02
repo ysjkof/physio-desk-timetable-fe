@@ -30,8 +30,10 @@ export const useSchedules = () => {
     if (!reservationData?.listReservations.results || !loginUser) return;
 
     setSchedules(
-      new Schedules(reservationData.listReservations.results, selectedDate)
-        .value
+      new Schedules(
+        reservationData.listReservations.results,
+        selectedDate
+      ).get()
     );
 
     subscribeToMore({

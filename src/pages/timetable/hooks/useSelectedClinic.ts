@@ -5,7 +5,7 @@ export const useSelectedClinic = () => {
   const selectClinic = (id: number) => {
     if (ClinicsOfClient.selectedClinic?.id === id) return;
 
-    const clinic = ClinicsOfClient.get(id);
+    const clinic = ClinicsOfClient.getById(id);
 
     if (!clinic)
       throw new Error('', {
@@ -13,7 +13,7 @@ export const useSelectedClinic = () => {
       });
     ClinicsOfClient.selectClinic(id);
 
-    const clinicList = ClinicsOfClient.value;
+    const clinicList = ClinicsOfClient.get();
 
     ClinicsOfClient.saveToLocalStorage(clinicList);
 
@@ -25,7 +25,7 @@ export const useSelectedClinic = () => {
     if (!toggledClinic) return;
 
     ClinicsOfClient.saveToLocalStorage(toggledClinic);
-    ClinicsOfClient.setValue(toggledClinic);
+    ClinicsOfClient.set(toggledClinic);
     clinicListsVar([...toggledClinic]);
   };
 

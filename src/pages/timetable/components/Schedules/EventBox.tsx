@@ -56,8 +56,8 @@ const EventBox = ({
   if (height > maxTableHeight) height = maxTableHeight;
 
   const matchTableEndtime = compareTableEndtime(new Date(event.endDate), {
-    hour: TableTime.value.lastHour,
-    minute: TableTime.value.lastMinute,
+    hour: TableTime.get().lastHour,
+    minute: TableTime.get().lastMinute,
   });
 
   if (matchTableEndtime) height = height;

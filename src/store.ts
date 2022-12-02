@@ -20,9 +20,9 @@ export const toastVar = makeVar<ToastState>({});
 // Timetable state
 export const hasTableDisplayVar = makeVar(false);
 
-export const tableTimeVar = makeVar<TableTimeOptions>(TableTime.value);
+export const tableTimeVar = makeVar<TableTimeOptions>(TableTime.get());
 
-export const tableDisplayVar = makeVar<TableDisplayOptions>(TableDisplay.value);
+export const tableDisplayVar = makeVar<TableDisplayOptions>(TableDisplay.get());
 
 export const selectedDateVar = makeVar(new Date());
 
