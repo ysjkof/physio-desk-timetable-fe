@@ -16,7 +16,7 @@ import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
 import { selectedPatientVar } from '../../../../store';
 import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 import type {
-  Reservation,
+  ReservationInList,
   ISelectedPrescription,
   PrescriptionWithSelect,
   ReserveFormType,
@@ -26,7 +26,7 @@ import type { CloseAction } from '../../../../types/props.types';
 interface IReserveFromProps extends CloseAction {
   userId: number;
   startDate?: Date;
-  reservation?: Reservation;
+  reservation?: ReservationInList;
 }
 
 export default function ReserveForm({

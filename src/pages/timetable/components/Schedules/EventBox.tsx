@@ -19,14 +19,14 @@ import EditReservationState from '../../_legacy_components/molecules/EditReserva
 import { cls } from '../../../../utils/common.utils';
 import { ROUTES } from '../../../../router/routes';
 import { ReservationState } from '../../../../types/generated.types';
-import type { Reservation } from '../../../../types/common.types';
+import type { ReservationInList } from '../../../../types/common.types';
 
 interface EventBoxProps {
   userIndex: number;
   inset: string;
   maxTableHeight: number;
   numberOfCell: number;
-  event: Reservation;
+  event: ReservationInList;
   isSingleUser: boolean;
 }
 

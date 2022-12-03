@@ -8,14 +8,14 @@ import {
 import { cls } from '../../../../utils/common.utils';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { EDIT_RESERVATION_DOCUMENT } from '../../../../graphql';
-import { Reservation } from '../../../../types/common.types';
+import { ReservationInList } from '../../../../types/common.types';
 import {
   EditReservationMutation,
   ReservationState,
 } from '../../../../types/generated.types';
 
 interface EditReservationStateProps {
-  reservation: Reservation;
+  reservation: ReservationInList;
 }
 
 export default function EditReservationState({

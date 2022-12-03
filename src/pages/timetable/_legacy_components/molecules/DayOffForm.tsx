@@ -8,7 +8,7 @@ import { useDayoff } from '../../hooks';
 import { createDate } from '../../../../utils/date.utils';
 import { ClinicsOfClient } from '../../../../models';
 import type {
-  Reservation,
+  ReservationInList,
   ReserveFormType,
 } from '../../../../types/common.types';
 import { CloseAction } from '../../../../types/props.types';
@@ -16,7 +16,7 @@ import { CloseAction } from '../../../../types/props.types';
 interface DayOffFormNewProps extends CloseAction {
   userId: number;
   startDate?: Date;
-  reservation?: Reservation;
+  reservation?: ReservationInList;
 }
 export default function DayOffForm({
   userId,

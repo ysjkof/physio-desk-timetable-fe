@@ -10,11 +10,11 @@ import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { GENDER_KOR } from '../../../../constants/constants';
 import { useDeleteReservation } from '../../hooks';
 import Loading from '../../../../_legacy_components/atoms/Loading';
-import type { Reservation } from '../../../../types/common.types';
+import type { ReservationInList } from '../../../../types/common.types';
 import type { CloseAction } from '../../../../types/props.types';
 
 interface ReservationCardProps extends CloseAction {
-  reservation: Reservation;
+  reservation: ReservationInList;
 }
 
 export default function ReservationCard({

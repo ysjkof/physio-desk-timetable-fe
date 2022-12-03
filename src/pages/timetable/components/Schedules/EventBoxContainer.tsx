@@ -7,11 +7,11 @@ import {
 import EventBox from './EventBox';
 import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
 import { ReservationState } from '../../../../types/generated.types';
-import type { Reservation } from '../../../../types/common.types';
+import type { ReservationInList } from '../../../../types/common.types';
 
 interface EventBoxContainerProps {
   userIndex: number;
-  events: Reservation[];
+  events: ReservationInList[];
   labels: string[];
   labelMaxLength: number;
   isSingleUser: boolean;

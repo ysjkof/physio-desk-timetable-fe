@@ -8,7 +8,7 @@ import {
 import { ClinicsOfClient } from './ClinicsOfClient';
 import type {
   ISchedules,
-  Reservation,
+  ReservationInList,
   MemberOfClient,
 } from '../types/common.types';
 
@@ -17,7 +17,7 @@ export class Schedules {
 
   #clinic = ClinicsOfClient.selectedClinic;
 
-  constructor(data: Reservation[], date: Date) {
+  constructor(data: ReservationInList[], date: Date) {
     if (!this.#clinic)
       throw new Error('selectedClinic이 없습니다.', {
         cause: ' 초기화가 되지 않았습니다.',
@@ -62,7 +62,7 @@ export class Schedules {
     return { ...member, events: [] };
   }
 
-  #addEventToForm(form: ISchedules[], events: Reservation[]) {
+  #addEventToForm(form: ISchedules[], events: ReservationInList[]) {
     const result = form;
     events.forEach((event) => {
       const dateIndex = result.findIndex((day) =>

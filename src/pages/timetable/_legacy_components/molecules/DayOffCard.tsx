@@ -6,11 +6,11 @@ import { useDeleteReservation } from '../../hooks';
 import DayOffForm from './DayOffForm';
 import CardDetail from './CardDetail';
 import { getTimeLength } from '../../../../utils/date.utils';
-import type { Reservation } from '../../../../types/common.types';
+import type { ReservationInList } from '../../../../types/common.types';
 import type { CloseAction } from '../../../../types/props.types';
 
 interface DayOffCardProps extends CloseAction {
-  reservation: Reservation;
+  reservation: ReservationInList;
 }
 
 export default function DayOffCard({

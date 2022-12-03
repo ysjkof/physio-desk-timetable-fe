@@ -57,15 +57,15 @@ export interface ClinicOfClient extends Omit<MyClinic, 'members'> {
   isStayed: boolean;
 }
 
-export type Reservation = NonNullable<
+export type ReservationInList = NonNullable<
   ListReservationsQuery['listReservations']['results']
 >[0];
 
-export type PatientInReservation = NonNullable<Reservation['patient']>;
-export type ClinicInReservation = NonNullable<Reservation['clinic']>;
-export type UserInReservation = NonNullable<Reservation['user']>;
+export type PatientInReservation = NonNullable<ReservationInList['patient']>;
+export type ClinicInReservation = NonNullable<ReservationInList['clinic']>;
+export type UserInReservation = NonNullable<ReservationInList['user']>;
 export type PrescriptionsInReservation = NonNullable<
-  Reservation['prescriptions']
+  ReservationInList['prescriptions']
 >;
 
 export type ReservationInPatient = NonNullable<
@@ -157,14 +157,14 @@ export interface ReserveFormType {
 //
 
 export interface UserWithEvent extends MemberOfClient {
-  events: Reservation[];
+  events: ReservationInList[];
 }
 export interface ISchedules {
   date: Date;
   users: UserWithEvent[];
 }
 
-export type SelectedReservationType = Reservation | undefined;
+export type SelectedReservationType = ReservationInList | undefined;
 
 export type SelectedPatientType = SelectedPatient | undefined | null;
 export interface SelectedPatient extends PatientInReservation {

@@ -1,11 +1,11 @@
 import { getTimeLength } from '../../../../utils/date.utils';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
-import { Reservation } from '../../../../types/common.types';
+import { ReservationInList } from '../../../../types/common.types';
 import EditReservationState from './EditReservationState';
 import CardDetail from './CardDetail';
 
 interface ReservationCardDetailProps {
-  reservation: Reservation;
+  reservation: ReservationInList;
 }
 
 export default function ReservationCardDetail({
