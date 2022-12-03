@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
-import { useSchedules, useTableLabel } from './hooks';
+import { useSchedules, useSubscriptions, useTableLabel } from './hooks';
 import { MUOOL } from '../../constants/constants';
 import {
   Schedules,
@@ -17,7 +17,8 @@ const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 const TimeTable = () => {
   const { labels } = useTableLabel();
-  const { schedules } = useSchedules();
+  const { schedules, variables } = useSchedules();
+  useSubscriptions({ variables });
 
   return (
     <>

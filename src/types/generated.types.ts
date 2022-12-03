@@ -418,8 +418,8 @@ export type ListReservationsOutput = {
   __typename?: 'ListReservationsOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-  results?: Maybe<Array<Reservation>>;
-  totalCount?: Maybe<Scalars['Int']>;
+  results: Array<Reservation>;
+  totalCount: Scalars['Int'];
 };
 
 export type ListenDeleteReservationInput = {
@@ -1063,7 +1063,7 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null }, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount: number, results: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null }, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> } };
 
 export type ListenDeleteReservationSubscriptionVariables = Exact<{
   input: ListenDeleteReservationInput;
