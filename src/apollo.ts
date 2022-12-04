@@ -75,22 +75,5 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 export const client = new ApolloClient({
   link: from([errorLink, splitLink]),
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          isLoggedIn: {
-            read() {
-              return isLoggedInVar();
-            },
-          },
-          token: {
-            read() {
-              return authTokenVar();
-            },
-          },
-        },
-      },
-    },
-  }),
+  cache: new InMemoryCache(),
 });
