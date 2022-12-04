@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * ChevronLeft > Outline
  */
-const ChevronLeft = ({ iconSize, ...args }: SVG) => {
+const ChevronLeft = ({ iconSize = 'MD', ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

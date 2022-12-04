@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * cog-6-tooth > Outline
  */
-const CogSixTooth = ({ iconSize, ...args }: SVG) => {
+const CogSixTooth = ({ iconSize = 'MD', ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

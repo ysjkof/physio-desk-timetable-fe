@@ -5,7 +5,7 @@ import { cls } from '../utils/common.utils';
  * heroicicons.com
  * UserPlus > Outline
  */
-const UserPlus = ({ iconSize, ...args }: SVG) => {
+const UserPlus = ({ iconSize = 'MD', ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
