@@ -38,7 +38,7 @@ export default function NameTag({ patient, canClick = false }: INameTagProps) {
       </div>
       <span>R.No : {registrationNumber || '미등록'}</span>
       <span>B : {birthday ? getYMD(birthday, 'yymmdd') : '미등록'}</span>
-      <span className="pl-3">{user.name}</span>
+      <span className="pl-3">{user?.name}</span>
       <span className="col-span-2">{renameUseSplit(clinic.name)}</span>
     </div>
   );

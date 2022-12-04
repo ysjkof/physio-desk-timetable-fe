@@ -422,6 +422,10 @@ export type ListReservationsOutput = {
   totalCount: Scalars['Int'];
 };
 
+export type ListenCreateReservationInput = {
+  clinicId: Scalars['Int'];
+};
+
 export type ListenDeleteReservationInput = {
   clinicId: Scalars['Int'];
 };
@@ -430,6 +434,10 @@ export type ListenDeleteReservationOutput = {
   __typename?: 'ListenDeleteReservationOutput';
   clinicId: Scalars['Int'];
   id: Scalars['Int'];
+};
+
+export type ListenUpdateReservationInput = {
+  clinicId: Scalars['Int'];
 };
 
 export type LoginInput = {
@@ -797,8 +805,14 @@ export type SendChangeEmailOutput = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  listenCreateReservation: Reservation;
   listenDeleteReservation: ListenDeleteReservationOutput;
   listenUpdateReservation: Reservation;
+};
+
+
+export type SubscriptionListenCreateReservationArgs = {
+  input: ListenCreateReservationInput;
 };
 
 
@@ -808,11 +822,7 @@ export type SubscriptionListenDeleteReservationArgs = {
 
 
 export type SubscriptionListenUpdateReservationArgs = {
-  input: UpdateReservationInput;
-};
-
-export type UpdateReservationInput = {
-  clinicId: Scalars['Int'];
+  input: ListenUpdateReservationInput;
 };
 
 export type User = {
@@ -1065,6 +1075,13 @@ export type ListReservationsQueryVariables = Exact<{
 
 export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount: number, results: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null }, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> } };
 
+export type ListenCreateReservationSubscriptionVariables = Exact<{
+  input: ListenCreateReservationInput;
+}>;
+
+
+export type ListenCreateReservationSubscription = { __typename?: 'Subscription', listenCreateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null }, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null } };
+
 export type ListenDeleteReservationSubscriptionVariables = Exact<{
   input: ListenDeleteReservationInput;
 }>;
@@ -1073,7 +1090,7 @@ export type ListenDeleteReservationSubscriptionVariables = Exact<{
 export type ListenDeleteReservationSubscription = { __typename?: 'Subscription', listenDeleteReservation: { __typename?: 'ListenDeleteReservationOutput', id: number, clinicId: number } };
 
 export type ListenUpdateReservationSubscriptionVariables = Exact<{
-  input: UpdateReservationInput;
+  input: ListenUpdateReservationInput;
 }>;
 
 
