@@ -190,3 +190,9 @@ export interface SVG extends SVGProps<SVGSVGElement> {
 export interface ClassNameProps {
   className?: string;
 }
+
+//
+
+export interface ObjValueIsFx {
+  [key: string]: () => void;
+}

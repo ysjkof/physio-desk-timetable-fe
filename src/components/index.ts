@@ -6,6 +6,7 @@ import ListCell from './ListCell';
 import MenuButton from './MenuButton';
 import Selectbox from './Selectbox';
 import TwoLabelSwitch from './TwoLabelSwitch';
+import InputWrapper from './WrapperForInput';
 
 export {
   ButtonOfPages,
@@ -16,4 +17,5 @@ export {
   MenuButton,
   Selectbox,
   TwoLabelSwitch,
+  InputWrapper,
 };
