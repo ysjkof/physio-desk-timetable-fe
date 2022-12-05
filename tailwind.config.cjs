@@ -27,6 +27,7 @@ module.exports = {
         'table-day-color': '#717198',
         'form-label': '#74758E',
         'cst-blue': '#6BA6FF',
+        disable: '#F2F2F9',
       },
       backgroundImage: {
         'check-white': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='4' stroke='white' class='w-6 h-6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.75l6 6 9-13.5' /%3E%3C/svg%3E")`,

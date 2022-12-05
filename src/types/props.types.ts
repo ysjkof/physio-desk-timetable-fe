@@ -54,3 +54,10 @@ export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
 export interface CloseAction {
   closeAction: () => void;
 }
+
+export interface UseAutoCompleteProps {
+  firstButtonId: string;
+  setInput: (value: string) => void;
+  clearList?: () => void;
+  query?: (query: string) => void;
+}

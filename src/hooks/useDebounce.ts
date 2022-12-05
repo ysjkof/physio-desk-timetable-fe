@@ -1,21 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 let timer: NodeJS.Timeout;
 let apiCallNumber = 0;
 
 interface UseDebounceProps {
-  watchValue: unknown;
   callback: () => void;
   timeout?: number;
 }
 
-export const useDebounce = ({
-  watchValue,
-  callback,
-  timeout = 300,
-}: UseDebounceProps) => {
+export const useDebounce = ({ callback, timeout = 300 }: UseDebounceProps) => {
+  const [trigger, setTrigger] = useState([1]);
+
+  const debounce = () => {
+    setTrigger((prev) => [...prev]);
+  };
+
   useEffect(() => {
-    if (!watchValue) return;
+    if (!trigger) return;
+
     const timerHandler = () => {
       callback();
       apiCallNumber += 1;
@@ -26,5 +28,7 @@ export const useDebounce = ({
     timer = setTimeout(timerHandler, timeout);
 
     return () => clearTimeout(timer);
-  }, [watchValue]);
+  }, [trigger]);
+
+  return debounce;
 };

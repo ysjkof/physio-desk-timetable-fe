@@ -112,3 +112,7 @@ export function createArrayFromLength(length: number) {
   }
   return numbers;
 }
+
+export function checkLengthIsZero<T>(arr?: T[] | null) {
+  return arr?.length === 0 ? undefined : arr;
+}
