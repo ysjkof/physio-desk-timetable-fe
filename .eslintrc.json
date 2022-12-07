@@ -49,6 +49,7 @@
     "no-alert": "off",
     "consistent-return": "off",
     "no-console": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "react/no-unused-prop-types": "off"
   }
 }
