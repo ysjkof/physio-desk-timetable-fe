@@ -65,6 +65,13 @@ export function getDateOfNumeric(date: Date) {
   });
 }
 
+export function getDateOfString(date: Date) {
+  return intlFormat(date, {
+    year: 'numeric',
+    month: 'long',
+  });
+}
+
 export function getDateAndDifference(start: string, end: string) {
   const startDate = parseISO(start);
   const date = getDateOfNumeric(startDate);
@@ -270,4 +277,8 @@ export function getMinutesByUnit(minutesUnit: number) {
 
 export function convertMinuteFromDate(date: Date) {
   return date.getTime() / 1000 / 60;
+}
+
+export function isPastDate(dateToCheck: Date, referenceDate: Date) {
+  return dateToCheck.getTime() < referenceDate.getTime();
 }

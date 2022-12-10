@@ -1,4 +1,5 @@
 import ButtonOfPages from './ButtonOfPage';
+import Datepicker from './Datepicker';
 import CheckableButton from './CheckableButton';
 import CheckAdmin from './CheckAdmin';
 import Initialize from './Initialize';
@@ -10,6 +11,7 @@ import InputWrapper from './WrapperForInput';
 
 export {
   ButtonOfPages,
+  Datepicker,
   CheckableButton,
   CheckAdmin,
   Initialize,
