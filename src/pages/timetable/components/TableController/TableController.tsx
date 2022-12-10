@@ -118,10 +118,11 @@ const TableController = () => {
           />
           <MenuButton
             onClick={toggleCalender}
-            label="달력보기"
-            icon={<Calendar />}
             isActivated={TableDisplay.get().navigationExpand}
-          />
+          >
+            <Calendar />
+            달력보기
+          </MenuButton>
         </div>
       </div>
       <div className="flex w-full items-center justify-between pb-3">
@@ -157,21 +158,23 @@ const TableController = () => {
         )}
         <div className="flex w-full items-center justify-end gap-x-2">
           <MenuButton
-            label="환자 등록하기"
-            icon={<UserPlus />}
             backgroundColor="#6BA6FF"
             color="white"
             onClick={() => navigate(ROUTES.createPatient)}
             ref={settingRef}
-          />
+          >
+            <UserPlus />
+            환자 등록하기
+          </MenuButton>
           <MenuButton
-            label="설정"
-            icon={<EllipsisVertical />}
             backgroundColor="#6889BB"
             color="white"
             onClick={() => toggleDisplayController()}
             ref={settingRef}
-          />
+          >
+            <EllipsisVertical />
+            설정
+          </MenuButton>
 
           <AnimatePresence>
             {hasTableDisplay && (

@@ -1,17 +1,15 @@
-import { forwardRef } from 'react';
+import { forwardRef, PropsWithChildren } from 'react';
 import { cls } from '../utils/common.utils';
 
-interface MenuButtonProps {
-  icon?: React.ReactNode;
+interface MenuButtonProps extends PropsWithChildren {
   isActivated?: boolean;
   color?: string;
   backgroundColor?: string;
-  label: string;
   onClick: () => void;
 }
 
 const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
-  ({ icon, isActivated, color, backgroundColor, label, onClick }, ref) => (
+  ({ isActivated, color, backgroundColor, children, onClick }, ref) => (
     <button
       className={cls(
         'flex h-8 w-fit select-none items-center gap-2 whitespace-nowrap rounded-sm border border-gray-500 px-2',
@@ -28,8 +26,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
       ref={ref}
       type="button"
     >
-      {icon && icon}
-      {label}
+      {children}
     </button>
   )
 );
