@@ -56,6 +56,7 @@ export const useAutoComplete = <T>({
     };
     action[key]?.();
 
+    if (!query) return;
     debounce();
   };
 
