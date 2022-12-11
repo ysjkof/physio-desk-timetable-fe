@@ -31,7 +31,7 @@ export const Datepicker = () => {
 
   return (
     <DatepickerContext.Provider value={value}>
-      <div className="datepicker__calendar-body z-50 max-w-[440px]">
+      <div className="datepicker__calendar-body z-50 min-w-[240px] max-w-[440px]">
         <div className="flex w-full flex-col rounded-md border bg-white p-3">
           <DatepickerNavigation />
           <DatepickerMain />

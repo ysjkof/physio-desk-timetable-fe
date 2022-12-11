@@ -11,7 +11,7 @@ export const DatepickerMain = () => {
 
   return (
     <div className="flex">
-      <div className="grid w-full grid-cols-7 pr-1.5 text-center">
+      <div className="grid w-full grid-cols-7 pr-1.5 text-center text-sm">
         <Title />
         {month.map((day) => {
           const isActivate = !isPastDate(day.getDate(), yesterDay);
@@ -36,7 +36,7 @@ const Title = () => {
         <div
           key={`datepicker__calendar-day${day}`}
           className={cls(
-            'mb-2 font-medium',
+            'mx-1 mb-2 w-full font-medium',
             index === 0 ? 'sunday' : '',
             index === 6 ? 'saturday' : ''
           )}
@@ -61,7 +61,7 @@ const CalendarDay = ({ date, isActivate }: CalendarDayProps) => {
     <button
       type="button"
       className={cls(
-        'm-1 cursor-pointer p-1',
+        'm-1 aspect-square w-full cursor-pointer p-1',
         isActivate ? '' : 'pointer-events-none line-through',
         date.isSunday() ? 'sunday' : '',
         date.isSaturday() ? 'saturday' : '',
