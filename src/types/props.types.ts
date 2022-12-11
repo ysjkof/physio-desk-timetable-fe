@@ -55,9 +55,9 @@ export interface CloseAction {
   closeAction: () => void;
 }
 
-export interface UseAutoCompleteProps {
+export interface UseAutoCompleteProps<T> {
   firstButtonId: string;
-  setInput: (value: string) => void;
+  setInput: (value: T | null) => void;
   clearList?: () => void;
   query?: (query: string) => void;
 }

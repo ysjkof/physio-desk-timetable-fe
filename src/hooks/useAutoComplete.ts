@@ -3,14 +3,14 @@ import { useDebounce } from './useDebounce';
 import type { ObjValueIsFx } from '../types/common.types';
 import type { UseAutoCompleteProps } from '../types/props.types';
 
-export const useAutoComplete = ({
+export const useAutoComplete = <T>({
   firstButtonId,
   setInput,
   clearList,
   query,
-}: UseAutoCompleteProps) => {
+}: UseAutoCompleteProps<T>) => {
   const [hasList, setHasList] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const [selectedValue, setSelectedValue] = useState<T | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const ulRef = useRef<HTMLUListElement>(null);
@@ -22,9 +22,9 @@ export const useAutoComplete = ({
     },
   });
 
-  const select = (name: string) => {
-    setInput(name);
-    setSelectedValue(name);
+  const select = (value: T | null) => {
+    setInput(value);
+    setSelectedValue(value);
     setHasList(false);
     inputRef.current?.blur();
   };
@@ -64,7 +64,8 @@ export const useAutoComplete = ({
 
     const action: ObjValueIsFx = {
       Enter() {
-        select(event.currentTarget.textContent || '');
+        const value = (event.currentTarget.textContent as T) || null;
+        select(value);
       },
       Escape() {
         if (!hasList) return;

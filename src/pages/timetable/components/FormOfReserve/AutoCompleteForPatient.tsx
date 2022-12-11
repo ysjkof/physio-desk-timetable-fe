@@ -40,9 +40,10 @@ const AutoCompleteForPatient = ({
     openList,
     select,
     clearValue,
-  } = useAutoComplete({
+  } = useAutoComplete<string>({
     firstButtonId,
-    setInput(value: string) {
+    setInput(value) {
+      if (!value) throw Error('Input 값의 유형이 바르지 않습니다.');
       setValue('patient', value);
       setValueOfParentInput('patient', value);
     },
