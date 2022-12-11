@@ -87,6 +87,26 @@ export class TableTime {
     );
   }
 
+  static getHours() {
+    const hours: number[] = [];
+    const { firstHour, lastHour, lastMinute } = this.#options;
+    for (let i = firstHour; i < lastHour; i += 1) {
+      hours.push(i);
+    }
+    if (lastMinute !== 0) hours.push(lastHour);
+    return hours;
+  }
+
+  static getMinutes() {
+    const minutes: number[] = [];
+    const MINUTE_OF_ONE_HOUR = 60;
+    const minutesLength = MINUTE_OF_ONE_HOUR / this.#options.gap;
+    for (let i = 0; i < minutesLength; i += 1) {
+      minutes.push(i * this.#options.gap);
+    }
+    return minutes;
+  }
+
   static createSpecificTime(hour: number, minute: number) {
     return createDate(undefined, {
       hour,
