@@ -17,7 +17,7 @@ import { selectedPatientVar } from '../../../../store';
 import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
 import type {
   ReservationInList,
-  ISelectedPrescription,
+  SelectedPrescription,
   PrescriptionWithSelect,
   ReserveFormType,
 } from '../../../../types/common.types';
@@ -83,7 +83,7 @@ export default function ReserveForm({
   );
 
   const [selectedPrescription, setSelectedPrescription] =
-    useState<ISelectedPrescription>({
+    useState<SelectedPrescription>({
       price: 0,
       minute: 0,
       prescriptions: [],

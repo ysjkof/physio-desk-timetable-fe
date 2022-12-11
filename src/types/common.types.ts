@@ -27,6 +27,11 @@ export interface FirstAndLastTime {
   lastMinute: number;
 }
 
+export interface HourAndMinute {
+  hour?: number;
+  minute?: number;
+}
+
 export interface TableTimeOptions extends FirstAndLastTime {
   gap: number;
 }
@@ -142,7 +147,7 @@ export interface MemberState {
 
 ///
 
-export interface ISelectedPrescription {
+export interface SelectedPrescription {
   price: number;
   minute: number;
   prescriptions: number[];
