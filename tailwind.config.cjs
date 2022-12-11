@@ -27,6 +27,7 @@ module.exports = {
         'table-day-color': '#717198',
         'form-label': '#74758E',
         'cst-blue': '#6BA6FF',
+        'light-blue': '#D2E4FF',
         disable: '#F2F2F9',
       },
       backgroundImage: {
