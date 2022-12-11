@@ -54,9 +54,13 @@ interface CalendarDayProps {
 }
 
 const CalendarDay = ({ date, isActivate }: CalendarDayProps) => {
+  const { setDate, closeAction } = useContext(DatepickerContext);
   const selectedDate = new Date(); // TODO: 상위 컴포넌트에서 전달받아야함
   const isSelect = compareDateMatch(date.getDate(), selectedDate, 'ymd');
-
+  const selectAndClose = () => {
+    setDate(date.getDate());
+    closeAction();
+  };
   return (
     <button
       type="button"
@@ -69,6 +73,7 @@ const CalendarDay = ({ date, isActivate }: CalendarDayProps) => {
         date.isToday() ? 'rounded-full bg-blue-400 text-white' : '',
         isSelect ? 'rounded-full ring-2 ring-blue-500' : ''
       )}
+      onClick={selectAndClose}
     >
       {date.getDay()}
     </button>

@@ -4,8 +4,13 @@ import { DatepickerContext } from './DatepickerStore';
 import { DatepickerNavigation } from './DatepickerNavigation';
 import { DatepickerMain } from './DatepickerMain';
 import { DatepickerButtons } from './DatepickerButtons';
+import { CloseAction } from '../../types/props.types';
 
-export const Datepicker = () => {
+interface DatepickerProps extends CloseAction {
+  setDate: (date: Date) => void;
+}
+
+export const Datepicker = ({ closeAction, setDate }: DatepickerProps) => {
   const today = new Date();
 
   const calendar = useMemo(() => new CalendarModel(today), []);
@@ -25,7 +30,14 @@ export const Datepicker = () => {
   };
 
   const value = useMemo(
-    () => ({ month, getYearMonth, setPreviousMonth, setNextMonth }),
+    () => ({
+      month,
+      getYearMonth,
+      setPreviousMonth,
+      setNextMonth,
+      closeAction,
+      setDate,
+    }),
     [month]
   );
 

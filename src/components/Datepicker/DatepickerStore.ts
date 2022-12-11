@@ -6,6 +6,8 @@ export const DatepickerContext = createContext<{
   getYearMonth: () => string;
   setPreviousMonth: () => void;
   setNextMonth: () => void;
+  closeAction: () => void;
+  setDate: (date: Date) => void;
 }>({
   month: [],
   getYearMonth() {
@@ -13,4 +15,6 @@ export const DatepickerContext = createContext<{
   },
   setNextMonth() {},
   setPreviousMonth() {},
+  closeAction() {},
+  setDate() {},
 });
