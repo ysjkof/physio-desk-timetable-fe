@@ -61,3 +61,7 @@ export interface UseAutoCompleteProps<T> {
   clearList?: () => void;
   query?: (query: string) => void;
 }
+
+export interface DatepickerProps extends CloseAction {
+  setDate: (date: Date) => void;
+}

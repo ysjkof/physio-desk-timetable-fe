@@ -4,11 +4,7 @@ import { DatepickerContext } from './DatepickerStore';
 import { DatepickerNavigation } from './DatepickerNavigation';
 import { DatepickerMain } from './DatepickerMain';
 import { DatepickerButtons } from './DatepickerButtons';
-import { CloseAction } from '../../types/props.types';
-
-interface DatepickerProps extends CloseAction {
-  setDate: (date: Date) => void;
-}
+import { DatepickerProps } from '../../types/props.types';
 
 export const Datepicker = ({ closeAction, setDate }: DatepickerProps) => {
   const today = new Date();
