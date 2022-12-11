@@ -24,7 +24,10 @@ export const useAutoComplete = <T>({
 
   const select = (value: T | null) => {
     setInput(value);
-    setSelectedValue(value);
+    setSelectedValue(() => {
+      if (Array.isArray(value) && value.length === 0) return null;
+      return value;
+    });
     setHasList(false);
     inputRef.current?.blur();
   };
