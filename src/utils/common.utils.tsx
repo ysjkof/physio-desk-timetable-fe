@@ -100,6 +100,7 @@ export function simpleCheckGQLError(
   if (callback && ok) callback();
 }
 
+// FIXME: checkLengthIsZero로 대체. 지울 것.
 export function checkArrayIncludeValue<T>(arr: T[] | undefined | null) {
   if (!arr) return false;
   return arr.length >= 1 ? arr : false;
@@ -113,6 +114,7 @@ export function createArrayFromLength(length: number) {
   return numbers;
 }
 
-export function checkLengthIsZero<T>(arr?: T[] | null) {
+export function checkLengthIsZero<T>(arr?: T | null) {
+  if (!Array.isArray(arr)) return undefined;
   return arr?.length === 0 ? undefined : arr;
 }
