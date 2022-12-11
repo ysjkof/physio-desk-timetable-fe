@@ -25,9 +25,9 @@ const AutoCompleteForPatient = ({
 
   const { patientQuery, data, loading } = useSearchPatient();
 
-  const firstPatient = data?.searchPatient.patients?.[0];
-  const firstButtonId = firstPatient
-    ? `auto-complete__patient_${firstPatient.id}-${firstPatient.name}`
+  const firstListItem = data?.searchPatient.patients?.[0];
+  const firstButtonId = firstListItem
+    ? `auto-complete__patient_${firstListItem.id}-${firstListItem.name}`
     : '';
 
   const {
@@ -83,30 +83,28 @@ const AutoCompleteForPatient = ({
         ref={inputRef}
       />
       {hasList && !selectedValue && selectionList && (
-        <>
-          <ul
-            className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white"
-            ref={ulRef}
-          >
-            <div>
-              <div className="mx-3 border-b" />
-            </div>
-            {selectionList.map((patient) => (
-              <li key={`auto-complete__patient_${patient.id}-${patient.name}`}>
-                <button
-                  id={`auto-complete__patient_${patient.id}-${patient.name}`}
-                  type="button"
-                  value={patient.id}
-                  className="w-full py-1.5 px-3 text-left"
-                  onClick={() => select(patient.name)}
-                  onKeyDown={keydownAtButton}
-                >
-                  {patient.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </>
+        <ul
+          className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white"
+          ref={ulRef}
+        >
+          <div>
+            <div className="mx-3 border-b" />
+          </div>
+          {selectionList.map((patient) => (
+            <li key={`auto-complete__patient_${patient.id}-${patient.name}`}>
+              <button
+                id={`auto-complete__patient_${patient.id}-${patient.name}`}
+                type="button"
+                value={patient.id}
+                className="w-full py-1.5 px-3 text-left"
+                onClick={() => select(patient.name)}
+                onKeyDown={keydownAtButton}
+              >
+                {patient.name}
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </>
   );

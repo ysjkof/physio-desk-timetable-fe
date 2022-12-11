@@ -20,9 +20,9 @@ const AutoCompleteForUser = ({
 
   const { register, setValue } = useForm<Pick<FormOfReserveFields, 'user'>>();
 
-  const firstMember = selectionList[0];
-  const firstButtonId = firstMember
-    ? `auto-complete__user_${firstMember.id}-${firstMember.user.name}`
+  const firstListItem = selectionList[0];
+  const firstButtonId = firstListItem
+    ? `auto-complete__user_${firstListItem.id}-${firstListItem.user.name}`
     : '';
 
   const {
@@ -45,7 +45,7 @@ const AutoCompleteForUser = ({
   });
 
   const handleFocus = () => {
-    if (!firstMember || hasList) return;
+    if (!firstListItem || hasList) return;
     openList();
   };
 
@@ -71,30 +71,28 @@ const AutoCompleteForUser = ({
         ref={inputRef}
       />
       {hasList && !selectedValue && selectionList && (
-        <>
-          <ul
-            className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white"
-            ref={ulRef}
-          >
-            <div>
-              <div className="mx-3 border-b" />
-            </div>
-            {selectionList.map((m) => (
-              <li key={`auto-complete__user_${m.id}-${m.user.name}`}>
-                <button
-                  id={`auto-complete__user_${m.id}-${m.user.name}`}
-                  type="button"
-                  value={m.user.id}
-                  className="w-full py-1.5 px-3 text-left"
-                  onClick={() => select(m.user.name)}
-                  onKeyDown={keydownAtButton}
-                >
-                  {m.user.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </>
+        <ul
+          className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white"
+          ref={ulRef}
+        >
+          <div>
+            <div className="mx-3 border-b" />
+          </div>
+          {selectionList.map((member) => (
+            <li key={`auto-complete__user_${member.id}-${member.user.name}`}>
+              <button
+                id={`auto-complete__user_${member.id}-${member.user.name}`}
+                type="button"
+                value={member.user.id}
+                className="w-full py-1.5 px-3 text-left"
+                onClick={() => select(member.user.name)}
+                onKeyDown={keydownAtButton}
+              >
+                {member.user.name}
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
