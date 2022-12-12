@@ -9,16 +9,27 @@ import type { FormOfReserveFields } from '../../../../types/form.types';
 
 interface AutoCompleteForUserProps {
   label: string;
+  userId: number;
   setValue: UseFormSetValue<FormOfReserveFields>;
 }
 
 const AutoCompleteForUser = ({
   label,
+  userId,
   setValue: setValueOfParentInput,
 }: AutoCompleteForUserProps) => {
   const selectionList = useState(ClinicsOfClient.selectedClinic.members)[0];
+  const name = selectionList.find((member) => member.user.id === userId)?.user
+    .name;
+  const getUserId = (name: string) => {
+    const user = selectionList.find((member) => member.user.name === name);
+    if (!user) throw new Error('사용자를 찾을 수 없습니다.');
+    return user.id;
+  };
 
-  const { register, setValue } = useForm<Pick<FormOfReserveFields, 'user'>>();
+  const { register, setValue } = useForm<{ name: string }>({
+    defaultValues: { name },
+  });
 
   const firstListItem = selectionList[0];
   const firstButtonId = firstListItem
@@ -39,9 +50,10 @@ const AutoCompleteForUser = ({
     firstButtonId,
     setInput(value) {
       if (!value) throw Error('Input 값의 유형이 바르지 않습니다.');
-      setValue('user', value);
-      setValueOfParentInput('user', value);
+      setValue('name', value);
+      setValueOfParentInput('userId', getUserId(value));
     },
+    initialValue: name,
   });
 
   const handleFocus = () => {
@@ -65,7 +77,7 @@ const AutoCompleteForUser = ({
             ? 'rounded-b-none border-2 border-b-0 border-cst-blue'
             : ''
         )}
-        register={register('user')}
+        register={register('name')}
         onKeyDown={keydownAtInput}
         onFocus={handleFocus}
         ref={inputRef}

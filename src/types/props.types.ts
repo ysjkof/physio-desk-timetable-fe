@@ -60,6 +60,7 @@ export interface UseAutoCompleteProps<T> {
   setInput: (value: T | null) => void;
   clearList?: () => void;
   query?: (query: string) => void;
+  initialValue?: T | null;
 }
 
 export interface DatepickerProps extends CloseAction {

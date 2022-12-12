@@ -1,7 +1,7 @@
 export interface FormOfReserveFields {
-  user: string;
-  patient: string;
-  date: Date;
+  userId: number;
+  patientId: number;
+  startDate: Date;
   prescriptions: number[];
   memo: string;
 }

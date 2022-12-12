@@ -1,31 +1,57 @@
-import { type PropsWithChildren } from 'react';
+import { useMemo, type PropsWithChildren } from 'react';
 import { useForm } from 'react-hook-form';
-import { set } from 'date-fns';
+import { addMinutes } from 'date-fns';
 import { DateForm, InputWrapper, MenuButton } from '../../../../components';
 import AutoCompleteForUser from './AutoCompleteForUser';
 import AutoCompleteForPatient from './AutoCompleteForPatient';
 import AutoCompleteForPrescription from './AutoCompleteForPrescription';
 import { Textarea } from './InputForReserve';
-import { TableTime } from '../../../../models';
+import { ClinicsOfClient, SelectedPrescriptions } from '../../../../models';
+import { useFindPrescriptions } from '../../../../hooks';
 import type { FormOfReserveFields } from '../../../../types/form.types';
+import type { CloseAction } from '../../../../types/props.types';
 
-const FormForReservation = () => {
-  const { firstHour, firstMinute } = TableTime.get();
+interface FormForReservationProps extends CloseAction {
+  date: Date;
+  userId: number;
+}
+
+const FormForReservation = ({
+  date,
+  userId,
+  closeAction,
+}: FormForReservationProps) => {
   const { register, setValue, getValues, handleSubmit } =
     useForm<FormOfReserveFields>({
-      defaultValues: {
-        date: set(new Date(), {
-          hours: firstHour,
-          minutes: firstMinute,
-          seconds: 0,
-          milliseconds: 0,
-        }),
-      },
+      defaultValues: { startDate: date, userId },
     });
 
+  const { data, loading } = useFindPrescriptions();
+
+  const prescriptionList = useMemo(
+    () => new SelectedPrescriptions(data?.findPrescriptions.prescriptions),
+    [data, loading]
+  );
+
   const onSubmit = () => {
-    console.log(getValues());
+    const { startDate, memo, patientId, prescriptions, userId } = getValues();
+
+    const formData = {
+      startDate,
+      endDate: addMinutes(startDate, prescriptionList.getSelection().minute),
+      memo,
+      userId,
+      clinicId: ClinicsOfClient.selectedClinic.id,
+      patientId,
+      prescriptionIds: prescriptions,
+    };
+    console.log(formData);
   };
+
+  register('userId', { required: true });
+  register('patientId', { required: true });
+  register('prescriptions', { required: true });
+  register('startDate', { required: true });
 
   return (
     <form
@@ -34,16 +60,24 @@ const FormForReservation = () => {
     >
       <div className="flex flex-col gap-5 px-4">
         <InputWrapper label="담당치료사" required>
-          <AutoCompleteForUser label="담당치료사" setValue={setValue} />
+          <AutoCompleteForUser
+            label="담당치료사"
+            setValue={setValue}
+            userId={userId}
+          />
         </InputWrapper>
         <InputWrapper label="환자" required>
           <AutoCompleteForPatient label="환자" setValue={setValue} />
         </InputWrapper>
         <InputWrapper label="처방" required>
-          <AutoCompleteForPrescription label="처방" setValue={setValue} />
+          <AutoCompleteForPrescription
+            label="처방"
+            setValue={setValue}
+            prescriptionList={prescriptionList}
+          />
         </InputWrapper>
         <InputWrapper label="치료일정" required>
-          <DateForm date={getValues('date')} setValue={setValue} />
+          <DateForm date={getValues('startDate')} setValue={setValue} />
         </InputWrapper>
         <InputWrapper label="메모">
           <Textarea label="메모" rows={3} register={register('memo')} />
@@ -53,6 +87,7 @@ const FormForReservation = () => {
         <MenuButton
           type="button"
           className="w-full bg-close-bg text-base font-medium text-font-gray"
+          onClick={closeAction}
         >
           닫기
         </MenuButton>

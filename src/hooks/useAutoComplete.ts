@@ -8,9 +8,12 @@ export const useAutoComplete = <T>({
   setInput,
   clearList,
   query,
+  initialValue,
 }: UseAutoCompleteProps<T>) => {
   const [hasList, setHasList] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<T | null>(null);
+  const [selectedValue, setSelectedValue] = useState<T | null>(
+    initialValue || null
+  );
 
   const inputRef = useRef<HTMLInputElement>(null);
   const ulRef = useRef<HTMLUListElement>(null);

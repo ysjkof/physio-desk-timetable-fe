@@ -63,7 +63,7 @@ export const DateForm = ({
   const setParentDate = () => {
     const values = getValues();
     const setOptions = { ...values, date: values.day };
-    setValueOfParentInput('date', set(date, setOptions));
+    setValueOfParentInput('startDate', set(date, setOptions));
   };
 
   const setDateTime = (date: Date) => {

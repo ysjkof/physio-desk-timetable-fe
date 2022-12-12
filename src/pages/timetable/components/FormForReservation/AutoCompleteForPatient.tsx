@@ -7,6 +7,7 @@ import { useAutoComplete } from '../../../../hooks/useAutoComplete';
 import { SelectedValue } from './SelectedValue';
 import type { FormOfReserveFields } from '../../../../types/form.types';
 import type { SearchPatientQuery } from '../../../../types/generated.types';
+import { PatientInSearch } from '../../../../types/common.types';
 
 interface AutoCompleteForPatientProps {
   label: string;
@@ -20,8 +21,7 @@ const AutoCompleteForPatient = ({
   const [selectionList, setSelectionList] =
     useState<SearchPatientQuery['searchPatient']['patients']>();
 
-  const { register, setValue } =
-    useForm<Pick<FormOfReserveFields, 'patient'>>();
+  const { register, setValue } = useForm<{ name: string }>();
 
   const { patientQuery, data, loading } = useSearchPatient();
 
@@ -40,12 +40,12 @@ const AutoCompleteForPatient = ({
     openList,
     select,
     clearValue,
-  } = useAutoComplete<string>({
+  } = useAutoComplete<PatientInSearch>({
     firstButtonId,
     setInput(value) {
       if (!value) throw Error('Input 값의 유형이 바르지 않습니다.');
-      setValue('patient', value);
-      setValueOfParentInput('patient', value);
+      setValue('name', value.name);
+      setValueOfParentInput('patientId', value.id);
     },
     clearList() {
       setSelectionList(null);
@@ -64,7 +64,9 @@ const AutoCompleteForPatient = ({
 
   if (selectedValue)
     return (
-      <SelectedValue clearValue={clearValue}>{selectedValue}</SelectedValue>
+      <SelectedValue clearValue={clearValue}>
+        {selectedValue.name}
+      </SelectedValue>
     );
 
   return (
@@ -78,7 +80,7 @@ const AutoCompleteForPatient = ({
             ? 'rounded-b-none border-2 border-b-0 border-cst-blue'
             : ''
         )}
-        register={register('patient')}
+        register={register('name')}
         onKeyDown={keydownAtInput}
         ref={inputRef}
       />
@@ -97,7 +99,7 @@ const AutoCompleteForPatient = ({
                 type="button"
                 value={patient.id}
                 className="w-full py-1.5 px-3 text-left"
-                onClick={() => select(patient.name)}
+                onClick={() => select(patient)}
                 onKeyDown={keydownAtButton}
               >
                 {patient.name}

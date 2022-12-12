@@ -1,35 +1,33 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, UseFormSetValue } from 'react-hook-form';
-import { checkLengthIsZero, cls } from '../../../../utils/common.utils';
-import { useAutoComplete, useFindPrescriptions } from '../../../../hooks';
+import { cls } from '../../../../utils/common.utils';
+import { useAutoComplete } from '../../../../hooks';
+import { SelectedPrescriptions } from '../../../../models';
 import { InputWithRef } from './InputForReserve';
 import { SelectedValue } from './SelectedValue';
-import { SelectedPrescriptions } from '../../../../models';
+import { PrescriptionTotal } from './PrescriptionTotal';
 import type { FormOfReserveFields } from '../../../../types/form.types';
 import type { Prescription } from '../../../../types/generated.types';
 import type { SelectedPrescription } from '../../../../types/common.types';
-import { PrescriptionTotal } from './PrescriptionTotal';
 
 interface AutoCompleteForPrescriptionProps {
   label: string;
+  prescriptionList: SelectedPrescriptions;
   setValue: UseFormSetValue<FormOfReserveFields>;
 }
 
 const AutoCompleteForPrescription = ({
   label,
+  prescriptionList,
   setValue: setValueOfParentInput,
 }: AutoCompleteForPrescriptionProps) => {
-  const [selectionList, setSelectionList] = useState<
-    Prescription[] | undefined
-  >([]);
+  const [selectionList, setSelectionList] = useState<Prescription[]>();
 
   const { register, setValue, getValues } = useForm<{
     prescriptions: string;
   }>();
 
-  const { data, loading } = useFindPrescriptions();
-
-  const firstListItem = data?.findPrescriptions.prescriptions?.[0];
+  const firstListItem = prescriptionList.getAll()[0];
   const firstButtonId = firstListItem
     ? `auto-complete__prescription_${firstListItem.id}-${firstListItem.name}`
     : '';
@@ -53,30 +51,23 @@ const AutoCompleteForPrescription = ({
     },
   });
 
-  const prescriptionList = useMemo(
-    () => new SelectedPrescriptions(data?.findPrescriptions.prescriptions),
-    [data]
-  );
-
   const [selectedPrescription, setSelectedPrescription] =
-    useState<SelectedPrescription>(prescriptionList.get());
+    useState<SelectedPrescription>(prescriptionList.getSelection());
 
   const toggleValue = (prescriptionId: number) => {
     const freshSelection = prescriptionList.toggleById(prescriptionId);
-    setSelectedPrescription({ ...freshSelection.get() });
+    setSelectedPrescription({ ...freshSelection.getSelection() });
     setValue('prescriptions', freshSelection.getNames());
   };
-
-  useEffect(() => {
-    if (loading) return;
-    const freshList = checkLengthIsZero(data?.findPrescriptions.prescriptions);
-    setSelectionList(freshList);
-  }, [data]);
 
   const handleFocus = () => {
     if (!firstListItem || hasList) return;
     openList();
   };
+
+  useEffect(() => {
+    setSelectionList(prescriptionList.getAll());
+  }, [prescriptionList.getAll()]);
 
   if (selectedValue) {
     return (
@@ -107,6 +98,9 @@ const AutoCompleteForPrescription = ({
         onFocus={handleFocus}
         ref={inputRef}
       />
+      {hasList && !selectedValue && !selectionList && (
+        <div>처방이 없습니다.</div>
+      )}
       {hasList && !selectedValue && selectionList && (
         <ul
           className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white"
