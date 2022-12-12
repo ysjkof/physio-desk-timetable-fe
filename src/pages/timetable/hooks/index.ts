@@ -1,3 +1,4 @@
+import { useCreateReservation } from './useCreateReservation';
 import { useDayoff } from './useDayoff';
 import { useDeleteReservation } from './useDeleteReservation';
 import { useListReservations } from './useListReservations';
@@ -10,6 +11,7 @@ import { useTableLabel } from './useTableLabel';
 import { useTableTime } from './useTableTime';
 
 export {
+  useCreateReservation,
   useDayoff,
   useDeleteReservation,
   useListReservations,
