@@ -9,6 +9,7 @@ import {
   MeQuery,
   Notice,
   Prescription,
+  SearchPatientQuery,
   User,
 } from './generated.types';
 
@@ -84,6 +85,10 @@ export interface PrescriptionWithSelect extends Prescription {
 export interface IsActive {
   isActive: boolean;
 }
+
+export type PatientInSearch = NonNullable<
+  SearchPatientQuery['searchPatient']['patients']
+>[0];
 
 // me
 
@@ -200,4 +205,14 @@ export interface ClassNameProps {
 
 export interface ObjValueIsFx {
   [key: string]: () => void;
+}
+
+export interface LocationState {
+  startDate: {
+    hours: number;
+    minutes: number;
+    dayIndex: number;
+  };
+  userId: number;
+  isDayoff?: boolean;
 }

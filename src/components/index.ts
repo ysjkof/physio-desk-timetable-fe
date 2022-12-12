@@ -10,6 +10,7 @@ import TwoLabelSwitch from './TwoLabelSwitch';
 import InputWrapper from './WrapperForInput';
 import DateForm from './DateForm';
 import Timepicker from './Timepicker';
+import Modal from './Modal';
 
 export {
   ButtonOfPages,
@@ -24,4 +25,5 @@ export {
   InputWrapper,
   DateForm,
   Timepicker,
+  Modal,
 };
