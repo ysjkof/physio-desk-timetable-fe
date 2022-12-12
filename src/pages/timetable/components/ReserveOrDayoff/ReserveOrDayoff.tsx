@@ -1,26 +1,52 @@
 import { ButtonHTMLAttributes, useState, type PropsWithChildren } from 'react';
-import { IsActive } from '../../../../types/common.types';
+import { useReactiveVar } from '@apollo/client';
+import { useLocation } from 'react-router-dom';
+import { set, setDay } from 'date-fns';
+import { Modal } from '../../../../components';
+import { selectedDateVar } from '../../../../store';
 import { cls } from '../../../../utils/common.utils';
 import { FormForReservation } from '../FormForReservation';
+import type { IsActive, LocationState } from '../../../../types/common.types';
+import type { CloseAction } from '../../../../types/props.types';
 
-const ReserveOrDayoff = () => {
-  const [isReserve, setIsReserve] = useState(true);
+const ReserveOrDayoff = ({ closeAction }: CloseAction) => {
+  const location = useLocation();
+  const {
+    startDate: { hours, minutes, dayIndex },
+    userId,
+    isDayoff,
+  }: LocationState = location.state;
+
+  const [isReserve, setIsReserve] = useState(!isDayoff);
+
+  const selectedDate = useReactiveVar(selectedDateVar);
+  const date = setDay(set(selectedDate, { hours, minutes }), dayIndex);
 
   const seeReserve = () => setIsReserve(true);
   const seeDayoff = () => setIsReserve(false);
 
   return (
-    <div className="w-96 border">
-      <Navigation>
-        <Tab isActive={isReserve} onClick={seeReserve}>
-          환자예약
-        </Tab>
-        <Tab isActive={!isReserve} onClick={seeDayoff}>
-          예약잠금
-        </Tab>
-      </Navigation>
-      <FormForReservation />
-    </div>
+    <Modal closeAction={closeAction}>
+      <div className="w-96 rounded-sm border">
+        <Navigation>
+          <Tab isActive={isReserve} onClick={seeReserve}>
+            환자예약
+          </Tab>
+          <Tab isActive={!isReserve} onClick={seeDayoff}>
+            예약잠금
+          </Tab>
+        </Navigation>
+        {isReserve ? (
+          <FormForReservation
+            closeAction={closeAction}
+            date={date}
+            userId={userId}
+          />
+        ) : (
+          <div>dayoff component</div>
+        )}
+      </div>
+    </Modal>
   );
 };
 
