@@ -1,3 +1,3 @@
-import Reserve from './Reserve';
+import FormForReservation from './FormForReservation';
 
-export { Reserve };
+export { FormForReservation };
