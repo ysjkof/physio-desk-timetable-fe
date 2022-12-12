@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 import { useForm } from 'react-hook-form';
 import { set } from 'date-fns';
-import { DateForm, InputWrapper } from '../../../../components';
+import { DateForm, InputWrapper, MenuButton } from '../../../../components';
 import AutoCompleteForUser from './AutoCompleteForUser';
 import AutoCompleteForPatient from './AutoCompleteForPatient';
 import AutoCompleteForPrescription from './AutoCompleteForPrescription';
@@ -23,7 +23,7 @@ const FormForReservation = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-5 border-y py-8"
+      className="flex flex-col gap-5 border-y pt-8"
     >
       <InputWrapper label="담당치료사" required>
         <AutoCompleteForUser label="담당치료사" setValue={setValue} />
@@ -41,8 +41,19 @@ const FormForReservation = () => {
         <Textarea label="메모" rows={3} register={register('memo')} />
       </InputWrapper>
       <Buttons>
-        <button type="button">닫기</button>
-        <button type="submit">예약하기</button>
+        <MenuButton
+          type="button"
+          className="w-full bg-close-bg text-base font-medium text-font-gray"
+        >
+          닫기
+        </MenuButton>
+        <MenuButton
+          onClick={handleSubmit(onSubmit)}
+          type="submit"
+          className="w-full bg-cst-blue text-base font-medium text-white"
+        >
+          예약하기
+        </MenuButton>
       </Buttons>
     </form>
   );
@@ -51,5 +62,5 @@ const FormForReservation = () => {
 export default FormForReservation;
 
 const Buttons = ({ children }: PropsWithChildren) => {
-  return <div>{children}</div>;
+  return <div className="flex gap-4 bg-light-gray px-4 py-4">{children}</div>;
 };
