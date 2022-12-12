@@ -1,5 +1,4 @@
-vite.config.ts
-apollo.config.js
+*.config.*
 src/types/generated.types.ts
 src/pages/TestPage.tsx
 src/main.tsx
