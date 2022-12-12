@@ -10,25 +10,25 @@ export const TimepickerMain = () => {
   const hours = TableTime.getHours();
   const minutes = TableTime.getMinutes();
 
-  const selectHour = (hour: number) => {
-    if (selectionTime.hour === hour) return closeAction();
-    setHours(hour);
+  const selectHour = (hours: number) => {
+    if (selectionTime.hours === hours) return closeAction();
+    setHours(hours);
   };
-  const selectMinute = (minute: number) => {
-    if (selectionTime.minute === minute) return closeAction();
-    setMinutes(minute);
+  const selectMinute = (minutes: number) => {
+    if (selectionTime.minutes === minutes) return closeAction();
+    setMinutes(minutes);
   };
 
   return (
     <div className="flex h-32 text-center text-sm">
-      <Scroll type="hour" numbers={hours} selectAction={selectHour} />
-      <Scroll type="minute" numbers={minutes} selectAction={selectMinute} />
+      <Scroll type="hours" numbers={hours} selectAction={selectHour} />
+      <Scroll type="minutes" numbers={minutes} selectAction={selectMinute} />
     </div>
   );
 };
 
 interface ScrollProps {
-  type: 'hour' | 'minute';
+  type: 'hours' | 'minutes';
   numbers: number[];
   selectAction: (number: number) => void;
 }
@@ -36,7 +36,7 @@ interface ScrollProps {
 const Scroll = ({ type, numbers, selectAction }: ScrollProps) => {
   const { selectionTime } = useContext(TimepickerContext);
 
-  const title = type === 'hour' ? '시' : '분';
+  const title = type === 'hours' ? '시' : '분';
 
   return (
     <div className="hidden-scrollbar flex flex-col overflow-y-scroll">

@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useForm, type UseFormSetValue } from 'react-hook-form';
+import { set } from 'date-fns';
 import { cls } from '../../utils/common.utils';
 import Datepicker from '../Datepicker';
 import Timepicker from '../Timepicker';
 import { InputForDateForm } from './InputForDateForm';
-import type { HourAndMinute } from '../../types/common.types';
+import type { HoursAndMinutes } from '../../types/common.types';
 import type { FormOfReserveFields } from '../../types/form.types';
 
 interface DateFormFields {
   year: number;
   month: number;
   day: number;
-  hour: number;
-  minute: number;
+  hours: number;
+  minutes: number;
 }
 
 interface DateFormProps {
@@ -26,7 +27,7 @@ export const DateForm = ({
   hasHour = true,
   setValue: setValueOfParentInput,
 }: DateFormProps) => {
-  const { register, setValue } = useForm<DateFormFields>();
+  const { register, setValue, getValues } = useForm<DateFormFields>();
 
   const [hasDatepicker, setHasDatepicker] = useState(false);
   const [hasTimepicker, setHasTimepicker] = useState(false);
@@ -50,20 +51,27 @@ export const DateForm = ({
     setValue('year', date.getFullYear());
     setValue('month', date.getMonth() + 1);
     setValue('day', date.getDate());
-    setValueOfParentInput('date', date); // 시분 갱신해야됨
+    setParentDate();
   };
 
-  const setTime = ({ hour, minute }: HourAndMinute) => {
-    if (hour) setValue('hour', hour);
-    if (minute) setValue('minute', minute);
+  const setTime = ({ hours, minutes }: HoursAndMinutes) => {
+    if (typeof hours === 'number') setValue('hours', hours);
+    if (typeof minutes === 'number') setValue('minutes', minutes);
+    setParentDate();
+  };
+
+  const setParentDate = () => {
+    const values = getValues();
+    const setOptions = { ...values, date: values.day };
+    setValueOfParentInput('date', set(date, setOptions));
   };
 
   const setDateTime = (date: Date) => {
     setValue('year', date.getFullYear());
     setValue('month', date.getMonth() + 1);
     setValue('day', date.getDate());
-    setValue('hour', date.getHours());
-    setValue('minute', date.getMinutes());
+    setValue('hours', date.getHours());
+    setValue('minutes', date.getMinutes());
   };
 
   useEffect(() => {
@@ -74,42 +82,43 @@ export const DateForm = ({
   return (
     <div
       className={cls(
-        'datepicker__input relative grid h-fit w-full gap-1',
+        'relative grid w-full gap-1',
         hasHour
           ? 'grid-cols-[1fr_repeat(4,_0.7fr)]'
           : 'grid-cols-[1fr_repeat(2,_0.7fr)]'
       )}
+      onBlur={setParentDate}
     >
       <InputForDateForm
         label="년"
         register={register('year')}
-        className="w-full rounded-md border py-1 pr-5 text-right text-sm text-cst-blue shadow-sm transition-colors focus:border-cst-blue focus:outline-none focus:ring-1 focus:ring-cst-blue"
+        className="date-form__input"
         onFocus={openDatepicker}
       />
       <InputForDateForm
         label="월"
         register={register('month')}
-        className="input-datepicker text-sm"
+        className="date-form__input"
         onFocus={openDatepicker}
       />
       <InputForDateForm
         label="일"
         register={register('day')}
-        className="input-datepicker text-sm"
+        className="date-form__input"
         onFocus={openDatepicker}
       />
       {hasHour && (
         <>
           <InputForDateForm
             label="시"
-            register={register('hour')}
-            className="input-datepicker text-sm"
+            register={register('hours')}
+            className="date-form__input"
             onFocus={openTimepicker}
           />
           <InputForDateForm
             label="분"
-            register={register('minute', { minLength: 2, maxLength: 2 })}
-            className="input-datepicker text-sm"
+            register={register('minutes', { minLength: 2, maxLength: 2 })}
+            className="date-form__input"
             onFocus={openTimepicker}
             minLength={1}
             maxLength={2}

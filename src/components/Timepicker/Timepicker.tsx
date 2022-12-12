@@ -3,23 +3,23 @@ import { TimepickerContext } from './TimepickerStore';
 import { TimepickerMain } from './TimepickerMain';
 import { TimepickerButtons } from './TimepickerButtons';
 import type { CloseAction } from '../../types/props.types';
-import type { HourAndMinute } from '../../types/common.types';
+import type { HoursAndMinutes } from '../../types/common.types';
 
 interface TimepickerProps extends CloseAction {
-  setTime: (args: HourAndMinute) => void;
+  setTime: (args: HoursAndMinutes) => void;
 }
 
 export const Timepicker = ({ closeAction, setTime }: TimepickerProps) => {
-  const [selectionTime, setSelectionTime] = useState({ hour: 9, minute: 0 });
+  const [selectionTime, setSelectionTime] = useState({ hours: 9, minutes: 0 });
 
-  const setHours = (hour: number) => {
-    setSelectionTime((prev) => ({ ...prev, hour }));
-    setTime({ hour });
+  const setHours = (hours: number) => {
+    setSelectionTime((prev) => ({ ...prev, hours }));
+    setTime({ hours });
   };
 
-  const setMinutes = (minute: number) => {
-    setSelectionTime((prev) => ({ ...prev, minute }));
-    setTime({ minute });
+  const setMinutes = (minutes: number) => {
+    setSelectionTime((prev) => ({ ...prev, minutes }));
+    setTime({ minutes });
   };
 
   const value = useMemo(

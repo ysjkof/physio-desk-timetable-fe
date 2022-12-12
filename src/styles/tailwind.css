@@ -61,6 +61,9 @@
   .input-datepicker {
     @apply w-full rounded-md border py-1 pr-5 text-right shadow-sm transition-colors focus:border-green-500 focus:outline-none focus:ring-green-500;
   }
+  .date-form__input {
+    @apply w-full rounded-md border py-1 pr-5 text-right text-sm text-cst-blue shadow-sm transition-colors focus:border-cst-blue focus:outline-none focus:ring-1 focus:ring-cst-blue;
+  }
 
   .bubble-arrow-t-center {
     @apply after:absolute after:bottom-full after:left-1/2 after:border-8 after:border-b-black  after:border-t-transparent after:border-l-transparent after:border-r-transparent;

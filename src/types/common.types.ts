@@ -27,9 +27,9 @@ export interface FirstAndLastTime {
   lastMinute: number;
 }
 
-export interface HourAndMinute {
-  hour?: number;
-  minute?: number;
+export interface HoursAndMinutes {
+  hours?: number;
+  minutes?: number;
 }
 
 export interface TableTimeOptions extends FirstAndLastTime {
