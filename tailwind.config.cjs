@@ -28,6 +28,7 @@ module.exports = {
         'form-label': '#74758E',
         'cst-blue': '#6BA6FF',
         'light-blue': '#D2E4FF',
+        'deep-blue': '#6889BB',
         disable: '#F2F2F9',
       },
       backgroundImage: {
