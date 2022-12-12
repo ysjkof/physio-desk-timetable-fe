@@ -41,7 +41,7 @@ export interface TableDisplayOptions {
   seeCancel: boolean;
   seeNoshow: boolean;
   seeList: boolean;
-  navigationExpand: boolean;
+  seeCalendar: boolean;
 }
 
 // typescript type & interface

@@ -7,7 +7,7 @@ export class TableDisplay {
     seeCancel: true,
     seeNoshow: true,
     seeList: false,
-    navigationExpand: false,
+    seeCalendar: false,
   };
 
   static #userIdAndName: UserIdAndName;

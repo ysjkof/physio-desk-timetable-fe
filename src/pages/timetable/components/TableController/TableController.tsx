@@ -1,14 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
-import {
-  addDays,
-  addMonths,
-  getMonth,
-  getWeekOfMonth,
-  subDays,
-  subMonths,
-} from 'date-fns';
+import { addDays, getMonth, getWeekOfMonth, subDays } from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,7 +28,7 @@ import {
   TwoLabelSwitch,
 } from '../../../../components';
 import { useSelectedClinic, useTableDisplay } from '../../hooks';
-import { ClinicsOfClient, TableDisplay } from '../../../../models';
+import { ClinicsOfClient } from '../../../../models';
 
 const TableController = () => {
   const hasTableDisplay = useReactiveVar(hasTableDisplayVar);
@@ -47,21 +40,14 @@ const TableController = () => {
 
   const { toggleUser } = useSelectedClinic();
 
-  const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
+  const { tableDisplay, toggleDisplayController, toggleDisplayOption } =
+    useTableDisplay();
 
   const handleDateNavMovePrev = () => {
-    const date = TableDisplay.get().navigationExpand
-      ? subMonths(selectedDate, 1)
-      : subDays(selectedDate, 7);
-
-    selectedDateVar(date);
+    selectedDateVar(subDays(selectedDate, 7));
   };
   const handleDateNavMoveNext = () => {
-    const date = TableDisplay.get().navigationExpand
-      ? addMonths(selectedDate, 1)
-      : addDays(selectedDate, 7);
-
-    selectedDateVar(date);
+    selectedDateVar(addDays(selectedDate, 7));
   };
 
   const settingRef = useRef<HTMLButtonElement>(null);
@@ -72,18 +58,20 @@ const TableController = () => {
   };
 
   const toggleCalender = () => {
-    toggleDisplayOption('navigationExpand');
+    toggleDisplayOption('seeCalendar');
   };
 
   const toggleUsers = (memberId: number) => {
     toggleUser(memberId);
   };
+
   const weekNumber = getWeekOfMonth(selectedDate);
   const month = `${getMonth(selectedDate) + 1}`.padStart(2, '0');
 
   const clearSelectedReservation = () => {
     selectedReservationVar(undefined);
   };
+
   useEffect(() => {
     return () => toggleDisplayController(false);
   }, []);
@@ -114,11 +102,11 @@ const TableController = () => {
           <TwoLabelSwitch
             labels={['하루', '주단위']}
             onClick={toggleWeekOrDay}
-            isActivated={!TableDisplay.get().hasWeekView}
+            isActivated={tableDisplay.hasWeekView}
           />
           <MenuButton
             onClick={toggleCalender}
-            isActivated={TableDisplay.get().navigationExpand}
+            isActivated={tableDisplay.seeCalendar}
           >
             <Calendar />
             달력보기
