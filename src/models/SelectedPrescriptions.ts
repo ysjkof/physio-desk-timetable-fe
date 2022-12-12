@@ -16,7 +16,11 @@ export class SelectedPrescriptions {
     this.#prescriptions = prescriptions || [];
   }
 
-  get() {
+  getAll() {
+    return this.#prescriptions;
+  }
+
+  getSelection() {
     return this.#list;
   }
 
