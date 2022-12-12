@@ -7,7 +7,7 @@ export const TimepickerButtons = () => {
 
   return (
     <div className="mt-2 flex justify-center gap-4 border-t">
-      <MenuButton borderNone onClick={closeAction}>
+      <MenuButton hasBorder onClick={closeAction}>
         닫기
       </MenuButton>
     </div>

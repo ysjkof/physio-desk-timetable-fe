@@ -158,19 +158,17 @@ const TableController = () => {
         )}
         <div className="flex w-full items-center justify-end gap-x-2">
           <MenuButton
-            backgroundColor="#6BA6FF"
-            color="white"
             onClick={() => navigate(ROUTES.createPatient)}
             ref={settingRef}
+            className="bg-cst-blue text-white"
           >
             <UserPlus />
             환자 등록하기
           </MenuButton>
           <MenuButton
-            backgroundColor="#6889BB"
-            color="white"
             onClick={() => toggleDisplayController()}
             ref={settingRef}
+            className="bg-deep-blue text-white"
           >
             <EllipsisVertical />
             설정
