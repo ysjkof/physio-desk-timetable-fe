@@ -12,7 +12,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
       type="button"
       {...args}
       className={cls(
-        'flex h-8 w-fit select-none items-center gap-2 whitespace-nowrap rounded-sm px-2',
+        'flex h-8 select-none items-center justify-center gap-2 whitespace-nowrap rounded-sm px-2',
         isActivated ? 'bg-gray-500 text-white' : '',
         hasBorder ? 'border border-gray-500' : '',
         args.className || ''
