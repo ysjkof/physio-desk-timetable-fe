@@ -5,7 +5,6 @@ import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
 } from '../../../../constants/constants';
-import { ROUTES } from '../../../../router/routes';
 import { cls } from '../../../../utils/common.utils';
 import type { SelectedReservationType } from '../../../../types/common.types';
 
@@ -32,11 +31,11 @@ const ReserveButton = ({
   const [isHover, setIsHover] = useState(false);
 
   const openReserveModal = () => {
-    navigate(ROUTES.reserve, {
+    navigate('', {
       state: {
         startDate: {
-          hour: +getFrom4DigitTime(label, 'hour'),
-          minute: +getFrom4DigitTime(label, 'minute'),
+          hours: Number.parseInt(getFrom4DigitTime(label, 'hour'), 10),
+          minutes: Number.parseInt(getFrom4DigitTime(label, 'minute'), 10),
           dayIndex,
         },
         userId,

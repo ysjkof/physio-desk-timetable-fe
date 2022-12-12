@@ -171,7 +171,7 @@ export function get4DigitHour(date: Date | string) {
 }
 
 export function getFrom4DigitTime(time: string, what: 'hour' | 'minute') {
-  return what === 'hour' ? +time.substring(0, 2) : time.substring(3, 5);
+  return what === 'hour' ? time.substring(0, 2) : time.substring(3, 5);
 }
 
 /**

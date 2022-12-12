@@ -1,9 +1,11 @@
-import { lazy } from 'react';
+import { lazy, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSchedules, useSubscriptions, useTableLabel } from './hooks';
 import { MUOOL } from '../../constants/constants';
 import {
+  ReserveOrDayoff,
   Schedules,
   TableAside,
   TableController,
@@ -11,7 +13,6 @@ import {
   TimetableTemplate,
 } from './components';
 import { TableDisplay } from '../../models';
-import TableModals from './_legacy_components/templates/TableModals';
 
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
@@ -19,6 +20,16 @@ const TimeTable = () => {
   const { labels } = useTableLabel();
   const { schedules, variables } = useSchedules();
   useSubscriptions({ variables });
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const closeAction = () => navigate('', { state: null });
+
+  console.log('TimeTable > location > ', location);
+
+  useEffect(() => {
+    return () => closeAction();
+  }, []);
 
   return (
     <>
@@ -44,7 +55,7 @@ const TimeTable = () => {
           }
         />
       )}
-      <TableModals />
+      {location.state && <ReserveOrDayoff closeAction={closeAction} />}
     </>
   );
 };
