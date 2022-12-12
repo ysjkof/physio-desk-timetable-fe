@@ -9,7 +9,7 @@ import {
   faCopy,
   faLock,
 } from '@fortawesome/free-solid-svg-icons';
-import { getTimeString } from '../../../../utils/date.utils';
+import { getStringOfTime } from '../../../../utils/date.utils';
 import { selectedReservationVar, tableDisplayVar } from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,
@@ -215,8 +215,8 @@ const EventBox = ({
             }}
           >
             <span className="mb-1 flex">
-              시간 : {getTimeString(new Date(event.startDate), false)} ~{' '}
-              {getTimeString(new Date(event.endDate), false)}
+              시간 : {getStringOfTime(new Date(event.startDate), false)} ~{' '}
+              {getStringOfTime(new Date(event.endDate), false)}
             </span>
             {!isDayOff && (
               <ul className="mb-1 flex flex-col">

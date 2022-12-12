@@ -48,7 +48,7 @@ export function getYMD(
  * @param date
  * @returns
  */
-export function getTimeString(date: Date, prefix?: boolean) {
+export function getStringOfTime(date: Date, prefix?: boolean) {
   return intlFormat(date, {
     hour: '2-digit',
     hour12: !!prefix,
@@ -56,16 +56,17 @@ export function getTimeString(date: Date, prefix?: boolean) {
   });
 }
 
-export function getDateOfNumeric(date: Date) {
+export function getStringOfDateTime(date: Date) {
   return intlFormat(date, {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
     hour: 'numeric',
+    minute: 'numeric',
   });
 }
 
-export function getDateOfString(date: Date) {
+export function getStringOfDate(date: Date) {
   return intlFormat(date, {
     year: 'numeric',
     month: 'long',
@@ -74,7 +75,7 @@ export function getDateOfString(date: Date) {
 
 export function getDateAndDifference(start: string, end: string) {
   const startDate = parseISO(start);
-  const date = getDateOfNumeric(startDate);
+  const date = getStringOfDateTime(startDate);
   const difference = differenceInMinutes(parseISO(end), startDate);
   return `${date} (${difference}분)`;
 }

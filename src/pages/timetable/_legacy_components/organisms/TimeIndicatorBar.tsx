@@ -4,13 +4,13 @@ import {
   TABLE_TIME_GAP,
 } from '../../../../constants/constants';
 import { TableTime } from '../../../../models/TableTime';
-import { getTimeString } from '../../../../utils/date.utils';
+import { getStringOfTime } from '../../../../utils/date.utils';
 import type { IsActive } from '../../../../types/common.types';
 
 export default function TimeIndicatorBar({ isActive }: IsActive) {
   const { firstTimeInMinute, lastTimeInMinute } = TableTime;
 
-  const [time, setTime] = useState(getTimeString(new Date()));
+  const [time, setTime] = useState(getStringOfTime(new Date()));
   const [top, setTop] = useState<number>();
 
   const setPosition = () => {
@@ -25,7 +25,7 @@ export default function TimeIndicatorBar({ isActive }: IsActive) {
       setTop(Math.floor((nowTime / TABLE_TIME_GAP) * TABLE_CELL_HEIGHT));
 
       if (!isActive) return;
-      setTime(getTimeString(new Date(), true));
+      setTime(getStringOfTime(new Date(), true));
     }
   };
 
