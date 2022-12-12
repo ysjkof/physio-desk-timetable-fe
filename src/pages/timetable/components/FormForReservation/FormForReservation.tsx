@@ -8,6 +8,7 @@ import AutoCompleteForPrescription from './AutoCompleteForPrescription';
 import { Textarea } from './InputForReserve';
 import { ClinicsOfClient, SelectedPrescriptions } from '../../../../models';
 import { useFindPrescriptions } from '../../../../hooks';
+import { useCreateReservation } from '../../hooks';
 import type { FormOfReserveFields } from '../../../../types/form.types';
 import type { CloseAction } from '../../../../types/props.types';
 
@@ -33,9 +34,13 @@ const FormForReservation = ({
     [data, loading]
   );
 
+  register('userId', { required: true });
+  register('patientId', { required: true });
+  register('prescriptions', { required: true });
+  register('startDate', { required: true });
+
   const onSubmit = () => {
     const { startDate, memo, patientId, prescriptions, userId } = getValues();
-
     const formData = {
       startDate,
       endDate: addMinutes(startDate, prescriptionList.getSelection().minute),
@@ -45,13 +50,10 @@ const FormForReservation = ({
       patientId,
       prescriptionIds: prescriptions,
     };
-    console.log(formData);
+    createReservation(formData);
   };
 
-  register('userId', { required: true });
-  register('patientId', { required: true });
-  register('prescriptions', { required: true });
-  register('startDate', { required: true });
+  const { createReservation } = useCreateReservation();
 
   return (
     <form
