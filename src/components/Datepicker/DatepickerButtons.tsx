@@ -7,7 +7,7 @@ export const DatepickerButtons = () => {
 
   return (
     <div className="mt-2 flex justify-end gap-4">
-      <MenuButton onClick={closeAction} className="bg-[#E4E4E4]">
+      <MenuButton onClick={closeAction} className="bg-close-bg">
         닫기
       </MenuButton>
     </div>
