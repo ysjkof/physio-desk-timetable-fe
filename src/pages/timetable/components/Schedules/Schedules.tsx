@@ -5,18 +5,16 @@ import { SchedulesStyle } from '../../../../styles/timetable.styles';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
-import { TableDisplay } from '../../../../models';
 import { cls } from '../../../../utils/common.utils';
-import { selectedDateVar } from '../../../../store';
+import { selectedDateVar, tableDisplayVar } from '../../../../store';
 import type { SchedulesProps } from '../../../../types/props.types';
 
 const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
   const today = new Date();
-  const selectedDate = useReactiveVar(selectedDateVar);
 
   const userLength = weekEvents[0].users.filter((user) => user.canSee).length;
 
-  const { hasWeekView } = TableDisplay.get();
+  const { hasWeekView } = useReactiveVar(tableDisplayVar);
 
   const containerStyle = hasWeekView
     ? SchedulesStyle.week.template(userLength)
@@ -25,6 +23,8 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
   const columnStyle = hasWeekView
     ? SchedulesStyle.week.userColumn(userLength)
     : SchedulesStyle.day.userColumn(userLength);
+
+  const selectedDate = useReactiveVar(selectedDateVar);
 
   const schedules = hasWeekView
     ? weekEvents
