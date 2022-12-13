@@ -55,11 +55,12 @@ const ToggleReservationState = ({ reservation }: EditReservationStateProps) => {
   return (
     <>
       <MenuButton
+        hasBorder
         className={cls(
-          'flex w-full cursor-pointer items-center justify-center gap-1 rounded-md py-2 text-sm text-white hover:text-black',
+          'flex w-full cursor-pointer items-center justify-center gap-1 rounded-md py-2 text-sm hover:ring hover:ring-navy',
           reservation.state === ReservationState.Canceled
-            ? 'bg-cst-blue'
-            : 'bg-gray-400'
+            ? 'border-navy text-navy'
+            : 'text-gray-500'
         )}
         onClick={() => editState(ReservationState.Canceled)}
       >
@@ -67,11 +68,12 @@ const ToggleReservationState = ({ reservation }: EditReservationStateProps) => {
         예약취소
       </MenuButton>
       <MenuButton
+        hasBorder
         className={cls(
-          'flex w-full cursor-pointer items-center justify-center gap-1 rounded-md py-2 text-sm text-white hover:text-black',
+          'flex w-full cursor-pointer items-center justify-center gap-1 rounded-md py-2 text-sm hover:ring hover:ring-navy',
           reservation.state === ReservationState.NoShow
-            ? 'bg-cst-blue'
-            : 'bg-gray-400'
+            ? 'border-navy text-navy'
+            : 'text-gray-500'
         )}
         onClick={() => editState(ReservationState.NoShow)}
       >

@@ -17,13 +17,13 @@ const SelectReservation = ({ reservation }: SelectReservationProps) => {
   };
   return (
     <MenuButton
+      hasBorder
       onClick={select}
       className={cls(
-        'flex w-full cursor-pointer items-center justify-center gap-1 rounded-md py-2 text-sm text-white hover:text-black',
-        selectedReservation?.id === reservation.id &&
-          reservation.state === ReservationState.Reserved
-          ? 'bg-cst-blue'
-          : 'bg-gray-400'
+        'flex w-full cursor-pointer items-center justify-center gap-1 rounded-md py-2 text-sm hover:ring hover:ring-navy',
+        selectedReservation?.id === reservation.id
+          ? 'border-navy text-navy'
+          : 'text-gray-500'
       )}
     >
       <FontAwesomeIcon icon={faCopy} fontSize={16} />

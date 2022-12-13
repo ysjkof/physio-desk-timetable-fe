@@ -29,6 +29,7 @@ module.exports = {
         'cst-blue': '#6BA6FF',
         'light-blue': '#D2E4FF',
         'deep-blue': '#6889BB',
+        navy: '#00079D',
         'close-bg': '#E4E4E4',
         'light-gray': '#F5F4F7',
         'font-gray': '#5E5A5A',

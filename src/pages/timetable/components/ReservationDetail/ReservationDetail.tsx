@@ -24,8 +24,10 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
 
   return (
     <div className="w-[300px]">
-      <h2 className="my-2 text-center text-xl font-medium">예약 자세히 보기</h2>
-      <div className="space-y-2 border-t pt-2">
+      <h2 className="my-2 text-center text-xl font-medium text-navy">
+        예약 자세히 보기
+      </h2>
+      <div className="space-y-2 border-t border-navy pt-2">
         <DetailBox title="환자정보">
           <li>등록번호 : {patient.registrationNumber}</li>
           <li>이름 : {patient.name}</li>
@@ -76,7 +78,7 @@ const DetailBox = ({
 }: DetailBoxProps) => {
   return (
     <div className="px-4">
-      <div className="text-base font-medium">{title}</div>
+      <div className="text-base font-medium text-navy">{title}</div>
       {isParagraph ? (
         <p className="mx-4 max-h-16 min-h-[1rem] overflow-y-scroll break-words rounded-sm py-1">
           {children}
