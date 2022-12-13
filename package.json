@@ -7,7 +7,8 @@
     "dev": "npm run codegen & vite",
     "build": "tsc && vite build && npm run copy:redirects",
     "preview": "vite preview",
-    "copy:redirects": "cp _redirects ./dist/_redirects"
+    "copy:redirects": "cp _redirects ./dist/_redirects",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@apollo/client": "^3.7.2",
