@@ -1,4 +1,5 @@
 import { toastVar } from '../store';
+import { ReservationState } from '../types/generated.types';
 
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
@@ -19,6 +20,18 @@ export function getPositionRef(
 
   const top = refTop + height + (modalGap || 0);
   return { top, width, left, right };
+}
+
+export function getStringFromReservationState(
+  state: keyof typeof ReservationState
+) {
+  const korWord = {
+    Canceled: '취소',
+    DayOff: '휴가',
+    NoShow: '부도',
+    Reserved: '예약',
+  };
+  return korWord[state];
 }
 
 export function getMemberState(
