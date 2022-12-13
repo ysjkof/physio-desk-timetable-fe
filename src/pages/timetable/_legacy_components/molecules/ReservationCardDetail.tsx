@@ -1,7 +1,7 @@
 import { getTimeLength } from '../../../../utils/date.utils';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { ReservationInList } from '../../../../types/common.types';
-import EditReservationState from './EditReservationState';
+import ToggleReservationState from '../../components/ToggleReservationState/ToggleReservationState';
 import CardDetail from './CardDetail';
 
 interface ReservationCardDetailProps {
@@ -30,7 +30,7 @@ export default function ReservationCardDetail({
       <CardDetail.State>
         {RESERVATION_STATE_KOR[state]}
         <div className="space-x-4">
-          <EditReservationState reservation={reservation} />
+          <ToggleReservationState reservation={reservation} />
         </div>
       </CardDetail.State>
       <CardDetail.LastUpdate
