@@ -6,20 +6,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCancel,
   faCommentSlash,
-  faCopy,
   faLock,
 } from '@fortawesome/free-solid-svg-icons';
-import { getStringOfTime } from '../../../../utils/date.utils';
-import { selectedReservationVar, tableDisplayVar } from '../../../../store';
+import { tableDisplayVar } from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
 } from '../../../../constants/constants';
-import EditReservationState from '../../_legacy_components/molecules/EditReservationState';
 import { cls } from '../../../../utils/common.utils';
-import { ROUTES } from '../../../../router/routes';
 import { ReservationState } from '../../../../types/generated.types';
 import type { ReservationInList } from '../../../../types/common.types';
+import TooltipForReservationDetail from './TooltipForReservation';
 
 interface EventBoxProps {
   userIndex: number;
@@ -36,7 +33,6 @@ const EventBox = ({
   maxTableHeight,
   numberOfCell,
   event,
-  isSingleUser,
 }: EventBoxProps) => {
   const navigate = useNavigate();
   const tableDisplay = useReactiveVar(tableDisplayVar);
@@ -52,64 +48,53 @@ const EventBox = ({
   if (height > maxTableHeight) height = maxTableHeight;
 
   const eventBox = useRef<HTMLDivElement>(null);
-  const eventController = useRef<HTMLDivElement>(null);
   const tooltip = useRef<HTMLDivElement>(null);
 
   const positioningTooltip = () => {
-    if (eventBox.current && tooltip.current && eventController.current) {
-      const {
-        offsetTop: eventBoxTop,
-        clientHeight: boxHeight,
-        parentElement: eventBoxParentElement,
-      } = eventBox.current;
-      if (!eventBoxParentElement) throw new Error('이벤트 박스가 없습니다.');
+    if (!eventBox.current || !tooltip.current) return;
 
-      const { clientHeight: userColsWidth } = eventBoxParentElement;
+    const { clientHeight: boxHeight, parentElement: eventBoxParentElement } =
+      eventBox.current;
+    if (!eventBoxParentElement) throw new Error('이벤트 박스가 없습니다.');
 
-      const columnContainer = document.getElementById('timetable__template');
-      if (!columnContainer) throw new Error('스케쥴 컨테이너가 없습니다.');
+    const { clientHeight: userColsWidth } = eventBoxParentElement;
 
-      const { clientHeight: columnViewportHeight } = columnContainer;
+    const columnContainer = document.getElementById('timetable__template');
+    if (!columnContainer) throw new Error('스케쥴 컨테이너가 없습니다.');
 
-      const {
-        right: tooltipRight,
-        width: tooltipWidth,
-        bottom: tooltipBottom,
-      } = tooltip.current.getBoundingClientRect();
+    const { clientHeight: columnViewportHeight } = columnContainer;
 
-      if (tooltipRight > userColsWidth) {
-        tooltip.current.classList.remove('left-[90px]');
-        tooltip.current.style.left = `-${tooltipWidth}px`;
-      }
+    const {
+      right: tooltipRight,
+      width: tooltipWidth,
+      bottom: tooltipBottom,
+    } = tooltip.current.getBoundingClientRect();
 
-      if (tooltipBottom > columnViewportHeight) {
-        tooltip.current.classList.remove('top-5');
+    if (tooltipRight > userColsWidth) {
+      tooltip.current.classList.remove('left-[90px]');
+      tooltip.current.style.left = `-${tooltipWidth}px`;
+    }
 
-        const boxTop = +inset.split('px')[0];
-        const boxBottom = boxHeight + boxTop;
-        const isOverflow = maxTableHeight < boxBottom;
+    if (tooltipBottom > columnViewportHeight) {
+      tooltip.current.classList.remove('top-5');
 
-        if (isOverflow) {
-          tooltip.current.style.bottom = `${boxBottom - maxTableHeight}px`;
-        } else {
-          tooltip.current.style.top = `-${
-            tooltipBottom - columnViewportHeight
-          }px`;
-        }
-      }
+      const boxTop = +inset.split('px')[0];
+      const boxBottom = boxHeight + boxTop;
+      const isOverflow = maxTableHeight < boxBottom;
 
-      if (eventBoxTop === 0) {
-        eventController.current.classList.remove('-top-[1.2rem]');
+      if (isOverflow) {
+        tooltip.current.style.bottom = `${boxBottom - maxTableHeight}px`;
+      } else {
+        tooltip.current.style.top = `-${
+          tooltipBottom - columnViewportHeight
+        }px`;
       }
     }
   };
 
   function onClickBox() {
-    navigate(ROUTES.editReservation, { state: { reservationId: event.id } });
+    navigate('', { state: { reservationId: event.id } });
   }
-  const selectReservation = () => {
-    selectedReservationVar(event);
-  };
 
   useEffect(() => {
     if (isHover) positioningTooltip();
@@ -178,63 +163,8 @@ const EventBox = ({
           ) // 칸이 없어서 메모 생략
         }
       </div>
-
       {isHover && (
-        <>
-          {!isDayOff && (
-            <motion.div
-              ref={eventController}
-              initial={{ width: 0 }}
-              animate={{
-                width: '100%',
-                transition: { bounce: 'twin', duration: 0.2 },
-              }}
-              className="absolute left-0 -top-[1.2rem] flex items-baseline justify-between overflow-hidden bg-gray-100 px-2 pb-[0.2rem] text-gray-800"
-            >
-              <FontAwesomeIcon
-                icon={faCopy}
-                fontSize={16}
-                className="text-green-500 hover:scale-125"
-                onClick={selectReservation}
-              />
-              <EditReservationState reservation={event} />
-            </motion.div>
-          )}
-          <div
-            ref={tooltip}
-            className={cls(
-              'EVENT-BOX__TOOL-TIP absolute top-5 w-[150px] rounded border p-1 shadow-cst',
-              isSingleUser ? 'left-[162px]' : 'left-[90px]',
-              !isReserve ? 'no-reserved' : ''
-            )}
-            style={{
-              ...(isReserve && {
-                borderColor: USER_COLORS[userIndex]?.deep ?? 'black',
-                backgroundColor: USER_COLORS[userIndex]?.light ?? 'white',
-              }),
-            }}
-          >
-            <span className="mb-1 flex">
-              시간 : {getStringOfTime(new Date(event.startDate), false)} ~{' '}
-              {getStringOfTime(new Date(event.endDate), false)}
-            </span>
-            {!isDayOff && (
-              <ul className="mb-1 flex flex-col">
-                처방 :
-                {event.prescriptions?.map((prescription, i) => (
-                  <li key={i} className="flex pl-2">
-                    <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-                      {prescription.name}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {event.memo && (
-              <div className="flex flex-col pt-1">메모 : {event.memo}</div>
-            )}
-          </div>
-        </>
+        <TooltipForReservationDetail reservation={event} ref={tooltip} />
       )}
     </motion.div>
   );
