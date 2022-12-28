@@ -6,7 +6,11 @@ import { DatepickerMain } from './DatepickerMain';
 import { DatepickerButtons } from './DatepickerButtons';
 import { DatepickerProps } from '../../types/props.types';
 
-export const Datepicker = ({ closeAction, setDate }: DatepickerProps) => {
+export const Datepicker = ({
+  closeAction,
+  setDate,
+  disablePreviousDay,
+}: DatepickerProps) => {
   const today = new Date();
 
   const calendar = useMemo(() => new CalendarModel(today), []);
@@ -42,7 +46,7 @@ export const Datepicker = ({ closeAction, setDate }: DatepickerProps) => {
       <div className="datepicker__calendar-body z-50 min-w-[240px] max-w-[440px]">
         <div className="flex w-full flex-col rounded-md border bg-white p-3">
           <DatepickerNavigation />
-          <DatepickerMain />
+          <DatepickerMain disablePreviousDay={disablePreviousDay} />
           <DatepickerButtons />
         </div>
       </div>

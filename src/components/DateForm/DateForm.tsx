@@ -17,12 +17,14 @@ interface DateFormFields {
 interface DateFormProps {
   date?: Date;
   hasHour?: boolean;
+  disablePreviousDay?: boolean;
   setParentValue: (date: Date) => void;
 }
 
 export const DateForm = ({
   date,
   hasHour = false,
+  disablePreviousDay,
   setParentValue,
 }: DateFormProps) => {
   const { register, setValue, getValues } = useForm<DateFormFields>();
@@ -130,7 +132,11 @@ export const DateForm = ({
       )}
       {hasDatepicker && (
         <div className="absolute left-0 top-8 z-10 bg-white">
-          <Datepicker closeAction={closeDatepicker} setDate={setDate} />
+          <Datepicker
+            closeAction={closeDatepicker}
+            setDate={setDate}
+            disablePreviousDay={disablePreviousDay}
+          />
         </div>
       )}
       {hasTimepicker && (

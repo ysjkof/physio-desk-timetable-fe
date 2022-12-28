@@ -5,7 +5,11 @@ import { cls } from '../../utils/common.utils';
 import { compareDateMatch, isPastDate } from '../../utils/date.utils';
 import { DatepickerContext } from './DatepickerStore';
 
-export const DatepickerMain = () => {
+interface DatepickerMainProps {
+  disablePreviousDay: boolean | undefined;
+}
+
+export const DatepickerMain = ({ disablePreviousDay }: DatepickerMainProps) => {
   const yesterDay = endOfYesterday();
   const { month } = useContext(DatepickerContext);
 
@@ -14,7 +18,9 @@ export const DatepickerMain = () => {
       <div className="grid w-full grid-cols-7 pr-1.5 text-center text-sm">
         <Title />
         {month.map((day) => {
-          const isActivate = !isPastDate(day.getDate(), yesterDay);
+          const isActivate = disablePreviousDay
+            ? !isPastDate(day.getDate(), yesterDay)
+            : true;
           return (
             <CalendarDay
               isActivate={isActivate}
