@@ -9,6 +9,7 @@ import ChevronUp from './ChevronUp';
 import CogSixTooth from './CogSixTooth';
 import Edit from './Edit';
 import EllipsisVertical from './EllipsisVertical';
+import Patient from './Patient';
 import Table from './Table';
 import UserPlus from './UserPlus';
 import XMark from './XMark';
@@ -25,6 +26,7 @@ export {
   CogSixTooth,
   Edit,
   EllipsisVertical,
+  Patient,
   Table,
   UserPlus,
   XMark,
