@@ -4,6 +4,7 @@ import { ROUTES } from '../../../../router/routes';
 import { cls } from '../../../../utils/common.utils';
 import { CogSixTooth, Building, Table } from '../../../../svgs';
 import TableClinicSelector from './TableClinicSelector';
+import { useTableDisplay } from '../../hooks';
 
 interface LiProps extends PropsWithChildren {
   to: string;
@@ -11,27 +12,50 @@ interface LiProps extends PropsWithChildren {
 }
 
 const TableAside = () => {
+  const {
+    tableDisplay: { asideExtension: extendedAside },
+    toggleDisplayOption,
+  } = useTableDisplay();
+
+  const toggleAsideExtension = () => {
+    toggleDisplayOption('asideExtension');
+  };
+
   return (
     <aside
       id="timetable__aside-nav"
-      className="flex h-full w-44 flex-col justify-between bg-table-aside-bg py-4 text-white"
+      className="flex h-full w-full flex-col justify-between bg-table-aside-bg py-4 text-white"
     >
-      <div className="mb-6 flex flex-col items-center justify-center gap-2 px-4">
-        <Link to="/">
-          <Logo />
-        </Link>
-        <TableClinicSelector />
+      <div className="relative mb-6 flex h-28 flex-col items-center justify-center gap-2 px-4">
+        {extendedAside && (
+          <>
+            <Link to="/">
+              <Logo />
+            </Link>
+            <TableClinicSelector />
+          </>
+        )}
       </div>
+      <button
+        type="button"
+        onClick={toggleAsideExtension}
+        className="mx-auto mb-4 w-fit rounded-sm border px-2 py-0.5"
+      >
+        {extendedAside ? '작게' : '크게'}
+      </button>
 
       <Ul>
         <Li to={ROUTES.timetable} selected>
-          <Table /> 시간표
+          <Table />
+          {extendedAside && '시간표'}
         </Li>
         <Li to={ROUTES.clinics}>
-          <Building /> 병원
+          <Building />
+          {extendedAside && '병원'}
         </Li>
         <Li to={ROUTES.editProfile}>
-          <CogSixTooth /> 프로필
+          <CogSixTooth />
+          {extendedAside && '프로필'}
         </Li>
       </Ul>
 

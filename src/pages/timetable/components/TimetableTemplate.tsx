@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useWindowSize } from '../../../hooks';
+import { useTableDisplay } from '../hooks';
+import { cls } from '../../../utils/common.utils';
 import type { TimetableTemplateProps } from '../../../types/props.types';
 
 const TimetableTemplate = ({
@@ -9,13 +11,15 @@ const TimetableTemplate = ({
   labels,
   columns,
 }: TimetableTemplateProps) => {
+  const {
+    tableDisplay: { asideExtension: extendedAside },
+  } = useTableDisplay();
   const { height, changeMinus } = useWindowSize(true);
   const headerRef = useRef<HTMLDivElement>(null);
   const extraMargin = 20;
 
   useEffect(() => {
     if (!headerRef.current) return;
-
     changeMinus(headerRef.current.clientHeight);
   }, []);
 
@@ -23,7 +27,10 @@ const TimetableTemplate = ({
     <motion.div
       animate={{ opacity: 1 }}
       id="timetable__template"
-      className="grid h-full grid-cols-[11rem,1fr] grid-rows-[7rem,1fr] opacity-0"
+      className={cls(
+        'grid h-full grid-rows-[7rem,1fr] opacity-0',
+        extendedAside ? 'grid-cols-[9.5rem,1fr]' : 'grid-cols-[3rem,1fr]'
+      )}
     >
       <div id="timetable__aside-nav" className="col-span-1 row-span-2">
         {aside}
