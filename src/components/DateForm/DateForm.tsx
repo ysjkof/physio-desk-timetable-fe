@@ -22,7 +22,7 @@ interface DateFormProps {
 
 export const DateForm = ({
   date,
-  hasHour = true,
+  hasHour = false,
   setParentValue,
 }: DateFormProps) => {
   const { register, setValue, getValues } = useForm<DateFormFields>();
@@ -114,6 +114,8 @@ export const DateForm = ({
             register={register('hours')}
             className="date-form__input"
             onFocus={openTimepicker}
+            minLength={1}
+            maxLength={2}
           />
           <InputForDateForm
             label="분"

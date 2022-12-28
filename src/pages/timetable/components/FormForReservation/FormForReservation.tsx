@@ -84,6 +84,7 @@ const FormForReservation = ({
         </InputWrapper>
         <InputWrapper label="치료일정" required>
           <DateForm
+            hasHour
             date={getValues('startDate')}
             setParentValue={setParentValue}
           />
@@ -114,6 +115,6 @@ const FormForReservation = ({
 
 export default FormForReservation;
 
-const Buttons = ({ children }: PropsWithChildren) => {
+export const Buttons = ({ children }: PropsWithChildren) => {
   return <div className="flex gap-4 bg-light-gray px-4 py-4">{children}</div>;
 };
