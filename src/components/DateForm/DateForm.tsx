@@ -15,7 +15,7 @@ interface DateFormFields {
 }
 
 interface DateFormProps {
-  date: Date;
+  date?: Date;
   hasHour?: boolean;
   setParentValue: (date: Date) => void;
 }
