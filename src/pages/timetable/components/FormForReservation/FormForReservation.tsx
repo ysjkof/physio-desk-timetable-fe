@@ -39,6 +39,8 @@ const FormForReservation = ({
   register('prescriptions', { required: true });
   register('startDate', { required: true });
 
+  const { createReservation } = useCreateReservation();
+
   const onSubmit = () => {
     const { startDate, memo, patientId, prescriptions, userId } = getValues();
     const formData = {
@@ -53,9 +55,13 @@ const FormForReservation = ({
     createReservation(formData);
   };
 
-  const { createReservation } = useCreateReservation();
-
-  const setParentValue = (date: Date) => {
+  const setUserId = (userId: number) => {
+    setValue('userId', userId);
+  };
+  const setPatient = (patientId: number) => {
+    setValue('patientId', patientId);
+  };
+  const setStartDate = (date: Date) => {
     setValue('startDate', date);
   };
 
@@ -68,12 +74,12 @@ const FormForReservation = ({
         <InputWrapper label="담당치료사" required>
           <AutoCompleteForUser
             label="담당치료사"
-            setValue={setValue}
+            setParentValue={setUserId}
             userId={userId}
           />
         </InputWrapper>
         <InputWrapper label="환자" required>
-          <AutoCompleteForPatient label="환자" setValue={setValue} />
+          <AutoCompleteForPatient label="환자" setParentValue={setPatient} />
         </InputWrapper>
         <InputWrapper label="처방" required>
           <AutoCompleteForPrescription
@@ -86,7 +92,7 @@ const FormForReservation = ({
           <DateForm
             hasHour
             date={getValues('startDate')}
-            setParentValue={setParentValue}
+            setParentValue={setStartDate}
           />
         </InputWrapper>
         <InputWrapper label="메모">

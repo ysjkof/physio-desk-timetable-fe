@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useForm, UseFormSetValue } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { checkLengthIsZero, cls } from '../../../../utils/common.utils';
 import { InputWithRef } from './InputForReserve';
 import { useSearchPatient } from '../../../../hooks';
 import { useAutoComplete } from '../../../../hooks/useAutoComplete';
 import { SelectedValue } from './SelectedValue';
-import type { FormOfReserveFields } from '../../../../types/form.types';
 import type { SearchPatientQuery } from '../../../../types/generated.types';
-import { PatientInSearch } from '../../../../types/common.types';
+import type { PatientInSearch } from '../../../../types/common.types';
 
 interface AutoCompleteForPatientProps {
   label: string;
-  setValue: UseFormSetValue<FormOfReserveFields>;
+  setParentValue: (patientId: number) => void;
 }
 
 const AutoCompleteForPatient = ({
   label,
-  setValue: setValueOfParentInput,
+  setParentValue,
 }: AutoCompleteForPatientProps) => {
   const [selectionList, setSelectionList] =
     useState<SearchPatientQuery['searchPatient']['patients']>();
@@ -45,7 +44,7 @@ const AutoCompleteForPatient = ({
     setInput(value) {
       if (!value) throw Error('Input 값의 유형이 바르지 않습니다.');
       setValue('name', value.name);
-      setValueOfParentInput('patientId', value.id);
+      setParentValue(value.id);
     },
     clearList() {
       setSelectionList(null);

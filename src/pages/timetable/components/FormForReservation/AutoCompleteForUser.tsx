@@ -1,22 +1,21 @@
 import { useState } from 'react';
-import { useForm, UseFormSetValue } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { cls } from '../../../../utils/common.utils';
 import { InputWithRef } from './InputForReserve';
 import { useAutoComplete } from '../../../../hooks';
 import { ClinicsOfClient } from '../../../../models';
 import { SelectedValue } from './SelectedValue';
-import type { FormOfReserveFields } from '../../../../types/form.types';
 
 interface AutoCompleteForUserProps {
   label: string;
   userId: number;
-  setValue: UseFormSetValue<FormOfReserveFields>;
+  setParentValue: (userId: number) => void;
 }
 
 const AutoCompleteForUser = ({
   label,
   userId,
-  setValue: setValueOfParentInput,
+  setParentValue,
 }: AutoCompleteForUserProps) => {
   const selectionList = useState(ClinicsOfClient.selectedClinic.members)[0];
   const name = selectionList.find((member) => member.user.id === userId)?.user
@@ -53,7 +52,7 @@ const AutoCompleteForUser = ({
     setInput(value) {
       if (!value) throw Error('Input 값의 유형이 바르지 않습니다.');
       setValue('name', value);
-      setValueOfParentInput('userId', getUserId(value));
+      setParentValue(getUserId(value));
     },
     initialValue: name,
   });
