@@ -55,6 +55,10 @@ const FormForReservation = ({
 
   const { createReservation } = useCreateReservation();
 
+  const setParentValue = (date: Date) => {
+    setValue('startDate', date);
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -79,7 +83,10 @@ const FormForReservation = ({
           />
         </InputWrapper>
         <InputWrapper label="치료일정" required>
-          <DateForm date={getValues('startDate')} setValue={setValue} />
+          <DateForm
+            date={getValues('startDate')}
+            setParentValue={setParentValue}
+          />
         </InputWrapper>
         <InputWrapper label="메모">
           <Textarea label="메모" rows={3} register={register('memo')} />

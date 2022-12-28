@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useForm, type UseFormSetValue } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { cls } from '../../utils/common.utils';
 import Datepicker from '../Datepicker';
 import Timepicker from '../Timepicker';
 import { InputForDateForm } from './InputForDateForm';
 import type { HoursAndMinutes } from '../../types/common.types';
-import type { FormOfReserveFields } from '../../types/form.types';
 
 interface DateFormFields {
   year: number;
@@ -18,13 +17,13 @@ interface DateFormFields {
 interface DateFormProps {
   date: Date;
   hasHour?: boolean;
-  setValue: UseFormSetValue<FormOfReserveFields>;
+  setParentValue: (date: Date) => void;
 }
 
 export const DateForm = ({
   date,
   hasHour = true,
-  setValue: setValueOfParentInput,
+  setParentValue,
 }: DateFormProps) => {
   const { register, setValue, getValues } = useForm<DateFormFields>();
 
@@ -64,7 +63,7 @@ export const DateForm = ({
     const startDate = new Date(
       `${year}-${month}-${day}T${hours}:${minutes}:00`
     );
-    setValueOfParentInput('startDate', startDate);
+    setParentValue(startDate);
   };
 
   const setDateTime = (date: Date) => {
