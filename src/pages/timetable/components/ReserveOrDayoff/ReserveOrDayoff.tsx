@@ -8,6 +8,7 @@ import { cls } from '../../../../utils/common.utils';
 import { FormForReservation } from '../FormForReservation';
 import { useCloseModal } from '../../../../hooks';
 import type { IsActive, LocationState } from '../../../../types/common.types';
+import { FormForDayoff } from '../FormForDayoff';
 
 const ReserveOrDayoff = () => {
   const closeModal = useCloseModal();
@@ -43,7 +44,7 @@ const ReserveOrDayoff = () => {
             userId={userId}
           />
         ) : (
-          <div>dayoff component</div>
+          <FormForDayoff closeAction={closeModal} date={date} userId={userId} />
         )}
       </div>
     </Modal>
