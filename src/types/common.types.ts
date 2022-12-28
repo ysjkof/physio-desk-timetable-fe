@@ -43,6 +43,7 @@ export interface TableDisplayOptions {
   seeNoshow: boolean;
   seeList: boolean;
   seeCalendar: boolean;
+  asideExtension: boolean;
 }
 
 // typescript type & interface
