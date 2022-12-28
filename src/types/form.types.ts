@@ -5,3 +5,10 @@ export interface FormOfReserveFields {
   prescriptions: number[];
   memo: string;
 }
+
+export interface CreatePatientForm {
+  name: string;
+  gender: 'male' | 'female';
+  birthday?: Date;
+  memo?: string;
+}

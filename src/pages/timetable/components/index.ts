@@ -1,3 +1,4 @@
+import { CreatePatient } from './CreatePatient';
 import { ReserveOrDayoff } from './ReserveOrDayoff';
 import { Schedules } from './Schedules';
 import { TableAside } from './TableAside';
@@ -6,6 +7,7 @@ import { TimeLabels } from './TimeLabels';
 import TimetableTemplate from './TimetableTemplate';
 
 export {
+  CreatePatient,
   ReserveOrDayoff,
   Schedules,
   TableAside,
