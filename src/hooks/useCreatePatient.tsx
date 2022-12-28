@@ -16,8 +16,6 @@ export const useCreatePatient = () => {
     { name, gender, memo, birthday }: FormForCreatePatientFields,
     closeAction: () => void
   ) => {
-    console.log(name, gender, memo, birthday);
-
     if (loading) return;
     if (!selectedClinic) throw new Error('선택된 병원이 없습니다');
 
@@ -36,10 +34,9 @@ export const useCreatePatient = () => {
           createPatient: { ok, patient },
         } = data;
         if (ok && patient) {
-          toastVar({ messages: [`"${patient?.name}"님을 등록했습니다`] });
+          toastVar({ messages: [`"${patient.name}"님을 등록했습니다`] });
           closeAction();
-          // 할일: 선택된환자 형태로 가공하고 적용하기
-          selectedPatientVar({ ...patient, user: patient.users[0] });
+          selectedPatientVar({ ...patient, user: patient.users?.[0] });
         }
       },
     });

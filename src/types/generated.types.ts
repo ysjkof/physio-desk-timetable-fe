@@ -622,7 +622,7 @@ export type Patient = {
   registrationNumber: Scalars['Int'];
   reservations: Array<Reservation>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-  users: Array<User>;
+  users?: Maybe<Array<User>>;
 };
 
 export type Prescription = {
@@ -964,7 +964,7 @@ export type CreatePatientMutationVariables = Exact<{
 }>;
 
 
-export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null, clinic: { __typename?: 'Clinic', id: number, name: string }, users: Array<{ __typename?: 'User', id: number, name: string }> } | null } };
+export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null, clinic: { __typename?: 'Clinic', id: number, name: string }, users?: Array<{ __typename?: 'User', id: number, name: string }> | null } | null } };
 
 export type FindAllPatientsQueryVariables = Exact<{
   input: FindAllPatientsInput;
@@ -985,7 +985,7 @@ export type SearchPatientQueryVariables = Exact<{
 }>;
 
 
-export type SearchPatientQuery = { __typename?: 'Query', searchPatient: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, clinic: { __typename?: 'Clinic', id: number, name: string }, users: Array<{ __typename?: 'User', id: number, name: string }> }> | null } };
+export type SearchPatientQuery = { __typename?: 'Query', searchPatient: { __typename?: 'SearchPatientOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, clinic: { __typename?: 'Clinic', id: number, name: string }, users?: Array<{ __typename?: 'User', id: number, name: string }> | null }> | null } };
 
 export type AllPrescriptionFieldsFragment = { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null };
 

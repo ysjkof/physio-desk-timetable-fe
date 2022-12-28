@@ -69,7 +69,7 @@ export type ReservationInList = NonNullable<
 
 export type PatientInReservation = NonNullable<ReservationInList['patient']>;
 export type ClinicInReservation = NonNullable<ReservationInList['clinic']>;
-export type UserInReservation = NonNullable<ReservationInList['user']>;
+export type UserInReservation = ReservationInList['user'];
 export type PrescriptionsInReservation = NonNullable<
   ReservationInList['prescriptions']
 >;
@@ -179,7 +179,7 @@ export type SelectedReservationType = ReservationInList | undefined;
 export type SelectedPatientType = SelectedPatient | undefined | null;
 export interface SelectedPatient extends PatientInReservation {
   clinic: ClinicInReservation;
-  user: UserInReservation;
+  user: UserInReservation | null | undefined;
 }
 
 // utils
