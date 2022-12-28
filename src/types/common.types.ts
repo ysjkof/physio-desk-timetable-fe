@@ -208,6 +208,7 @@ export interface ObjValueIsFx {
 }
 
 export interface LocationState {
+  createReservation?: boolean;
   startDate: {
     hours: number;
     minutes: number;
@@ -215,4 +216,5 @@ export interface LocationState {
   };
   userId: number;
   isDayoff?: boolean;
+  createPatient?: boolean;
 }

@@ -33,6 +33,7 @@ const ReserveButton = ({
   const openReserveModal = () => {
     navigate('', {
       state: {
+        createReservation: true,
         startDate: {
           hours: Number.parseInt(getFrom4DigitTime(label, 'hour'), 10),
           minutes: Number.parseInt(getFrom4DigitTime(label, 'minute'), 10),
