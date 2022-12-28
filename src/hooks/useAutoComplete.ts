@@ -66,12 +66,16 @@ export const useAutoComplete = <T>({
     debounce();
   };
 
-  const keydownAtButton = (event: KeyboardEvent<HTMLButtonElement>) => {
+  const keydownAtButton = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    selectedValue?: T
+  ) => {
     const { key } = event;
 
     const action: ObjValueIsFx = {
       Enter() {
-        const value = (event.currentTarget.textContent as T) || null;
+        const value =
+          selectedValue || (event.currentTarget.textContent as T) || null;
         select(value);
       },
       Escape() {

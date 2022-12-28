@@ -100,7 +100,7 @@ const AutoCompleteForPatient = ({
                 value={patient.id}
                 className="w-full py-1.5 px-3 text-left"
                 onClick={() => select(patient)}
-                onKeyDown={keydownAtButton}
+                onKeyDown={(e) => keydownAtButton(e, patient)}
               >
                 {patient.name}
               </button>
