@@ -22,7 +22,9 @@ const AutoCompleteForUser = ({
   const name = selectionList.find((member) => member.user.id === userId)?.user
     .name;
   const getUserId = (name: string) => {
-    const user = selectionList.find((member) => member.user.name === name);
+    const user = selectionList.find(
+      (member) => member.user.name === name
+    )?.user;
     if (!user) throw new Error('사용자를 찾을 수 없습니다.');
     return user.id;
   };
