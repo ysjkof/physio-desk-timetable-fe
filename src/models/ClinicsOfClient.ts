@@ -21,6 +21,7 @@ export class ClinicsOfClient {
     const latestClinics = this.createClinicsOfClient(clinics);
     if (localClinics === null) {
       this.saveToLocalStorage(latestClinics);
+      this.set(latestClinics);
       return this.get();
     }
 
