@@ -11,6 +11,7 @@ import InputWrapper from './WrapperForInput';
 import DateForm from './DateForm';
 import Timepicker from './Timepicker';
 import Modal from './Modal';
+import Checkbox from './Checkbox';
 
 export {
   ButtonOfPages,
@@ -26,4 +27,5 @@ export {
   DateForm,
   Timepicker,
   Modal,
+  Checkbox,
 };
