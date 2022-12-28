@@ -65,4 +65,12 @@ export interface UseAutoCompleteProps<T> {
 
 export interface DatepickerProps extends CloseAction {
   setDate: (date: Date) => void;
+  disablePreviousDay?: boolean;
 }
+
+export interface FormForReservationProps extends CloseAction {
+  date: Date;
+  userId: number;
+}
+
+export interface FormForDayoffProps extends FormForReservationProps {}

@@ -10,12 +10,7 @@ import { ClinicsOfClient, SelectedPrescriptions } from '../../../../models';
 import { useFindPrescriptions } from '../../../../hooks';
 import { useCreateReservation } from '../../hooks';
 import type { FormOfReserveFields } from '../../../../types/form.types';
-import type { CloseAction } from '../../../../types/props.types';
-
-interface FormForReservationProps extends CloseAction {
-  date: Date;
-  userId: number;
-}
+import type { FormForReservationProps } from '../../../../types/props.types';
 
 const FormForReservation = ({
   date,
