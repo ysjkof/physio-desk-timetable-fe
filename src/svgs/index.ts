@@ -11,6 +11,7 @@ import Edit from './Edit';
 import EllipsisVertical from './EllipsisVertical';
 import Patient from './Patient';
 import Table from './Table';
+import Trash from './Trash';
 import UserPlus from './UserPlus';
 import XMark from './XMark';
 
@@ -28,6 +29,7 @@ export {
   EllipsisVertical,
   Patient,
   Table,
+  Trash,
   UserPlus,
   XMark,
 };
