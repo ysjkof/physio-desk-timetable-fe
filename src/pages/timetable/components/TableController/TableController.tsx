@@ -11,7 +11,6 @@ import {
   selectedDateVar,
   selectedReservationVar,
 } from '../../../../store';
-import { ROUTES } from '../../../../router/routes';
 import { getPositionRef } from '../../../../utils/common.utils';
 import {
   Calendar,
@@ -29,15 +28,16 @@ import {
 } from '../../../../components';
 import { useSelectedClinic, useTableDisplay } from '../../hooks';
 import { ClinicsOfClient } from '../../../../models';
+import { useNavCreatePatient } from '../../../../hooks';
 
 const TableController = () => {
   const hasTableDisplay = useReactiveVar(hasTableDisplayVar);
   const selectedReservation = useReactiveVar(selectedReservationVar);
   const selectedDate = useReactiveVar(selectedDateVar);
 
-  const navigate = useNavigate();
   const today = new Date();
 
+  const { openCreatePatientModal } = useNavCreatePatient();
   const { toggleUser } = useSelectedClinic();
 
   const { tableDisplay, toggleDisplayController, toggleDisplayOption } =
@@ -146,7 +146,7 @@ const TableController = () => {
         )}
         <div className="flex w-full items-center justify-end gap-x-2">
           <MenuButton
-            onClick={() => navigate(ROUTES.createPatient)}
+            onClick={openCreatePatientModal}
             ref={settingRef}
             className="bg-cst-blue text-white"
           >
