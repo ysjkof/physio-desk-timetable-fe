@@ -31,30 +31,27 @@ const TimeTable = () => {
     return () => closeAction();
   }, []);
 
+  if (!TableDisplay.get() || !schedules) return <Loading />;
   return (
     <>
       <Helmet>
         <title>시간표 | {MUOOL}</title>
       </Helmet>
-      {!TableDisplay.get() || !schedules ? (
-        <Loading />
-      ) : (
-        <TimetableTemplate
-          aside={<TableAside />}
-          nav={<TableController />}
-          labels={<TimeLabels labels={labels} />}
-          columns={
-            <>
+      <TimetableTemplate
+        aside={<TableAside />}
+        nav={<TableController />}
+        labels={<TimeLabels labels={labels} />}
+        columns={
+          <>
+            {TableDisplay.get().seeList === false && (
               <AnimatePresence>
-                {TableDisplay.get().seeList === false && (
-                  <Schedules labels={labels} weekEvents={schedules} />
-                )}
+                <Schedules labels={labels} weekEvents={schedules} />
               </AnimatePresence>
-              {TableDisplay.get().seeList === true && '준비 중'}
-            </>
-          }
-        />
-      )}
+            )}
+            {TableDisplay.get().seeList === true && '준비 중'}
+          </>
+        }
+      />
       {location.state && <ReserveOrDayoff closeAction={closeAction} />}
     </>
   );
