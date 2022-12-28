@@ -6,16 +6,16 @@ import { Modal } from '../../../../components';
 import { selectedDateVar } from '../../../../store';
 import { cls } from '../../../../utils/common.utils';
 import { FormForReservation } from '../FormForReservation';
+import { useCloseModal } from '../../../../hooks';
 import type { IsActive, LocationState } from '../../../../types/common.types';
-import type { CloseAction } from '../../../../types/props.types';
 
-const ReserveOrDayoff = ({ closeAction }: CloseAction) => {
-  const location = useLocation();
+const ReserveOrDayoff = () => {
+  const closeModal = useCloseModal();
   const {
     startDate: { hours, minutes, dayIndex },
     userId,
     isDayoff,
-  }: LocationState = location.state;
+  } = useLocation().state as LocationState;
 
   const [isReserve, setIsReserve] = useState(!isDayoff);
 
@@ -26,7 +26,7 @@ const ReserveOrDayoff = ({ closeAction }: CloseAction) => {
   const seeDayoff = () => setIsReserve(false);
 
   return (
-    <Modal closeAction={closeAction}>
+    <Modal closeAction={closeModal}>
       <div className="w-96 rounded-sm border">
         <Navigation>
           <Tab isActive={isReserve} onClick={seeReserve}>
@@ -38,7 +38,7 @@ const ReserveOrDayoff = ({ closeAction }: CloseAction) => {
         </Navigation>
         {isReserve ? (
           <FormForReservation
-            closeAction={closeAction}
+            closeAction={closeModal}
             date={date}
             userId={userId}
           />
@@ -65,9 +65,8 @@ const Tab = ({ isActive, children, ...args }: TapProps) => {
   return (
     <button
       className={cls(
-        'h-14 w-full text-xl font-medium ',
-
-        isActive ? 'text-cst-blue' : 'bg-table-bg text-font-gray'
+        'modal-header',
+        isActive ? '' : 'bg-table-bg text-font-gray'
       )}
       type="button"
       {...args}
