@@ -63,9 +63,9 @@ const FormForReservation = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-5 pt-8"
+      className="flex h-full flex-col gap-5 pt-8"
     >
-      <div className="flex flex-col gap-5 px-4">
+      <div className="flex basis-full flex-col justify-between gap-5 px-4">
         <InputWrapper label="담당치료사" required>
           <AutoCompleteForUser
             label="담당치료사"

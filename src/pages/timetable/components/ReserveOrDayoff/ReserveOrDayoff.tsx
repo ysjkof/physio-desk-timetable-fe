@@ -7,8 +7,8 @@ import { selectedDateVar } from '../../../../store';
 import { cls } from '../../../../utils/common.utils';
 import { FormForReservation } from '../FormForReservation';
 import { useCloseModal } from '../../../../hooks';
-import type { IsActive, LocationState } from '../../../../types/common.types';
 import { FormForDayoff } from '../FormForDayoff';
+import type { IsActive, LocationState } from '../../../../types/common.types';
 
 const ReserveOrDayoff = () => {
   const closeModal = useCloseModal();
@@ -37,15 +37,21 @@ const ReserveOrDayoff = () => {
             예약잠금
           </Tab>
         </Navigation>
-        {isReserve ? (
-          <FormForReservation
-            closeAction={closeModal}
-            date={date}
-            userId={userId}
-          />
-        ) : (
-          <FormForDayoff closeAction={closeModal} date={date} userId={userId} />
-        )}
+        <div className="h-[465px]">
+          {isReserve ? (
+            <FormForReservation
+              closeAction={closeModal}
+              date={date}
+              userId={userId}
+            />
+          ) : (
+            <FormForDayoff
+              closeAction={closeModal}
+              date={date}
+              userId={userId}
+            />
+          )}
+        </div>
       </div>
     </Modal>
   );

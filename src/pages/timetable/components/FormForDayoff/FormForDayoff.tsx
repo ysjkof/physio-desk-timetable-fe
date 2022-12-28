@@ -8,7 +8,7 @@ import AutoCompleteForUser from '../FormForReservation/AutoCompleteForUser';
 import { Textarea } from '../FormForReservation/InputForReserve';
 import type { FormForDayoffFields } from '../../../../types/form.types';
 import type { FormForDayoffProps } from '../../../../types/props.types';
-import { CreateReservationMutationVariables } from '../../../../types/generated.types';
+import type { CreateReservationMutationVariables } from '../../../../types/generated.types';
 
 const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
   const { register, setValue, getValues, handleSubmit } =
@@ -44,9 +44,9 @@ const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-5 pt-8"
+      className="flex h-full flex-col gap-5 pt-8"
     >
-      <div className="flex flex-col gap-5 px-4">
+      <div className="flex basis-full flex-col justify-between gap-5 px-4">
         <InputWrapper label="치료사" required>
           <AutoCompleteForUser
             label="치료사"
@@ -69,7 +69,7 @@ const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
           />
         </InputWrapper>
         <InputWrapper label="메모">
-          <Textarea label="메모" rows={3} register={register('memo')} />
+          <Textarea label="메모" rows={5} register={register('memo')} />
         </InputWrapper>
       </div>
       <Buttons>
