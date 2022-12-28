@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useForm, type UseFormSetValue } from 'react-hook-form';
-import { set } from 'date-fns';
 import { cls } from '../../utils/common.utils';
 import Datepicker from '../Datepicker';
 import Timepicker from '../Timepicker';
@@ -61,9 +60,11 @@ export const DateForm = ({
   };
 
   const setParentDate = () => {
-    const values = getValues();
-    const setOptions = { ...values, date: values.day };
-    setValueOfParentInput('startDate', set(date, setOptions));
+    const { year, month, day, hours, minutes } = getValues();
+    const startDate = new Date(
+      `${year}-${month}-${day}T${hours}:${minutes}:00`
+    );
+    setValueOfParentInput('startDate', startDate);
   };
 
   const setDateTime = (date: Date) => {
