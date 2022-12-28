@@ -6,7 +6,14 @@ export interface FormOfReserveFields {
   memo: string;
 }
 
-export interface CreatePatientForm {
+export interface FormForDayoffFields {
+  startDate: Date;
+  endDate: Date;
+  userId: number;
+  memo?: string;
+}
+
+export interface FormForCreatePatientFields {
   name: string;
   gender: 'male' | 'female';
   birthday?: Date;

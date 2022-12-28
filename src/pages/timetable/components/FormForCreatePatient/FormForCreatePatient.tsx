@@ -10,7 +10,7 @@ import { Buttons } from '../FormForReservation/FormForReservation';
 import { GENDER_KOR } from '../../../../constants/constants';
 import { REG_EXP } from '../../../../constants/regex';
 import { useCreatePatient } from '../../../../hooks';
-import type { CreatePatientForm } from '../../../../types/form.types';
+import type { FormForCreatePatientFields } from '../../../../types/form.types';
 import type { CloseAction } from '../../../../types/props.types';
 
 const FormForCreatePatient = ({ closeAction }: CloseAction) => {
@@ -22,7 +22,7 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<CreatePatientForm>();
+  } = useForm<FormForCreatePatientFields>();
 
   const setParentValue = (date: Date) => {
     setValue('birthday', date);

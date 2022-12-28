@@ -3,7 +3,7 @@ import { ClinicsOfClient } from '../models';
 import { CreatePatientMutation } from '../types/generated.types';
 import { CREATE_PATIENT_DOCUMENT } from '../graphql';
 import { selectedPatientVar, toastVar } from '../store';
-import { CreatePatientForm } from '../types/form.types';
+import { FormForCreatePatientFields } from '../types/form.types';
 
 export const useCreatePatient = () => {
   const { selectedClinic } = ClinicsOfClient;
@@ -13,7 +13,7 @@ export const useCreatePatient = () => {
   );
 
   const createPatientMutation = (
-    { name, gender, memo, birthday }: CreatePatientForm,
+    { name, gender, memo, birthday }: FormForCreatePatientFields,
     closeAction: () => void
   ) => {
     console.log(name, gender, memo, birthday);
