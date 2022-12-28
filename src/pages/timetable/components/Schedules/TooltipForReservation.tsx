@@ -2,6 +2,8 @@ import { forwardRef } from 'react';
 import { SelectReservation } from '../SelectReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
 import { ReservationDetail } from '../ReservationDetail';
+import { Trash } from '../../../../svgs';
+import { useDeleteReservation } from '../../hooks';
 import type { ReservationInList } from '../../../../types/common.types';
 
 interface TooltipForReservationDetailProps {
@@ -13,6 +15,9 @@ const TooltipForReservationDetail = forwardRef<
   TooltipForReservationDetailProps
 >((props, ref) => {
   const { reservation } = props;
+
+  const { deleteReservation } = useDeleteReservation();
+
   return (
     <div
       ref={ref}
@@ -23,6 +28,13 @@ const TooltipForReservationDetail = forwardRef<
         <SelectReservation reservation={reservation} />
         <ToggleReservationState reservation={reservation} />
       </div>
+      <button
+        type="button"
+        onClick={() => deleteReservation({ reservationId: reservation.id })}
+        className="absolute top-16 right-4"
+      >
+        <Trash iconSize="LG" />
+      </button>
     </div>
   );
 });
