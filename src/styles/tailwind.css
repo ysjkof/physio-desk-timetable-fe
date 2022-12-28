@@ -98,6 +98,10 @@
   .badge-gray {
     @apply rounded-md bg-gray-100 px-1.5 py-0.5 text-gray-700;
   }
+
+  .modal-header {
+    @apply h-14 w-full text-xl font-medium text-cst-blue;
+  }
 }
 
 @layer utilities {
