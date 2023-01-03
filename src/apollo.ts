@@ -18,20 +18,15 @@ const token = localStorageUtils.get<string>({ key: 'token' });
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar<string | null>(token);
 
-const BACKEND_URLS = {
-  FLYIO: '://muool-backend.fly.dev/graphql',
-  ORACLE_CLOUD: '://db.muool.com:8443/graphql',
-  LOCAL: '://localhost:3002/graphql',
-};
+const isProduction = import.meta.env.PROD;
 
-const PRODUCTION_URL = BACKEND_URLS.ORACLE_CLOUD;
-const DEV_URL = BACKEND_URLS.LOCAL;
-
-const isProduction = process.env.NODE_ENV === 'production';
+const BACKEND_URL = isProduction
+  ? import.meta.env.VITE_BACKEND_URL
+  : '://localhost:3002/graphql';
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: isProduction ? `wss${PRODUCTION_URL}` : `ws${DEV_URL}`,
+    url: isProduction ? `wss${BACKEND_URL}` : `ws${BACKEND_URL}`,
     connectionParams: () => {
       return { 'x-jwt': authTokenVar() };
     },
@@ -39,7 +34,7 @@ const wsLink = new GraphQLWsLink(
 );
 
 const httpLink = createHttpLink({
-  uri: isProduction ? `https${PRODUCTION_URL}` : `http${DEV_URL}`,
+  uri: isProduction ? `https${BACKEND_URL}` : `http${BACKEND_URL}`,
 });
 
 const authLink = setContext((_, { headers }) => {
