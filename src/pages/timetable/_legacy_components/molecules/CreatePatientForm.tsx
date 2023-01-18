@@ -98,7 +98,7 @@ export default function CreatePatientForm({
               closeAction();
               toastVar({ messages: [`"${patient?.name}"님을 등록했습니다`] });
               // 할일: 선택된환자 형태로 가공하고 적용하기
-              selectedPatientVar({ ...patient, user: patient.users[0] });
+              selectedPatientVar({ ...patient, user: patient.users?.[0] });
             }
           },
         });

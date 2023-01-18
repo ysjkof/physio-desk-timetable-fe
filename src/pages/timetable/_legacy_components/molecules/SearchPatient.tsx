@@ -94,7 +94,7 @@ export default function SearchPatient() {
                 patient={{
                   // 할일: 선택된환자 형태로 가공하는 메서드
                   ...patient,
-                  user: patient.users[patient.users.length - 1],
+                  user: patient.users?.[patient.users.length - 1],
                 }}
                 canClick
               />
