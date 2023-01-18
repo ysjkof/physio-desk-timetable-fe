@@ -1,7 +1,7 @@
 import { lazy, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSchedules, useSubscriptions, useTableLabel } from './hooks';
 import { MUOOL } from '../../constants/constants';
 import {
@@ -14,8 +14,7 @@ import {
   TimetableTemplate,
 } from './components';
 import { TableDisplay } from '../../models';
-import { LocationState } from '../../types/common.types';
-import { useCloseModal } from '../../hooks';
+import type { LocationState } from '../../types/common.types';
 
 const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
@@ -24,12 +23,15 @@ const TimeTable = () => {
   const { schedules, variables } = useSchedules();
   useSubscriptions({ variables });
 
-  const closeModal = useCloseModal();
-
   const locationState = useLocation().state as LocationState;
 
+  const navigate = useNavigate();
+  const clearLocationState = () => {
+    navigate('', { state: null });
+  };
+
   useEffect(() => {
-    return () => closeModal();
+    clearLocationState();
   }, []);
 
   if (!TableDisplay.get() || !schedules) return <Loading />;
