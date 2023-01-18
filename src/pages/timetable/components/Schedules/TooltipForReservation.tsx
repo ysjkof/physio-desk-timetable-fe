@@ -19,7 +19,7 @@ const TooltipForReservationDetail = forwardRef<
   return (
     <div
       ref={ref}
-      className="absolute top-5 left-[90px] cursor-default rounded border border-navy bg-white shadow-cst"
+      className="absolute top-5 left-[84px] cursor-default rounded border border-navy bg-white shadow-cst"
     >
       <ReservationDetail reservation={reservation} />
       <button
