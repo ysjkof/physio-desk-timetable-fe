@@ -1,10 +1,12 @@
 import { PropsWithChildren } from 'react';
-import { ReservationInList } from '../../../../types/common.types';
 import { getStringFromReservationState } from '../../../../utils/common.utils';
 import {
   getStringOfDateTime,
   getStringOfDate,
 } from '../../../../utils/date.utils';
+import { SelectReservation } from '../SelectReservation';
+import { ToggleReservationState } from '../ToggleReservationState';
+import type { ReservationInList } from '../../../../types/common.types';
 
 interface ReservationDetailProps {
   reservation: ReservationInList;
@@ -23,10 +25,14 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
   } = reservation;
 
   return (
-    <div className="w-[300px]">
-      <h2 className="my-2 text-center text-xl font-medium text-navy">
-        예약 자세히 보기
-      </h2>
+    <div className="w-[300px] pb-4">
+      <div className="flex items-center justify-between px-4">
+        <h2 className="my-2 text-xl font-medium text-font-gray">
+          예약 자세히 보기
+        </h2>
+        {/* TODO: SelectReservation가 왼쪽에 가서 클릭을 위한 마우스 이동 최소화 고려 */}
+        <SelectReservation reservation={reservation} />
+      </div>
       <div className="space-y-2 border-t border-navy pt-2">
         <DetailBox title="환자정보">
           <li>등록번호 : {patient.registrationNumber}</li>
@@ -49,8 +55,11 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
         <DetailBox title="메모" isParagraph>
           {memo}
         </DetailBox>
-        <DetailBox title="상태">
+        <DetailBox title="예약상태">
           {getStringFromReservationState(state)}
+          <div className="mt-2 ml-2 flex w-full gap-2">
+            <ToggleReservationState reservation={reservation} />
+          </div>
         </DetailBox>
         <DetailBox title="수정정보">
           <li>
@@ -84,7 +93,7 @@ const DetailBox = ({
           {children}
         </p>
       ) : (
-        <ul className="mx-4">{children}</ul>
+        <ul className="mx-4 text-sm">{children}</ul>
       )}
     </div>
   );

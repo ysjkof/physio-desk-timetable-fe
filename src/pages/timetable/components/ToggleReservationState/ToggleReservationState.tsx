@@ -1,15 +1,16 @@
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
+import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { cls } from '../../../../utils/common.utils';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { EDIT_RESERVATION_DOCUMENT } from '../../../../graphql';
-import type { ReservationInList } from '../../../../types/common.types';
+import { MenuButton } from '../../../../components';
+import { XMark } from '../../../../svgs';
 import {
   type EditReservationMutation,
   ReservationState,
 } from '../../../../types/generated.types';
-import { MenuButton } from '../../../../components';
+import type { ReservationInList } from '../../../../types/common.types';
 
 interface EditReservationStateProps {
   reservation: ReservationInList;
@@ -57,27 +58,27 @@ const ToggleReservationState = ({ reservation }: EditReservationStateProps) => {
       <MenuButton
         hasBorder
         className={cls(
-          'flex w-full cursor-pointer items-center justify-center gap-1 rounded-md py-2 text-sm hover:ring hover:ring-navy',
+          'flex h-5 cursor-pointer items-center justify-center rounded-md border-red-400 text-xs',
           reservation.state === ReservationState.Canceled
-            ? 'border-navy text-navy'
-            : 'text-gray-500'
+            ? 'bg-red-400 text-white'
+            : 'bg-white text-red-400'
         )}
         onClick={() => editState(ReservationState.Canceled)}
       >
-        <FontAwesomeIcon icon={faBan} fontSize={14} />
+        <XMark />
         예약취소
       </MenuButton>
       <MenuButton
         hasBorder
         className={cls(
-          'flex w-full cursor-pointer items-center justify-center gap-1 rounded-md py-2 text-sm hover:ring hover:ring-navy',
+          'flex h-5 cursor-pointer items-center justify-center rounded-md border-red-400 text-xs',
           reservation.state === ReservationState.NoShow
-            ? 'border-navy text-navy'
-            : 'text-gray-500'
+            ? 'bg-red-400 text-white'
+            : 'bg-white text-red-400'
         )}
         onClick={() => editState(ReservationState.NoShow)}
       >
-        <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />
+        <FontAwesomeIcon icon={faExclamation} fontSize={16} />
         예약부도
       </MenuButton>
     </>

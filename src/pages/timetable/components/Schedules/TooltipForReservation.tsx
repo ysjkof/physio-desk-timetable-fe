@@ -1,6 +1,4 @@
 import { forwardRef } from 'react';
-import { SelectReservation } from '../SelectReservation';
-import { ToggleReservationState } from '../ToggleReservationState';
 import { ReservationDetail } from '../ReservationDetail';
 import { Trash } from '../../../../svgs';
 import { useDeleteReservation } from '../../hooks';
@@ -21,13 +19,9 @@ const TooltipForReservationDetail = forwardRef<
   return (
     <div
       ref={ref}
-      className="absolute top-5 left-[90px] rounded border border-navy bg-white shadow-cst"
+      className="absolute top-5 left-[90px] cursor-default rounded border border-navy bg-white shadow-cst"
     >
       <ReservationDetail reservation={reservation} />
-      <div className="mt-4 mb-2 flex gap-1 px-4">
-        <SelectReservation reservation={reservation} />
-        <ToggleReservationState reservation={reservation} />
-      </div>
       <button
         type="button"
         onClick={() => deleteReservation({ reservationId: reservation.id })}
