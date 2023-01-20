@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useReactiveVar } from '@apollo/client';
 import { addDays, getMonth, getWeekOfMonth, subDays } from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
@@ -19,7 +18,7 @@ import {
   EllipsisVertical,
   UserPlus,
 } from '../../../../svgs';
-import TableOptionSelector from '../../_legacy_components/molecules/TableOptionSelector';
+import TableOptionSelector from '../../_legacy_components/TableOptionSelector';
 import ModalPortal from '../../../../_legacy_components/templates/ModalPortal';
 import {
   CheckableButton,

@@ -7,26 +7,26 @@ import {
   getMemberState,
   isStayMember,
   renameUseSplit,
-} from '../../../../utils/common.utils';
+} from '../../../utils/common.utils';
 import {
   clinicListsVar,
   loggedInUserVar,
   tableDisplayVar,
-} from '../../../../store';
-import { NEXT } from '../../../../constants/constants';
-import { Selectbox } from '../../../../components';
-import { getHoursByUnit, getMinutesByUnit } from '../../../../utils/date.utils';
-import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
-import BtnArrow from '../../../../_legacy_components/atoms/ButtonArrow';
-import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
-import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
-import { Check } from '../../../../svgs';
-import { ClinicsOfClient, TableDisplay, TableTime } from '../../../../models';
-import { useSelectedClinic, useTableDisplay, useTableTime } from '../../hooks';
+} from '../../../store';
+import { NEXT } from '../../../constants/constants';
+import { Selectbox } from '../../../components';
+import { getHoursByUnit, getMinutesByUnit } from '../../../utils/date.utils';
+import MenuButton from '../../../_legacy_components/molecules/MenuButton';
+import BtnArrow from '../../../_legacy_components/atoms/ButtonArrow';
+import StateBadge from '../../../_legacy_components/atoms/StateBadge';
+import Sidebar from '../../../_legacy_components/molecules/Sidebar';
+import { Check } from '../../../svgs';
+import { ClinicsOfClient, TableDisplay, TableTime } from '../../../models';
+import { useSelectedClinic, useTableDisplay, useTableTime } from '../hooks';
 import type {
   FirstAndLastTime,
   MemberOfClient,
-} from '../../../../types/common.types';
+} from '../../../types/common.types';
 
 export default function TableOptionSelector() {
   useReactiveVar(tableDisplayVar); // ui 업데이트 전용

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import {
   TABLE_CELL_HEIGHT,
   TABLE_TIME_GAP,
-} from '../../../../constants/constants';
-import { TableTime } from '../../../../models/TableTime';
-import { getStringOfTime } from '../../../../utils/date.utils';
-import type { IsActive } from '../../../../types/common.types';
+} from '../../../constants/constants';
+import { TableTime } from '../../../models';
+import { getStringOfTime } from '../../../utils/date.utils';
+import type { IsActive } from '../../../types/common.types';
 
 export default function TimeIndicatorBar({ isActive }: IsActive) {
   const { firstTimeInMinute, lastTimeInMinute } = TableTime;
