@@ -26,11 +26,14 @@ const TableAside = () => {
       id="timetable__aside-nav"
       className="flex h-full w-full flex-col justify-between bg-table-aside-bg py-4 text-white"
     >
-      <div className="relative mb-6 flex h-28 flex-col items-center justify-center gap-2 px-4">
+      <div className="relative mb-6 flex h-28 flex-col items-center justify-center gap-y-3 px-4">
         {extendedAside && (
           <>
-            <Link to="/">
-              <Logo />
+            <Link
+              to="/"
+              className="flex aspect-square w-11 items-center justify-center rounded-lg bg-white"
+            >
+              <img src="/images/Logo.png" alt="logo" />
             </Link>
             <TableClinicSelector />
           </>
@@ -64,14 +67,6 @@ const TableAside = () => {
         <button type="button">문의하기</button>
       </div>
     </aside>
-  );
-};
-
-const Logo = () => {
-  return (
-    <h1 className="cursor-pointer whitespace-nowrap text-xl font-bold">
-      MUOOL
-    </h1>
   );
 };
 
