@@ -1,4 +1,5 @@
 import { cls } from '../../../../utils/common.utils';
+import { USER_COLORS } from '../../../../constants/constants';
 import type { MemberNameProps } from '../../../../types/props.types';
 
 const MemberName = ({
@@ -14,12 +15,15 @@ const MemberName = ({
       )}
       style={viewPeriodStyle}
     >
-      {users.map((member) => (
+      {users.map((member, idx) => (
         <div
           key={member.id}
-          className="rounded-sm border border-table-bg px-1 pb-0.5 pt-4 font-medium"
+          className="flex items-center justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 pt-4 font-medium"
+          style={{ borderBottomColor: USER_COLORS[idx]?.deep || 'inherit' }}
         >
-          {member.user.name}
+          <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+            {member.user.name}
+          </span>
         </div>
       ))}
     </div>
