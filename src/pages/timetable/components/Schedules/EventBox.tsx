@@ -14,9 +14,15 @@ import {
   USER_COLORS,
 } from '../../../../constants/constants';
 import { cls } from '../../../../utils/common.utils';
-import { ReservationState } from '../../../../types/generated.types';
-import type { ReservationInList } from '../../../../types/common.types';
 import TooltipForReservationDetail from './TooltipForReservation';
+import {
+  type Reservation,
+  ReservationState,
+} from '../../../../types/generated.types';
+import type {
+  PatientInReservation,
+  ReservationInList,
+} from '../../../../types/common.types';
 
 interface EventBoxProps {
   userIndex: number;
@@ -37,6 +43,8 @@ const EventBox = ({
   const navigate = useNavigate();
   const tableDisplay = useReactiveVar(tableDisplayVar);
   const [isHover, setIsHover] = useState(false);
+
+  const personalColor = USER_COLORS[userIndex]?.deep || 'inherit';
 
   const isDayOff = event.state === ReservationState.DayOff;
   const isReserve = event.state === ReservationState.Reserved;
@@ -122,51 +130,96 @@ const EventBox = ({
         role="button"
         tabIndex={0}
         className={cls(
-          'relative h-full overflow-hidden border-l-8 bg-white px-1',
+          'relative flex h-full flex-col items-start justify-center overflow-hidden border-l-4 bg-white pl-0.5',
           !isReserve ? 'no-reserved' : ''
         )}
         style={{
           ...(isReserve && {
-            borderColor: USER_COLORS[userIndex]?.deep ?? 'black',
+            borderColor: personalColor,
+            color: personalColor,
           }),
         }}
       >
-        <div className="flex h-5 items-center justify-between overflow-hidden whitespace-nowrap text-center">
-          {isDayOff && <FontAwesomeIcon icon={faLock} className="cancel" />}
-          {isCancel && <FontAwesomeIcon icon={faCancel} className="cancel" />}
-          {isNoshow && (
-            <FontAwesomeIcon icon={faCommentSlash} className="noshow" />
-          )}
-          <span className="ml-0.5 w-full font-extralight">
-            {isDayOff
-              ? '예약잠금'
-              : `${event.patient?.registrationNumber}:${event.patient?.name}`}
-          </span>
-          {event.memo && (
-            <div className="absolute right-0 top-0 border-4 border-t-red-500 border-r-red-500 border-l-transparent border-b-transparent" />
-          )}
+        <div className="flex h-5 w-full items-center overflow-hidden whitespace-nowrap text-center">
+          <StatusIcon eventState={event.state} />
+          <Name
+            eventState={event.state}
+            registrationNumber={event.patient?.registrationNumber}
+            patientName={event.patient?.name}
+          />
+          <MemoNotification memo={event.memo} />
         </div>
-        {!isDayOff && event.prescriptions && numberOfCell !== 1 && (
-          <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
-            {event.prescriptions.map((prescription) => `${prescription.name} `)}
-          </div>
-        )}
-
-        {
-          numberOfCell > 2 && event.memo && (
-            <div
-              className="overflow-hidden break-all font-extralight leading-5"
-              style={{ height: (numberOfCell - 2) * TABLE_CELL_HEIGHT }}
-            >
-              {event.memo}
-            </div>
-          ) // 칸이 없어서 메모 생략
-        }
+        <Prescriptions
+          isDayOff={isDayOff}
+          numberOfCell={numberOfCell}
+          prescriptions={event.prescriptions}
+        />
       </div>
       {isHover && (
         <TooltipForReservationDetail reservation={event} ref={tooltip} />
       )}
     </motion.div>
+  );
+};
+
+interface EventStateProps {
+  eventState: ReservationState;
+}
+
+const StatusIcon = ({ eventState }: EventStateProps) => {
+  if (eventState === ReservationState.DayOff)
+    return <FontAwesomeIcon icon={faLock} className="cancel mx-auto" />;
+  if (eventState === ReservationState.Canceled)
+    return <FontAwesomeIcon icon={faCancel} className="cancel" />;
+  if (eventState === ReservationState.NoShow)
+    return <FontAwesomeIcon icon={faCommentSlash} className="noshow" />;
+  return null;
+};
+
+interface NameProps extends EventStateProps {
+  registrationNumber: PatientInReservation['registrationNumber'] | undefined;
+  patientName: PatientInReservation['name'] | undefined;
+}
+
+const Name = ({ eventState, registrationNumber, patientName }: NameProps) => {
+  if (eventState === ReservationState.DayOff) return null;
+  return (
+    <div className="flex w-full gap-0.5">
+      <span>{registrationNumber}</span>
+      <span className="overflow-hidden text-ellipsis text-black">
+        {patientName}
+      </span>
+    </div>
+  );
+};
+
+interface MemoNotificationProps {
+  memo: Reservation['memo'];
+}
+
+const MemoNotification = ({ memo }: MemoNotificationProps) => {
+  if (!memo) return null;
+  return (
+    <div className="absolute right-0 top-0 border-4 border-t-red-500 border-r-red-500 border-l-transparent border-b-transparent" />
+  );
+};
+
+interface PrescriptionsProps {
+  isDayOff: boolean;
+  prescriptions: EventBoxProps['event']['prescriptions'];
+  numberOfCell: number;
+}
+
+const Prescriptions = ({
+  isDayOff,
+  prescriptions,
+  numberOfCell,
+}: PrescriptionsProps) => {
+  if (isDayOff || !prescriptions || numberOfCell === 1) return null;
+  return (
+    <div className="h-5 overflow-hidden text-ellipsis whitespace-nowrap text-center">
+      {prescriptions.map((prescription) => `${prescription.name} `)}
+    </div>
   );
 };
 
