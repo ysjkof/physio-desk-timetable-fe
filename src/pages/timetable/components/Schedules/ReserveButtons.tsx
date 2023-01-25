@@ -73,7 +73,7 @@ const ReservationButtons = ({
       variables: {
         input: {
           clinicId: selectedReservation.clinic.id,
-          patientId: selectedReservation.patient.id,
+          patientId: selectedReservation.patient?.id,
           memo: selectedReservation.memo,
           userId,
           startDate,

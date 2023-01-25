@@ -35,10 +35,10 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
       </div>
       <div className="space-y-2 border-t border-navy pt-2">
         <DetailBox title="환자정보">
-          <li>등록번호 : {patient.registrationNumber}</li>
-          <li>이름 : {patient.name}</li>
-          <li>성별 : {patient.gender}</li>
-          <li>생일 : {getStringOfDate(new Date(patient.birthday))}</li>
+          <li>등록번호 : {patient?.registrationNumber}</li>
+          <li>이름 : {patient?.name}</li>
+          <li>성별 : {patient?.gender}</li>
+          <li>생일 : {getStringOfDate(new Date(patient?.birthday))}</li>
         </DetailBox>
         <DetailBox title="담당치료사">
           <li>{user.name}</li>
