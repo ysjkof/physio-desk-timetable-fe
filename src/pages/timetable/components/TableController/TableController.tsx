@@ -17,17 +17,17 @@ const TableController = () => {
 
   return (
     <>
-      <div className="flex w-full items-center justify-between border-b py-1">
+      <div className="mb-1.5 flex w-full items-center justify-between border-b py-1">
         <DateController />
         <div className="flex gap-2">
           <SwitchWeekViewButton />
           <SeeCalendarButton />
         </div>
       </div>
-      <div className="flex w-full items-center justify-between pb-3">
+      <div className="flex w-full items-center gap-x-6 pb-3">
         <UserSelector />
         <ReservationForCopy />
-        <div className="flex w-full items-center justify-end gap-x-2">
+        <div className="flex items-center justify-end gap-x-2">
           <CreatePatientButton />
           <DisplayControlButton />
         </div>
