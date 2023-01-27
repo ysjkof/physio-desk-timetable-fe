@@ -12,7 +12,7 @@ const ReservationForCopy = () => {
 
   if (!selectedReservation) return null;
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex items-center justify-center whitespace-nowrap">
       <span className="mr-4 flex">
         <span className="absolute inline-flex h-2.5 w-2.5 animate-ping rounded-full bg-blue-700 opacity-75" />
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-blue-800" />
