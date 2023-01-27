@@ -14,22 +14,24 @@ const UserSelector = () => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex basis-full items-center gap-2">
       <SpreadingToggleButton
         isSpreading={isSpreading}
         setIsSpreading={setIsSpreading}
       />
-      {isSpreading &&
-        ClinicsOfClient.selectedClinic?.members.map((member, i) => (
-          <CheckableButton
-            key={i}
-            color="black"
-            backgroundColor={USER_COLORS[i].deep}
-            canSee={!!member.canSee}
-            label={member.user.name}
-            onClick={() => toggleUsers(member.id)}
-          />
-        ))}
+      {isSpreading && (
+        <div className="flex flex-wrap items-center gap-2">
+          {ClinicsOfClient.selectedClinic?.members.map((member, i) => (
+            <CheckableButton
+              key={i}
+              personalColor={USER_COLORS[i].deep}
+              canSee={!!member.canSee}
+              label={member.user.name}
+              onClick={() => toggleUsers(member.id)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
