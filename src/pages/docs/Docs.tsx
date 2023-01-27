@@ -16,7 +16,7 @@ export default function Docs() {
 
   const isOverview = useMatch('docs/overview');
 
-  const { height, changeMinus } = useWindowSize(true);
+  const { height, changeHeight } = useWindowSize(true);
   const navRef = useRef<HTMLDivElement>(null);
 
   const toggleAside = () => {
@@ -24,10 +24,10 @@ export default function Docs() {
   };
 
   useEffect(() => {
-    if (!navRef.current) return changeMinus(0);
+    if (!navRef.current) return changeHeight(0);
 
     const { clientHeight } = navRef.current;
-    changeMinus(clientHeight);
+    changeHeight(clientHeight);
   }, [isDesktop]);
 
   if (loading) return <Loading />;

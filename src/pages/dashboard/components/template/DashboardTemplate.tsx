@@ -16,7 +16,7 @@ export default function DashboardTemplate({
   clinicSelector,
   children,
 }: DashboardTemplateProps) {
-  const { height, changeMinus } = useWindowSize(true);
+  const { height, changeHeight } = useWindowSize(true);
   const breadcrumbRef = useRef<HTMLDivElement>(null);
 
   const [isDesktop] = useMediaQuery({ minWidth: '640' });
@@ -27,7 +27,7 @@ export default function DashboardTemplate({
   };
   useEffect(() => {
     if (!breadcrumbRef.current) return;
-    changeMinus(breadcrumbRef.current.clientHeight);
+    changeHeight(breadcrumbRef.current.clientHeight);
   }, []);
 
   return (

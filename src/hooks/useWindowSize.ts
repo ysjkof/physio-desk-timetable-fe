@@ -3,21 +3,35 @@ import { useEffect, useState } from 'react';
 /** 반환하는 height = View Port Height - Global Navigation Bar Height */
 export const useWindowSize = (hasEventListener?: boolean) => {
   const [height, setHeight] = useState(window.innerHeight);
-  const [minus, setMinus] = useState(0);
+  const [width, setWidth] = useState(window.innerWidth);
+  const [minusToHeight, setMinusToHeight] = useState(0);
+  const [minusToWidth, setMinusToWidth] = useState(0);
 
-  const changeMinus = (value: number) => {
-    setMinus(value);
+  const changeHeight = (number: number) => {
+    setMinusToHeight(number);
+  };
+
+  const changeWidth = (number: number) => {
+    setMinusToWidth(number);
+  };
+
+  const getHeightAndWidth = () => {
+    getHeight();
+    getWidth();
   };
 
   const getHeight = () => {
-    const windowHeight = window.innerHeight;
     // GNB = Global Navigation Bar
     const GNBHeight =
       document.getElementById('global-header')?.clientHeight || 0;
-    setHeight(windowHeight - GNBHeight - minus);
+    setHeight(window.innerHeight - GNBHeight - minusToHeight);
   };
 
-  const delayedGetHeight = () => setTimeout(getHeight, 0);
+  const getWidth = () => {
+    setWidth(window.innerWidth - minusToWidth);
+  };
+
+  const delayedGetHeight = () => setTimeout(getHeightAndWidth, 0);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -33,7 +47,7 @@ export const useWindowSize = (hasEventListener?: boolean) => {
       return () =>
         window.removeEventListener('resize', debounceDelayedGetHeight);
     }
-  }, [hasEventListener, minus]);
+  }, [hasEventListener, minusToHeight, minusToWidth]);
 
-  return { height, changeMinus };
+  return { height, width, changeHeight, changeWidth };
 };
