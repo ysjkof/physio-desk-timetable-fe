@@ -2,6 +2,7 @@ import localStorageUtils from '../utils/localStorage.utils';
 import { ClinicType } from '../types/generated.types';
 import type {
   ClinicOfClient,
+  ClinicOfClientState,
   IMember,
   MyClinic,
   UserIdAndName,
@@ -42,7 +43,7 @@ export class ClinicsOfClient {
     return clinics.map(this.#createClinicOfClient);
   }
 
-  static #createClinicOfClient(clinic: MyClinic): ClinicOfClient {
+  static #createClinicOfClient(clinic: MyClinic) {
     const addCanSee = (member: IMember) => ({ ...member, canSee: true });
 
     const property =
@@ -57,15 +58,16 @@ export class ClinicsOfClient {
     };
   }
 
-  static #getKeyForPersonal() {
+  static #getKeyForPersonal(): ClinicOfClientState {
     return {
       isSelected: true,
       isManager: true,
       isStayed: true,
+      position: '관리자',
     };
   }
 
-  static #getKeyForGroup(clinic: MyClinic) {
+  static #getKeyForGroup(clinic: MyClinic): ClinicOfClientState {
     const userInClinic = clinic.members.find(
       (member) => member.user.id === this.#userIdAndName.userId
     );
@@ -77,8 +79,9 @@ export class ClinicsOfClient {
 
     return {
       isSelected: false,
-      isManager: !!userInClinic?.manager,
-      isStayed: !!userInClinic?.staying,
+      isManager: userInClinic.manager,
+      isStayed: userInClinic.staying,
+      position: userInClinic.manager ? '관리자' : '직원',
     };
   }
 
@@ -132,6 +135,7 @@ export class ClinicsOfClient {
       isSelected: clinicFromClient.isSelected,
       isManager: clinicFromClient.isManager,
       isStayed: clinicFromClient.isStayed,
+      position: clinicFromClient.position,
     };
   }
 
@@ -150,7 +154,7 @@ export class ClinicsOfClient {
     return personalClinic;
   }
 
-  static get selectedClinic() {
+  static get selectedClinic(): ClinicOfClient {
     const selectedClinic = this.#clinics.find((clinic) => clinic.isSelected);
     if (!selectedClinic)
       throw new Error('selectedClinic이 없습니다.', { cause: '없어!!' });

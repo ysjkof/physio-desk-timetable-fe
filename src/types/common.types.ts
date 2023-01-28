@@ -57,11 +57,17 @@ export interface MemberOfClient extends IMember {
   canSee?: boolean;
 }
 
-export interface ClinicOfClient extends Omit<MyClinic, 'members'> {
-  members: MemberOfClient[];
+type ClinicPosition = '관리자' | '직원';
+export interface ClinicOfClientState {
   isSelected: boolean;
   isManager: boolean;
   isStayed: boolean;
+  position: ClinicPosition;
+}
+export interface ClinicOfClient
+  extends Omit<MyClinic, 'members'>,
+    ClinicOfClientState {
+  members: MemberOfClient[];
 }
 
 export type ReservationInList = NonNullable<
