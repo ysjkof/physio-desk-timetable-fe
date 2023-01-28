@@ -2,7 +2,7 @@ import { type ChangeEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-const SearchAndInviteUser = () => {
+const SearchAndInviteMember = () => {
   const searchMembers = (event: ChangeEvent<HTMLInputElement>) => {
     // TODO: 어떤 방식으로 검색할 것인가?
   };
@@ -40,4 +40,4 @@ const SearchAndInviteUser = () => {
   );
 };
 
-export default SearchAndInviteUser;
+export default SearchAndInviteMember;

@@ -1,6 +1,13 @@
 import { ColumnContainer } from './ColumnContainer';
 import { MenuContainer } from './MenuContainer';
 import { Profile } from './Profile';
-import { SearchAndInviteUser } from './SearchAndInviteUser';
+import { SearchAndInviteMember } from './SearchAndInviteMember';
+import { MemberList } from './MemberList';
 
-export { ColumnContainer, MenuContainer, Profile, SearchAndInviteUser };
+export {
+  ColumnContainer,
+  MenuContainer,
+  Profile,
+  SearchAndInviteMember,
+  MemberList,
+};
