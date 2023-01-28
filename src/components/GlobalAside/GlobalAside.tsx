@@ -22,13 +22,19 @@ const GlobalAside = () => {
   };
 
   const menu = useLocation().pathname.split('/')[1];
+  console.log('extendedAside >>', extendedAside);
 
   return (
     <aside
       id="global-aside"
-      className="flex h-full w-fit flex-col justify-between bg-table-aside-bg py-4 text-white"
+      className="flex h-full flex-col justify-between bg-table-aside-bg py-4 text-white"
     >
-      <div className="relative mb-6 flex h-28 flex-col items-center justify-center gap-y-3 px-4">
+      <div
+        className={cls(
+          'relative mb-6 flex h-28 flex-col items-center justify-center gap-y-3 px-4',
+          extendedAside ? 'w-[170px]' : 'w-fit'
+        )}
+      >
         {extendedAside && (
           <>
             <Link
