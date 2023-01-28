@@ -107,6 +107,14 @@
   .modal-header {
     @apply h-14 w-full text-xl font-medium text-cst-blue;
   }
+
+  /* 재사용하지 않는 컴포넌트 */
+  .css_dashboard__column-container-1st {
+    @apply flex h-full w-[200px] flex-col gap-y-10 border-r border-r-table-line px-4 pt-8;
+  }
+  .css_dashboard__column-container-2nd {
+    @apply flex h-full w-[360px] flex-col overflow-y-scroll border-r border-r-table-line pt-16;
+  }
 }
 
 @layer utilities {
