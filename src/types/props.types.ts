@@ -17,7 +17,6 @@ interface IDate {
 }
 
 export interface TimetableTemplateProps {
-  aside: ReactNode;
   nav: ReactNode;
   labels: ReactNode;
   columns: ReactNode;
