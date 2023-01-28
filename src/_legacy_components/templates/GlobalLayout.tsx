@@ -1,11 +1,11 @@
 import { lazy } from 'react';
 import { Outlet } from 'react-router-dom';
+import { cls } from '../../utils/common.utils';
 import { Initialize } from '../../components';
 import Toast from '../molecules/Toast';
 
-const LoggedInGlobalNavBar = lazy(
-  () => import('../organisms/LoggedInGlobalNavBar')
-);
+const TableAside = lazy(() => import('../../components/TableAside'));
+
 const LoggedOutGlobalNavBar = lazy(
   () => import('../organisms/LoggedOutGlobalNavBar')
 );
@@ -16,10 +16,15 @@ export interface IsLoggedIn {
 
 export default function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
   return (
-    <div className="h-screen overflow-hidden">
+    <div
+      className={cls(
+        'flex h-screen overflow-hidden',
+        isLoggedIn ? '' : 'flex-col'
+      )}
+    >
       {isLoggedIn ? (
         <Initialize>
-          <LoggedInGlobalNavBar />
+          <TableAside />
           <Outlet />
         </Initialize>
       ) : (
