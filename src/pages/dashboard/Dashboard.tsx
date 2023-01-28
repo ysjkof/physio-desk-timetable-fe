@@ -1,7 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import { ChangeEvent, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 import { ClinicsOfClient } from '../../models';
 import { clinicListsVar } from '../../store';
 import {
@@ -10,7 +8,12 @@ import {
   sortByBoolean,
   sortByString,
 } from '../../utils/common.utils';
-import { ColumnContainer, MenuContainer, Profile } from './components';
+import {
+  ColumnContainer,
+  MenuContainer,
+  Profile,
+  SearchAndInviteUser,
+} from './components';
 import { USER_COLORS } from '../../constants/constants';
 import { VerticalCrossArrow } from '../../svgs';
 
@@ -63,12 +66,6 @@ const Dashboard = () => {
     ]);
   };
 
-  const searchMembers = (event: ChangeEvent<HTMLInputElement>) => {
-    // TODO: 어떤 방식으로 검색할 것인가?
-  };
-
-  const inviteUserToClinic = () => {};
-
   return (
     <div className="flex">
       <ColumnContainer>
@@ -77,33 +74,7 @@ const Dashboard = () => {
       </ColumnContainer>
       <div className="flex h-full w-[360px] flex-col overflow-y-scroll border-r border-r-table-line pt-16">
         <h1 className="mb-8 pl-4 text-3xl font-medium">직원열람 및 관리</h1>
-        <div className="mb-7 flex items-center justify-between gap-4 px-4">
-          <label className="relative w-full" htmlFor="dashboard-user-search">
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="position-center-y absolute left-2"
-            />
-            <input
-              id="dashboard-user-search"
-              type="text"
-              className="css_default-input pl-6"
-              placeholder="직원을 검색하세요"
-              onChange={searchMembers}
-            />
-          </label>
-          <button
-            type="button"
-            className="css_default-button rounded-md bg-cst-green text-sm text-white"
-            onClick={inviteUserToClinic}
-          >
-            <FontAwesomeIcon
-              icon={faPlus}
-              className="rounded-full border p-0.5"
-              size="xs"
-            />
-            직원 초대하기
-          </button>
-        </div>
+        <SearchAndInviteUser />
         <div className="mb-8 border-y">
           <div className="flex gap-8 border-b py-2 px-4 text-xs">
             <button
