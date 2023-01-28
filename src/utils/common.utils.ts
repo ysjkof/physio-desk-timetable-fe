@@ -130,3 +130,33 @@ export function checkLengthIsZero<T>(arr?: T | null) {
   if (!Array.isArray(arr)) return undefined;
   return arr?.length === 0 ? undefined : arr;
 }
+
+export function sortByString(
+  str1: string,
+  str2: string,
+  direction: 'ASC' | 'DESC'
+) {
+  if (!direction || direction === 'ASC') {
+    if (str1 > str2) return 1;
+    if (str1 < str2) return -1;
+    return 0;
+  }
+  if (str1 > str2) return -1;
+  if (str1 < str2) return 1;
+  return 0;
+}
+
+export function sortByBoolean(
+  bool1: boolean,
+  bool2: boolean,
+  direction: 'ASC' | 'DESC'
+) {
+  if (!direction || direction === 'ASC') {
+    if (bool1 > bool2) return 1;
+    if (bool1 < bool2) return -1;
+    return 0;
+  }
+  if (bool1 > bool2) return -1;
+  if (bool1 < bool2) return 1;
+  return 0;
+}
