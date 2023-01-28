@@ -12,6 +12,7 @@ import DateForm from './DateForm';
 import Timepicker from './Timepicker';
 import Modal from './Modal';
 import Checkbox from './Checkbox';
+import TableAside from './TableAside';
 
 export {
   ButtonOfPages,
@@ -28,4 +29,5 @@ export {
   Timepicker,
   Modal,
   Checkbox,
+  TableAside,
 };

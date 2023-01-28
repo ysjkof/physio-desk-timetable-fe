@@ -1,10 +1,10 @@
 import type { PropsWithChildren } from 'react';
-import { Link } from 'react-router-dom';
-import { ROUTES } from '../../../../router/routes';
-import { cls } from '../../../../utils/common.utils';
-import { CogSixTooth, Building, Table } from '../../../../svgs';
+import { Link, useLocation } from 'react-router-dom';
+import { ROUTES } from '../../router/routes';
+import { cls } from '../../utils/common.utils';
+import { CogSixTooth, Building, Table } from '../../svgs';
 import TableClinicSelector from './TableClinicSelector';
-import { useTableDisplay } from '../../hooks';
+import { useTableDisplay } from '../../pages/timetable/hooks';
 
 interface LiProps extends PropsWithChildren {
   to: string;
@@ -21,10 +21,12 @@ const TableAside = () => {
     toggleDisplayOption('asideExtension');
   };
 
+  const menu = useLocation().pathname.split('/')[1];
+
   return (
     <aside
-      id="timetable__aside-nav"
-      className="flex h-full w-full flex-col justify-between bg-table-aside-bg py-4 text-white"
+      id="global-aside"
+      className="flex h-full w-fit flex-col justify-between bg-table-aside-bg py-4 text-white"
     >
       <div className="relative mb-6 flex h-28 flex-col items-center justify-center gap-y-3 px-4">
         {extendedAside && (
@@ -48,15 +50,15 @@ const TableAside = () => {
       </button>
 
       <Ul>
-        <Li to={ROUTES.timetable} selected>
+        <Li to={ROUTES.timetable} selected={menu === 'tt'}>
           <Table />
           {extendedAside && '시간표'}
         </Li>
-        <Li to={ROUTES.clinics}>
+        <Li to={ROUTES.clinics} selected={menu === 'dashboard'}>
           <Building />
           {extendedAside && '병원'}
         </Li>
-        <Li to={ROUTES.editProfile}>
+        <Li to={ROUTES.editProfile} selected={menu === 'profile'}>
           <CogSixTooth />
           {extendedAside && '프로필'}
         </Li>

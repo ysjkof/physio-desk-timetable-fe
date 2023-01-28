@@ -1,10 +1,10 @@
 import { useReactiveVar } from '@apollo/client';
-import { renameUseSplit } from '../../../../utils/common.utils';
-import { Selectbox } from '../../../../components';
-import { useMe } from '../../../../hooks';
-import { clinicListsVar } from '../../../../store';
-import { ClinicsOfClient } from '../../../../models';
-import { useSelectedClinic } from '../../hooks';
+import { renameUseSplit } from '../../utils/common.utils';
+import { useMe } from '../../hooks';
+import { clinicListsVar } from '../../store';
+import { ClinicsOfClient } from '../../models';
+import { useSelectedClinic } from '../../pages/timetable/hooks';
+import Selectbox from '../Selectbox';
 
 const TableClinicSelector = () => {
   const clinicLists = useReactiveVar(clinicListsVar);

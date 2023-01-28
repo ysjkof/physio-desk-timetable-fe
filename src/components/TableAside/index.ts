@@ -1,3 +1,3 @@
 import TableAside from './TableAside';
 
-export { TableAside };
+export default TableAside;

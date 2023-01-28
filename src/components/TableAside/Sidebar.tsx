@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../utils/common.utils';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
