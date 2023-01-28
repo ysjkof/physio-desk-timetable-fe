@@ -4,7 +4,7 @@ import { cls } from '../../utils/common.utils';
 import { Initialize } from '../../components';
 import Toast from '../molecules/Toast';
 
-const TableAside = lazy(() => import('../../components/TableAside'));
+const TableAside = lazy(() => import('../../components/GlobalAside'));
 
 const LoggedOutGlobalNavBar = lazy(
   () => import('../organisms/LoggedOutGlobalNavBar')

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../router/routes';
 import { cls } from '../../utils/common.utils';
 import { CogSixTooth, Building, Table } from '../../svgs';
-import TableClinicSelector from './TableClinicSelector';
+import ClinicSelector from './ClinicSelector';
 import { useTableDisplay } from '../../pages/timetable/hooks';
 
 interface LiProps extends PropsWithChildren {
@@ -11,7 +11,7 @@ interface LiProps extends PropsWithChildren {
   selected?: boolean;
 }
 
-const TableAside = () => {
+const GlobalAside = () => {
   const {
     tableDisplay: { asideExtension: extendedAside },
     toggleDisplayOption,
@@ -37,7 +37,7 @@ const TableAside = () => {
             >
               <img src="/images/Logo.png" alt="logo" />
             </Link>
-            <TableClinicSelector />
+            <ClinicSelector />
           </>
         )}
       </div>
@@ -100,4 +100,4 @@ const Li = ({ to, children, selected }: LiProps) => {
   );
 };
 
-export default TableAside;
+export default GlobalAside;

@@ -6,7 +6,7 @@ import { ClinicsOfClient } from '../../models';
 import { useSelectedClinic } from '../../pages/timetable/hooks';
 import Selectbox from '../Selectbox';
 
-const TableClinicSelector = () => {
+const ClinicSelector = () => {
   const clinicLists = useReactiveVar(clinicListsVar);
   const { selectClinic } = useSelectedClinic();
   const { data: meData } = useMe();
@@ -65,4 +65,4 @@ const TableClinicSelector = () => {
   );
 };
 
-export default TableClinicSelector;
+export default ClinicSelector;
