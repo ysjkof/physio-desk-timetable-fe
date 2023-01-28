@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import useMediaQuery from '../../../../hooks/useMediaQuery';
-import useWindowSize from '../../../../hooks/useWindowSize';
-import BarBottomLeft from '../../../../svgs/BarBottomLeft';
+import { useMediaQuery, useWindowSize } from '../../../../hooks';
+import { BarBottomLeft } from '../../../../svgs';
 import DocsSidebarModal from '../../../docs/components/molecules/DocsSidebarModal';
 
 interface DashboardTemplateProps {
@@ -10,13 +9,14 @@ interface DashboardTemplateProps {
   clinicSelector: ReactNode;
   children: ReactNode;
 }
+
 export default function DashboardTemplate({
   sidebar,
   breadcrumb,
   clinicSelector,
   children,
 }: DashboardTemplateProps) {
-  const { height, changeMinus } = useWindowSize(true);
+  const { height, changeHeight } = useWindowSize(true);
   const breadcrumbRef = useRef<HTMLDivElement>(null);
 
   const [isDesktop] = useMediaQuery({ minWidth: '640' });
@@ -27,7 +27,7 @@ export default function DashboardTemplate({
   };
   useEffect(() => {
     if (!breadcrumbRef.current) return;
-    changeMinus(breadcrumbRef.current.clientHeight);
+    changeHeight(breadcrumbRef.current.clientHeight);
   }, []);
 
   return (

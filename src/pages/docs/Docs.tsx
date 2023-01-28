@@ -1,16 +1,14 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Outlet, useMatch } from 'react-router-dom';
 import DocsSidebar from './components/organisms/DocsSidebar';
-import useMediaQuery from '../../hooks/useMediaQuery';
-import useWindowSize from '../../hooks/useWindowSize';
-import BarBottomLeft from '../../svgs/BarBottomLeft';
-import XMark from '../../svgs/XMark';
-import { cls } from '../../utils/utils';
+import { BarBottomLeft, XMark } from '../../svgs';
+import { cls } from '../../utils/common.utils';
+import { useMediaQuery, useWindowSize } from '../../hooks';
 
 const DocsSidebarModal = lazy(
   () => import('./components/molecules/DocsSidebarModal')
 );
-const Loading = lazy(() => import('../../components/atoms/Loading'));
+const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);
@@ -18,7 +16,7 @@ export default function Docs() {
 
   const isOverview = useMatch('docs/overview');
 
-  const { height, changeMinus } = useWindowSize(true);
+  const { height, changeHeight } = useWindowSize(true);
   const navRef = useRef<HTMLDivElement>(null);
 
   const toggleAside = () => {
@@ -26,10 +24,10 @@ export default function Docs() {
   };
 
   useEffect(() => {
-    if (!navRef.current) return changeMinus(0);
+    if (!navRef.current) return changeHeight(0);
 
     const { clientHeight } = navRef.current;
-    changeMinus(clientHeight);
+    changeHeight(clientHeight);
   }, [isDesktop]);
 
   if (loading) return <Loading />;

@@ -1,4 +1,4 @@
-import XMark from '../../../../svgs/XMark';
+import { XMark } from '../../../../svgs';
 
 interface DocsSidebarModalProps {
   toggleAside: () => void;
@@ -13,6 +13,9 @@ export default function DocsSidebarModal({
       <div
         className="absolute top-0 z-40 h-full w-full bg-black/50"
         onClick={toggleAside}
+        onKeyDown={toggleAside}
+        tabIndex={0}
+        role="button"
       />
       <aside className="absolute top-0 z-50 h-screen w-1/2 bg-white">
         <button className="absolute right-4 top-3" type="button">

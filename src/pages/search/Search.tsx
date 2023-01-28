@@ -1,49 +1,47 @@
-import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { selectedInfoVar } from '../../store';
-import { cls, renameUseSplit } from '../../utils/utils';
-import useWindowSize from '../../hooks/useWindowSize';
-import useStore from '../../hooks/useStore';
-import { getYMD } from '../../services/dateServices';
-import ListCell from './atoms/ListCell';
-import SearchList from './organisms/SearchList';
-import Button from '../../components/molecules/Button';
-import Worning from '../../components/atoms/Warning';
-import Checkbox from '../../components/molecules/Checkbox';
+import {
+  createArrayFromLength,
+  renameUseSplit,
+} from '../../utils/common.utils';
+import { useWindowSize } from '../../hooks';
+import { getYMD } from '../../utils/date.utils';
+import { ButtonOfPages } from '../../components';
+import {
+  SearchCheckList,
+  SearchList,
+  SearchNavigation,
+  SearchTitle,
+} from './components';
+import Warning from '../../_legacy_components/atoms/Warning';
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
 import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
+import { ClinicsOfClient } from '../../models';
 import type { SearchPatientQuery } from '../../types/generated.types';
 
 export default function Search() {
+  const { selectedClinic } = ClinicsOfClient;
   const location = useLocation();
   const navigate = useNavigate();
-
   const [page, setPage] = useState(1);
-  const [pageNumbers, setPageNumbers] = useState([1]);
-  const selectedInfo = useReactiveVar(selectedInfoVar);
-  const { clinicLists } = useStore();
-  const { register, getValues } = useForm<{ clinicIds: number[] }>({
-    defaultValues: { clinicIds: [selectedInfo.clinic?.id] },
-  });
 
   const [callQuery, { loading, data }] = useLazyQuery<SearchPatientQuery>(
     SEARCH_PATIENT_DOCUMENT
   );
 
-  const changePage = (pageNumber: number) => {
-    if (page === pageNumber) return;
-    setPage(pageNumber);
-  };
+  const { register, getValues } = useForm<{ clinicIds: number[] }>({
+    defaultValues: { clinicIds: [selectedClinic.id] },
+  });
+
+  const { height } = useWindowSize(true);
 
   const invokeQuery = () => {
-    const { search } = location;
-    const [_, queryName] = search.split('?name=');
-    if (!queryName) {
-      return navigate(-1);
-    }
+    const queryName = location.search.split('?name=')[1];
+    if (!queryName) return navigate(-1);
+
     const { clinicIds } = getValues();
     callQuery({
       variables: {
@@ -53,24 +51,21 @@ export default function Search() {
           clinicIds: clinicIds.map((id) => +id),
         },
       },
-      onCompleted(data) {
-        if (data.searchPatient.totalPages) {
-          const totalPageCount = Math.ceil(data.searchPatient.totalPages / 20);
-          const numbers = [1];
-          while (numbers.length < totalPageCount) {
-            numbers.push(numbers.length + 1);
-          }
-
-          setPageNumbers(numbers);
-        }
-      },
     });
   };
+
+  const numberOfPages = createArrayFromLength(
+    data?.searchPatient.totalPages || 1
+  );
+
+  const changePage = (pageNumber: number) => {
+    if (page === pageNumber) return;
+    setPage(pageNumber);
+  };
+
   useEffect(() => {
     invokeQuery();
   }, [location, page]);
-
-  const { height } = useWindowSize(true);
 
   return (
     <>
@@ -82,43 +77,19 @@ export default function Search() {
         style={{ height }}
       >
         <div id="search__header" className="shadow-sm">
-          <div className="flex justify-between border-b px-6 py-2">
-            <h1 className="text-base font-bold">환자 검색</h1>
-            <Button canClick isSmall onClick={invokeQuery} loading={loading}>
-              검색
-            </Button>
-          </div>
-
-          <div className="flex flex-wrap gap-6 border-b px-6 py-2">
-            {clinicLists.map((clinic) => (
-              <Checkbox
-                key={clinic.id}
-                id={'search__clinic-' + clinic.id}
-                label={renameUseSplit(clinic.name)}
-                type="checkbox"
-                value={clinic.id}
-                register={register('clinicIds', {
-                  required: true,
-                })}
-                defaultChecked={clinic.id === selectedInfo.clinic?.id}
-              />
-            ))}
-          </div>
-          <div className="grid grid-cols-[1fr,4rem,1fr,3rem,5rem,5rem] divide-x border-b-2 sm:px-6 lg:grid-cols-6">
-            {['병원', '등록번호', '이름', '성별', '생년월일', '기능'].map(
-              (title) => (
-                <ListCell key={title} className="">
-                  {title}
-                </ListCell>
-              )
-            )}
-          </div>
+          <SearchNavigation invokeQuery={invokeQuery} loading={loading} />
+          <SearchCheckList
+            register={register}
+            selectedClinicId={selectedClinic.id}
+          />
+          <SearchTitle
+            subject={['병원', '등록번호', '이름', '성별', '생년월일', '기능']}
+          />
         </div>
         <div id="search__results" className="divide-y">
-          {!data ||
-          !data.searchPatient.patients ||
+          {!data?.searchPatient.patients ||
           data.searchPatient.patients.length === 0 ? (
-            <Worning type="emptySearch" />
+            <Warning type="emptySearch" />
           ) : (
             data.searchPatient.patients.map((patient, idx) => (
               <SearchList
@@ -137,18 +108,14 @@ export default function Search() {
           id="search__footer"
           className="absolute bottom-0 flex h-16 w-full items-center justify-center gap-2 border-t-2 bg-white text-sm"
         >
-          {pageNumbers.map((pageNumber) => (
-            <button
+          {numberOfPages.map((pageNumber) => (
+            <ButtonOfPages
               key={pageNumber}
-              type="button"
-              className={cls(
-                'border px-2',
-                page === pageNumber ? 'text-base font-semibold' : ''
-              )}
-              onClick={() => changePage(pageNumber)}
-            >
-              {pageNumber}
-            </button>
+              page={pageNumber}
+              isActive={pageNumber === page}
+              changePage={changePage}
+              hasBorder
+            />
           ))}
         </div>
       </div>

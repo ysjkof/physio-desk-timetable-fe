@@ -1,20 +1,22 @@
 import { lazy, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { getMemberState, renameUseSplit } from '../../../../utils/utils';
-import { useMe } from '../../../../hooks/useMe';
-import useAcceptInvitation from '../../hooks/useAcceptInvitation';
-import useCancelInvitation from '../../hooks/useCancelInvitation';
+import { getMemberState, renameUseSplit } from '../../../../utils/common.utils';
+import { useMe } from '../../../../hooks';
+import { useAcceptInvitation, useCancelInvitation } from '../../hooks';
 import DeactivateClinic from './DeactivateClinic';
 import ClinicCard from '../molecules/ClinicCard';
-import ModalTemplate from '../../../../components/templates/ModalTemplate';
-import ModalContentsLayout from '../../../../components/templates/ModalContentsLayout';
+import ModalTemplate from '../../../../_legacy_components/templates/ModalTemplate';
+import ModalContentsLayout from '../../../../_legacy_components/templates/ModalContentsLayout';
 import { FIND_MY_CLINICS_DOCUMENT } from '../../../../graphql';
 import {
   FindMyClinicsQuery,
   ClinicType,
 } from '../../../../types/generated.types';
 import type { IdAndName } from '../../../../types/common.types';
-const Loading = lazy(() => import('../../../../components/atoms/Loading'));
+
+const Loading = lazy(
+  () => import('../../../../_legacy_components/atoms/Loading')
+);
 
 interface CanClose {
   isActivated: boolean;
@@ -44,15 +46,19 @@ export default function MyClinics() {
   const clinicsExcludeOtherMember =
     findMyClinicsData?.findMyClinics.clinics?.map((clinic) => {
       const { id, isActivated, name, type } = clinic;
+      const member = clinic.members
+        .flat(1)
+        .flat(1)
+        .find((member) => member.user.id === data?.me.id);
+
+      if (!member) throw new Error('멤버를 찾을 수 없습니다.');
+
       return {
         id,
         isActivated,
         name,
         type,
-        member: clinic.members
-          .flat(1)
-          .flat(1)
-          .find((member) => member.user.id === data?.me.id)!,
+        member,
       };
     });
 
@@ -126,20 +132,18 @@ export default function MyClinics() {
         <ModalTemplate
           isSmallChildren
           closeAction={() => setHasDeactivate(false)}
-          children={
-            <ModalContentsLayout
-              title="병원 비활성하기"
+        >
+          <ModalContentsLayout
+            title="병원 비활성하기"
+            closeAction={() => setHasDeactivate(false)}
+          >
+            <DeactivateClinic
+              id={deactivateClinic.id}
+              name={deactivateClinic.name}
               closeAction={() => setHasDeactivate(false)}
-              children={
-                <DeactivateClinic
-                  id={deactivateClinic.id}
-                  name={deactivateClinic.name}
-                  closeAction={() => setHasDeactivate(false)}
-                />
-              }
             />
-          }
-        />
+          </ModalContentsLayout>
+        </ModalTemplate>
       )}
     </section>
   );

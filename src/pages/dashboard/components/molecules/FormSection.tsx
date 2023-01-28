@@ -1,5 +1,5 @@
-import { ChildrenProps } from '../../../../types/common.types';
+import type { PropsWithChildren } from 'react';
 
-export default function FormSection({ children }: ChildrenProps) {
+export default function FormSection({ children }: PropsWithChildren) {
   return <section className="flex h-full justify-center">{children}</section>;
 }

@@ -16,7 +16,8 @@ export const REG_EXP = {
     maxLength: 30,
   },
   personName: {
-    pattern: /^[가-힣a-zA-Z\d\. ,.'-]{2,20}$/i,
+    // pattern: /^[가-힣a-zA-Z\d\. ,.'-]{2,20}$/i,
+    pattern: /^[가-힣a-zA-Z\d\\. ,.'-]{2,20}$/i,
     condition: "2~20자로 한글, 영문, 숫자, 특수문자(,.'-)를 사용",
     maxLength: 20,
   },

@@ -1,58 +1,95 @@
 import { SVGProps } from 'react';
-import { VIEW_PERIOD } from '../constants/constants';
 import {
   Clinic,
   FindMyClinicsQuery,
+  GetReservationsByPatientQuery,
   GetStatisticsQuery,
   ListReservationsQuery,
   Member,
   MeQuery,
   Notice,
-  Patient,
   Prescription,
+  SearchPatientQuery,
   User,
 } from './generated.types';
 
-type ViewPeriodKey = keyof typeof VIEW_PERIOD;
-type ViewPeriod = typeof VIEW_PERIOD[ViewPeriodKey];
-export interface IViewOption {
-  viewPeriod: ViewPeriod;
+// models
+
+export interface TimeLabelArg {
+  readonly label: string;
+  readonly visibleMinute: string[];
+  readonly colors: string[];
+}
+
+export interface FirstAndLastTime {
+  firstHour: number;
+  firstMinute: number;
+  lastHour: number;
+  lastMinute: number;
+}
+
+export interface HoursAndMinutes {
+  hours?: number;
+  minutes?: number;
+}
+
+export interface TableTimeOptions extends FirstAndLastTime {
+  gap: number;
+}
+
+export interface TableDisplayOptions {
+  hasWeekView: boolean;
   seeCancel: boolean;
   seeNoshow: boolean;
   seeList: boolean;
-  seeActiveOption: boolean;
-  navigationExpand: boolean;
-  tableDuration: {
-    startHour: number;
-    startMinute: number;
-    endHour: number;
-    endMinute: number;
-  };
+  seeCalendar: boolean;
+  asideExtension: boolean;
 }
 
 // typescript type & interface
 export type IFindMyClinics = FindMyClinicsQuery['findMyClinics']['clinics'];
-export type IClinic = NonNullable<FlatArray<IFindMyClinics, 0>>;
+export type MyClinic = NonNullable<FlatArray<IFindMyClinics, 0>>;
 
-export type IMember = IClinic['members'][0];
-export type IMemberWithActivate = IMember & { isActivate: boolean };
+// TODO : MyClinicMember로 이름 변경
+export type IMember = MyClinic['members'][0];
 
-export interface IClinicList extends Omit<IClinic, 'members'> {
-  members: IMemberWithActivate[];
+export interface MemberOfClient extends IMember {
+  canSee?: boolean;
 }
-export type IListReservation = NonNullable<
+
+export interface ClinicOfClient extends Omit<MyClinic, 'members'> {
+  members: MemberOfClient[];
+  isSelected: boolean;
+  isManager: boolean;
+  isStayed: boolean;
+}
+
+export type ReservationInList = NonNullable<
   ListReservationsQuery['listReservations']['results']
+>[0];
+
+export type PatientInReservation = NonNullable<ReservationInList['patient']>;
+export type ClinicInReservation = NonNullable<ReservationInList['clinic']>;
+export type UserInReservation = ReservationInList['user'];
+export type PrescriptionsInReservation = NonNullable<
+  ReservationInList['prescriptions']
+>;
+
+export type ReservationInPatient = NonNullable<
+  GetReservationsByPatientQuery['getReservationsByPatient']['results']
 >[0];
 
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
 }
 
-export interface ISelectedClinic extends Pick<Clinic, 'id' | 'name' | 'type'> {
-  isManager: IMember['manager'];
-  isStayed: IMember['staying'];
-  members: IMemberWithActivate[];
+export interface IsActive {
+  isActive: boolean;
 }
+
+export type PatientInSearch = NonNullable<
+  SearchPatientQuery['searchPatient']['patients']
+>[0];
 
 // me
 
@@ -60,7 +97,7 @@ interface ModifiedClinicMemberWithClinic
   extends Pick<Member, 'id' | 'staying' | 'manager' | 'accepted'> {
   clinic: Pick<Clinic, 'id' | 'name' | 'isActivated'>;
 }
-interface ModifiedNotice extends Pick<Notice, 'message' | 'read'> {}
+type ModifiedNotice = Pick<Notice, 'message' | 'read'>;
 export interface ModifiedLoginUser
   extends Pick<User, 'id' | 'name' | 'email' | 'role' | 'verified'> {
   members?: ModifiedClinicMemberWithClinic[] | null;
@@ -73,7 +110,14 @@ export interface IdAndName {
   id: number;
   name: string;
 }
+export interface UserIdAndName {
+  userId: number;
+  userName: string;
+}
 
+export interface Value {
+  value: unknown;
+}
 // statistics
 
 type IDailyReports = GetStatisticsQuery['getStatistics']['dailyReports'];
@@ -109,7 +153,7 @@ export interface MemberState {
 
 ///
 
-export interface ISelectedPrescription {
+export interface SelectedPrescription {
   price: number;
   minute: number;
   prescriptions: number[];
@@ -123,32 +167,21 @@ export interface ReserveFormType {
 
 //
 
-export interface IUserWithEvent extends IMember {
-  events: IListReservation[];
-  isActivate?: boolean;
+export interface UserWithEvent extends MemberOfClient {
+  events: ReservationInList[];
 }
-export interface DayWithUsers {
+export interface ISchedules {
   date: Date;
-  users: IUserWithEvent[];
+  users: UserWithEvent[];
 }
 
-export interface SelectedClinic extends ISelectedClinic {}
-interface SelectedReservation extends IListReservation {}
-export interface SelectedPatient
-  extends Pick<Patient, 'name' | 'gender' | 'registrationNumber' | 'birthday'> {
-  id: number;
-  clinicName: string;
-  user?: { id: number; name: string };
-}
+export type SelectedReservationType = ReservationInList | undefined;
 
-export interface SelectedInfo {
-  clinic: SelectedClinic | null;
-  patient: SelectedPatient | null;
-  reservation: SelectedReservation | null;
+export type SelectedPatientType = SelectedPatient | undefined | null;
+export interface SelectedPatient extends PatientInReservation {
+  clinic: ClinicInReservation;
+  user: UserInReservation | null | undefined;
 }
-
-export type SetSelectedInfoKey = keyof SelectedInfo;
-export type SetSelectedInfoValue = SelectedInfo[SetSelectedInfoKey];
 
 // utils
 
@@ -161,12 +194,28 @@ export interface ToastState {
   bgColor?: boolean;
 }
 
-export interface ChildrenProps {
-  children?: React.ReactNode;
+export interface SVG extends SVGProps<SVGSVGElement> {
+  iconSize?: 'LG' | 'MD' | 'SM';
 }
-
-export interface SVG extends SVGProps<SVGSVGElement> {}
 
 export interface ClassNameProps {
   className?: string;
+}
+
+//
+
+export interface ObjValueIsFx {
+  [key: string]: () => void;
+}
+
+export interface LocationState {
+  createReservation?: boolean;
+  startDate: {
+    hours: number;
+    minutes: number;
+    dayIndex: number;
+  };
+  userId: number;
+  isDayoff?: boolean;
+  createPatient?: boolean;
 }

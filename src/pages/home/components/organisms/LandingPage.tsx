@@ -1,19 +1,19 @@
 import { Link } from 'react-router-dom';
-import { isLoggedInVar } from '../../../../apollo';
-import { ROUTES } from '../../../../router/routes';
-import H2 from '../atoms/H2';
-import Li from '../atoms/Li';
-import P from '../atoms/P';
-import Section from '../atoms/Section';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRotateLeft,
   faBan,
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import useMediaQuery from '../../../../hooks/useMediaQuery';
+import { isLoggedInVar } from '../../../../apollo';
+import { ROUTES } from '../../../../router/routes';
+import H2 from '../atoms/H2';
+import Li from '../atoms/Li';
+import P from '../atoms/P';
+import Section from '../atoms/Section';
+import { useMediaQuery } from '../../../../hooks';
 import DocsEventBox from '../molecules/DocsEventBox';
-import Check from '../../../../svgs/Check';
+import { Check } from '../../../../svgs';
 import H1 from '../atoms/H1';
 import H3 from '../atoms/H3';
 import { ReservationState } from '../../../../types/generated.types';
@@ -25,7 +25,6 @@ export default function LandingPage() {
   const tableWide = '/images/landing-page/table-wide.webp';
   const myFourClinicsMobil = '/images/landing-page/my-four-clinics_mobil.webp';
   const myFourClinicsDesk = '/images/landing-page/my-four-clinics_desk.webp';
-
   const features = [
     '한 눈에 일정 파악',
     '팀원 색깔 구별',
@@ -106,6 +105,7 @@ export default function LandingPage() {
           <img
             src={tableWide}
             className="h-[101px] w-full md:h-[189px] lg:h-[303px]"
+            alt="시간표 사용예시"
           />
         </div>
       </Section>
@@ -118,7 +118,7 @@ export default function LandingPage() {
         {!isLoggedIn && (
           <P className="mx-auto mt-8 w-72 sm:w-96">
             <Link
-              to={ROUTES.sign_up}
+              to={ROUTES.signUp}
               className="my-6 mr-2 rounded-md bg-black px-8 py-0.5 font-medium text-white"
             >
               회원가입
@@ -161,6 +161,7 @@ export default function LandingPage() {
             <img
               className="h-fit sm:w-[279px] md:w-[544px] "
               src={isMobile ? myFourClinicsMobil : myFourClinicsDesk}
+              alt="네 개의 병원이 있는 관리화면 "
             />
           </div>
         </Section>
@@ -179,7 +180,7 @@ export default function LandingPage() {
                   <DocsEventBox height={70} width={150} state={state} />
                 </div>
               ))}
-              <div className="h-1/4"></div>
+              <div className="h-1/4" />
             </div>
             <div className="flex w-1/2 flex-col gap-5">
               {descriptionReservationState.map((state) => (

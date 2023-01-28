@@ -1,17 +1,18 @@
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { client } from '../../../../apollo';
-import { selectedInfoVar, toastVar } from '../../../../store';
+import { toastVar } from '../../../../store';
 import { IdAndName } from '../../../../types/common.types';
-import Worning from '../../../../components/atoms/Warning';
-import Button from '../../../../components/molecules/Button';
-import MenuButton from '../../../../components/molecules/MenuButton';
+import Warning from '../../../../_legacy_components/atoms/Warning';
+import Button from '../../../../_legacy_components/molecules/Button';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import {
   FIND_MY_CLINICS_DOCUMENT,
   INACTIVATE_CLINIC_DOCUMENT,
 } from '../../../../graphql';
+import { ClinicsOfClient } from '../../../../models';
 import type { InactivateClinicMutation } from '../../../../types/generated.types';
 
 interface DeactivateClinicProps extends IdAndName {
@@ -23,18 +24,15 @@ export default function DeactivateClinic({
   name,
   closeAction,
 }: DeactivateClinicProps) {
-  const selectedInfo = useReactiveVar(selectedInfoVar);
+  const { selectedClinic } = ClinicsOfClient;
+
   const [agree, setAgree] = useState(false);
 
   const [mutationInactivateClinic, { loading }] =
     useMutation<InactivateClinicMutation>(INACTIVATE_CLINIC_DOCUMENT);
 
   const onClick = () => {
-    if (
-      !loading &&
-      confirm(`다음 병원을 비활성하시겠습니까?
-                          ${name}`)
-    ) {
+    if (!loading && confirm(`다음 병원을 비활성하시겠습니까?\n${name}`)) {
       mutationInactivateClinic({
         variables: { input: { clinicId: id } },
         onCompleted(data) {
@@ -56,7 +54,10 @@ export default function DeactivateClinic({
     }
   };
 
-  return selectedInfo.clinic?.isStayed && selectedInfo.clinic.isManager ? (
+  if (!selectedClinic.isStayed || !selectedClinic.isManager)
+    return <Warning type="hasNotPermission" />;
+
+  return (
     <>
       <p>
         병원을 더 이상 사용하지 않기 때문에 비활성합니다. 비활성하면 정보의
@@ -75,7 +76,5 @@ export default function DeactivateClinic({
         비활성하기
       </Button>
     </>
-  ) : (
-    <Worning type="hasNotPermission" />
   );
 }

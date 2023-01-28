@@ -1,17 +1,10 @@
 import { useState } from 'react';
-import { cls } from '../../../../utils/utils';
-import { PrescriptionListProps } from '../organisms/PrescriptionPage';
+import { cls } from '../../../../utils/common.utils';
 import PrescriptionEdit from './PrescriptionEdit';
 import PrescriptionState from './PrescriptionState';
-import Button from '../../../../components/molecules/Button';
-import Edit from '../../../../svgs/Edit';
-import type { FindPrescriptionsQuery } from '../../../../types/generated.types';
-
-export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
-  prescription: NonNullable<
-    FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
-  >;
-}
+import Button from '../../../../_legacy_components/molecules/Button';
+import { Edit } from '../../../../svgs';
+import type { CardProps } from '../../../../types/props.types';
 
 export default function PrescriptionCard({
   prescription,
@@ -82,7 +75,7 @@ export default function PrescriptionCard({
             />
             <span className="px-1 text-right">{requiredTime}분</span>
             <span className="px-1 text-right">{price}원</span>
-            <button className="pl-2" onClick={toggleEditMode}>
+            <button className="pl-2" onClick={toggleEditMode} type="button">
               <Edit />
             </button>
           </div>

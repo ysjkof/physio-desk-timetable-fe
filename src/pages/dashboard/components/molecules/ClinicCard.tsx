@@ -1,14 +1,13 @@
+import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ButtonHTMLAttributes } from 'react';
-import StateBadge from '../../../../components/atoms/StateBadge';
-import CardContainer from '../../../../components/templates/CardContainer';
-import { ChildrenProps } from '../../../../types/common.types';
-import { cls, StayingState } from '../../../../utils/utils';
+import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
+import CardContainer from '../../../../_legacy_components/templates/CardContainer';
+import { cls, StayingState } from '../../../../utils/common.utils';
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    ChildrenProps {
+    PropsWithChildren {
   loading?: boolean;
 }
 
@@ -21,6 +20,7 @@ function Button({ loading, children, ...args }: ButtonProps) {
           'flex w-full items-center justify-center hover:cursor-pointer hover:font-semibold',
           loading ? 'pointer-events-none' : ''
         )}
+        type="button"
       >
         {loading ? (
           <FontAwesomeIcon
@@ -36,7 +36,7 @@ function Button({ loading, children, ...args }: ButtonProps) {
   );
 }
 
-function ButtonContainer({ children }: ChildrenProps) {
+function ButtonContainer({ children }: PropsWithChildren) {
   return <div className="BUTTONS flex h-1/3 divide-x"> {children}</div>;
 }
 

@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
-import Input from '../../../components/molecules/Input';
-import FormError from '../../../components/atoms/FormError';
-import Button from '../../../components/molecules/Button';
+import Input from '../../../_legacy_components/molecules/Input';
+import FormError from '../../../_legacy_components/atoms/FormError';
+import Button from '../../../_legacy_components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { toastVar } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
@@ -30,7 +30,7 @@ export default function SignUp() {
 
   const [
     createAccountMutation,
-    { loading, data: createaAccountMutationResult },
+    { loading, data: createdAccountMutationResult },
   ] = useMutation<CreateAccountMutation>(CREATE_ACCOUNT_DOCUMENT);
 
   const onCompleted = (data: CreateAccountMutation) => {
@@ -93,23 +93,21 @@ export default function SignUp() {
             pattern: REG_EXP.email.pattern,
           })}
         >
-          {
-            <>
-              <div className="group absolute left-[2.5rem] top-[0.08rem] cursor-pointer">
-                <FontAwesomeIcon icon={faCircleQuestion} fontSize={14} />
-                <p className="bubble-arrow-t-2-5 absolute top-7 -left-12 hidden w-44 rounded-md bg-black px-3 py-2 text-center text-white group-hover:block">
-                  Email은 로그인에 사용됩니다
-                </p>
-              </div>
-              {errors.email?.message ? (
-                <FormError errorMessage={errors.email.message} />
-              ) : (
-                errors.email?.type === 'pattern' && (
-                  <FormError errorMessage={REG_EXP.email.condition} />
-                )
-              )}
-            </>
-          }
+          <>
+            <div className="group absolute left-[2.5rem] top-[0.08rem] cursor-pointer">
+              <FontAwesomeIcon icon={faCircleQuestion} fontSize={14} />
+              <p className="bubble-arrow-t-2-5 absolute top-7 -left-12 hidden w-44 rounded-md bg-black px-3 py-2 text-center text-white group-hover:block">
+                Email은 로그인에 사용됩니다
+              </p>
+            </div>
+            {errors.email?.message ? (
+              <FormError errorMessage={errors.email.message} />
+            ) : (
+              errors.email?.type === 'pattern' && (
+                <FormError errorMessage={REG_EXP.email.condition} />
+              )
+            )}
+          </>
         </Input>
         <Input
           id="sign-up__name"
@@ -155,9 +153,9 @@ export default function SignUp() {
         <Button type="submit" canClick={isValid} loading={loading}>
           계정 만들기
         </Button>
-        {createaAccountMutationResult?.createAccount.error && (
+        {createdAccountMutationResult?.createAccount.error && (
           <FormError
-            errorMessage={createaAccountMutationResult.createAccount.error}
+            errorMessage={createdAccountMutationResult.createAccount.error}
           />
         )}
       </form>

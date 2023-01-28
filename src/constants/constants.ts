@@ -6,11 +6,6 @@ export const UTC_OPTION = {
   kor: UTC_OPTION_KST,
 };
 
-export const VIEW_PERIOD = {
-  ONE_DAY: 1,
-  ONE_WEEK: 7,
-} as const;
-
 export const TABLE_MAIN_COMPONENT_LAYOUT_PADDING_TOP = 50; // px
 export const TABLE_CELL_HEIGHT = 20; // px
 export const TABLE_CELL_HEIGHT_IN_ONE_MINUTE = 2; // px
@@ -18,7 +13,7 @@ export const TABLE_TIME_GAP = 10; // 분 단위, 나중에 전역변수로 조�
 
 export const NEXT = 'next';
 export const PREV = 'prev';
-export const SCROLL_ADRESS = 'scroll-adress-';
+export const SCROLL_ADDRESS = 'scroll-address-';
 
 // Reservation State 한글
 export const RESERVATION_STATE_KOR = {
@@ -48,7 +43,7 @@ export const DASHBOARD_MENU_KR = {
   statistics: '통계',
   create: '병원 만들기',
   clinics: '나의 병원',
-  edit_profile: '나의 정보',
+  editProfile: '나의 정보',
 };
 
 export const STATISTICS_LABEL_COLORS = [
@@ -86,3 +81,11 @@ export const GENDER_KOR = {
   male: '남성',
   female: '여성',
 } as const;
+
+export const LOCALE = 'ko-KR';
+
+export const LABEL_VISIBLE_MINUTES = ['00', '30'];
+
+export const LABEL_COLORS = ['#333779', '#DDDDEF'];
+
+export const LATEST_STORAGE_VERSION = '2022-12-28T00:00:50.000Z';

@@ -35,12 +35,12 @@ function combineUserStatistics({
     const obj: ObjReport = {};
     class Prescription implements IDailyPrescriptionWithCount {
       count = 0;
+
       price = 0;
+
       requiredTime = 0;
-      constructor(public readonly id: number, public readonly name: string) {
-        id;
-        name;
-      }
+
+      constructor(public readonly id: number, public readonly name: string) {}
     }
 
     flatReports.forEach((user) => {
@@ -56,18 +56,19 @@ function combineUserStatistics({
         prevPrescriptions: IDailyPrescriptionWithCount[],
         nextPrescriptions: IPrescriptionOfUser[]
       ) => {
+        const prescriptionsWithCount = structuredClone(prevPrescriptions);
         nextPrescriptions.forEach((prescription) => {
           const idx = prevPrescriptions.findIndex(
             (prevPrescription) => prevPrescription.id === prescription.id
           );
           if (idx !== -1) {
-            prevPrescriptions[idx].count =
+            prescriptionsWithCount[idx].count =
               prevPrescriptions[idx].count + prescription.count;
-            prevPrescriptions[idx].price = 0;
-            prevPrescriptions[idx].requiredTime = 0;
+            prescriptionsWithCount[idx].price = 0;
+            prescriptionsWithCount[idx].requiredTime = 0;
           }
         });
-        return prevPrescriptions;
+        return prescriptionsWithCount;
       };
 
       const prevPrescriptions = obj[userKey]
@@ -117,7 +118,7 @@ function combineUserStatistics({
 
   const convertObjToArr = (objReport: ReturnType<typeof combineSameUser>) => {
     const toArrReport = Object.entries(objReport);
-    const injectUserName = toArrReport.map(([userId, reports]) => {
+    const injectedUserName = toArrReport.map(([userId, reports]) => {
       function injectUserName() {
         const member = memberState?.find((member) => member.userId === +userId);
         return member ? member.name : userId;
@@ -143,7 +144,7 @@ function combineUserStatistics({
         prescriptions,
       };
     });
-    return injectUserName;
+    return injectedUserName;
   };
 
   const objReport = combineSameUser(flattening(dailyReports));

@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { simpleCheckGQLError } from '../../../utils/utils';
+import { simpleCheckGQLError } from '../../../utils/common.utils';
 import { DELETE_RESERVATION_DOCUMENT } from '../../../graphql';
 import type { DeleteReservationMutation } from '../../../types/generated.types';
 
@@ -8,7 +8,7 @@ interface DeleteReservation {
   closeAction?: () => void;
 }
 
-export default function useDeleteReservation() {
+export const useDeleteReservation = () => {
   const [deleteReservationMutation] = useMutation<DeleteReservationMutation>(
     DELETE_RESERVATION_DOCUMENT
   );
@@ -17,7 +17,7 @@ export default function useDeleteReservation() {
     reservationId,
     closeAction,
   }: DeleteReservation) => {
-    const confirmDelete = window.confirm('예약을 지웁니다.');
+    const confirmDelete = confirm('예약을 지웁니다.');
     if (confirmDelete) {
       deleteReservationMutation({
         variables: { input: { reservationId } },
@@ -32,4 +32,4 @@ export default function useDeleteReservation() {
   };
 
   return { deleteReservation };
-}
+};

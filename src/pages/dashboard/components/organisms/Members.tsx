@@ -1,24 +1,25 @@
-import { checkManager, getMemberState } from '../../../../utils/utils';
-import useStore from '../../../../hooks/useStore';
-import useCancelInvitation from '../../hooks/useCancelInvitation';
-import { loggedInUserVar } from '../../../../store';
+import { useReactiveVar } from '@apollo/client';
+import { useCancelInvitation } from '../../hooks';
+import { ClinicsOfClient } from '../../../../models';
+import { clinicListsVar, loggedInUserVar } from '../../../../store';
+import { checkManager, getMemberState } from '../../../../utils/common.utils';
 import UserCard from '../molecules/UserCard';
 
 export default function Members() {
+  useReactiveVar(clinicListsVar); // ui 새로고침 용
   const loggedInUser = loggedInUserVar();
-  const { selectedInfo } = useStore();
+
   const { invokeCancelInvitation, loading: loadingCancel } =
     useCancelInvitation();
 
-  const isManager = checkManager(
-    selectedInfo.clinic?.members!,
-    loggedInUser!.id
-  );
+  const isManager = loggedInUser
+    ? checkManager(ClinicsOfClient.selectedClinic?.members, loggedInUser.id)
+    : false;
 
   return (
     <section className="px-10 py-8">
       <UserCard.Container>
-        {selectedInfo.clinic?.members?.map((member) => {
+        {ClinicsOfClient.selectedClinic?.members.map((member) => {
           const state = getMemberState(
             member.staying,
             member.accepted,

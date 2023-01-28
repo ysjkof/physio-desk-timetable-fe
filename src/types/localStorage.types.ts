@@ -1,8 +1,9 @@
-import { LOCAL_STORAGE_KEY } from '../utils/localStorageUtils';
+import { LOCAL_STORAGE_KEY } from '../utils/localStorage.utils';
+import type { UserIdAndName, Value } from './common.types';
 
 type PrivateLocalStorageKey = keyof Pick<
   typeof LOCAL_STORAGE_KEY,
-  'clinicLists' | 'selectedClinic' | 'viewOption'
+  'clinicLists' | 'viewOption' | 'tableTime'
 >;
 
 type PublicLocalStorageKey = keyof Pick<
@@ -16,21 +17,13 @@ export type LocalStorageValue = typeof LOCAL_STORAGE_KEY[LocalStorageKey];
 
 // CREATE
 export interface GenerateStorageKey extends Partial<UserIdAndName> {
-  key: LocalStorageValue;
+  key: PrivateLocalStorageKey | PublicLocalStorageKey;
 }
 
 //
 
 export interface CreatedAt {
   createdAt: Date;
-}
-interface Value {
-  value: any;
-}
-
-interface UserIdAndName {
-  userId: number;
-  userName: string;
 }
 
 // GET
@@ -48,5 +41,5 @@ export interface SetPublicStorage extends GetPublicLocalStorage, Value {}
 
 // DELETE
 
-export interface RemovePrivateLocalStorage extends GetPrivateStorage {}
-export interface RemovePublicLocalStorage extends GetPublicLocalStorage {}
+export type RemovePrivateLocalStorage = GetPrivateStorage;
+export type RemovePublicLocalStorage = GetPublicLocalStorage;

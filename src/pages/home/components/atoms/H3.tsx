@@ -1,7 +1,7 @@
-import { cls } from '../../../../utils/utils';
-import { HeadingPoprs } from './H1';
+import { cls } from '../../../../utils/common.utils';
+import { HeadingProps } from './H1';
 
-export default function H3({ children, ...args }: HeadingPoprs) {
+export default function H3({ children, ...args }: HeadingProps) {
   return (
     <h3
       {...args}

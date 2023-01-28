@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import Logo from '../../../components/atoms/Logo';
+import Logo from '../../../_legacy_components/atoms/Logo';
 import { ROUTES } from '../../../router/routes';
 
 export default function AuthContainer({
@@ -19,7 +19,7 @@ export default function AuthContainer({
         {children}
 
         <NavLink
-          to={ROUTES.sign_up}
+          to={ROUTES.signUp}
           className={
             location.pathname === '/create-account'
               ? 'font-bold text-sky-500 hover:underline'

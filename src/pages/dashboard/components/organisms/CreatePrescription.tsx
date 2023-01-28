@@ -2,21 +2,21 @@ import { useMutation, useQuery } from '@apollo/client';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import Button from '../../../../components/molecules/Button';
-import Input from '../../../../components/molecules/Input';
-import FormError from '../../../../components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Input from '../../../../_legacy_components/molecules/Input';
+import FormError from '../../../../_legacy_components/atoms/FormError';
 import { REG_EXP } from '../../../../constants/regex';
-import useStore from '../../../../hooks/useStore';
-import Textarea from '../../../../components/molecules/Textarea';
-import Worning from '../../../../components/atoms/Warning';
+import Textarea from '../../../../_legacy_components/molecules/Textarea';
+import Warning from '../../../../_legacy_components/atoms/Warning';
 import { toastVar } from '../../../../store';
 import { client } from '../../../../apollo';
-import Checkbox from '../../../../components/molecules/Checkbox';
+import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 import {
   CREATE_PRESCRIPTION_DOCUMENT,
   FIND_ATOM_PRESCRIPTIONS_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../../../../graphql';
+import { ClinicsOfClient } from '../../../../models';
 import type {
   CreatePrescriptionInput,
   CreatePrescriptionMutation,
@@ -25,9 +25,10 @@ import type {
 } from '../../../../types/generated.types';
 
 export default function CreatePrescription() {
-  const { selectedInfo } = useStore();
-  const { data: findAtomPrescriptions, loading: loadingAtom } =
-    useQuery<FindAtomPrescriptionsQuery>(FIND_ATOM_PRESCRIPTIONS_DOCUMENT);
+  const { selectedClinic } = ClinicsOfClient;
+  const { data: findAtomPrescriptions } = useQuery<FindAtomPrescriptionsQuery>(
+    FIND_ATOM_PRESCRIPTIONS_DOCUMENT
+  );
 
   const [createPrescription, { loading: loadingCreatePrescriptionOption }] =
     useMutation<CreatePrescriptionMutation>(CREATE_PRESCRIPTION_DOCUMENT, {
@@ -44,7 +45,7 @@ export default function CreatePrescription() {
             query: FIND_PRESCRIPTIONS_DOCUMENT,
             variables: {
               input: {
-                clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,
+                clinicId: selectedClinic.id || 0,
                 onlyLookUpActive: false,
               },
             },
@@ -80,7 +81,7 @@ export default function CreatePrescription() {
     formState: { isValid, errors },
   } = useForm<CreatePrescriptionInput>({ mode: 'onChange' });
 
-  const onSubmitCreatePresciption = () => {
+  const onSubmitCreatePrescription = () => {
     if (!loadingCreatePrescriptionOption) {
       const { name, requiredTime, price, prescriptionAtomIds, description } =
         getValues();
@@ -93,22 +94,22 @@ export default function CreatePrescription() {
             price: +price,
             description,
             prescriptionAtomIds: prescriptionAtomIds.map((id) => +id),
-            clinicId: selectedInfo.clinic ? selectedInfo.clinic.id : 0,
+            clinicId: selectedClinic ? selectedClinic.id : 0,
           },
         },
       });
     }
   };
 
-  if (!selectedInfo.clinic?.isStayed || !selectedInfo.clinic.isManager)
-    return <Worning type="hasNotPermission" />;
+  if (!selectedClinic.isStayed || !selectedClinic.isManager)
+    return <Warning type="hasNotPermission" />;
 
   return (
     <section className="px-10">
-      <details open={selectedInfo.clinic.isManager}>
+      <details open={selectedClinic.isManager}>
         <summary>처방 만들기</summary>
         <form
-          onSubmit={handleSubmit(onSubmitCreatePresciption)}
+          onSubmit={handleSubmit(onSubmitCreatePrescription)}
           className="space-y-8 pt-4 pb-2"
         >
           <div className="prescription-selector flex items-center">
@@ -200,8 +201,8 @@ export default function CreatePrescription() {
           </Input>
           <Textarea
             id="create-prescription__description"
-            label={'설명'}
-            placeholder={'처방에 대한 설명'}
+            label="설명"
+            placeholder="처방에 대한 설명"
             register={register('description', {
               maxLength: { value: 200, message: '최대 200자입니다' },
             })}

@@ -61,7 +61,6 @@ export default function ChangeEmail() {
           }
         },
       });
-      return;
     }
   }, []);
 
@@ -72,7 +71,7 @@ export default function ChangeEmail() {
       </Helmet>
       <h2 className="mb-4 text-lg font-medium">이메일 인증</h2>
       <h4 className="animate-pulse text-base font-medium text-red-600">
-        {message ? message : '화면을 닫지 말고 기다려주세요. 확인 중입니다.'}
+        {message || '화면을 닫지 말고 기다려주세요. 확인 중입니다.'}
       </h4>
     </div>
   );

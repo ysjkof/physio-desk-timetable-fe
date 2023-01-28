@@ -1,23 +1,21 @@
 import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
-import FormError from '../../../../components/atoms/FormError';
-import Button from '../../../../components/molecules/Button';
+import FormError from '../../../../_legacy_components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
 import { REG_EXP } from '../../../../constants/regex';
 import {
   EDIT_PRESCRIPTION_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../../../../graphql';
 import { toastVar } from '../../../../store';
-import { changeValueInArray, cls } from '../../../../utils/utils';
-import { CardProps } from './PrescriptionCard';
+import { changeValueInArray, cls } from '../../../../utils/common.utils';
 import type {
   EditPrescriptionInput,
   EditPrescriptionMutation,
   FindPrescriptionsQuery,
 } from '../../../../types/generated.types';
-
-interface PrescriptionEditProps extends CardProps {}
+import type { CardProps } from '../../../../types/props.types';
 
 interface PrescriptionEditForm
   extends Pick<EditPrescriptionInput, 'description'> {
@@ -27,7 +25,7 @@ interface PrescriptionEditForm
 export default function PrescriptionEdit({
   prescription,
   clinicId,
-}: PrescriptionEditProps) {
+}: CardProps) {
   const { id, name, activate, description, prescriptionAtoms } = prescription;
 
   const {
@@ -108,28 +106,26 @@ export default function PrescriptionEdit({
     });
   };
 
-  const GetFormError = () => {
-    let errorMessage = '';
-    if (errors.name?.message) {
-      errorMessage = errors.name.message;
-    } else if (errors.name?.type === 'pattern') {
-      errorMessage = REG_EXP.prescription.condition;
-    } else if (errors.description?.message) {
-      errorMessage = errors.description.message;
-    }
-
-    return <FormError className="left-0 -top-8" errorMessage={errorMessage} />;
+  const getFormError = (formErrors: typeof errors) => {
+    const { description, name } = formErrors;
+    if (name?.message) return name.message;
+    if (name?.type === 'pattern') return REG_EXP.prescription.condition;
+    if (description?.message) return description.message;
+    return '';
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="relative px-6">
-      <GetFormError />
+      <FormError
+        className="left-0 -top-8"
+        errorMessage={getFormError(errors)}
+      />
+      ;
       <div className="">
         <input
           id="prescription-edit__name"
           type="text"
           placeholder="처방 이름을 입력하세요"
           required
-          autoFocus
           maxLength={REG_EXP.prescription.maxLength}
           {...register('name', {
             required: '처방이름을 입력해주세요',
@@ -152,7 +148,7 @@ export default function PrescriptionEdit({
       <div className="flex items-center justify-between">
         <textarea
           id="prescription-edit__description"
-          placeholder={'설명을 입력하세요'}
+          placeholder="설명을 입력하세요"
           {...register('description', {
             maxLength: { value: 200, message: '최대 200자입니다' },
           })}

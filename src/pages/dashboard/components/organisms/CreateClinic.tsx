@@ -1,24 +1,24 @@
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
-import FormError from '../../../../components/atoms/FormError';
-import Button from '../../../../components/molecules/Button';
-import Input from '../../../../components/molecules/Input';
+import FormError from '../../../../_legacy_components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Input from '../../../../_legacy_components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
-import { selectedInfoVar, toastVar } from '../../../../store';
+import { toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
 import {
   ME_DOCUMENT,
   CREATE_CLINIC_DOCUMENT,
   FIND_MY_CLINICS_DOCUMENT,
 } from '../../../../graphql';
+import { ClinicsOfClient } from '../../../../models';
 import type {
   CreateClinicInput,
   CreateClinicMutation,
 } from '../../../../types/generated.types';
 
 export default function CreateClinic() {
-  const selectedInfo = useReactiveVar(selectedInfoVar);
   const {
     register,
     handleSubmit,
@@ -38,7 +38,8 @@ export default function CreateClinic() {
         variables: { input: { name } },
         onCompleted(data) {
           if (data.createClinic.ok) {
-            if (!selectedInfo.clinic) throw new Error('선택된 병원이 없습니다');
+            if (!ClinicsOfClient.selectedClinic)
+              throw new Error('선택된 병원이 없습니다');
             toastVar({ messages: [`병원 "${name}"을 만들었습니다`] });
 
             const newClinic = {
@@ -48,12 +49,11 @@ export default function CreateClinic() {
                 name: data.createClinic.clinic?.name,
               },
             };
-            const newMember = { ...newClinic };
-            // @ts-ignore
-            newMember.clinic.isActivated =
-              data.createClinic.clinic?.isActivated;
-            // @ts-ignore
-            newMember.clinic.type = data.createClinic.clinic?.type;
+            const newMember = {
+              ...newClinic,
+              isActivated: data.createClinic.clinic?.isActivated,
+              type: data.createClinic.clinic?.type,
+            };
 
             client.cache.updateQuery(
               {
@@ -109,7 +109,7 @@ export default function CreateClinic() {
           id="create-clinic__name"
           label="이름*"
           type="text"
-          placeholder={'병원 이름'}
+          placeholder="병원 이름"
           maxLength={REG_EXP.clinicName.maxLength}
           onChange={invokeClearErrors}
           register={register('name', {
@@ -119,12 +119,13 @@ export default function CreateClinic() {
         >
           {errors.name?.message ? (
             <FormError errorMessage={errors.name.message} />
-          ) : errors.name?.type === 'pattern' ? (
-            <FormError errorMessage={REG_EXP.clinicName.condition} />
           ) : (
-            data?.createClinic.error && (
-              <FormError errorMessage={data.createClinic.error} />
+            errors.name?.type === 'pattern' && (
+              <FormError errorMessage={REG_EXP.clinicName.condition} />
             )
+          )}
+          {!errors.name && data?.createClinic.error && (
+            <FormError errorMessage={data.createClinic.error} />
           )}
         </Input>
         <Button type="submit" canClick={isValid} loading={loading} isWidthFull>

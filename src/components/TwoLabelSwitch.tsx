@@ -1,0 +1,62 @@
+import { cls } from '../utils/common.utils';
+
+type Label = string;
+interface SwitchProps {
+  isActivated: boolean;
+  labels: [Label, Label];
+  onClick: () => void;
+}
+
+interface SwitchLabelType {
+  label: Label;
+}
+
+const SwitchLabel = ({ label }: SwitchLabelType) => {
+  return (
+    <button
+      className={cls(
+        'z-10 flex w-1/2 items-center justify-center whitespace-nowrap px-4'
+      )}
+      type="button"
+    >
+      {label}
+    </button>
+  );
+};
+
+const MovingBox = ({ isActivated }: Pick<SwitchProps, 'isActivated'>) => {
+  return (
+    <div
+      className={cls(
+        'absolute inline-flex h-full w-full cursor-pointer items-center bg-gray-200 transition-colors duration-200 ease-in-out'
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className={cls(
+          'h-full w-1/2 transform rounded-sm bg-white transition duration-200 ease-in-out',
+          isActivated ? 'translate-x-full' : 'translate-x-0'
+        )}
+      />
+    </div>
+  );
+};
+
+const TwoLabelSwitch = ({ isActivated, labels, onClick }: SwitchProps) => {
+  return (
+    <div
+      className="relative flex h-8 w-fit cursor-pointer select-none items-center justify-center rounded-sm border border-gray-200 bg-gray-200"
+      onClick={onClick}
+      onKeyDown={onClick}
+      role="button"
+      tabIndex={0}
+    >
+      {labels.map((label) => (
+        <SwitchLabel key={label} label={label} />
+      ))}
+      <MovingBox isActivated={isActivated} />
+    </div>
+  );
+};
+
+export default TwoLabelSwitch;

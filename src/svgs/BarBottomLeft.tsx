@@ -1,18 +1,23 @@
 import { SVG } from '../types/common.types';
-import { cls } from '../utils/utils';
+import { cls } from '../utils/common.utils';
 
 /**
  * heroicicons.com
  * bars-3-bottom-left
  */
-export default function BarBottomLeft({ ...args }: SVG) {
+const BarBottomLeft = ({ iconSize = 'MD', ...args }: SVG) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="currentColor"
       {...args}
-      className={cls('h-5 w-5', args.className || '')}
+      className={cls(
+        args.className || '',
+        iconSize === 'LG' ? 'h-5 w-5' : '',
+        iconSize === 'MD' ? 'h-4 w-4' : '',
+        iconSize === 'SM' ? 'h-3 w-3' : ''
+      )}
     >
       <path
         fillRule="evenodd"
@@ -21,4 +26,6 @@ export default function BarBottomLeft({ ...args }: SVG) {
       />
     </svg>
   );
-}
+};
+
+export default BarBottomLeft;

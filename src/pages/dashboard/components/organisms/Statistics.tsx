@@ -1,27 +1,33 @@
 import { lazy, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useReactiveVar } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { getMonthStartEnd } from '../../../../services/dateServices';
+import { getMonthStartEnd } from '../../../../utils/date.utils';
 import combineUserStatistics from '../../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../../types/common.types';
-import useStore from '../../../../hooks/useStore';
 import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import Charts from '../molecules/Charts';
-import Worning from '../../../../components/atoms/Warning';
-import Button from '../../../../components/molecules/Button';
-import Checkbox from '../../../../components/molecules/Checkbox';
-import MenuButton from '../../../../components/molecules/MenuButton';
+import Warning from '../../../../_legacy_components/atoms/Warning';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
+import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
+import { clinicListsVar, selectedDateVar } from '../../../../store';
+import { ClinicsOfClient } from '../../../../models';
 import type { GetStatisticsQuery } from '../../../../types/generated.types';
-const Loading = lazy(() => import('../../../../components/atoms/Loading'));
+
+const Loading = lazy(
+  () => import('../../../../_legacy_components/atoms/Loading')
+);
 
 export default function Statistics() {
-  const { selectedInfo, selectedDate } = useStore();
+  useReactiveVar(clinicListsVar); // ui 새로고침 용
+  const { selectedClinic } = ClinicsOfClient;
+  const selectedDate = useReactiveVar(selectedDateVar);
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);
@@ -40,11 +46,11 @@ export default function Statistics() {
     mode: 'onChange',
     defaultValues: {
       year: selectedDate.getFullYear(),
-      month: selectedDate.getMonth() + 1 + '',
+      month: String(selectedDate.getMonth() + 1),
     },
   });
 
-  const acceptedMember: MemberState[] | undefined = selectedInfo.clinic?.members
+  const acceptedMember: MemberState[] | undefined = selectedClinic.members
     .filter((member) => member.accepted)
     .map((member) => ({
       userId: member.user.id,
@@ -71,7 +77,7 @@ export default function Statistics() {
         input: {
           startDate,
           endDate,
-          clinicId: selectedInfo.clinic!.id,
+          clinicId: selectedClinic.id,
           userIds: Array.isArray(userIds)
             ? userIds.map((id) => +id)
             : [+userIds],
@@ -99,7 +105,7 @@ export default function Statistics() {
 
   const resetYear = () => {
     setValue('year', selectedDate.getFullYear());
-    setValue('month', selectedDate.getMonth() + 1 + '');
+    setValue('month', String(selectedDate.getMonth() + 1));
   };
 
   useEffect(() => {
@@ -110,7 +116,7 @@ export default function Statistics() {
     )
       return;
 
-    const { dailyReports, prescriptions, visitRates } = data.getStatistics;
+    const { dailyReports, prescriptions } = data.getStatistics;
 
     const newUserStatistics = combineUserStatistics({
       dailyReports,
@@ -118,80 +124,68 @@ export default function Statistics() {
       prescriptions,
     });
     setUserStatistics(newUserStatistics);
-  }, [data]);
+  }, [data, loadingStatisticsData]);
 
   return (
     <>
-      <DashboardSectionLayout
-        elementName="date-picker"
-        hasShadow
-        children={
-          <div className="flex flex-col items-center justify-center gap-x-4 gap-y-1">
-            <div className="flex w-full justify-between gap-4">
-              <div className="flex items-center">
-                <MenuButton
-                  onClick={() => changeYear('minus')}
-                  enabled
-                  hasBorder
-                >
-                  <FontAwesomeIcon icon={faChevronLeft} fontSize={14} />
-                </MenuButton>
-                <input
-                  type="number"
-                  {...register('year', { required: true })}
-                  className="pointer-events-none w-10 appearance-none text-center"
-                  onClick={resetYear}
-                />
-                <MenuButton
-                  onClick={() => changeYear('plus')}
-                  enabled
-                  hasBorder
-                >
-                  <FontAwesomeIcon icon={faChevronRight} fontSize={14} />
-                </MenuButton>
-              </div>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, idx) => (
-                  <Checkbox
-                    key={month}
-                    id={'statistics__month-' + month}
-                    label={month + '월'}
-                    type="radio"
-                    value={month}
-                    register={register('month', {
-                      required: true,
-                    })}
-                  />
-                ))}
-              </div>
+      <DashboardSectionLayout elementName="date-picker" hasShadow>
+        <div className="flex flex-col items-center justify-center gap-x-4 gap-y-1">
+          <div className="flex w-full justify-between gap-4">
+            <div className="flex items-center">
+              <MenuButton onClick={() => changeYear('minus')} enabled hasBorder>
+                <FontAwesomeIcon icon={faChevronLeft} fontSize={14} />
+              </MenuButton>
+              <input
+                type="number"
+                {...register('year', { required: true })}
+                className="pointer-events-none w-10 appearance-none text-center"
+                onClick={resetYear}
+              />
+              <MenuButton onClick={() => changeYear('plus')} enabled hasBorder>
+                <FontAwesomeIcon icon={faChevronRight} fontSize={14} />
+              </MenuButton>
             </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
-                {acceptedMember?.map((member) => (
-                  <Checkbox
-                    key={member.userId}
-                    id={member.name}
-                    label={member.name}
-                    type="checkbox"
-                    value={member.userId}
-                    register={register('userIds', {
-                      required: true,
-                    })}
-                  />
-                ))}
-                <Button
-                  type="submit"
-                  canClick={isValid}
-                  loading={loadingStatisticsData}
-                  isSmall
-                >
-                  조회하기
-                </Button>
-              </div>
-            </form>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
+                <Checkbox
+                  key={month}
+                  id={`statistics__month-${month}`}
+                  label={`${month}월`}
+                  type="radio"
+                  value={month}
+                  register={register('month', {
+                    required: true,
+                  })}
+                />
+              ))}
+            </div>
           </div>
-        }
-      />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
+              {acceptedMember?.map((member) => (
+                <Checkbox
+                  key={member.userId}
+                  id={member.name}
+                  label={member.name}
+                  type="checkbox"
+                  value={member.userId}
+                  register={register('userIds', {
+                    required: true,
+                  })}
+                />
+              ))}
+              <Button
+                type="submit"
+                canClick={isValid}
+                loading={loadingStatisticsData}
+                isSmall
+              >
+                조회하기
+              </Button>
+            </div>
+          </form>
+        </div>
+      </DashboardSectionLayout>
       {loadingStatisticsData && <Loading />}
       {!loadingStatisticsData &&
       userStatistics &&
@@ -199,12 +193,12 @@ export default function Statistics() {
       data.getStatistics.dailyReports ? (
         <>
           {data.getStatistics.dailyReports.length < 1 ? (
-            <Worning type="hasNotStatistics" />
+            <Warning type="hasNotStatistics" />
           ) : (
             userStatistics.length > 0 && (
               <Charts
                 userStatistics={userStatistics}
-                prescriptions={data.getStatistics.prescriptions!}
+                prescriptions={data.getStatistics.prescriptions || []}
                 dailyReports={data.getStatistics.dailyReports}
                 startDate={getMonthStartDate()}
                 endDate={getMonthEndDate()}
@@ -213,7 +207,7 @@ export default function Statistics() {
           )}
         </>
       ) : (
-        <Worning>사용자를 선택하고 조회하기를 눌러주세요</Worning>
+        <Warning>사용자를 선택하고 조회하기를 눌러주세요</Warning>
       )}
     </>
   );

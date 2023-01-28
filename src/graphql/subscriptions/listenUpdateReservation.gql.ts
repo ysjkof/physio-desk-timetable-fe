@@ -5,7 +5,7 @@ import { USER_ID_NAME_EMAIL_FIELDS } from '../users/_usersFragments.gql';
 export const LISTEN_UPDATE_RESERVATION_DOCUMENT = gql`
   ${COMMON_RESERVATION_FIELDS}
   ${USER_ID_NAME_EMAIL_FIELDS}
-  subscription listenUpdateReservation($input: UpdateReservationInput!) {
+  subscription listenUpdateReservation($input: ListenUpdateReservationInput!) {
     listenUpdateReservation(input: $input) {
       ...CommonReservationFields
       user {

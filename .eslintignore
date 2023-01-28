@@ -1,0 +1,5 @@
+*.config.*
+src/types/generated.types.ts
+src/pages/TestPage.tsx
+src/main.tsx
+dist/

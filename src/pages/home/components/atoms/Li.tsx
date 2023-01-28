@@ -1,7 +1,8 @@
-import { ChildrenProps, ClassNameProps } from '../../../../types/common.types';
-import { cls } from '../../../../utils/utils';
+import type { PropsWithChildren } from 'react';
+import { cls } from '../../../../utils/common.utils';
+import type { ClassNameProps } from '../../../../types/common.types';
 
-interface LiProps extends ChildrenProps, ClassNameProps {}
+interface LiProps extends PropsWithChildren, ClassNameProps {}
 
 export default function Li({ children, className }: LiProps) {
   return (

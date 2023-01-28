@@ -1,7 +1,7 @@
-import useWindowSize from '../../../../hooks/useWindowSize';
-import { ChildrenProps } from '../../../../types/common.types';
+import type { PropsWithChildren } from 'react';
+import { useWindowSize } from '../../../../hooks';
 
-export default function HomeTemplate({ children }: ChildrenProps) {
+export default function HomeTemplate({ children }: PropsWithChildren) {
   const { height } = useWindowSize(true);
   return (
     <div className="h-full overflow-y-scroll text-base" style={{ height }}>

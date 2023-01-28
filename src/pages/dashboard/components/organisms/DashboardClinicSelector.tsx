@@ -1,9 +1,10 @@
-import { checkStay } from '../../Dashboard';
-import { renameUseSplit } from '../../../../utils/utils';
-import useStore from '../../../../hooks/useStore';
-import localStorageUtils from '../../../../utils/localStorageUtils';
-import Selectbox from '../../../../components/molecules/Selectbox';
-import { ClinicType, MeQuery } from '../../../../types/generated.types';
+import { useReactiveVar } from '@apollo/client';
+import { renameUseSplit } from '../../../../utils/common.utils';
+import { Selectbox } from '../../../../components';
+import { clinicListsVar } from '../../../../store';
+import { useSelectedClinic } from '../../../timetable/hooks';
+import { ClinicsOfClient } from '../../../../models';
+import type { MeQuery } from '../../../../types/generated.types';
 
 interface DashboardSideNavProps {
   meData: MeQuery;
@@ -14,7 +15,9 @@ export default function DashboardClinicSelector({
   meData,
   isAccepted,
 }: DashboardSideNavProps) {
-  const { clinicLists, setSelectedInfo, selectedInfo } = useStore();
+  const { selectClinic } = useSelectedClinic();
+  const clinicLists = useReactiveVar(clinicListsVar);
+
   const clinicListsSelectMeMember = clinicLists.map((clinic) => {
     const idx = clinic.members.findIndex(
       (member) => member.user.id === meData.me.id
@@ -27,29 +30,8 @@ export default function DashboardClinicSelector({
     };
   });
 
-  const changeSelectedClinic = (id: number, name: string, type: ClinicType) => {
-    const newSelectedClinic = {
-      id,
-      name,
-      type,
-      members:
-        clinicLists.find((clinicInFind) => clinicInFind.id === id)?.members ??
-        [],
-      isManager: Boolean(
-        meData.me.members?.find(
-          (member) => member.clinic.id === id && member.manager
-        )
-      ),
-      isStayed: checkStay(id, meData),
-    };
-    setSelectedInfo('clinic', newSelectedClinic, () =>
-      localStorageUtils.set({
-        key: 'selectedClinic',
-        userId: meData.me.id,
-        userName: meData.me.name,
-        value: newSelectedClinic,
-      })
-    );
+  const changeSelectedClinic = (id: number) => {
+    selectClinic(id);
   };
 
   const changeName = (name: string, isAccepted?: boolean) => {
@@ -63,16 +45,17 @@ export default function DashboardClinicSelector({
 
   return (
     <Selectbox
-      selectedValue={changeName(selectedInfo.clinic!.name, isAccepted)}
+      selectedValue={changeName(
+        ClinicsOfClient.selectedClinic.name,
+        isAccepted
+      )}
     >
       <Selectbox.Options>
         {clinicListsSelectMeMember.map((clinic) => (
           <Selectbox.Option
             key={clinic.id}
-            selected={clinic.id === selectedInfo.clinic?.id}
-            onClick={() =>
-              changeSelectedClinic(clinic.id, clinic.name, clinic.type)
-            }
+            selected={clinic.id === ClinicsOfClient.selectedClinic?.id}
+            onClick={() => changeSelectedClinic(clinic.id)}
           >
             {changeName(clinic.name, clinic.member.accepted)}
           </Selectbox.Option>

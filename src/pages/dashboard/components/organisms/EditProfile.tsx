@@ -2,12 +2,12 @@ import { gql, useApolloClient, useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import FormError from '../../../../components/atoms/FormError';
-import Button from '../../../../components/molecules/Button';
-import Input from '../../../../components/molecules/Input';
+import FormError from '../../../../_legacy_components/atoms/FormError';
+import Button from '../../../../_legacy_components/molecules/Button';
+import Input from '../../../../_legacy_components/molecules/Input';
 import { MUOOL } from '../../../../constants/constants';
 import { REG_EXP } from '../../../../constants/regex';
-import { useMe } from '../../../../hooks/useMe';
+import { useMe } from '../../../../hooks';
 import { toastVar } from '../../../../store';
 import FormSection from '../molecules/FormSection';
 import EditEmail from './EditEmail';
@@ -59,10 +59,10 @@ export default function EditProfile() {
         }
         if (ok && userData) {
           toastVar({ messages: ['사용자 정보 수정완료'], fade: true });
-          const { name: prevName, id } = userData.me;
+          const { name: freshName, id } = userData.me;
 
-          const { name } = getValues();
-          if (prevName === name) return;
+          const { name: nameOfForm } = getValues();
+          if (freshName === nameOfForm) return;
 
           client.writeFragment({
             id: `User:${id}`,
@@ -72,8 +72,8 @@ export default function EditProfile() {
               }
             `,
             data: {
-              ...(prevName !== name && {
-                name,
+              ...(freshName !== nameOfForm && {
+                name: nameOfForm,
               }),
             },
           });
