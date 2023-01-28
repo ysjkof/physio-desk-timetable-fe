@@ -18,6 +18,14 @@
 }
 
 @layer components {
+  .css_default-button {
+    @apply flex h-8 select-none items-center justify-center gap-2 whitespace-nowrap rounded-sm px-2;
+  }
+
+  .css_default-input {
+    @apply w-full rounded-md border py-2 px-3 placeholder:text-sm;
+  }
+
   .sunday {
     @apply text-red-400;
   }
@@ -55,9 +63,6 @@
     @apply relative mx-auto space-y-4 rounded-md bg-white px-14;
   }
 
-  .input {
-    @apply w-full appearance-none rounded-md border py-2 px-5 shadow-sm transition-colors focus:border-green-500 focus:outline-none focus:ring-green-500;
-  }
   .input-datepicker {
     @apply w-full rounded-md border py-1 pr-5 text-right shadow-sm transition-colors focus:border-green-500 focus:outline-none focus:ring-green-500;
   }
