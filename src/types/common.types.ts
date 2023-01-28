@@ -58,6 +58,7 @@ export interface MemberOfClient extends IMember {
 }
 
 type ClinicPosition = '관리자' | '직원';
+
 export interface ClinicOfClientState {
   isSelected: boolean;
   isManager: boolean;
@@ -98,9 +99,11 @@ export type PatientInSearch = NonNullable<
 >[0];
 
 // me
-
+export interface MemberStatus
+  extends Pick<Member, 'staying' | 'manager' | 'accepted'> {}
 interface ModifiedClinicMemberWithClinic
-  extends Pick<Member, 'id' | 'staying' | 'manager' | 'accepted'> {
+  extends Pick<Member, 'id'>,
+    MemberStatus {
   clinic: Pick<Clinic, 'id' | 'name' | 'isActivated'>;
 }
 type ModifiedNotice = Pick<Notice, 'message' | 'read'>;

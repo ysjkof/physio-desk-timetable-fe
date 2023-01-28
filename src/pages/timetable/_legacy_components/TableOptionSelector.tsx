@@ -192,8 +192,8 @@ export default function TableOptionSelector() {
           const isSelectedClinic =
             clinic.id === ClinicsOfClient.getSelectedClinic().id;
 
-          const { staying, accepted } = meMember;
-          const memberState = getMemberState(staying, accepted);
+          const { staying, accepted, manager } = meMember;
+          const memberState = getMemberState({ staying, accepted, manager });
           const isStay = isStayMember(memberState);
 
           const sortMember = (members: MemberOfClient[]) =>

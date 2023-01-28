@@ -20,11 +20,11 @@ export default function Members() {
     <section className="px-10 py-8">
       <UserCard.Container>
         {ClinicsOfClient.getSelectedClinic().members.map((member) => {
-          const state = getMemberState(
-            member.staying,
-            member.accepted,
-            member.manager
-          );
+          const state = getMemberState({
+            staying: member.staying,
+            accepted: member.accepted,
+            manager: member.manager,
+          });
           return (
             <UserCard
               key={member.user.id}

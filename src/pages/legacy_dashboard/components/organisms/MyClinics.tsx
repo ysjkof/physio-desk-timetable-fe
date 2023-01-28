@@ -75,57 +75,59 @@ export default function MyClinics() {
   return (
     <section className="px-10 py-8">
       <ClinicCard.Container>
-        {clinicsExcludeOtherMember?.map((clinic) => (
-          <ClinicCard
-            key={clinic.id}
-            clinicName={renameUseSplit(clinic.name)}
-            state={getMemberState(
-              clinic.member.staying,
-              clinic.member.accepted,
-              clinic.member.manager
-            )}
-            isActivate={clinic.isActivated}
-          >
-            <ClinicCard.ButtonContainer>
-              {getMemberState(clinic.member.staying, clinic.member.accepted) ===
-                '승인대기' && (
-                <>
+        {clinicsExcludeOtherMember?.map((clinic) => {
+          const state = getMemberState({
+            staying: clinic.member.staying,
+            accepted: clinic.member.accepted,
+            manager: clinic.member.manager,
+          });
+          return (
+            <ClinicCard
+              key={clinic.id}
+              clinicName={renameUseSplit(clinic.name)}
+              state={state}
+              isActivate={clinic.isActivated}
+            >
+              <ClinicCard.ButtonContainer>
+                {state === '승인대기' && (
+                  <>
+                    <ClinicCard.Button
+                      loading={acceptLoading}
+                      onClick={() => acceptInvitation(clinic.id)}
+                    >
+                      <div className="mr-2 h-5 w-5 bg-check" />
+                      초대 수락
+                    </ClinicCard.Button>
+                    <ClinicCard.Button
+                      loading={cancelLoading}
+                      onClick={() => invokeCancelInvitation(clinic.id)}
+                    >
+                      <div className="mr-2 h-5 w-5 bg-no" />
+                      거절
+                    </ClinicCard.Button>
+                  </>
+                )}
+                {canClose({
+                  isActivated: clinic.isActivated,
+                  isManager: clinic.member.manager,
+                  clinicType: clinic.type,
+                }) && (
                   <ClinicCard.Button
-                    loading={acceptLoading}
-                    onClick={() => acceptInvitation(clinic.id)}
+                    onClick={() =>
+                      openDeactivate({
+                        id: clinic.id,
+                        name: clinic.name,
+                      })
+                    }
                   >
-                    <div className="mr-2 h-5 w-5 bg-check" />
-                    초대 수락
+                    <div className="mr-2 h-5 w-5 bg-lock-closed" />
+                    폐쇄하기
                   </ClinicCard.Button>
-                  <ClinicCard.Button
-                    loading={cancelLoading}
-                    onClick={() => invokeCancelInvitation(clinic.id)}
-                  >
-                    <div className="mr-2 h-5 w-5 bg-no" />
-                    거절
-                  </ClinicCard.Button>
-                </>
-              )}
-              {canClose({
-                isActivated: clinic.isActivated,
-                isManager: clinic.member.manager,
-                clinicType: clinic.type,
-              }) && (
-                <ClinicCard.Button
-                  onClick={() =>
-                    openDeactivate({
-                      id: clinic.id,
-                      name: clinic.name,
-                    })
-                  }
-                >
-                  <div className="mr-2 h-5 w-5 bg-lock-closed" />
-                  폐쇄하기
-                </ClinicCard.Button>
-              )}
-            </ClinicCard.ButtonContainer>
-          </ClinicCard>
-        ))}
+                )}
+              </ClinicCard.ButtonContainer>
+            </ClinicCard>
+          );
+        })}
       </ClinicCard.Container>
 
       {hasDeactivate && (

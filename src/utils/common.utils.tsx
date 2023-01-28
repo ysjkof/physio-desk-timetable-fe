@@ -1,4 +1,5 @@
 import { toastVar } from '../store';
+import { MemberStatus } from '../types/common.types';
 import { ReservationState } from '../types/generated.types';
 
 export function cls(...classnames: string[]) {
@@ -34,19 +35,17 @@ export function getStringFromReservationState(
   return korWord[state];
 }
 
-export function getMemberState(
-  staying: boolean,
-  accepted: boolean,
-  manager?: boolean
-) {
-  if (!staying) {
-    return accepted ? '탈퇴' : '승인대기';
+export function getMemberState({
+  staying,
+  accepted,
+  manager,
+}: MemberStatus): '관리자' | '직원' | '탈퇴' | '승인대기' {
+  if (staying && accepted) {
+    return manager ? '관리자' : '직원';
   }
-
-  return manager ? '관리자' : '직원';
-  // if (staying && accepted) return "직원";
-  // if (!staying && !accepted) return "수락대기";
-  // if (!staying && accepted) return "탈퇴";
+  if (!staying && accepted) return '탈퇴';
+  if (!staying && !accepted) return '승인대기';
+  throw new Error('getMemberState >> 불가능한 경우의 수');
 }
 
 export type StayingState = ReturnType<typeof getMemberState>;
