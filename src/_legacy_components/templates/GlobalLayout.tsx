@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { Outlet } from 'react-router-dom';
+import { Initialize } from '../../components';
 import Toast from '../molecules/Toast';
 
 const LoggedInGlobalNavBar = lazy(
@@ -16,8 +17,17 @@ export interface IsLoggedIn {
 export default function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
   return (
     <div className="h-screen overflow-hidden">
-      {isLoggedIn ? <LoggedInGlobalNavBar /> : <LoggedOutGlobalNavBar />}
-      <Outlet />
+      {isLoggedIn ? (
+        <Initialize>
+          <LoggedInGlobalNavBar />
+          <Outlet />
+        </Initialize>
+      ) : (
+        <>
+          <LoggedOutGlobalNavBar />
+          <Outlet />
+        </>
+      )}
       <Toast />
     </div>
   );

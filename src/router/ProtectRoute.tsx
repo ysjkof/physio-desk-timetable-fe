@@ -1,39 +1,60 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
+import { isLoggedInVar } from '../apollo';
 
 interface ProtectRouteProps {
-  isPass: boolean | undefined;
   children: ReactNode;
-  alarm?: string;
+  whenFail: ReactNode | string;
 }
 
-interface ProtectRouteLinkProps extends ProtectRouteProps {
-  goWhenFail: string;
-  failElement?: false;
+interface ProtectRoutePassProps extends ProtectRouteProps {
+  isPass: boolean;
+  failWhenLogin?: false | undefined;
+  failWhenLogout?: false | undefined;
 }
-interface ProtectRouteElementProps extends ProtectRouteProps {
-  failElement: ReactNode;
-  goWhenFail?: false;
+interface ProtectRouteLoginProps extends ProtectRouteProps {
+  isPass?: false | undefined;
+  failWhenLogin: boolean;
+  failWhenLogout?: false | undefined;
+}
+interface ProtectRouteLogoutProps extends ProtectRouteProps {
+  isPass?: false | undefined;
+  failWhenLogin?: false | undefined;
+  failWhenLogout: boolean;
 }
 
-type ProtectRouteType = ProtectRouteLinkProps | ProtectRouteElementProps;
+type ProtectRouteType =
+  | ProtectRoutePassProps
+  | ProtectRouteLoginProps
+  | ProtectRouteLogoutProps;
 
-/**
- * 접근 권한이 없는 경로로 올 경우(`isPass === false`) 리다이렉트 한다
- * @param alarm `useLocation().state.alarm`에 전달한다
- */
 export default function ProtectRoute({
   isPass,
-  goWhenFail,
-  failElement,
+  whenFail,
   children,
-  alarm,
+  failWhenLogin,
+  failWhenLogout,
 }: ProtectRouteType) {
-  if (goWhenFail) {
-    const handleFailPass = () => {
-      return Navigate({ to: goWhenFail, state: { alarm } });
-    };
-    return isPass ? <>{children}</> : handleFailPass();
+  console.log(
+    'isLoggedInVar >>',
+    isLoggedInVar(),
+    'failWhenLogin >>',
+    failWhenLogin,
+    'failWhenLogout >>',
+    failWhenLogout
+  );
+
+  if (failWhenLogin && typeof whenFail === 'string') {
+    return isLoggedInVar() ? Navigate({ to: whenFail }) : <>{children}</>;
   }
-  return isPass ? <>{children}</> : <>{failElement}</>;
+  if (failWhenLogin) {
+    return isLoggedInVar() ? <>{whenFail}</> : <>{children}</>;
+  }
+  if (failWhenLogout && typeof whenFail === 'string') {
+    return isLoggedInVar() ? <>{children}</> : Navigate({ to: whenFail });
+  }
+  if (failWhenLogout) {
+    return isLoggedInVar() ? <>{children}</> : <>{whenFail}</>;
+  }
+  return isPass ? <>{children}</> : <>{whenFail}</>;
 }
