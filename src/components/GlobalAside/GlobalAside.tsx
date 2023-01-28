@@ -22,7 +22,6 @@ const GlobalAside = () => {
   };
 
   const menu = useLocation().pathname.split('/')[1];
-  console.log('extendedAside >>', extendedAside);
 
   return (
     <aside
