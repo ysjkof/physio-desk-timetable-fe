@@ -86,7 +86,7 @@ export class ClinicsOfClient {
   }
 
   static saveToLocalStorage(value: ClinicOfClient[]) {
-    if (!this.#userIdAndName) throw this.#initialError;
+    if (!this.#userIdAndName) throw this.#getInitialError();
 
     this.#localStorageUtil.set({
       key: 'clinicLists',
@@ -96,7 +96,7 @@ export class ClinicsOfClient {
   }
 
   static #getFromLocalStorage() {
-    if (!this.#userIdAndName) throw this.#initialError;
+    if (!this.#userIdAndName) throw this.#getInitialError();
 
     return this.#localStorageUtil.get<ClinicOfClient[]>({
       key: 'clinicLists',
@@ -104,7 +104,7 @@ export class ClinicsOfClient {
     });
   }
 
-  static get #initialError() {
+  static #getInitialError() {
     return new Error('TableTime이 초기화되지 않았습니다.', {
       cause:
         'TableTime클래스는 초기화 메소드를 수행한 뒤에 정상작동합니다. TableTime.initialSetup()을 수행해주세요.',
@@ -143,7 +143,7 @@ export class ClinicsOfClient {
     return this.#clinics;
   }
 
-  static get personalClinic() {
+  static getPersonalClinic() {
     const personalClinic = ClinicsOfClient.#clinics.find(
       (clinic) => clinic.type === ClinicType.Personal
     );
@@ -154,7 +154,7 @@ export class ClinicsOfClient {
     return personalClinic;
   }
 
-  static get selectedClinic(): ClinicOfClient {
+  static getSelectedClinic(): ClinicOfClient {
     const selectedClinic = this.#clinics.find((clinic) => clinic.isSelected);
     if (!selectedClinic)
       throw new Error('selectedClinic이 없습니다.', { cause: '없어!!' });
@@ -182,7 +182,7 @@ export class ClinicsOfClient {
   }
 
   static toggleUserCanSee(memberId: number) {
-    const { id, members } = ClinicsOfClient.selectedClinic;
+    const { id, members } = ClinicsOfClient.getSelectedClinic();
     const canSeeLength = members.filter((member) => member.canSee).length;
 
     if (canSeeLength <= 1) return false;
