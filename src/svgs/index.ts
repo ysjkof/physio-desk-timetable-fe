@@ -15,6 +15,7 @@ import Medicine from './Medicine';
 import Table from './Table';
 import Trash from './Trash';
 import UserPlus from './UserPlus';
+import VerticalCrossArrow from './VerticalCrossArrow';
 import XMark from './XMark';
 
 export {
@@ -35,5 +36,6 @@ export {
   Table,
   Trash,
   UserPlus,
+  VerticalCrossArrow,
   XMark,
 };
