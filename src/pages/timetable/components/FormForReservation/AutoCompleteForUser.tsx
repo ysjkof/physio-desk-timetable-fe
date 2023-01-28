@@ -17,7 +17,9 @@ const AutoCompleteForUser = ({
   userId,
   setParentValue,
 }: AutoCompleteForUserProps) => {
-  const selectionList = useState(ClinicsOfClient.selectedClinic.members)[0];
+  const selectionList = useState(
+    ClinicsOfClient.getSelectedClinic().members
+  )[0];
   const name = selectionList.find((member) => member.user.id === userId)?.user
     .name;
   const getUserId = (name: string) => {

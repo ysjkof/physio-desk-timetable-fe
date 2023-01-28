@@ -15,7 +15,7 @@ export default function ModalContentsLayout({
   children,
   closeAction,
 }: ModalContentLayoutProps) {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
 
   return (
     <>

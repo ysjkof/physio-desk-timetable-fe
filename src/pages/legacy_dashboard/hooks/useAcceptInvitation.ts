@@ -20,7 +20,7 @@ export default function useAcceptInvitation() {
     useMutation<AcceptInvitationMutation>(ACCEPT_INVITATION_DOCUMENT);
 
   const clinicLists = useReactiveVar(clinicListsVar);
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
 
   const loggedInUserId = loggedInUserVar()?.id;
   const clinicName = selectedClinic.name;

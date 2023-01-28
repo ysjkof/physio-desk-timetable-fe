@@ -15,7 +15,7 @@ import type {
 export class Schedules {
   #value: ISchedules[];
 
-  #clinic = ClinicsOfClient.selectedClinic;
+  #clinic = ClinicsOfClient.getSelectedClinic();
 
   constructor(data: ReservationInList[], date: Date) {
     if (!this.#clinic)

@@ -43,7 +43,7 @@ const FormForReservation = ({
       endDate: addMinutes(startDate, prescriptionList.getSelection().minute),
       memo,
       userId,
-      clinicId: ClinicsOfClient.selectedClinic.id,
+      clinicId: ClinicsOfClient.getSelectedClinic().id,
       patientId,
       prescriptionIds: prescriptions,
     };

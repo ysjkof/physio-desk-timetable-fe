@@ -38,7 +38,7 @@ export default function CreateClinic() {
         variables: { input: { name } },
         onCompleted(data) {
           if (data.createClinic.ok) {
-            if (!ClinicsOfClient.selectedClinic)
+            if (!ClinicsOfClient.getSelectedClinic)
               throw new Error('선택된 병원이 없습니다');
             toastVar({ messages: [`병원 "${name}"을 만들었습니다`] });
 

@@ -25,7 +25,7 @@ import type {
 } from '../../../../types/generated.types';
 
 export default function CreatePrescription() {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
   const { data: findAtomPrescriptions } = useQuery<FindAtomPrescriptionsQuery>(
     FIND_ATOM_PRESCRIPTIONS_DOCUMENT
   );

@@ -23,7 +23,7 @@ import { ClinicsOfClient } from '../../models';
 import type { SearchPatientQuery } from '../../types/generated.types';
 
 export default function Search() {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
   const location = useLocation();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);

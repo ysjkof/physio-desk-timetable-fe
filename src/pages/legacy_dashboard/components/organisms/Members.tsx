@@ -13,13 +13,13 @@ export default function Members() {
     useCancelInvitation();
 
   const isManager = loggedInUser
-    ? checkManager(ClinicsOfClient.selectedClinic?.members, loggedInUser.id)
+    ? checkManager(ClinicsOfClient.getSelectedClinic().members, loggedInUser.id)
     : false;
 
   return (
     <section className="px-10 py-8">
       <UserCard.Container>
-        {ClinicsOfClient.selectedClinic?.members.map((member) => {
+        {ClinicsOfClient.getSelectedClinic().members.map((member) => {
           const state = getMemberState(
             member.staying,
             member.accepted,

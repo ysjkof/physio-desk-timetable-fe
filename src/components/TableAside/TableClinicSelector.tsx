@@ -38,13 +38,13 @@ const TableClinicSelector = () => {
   };
 
   const isAccepted = meData?.me.members?.find(
-    (member) => member.clinic.id === ClinicsOfClient.selectedClinic?.id
+    (member) => member.clinic.id === ClinicsOfClient.getSelectedClinic().id
   )?.accepted;
 
   return (
     <Selectbox
       selectedValue={changeName(
-        ClinicsOfClient.selectedClinic.name,
+        ClinicsOfClient.getSelectedClinic().name,
         isAccepted
       )}
       hasBorder
@@ -54,7 +54,7 @@ const TableClinicSelector = () => {
         {clinicListsSelectMeMember.map((clinic) => (
           <Selectbox.Option
             key={clinic.id}
-            selected={clinic.id === ClinicsOfClient.selectedClinic?.id}
+            selected={clinic.id === ClinicsOfClient.getSelectedClinic().id}
             onClick={() => changeSelectedClinic(clinic.id)}
           >
             {changeName(clinic.name, clinic.member.accepted)}

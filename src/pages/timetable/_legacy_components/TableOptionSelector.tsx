@@ -190,7 +190,7 @@ export default function TableOptionSelector() {
           if (!meMember) return null;
 
           const isSelectedClinic =
-            clinic.id === ClinicsOfClient.selectedClinic?.id;
+            clinic.id === ClinicsOfClient.getSelectedClinic().id;
 
           const { staying, accepted } = meMember;
           const memberState = getMemberState(staying, accepted);

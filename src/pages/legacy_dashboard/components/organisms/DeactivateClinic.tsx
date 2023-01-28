@@ -24,7 +24,7 @@ export default function DeactivateClinic({
   name,
   closeAction,
 }: DeactivateClinicProps) {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
 
   const [agree, setAgree] = useState(false);
 

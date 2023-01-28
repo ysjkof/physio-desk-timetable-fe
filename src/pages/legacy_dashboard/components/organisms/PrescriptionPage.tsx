@@ -52,13 +52,11 @@ function PrescriptionList({ clinicId, showInactivate }: PrescriptionListProps) {
 
 export default function PrescriptionPage() {
   useReactiveVar(clinicListsVar); // ui 새로고침 용
-  const {
-    selectedClinic: { id, isManager },
-  } = ClinicsOfClient;
+  const { id, isManager } = ClinicsOfClient.getSelectedClinic();
 
   const [showInactivate, setShowInactivate] = useState(true);
   const toggleShowInactivate = () => setShowInactivate((prev) => !prev);
-  if (!ClinicsOfClient.selectedClinic.isStayed)
+  if (!ClinicsOfClient.getSelectedClinic().isStayed)
     return <Warning type="hasNotPermission" />;
 
   return (

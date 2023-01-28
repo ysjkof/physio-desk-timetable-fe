@@ -26,7 +26,7 @@ const Loading = lazy(
 
 export default function Statistics() {
   useReactiveVar(clinicListsVar); // ui 새로고침 용
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
   const selectedDate = useReactiveVar(selectedDateVar);
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null

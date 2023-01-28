@@ -7,7 +7,7 @@ import type {
 } from '../types/generated.types';
 
 export const useFindPrescriptions = () => {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
 
   const queryResult = useQuery<
     FindPrescriptionsQuery,

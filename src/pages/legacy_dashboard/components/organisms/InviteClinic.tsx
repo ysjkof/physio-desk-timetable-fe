@@ -28,7 +28,7 @@ const Loading = lazy(
 export default function InviteClinic() {
   useReactiveVar(clinicListsVar); // ui 새로고침 용
   const [okMessage, setOkMessage] = useState('');
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
 
   const {
     register,

@@ -107,7 +107,7 @@ function CreateReservation() {
     totalCount: 0,
     thisCount: 0,
   });
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
   const clinicId = selectedClinic.id;
 
   const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
@@ -233,7 +233,7 @@ function CreateReservation() {
 }
 
 function CreateDummyData() {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
   const [reserveDate] = useState(new Date().getMonth() + 1);
 
   const [createAccount] = useMutation<CreateAccountMutation>(

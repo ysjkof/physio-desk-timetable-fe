@@ -25,7 +25,7 @@ export function checkStay(clinicId: number, meData: MeQuery) {
 
 export default function Dashboard() {
   const { data: meData, loading } = useMe();
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
 
   const location = useLocation();
   const pathname = location.pathname.split('/');

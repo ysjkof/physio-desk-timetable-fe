@@ -46,7 +46,7 @@ export default function DashboardClinicSelector({
   return (
     <Selectbox
       selectedValue={changeName(
-        ClinicsOfClient.selectedClinic.name,
+        ClinicsOfClient.getSelectedClinic().name,
         isAccepted
       )}
     >
@@ -54,7 +54,7 @@ export default function DashboardClinicSelector({
         {clinicListsSelectMeMember.map((clinic) => (
           <Selectbox.Option
             key={clinic.id}
-            selected={clinic.id === ClinicsOfClient.selectedClinic?.id}
+            selected={clinic.id === ClinicsOfClient.getSelectedClinic().id}
             onClick={() => changeSelectedClinic(clinic.id)}
           >
             {changeName(clinic.name, clinic.member.accepted)}
