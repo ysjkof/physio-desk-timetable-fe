@@ -1,8 +1,9 @@
-import { lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 import { cls } from '../../utils/common.utils';
 import { Initialize } from '../../components';
 import Toast from '../molecules/Toast';
+import Loading from '../atoms/Loading';
 
 const TableAside = lazy(() => import('../../components/GlobalAside'));
 
@@ -25,15 +26,21 @@ export default function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
       {isLoggedIn ? (
         <Initialize>
           <TableAside />
-          <Outlet />
+          <OutletWithSuspense />
         </Initialize>
       ) : (
         <>
           <LoggedOutGlobalNavBar />
-          <Outlet />
+          <OutletWithSuspense />
         </>
       )}
       <Toast />
     </div>
   );
 }
+
+const OutletWithSuspense = () => (
+  <Suspense fallback={<Loading />}>
+    <Outlet />
+  </Suspense>
+);
