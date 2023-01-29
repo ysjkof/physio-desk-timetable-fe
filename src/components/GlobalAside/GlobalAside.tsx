@@ -17,6 +17,9 @@ const GlobalAside = () => {
     toggleDisplayOption,
   } = useTableDisplay();
 
+  const location = useLocation().pathname;
+  console.log(location);
+
   const toggleAsideExtension = () => {
     toggleDisplayOption('asideExtension');
   };
@@ -55,11 +58,11 @@ const GlobalAside = () => {
       </button>
 
       <Ul>
-        <Li to={ROUTES.timetable} selected={menu === 'tt'}>
+        <Li to="tt" selected={menu === 'tt'}>
           <Table />
           {extendedAside && '시간표'}
         </Li>
-        <Li to={ROUTES.clinics} selected={menu === 'dashboard'}>
+        <Li to="dashboard/clinic/members" selected={menu === 'dashboard'}>
           <Building />
           {extendedAside && '병원'}
         </Li>
