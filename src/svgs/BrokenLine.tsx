@@ -12,6 +12,7 @@ const BrokenLine = ({ iconSize = 'MD', ...args }: SVG) => {
       viewBox="0 0 16 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      stroke="currentColor"
       {...args}
       className={cls(
         args.className || '',
@@ -22,7 +23,6 @@ const BrokenLine = ({ iconSize = 'MD', ...args }: SVG) => {
     >
       <path
         d="M1 10L3.5 4.5L7.5 11L12.5 1.5L15 7"
-        stroke="#8D8DAD"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
