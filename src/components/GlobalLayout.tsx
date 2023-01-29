@@ -1,21 +1,18 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
-import { cls } from '../../utils/common.utils';
-import { Initialize } from '../../components';
-import Toast from '../molecules/Toast';
-import Loading from '../atoms/Loading';
+import { cls } from '../utils/common.utils';
+import Initialize from './Initialize';
+import Toast from '../_legacy_components/molecules/Toast';
+import Loading from '../_legacy_components/atoms/Loading';
 
-const TableAside = lazy(() => import('../../components/GlobalAside'));
-
-const LoggedOutGlobalNavBar = lazy(
-  () => import('../organisms/LoggedOutGlobalNavBar')
-);
+const TableAside = lazy(() => import('./GlobalAside'));
+const GlobalNavBar = lazy(() => import('./GlobalNavBar'));
 
 export interface IsLoggedIn {
   isLoggedIn?: boolean;
 }
 
-export default function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
+function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
   return (
     <div
       className={cls(
@@ -30,7 +27,7 @@ export default function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
         </Initialize>
       ) : (
         <>
-          <LoggedOutGlobalNavBar />
+          <GlobalNavBar />
           <OutletWithSuspense />
         </>
       )}
@@ -44,3 +41,5 @@ const OutletWithSuspense = () => (
     <Outlet />
   </Suspense>
 );
+
+export default GlobalLayout;

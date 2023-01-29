@@ -14,6 +14,7 @@ import Modal from './Modal';
 import Checkbox from './Checkbox';
 import GlobalAside from './GlobalAside';
 import GlobalNavBar from './GlobalNavBar';
+import GlobalLayout from './GlobalLayout';
 
 export {
   ButtonOfPages,
@@ -32,4 +33,5 @@ export {
   Checkbox,
   GlobalAside,
   GlobalNavBar,
+  GlobalLayout,
 };
