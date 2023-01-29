@@ -115,6 +115,9 @@
   .css_dashboard__column-container-2nd {
     @apply flex h-full w-[360px] flex-col overflow-y-scroll border-r border-r-table-line pt-16;
   }
+  .css_dashboard__column-container-3rd {
+    @apply flex flex-col items-center justify-center;
+  }
 }
 
 @layer utilities {
