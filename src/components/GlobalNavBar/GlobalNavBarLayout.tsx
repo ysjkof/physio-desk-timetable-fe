@@ -2,11 +2,9 @@ import type { PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../router/routes';
 import { cls } from '../../utils/common.utils';
-import Logo from '../atoms/Logo';
+import Logo from '../../_legacy_components/atoms/Logo';
 
-export default function GlobalNavigationBarLayout({
-  children,
-}: PropsWithChildren) {
+export default function GlobalNavBarLayout({ children }: PropsWithChildren) {
   const location = useLocation();
   const { pathname } = location;
 

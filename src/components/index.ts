@@ -13,6 +13,7 @@ import Timepicker from './Timepicker';
 import Modal from './Modal';
 import Checkbox from './Checkbox';
 import GlobalAside from './GlobalAside';
+import GlobalNavBar from './GlobalNavBar';
 
 export {
   ButtonOfPages,
@@ -30,4 +31,5 @@ export {
   Modal,
   Checkbox,
   GlobalAside,
+  GlobalNavBar,
 };

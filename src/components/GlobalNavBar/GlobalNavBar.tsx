@@ -1,7 +1,16 @@
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../router/routes';
+import GlobalNavBarLayout from './GlobalNavBarLayout';
 
-export default function LoggedOutGlobalNavBarMenu() {
+function GlobalNavBar() {
+  return (
+    <GlobalNavBarLayout>
+      <Menu />
+    </GlobalNavBarLayout>
+  );
+}
+
+const Menu = () => {
   return (
     <>
       <Link to={ROUTES.docs}>
@@ -12,4 +21,6 @@ export default function LoggedOutGlobalNavBarMenu() {
       </Link>
     </>
   );
-}
+};
+
+export default GlobalNavBar;

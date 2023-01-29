@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMe } from '../../hooks';
 import Banner from '../molecules/Banner';
-import GlobalNavigationBarLayout from '../templates/GlobalNavigationBarLayout';
+import GlobalNavBarLayout from '../../components/GlobalNavBar/GlobalNavBarLayout';
 import LoggedInGlobalNavBarMenu from '../molecules/LoggedInGlobalNavBarMenu';
 
 export default function LoggedInGlobalNavBar() {
@@ -14,9 +14,9 @@ export default function LoggedInGlobalNavBar() {
       {hasBanner && meData && !meData.me.verified && (
         <Banner close={closeBanner} />
       )}
-      <GlobalNavigationBarLayout>
+      <GlobalNavBarLayout>
         <LoggedInGlobalNavBarMenu />
-      </GlobalNavigationBarLayout>
+      </GlobalNavBarLayout>
     </>
   );
 }
