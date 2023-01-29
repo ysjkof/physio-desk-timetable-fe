@@ -18,15 +18,15 @@ const token = localStorageUtils.get<string>({ key: 'token' });
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar<string | null>(token);
 
-const isProduction = import.meta.env.PROD;
+const isDevelopment = import.meta.env.MODE === 'development';
 
-const BACKEND_URL = isProduction
-  ? import.meta.env.VITE_BACKEND_URL
-  : '://localhost:3002/graphql';
+const BACKEND_URL = isDevelopment
+  ? '://localhost:3002/graphql'
+  : import.meta.env.VITE_BACKEND_URL;
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: isProduction ? `wss${BACKEND_URL}` : `ws${BACKEND_URL}`,
+    url: isDevelopment ? `ws${BACKEND_URL}` : `wss${BACKEND_URL}`,
     connectionParams: () => {
       return { 'x-jwt': authTokenVar() };
     },
@@ -34,7 +34,7 @@ const wsLink = new GraphQLWsLink(
 );
 
 const httpLink = createHttpLink({
-  uri: isProduction ? `https${BACKEND_URL}` : `http${BACKEND_URL}`,
+  uri: isDevelopment ? `http${BACKEND_URL}` : `https${BACKEND_URL}`,
 });
 
 const authLink = setContext((_, { headers }) => {
