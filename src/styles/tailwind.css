@@ -137,6 +137,14 @@
   .no-reserved {
     @apply border-gray-300 bg-gray-100;
   }
+
+  .hidden-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .hidden-scrollbar::-webkit-scrollbar {
+    width: 0px;
+  }
 }
 
 .search-result {
