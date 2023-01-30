@@ -291,6 +291,19 @@ export type GetClinicOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type GetMemberInput = {
+  clinicId: Scalars['Int'];
+  id: Scalars['Int'];
+};
+
+export type GetMemberOutput = {
+  __typename?: 'GetMemberOutput';
+  countOfPatient: Scalars['Int'];
+  error?: Maybe<Scalars['String']>;
+  member?: Maybe<Member>;
+  ok: Scalars['Boolean'];
+};
+
 export type GetPatientInput = {
   id: Scalars['Int'];
 };
@@ -654,6 +667,7 @@ export type Query = {
   findMyClinics: FindMyClinicsOutput;
   findPrescriptions: FindPrescriptionsOutput;
   getClinic: GetClinicOutput;
+  getMember: GetMemberOutput;
   getPatient: GetPatientOutput;
   getPatients: GetPatientsOutput;
   getPrescriptions: GetPrescriptionsOutput;
@@ -690,6 +704,11 @@ export type QueryFindPrescriptionsArgs = {
 
 export type QueryGetClinicArgs = {
   input: GetClinicInput;
+};
+
+
+export type QueryGetMemberArgs = {
+  input: GetMemberInput;
 };
 
 
@@ -933,6 +952,13 @@ export type GetClinicQueryVariables = Exact<{
 
 
 export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+
+export type GetMemberQueryVariables = Exact<{
+  input: GetMemberInput;
+}>;
+
+
+export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient: number, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
 
 export type InactivateClinicMutationVariables = Exact<{
   input: InactivateClinicInput;
