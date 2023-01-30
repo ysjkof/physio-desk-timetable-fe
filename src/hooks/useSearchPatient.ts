@@ -24,12 +24,12 @@ export const useSearchPatient = () => {
           clinicIds: [selectedClinic.id],
         },
       },
-
       onCompleted(data) {
         const { totalPages } = data.searchPatient;
         if (!totalPages) return;
         setPages(getPages(totalPages));
       },
+      fetchPolicy: 'network-only',
     });
   };
 
