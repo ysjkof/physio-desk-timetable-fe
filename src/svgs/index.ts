@@ -1,4 +1,5 @@
 import BarBottomLeft from './BarBottomLeft';
+import BriefCase from './BriefCase';
 import BrokenLine from './BrokenLine';
 import Building from './Building';
 import Calendar from './Calendar';
@@ -11,7 +12,10 @@ import CogSixTooth from './CogSixTooth';
 import Edit from './Edit';
 import EllipsisVertical from './EllipsisVertical';
 import Heart from './Heart';
+import Mail from './Mail';
 import Medicine from './Medicine';
+import Person from './Person';
+import Phone from './Phone';
 import Table from './Table';
 import Trash from './Trash';
 import UserPlus from './UserPlus';
@@ -20,6 +24,7 @@ import XMark from './XMark';
 
 export {
   BarBottomLeft,
+  BriefCase,
   BrokenLine,
   Building,
   Calendar,
@@ -32,7 +37,10 @@ export {
   Edit,
   EllipsisVertical,
   Heart,
+  Mail,
   Medicine,
+  Person,
+  Phone,
   Table,
   Trash,
   UserPlus,
