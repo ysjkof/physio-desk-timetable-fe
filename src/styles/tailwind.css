@@ -104,6 +104,10 @@
     @apply rounded-md bg-gray-100 px-1.5 py-0.5 text-gray-700;
   }
 
+  .badge-blue {
+    @apply rounded-full bg-[#E5F6FE] px-3 py-0.5 text-[#2385B4];
+  }
+
   .modal-header {
     @apply h-14 w-full text-xl font-medium text-cst-blue;
   }

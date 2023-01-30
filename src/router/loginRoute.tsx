@@ -3,6 +3,7 @@ import { ROUTES } from './routes';
 import ProtectRoute from './ProtectRoute';
 import Warning from '../_legacy_components/atoms/Warning';
 import CreatePrescription from '../pages/legacy_dashboard/components/organisms/CreatePrescription';
+import { MemberDetail, NotSelected } from '../pages/dashboard/components';
 
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
@@ -50,6 +51,22 @@ const loginRoute = [
     ),
   },
   {
+    path: 'dashboard/clinic/members',
+    element: <Dashboard />,
+    children: [
+      {
+        path: '',
+        element: <NotSelected />,
+      },
+      {
+        path: ':memberId',
+        element: <MemberDetail />,
+      },
+    ],
+  },
+  { path: 'dashboard/clinic/prescriptions', element: <Dashboard /> },
+  { path: 'dashboard/clinic/statistics', element: <Dashboard /> },
+  {
     path: 'search',
     element: (
       <ProtectRoute whenFail={<Warning type="verifyEmail" />} failWhenLogout>
@@ -57,7 +74,6 @@ const loginRoute = [
       </ProtectRoute>
     ),
   },
-  { path: 'dashboard/clinic', element: <Dashboard /> },
   {
     path: clinics,
     element: <MyClinics />,

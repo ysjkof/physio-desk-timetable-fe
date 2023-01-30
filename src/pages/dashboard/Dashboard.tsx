@@ -14,7 +14,7 @@ const Dashboard = () => {
   const { width } = useWindowSize(true);
 
   return (
-    <div className="flex" style={{ width }}>
+    <div className="flex text-base" style={{ width }}>
       <div className="css_dashboard__column-container-1st">
         <Profile />
         <MenuContainer />
