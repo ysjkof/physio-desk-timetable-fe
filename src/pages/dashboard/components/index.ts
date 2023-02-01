@@ -4,6 +4,8 @@ import { SearchAndInviteMember } from './SearchAndInviteMember';
 import { MemberList } from './MemberList';
 import { NotSelected } from './NotSelected';
 import { MemberDetail } from './MemberDetail';
+import { EventList } from './EventList';
+import { CalendarAndEventList } from './CalendarAndEventList';
 
 export {
   MenuContainer,
@@ -12,4 +14,6 @@ export {
   MemberList,
   NotSelected,
   MemberDetail,
+  EventList,
+  CalendarAndEventList,
 };

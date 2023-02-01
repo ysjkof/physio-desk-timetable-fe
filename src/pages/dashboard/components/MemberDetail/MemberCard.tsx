@@ -18,9 +18,9 @@ const MemberCard = ({
   const memberState = getMemberState({ accepted, manager, staying });
 
   return (
-    <div className="flex gap-6 border bg-white p-4">
+    <div className="flex h-96 gap-6 border bg-white p-4">
       <div className="bg-[TODO:프로필사진설정] h-80 w-60 rounded-md bg-gray-100" />
-      <div className="flex flex-col justify-between gap-2 text-[#64648E]">
+      <div className="flex w-full flex-col justify-between gap-2 text-[#64648E]">
         <h1 className="text-2xl font-bold text-[#262850]">{name}</h1>
         <div className="flex gap-2">
           <span className="badge-blue">{memberState}</span>
@@ -29,7 +29,9 @@ const MemberCard = ({
             {role}
           </span>
         </div>
-        <div className="basis-full">Introduce yourself. 자기소개하세요.</div>
+        <div className="basis-full overflow-y-scroll ">
+          Introduce yourself. 자기소개하세요.
+        </div>
         <div className="flex flex-wrap items-center gap-1 ">
           <PhoneBadge>010-9999-8888</PhoneBadge>
           <MailBadge>{email}</MailBadge>

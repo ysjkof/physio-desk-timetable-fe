@@ -48,7 +48,7 @@ const CardInDetail = ({
   textContent: string;
 }) => {
   return (
-    <div className="flex w-[164px] items-center gap-2 rounded-sm border bg-white px-4 py-2">
+    <div className="flex w-full min-w-[164px] items-center gap-2 rounded-sm border bg-white px-4 py-2">
       <div
         className="rounded-md p-1 text-white"
         style={{ backgroundColor: iconBgColor }}

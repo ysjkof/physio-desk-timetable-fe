@@ -5,10 +5,13 @@ import { GET_MEMBER_DOCUMENT } from '../../../../graphql';
 import MemberCard from './MemberCard';
 import CardSection from './CardSection';
 import VacationTable from './VacationTable';
+import { EventList } from '../EventList';
 import type {
   GetMemberQuery,
   GetMemberQueryVariables,
 } from '../../../../types/generated.types';
+import { Warning } from '../../../../components';
+import { CalendarAndEventList } from '../CalendarAndEventList';
 
 const MemberDetail = () => {
   const { memberId } = useParams();
@@ -22,16 +25,16 @@ const MemberDetail = () => {
   );
 
   if (!data || !data.getMember.member)
-    return <p>데이터가 없습니다. 잘못된 접근입니다.</p>;
+    return <Warning>데이터가 없습니다. 잘못된 접근입니다.</Warning>;
 
   return (
-    <div className="flex h-full w-full divide-x bg-[#F9F9FF]">
-      <div className="flex w-[750px] flex-col gap-y-6 px-10 py-10">
+    <div className="flex h-full w-full overflow-x-scroll bg-[#F9F9FF]">
+      <div className="mx-10 flex min-w-[750px] basis-full flex-col gap-y-6 py-10">
         <MemberCard member={data.getMember.member} />
         <CardSection countOfPatient={data.getMember.countOfPatient} />
         <VacationTable />
       </div>
-      <div className="w-1/3">b</div>
+      <CalendarAndEventList />
     </div>
   );
 };
