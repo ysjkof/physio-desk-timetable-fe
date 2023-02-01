@@ -65,7 +65,7 @@ const CalendarDay = ({ date, isActivate }: CalendarDayProps) => {
   const isSelect = compareDateMatch(date.getDate(), selectedDate, 'ymd');
   const selectAndClose = () => {
     setDate(date.getDate());
-    closeAction();
+    closeAction?.();
   };
   return (
     <button
