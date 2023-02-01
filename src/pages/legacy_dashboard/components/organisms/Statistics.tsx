@@ -11,7 +11,7 @@ import combineUserStatistics from '../../statisticsServices';
 import { IUserStatistics, MemberState } from '../../../../types/common.types';
 import DashboardSectionLayout from '../template/DashboardSectionLayout';
 import Charts from '../molecules/Charts';
-import Warning from '../../../../_legacy_components/atoms/Warning';
+import { Warning } from '../../../../components';
 import Button from '../../../../_legacy_components/molecules/Button';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';

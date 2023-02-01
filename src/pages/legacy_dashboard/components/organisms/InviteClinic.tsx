@@ -4,7 +4,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
 import { client } from '../../../../apollo';
-import Warning from '../../../../_legacy_components/atoms/Warning';
+import { Warning } from '../../../../components';
 import Input from '../../../../_legacy_components/molecules/Input';
 import { REG_EXP } from '../../../../constants/regex';
 import FormError from '../../../../_legacy_components/atoms/FormError';

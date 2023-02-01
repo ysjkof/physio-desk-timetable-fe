@@ -1,7 +1,7 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import Warning from '../../../../_legacy_components/atoms/Warning';
+import { Warning } from '../../../../components';
 import Button from '../../../../_legacy_components/molecules/Button';
 import CardContainer from '../../../../_legacy_components/templates/CardContainer';
 import PrescriptionCard from '../molecules/PrescriptionCard';

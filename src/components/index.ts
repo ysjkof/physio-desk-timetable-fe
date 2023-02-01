@@ -15,6 +15,7 @@ import Checkbox from './Checkbox';
 import GlobalAside from './GlobalAside';
 import GlobalNavBar from './GlobalNavBar';
 import GlobalLayout from './GlobalLayout';
+import Warning from './Warning';
 
 export {
   ButtonOfPages,
@@ -34,4 +35,5 @@ export {
   GlobalAside,
   GlobalNavBar,
   GlobalLayout,
+  Warning,
 };

@@ -1,4 +1,4 @@
-import Warning from '../../../../_legacy_components/atoms/Warning';
+import { Warning } from '../../../../components';
 import Button from '../../../../_legacy_components/molecules/Button';
 import { useAcceptInvitation, useCancelInvitation } from '../../hooks';
 

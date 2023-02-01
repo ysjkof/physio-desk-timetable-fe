@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { ROUTES } from './routes';
 import ProtectRoute from './ProtectRoute';
-import Warning from '../_legacy_components/atoms/Warning';
+import { Warning } from '../components';
 import CreatePrescription from '../pages/legacy_dashboard/components/organisms/CreatePrescription';
 import { MemberDetail, NotSelected } from '../pages/dashboard/components';
 

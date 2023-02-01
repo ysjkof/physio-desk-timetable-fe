@@ -7,7 +7,7 @@ import Input from '../../../../_legacy_components/molecules/Input';
 import FormError from '../../../../_legacy_components/atoms/FormError';
 import { REG_EXP } from '../../../../constants/regex';
 import Textarea from '../../../../_legacy_components/molecules/Textarea';
-import Warning from '../../../../_legacy_components/atoms/Warning';
+import { Warning } from '../../../../components';
 import { toastVar } from '../../../../store';
 import { client } from '../../../../apollo';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';

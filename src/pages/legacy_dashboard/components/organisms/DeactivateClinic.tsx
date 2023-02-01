@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { client } from '../../../../apollo';
 import { toastVar } from '../../../../store';
 import { IdAndName } from '../../../../types/common.types';
-import Warning from '../../../../_legacy_components/atoms/Warning';
+import { Warning } from '../../../../components';
 import Button from '../../../../_legacy_components/molecules/Button';
 import MenuButton from '../../../../_legacy_components/molecules/MenuButton';
 import {
