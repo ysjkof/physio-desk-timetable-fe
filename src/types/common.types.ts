@@ -228,3 +228,7 @@ export interface LocationState {
   isDayoff?: boolean;
   createPatient?: boolean;
 }
+
+export interface DashboardOutletContext {
+  outletWidth: number;
+}
