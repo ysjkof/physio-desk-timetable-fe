@@ -14,10 +14,12 @@ import EllipsisVertical from './EllipsisVertical';
 import Heart from './Heart';
 import Mail from './Mail';
 import Medicine from './Medicine';
+import Pencil from './Pencil';
 import Person from './Person';
 import Phone from './Phone';
 import Table from './Table';
 import Trash from './Trash';
+import TrashPot from './TrashPot';
 import UserPlus from './UserPlus';
 import VerticalCrossArrow from './VerticalCrossArrow';
 import XMark from './XMark';
@@ -39,10 +41,12 @@ export {
   Heart,
   Mail,
   Medicine,
+  Pencil,
   Person,
   Phone,
   Table,
   Trash,
+  TrashPot,
   UserPlus,
   VerticalCrossArrow,
   XMark,
