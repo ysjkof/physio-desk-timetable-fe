@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex text-base" style={{ width }}>
-      <div className="css_dashboard__column-container-1st">
+      <div className="css_dashboard__column-container">
         <Profile />
         <MenuContainer />
       </div>
