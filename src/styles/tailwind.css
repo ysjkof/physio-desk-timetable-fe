@@ -122,6 +122,34 @@
   .css_dashboard__member-management-column__2nd {
     @apply flex flex-col items-center justify-center;
   }
+
+  .prescription-management-item-container {
+    @apply flex flex-col gap-2 overflow-y-scroll pb-6;
+  }
+  .prescription-management-item {
+    @apply flex w-full items-center justify-between gap-x-6 whitespace-nowrap rounded-md px-6;
+  }
+  .prescription-management-item__col1 {
+    @apply w-full max-w-[160px];
+  }
+  .prescription-management-item__col2 {
+    @apply w-full max-w-[110px];
+  }
+  .prescription-management-item__col3 {
+    @apply w-full max-w-[140px];
+  }
+  .prescription-management-item__col4 {
+    @apply w-full max-w-[120px];
+  }
+  .prescription-management-item__col5 {
+    @apply w-full;
+  }
+  .prescription-management-item__col6 {
+    @apply w-full max-w-[90px];
+  }
+  .prescription-management-item__col7 {
+    @apply w-full max-w-[70px];
+  }
 }
 
 @layer utilities {
