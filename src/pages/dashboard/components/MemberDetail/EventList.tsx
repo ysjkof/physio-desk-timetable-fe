@@ -40,19 +40,6 @@ const EventList = ({ date }: { date: Date }) => {
     variables,
     fetchPolicy: 'network-only',
     onCompleted({ getReservationsOfMember: { results, totalPages } }) {
-      // const CategorizationByDate = () => {
-      //   const category: { [key: string]: EventItem[] } = {};
-      //   results?.forEach((event) => {
-      //     const date = event.startDate.substring(0, 10);
-      //     if (category[date]) return category[date].push(event);
-      //     category[date] = [event];
-      //   });
-      //   console.log(category);
-      //   return category;
-      // };
-
-      // CategorizationByDate();
-
       // 무한 스크롤일 때
       // setEventList((prev) => [...prev, ...(results || [])]);
       setEventList(results || []);
@@ -72,37 +59,72 @@ const EventList = ({ date }: { date: Date }) => {
   return (
     <div className="flex w-[440px] basis-full flex-col justify-between">
       <ul className="flex flex-col gap-4 overflow-y-scroll ">
-        {eventList.map((a) => {
-          return (
-            <li
-              key={a.id}
-              className="flex rounded-md border bg-white px-4 py-3"
-            >
-              <div
-                className="mr-2 flex items-center justify-center rounded-md p-1 text-white"
-                style={{ backgroundColor: '#6BA6FF' }}
-              >
-                <Person className="h-9 w-9" />
-              </div>
-              <div className="flex flex-col">
-                <span>
-                  환자예약(
-                  {`${a.patient?.registrationNumber} ${a.patient?.name}`})
-                </span>
-                <span>{getStringOfDateTime(new Date(a.startDate))}</span>
-              </div>
-            </li>
-          );
-        })}
+        {eventList.map((a) => (
+          <EventListItem
+            key={a.id}
+            registrationNumber={a.patient?.registrationNumber}
+            name={a.patient?.name}
+            startDate={a.startDate}
+          />
+        ))}
       </ul>
       <div className="flex justify-center gap-4 border-t pt-2">
-        {pages.map((page) => (
-          <button key={page} type="button" onClick={() => setPage(page)}>
-            {page}
-          </button>
-        ))}
+        <PagesButton pages={pages} setPage={setPage} />
       </div>
     </div>
+  );
+};
+
+interface EventListItemProps {
+  registrationNumber: number | undefined;
+  name: string | undefined;
+  startDate: Date;
+}
+
+const EventListItem = ({
+  registrationNumber = 0,
+  name = '',
+  startDate,
+}: EventListItemProps) => {
+  return (
+    <li className="flex rounded-md border bg-white px-4 py-3">
+      <EventListItemIcon />
+      <div className="flex flex-col">
+        <span>
+          환자예약(
+          {`${registrationNumber} ${name}`})
+        </span>
+        <span>{getStringOfDateTime(new Date(startDate))}</span>
+      </div>
+    </li>
+  );
+};
+
+const EventListItemIcon = () => {
+  return (
+    <div
+      className="mr-2 flex items-center justify-center rounded-md p-1 text-white"
+      style={{ backgroundColor: '#6BA6FF' }}
+    >
+      <Person className="h-9 w-9" />
+    </div>
+  );
+};
+
+interface PagesButtonProps {
+  pages: number[];
+  setPage: (page: number) => void;
+}
+
+const PagesButton = ({ pages, setPage }: PagesButtonProps) => {
+  return (
+    <>
+      {pages.map((page) => (
+        <button key={page} type="button" onClick={() => setPage(page)}>
+          {page}
+        </button>
+      ))}
+    </>
   );
 };
 
