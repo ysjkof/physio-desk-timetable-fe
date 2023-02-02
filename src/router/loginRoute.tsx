@@ -3,7 +3,12 @@ import { ROUTES } from './routes';
 import ProtectRoute from './ProtectRoute';
 import { Warning } from '../components';
 import CreatePrescription from '../pages/legacy_dashboard/components/organisms/CreatePrescription';
-import { MemberDetail, NotSelected } from '../pages/dashboard/components';
+import {
+  MemberDetail,
+  MemberManagement,
+  NotSelected,
+  PrescriptionManagement,
+} from '../pages/dashboard/components';
 
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
@@ -56,15 +61,22 @@ const loginRoute = [
     children: [
       {
         path: '',
-        element: <NotSelected />,
-      },
-      {
-        path: ':memberId',
-        element: <MemberDetail />,
+        element: <MemberManagement />,
+        children: [
+          { path: '', element: <NotSelected /> },
+          {
+            path: ':memberId',
+            element: <MemberDetail />,
+          },
+        ],
       },
     ],
   },
-  { path: 'dashboard/clinic/prescriptions', element: <Dashboard /> },
+  {
+    path: 'dashboard/clinic/prescriptions',
+    element: <Dashboard />,
+    children: [{ path: '', element: <PrescriptionManagement /> }],
+  },
   { path: 'dashboard/clinic/statistics', element: <Dashboard /> },
   {
     path: 'search',

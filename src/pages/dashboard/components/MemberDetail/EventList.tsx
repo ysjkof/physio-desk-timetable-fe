@@ -40,20 +40,21 @@ const EventList = ({ date }: { date: Date }) => {
     variables,
     fetchPolicy: 'network-only',
     onCompleted({ getReservationsOfMember: { results, totalPages } }) {
+      // const CategorizationByDate = () => {
+      //   const category: { [key: string]: EventItem[] } = {};
+      //   results?.forEach((event) => {
+      //     const date = event.startDate.substring(0, 10);
+      //     if (category[date]) return category[date].push(event);
+      //     category[date] = [event];
+      //   });
+      //   console.log(category);
+      //   return category;
+      // };
+
+      // CategorizationByDate();
+
       // 무한 스크롤일 때
       // setEventList((prev) => [...prev, ...(results || [])]);
-      const CategorizationByDate = () => {
-        const category: { [key: string]: EventItem[] } = {};
-        results?.forEach((event) => {
-          const date = event.startDate.substring(0, 10);
-          if (category[date]) return category[date].push(event);
-          category[date] = [event];
-        });
-        console.log(category);
-        return category;
-      };
-
-      CategorizationByDate();
       setEventList(results || []);
       setPages((prevPages) => {
         if (!totalPages) return [1];

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Datepicker } from '../../../../components';
-import { EventList } from '../EventList';
+import EventList from './EventList';
 
 const CalendarAndEventList = () => {
   const [date, setDate] = useState(new Date());

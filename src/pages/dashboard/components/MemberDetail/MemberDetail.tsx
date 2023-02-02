@@ -5,13 +5,12 @@ import { GET_MEMBER_DOCUMENT } from '../../../../graphql';
 import MemberCard from './MemberCard';
 import CardSection from './CardSection';
 import VacationTable from './VacationTable';
-import { EventList } from '../EventList';
+import CalendarAndEventList from './CalendarAndEventList';
+import { Warning } from '../../../../components';
 import type {
   GetMemberQuery,
   GetMemberQueryVariables,
 } from '../../../../types/generated.types';
-import { Warning } from '../../../../components';
-import { CalendarAndEventList } from '../CalendarAndEventList';
 
 const MemberDetail = () => {
   const { memberId } = useParams();

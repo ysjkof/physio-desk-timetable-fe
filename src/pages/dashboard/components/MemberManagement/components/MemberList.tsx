@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ClinicsOfClient } from '../../../../models';
+import { ClinicsOfClient } from '../../../../../models';
 import AlignmentButtons from './AlignmentButtons';
 import MemberListItem from './MemberListItem';
 

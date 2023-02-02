@@ -1,7 +1,7 @@
 import { Dispatch, useState } from 'react';
-import { sortByBoolean, sortByString } from '../../../../utils/common.utils';
-import { VerticalCrossArrow } from '../../../../svgs';
-import type { MemberOfClient } from '../../../../types/common.types';
+import { sortByBoolean, sortByString } from '../../../../../utils/common.utils';
+import { VerticalCrossArrow } from '../../../../../svgs';
+import type { MemberOfClient } from '../../../../../types/common.types';
 
 interface AlignmentButtonsProps {
   setMembers: Dispatch<React.SetStateAction<MemberOfClient[]>>;
