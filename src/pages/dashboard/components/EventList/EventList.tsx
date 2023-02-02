@@ -48,7 +48,8 @@ const EventList = ({ date }: { date: Date }) => {
       // 무한 스크롤일 때
       // setEventList((prev) => [...prev, ...(results || [])]);
       setEventList(results || []);
-      if (totalPages && totalPages !== maximumPage) setMaximumPage(totalPages);
+      if (typeof totalPages === 'number' && totalPages !== maximumPage)
+        setMaximumPage(totalPages);
     },
   });
 
@@ -58,13 +59,13 @@ const EventList = ({ date }: { date: Date }) => {
   }, [page, maximumPage, date]);
 
   return (
-    <div className="flex basis-full flex-col justify-between">
-      <ul className="flex flex-col gap-4 overflow-y-scroll">
+    <div className="flex w-[440px] basis-full flex-col justify-between">
+      <ul className="flex flex-col gap-4 overflow-y-scroll ">
         {eventList.map((a) => {
           return (
             <li
               key={a.id}
-              className="flex w-[440px] rounded-md border bg-white px-4 py-3"
+              className="flex rounded-md border bg-white px-4 py-3"
             >
               <div
                 className="mr-2 flex items-center justify-center rounded-md p-1 text-white"
