@@ -8,34 +8,29 @@ import {
   getMonthStartEnd,
   getStringOfDateTime,
 } from '../../../../utils/date.utils';
+import { Person } from '../../../../svgs';
 import type {
   GetReservationsOfMemberQuery,
   GetReservationsOfMemberQueryVariables,
 } from '../../../../types/generated.types';
-import { Person } from '../../../../svgs';
 
 type EventItem = NonNullable<
   GetReservationsOfMemberQuery['getReservationsOfMember']['results']
 >[0];
 
 const EventList = ({ date }: { date: Date }) => {
-  const [page, setPage] = useState(1);
-  const [maximumPage, setMaximumPage] = useState(1);
   const [eventList, setEventList] = useState<EventItem[]>([]);
+  const [pages, setPages] = useState([1]);
 
-  const pages = Array.from({ length: maximumPage }).map(
-    (_, index) => index + 1
-  );
-
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
-  const { memberId } = useParams();
-
+  const [page, setPage] = useState(1);
   const [startOfMonth, endOfMonth] = getMonthStartEnd(date);
   const startDate = startOfWeek(startOfMonth);
   const endDate = endOfWeek(endOfMonth);
+  const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const { memberId } = useParams();
 
   const variables = {
-    input: { startDate, endDate, clinicId, memberId: Number(memberId), page },
+    input: { page, startDate, endDate, clinicId, memberId: Number(memberId) },
   };
 
   const { fetchMore } = useQuery<
@@ -47,16 +42,31 @@ const EventList = ({ date }: { date: Date }) => {
     onCompleted({ getReservationsOfMember: { results, totalPages } }) {
       // 무한 스크롤일 때
       // setEventList((prev) => [...prev, ...(results || [])]);
+      const CategorizationByDate = () => {
+        const category: { [key: string]: EventItem[] } = {};
+        results?.forEach((event) => {
+          const date = event.startDate.substring(0, 10);
+          if (category[date]) return category[date].push(event);
+          category[date] = [event];
+        });
+        console.log(category);
+        return category;
+      };
+
+      CategorizationByDate();
       setEventList(results || []);
-      if (typeof totalPages === 'number' && totalPages !== maximumPage)
-        setMaximumPage(totalPages);
+      setPages((prevPages) => {
+        if (!totalPages) return [1];
+        if (totalPages === pages.length) return prevPages;
+        return Array.from({ length: totalPages }).map((_, index) => index + 1);
+      });
     },
   });
 
   useEffect(() => {
-    if (page === 1 || page === maximumPage) return;
+    if (page === pages.length) return;
     fetchMore({ variables });
-  }, [page, maximumPage, date]);
+  }, [page, pages]);
 
   return (
     <div className="flex w-[440px] basis-full flex-col justify-between">
