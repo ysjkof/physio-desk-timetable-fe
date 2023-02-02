@@ -8,12 +8,11 @@ import { DatepickerProps } from '../../types/props.types';
 
 export const Datepicker = ({
   closeAction,
-  setDate,
+  selectedDate,
+  selectDate,
   disablePreviousDay,
 }: DatepickerProps) => {
-  const today = new Date();
-
-  const calendar = useMemo(() => new CalendarModel(today), []);
+  const calendar = useMemo(() => new CalendarModel(selectedDate), []);
 
   const [month, setMonth] = useState(calendar.month);
 
@@ -36,9 +35,10 @@ export const Datepicker = ({
       setPreviousMonth,
       setNextMonth,
       closeAction,
-      setDate,
+      selectedDate,
+      selectDate,
     }),
-    [month]
+    [month, selectedDate]
   );
 
   return (

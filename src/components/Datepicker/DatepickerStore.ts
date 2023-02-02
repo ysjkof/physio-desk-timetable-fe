@@ -7,7 +7,8 @@ interface DatepickerContextProps extends Partial<CloseAction> {
   getYearMonth: () => string;
   setPreviousMonth: () => void;
   setNextMonth: () => void;
-  setDate: (date: Date) => void;
+  selectedDate: Date;
+  selectDate: (date: Date) => void;
 }
 
 export const DatepickerContext = createContext<DatepickerContextProps>({
@@ -18,5 +19,6 @@ export const DatepickerContext = createContext<DatepickerContextProps>({
   setNextMonth() {},
   setPreviousMonth() {},
   closeAction: () => {},
-  setDate() {},
+  selectedDate: new Date(),
+  selectDate() {},
 });
