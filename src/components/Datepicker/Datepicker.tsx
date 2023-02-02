@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Calendar as CalendarModel } from '../../models/Calendar';
 import { DatepickerContext } from './DatepickerStore';
 import { DatepickerNavigation } from './DatepickerNavigation';
@@ -12,7 +12,10 @@ export const Datepicker = ({
   selectDate,
   disablePreviousDay,
 }: DatepickerProps) => {
-  const calendar = useMemo(() => new CalendarModel(selectedDate), []);
+  const calendar = useMemo(
+    () => new CalendarModel(selectedDate),
+    [selectedDate]
+  );
 
   const [month, setMonth] = useState(calendar.month);
 
@@ -40,6 +43,10 @@ export const Datepicker = ({
     }),
     [month, selectedDate]
   );
+
+  useEffect(() => {
+    setMonth(calendar.month);
+  }, [calendar]);
 
   return (
     <DatepickerContext.Provider value={value}>
