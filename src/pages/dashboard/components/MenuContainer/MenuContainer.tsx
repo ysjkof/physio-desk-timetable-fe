@@ -10,21 +10,21 @@ const MenuContainer = () => {
     <div className="flex flex-col text-sm">
       <LinkButton
         path="/dashboard/clinic/members"
-        isActivate={pathname === '/dashboard/clinic/members'}
+        isActivate={pathname.startsWith('/dashboard/clinic/members')}
       >
         <Heart />
         직원열람 및 관리
       </LinkButton>
       <LinkButton
         path="/dashboard/clinic/prescriptions"
-        isActivate={pathname === '/dashboard/clinic/prescriptions'}
+        isActivate={pathname.startsWith('/dashboard/clinic/prescriptions')}
       >
         <Medicine />
         처방등록 및 관리
       </LinkButton>
       <LinkButton
         path="/dashboard/clinic/statistics"
-        isActivate={pathname === '/dashboard/clinic/statistics'}
+        isActivate={pathname.startsWith('/dashboard/clinic/statistics')}
       >
         <BrokenLine />
         통계
