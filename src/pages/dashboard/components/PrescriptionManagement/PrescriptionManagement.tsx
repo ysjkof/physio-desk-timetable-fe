@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { useOutletContext } from 'react-router-dom';
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../../../../graphql';
 import { ClinicsOfClient } from '../../../../models';
 import PrescriptionManagementHeader from './PrescriptionManagementHeader';
 import PrescriptionItemHeader from './PrescriptionItemHeader';
 import PrescriptionItem from './PrescriptionItem';
+import { CreatePrescription } from '../CreatePrescription';
 import type { DashboardOutletContext } from '../../../../types/common.types';
 import type {
   FindPrescriptionsQuery,
@@ -29,6 +30,14 @@ const PrescriptionManagement = () => {
     },
   });
 
+  const { pathname } = useLocation();
+  const hasModal = pathname.endsWith('/create');
+
+  const navigate = useNavigate();
+  const closeAction = () => {
+    navigate(-1);
+  };
+
   return (
     <div
       className="whitespace-nowrap bg-[#F9F9FF] p-10"
@@ -51,6 +60,7 @@ const PrescriptionManagement = () => {
           />
         ))}
       </div>
+      {hasModal && <CreatePrescription closeAction={closeAction} />}
     </div>
   );
 };
