@@ -1,3 +1,5 @@
+import { CreatePrescriptionInput } from './generated.types';
+
 export interface FormOfReserveFields {
   userId: number;
   patientId: number;
@@ -19,3 +21,9 @@ export interface FormForCreatePatientFields {
   birthday?: Date;
   memo?: string;
 }
+
+export interface FormForCreatePrescriptionFields
+  extends Pick<
+    CreatePrescriptionInput,
+    'description' | 'name' | 'prescriptionAtomIds' | 'price' | 'requiredTime'
+  > {}
