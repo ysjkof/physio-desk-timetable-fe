@@ -1,6 +1,7 @@
 import { type ChangeEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const SearchAndCreatePrescription = () => {
   const searchMembers = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +28,8 @@ const SearchAndCreatePrescription = () => {
           onChange={searchMembers}
         />
       </label>
-      <button
+      <Link
+        to="create"
         type="button"
         className="css_default-button rounded-md bg-[#26C06D] text-sm text-white"
         onClick={createPrescription}
@@ -38,7 +40,7 @@ const SearchAndCreatePrescription = () => {
           size="xs"
         />
         처방 등록하기
-      </button>
+      </Link>
     </div>
   );
 };
