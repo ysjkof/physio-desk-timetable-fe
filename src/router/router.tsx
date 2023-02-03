@@ -104,12 +104,12 @@ const router = createBrowserRouter([
       {
         path: 'test',
         element:
-          process.env.NODE_ENV === 'production' ? (
+          import.meta.env.MODE === 'development' ? (
+            <TestPage />
+          ) : (
             <CheckAdmin>
               <TestPage />
             </CheckAdmin>
-          ) : (
-            <TestPage />
           ),
       },
     ],
