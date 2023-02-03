@@ -1,7 +1,8 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 import { ROUTES } from './routes';
 import ProtectRoute from './ProtectRoute';
-import { Warning } from '../components';
+import { Modal, Warning } from '../components';
 import CreatePrescription from '../pages/legacy_dashboard/components/organisms/CreatePrescription';
 import {
   MemberDetail,
@@ -75,7 +76,18 @@ const loginRoute = [
   {
     path: 'dashboard/clinic/prescriptions',
     element: <Dashboard />,
-    children: [{ path: '', element: <PrescriptionManagement /> }],
+    children: [
+      {
+        path: '',
+        element: <PrescriptionManagement />,
+        children: [
+          {
+            path: 'create',
+            element: <></>,
+          },
+        ],
+      },
+    ],
   },
   { path: 'dashboard/clinic/statistics', element: <Dashboard /> },
   {
