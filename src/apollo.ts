@@ -12,7 +12,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import localStorageUtils from './utils/localStorage.utils';
-import { printNetworkError } from './utils/error.utils';
+import { printGraphQLErrors, printNetworkError } from './utils/error.utils';
 
 const token = localStorageUtils.get<string>({ key: 'token' });
 export const isLoggedInVar = makeVar(Boolean(token));
@@ -61,15 +61,30 @@ const splitLink = split(
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.warn(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    );
+    return graphQLErrors.forEach((errors) => {
+      const { locations, message, path } = errors;
+
+      if (message.includes('"$input" got invalid value'))
+        printGraphQLErrors('gotInvalidValue');
+
+      console.error(
+        `[GraphQL error]:
+        Message: ${message};
+        Location: ${JSON.stringify(locations)};
+        Path: ${JSON.stringify(path)};`
+      );
+    });
 
   if (networkError) {
-    printNetworkError(networkError.message);
-    console.warn(`[Network error]: ${networkError}`);
+    printNetworkError();
+    // const { message, name, cause, stack } = networkError;
+    // console.error(
+    //   `[Network error]:
+    //   Message: ${message};
+    //   Name: ${name};
+    //   Cause: ${cause};
+    //   Stack: ${stack};`
+    // );
   }
 });
 
