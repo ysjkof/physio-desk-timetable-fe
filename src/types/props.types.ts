@@ -42,10 +42,12 @@ export interface ScheduleBoxProps extends MemberNameProps, ILabels, IDate {
 
 // Dashboard
 
+export type PrescriptionForFind = NonNullable<
+  FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
+>;
+
 export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
-  prescription: NonNullable<
-    FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
-  >;
+  prescription: PrescriptionForFind;
 }
 
 // Common
