@@ -8,9 +8,7 @@ const CreatePatient = () => {
   return (
     <Modal closeAction={closeModal}>
       <div className="w-96 rounded-sm border">
-        <h1 className="modal-header flex items-center justify-center">
-          환자 등록
-        </h1>
+        <h1 className="modal-header">환자 등록</h1>
         <FormForCreatePatient closeAction={closeModal} />
       </div>
     </Modal>

@@ -109,7 +109,7 @@
   }
 
   .modal-header {
-    @apply h-14 w-full text-xl font-medium text-cst-blue;
+    @apply mt-8 w-full pl-8 text-3xl font-bold text-cst-blue;
   }
 
   /* 재사용하지 않는 컴포넌트 */
