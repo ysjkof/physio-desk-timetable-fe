@@ -1073,6 +1073,13 @@ export type FindPrescriptionsQueryVariables = Exact<{
 
 export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
 
+export type GetPrescriptionsQueryVariables = Exact<{
+  input: GetPrescriptionsInput;
+}>;
+
+
+export type GetPrescriptionsQuery = { __typename?: 'Query', getPrescriptions: { __typename?: 'GetPrescriptionsOutput', ok: boolean, error?: string | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, description?: string | null }> | null } };
+
 export type CommonReservationFieldsFragment = { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean };
 
 export type CreateDayOffMutationVariables = Exact<{
