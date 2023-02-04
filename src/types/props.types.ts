@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { PrescriptionListProps } from '../pages/legacy_dashboard/components/organisms/PrescriptionPage';
 import type { ISchedules, UserWithEvent } from './common.types';
 import { FindPrescriptionsQuery } from './generated.types';
+import { FormForEditPrescriptionFields } from './form.types';
 
 // TimeTable
 export interface IUserLength {
@@ -76,3 +77,7 @@ export interface FormForReservationProps extends CloseAction {
 }
 
 export interface FormForDayoffProps extends FormForReservationProps {}
+
+export interface UseFormForEditPrescriptionProps {
+  defaultValues: FormForEditPrescriptionFields | undefined;
+}
