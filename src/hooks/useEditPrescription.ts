@@ -13,7 +13,6 @@ import type {
   FindPrescriptionsQuery,
   FindPrescriptionsQueryVariables,
 } from '../types/generated.types';
-import type { PrescriptionForFind } from '../types/props.types';
 
 // FormForEditPrescriptionFields의 값과 같다. EditPrescriptionInput가 InputMaybe<Scalars['String]>> 이런 타입을 쓰기 때문에 여기서 따로 선언함
 interface Input {
@@ -26,16 +25,6 @@ export const useEditPrescription = () => {
   const clinicId = ClinicsOfClient.getSelectedClinic().id;
   const variables: FindPrescriptionsQueryVariables = {
     input: { clinicId, onlyLookUpActive: false },
-  };
-
-  const getUpdatedPrescription = (
-    prescription: PrescriptionForFind,
-    input: Input
-  ) => {
-    return {
-      ...prescription,
-      ...input,
-    };
   };
 
   return useMutation<
@@ -60,10 +49,10 @@ export const useEditPrescription = () => {
           );
           if (index === -1) return cacheData;
 
-          const updatedPrescription = getUpdatedPrescription(
-            cachePrescriptions[index],
-            prescriptionInput
-          );
+          const updatedPrescription = {
+            ...cachePrescriptions[index],
+            ...prescriptionInput,
+          };
 
           const newData = structuredClone(cacheData);
           newData.findPrescriptions.prescriptions = changeValueInArray(
