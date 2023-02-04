@@ -12,6 +12,7 @@ import type {
   FindPrescriptionsQuery,
   FindPrescriptionsQueryVariables,
 } from '../../../../types/generated.types';
+import EditPrescription from '../EditPrescription/EditPrescription';
 
 const PrescriptionManagement = () => {
   const { outletWidth } = useOutletContext<DashboardOutletContext>();
@@ -31,7 +32,8 @@ const PrescriptionManagement = () => {
   });
 
   const { pathname } = useLocation();
-  const hasModal = pathname.endsWith('/create');
+  const hasCreate = pathname.endsWith('/create');
+  const hasEdit = pathname.endsWith('/edit');
 
   const navigate = useNavigate();
   const closeAction = () => {
@@ -60,7 +62,8 @@ const PrescriptionManagement = () => {
           />
         ))}
       </div>
-      {hasModal && <CreatePrescription closeAction={closeAction} />}
+      {hasCreate && <CreatePrescription closeAction={closeAction} />}
+      {hasEdit && <EditPrescription closeAction={closeAction} />}
     </div>
   );
 };
