@@ -9,6 +9,7 @@ import { useMediaQuery } from './useMediaQuery';
 import { useCloseModal } from './useModalClose';
 import { useNavCreatePatient } from './useNavCreatePatient';
 import { useSearchPatient } from './useSearchPatient';
+import { useTogglePrescriptionActivate } from './useTogglePrescriptionActivate';
 import { useWindowSize } from './useWindowSize';
 
 export {
@@ -23,5 +24,6 @@ export {
   useCloseModal,
   useNavCreatePatient,
   useSearchPatient,
+  useTogglePrescriptionActivate,
   useWindowSize,
 };
