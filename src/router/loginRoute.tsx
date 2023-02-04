@@ -81,10 +81,8 @@ const loginRoute = [
         path: '',
         element: <PrescriptionManagement />,
         children: [
-          {
-            path: 'create',
-            element: <></>,
-          },
+          { path: 'create', element: <></> },
+          { path: ':prescriptionId/edit', element: <></> },
         ],
       },
     ],
