@@ -10,7 +10,7 @@ import type {
 } from '../../../types/generated.types';
 import type { FormForCreatePrescriptionFields } from '../../../types/form.types';
 
-export const useFormForPrescription = () => {
+export const useFormForCreatePrescription = () => {
   const {
     register,
     handleSubmit: handleSubmitWrapper,

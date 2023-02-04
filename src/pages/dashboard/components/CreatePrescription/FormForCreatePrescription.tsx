@@ -5,12 +5,12 @@ import {
 } from '../../../timetable/components/FormForReservation/InputForReserve';
 import { Buttons } from '../../../timetable/components/FormForReservation/FormForReservation';
 import { REG_EXP } from '../../../../constants/regex';
-import { useFormForPrescription } from '../../hooks/useFormForPrescription';
+import { useFormForCreatePrescription } from '../../hooks/useFormForCreatePrescription';
 import type { CloseAction } from '../../../../types/props.types';
 
 const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
   const { handleSubmit, register, atomPrescription, error } =
-    useFormForPrescription();
+    useFormForCreatePrescription();
 
   return (
     <form
