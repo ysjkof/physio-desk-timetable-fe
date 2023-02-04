@@ -1,6 +1,6 @@
 import { Modal } from '../../../../components';
 import FormForEditPrescription from './FormForEditPrescription';
-import { CloseAction } from '../../../../types/props.types';
+import type { CloseAction } from '../../../../types/props.types';
 
 const EditPrescription = ({ closeAction }: CloseAction) => {
   return (
