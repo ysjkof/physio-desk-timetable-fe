@@ -1,9 +1,11 @@
+import { Link } from 'react-router-dom';
 import { Pencil, TrashPot } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
 import type { CardProps } from '../../../../types/props.types';
 
 const PrescriptionItem = ({ prescription }: CardProps) => {
   const {
+    id,
     name,
     price,
     requiredTime,
@@ -36,11 +38,18 @@ const PrescriptionItem = ({ prescription }: CardProps) => {
         {status}
       </div>
       <div className="prescription-management-item__col7 flex gap-7">
-        <Pencil />
+        <EditPrescription id={id} />
         <TrashPot className="" />
       </div>
     </div>
   );
 };
 
+const EditPrescription = ({ id }: { id: number }) => {
+  return (
+    <Link to={`${id}/edit`}>
+      <Pencil />
+    </Link>
+  );
+};
 export default PrescriptionItem;
