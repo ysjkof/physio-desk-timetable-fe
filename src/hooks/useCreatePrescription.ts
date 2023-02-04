@@ -23,7 +23,7 @@ export const useCreatePrescription = () => {
     cacheData: FindPrescriptionsQuery,
     newPrescription: PrescriptionForFind
   ) => {
-    const newData = { ...cacheData };
+    const newData = structuredClone(cacheData);
     newData.findPrescriptions.prescriptions?.push(newPrescription);
     return newData;
   };
