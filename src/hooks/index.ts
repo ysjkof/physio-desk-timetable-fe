@@ -3,6 +3,7 @@ import { useCreatePatient } from './useCreatePatient';
 import { useCreatePrescription } from './useCreatePrescription';
 import { useDebounce } from './useDebounce';
 import { useFindPrescriptions } from './useFindPrescriptions';
+import { useGetPrescription } from './useGetPrescription';
 import { useMe } from './useMe';
 import { useMediaQuery } from './useMediaQuery';
 import { useCloseModal } from './useModalClose';
@@ -16,6 +17,7 @@ export {
   useCreatePrescription,
   useDebounce,
   useFindPrescriptions,
+  useGetPrescription,
   useMe,
   useMediaQuery,
   useCloseModal,
