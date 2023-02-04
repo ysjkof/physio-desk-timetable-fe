@@ -9,12 +9,12 @@ import { useFormForPrescription } from '../../hooks/useFormForPrescription';
 import type { CloseAction } from '../../../../types/props.types';
 
 const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
-  const { handleSubmit, onSubmit, register, atomPrescription, error } =
+  const { handleSubmit, register, atomPrescription, error } =
     useFormForPrescription();
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit}
       className="flex h-full flex-col gap-5 bg-white pt-8"
     >
       <div className="flex basis-full flex-col justify-between gap-5 px-4">
@@ -29,7 +29,7 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
             })}
           />
         </InputWrapper>
-        <InputWrapper label="처방" required>
+        <InputWrapper label="처방" required error={error.prescriptionAtomIds}>
           <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
             {atomPrescription.map((option) => (
               <Checkbox
@@ -39,7 +39,7 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
                 type="checkbox"
                 value={option.id}
                 register={register('prescriptionAtomIds', {
-                  required: true,
+                  required: '처방을 선택하세요.',
                 })}
               />
             ))}
@@ -54,7 +54,8 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
               required: '시간을 입력해주세요',
               min: { value: 10, message: '최소 10분입니다' },
               max: { value: 180, message: '최대 180분입니다' },
-              pattern: REG_EXP.numberEnd0.pattern,
+              valueAsNumber: true,
+              validate: { step10: (value) => !(value % 10) },
             })}
             className="mr-2 w-20"
             type="number"
@@ -72,6 +73,7 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
                 value: 100_000_000,
                 message: '더 이상 불가합니다',
               },
+              valueAsNumber: true,
             })}
             className="mr-2 w-48"
             type="number"
@@ -100,7 +102,7 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
           </MenuButton>
         )}
         <MenuButton
-          onClick={handleSubmit(onSubmit)}
+          onClick={handleSubmit}
           type="submit"
           className="w-full bg-cst-blue text-base font-medium text-white"
         >
