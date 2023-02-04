@@ -106,7 +106,7 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
           type="submit"
           className="w-full bg-cst-blue text-base font-medium text-white"
         >
-          등록하기
+          만들기
         </MenuButton>
       </Buttons>
     </form>
