@@ -65,7 +65,7 @@ const FormForEditPrescription = ({ closeAction }: CloseAction) => {
           type="submit"
           className="w-full bg-cst-blue text-base font-medium text-white"
         >
-          등록하기
+          수정하기
         </MenuButton>
       </Buttons>
     </form>
