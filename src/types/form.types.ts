@@ -1,4 +1,7 @@
-import { CreatePrescriptionInput } from './generated.types';
+import {
+  CreatePrescriptionInput,
+  EditPrescriptionInput,
+} from './generated.types';
 
 export interface FormOfReserveFields {
   userId: number;
@@ -27,3 +30,6 @@ export interface FormForCreatePrescriptionFields
     CreatePrescriptionInput,
     'description' | 'name' | 'prescriptionAtomIds' | 'price' | 'requiredTime'
   > {}
+
+export interface FormForEditPrescriptionFields
+  extends Pick<EditPrescriptionInput, 'id' | 'description' | 'name'> {}
