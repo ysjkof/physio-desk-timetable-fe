@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Pencil, TrashPot } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
 import type { CardProps } from '../../../../types/props.types';
+import { useTogglePrescriptionActivate } from '../../../../hooks';
 
 const PrescriptionItem = ({ prescription }: CardProps) => {
   const {
@@ -39,7 +40,7 @@ const PrescriptionItem = ({ prescription }: CardProps) => {
       </div>
       <div className="prescription-management-item__col7 flex gap-7">
         <EditPrescription id={id} />
-        <TrashPot className="" />
+        <TogglePrescriptionActivate id={id} activate={!!activate} />
       </div>
     </div>
   );
@@ -52,4 +53,26 @@ const EditPrescription = ({ id }: { id: number }) => {
     </Link>
   );
 };
+
+interface TogglePrescriptionStatusProps {
+  id: number;
+  activate: boolean;
+}
+
+const TogglePrescriptionActivate = ({
+  id,
+  activate,
+}: TogglePrescriptionStatusProps) => {
+  const { toggleActivation } = useTogglePrescriptionActivate();
+  const invokeToggleActivation = () => {
+    toggleActivation(id, activate);
+  };
+  // TODO: 확인용 팝업창 구현. 현재 브라우저 confirm API 사용중.
+  return (
+    <button onClick={invokeToggleActivation} type="button">
+      <TrashPot className="" />
+    </button>
+  );
+};
+
 export default PrescriptionItem;
