@@ -1,6 +1,7 @@
 import { Dispatch } from 'react';
 import { TwoLabelSwitch } from '../../../../components';
-import SearchAndCreatePrescription from './SearchAndCreatePrescription';
+import CreatePrescriptionButton from './CreatePrescriptionButton';
+import SearchPrescription from './SearchPrescription';
 
 const PrescriptionManagementHeader = ({
   seeInactivate,
@@ -25,7 +26,10 @@ const PrescriptionManagementHeader = ({
             isActivated={seeInactivate}
           />
         </div>
-        <SearchAndCreatePrescription />
+        <div className="flex items-center justify-between gap-4 px-4">
+          <SearchPrescription />
+          <CreatePrescriptionButton />
+        </div>
       </div>
     </div>
   );
