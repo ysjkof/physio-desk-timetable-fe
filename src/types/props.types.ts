@@ -89,3 +89,9 @@ export interface ConfirmProps extends CloseAction {
   confirmAction: () => void;
   icon?: ReactNode;
 }
+
+export interface TogglePrescriptionActivateProps {
+  id: number;
+  name: string;
+  activate: boolean;
+}

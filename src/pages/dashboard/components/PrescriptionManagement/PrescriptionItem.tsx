@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { Pencil, TrashPot } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
-import type { CardProps } from '../../../../types/props.types';
 import { useTogglePrescriptionActivate } from '../../../../hooks';
+import { ConfirmModal } from '../../../../components';
+import type {
+  CardProps,
+  TogglePrescriptionActivateProps,
+} from '../../../../types/props.types';
 
 const PrescriptionItem = ({ prescription }: CardProps) => {
   const {
@@ -40,7 +45,7 @@ const PrescriptionItem = ({ prescription }: CardProps) => {
       </div>
       <div className="prescription-management-item__col7 flex gap-7">
         <EditPrescription id={id} />
-        <TogglePrescriptionActivate id={id} activate={!!activate} />
+        <TogglePrescriptionActivate id={id} name={name} activate={!!activate} />
       </div>
     </div>
   );
@@ -54,24 +59,47 @@ const EditPrescription = ({ id }: { id: number }) => {
   );
 };
 
-interface TogglePrescriptionStatusProps {
-  id: number;
-  activate: boolean;
-}
-
 const TogglePrescriptionActivate = ({
   id,
+  name,
   activate,
-}: TogglePrescriptionStatusProps) => {
+}: TogglePrescriptionActivateProps) => {
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const openConfirm = () => {
+    setShowConfirm(true);
+  };
+  const closeConfirm = () => {
+    setShowConfirm(false);
+  };
+
   const { toggleActivation } = useTogglePrescriptionActivate();
   const invokeToggleActivation = () => {
     toggleActivation(id, activate);
   };
-  // TODO: 확인용 팝업창 구현. 현재 브라우저 confirm API 사용중.
+
+  const todo = activate ? '비활성' : '활성';
+  const messages = [
+    `처방을 ${todo} 합니다.`,
+    activate ? `${todo}되면 정보 수정이 불가능합니다.` : '',
+  ];
+  const buttonText = `${todo}하기`;
+
   return (
-    <button onClick={invokeToggleActivation} type="button">
-      <TrashPot className="" />
-    </button>
+    <>
+      <button onClick={openConfirm} type="button">
+        <TrashPot className="" />
+      </button>
+      {showConfirm && (
+        <ConfirmModal
+          closeAction={closeConfirm}
+          confirmAction={invokeToggleActivation}
+          messages={messages}
+          targetName={name}
+          buttonText={buttonText}
+        />
+      )}
+    </>
   );
 };
 
