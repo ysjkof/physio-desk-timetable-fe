@@ -39,7 +39,7 @@ const ProfileWithImage = () => {
             event.currentTarget.style.display = 'none';
           }}
         />
-        <User className="absolute top-0 left-0 h-24 w-full fill-white stroke-white" />
+        <User className="position-center-x absolute top-3 h-full w-4/6 fill-white stroke-white" />
       </div>
       <div className="text-base">
         <span className="mr-1">

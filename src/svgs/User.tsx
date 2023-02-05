@@ -2,16 +2,16 @@ import { SVG } from '../types/common.types';
 import { cls } from '../utils/common.utils';
 
 /**
- * https://heroicons.com/
- * user > Outline
+ * by JH
  */
 const User = ({ iconSize = 'MD', ...args }: SVG) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      width="11"
+      height="15"
+      viewBox="0 0 11 15"
       fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
+      xmlns="http://www.w3.org/2000/svg"
       stroke="currentColor"
       {...args}
       className={cls(
@@ -21,10 +21,11 @@ const User = ({ iconSize = 'MD', ...args }: SVG) => {
         iconSize === 'SM' ? 'h-3 w-3' : ''
       )}
     >
+      <circle cx="5.5" cy="4.5" r="3.5" strokeWidth="2" />
       <path
+        d="M10 14V14C10 12.3431 8.65685 11 7 11H4C2.34315 11 1 12.3431 1 14V14"
+        strokeWidth="2"
         strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
       />
     </svg>
   );
