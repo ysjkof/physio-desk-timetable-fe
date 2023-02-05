@@ -49,6 +49,7 @@ export type PrescriptionForFind = NonNullable<
 
 export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
   prescription: PrescriptionForFind;
+  showInactivate: boolean;
 }
 
 // Common

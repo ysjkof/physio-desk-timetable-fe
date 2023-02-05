@@ -9,7 +9,7 @@ import type {
   TogglePrescriptionActivateProps,
 } from '../../../../types/props.types';
 
-const PrescriptionItem = ({ prescription }: CardProps) => {
+const PrescriptionItem = ({ prescription, showInactivate }: CardProps) => {
   const {
     id,
     name,
@@ -21,6 +21,8 @@ const PrescriptionItem = ({ prescription }: CardProps) => {
   } = prescription;
 
   const status = activate ? '활성' : '비활성';
+
+  if (!showInactivate && !prescription.activate) return null;
 
   return (
     <div className="prescription-management-item border bg-white text-[#262850]">

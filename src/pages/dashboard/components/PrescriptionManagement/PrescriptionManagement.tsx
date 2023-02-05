@@ -17,7 +17,7 @@ import EditPrescription from '../EditPrescription/EditPrescription';
 const PrescriptionManagement = () => {
   const { outletWidth } = useOutletContext<DashboardOutletContext>();
   const clinicId = ClinicsOfClient.getSelectedClinic().id;
-  const [hasInactivate, setHasInactivate] = useState(false);
+  const [showInactivate, setShowInactivate] = useState(false);
 
   const { data } = useQuery<
     FindPrescriptionsQuery,
@@ -26,7 +26,7 @@ const PrescriptionManagement = () => {
     variables: {
       input: {
         clinicId,
-        onlyLookUpActive: hasInactivate,
+        onlyLookUpActive: false,
       },
     },
   });
@@ -46,8 +46,8 @@ const PrescriptionManagement = () => {
       style={{ width: outletWidth }}
     >
       <PrescriptionManagementHeader
-        seeInactivate={hasInactivate}
-        setSeeInactivate={setHasInactivate}
+        seeInactivate={showInactivate}
+        setSeeInactivate={setShowInactivate}
       />
       <PrescriptionItemHeader />
       <div
@@ -59,6 +59,7 @@ const PrescriptionManagement = () => {
             key={prescription.id}
             prescription={prescription}
             clinicId={clinicId}
+            showInactivate={showInactivate}
           />
         ))}
       </div>
