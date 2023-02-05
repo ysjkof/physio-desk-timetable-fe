@@ -50,7 +50,9 @@ const TimetableTemplate = ({
         >
           {labels}
         </div>
-        <div id="timetable__columns">{columns}</div>
+        <div id="timetable__columns" className="w-full">
+          {columns}
+        </div>
       </div>
     </motion.div>
   );
