@@ -8,7 +8,7 @@ import {
   getMonthStartEnd,
   getStringOfDateTime,
 } from '../../../../utils/date.utils';
-import { Person } from '../../../../svgs';
+import { PersonPlus } from '../../../../svgs';
 import type {
   GetReservationsOfMemberQuery,
   GetReservationsOfMemberQueryVariables,
@@ -106,7 +106,7 @@ const EventListItemIcon = () => {
       className="mr-2 flex items-center justify-center rounded-md p-1 text-white"
       style={{ backgroundColor: '#6BA6FF' }}
     >
-      <Person className="h-9 w-9" />
+      <PersonPlus className="h-9 w-9" />
     </div>
   );
 };

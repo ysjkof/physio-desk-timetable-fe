@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { BriefCase, Person } from '../../../../svgs';
+import { BriefCase, PersonPlus } from '../../../../svgs';
 
 const CardSection = ({ countOfPatient }: { countOfPatient: number }) => {
   return (
@@ -11,7 +11,7 @@ const CardSection = ({ countOfPatient }: { countOfPatient: number }) => {
         textContent="2년차"
       />
       <CardInDetail
-        icon={<Person className="h-8 w-8" />}
+        icon={<PersonPlus className="h-8 w-8" />}
         iconBgColor="#6BA6FF"
         title="담당환자수"
         textContent={`${countOfPatient}명`}

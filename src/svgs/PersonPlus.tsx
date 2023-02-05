@@ -4,7 +4,7 @@ import { cls } from '../utils/common.utils';
 /**
  * by JH
  */
-const Person = ({ iconSize = 'MD', ...args }: SVG) => {
+const PersonPlus = ({ iconSize = 'MD', ...args }: SVG) => {
   return (
     <svg
       width="36"
@@ -37,4 +37,4 @@ const Person = ({ iconSize = 'MD', ...args }: SVG) => {
   );
 };
 
-export default Person;
+export default PersonPlus;

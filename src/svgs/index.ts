@@ -15,7 +15,7 @@ import Heart from './Heart';
 import Mail from './Mail';
 import Medicine from './Medicine';
 import Pencil from './Pencil';
-import Person from './Person';
+import PersonPlus from './PersonPlus';
 import Phone from './Phone';
 import Table from './Table';
 import Trash from './Trash';
@@ -42,7 +42,7 @@ export {
   Mail,
   Medicine,
   Pencil,
-  Person,
+  PersonPlus,
   Phone,
   Table,
   Trash,
