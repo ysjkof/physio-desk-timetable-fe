@@ -21,9 +21,6 @@ export const useTogglePrescriptionActivate = () => {
   >(EDIT_PRESCRIPTION_DOCUMENT);
 
   const toggleActivation = (id: number, activate: boolean) => {
-    const todo = activate ? '비활성' : '활성';
-    if (!confirm(`처방을 ${todo} 하시겠습니까?`)) return;
-
     const inputActivate = !activate;
     const variables = { input: { id, activate: inputActivate } };
     callMutation({
