@@ -81,3 +81,11 @@ export interface FormForDayoffProps extends FormForReservationProps {}
 export interface UseFormForEditPrescriptionProps {
   defaultValues: FormForEditPrescriptionFields | undefined;
 }
+
+export interface ConfirmProps extends CloseAction {
+  messages: string[];
+  targetName: string;
+  buttonText: string;
+  confirmAction: () => void;
+  icon?: ReactNode;
+}

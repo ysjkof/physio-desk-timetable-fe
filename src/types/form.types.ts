@@ -33,3 +33,7 @@ export interface FormForCreatePrescriptionFields
 
 export interface FormForEditPrescriptionFields
   extends Pick<EditPrescriptionInput, 'id' | 'description' | 'name'> {}
+
+export interface ConfirmFormFields {
+  agree: boolean;
+}
