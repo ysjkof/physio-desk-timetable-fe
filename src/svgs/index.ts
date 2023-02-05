@@ -20,6 +20,7 @@ import Phone from './Phone';
 import Table from './Table';
 import Trash from './Trash';
 import TrashPot from './TrashPot';
+import User from './User';
 import UserPlus from './UserPlus';
 import VerticalCrossArrow from './VerticalCrossArrow';
 import XMark from './XMark';
@@ -47,6 +48,7 @@ export {
   Table,
   Trash,
   TrashPot,
+  User,
   UserPlus,
   VerticalCrossArrow,
   XMark,
