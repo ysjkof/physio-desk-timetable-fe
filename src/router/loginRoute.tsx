@@ -59,6 +59,20 @@ const loginRoute = [
   {
     path: 'setting',
     element: <Setting />,
+    children: [
+      {
+        path: 'my-info',
+        element: <div>my info</div>,
+      },
+      {
+        path: 'my-clinics',
+        element: <div>clinic</div>,
+      },
+      {
+        path: 'clinic/create',
+        element: <div>create</div>,
+      },
+    ],
   },
   {
     path: 'dashboard/clinic/members',
