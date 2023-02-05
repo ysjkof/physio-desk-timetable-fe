@@ -275,7 +275,9 @@ export type FindPrescriptionsInput = {
 
 export type FindPrescriptionsOutput = {
   __typename?: 'FindPrescriptionsOutput';
+  count: Scalars['Int'];
   error?: Maybe<Scalars['String']>;
+  maximumCount: Scalars['Int'];
   ok: Scalars['Boolean'];
   prescriptions?: Maybe<Array<Prescription>>;
 };
@@ -1071,7 +1073,7 @@ export type FindPrescriptionsQueryVariables = Exact<{
 }>;
 
 
-export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
+export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, count: number, maximumCount: number, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
 
 export type GetPrescriptionsQueryVariables = Exact<{
   input: GetPrescriptionsInput;

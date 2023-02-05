@@ -7,12 +7,12 @@ import PrescriptionManagementHeader from './PrescriptionManagementHeader';
 import PrescriptionItemHeader from './PrescriptionItemHeader';
 import PrescriptionItem from './PrescriptionItem';
 import { CreatePrescription } from '../CreatePrescription';
+import EditPrescription from '../EditPrescription/EditPrescription';
 import type { DashboardOutletContext } from '../../../../types/common.types';
 import type {
   FindPrescriptionsQuery,
   FindPrescriptionsQueryVariables,
 } from '../../../../types/generated.types';
-import EditPrescription from '../EditPrescription/EditPrescription';
 
 const PrescriptionManagement = () => {
   const { outletWidth } = useOutletContext<DashboardOutletContext>();
@@ -48,6 +48,8 @@ const PrescriptionManagement = () => {
       <PrescriptionManagementHeader
         seeInactivate={showInactivate}
         setSeeInactivate={setShowInactivate}
+        count={data?.findPrescriptions.count}
+        maximumCount={data?.findPrescriptions.maximumCount}
       />
       <PrescriptionItemHeader />
       <div
