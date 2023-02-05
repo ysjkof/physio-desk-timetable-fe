@@ -62,9 +62,9 @@ const GlobalAside = () => {
           <Building />
           {extendedAside && '병원'}
         </Li>
-        <Li to="profile" selected={menu === 'profile'}>
+        <Li to="setting" selected={menu === 'setting'}>
           <CogSixTooth />
-          {extendedAside && '프로필'}
+          {extendedAside && '설정'}
         </Li>
       </Ul>
 
