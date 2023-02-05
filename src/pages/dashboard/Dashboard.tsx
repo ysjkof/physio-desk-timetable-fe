@@ -5,7 +5,7 @@ import { clinicListsVar, loggedInUserVar } from '../../store';
 import { useWindowSize } from '../../hooks';
 import { ClinicsOfClient } from '../../models';
 import { cls } from '../../utils/common.utils';
-import { BrokenLine, Heart, Medicine } from '../../svgs';
+import { BrokenLine, Heart, Medicine, User } from '../../svgs';
 
 const Dashboard = () => {
   useReactiveVar(clinicListsVar); // 리렌더 위한 선언
@@ -25,12 +25,22 @@ const Dashboard = () => {
 const ProfileWithImage = () => {
   const loggedInUser = useReactiveVar(loggedInUserVar);
 
+  const profileImageUrl = 'maybe-profile-image.png';
+
   return (
     <div className="flex flex-col items-center">
-      <img
-        alt="프로필 사진"
-        className="mb-2 h-20 w-20 rounded-full bg-gray-200"
-      />
+      <div className="relative mb-2 h-20 w-20 overflow-hidden rounded-full bg-gray-200">
+        <img
+          src={profileImageUrl}
+          className="position-center absolute z-10 h-full w-full bg-white bg-cover p-3"
+          alt="프로필 사진"
+          onError={(event) => {
+            // eslint-disable-next-line no-param-reassign
+            event.currentTarget.style.display = 'none';
+          }}
+        />
+        <User className="absolute top-0 left-0 h-24 w-full fill-white stroke-white" />
+      </div>
       <div className="text-base">
         <span className="mr-1">
           {ClinicsOfClient.getSelectedClinic().position}
