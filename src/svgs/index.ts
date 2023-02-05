@@ -2,6 +2,7 @@ import BarBottomLeft from './BarBottomLeft';
 import BriefCase from './BriefCase';
 import BrokenLine from './BrokenLine';
 import Building from './Building';
+import BuildingPlus from './BuildingPlus';
 import Calendar from './Calendar';
 import Check from './Check';
 import ChevronDown from './ChevronDown';
@@ -30,6 +31,7 @@ export {
   BriefCase,
   BrokenLine,
   Building,
+  BuildingPlus,
   Calendar,
   Check,
   ChevronDown,
