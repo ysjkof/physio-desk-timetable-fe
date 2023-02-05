@@ -7,6 +7,7 @@ import {
   NotSelected,
   PrescriptionManagement,
 } from '../pages/dashboard/components';
+import Profile from '../pages/profile/Profile';
 
 const ProtectRoute = lazy(() => import('./ProtectRoute'));
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
@@ -54,6 +55,10 @@ const loginRoute = [
         <TimeTable />
       </ProtectRoute>
     ),
+  },
+  {
+    path: 'profile',
+    element: <Profile />,
   },
   {
     path: 'dashboard/clinic/members',

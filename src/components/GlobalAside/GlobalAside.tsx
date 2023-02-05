@@ -1,6 +1,5 @@
 import type { PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ROUTES } from '../../router/routes';
 import { cls } from '../../utils/common.utils';
 import { CogSixTooth, Building, Table } from '../../svgs';
 import ClinicSelector from './ClinicSelector';
@@ -16,9 +15,6 @@ const GlobalAside = () => {
     tableDisplay: { asideExtension: extendedAside },
     toggleDisplayOption,
   } = useTableDisplay();
-
-  const location = useLocation().pathname;
-  console.log(location);
 
   const toggleAsideExtension = () => {
     toggleDisplayOption('asideExtension');
@@ -66,7 +62,7 @@ const GlobalAside = () => {
           <Building />
           {extendedAside && '병원'}
         </Li>
-        <Li to={ROUTES.editProfile} selected={menu === 'profile'}>
+        <Li to="profile" selected={menu === 'profile'}>
           <CogSixTooth />
           {extendedAside && '프로필'}
         </Li>
