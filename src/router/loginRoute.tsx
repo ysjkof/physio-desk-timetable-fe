@@ -1,8 +1,5 @@
 import { lazy } from 'react';
-import { Navigate } from 'react-router-dom';
 import { ROUTES } from './routes';
-import ProtectRoute from './ProtectRoute';
-import { Modal, Warning } from '../components';
 import CreatePrescription from '../pages/legacy_dashboard/components/organisms/CreatePrescription';
 import {
   MemberDetail,
@@ -11,6 +8,7 @@ import {
   PrescriptionManagement,
 } from '../pages/dashboard/components';
 
+const ProtectRoute = lazy(() => import('./ProtectRoute'));
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
 const CreateClinic = lazy(
@@ -36,6 +34,7 @@ const EditProfile = lazy(
   () => import('../pages/legacy_dashboard/components/organisms/EditProfile')
 );
 const Search = lazy(() => import('../pages/search/Search'));
+const Warning = lazy(() => import('../components/Warning'));
 
 const {
   member,
