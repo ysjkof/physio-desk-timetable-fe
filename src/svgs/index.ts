@@ -13,6 +13,7 @@ import CogSixTooth from './CogSixTooth';
 import Edit from './Edit';
 import EllipsisVertical from './EllipsisVertical';
 import Heart from './Heart';
+import HourglassWithArrow from './HourglassWithArrow';
 import Mail from './Mail';
 import Medicine from './Medicine';
 import Pencil from './Pencil';
@@ -42,6 +43,7 @@ export {
   Edit,
   EllipsisVertical,
   Heart,
+  HourglassWithArrow,
   Mail,
   Medicine,
   Pencil,
