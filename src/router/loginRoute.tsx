@@ -8,6 +8,7 @@ import {
   PrescriptionManagement,
 } from '../pages/dashboard/components';
 import Setting from '../pages/setting/Setting';
+import { MyProfile } from '../pages/setting/components';
 
 const ProtectRoute = lazy(() => import('./ProtectRoute'));
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
@@ -62,7 +63,7 @@ const loginRoute = [
     children: [
       {
         path: 'my-info',
-        element: <div>my info</div>,
+        element: <MyProfile />,
       },
       {
         path: 'my-clinics',

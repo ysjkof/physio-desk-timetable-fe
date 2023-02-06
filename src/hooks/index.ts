@@ -2,6 +2,7 @@ import { useAutoComplete } from './useAutoComplete';
 import { useCreatePatient } from './useCreatePatient';
 import { useCreatePrescription } from './useCreatePrescription';
 import { useDebounce } from './useDebounce';
+import { useEditProfile } from './useEditProfile';
 import { useFindPrescriptions } from './useFindPrescriptions';
 import { useGetPrescription } from './useGetPrescription';
 import { useMe } from './useMe';
@@ -17,6 +18,7 @@ export {
   useCreatePatient,
   useCreatePrescription,
   useDebounce,
+  useEditProfile,
   useFindPrescriptions,
   useGetPrescription,
   useMe,

@@ -96,3 +96,11 @@ export interface TogglePrescriptionActivateProps {
   name: string;
   activate: boolean;
 }
+
+export interface ToggleEditMode {
+  toggleEditMode: () => void;
+}
+
+export interface FormForEditEmailFields {
+  email: string;
+}

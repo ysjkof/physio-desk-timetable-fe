@@ -232,3 +232,5 @@ export interface LocationState {
 export interface DashboardOutletContext {
   outletWidth: number;
 }
+
+export interface SettingOutletContext extends DashboardOutletContext {}
