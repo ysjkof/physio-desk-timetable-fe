@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { LATEST_STORAGE_VERSION } from '../constants/constants';
-import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
+import { FIND_MY_CLINICS_DOCUMENT } from '../graphql';
 import { ClinicsOfClient, TableDisplay, TableTime } from '../models';
 import localStorageUtils from '../utils/localStorage.utils';
 import {
@@ -10,13 +10,14 @@ import {
   tableDisplayVar,
   tableTimeVar,
 } from '../store';
+import { useMe } from '../hooks';
 import type { MyClinic, UserIdAndName } from '../types/common.types';
-import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
+import type { FindMyClinicsQuery } from '../types/generated.types';
 
 const Initialize = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(true);
 
-  const { data: meData } = useQuery<MeQuery>(ME_DOCUMENT);
+  const { data: meData } = useMe();
 
   const { data: findMyClinicsData } = useQuery<FindMyClinicsQuery>(
     FIND_MY_CLINICS_DOCUMENT,
