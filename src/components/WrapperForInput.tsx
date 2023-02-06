@@ -15,6 +15,8 @@ const InputWrapper = ({
   error,
   align = 'row',
 }: InputWrapperProps) => {
+  const top = align === 'col' ? '0px' : undefined;
+
   return (
     <label
       htmlFor={`form-of-reserve__input-${label}`}
@@ -35,7 +37,7 @@ const InputWrapper = ({
         {label}
       </span>
       <div className="relative w-full">{children}</div>
-      {error && <FormError error={error} />}
+      {error && <FormError error={error} top={top} />}
     </label>
   );
 };
