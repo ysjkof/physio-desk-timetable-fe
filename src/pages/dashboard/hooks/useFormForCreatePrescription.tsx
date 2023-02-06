@@ -68,7 +68,6 @@ export const useFormForCreatePrescription = () => {
     handleSubmit,
     register,
     atomPrescription,
-    nameError,
     error,
   };
 };
