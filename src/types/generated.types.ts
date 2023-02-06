@@ -210,8 +210,9 @@ export type EditPrescriptionOutput = {
 };
 
 export type EditProfileInput = {
+  currentPassword?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
+  newPassword?: InputMaybe<Scalars['String']>;
 };
 
 export type EditProfileOutput = {
