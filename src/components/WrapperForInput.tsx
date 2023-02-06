@@ -6,21 +6,27 @@ interface InputWrapperProps extends PropsWithChildren {
   label: string;
   required?: boolean;
   error?: string | false;
+  align?: 'row' | 'col';
 }
 const InputWrapper = ({
+  children,
   label,
   required = false,
-  children,
   error,
+  align = 'row',
 }: InputWrapperProps) => {
   return (
     <label
       htmlFor={`form-of-reserve__input-${label}`}
-      className="input-wrapper relative flex min-h-[2.7rem] w-full items-center justify-between text-base"
+      className={cls(
+        'input-wrapper relative flex min-h-[2.7rem] w-full justify-between text-base',
+        align === 'row' ? 'items-center' : 'flex-col gap-1'
+      )}
     >
       <span
         className={cls(
-          'ml-5 w-40 font-bold text-form-label',
+          'w-40 text-form-label',
+          align === 'row' ? 'ml-5' : '',
           required
             ? 'before:absolute before:-left-2 before:ml-4 before:text-red-700 before:content-["*"]'
             : ''
