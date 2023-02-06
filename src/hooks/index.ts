@@ -1,4 +1,5 @@
 import { useAutoComplete } from './useAutoComplete';
+import { useCreateClinic } from './useCreateClinic';
 import { useCreatePatient } from './useCreatePatient';
 import { useCreatePrescription } from './useCreatePrescription';
 import { useDebounce } from './useDebounce';
@@ -15,6 +16,7 @@ import { useWindowSize } from './useWindowSize';
 
 export {
   useAutoComplete,
+  useCreateClinic,
   useCreatePatient,
   useCreatePrescription,
   useDebounce,

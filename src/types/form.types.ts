@@ -44,3 +44,7 @@ export interface FormForEditMyProfileFields {
   newPassword1?: string;
   newPassword2?: string;
 }
+
+export interface FormForCreateClinicFields {
+  name: string;
+}

@@ -1,3 +1,4 @@
+import { CreateClinic } from './CreateClinic';
 import { MyProfile } from './MyProfile';
 
-export { MyProfile };
+export { CreateClinic, MyProfile };
