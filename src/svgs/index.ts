@@ -2,6 +2,9 @@ import BarBottomLeft from './BarBottomLeft';
 import BriefCase from './BriefCase';
 import BrokenLine from './BrokenLine';
 import Building from './Building';
+import BuildingLarge from './BuildingLarge';
+import BuildingLargeWithBan from './BuildingLargeWithBan';
+import BuildingLargeWithX from './BuildingLargeWithX';
 import BuildingPlus from './BuildingPlus';
 import Calendar from './Calendar';
 import Check from './Check';
@@ -32,6 +35,9 @@ export {
   BriefCase,
   BrokenLine,
   Building,
+  BuildingLarge,
+  BuildingLargeWithX,
+  BuildingLargeWithBan,
   BuildingPlus,
   Calendar,
   Check,
