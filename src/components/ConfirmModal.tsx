@@ -48,7 +48,7 @@ const Confirm = ({
   };
 
   const errorMessage =
-    errors.agree?.type === 'required' && '동의해야 비활성할 수 있습니다.';
+    errors.agree?.type === 'required' && '동의해야 수행할 수 있습니다.';
 
   return (
     <form
