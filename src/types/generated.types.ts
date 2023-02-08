@@ -14,18 +14,13 @@ export type Scalars = {
 };
 
 export type AcceptInvitationInput = {
-  clinicId: Scalars['Int'];
+  memberId: Scalars['Int'];
 };
 
 export type AcceptInvitationOutput = {
   __typename?: 'AcceptInvitationOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-};
-
-export type CancelInvitationInput = {
-  id: Scalars['Int'];
-  manager?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CheckAdminOutput = {
@@ -159,6 +154,16 @@ export type DailyReport = {
   noshow: Scalars['Int'];
   reservationCount: Scalars['Int'];
   users: Array<UserInDailyReport>;
+};
+
+export type DeactivateClinicInput = {
+  clinicId: Scalars['Int'];
+};
+
+export type DeactivateClinicOutput = {
+  __typename?: 'DeactivateClinicOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type DeletePatientInput = {
@@ -409,16 +414,6 @@ export type GetUserOutput = {
   user?: Maybe<User>;
 };
 
-export type InactivateClinicInput = {
-  clinicId: Scalars['Int'];
-};
-
-export type InactivateClinicOutput = {
-  __typename?: 'InactivateClinicOutput';
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-};
-
 export type InviteUserInput = {
   clinicId: Scalars['Int'];
   name: Scalars['String'];
@@ -431,7 +426,7 @@ export type InviteUserOutput = {
 };
 
 export type LeaveClinicInput = {
-  clinicId: Scalars['Int'];
+  memberId: Scalars['Int'];
 };
 
 export type LeaveClinicOutput = {
@@ -500,7 +495,6 @@ export type Member = {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptInvitation: AcceptInvitationOutput;
-  cancelInvitation: InviteUserOutput;
   createAccount: CreateAccountOutput;
   createAtomPrescription: CreateAtomPrescriptionOutput;
   createClinic: CreateClinicOutput;
@@ -508,16 +502,17 @@ export type Mutation = {
   createPatient: CreatePatientOutput;
   createPrescription: CreatePrescriptionOutput;
   createReservation: CreateReservationOutput;
+  deactivateClinic: DeactivateClinicOutput;
   deletePatient: DeletePatientOutput;
   deleteReservation: DeleteReservationOutput;
   editPatient: EditPatientOutput;
   editPrescription: EditPrescriptionOutput;
   editProfile: EditProfileOutput;
   editReservation: EditReservationOutput;
-  inactivateClinic: InactivateClinicOutput;
   inviteUser: InviteUserOutput;
   leaveClinic: LeaveClinicOutput;
   login: LoginOutput;
+  refuseInvitation: InviteUserOutput;
   sendChangeEmail: SendChangeEmailOutput;
   verifyChangeEmail: VerifyChangeEmailOutput;
   verifyEmail: VerifyEmailOutput;
@@ -526,11 +521,6 @@ export type Mutation = {
 
 export type MutationAcceptInvitationArgs = {
   input: AcceptInvitationInput;
-};
-
-
-export type MutationCancelInvitationArgs = {
-  input: CancelInvitationInput;
 };
 
 
@@ -569,6 +559,11 @@ export type MutationCreateReservationArgs = {
 };
 
 
+export type MutationDeactivateClinicArgs = {
+  input: DeactivateClinicInput;
+};
+
+
 export type MutationDeletePatientArgs = {
   input: DeletePatientInput;
 };
@@ -599,11 +594,6 @@ export type MutationEditReservationArgs = {
 };
 
 
-export type MutationInactivateClinicArgs = {
-  input: InactivateClinicInput;
-};
-
-
 export type MutationInviteUserArgs = {
   input: InviteUserInput;
 };
@@ -616,6 +606,11 @@ export type MutationLeaveClinicArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput;
+};
+
+
+export type MutationRefuseInvitationArgs = {
+  input: RefuseInvitationInput;
 };
 
 
@@ -685,6 +680,7 @@ export type Query = {
   findAllPatients: FindAllPatientsOutput;
   findAtomPrescriptions: FindAtomPrescriptionsOutput;
   findMyClinics: FindMyClinicsOutput;
+  findMyMembers: FindMyMembersOutput;
   findPrescriptions: FindPrescriptionsOutput;
   getClinic: GetClinicOutput;
   getMember: GetMemberOutput;
@@ -785,6 +781,10 @@ export type QuerySearchUsersArgs = {
 
 export type QueryUserProfileArgs = {
   id: Scalars['Float'];
+};
+
+export type RefuseInvitationInput = {
+  memberId: Scalars['Int'];
 };
 
 export type Reservation = {
@@ -933,6 +933,13 @@ export type VisitRate = {
   visited: Array<Scalars['Boolean']>;
 };
 
+export type FindMyMembersOutput = {
+  __typename?: 'findMyMembersOutput';
+  error?: Maybe<Scalars['String']>;
+  members: Array<Member>;
+  ok: Scalars['Boolean'];
+};
+
 export type GetStatisticsOutputPrescription = {
   __typename?: 'getStatisticsOutputPrescription';
   count: Scalars['Int'];
@@ -951,13 +958,6 @@ export type AcceptInvitationMutationVariables = Exact<{
 
 export type AcceptInvitationMutation = { __typename?: 'Mutation', acceptInvitation: { __typename?: 'AcceptInvitationOutput', ok: boolean, error?: string | null } };
 
-export type CancelInvitationMutationVariables = Exact<{
-  input: CancelInvitationInput;
-}>;
-
-
-export type CancelInvitationMutation = { __typename?: 'Mutation', cancelInvitation: { __typename?: 'InviteUserOutput', ok: boolean, error?: string | null } };
-
 export type CreateClinicMutationVariables = Exact<{
   input: CreateClinicInput;
 }>;
@@ -965,12 +965,24 @@ export type CreateClinicMutationVariables = Exact<{
 
 export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> } | null } };
 
+export type DeactivateClinicMutationVariables = Exact<{
+  input: DeactivateClinicInput;
+}>;
+
+
+export type DeactivateClinicMutation = { __typename?: 'Mutation', deactivateClinic: { __typename?: 'DeactivateClinicOutput', ok: boolean, error?: string | null } };
+
 export type FindMyClinicsQueryVariables = Exact<{
   input: FindMyClinicsInput;
 }>;
 
 
 export type FindMyClinicsQuery = { __typename?: 'Query', findMyClinics: { __typename?: 'FindMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> }> | null } };
+
+export type FindMyMembersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindMyMembersQuery = { __typename?: 'Query', findMyMembers: { __typename?: 'findMyMembersOutput', ok: boolean, error?: string | null, members: Array<{ __typename?: 'Member', id: number, manager: boolean, accepted: boolean, staying: boolean, createdAt?: any | null, clinic: { __typename?: 'Clinic', id: number, name: string, isActivated: boolean } }> } };
 
 export type GetClinicQueryVariables = Exact<{
   input: GetClinicInput;
@@ -986,13 +998,6 @@ export type GetMemberQueryVariables = Exact<{
 
 export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient: number, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
 
-export type InactivateClinicMutationVariables = Exact<{
-  input: InactivateClinicInput;
-}>;
-
-
-export type InactivateClinicMutation = { __typename?: 'Mutation', inactivateClinic: { __typename?: 'InactivateClinicOutput', ok: boolean, error?: string | null } };
-
 export type InviteUserMutationVariables = Exact<{
   input: InviteUserInput;
 }>;
@@ -1006,6 +1011,13 @@ export type LeaveClinicMutationVariables = Exact<{
 
 
 export type LeaveClinicMutation = { __typename?: 'Mutation', leaveClinic: { __typename?: 'LeaveClinicOutput', ok: boolean, error?: string | null } };
+
+export type RefuseInvitationMutationVariables = Exact<{
+  input: RefuseInvitationInput;
+}>;
+
+
+export type RefuseInvitationMutation = { __typename?: 'Mutation', refuseInvitation: { __typename?: 'InviteUserOutput', ok: boolean, error?: string | null } };
 
 export type AllPatientFieldsFragment = { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null };
 
