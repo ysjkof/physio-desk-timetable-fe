@@ -2,6 +2,7 @@ import { SVGProps } from 'react';
 import {
   Clinic,
   FindMyClinicsQuery,
+  FindMyMembersQuery,
   GetReservationsByPatientQuery,
   GetStatisticsQuery,
   ListReservationsQuery,
@@ -63,12 +64,22 @@ export interface ClinicOfClientState {
   isSelected: boolean;
   isManager: boolean;
   isStayed: boolean;
+  isAccepted: boolean;
   position: ClinicPosition;
 }
 export interface ClinicOfClient
   extends Omit<MyClinic, 'members'>,
     ClinicOfClientState {
   members: MemberOfClient[];
+}
+
+export type MyMembersType = FindMyMembersQuery['findMyMembers']['members'];
+export interface MyMembers {
+  관리자: MyMembersType;
+  직원: MyMembersType;
+  탈퇴: MyMembersType;
+  승인대기: MyMembersType;
+  폐쇄: MyMembersType;
 }
 
 export type ReservationInList = NonNullable<

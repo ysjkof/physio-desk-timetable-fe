@@ -7,7 +7,11 @@ import {
   PrescriptionManagement,
 } from '../pages/dashboard/components';
 import Setting from '../pages/setting/Setting';
-import { CreateClinic, MyProfile } from '../pages/setting/components';
+import {
+  CreateClinic,
+  MyClinics,
+  MyProfile,
+} from '../pages/setting/components';
 
 const ProtectRoute = lazy(() => import('./ProtectRoute'));
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
@@ -66,7 +70,7 @@ const loginRoute = [
       },
       {
         path: 'my-clinics',
-        element: <div>clinic</div>,
+        element: <MyClinics />,
       },
       {
         path: 'clinic/create',

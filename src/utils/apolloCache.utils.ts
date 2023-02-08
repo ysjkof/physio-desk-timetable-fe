@@ -32,6 +32,19 @@ export const cacheUpdatePersonalClinicName = (name: string) => {
   });
 };
 
+export const cacheUpdateMemberAccepted = (id: number) => {
+  client.writeFragment({
+    id: `Member:${id}`,
+    fragment: gql`
+      fragment AcceptedFields on Member {
+        staying
+        accepted
+      }
+    `,
+    data: { staying: true, accepted: true },
+  });
+};
+
 export const cacheAddClinicToMyClinics = (clinic: MyClinic) => {
   const variables = { input: { includeInactivate: true } };
   client.cache.updateQuery<FindMyClinicsQuery>(
