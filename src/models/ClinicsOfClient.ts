@@ -63,6 +63,7 @@ export class ClinicsOfClient {
       isSelected: true,
       isManager: true,
       isStayed: true,
+      isAccepted: true,
       position: '관리자',
     };
   }
@@ -81,6 +82,7 @@ export class ClinicsOfClient {
       isSelected: false,
       isManager: userInClinic.manager,
       isStayed: userInClinic.staying,
+      isAccepted: userInClinic.accepted,
       position: userInClinic.manager ? '관리자' : '직원',
     };
   }
@@ -135,6 +137,7 @@ export class ClinicsOfClient {
       isSelected: clinicFromClient.isSelected,
       isManager: clinicFromClient.isManager,
       isStayed: clinicFromClient.isStayed,
+      isAccepted: clinicFromClient.isAccepted,
       position: clinicFromClient.position,
     };
   }
@@ -159,6 +162,12 @@ export class ClinicsOfClient {
     if (!selectedClinic)
       throw new Error('selectedClinic이 없습니다.', { cause: '없어!!' });
     return selectedClinic;
+  }
+
+  static getWaitingClinic() {
+    return this.#clinics.filter(
+      (clinic) => !clinic.isAccepted && !clinic.isStayed
+    );
   }
 
   static getById(id: number) {
