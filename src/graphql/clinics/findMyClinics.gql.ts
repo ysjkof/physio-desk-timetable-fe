@@ -20,10 +20,6 @@ export const FIND_MY_CLINICS_DOCUMENT = gql`
             id
             name
           }
-          clinic {
-            id
-            name
-          }
         }
       }
     }

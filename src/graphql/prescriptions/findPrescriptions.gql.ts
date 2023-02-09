@@ -14,6 +14,8 @@ export const FIND_PRESCRIPTIONS_DOCUMENT = gql`
           name
         }
       }
+      count
+      maximumCount
     }
   }
 `;

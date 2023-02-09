@@ -9,21 +9,20 @@ import {
 } from '../../utils/common.utils';
 import { useWindowSize } from '../../hooks';
 import { getYMD } from '../../utils/date.utils';
-import { ButtonOfPages } from '../../components';
+import { ButtonOfPages, Warning } from '../../components';
 import {
   SearchCheckList,
   SearchList,
   SearchNavigation,
   SearchTitle,
 } from './components';
-import Warning from '../../_legacy_components/atoms/Warning';
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
 import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
 import { ClinicsOfClient } from '../../models';
 import type { SearchPatientQuery } from '../../types/generated.types';
 
 export default function Search() {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
   const location = useLocation();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);

@@ -2,12 +2,13 @@ import { createContext } from 'react';
 import type { CalendarDate } from '../../models/CalendarDate';
 import type { CloseAction } from '../../types/props.types';
 
-interface DatepickerContextProps extends CloseAction {
+interface DatepickerContextProps extends Partial<CloseAction> {
   month: CalendarDate[];
   getYearMonth: () => string;
   setPreviousMonth: () => void;
   setNextMonth: () => void;
-  setDate: (date: Date) => void;
+  selectedDate: Date;
+  selectDate: (date: Date) => void;
 }
 
 export const DatepickerContext = createContext<DatepickerContextProps>({
@@ -17,6 +18,7 @@ export const DatepickerContext = createContext<DatepickerContextProps>({
   },
   setNextMonth() {},
   setPreviousMonth() {},
-  closeAction() {},
-  setDate() {},
+  closeAction: () => {},
+  selectedDate: new Date(),
+  selectDate() {},
 });

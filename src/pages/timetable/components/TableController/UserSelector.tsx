@@ -21,7 +21,7 @@ const UserSelector = () => {
       />
       {isSpreading && (
         <div className="flex flex-wrap items-center gap-2">
-          {ClinicsOfClient.selectedClinic?.members.map((member, i) => (
+          {ClinicsOfClient.getSelectedClinic().members.map((member, i) => (
             <CheckableButton
               key={i}
               personalColor={USER_COLORS[i].deep}

@@ -6,7 +6,7 @@ import { selectedPatientVar, toastVar } from '../store';
 import { FormForCreatePatientFields } from '../types/form.types';
 
 export const useCreatePatient = () => {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
 
   const [createMutation, { loading }] = useMutation<CreatePatientMutation>(
     CREATE_PATIENT_DOCUMENT

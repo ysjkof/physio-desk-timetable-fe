@@ -8,7 +8,6 @@ import {
   CreatePatient,
   ReserveOrDayoff,
   Schedules,
-  TableAside,
   TableController,
   TimeLabels,
   TimetableTemplate,
@@ -41,7 +40,6 @@ const TimeTable = () => {
         <title>시간표 | {MUOOL}</title>
       </Helmet>
       <TimetableTemplate
-        aside={<TableAside />}
         nav={<TableController />}
         labels={<TimeLabels labels={labels} />}
         columns={

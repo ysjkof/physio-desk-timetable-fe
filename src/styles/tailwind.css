@@ -18,6 +18,14 @@
 }
 
 @layer components {
+  .css_default-button {
+    @apply flex h-8 select-none items-center justify-center gap-2 whitespace-nowrap rounded-sm px-2;
+  }
+
+  .css_default-input {
+    @apply w-full rounded-md border py-2 px-3 placeholder:text-sm;
+  }
+
   .sunday {
     @apply text-red-400;
   }
@@ -55,9 +63,6 @@
     @apply relative mx-auto space-y-4 rounded-md bg-white px-14;
   }
 
-  .input {
-    @apply w-full appearance-none rounded-md border py-2 px-5 shadow-sm transition-colors focus:border-green-500 focus:outline-none focus:ring-green-500;
-  }
   .input-datepicker {
     @apply w-full rounded-md border py-1 pr-5 text-right shadow-sm transition-colors focus:border-green-500 focus:outline-none focus:ring-green-500;
   }
@@ -99,8 +104,51 @@
     @apply rounded-md bg-gray-100 px-1.5 py-0.5 text-gray-700;
   }
 
+  .badge-blue {
+    @apply rounded-full bg-[#E5F6FE] px-3 py-0.5 text-[#2385B4];
+  }
+
   .modal-header {
-    @apply h-14 w-full text-xl font-medium text-cst-blue;
+    @apply mt-8 w-full pl-8 text-3xl font-bold text-cst-blue;
+  }
+
+  /* 재사용하지 않는 컴포넌트 */
+  .css_dashboard__column-container {
+    @apply flex h-full w-[200px] flex-col gap-y-10 border-r border-r-table-line px-4 pt-8;
+  }
+  .css_dashboard__member-management-column__1st {
+    @apply flex h-full w-[360px] flex-col overflow-y-scroll border-r border-r-table-line pt-16;
+  }
+  .css_dashboard__member-management-column__2nd {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .prescription-management-item-container {
+    @apply flex flex-col gap-2 overflow-y-scroll pb-6;
+  }
+  .prescription-management-item {
+    @apply flex w-full items-center justify-between gap-x-6 whitespace-nowrap rounded-md px-6;
+  }
+  .prescription-management-item__col1 {
+    @apply w-full max-w-[160px];
+  }
+  .prescription-management-item__col2 {
+    @apply w-full max-w-[110px];
+  }
+  .prescription-management-item__col3 {
+    @apply w-full max-w-[140px];
+  }
+  .prescription-management-item__col4 {
+    @apply w-full max-w-[120px];
+  }
+  .prescription-management-item__col5 {
+    @apply w-full;
+  }
+  .prescription-management-item__col6 {
+    @apply w-full max-w-[90px];
+  }
+  .prescription-management-item__col7 {
+    @apply w-full max-w-[70px];
   }
 }
 
@@ -123,6 +171,14 @@
   }
   .no-reserved {
     @apply border-gray-300 bg-gray-100;
+  }
+
+  .hidden-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .hidden-scrollbar::-webkit-scrollbar {
+    width: 0px;
   }
 }
 

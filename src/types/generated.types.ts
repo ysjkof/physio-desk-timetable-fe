@@ -14,18 +14,13 @@ export type Scalars = {
 };
 
 export type AcceptInvitationInput = {
-  clinicId: Scalars['Int'];
+  memberId: Scalars['Int'];
 };
 
 export type AcceptInvitationOutput = {
   __typename?: 'AcceptInvitationOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-};
-
-export type CancelInvitationInput = {
-  id: Scalars['Int'];
-  manager?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CheckAdminOutput = {
@@ -161,6 +156,16 @@ export type DailyReport = {
   users: Array<UserInDailyReport>;
 };
 
+export type DeactivateClinicInput = {
+  clinicId: Scalars['Int'];
+};
+
+export type DeactivateClinicOutput = {
+  __typename?: 'DeactivateClinicOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type DeletePatientInput = {
   patientId: Scalars['Float'];
 };
@@ -210,8 +215,9 @@ export type EditPrescriptionOutput = {
 };
 
 export type EditProfileInput = {
+  currentPassword?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
+  newPassword?: InputMaybe<Scalars['String']>;
 };
 
 export type EditProfileOutput = {
@@ -275,7 +281,9 @@ export type FindPrescriptionsInput = {
 
 export type FindPrescriptionsOutput = {
   __typename?: 'FindPrescriptionsOutput';
+  count: Scalars['Int'];
   error?: Maybe<Scalars['String']>;
+  maximumCount: Scalars['Int'];
   ok: Scalars['Boolean'];
   prescriptions?: Maybe<Array<Prescription>>;
 };
@@ -288,6 +296,19 @@ export type GetClinicOutput = {
   __typename?: 'GetClinicOutput';
   clinic?: Maybe<Clinic>;
   error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
+export type GetMemberInput = {
+  clinicId: Scalars['Int'];
+  id: Scalars['Int'];
+};
+
+export type GetMemberOutput = {
+  __typename?: 'GetMemberOutput';
+  countOfPatient?: Maybe<Scalars['Int']>;
+  error?: Maybe<Scalars['String']>;
+  member?: Maybe<Member>;
   ok: Scalars['Boolean'];
 };
 
@@ -352,6 +373,23 @@ export type GetReservationsByPatientOutput = {
   totalPages?: Maybe<Scalars['Int']>;
 };
 
+export type GetReservationsOfMemberInput = {
+  clinicId: Scalars['Int'];
+  endDate: Scalars['DateTime'];
+  memberId: Scalars['Int'];
+  page?: InputMaybe<Scalars['Int']>;
+  startDate: Scalars['DateTime'];
+};
+
+export type GetReservationsOfMemberOutput = {
+  __typename?: 'GetReservationsOfMemberOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  results?: Maybe<Array<Reservation>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  totalPages?: Maybe<Scalars['Int']>;
+};
+
 export type GetStatisticsInput = {
   clinicId?: InputMaybe<Scalars['Int']>;
   endDate: Scalars['DateTime'];
@@ -376,16 +414,6 @@ export type GetUserOutput = {
   user?: Maybe<User>;
 };
 
-export type InactivateClinicInput = {
-  clinicId: Scalars['Int'];
-};
-
-export type InactivateClinicOutput = {
-  __typename?: 'InactivateClinicOutput';
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-};
-
 export type InviteUserInput = {
   clinicId: Scalars['Int'];
   name: Scalars['String'];
@@ -398,7 +426,7 @@ export type InviteUserOutput = {
 };
 
 export type LeaveClinicInput = {
-  clinicId: Scalars['Int'];
+  memberId: Scalars['Int'];
 };
 
 export type LeaveClinicOutput = {
@@ -467,7 +495,6 @@ export type Member = {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptInvitation: AcceptInvitationOutput;
-  cancelInvitation: InviteUserOutput;
   createAccount: CreateAccountOutput;
   createAtomPrescription: CreateAtomPrescriptionOutput;
   createClinic: CreateClinicOutput;
@@ -475,16 +502,17 @@ export type Mutation = {
   createPatient: CreatePatientOutput;
   createPrescription: CreatePrescriptionOutput;
   createReservation: CreateReservationOutput;
+  deactivateClinic: DeactivateClinicOutput;
   deletePatient: DeletePatientOutput;
   deleteReservation: DeleteReservationOutput;
   editPatient: EditPatientOutput;
   editPrescription: EditPrescriptionOutput;
   editProfile: EditProfileOutput;
   editReservation: EditReservationOutput;
-  inactivateClinic: InactivateClinicOutput;
   inviteUser: InviteUserOutput;
   leaveClinic: LeaveClinicOutput;
   login: LoginOutput;
+  refuseInvitation: InviteUserOutput;
   sendChangeEmail: SendChangeEmailOutput;
   verifyChangeEmail: VerifyChangeEmailOutput;
   verifyEmail: VerifyEmailOutput;
@@ -493,11 +521,6 @@ export type Mutation = {
 
 export type MutationAcceptInvitationArgs = {
   input: AcceptInvitationInput;
-};
-
-
-export type MutationCancelInvitationArgs = {
-  input: CancelInvitationInput;
 };
 
 
@@ -536,6 +559,11 @@ export type MutationCreateReservationArgs = {
 };
 
 
+export type MutationDeactivateClinicArgs = {
+  input: DeactivateClinicInput;
+};
+
+
 export type MutationDeletePatientArgs = {
   input: DeletePatientInput;
 };
@@ -566,11 +594,6 @@ export type MutationEditReservationArgs = {
 };
 
 
-export type MutationInactivateClinicArgs = {
-  input: InactivateClinicInput;
-};
-
-
 export type MutationInviteUserArgs = {
   input: InviteUserInput;
 };
@@ -583,6 +606,11 @@ export type MutationLeaveClinicArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput;
+};
+
+
+export type MutationRefuseInvitationArgs = {
+  input: RefuseInvitationInput;
 };
 
 
@@ -652,13 +680,16 @@ export type Query = {
   findAllPatients: FindAllPatientsOutput;
   findAtomPrescriptions: FindAtomPrescriptionsOutput;
   findMyClinics: FindMyClinicsOutput;
+  findMyMembers: FindMyMembersOutput;
   findPrescriptions: FindPrescriptionsOutput;
   getClinic: GetClinicOutput;
+  getMember: GetMemberOutput;
   getPatient: GetPatientOutput;
   getPatients: GetPatientsOutput;
   getPrescriptions: GetPrescriptionsOutput;
   getReservation: GetReservationOutput;
   getReservationsByPatient: GetReservationsByPatientOutput;
+  getReservationsOfMember: GetReservationsOfMemberOutput;
   getStatistics: GetStatisticsOutput;
   listReservations: ListReservationsOutput;
   me: User;
@@ -693,6 +724,11 @@ export type QueryGetClinicArgs = {
 };
 
 
+export type QueryGetMemberArgs = {
+  input: GetMemberInput;
+};
+
+
 export type QueryGetPatientArgs = {
   input: GetPatientInput;
 };
@@ -718,6 +754,11 @@ export type QueryGetReservationsByPatientArgs = {
 };
 
 
+export type QueryGetReservationsOfMemberArgs = {
+  input: GetReservationsOfMemberInput;
+};
+
+
 export type QueryGetStatisticsArgs = {
   input: GetStatisticsInput;
 };
@@ -740,6 +781,10 @@ export type QuerySearchUsersArgs = {
 
 export type QueryUserProfileArgs = {
   id: Scalars['Float'];
+};
+
+export type RefuseInvitationInput = {
+  memberId: Scalars['Int'];
 };
 
 export type Reservation = {
@@ -888,6 +933,13 @@ export type VisitRate = {
   visited: Array<Scalars['Boolean']>;
 };
 
+export type FindMyMembersOutput = {
+  __typename?: 'findMyMembersOutput';
+  error?: Maybe<Scalars['String']>;
+  members: Array<Member>;
+  ok: Scalars['Boolean'];
+};
+
 export type GetStatisticsOutputPrescription = {
   __typename?: 'getStatisticsOutputPrescription';
   count: Scalars['Int'];
@@ -906,13 +958,6 @@ export type AcceptInvitationMutationVariables = Exact<{
 
 export type AcceptInvitationMutation = { __typename?: 'Mutation', acceptInvitation: { __typename?: 'AcceptInvitationOutput', ok: boolean, error?: string | null } };
 
-export type CancelInvitationMutationVariables = Exact<{
-  input: CancelInvitationInput;
-}>;
-
-
-export type CancelInvitationMutation = { __typename?: 'Mutation', cancelInvitation: { __typename?: 'InviteUserOutput', ok: boolean, error?: string | null } };
-
 export type CreateClinicMutationVariables = Exact<{
   input: CreateClinicInput;
 }>;
@@ -920,12 +965,24 @@ export type CreateClinicMutationVariables = Exact<{
 
 export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> } | null } };
 
+export type DeactivateClinicMutationVariables = Exact<{
+  input: DeactivateClinicInput;
+}>;
+
+
+export type DeactivateClinicMutation = { __typename?: 'Mutation', deactivateClinic: { __typename?: 'DeactivateClinicOutput', ok: boolean, error?: string | null } };
+
 export type FindMyClinicsQueryVariables = Exact<{
   input: FindMyClinicsInput;
 }>;
 
 
-export type FindMyClinicsQuery = { __typename?: 'Query', findMyClinics: { __typename?: 'FindMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string }, clinic: { __typename?: 'Clinic', id: number, name: string } }> }> | null } };
+export type FindMyClinicsQuery = { __typename?: 'Query', findMyClinics: { __typename?: 'FindMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> }> | null } };
+
+export type FindMyMembersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindMyMembersQuery = { __typename?: 'Query', findMyMembers: { __typename?: 'findMyMembersOutput', ok: boolean, error?: string | null, members: Array<{ __typename?: 'Member', id: number, manager: boolean, accepted: boolean, staying: boolean, createdAt?: any | null, clinic: { __typename?: 'Clinic', id: number, name: string, isActivated: boolean } }> } };
 
 export type GetClinicQueryVariables = Exact<{
   input: GetClinicInput;
@@ -934,12 +991,12 @@ export type GetClinicQueryVariables = Exact<{
 
 export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
 
-export type InactivateClinicMutationVariables = Exact<{
-  input: InactivateClinicInput;
+export type GetMemberQueryVariables = Exact<{
+  input: GetMemberInput;
 }>;
 
 
-export type InactivateClinicMutation = { __typename?: 'Mutation', inactivateClinic: { __typename?: 'InactivateClinicOutput', ok: boolean, error?: string | null } };
+export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient?: number | null, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
 
 export type InviteUserMutationVariables = Exact<{
   input: InviteUserInput;
@@ -954,6 +1011,13 @@ export type LeaveClinicMutationVariables = Exact<{
 
 
 export type LeaveClinicMutation = { __typename?: 'Mutation', leaveClinic: { __typename?: 'LeaveClinicOutput', ok: boolean, error?: string | null } };
+
+export type RefuseInvitationMutationVariables = Exact<{
+  input: RefuseInvitationInput;
+}>;
+
+
+export type RefuseInvitationMutation = { __typename?: 'Mutation', refuseInvitation: { __typename?: 'InviteUserOutput', ok: boolean, error?: string | null } };
 
 export type AllPatientFieldsFragment = { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null };
 
@@ -1022,7 +1086,14 @@ export type FindPrescriptionsQueryVariables = Exact<{
 }>;
 
 
-export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
+export type FindPrescriptionsQuery = { __typename?: 'Query', findPrescriptions: { __typename?: 'FindPrescriptionsOutput', ok: boolean, error?: string | null, count: number, maximumCount: number, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
+
+export type GetPrescriptionsQueryVariables = Exact<{
+  input: GetPrescriptionsInput;
+}>;
+
+
+export type GetPrescriptionsQuery = { __typename?: 'Query', getPrescriptions: { __typename?: 'GetPrescriptionsOutput', ok: boolean, error?: string | null, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, description?: string | null }> | null } };
 
 export type CommonReservationFieldsFragment = { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean };
 
@@ -1060,6 +1131,13 @@ export type GetReservationsByPatientQueryVariables = Exact<{
 
 
 export type GetReservationsByPatientQuery = { __typename?: 'Query', getReservationsByPatient: { __typename?: 'GetReservationsByPatientOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, prescriptions?: Array<{ __typename?: 'Prescription', name: string, requiredTime: number }> | null, user: { __typename?: 'User', id: number, name: string }, lastModifier: { __typename?: 'User', id: number, name: string } }> | null } };
+
+export type GetReservationsOfMemberQueryVariables = Exact<{
+  input: GetReservationsOfMemberInput;
+}>;
+
+
+export type GetReservationsOfMemberQuery = { __typename?: 'Query', getReservationsOfMember: { __typename?: 'GetReservationsOfMemberOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, prescriptions?: Array<{ __typename?: 'Prescription', name: string, requiredTime: number }> | null, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null } | null, lastModifier: { __typename?: 'User', id: number, name: string } }> | null } };
 
 export type GetStatisticsQueryVariables = Exact<{
   input: GetStatisticsInput;

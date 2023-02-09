@@ -12,21 +12,21 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import localStorageUtils from './utils/localStorage.utils';
-import { printNetworkError } from './utils/error.utils';
+import { printGraphQLErrors, printNetworkError } from './utils/error.utils';
 
 const token = localStorageUtils.get<string>({ key: 'token' });
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar<string | null>(token);
 
-const isProduction = import.meta.env.PROD;
+const isDevelopment = import.meta.env.MODE === 'development';
 
-const BACKEND_URL = isProduction
-  ? import.meta.env.VITE_BACKEND_URL
-  : '://localhost:3002/graphql';
+const BACKEND_URL = isDevelopment
+  ? '://localhost:3002/graphql'
+  : import.meta.env.VITE_BACKEND_URL;
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: isProduction ? `wss${BACKEND_URL}` : `ws${BACKEND_URL}`,
+    url: isDevelopment ? `ws${BACKEND_URL}` : `wss${BACKEND_URL}`,
     connectionParams: () => {
       return { 'x-jwt': authTokenVar() };
     },
@@ -34,7 +34,7 @@ const wsLink = new GraphQLWsLink(
 );
 
 const httpLink = createHttpLink({
-  uri: isProduction ? `https${BACKEND_URL}` : `http${BACKEND_URL}`,
+  uri: isDevelopment ? `http${BACKEND_URL}` : `https${BACKEND_URL}`,
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -61,15 +61,31 @@ const splitLink = split(
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.warn(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    );
+    return graphQLErrors.forEach((errors) => {
+      const { locations, message, path, extensions } = errors;
+
+      if (message.includes('"$input" got invalid value'))
+        printGraphQLErrors('gotInvalidValue');
+
+      console.error(
+        `[GraphQL error]:
+        Message: ${message};
+        Location: ${JSON.stringify(locations)};
+        Path: ${JSON.stringify(path)};
+        Extensions :${JSON.stringify(extensions)};`
+      );
+    });
 
   if (networkError) {
-    printNetworkError(networkError.message);
-    console.warn(`[Network error]: ${networkError}`);
+    printNetworkError();
+    // const { message, name, cause, stack } = networkError;
+    // console.error(
+    //   `[Network error]:
+    //   Message: ${message};
+    //   Name: ${name};
+    //   Cause: ${cause};
+    //   Stack: ${stack};`
+    // );
   }
 });
 

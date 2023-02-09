@@ -75,12 +75,7 @@ const router = createBrowserRouter([
           },
           {
             path: basicReserve,
-            element: (
-              <BasicReserve
-                createPatientUrl={ROUTES.createPatient}
-                createPrescriptionUrl={ROUTES.prescription}
-              />
-            ),
+            element: <BasicReserve />,
           },
           /** */
           {
@@ -109,12 +104,12 @@ const router = createBrowserRouter([
       {
         path: 'test',
         element:
-          process.env.NODE_ENV === 'production' ? (
+          import.meta.env.MODE === 'development' ? (
+            <TestPage />
+          ) : (
             <CheckAdmin>
               <TestPage />
             </CheckAdmin>
-          ) : (
-            <TestPage />
           ),
       },
     ],

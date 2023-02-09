@@ -24,7 +24,7 @@ const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
       memo,
       userId,
       isDayoff: true,
-      clinicId: ClinicsOfClient.selectedClinic.id,
+      clinicId: ClinicsOfClient.getSelectedClinic().id,
     };
     createReservation(formData);
   };

@@ -2,6 +2,7 @@ import { SVGProps } from 'react';
 import {
   Clinic,
   FindMyClinicsQuery,
+  FindMyMembersQuery,
   GetReservationsByPatientQuery,
   GetStatisticsQuery,
   ListReservationsQuery,
@@ -57,11 +58,28 @@ export interface MemberOfClient extends IMember {
   canSee?: boolean;
 }
 
-export interface ClinicOfClient extends Omit<MyClinic, 'members'> {
-  members: MemberOfClient[];
+type ClinicPosition = '관리자' | '직원';
+
+export interface ClinicOfClientState {
   isSelected: boolean;
   isManager: boolean;
   isStayed: boolean;
+  isAccepted: boolean;
+  position: ClinicPosition;
+}
+export interface ClinicOfClient
+  extends Omit<MyClinic, 'members'>,
+    ClinicOfClientState {
+  members: MemberOfClient[];
+}
+
+export type MyMembersType = FindMyMembersQuery['findMyMembers']['members'];
+export interface MyMembers {
+  관리자: MyMembersType;
+  직원: MyMembersType;
+  탈퇴: MyMembersType;
+  승인대기: MyMembersType;
+  폐쇄: MyMembersType;
 }
 
 export type ReservationInList = NonNullable<
@@ -92,9 +110,11 @@ export type PatientInSearch = NonNullable<
 >[0];
 
 // me
-
+export interface MemberStatus
+  extends Pick<Member, 'staying' | 'manager' | 'accepted'> {}
 interface ModifiedClinicMemberWithClinic
-  extends Pick<Member, 'id' | 'staying' | 'manager' | 'accepted'> {
+  extends Pick<Member, 'id'>,
+    MemberStatus {
   clinic: Pick<Clinic, 'id' | 'name' | 'isActivated'>;
 }
 type ModifiedNotice = Pick<Notice, 'message' | 'read'>;
@@ -219,3 +239,9 @@ export interface LocationState {
   isDayoff?: boolean;
   createPatient?: boolean;
 }
+
+export interface DashboardOutletContext {
+  outletWidth: number;
+}
+
+export interface SettingOutletContext extends DashboardOutletContext {}

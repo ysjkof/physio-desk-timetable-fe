@@ -72,8 +72,8 @@ const Tab = ({ isActive, children, ...args }: TapProps) => {
   return (
     <button
       className={cls(
-        'modal-header',
-        isActive ? '' : 'bg-table-bg text-font-gray'
+        'modal-header m-0 h-16 p-0 text-2xl font-semibold',
+        isActive ? '' : 'bg-table-bg text-[#74758E]'
       )}
       type="button"
       {...args}

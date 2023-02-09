@@ -2,16 +2,16 @@ import { SVG } from '../types/common.types';
 import { cls } from '../utils/common.utils';
 
 /**
- * heroicicons.com
- * building-office-2 > Outline
+ * by JH
  */
 const Building = ({ iconSize = 'MD', ...args }: SVG) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="15"
+      viewBox="0 0 17 15"
       fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
+      xmlns="http://www.w3.org/2000/svg"
       stroke="currentColor"
       {...args}
       className={cls(
@@ -22,9 +22,82 @@ const Building = ({ iconSize = 'MD', ...args }: SVG) => {
       )}
     >
       <path
+        d="M1 13.1875L16 13.5"
+        stroke="white"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"
+      />
+      <path
+        d="M1 13.1875L16 13.5"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M2 12.5V2.5C2 1.94771 2.44772 1.5 3 1.5H8C8.55228 1.5 9 1.94772 9 2.5V12.5"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M2 12.5V2.5C2 1.94771 2.44772 1.5 3 1.5H8C8.55228 1.5 9 1.94772 9 2.5V12.5"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10 7.5H12.13C13.1628 7.5 14 8.33723 14 9.37V12.5"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10 7.5H12.13C13.1628 7.5 14 8.33723 14 9.37V12.5"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 4.5H6"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 4.5H6"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 7.5H6"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 7.5H6"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.55225 10.4165L5.55225 12.4165"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.55225 10.4165L5.55225 12.4165"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

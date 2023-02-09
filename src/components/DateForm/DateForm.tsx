@@ -134,7 +134,8 @@ export const DateForm = ({
         <div className="absolute left-0 top-8 z-10 bg-white">
           <Datepicker
             closeAction={closeDatepicker}
-            setDate={setDate}
+            selectedDate={date || new Date()}
+            selectDate={setDate}
             disablePreviousDay={disablePreviousDay}
           />
         </div>

@@ -6,6 +6,7 @@ import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from './getReservationsByPatient
 import { GET_STATISTICS_DOCUMENT } from './getStastics.gql';
 import { LIST_RESERVATIONS_DOCUMENT } from './listReservations.gql';
 import { COMMON_RESERVATION_FIELDS } from './_reservationsFragments.gql';
+import { GET_RESERVATIONS_OF_MEMBER_DOCUMENT } from './getReservationsOfMember.gql';
 
 export {
   CREATE_DAY_OFF_DOCUMENT,
@@ -16,4 +17,5 @@ export {
   GET_STATISTICS_DOCUMENT,
   LIST_RESERVATIONS_DOCUMENT,
   COMMON_RESERVATION_FIELDS,
+  GET_RESERVATIONS_OF_MEMBER_DOCUMENT,
 };

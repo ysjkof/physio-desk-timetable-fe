@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 
-/** 반환하는 height = View Port Height - Global Navigation Bar Height */
+/**
+ * 반환하는 height = View Port Height - Global Navigation Bar Height
+ * 반환하는 width = View Port Width - Global Aside Width
+ */
 export const useWindowSize = (hasEventListener?: boolean) => {
   const [height, setHeight] = useState(window.innerHeight);
   const [width, setWidth] = useState(window.innerWidth);
@@ -11,7 +14,8 @@ export const useWindowSize = (hasEventListener?: boolean) => {
     setMinusToHeight(number);
   };
 
-  const changeWidth = (number: number) => {
+  const changeWidth = (number?: number) => {
+    if (!number) return getWidth();
     setMinusToWidth(number);
   };
 
@@ -21,14 +25,15 @@ export const useWindowSize = (hasEventListener?: boolean) => {
   };
 
   const getHeight = () => {
-    // GNB = Global Navigation Bar
     const GNBHeight =
       document.getElementById('global-header')?.clientHeight || 0;
     setHeight(window.innerHeight - GNBHeight - minusToHeight);
   };
 
   const getWidth = () => {
-    setWidth(window.innerWidth - minusToWidth);
+    const globalAsideWidth =
+      document.getElementById('global-aside')?.clientWidth || 0;
+    setWidth(window.innerWidth - globalAsideWidth - minusToWidth);
   };
 
   const delayedGetHeight = () => setTimeout(getHeightAndWidth, 0);

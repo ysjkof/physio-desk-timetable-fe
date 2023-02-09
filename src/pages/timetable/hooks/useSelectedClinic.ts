@@ -3,7 +3,7 @@ import { clinicListsVar } from '../../../store';
 
 export const useSelectedClinic = () => {
   const selectClinic = (id: number) => {
-    if (ClinicsOfClient.selectedClinic?.id === id) return;
+    if (ClinicsOfClient.getSelectedClinic().id === id) return;
 
     const clinic = ClinicsOfClient.getById(id);
 

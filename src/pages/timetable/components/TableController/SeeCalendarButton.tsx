@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useReactiveVar } from '@apollo/client';
 import { Calendar } from '../../../../svgs';
 import { Datepicker, MenuButton, Modal } from '../../../../components';
 import { useTableDisplay } from '../../hooks';
@@ -14,6 +15,7 @@ const SeeCalendarButton = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { top } = getPositionRef(buttonRef);
 
+  const selectedDate = useReactiveVar(selectedDateVar);
   const setDate = (date: Date) => {
     selectedDateVar(date);
   };
@@ -31,7 +33,11 @@ const SeeCalendarButton = () => {
       </MenuButton>
       {tableDisplay.seeCalendar && (
         <Modal top={top} right={10} closeAction={toggleCalender}>
-          <Datepicker closeAction={toggleCalender} setDate={setDate} />
+          <Datepicker
+            selectedDate={selectedDate}
+            selectDate={setDate}
+            closeAction={toggleCalender}
+          />
         </Modal>
       )}
     </>

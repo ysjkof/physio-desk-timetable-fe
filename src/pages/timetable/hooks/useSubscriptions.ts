@@ -23,7 +23,7 @@ interface UseSubscriptionsProps {
 }
 
 export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
-  const clinicId = ClinicsOfClient.selectedClinic.id;
+  const clinicId = ClinicsOfClient.getSelectedClinic().id;
 
   const { loading: loadingOfDelete, data: deleteResult } =
     useSubscription<ListenDeleteReservationSubscription>(

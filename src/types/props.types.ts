@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { PrescriptionListProps } from '../pages/dashboard/components/organisms/PrescriptionPage';
 import type { ISchedules, UserWithEvent } from './common.types';
 import { FindPrescriptionsQuery } from './generated.types';
+import { FormForEditPrescriptionFields } from './form.types';
 
 // TimeTable
 export interface IUserLength {
@@ -17,7 +17,6 @@ interface IDate {
 }
 
 export interface TimetableTemplateProps {
-  aside: ReactNode;
   nav: ReactNode;
   labels: ReactNode;
   columns: ReactNode;
@@ -43,10 +42,14 @@ export interface ScheduleBoxProps extends MemberNameProps, ILabels, IDate {
 
 // Dashboard
 
-export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
-  prescription: NonNullable<
-    FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
-  >;
+export type PrescriptionForFind = NonNullable<
+  FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
+>;
+
+export interface CardProps {
+  clinicId: number;
+  prescription: PrescriptionForFind;
+  showInactivate: boolean;
 }
 
 // Common
@@ -63,8 +66,9 @@ export interface UseAutoCompleteProps<T> {
   initialValue?: T | null;
 }
 
-export interface DatepickerProps extends CloseAction {
-  setDate: (date: Date) => void;
+export interface DatepickerProps extends Partial<CloseAction> {
+  selectedDate: Date;
+  selectDate: (date: Date) => void;
   disablePreviousDay?: boolean;
 }
 
@@ -74,3 +78,29 @@ export interface FormForReservationProps extends CloseAction {
 }
 
 export interface FormForDayoffProps extends FormForReservationProps {}
+
+export interface UseFormForEditPrescriptionProps {
+  defaultValues: FormForEditPrescriptionFields | undefined;
+}
+
+export interface ConfirmProps extends CloseAction {
+  messages: string[];
+  targetName: string;
+  buttonText: string;
+  confirmAction: () => void;
+  icon?: ReactNode;
+}
+
+export interface TogglePrescriptionActivateProps {
+  id: number;
+  name: string;
+  activate: boolean;
+}
+
+export interface ToggleEditMode {
+  toggleEditMode: () => void;
+}
+
+export interface FormForEditEmailFields {
+  email: string;
+}

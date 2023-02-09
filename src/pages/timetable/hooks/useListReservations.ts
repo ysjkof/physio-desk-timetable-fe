@@ -9,7 +9,7 @@ import type { ListReservationsQuery } from '../../../types/generated.types';
 export const useListReservations = () => {
   const selectedDate = useReactiveVar(selectedDateVar);
 
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
 
   const startDate = getSunday(selectedDate);
   const endDate = endOfDay(nextSaturday(startDate));

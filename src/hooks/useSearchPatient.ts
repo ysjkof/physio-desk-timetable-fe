@@ -5,7 +5,7 @@ import { ClinicsOfClient } from '../models';
 import { SearchPatientQuery } from '../types/generated.types';
 
 export const useSearchPatient = () => {
-  const { selectedClinic } = ClinicsOfClient;
+  const selectedClinic = ClinicsOfClient.getSelectedClinic();
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState([1]);
 
@@ -24,12 +24,12 @@ export const useSearchPatient = () => {
           clinicIds: [selectedClinic.id],
         },
       },
-
       onCompleted(data) {
         const { totalPages } = data.searchPatient;
         if (!totalPages) return;
         setPages(getPages(totalPages));
       },
+      fetchPolicy: 'network-only',
     });
   };
 

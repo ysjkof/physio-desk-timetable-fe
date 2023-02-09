@@ -12,6 +12,11 @@ import DateForm from './DateForm';
 import Timepicker from './Timepicker';
 import Modal from './Modal';
 import Checkbox from './Checkbox';
+import GlobalAside from './GlobalAside';
+import GlobalNavBar from './GlobalNavBar';
+import GlobalLayout from './GlobalLayout';
+import Warning from './Warning';
+import ConfirmModal from './ConfirmModal';
 
 export {
   ButtonOfPages,
@@ -28,4 +33,9 @@ export {
   Timepicker,
   Modal,
   Checkbox,
+  GlobalAside,
+  GlobalNavBar,
+  GlobalLayout,
+  Warning,
+  ConfirmModal,
 };

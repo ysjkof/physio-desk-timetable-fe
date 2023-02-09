@@ -1,7 +1,4 @@
 const timetable = 'tt';
-const createPatient = 'create_patient';
-const reserve = 'reserve';
-const editReservation = 'edit_reservation';
 
 // auth
 const auth = 'auth';
@@ -14,9 +11,10 @@ const editProfile = 'edit_profile';
 // dashboard
 const dashboard = 'dashboard';
 const member = 'member';
-const invite = 'invite';
 const prescription = 'prescription';
 const statistics = 'statistics';
+
+const invite = 'invite';
 const create = 'create';
 const clinics = 'clinics';
 
@@ -54,9 +52,6 @@ export const ROUTES = {
   contacts: `/${DOCS}/${contacts}`,
   search: '/search',
   timetable: `/${timetable}`,
-  reserve: `/${timetable}/${reserve}`,
-  createPatient: `/${timetable}/${createPatient}`,
-  editReservation: `/${timetable}/${editReservation}`,
   login: `/${auth}/${login}`,
   signUp: `/${auth}/${signUp}`,
   confirmEmail: `/${auth}/${confirmEmail}`,
@@ -72,18 +67,15 @@ export const ROUTES = {
 } as const;
 
 export const ENDPOINT = {
-  reserve,
-  createPatient,
-  editReservation,
   login,
   signUp,
   confirmEmail,
   dashboard: {
     dashboard,
     member,
-    invite,
     prescription,
     statistics,
+    invite,
     create,
     clinics,
     editProfile,
