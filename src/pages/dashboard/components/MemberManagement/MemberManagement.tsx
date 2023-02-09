@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import { MemberList, SearchAndInviteMember } from './components';
+import SearchAndInviteMember from './SearchAndInviteMember';
+import MemberList from './MemberList';
 
 const MemberManagement = () => {
   return (
