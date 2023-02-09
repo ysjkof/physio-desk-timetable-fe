@@ -306,7 +306,7 @@ export type GetMemberInput = {
 
 export type GetMemberOutput = {
   __typename?: 'GetMemberOutput';
-  countOfPatient: Scalars['Int'];
+  countOfPatient?: Maybe<Scalars['Int']>;
   error?: Maybe<Scalars['String']>;
   member?: Maybe<Member>;
   ok: Scalars['Boolean'];
@@ -996,7 +996,7 @@ export type GetMemberQueryVariables = Exact<{
 }>;
 
 
-export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient: number, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
+export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient?: number | null, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
 
 export type InviteUserMutationVariables = Exact<{
   input: InviteUserInput;
