@@ -11,12 +11,12 @@ import { FIND_MY_MEMBERS_DOCUMENT } from '../../../../graphql/clinics';
 import { getMemberState, renameUseSplit } from '../../../../utils/common.utils';
 import WaitingCard from './WaitingCard';
 import ClinicCard from './ClinicCard';
+import DisabledCard from './DisabledCard';
 import type { FindMyMembersQuery } from '../../../../types/generated.types';
 import type {
   MyMembers,
   SettingOutletContext,
 } from '../../../../types/common.types';
-import DisabledCard from './DisabledCard';
 
 const MyClinics = () => {
   const { outletWidth } = useOutletContext<SettingOutletContext>();
@@ -45,7 +45,10 @@ const MyClinics = () => {
   });
 
   return (
-    <div style={{ width: outletWidth }} className="px-14 py-10">
+    <div
+      style={{ width: outletWidth }}
+      className="overflow-y-scroll px-14 py-10"
+    >
       <Title />
       <div className="mt-10 flex flex-col gap-10">
         <ClinicsContainer title="승인대기 병원">
@@ -133,7 +136,7 @@ const ClinicsContainer = ({ title, children }: ClinicsContainerProps) => {
   return (
     <div className="flex flex-col gap-4">
       <h2>{title}</h2>
-      <div className="flex gap-2">{children}</div>
+      <div className="flex flex-wrap gap-2">{children}</div>
     </div>
   );
 };
