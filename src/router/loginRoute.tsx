@@ -1,5 +1,4 @@
 import { lazy } from 'react';
-import { ROUTES } from './routes';
 import {
   MemberDetail,
   MemberManagement,
@@ -13,6 +12,7 @@ import {
   MyClinics,
   MyProfile,
 } from '../pages/setting/components';
+import InviteUser from '../pages/dashboard/components/MemberManagement/InviteUser';
 
 const ProtectRoute = lazy(() => import('./ProtectRoute'));
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
@@ -69,7 +69,14 @@ const loginRoute = [
           },
           {
             path: 'invite',
-            element: <div>초대하기</div>,
+            element: (
+              <ProtectRoute
+                whenFail={<Warning type="verifyEmail" />}
+                failWhenLogout
+              >
+                <InviteUser />,
+              </ProtectRoute>
+            ),
           },
         ],
       },

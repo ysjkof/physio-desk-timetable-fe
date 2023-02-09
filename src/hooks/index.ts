@@ -8,6 +8,7 @@ import { useDebounce } from './useDebounce';
 import { useEditProfile } from './useEditProfile';
 import { useFindPrescriptions } from './useFindPrescriptions';
 import { useGetPrescription } from './useGetPrescription';
+import { useInviteUser } from './useInviteUser';
 import { useLeaveClinic } from './useLeaveClinic';
 import { useMe } from './useMe';
 import { useMediaQuery } from './useMediaQuery';
@@ -29,6 +30,7 @@ export {
   useEditProfile,
   useFindPrescriptions,
   useGetPrescription,
+  useInviteUser,
   useLeaveClinic,
   useMe,
   useMediaQuery,
