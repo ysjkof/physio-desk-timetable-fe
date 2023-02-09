@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { PrescriptionListProps } from '../pages/legacy_dashboard/components/organisms/PrescriptionPage';
 import type { ISchedules, UserWithEvent } from './common.types';
 import { FindPrescriptionsQuery } from './generated.types';
 import { FormForEditPrescriptionFields } from './form.types';
@@ -47,7 +46,8 @@ export type PrescriptionForFind = NonNullable<
   FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
 >;
 
-export interface CardProps extends Pick<PrescriptionListProps, 'clinicId'> {
+export interface CardProps {
+  clinicId: number;
   prescription: PrescriptionForFind;
   showInactivate: boolean;
 }
