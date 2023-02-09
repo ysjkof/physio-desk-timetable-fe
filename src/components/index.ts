@@ -18,6 +18,7 @@ import GlobalLayout from './GlobalLayout';
 import Warning from './Warning';
 import ConfirmModal from './ConfirmModal';
 import Loading from './Loading';
+import NotFound from './NotFound';
 
 export {
   ButtonOfPages,
@@ -40,4 +41,5 @@ export {
   Warning,
   ConfirmModal,
   Loading,
+  NotFound,
 };

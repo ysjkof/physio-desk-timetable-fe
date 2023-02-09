@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import NotFound from '../_legacy_components/404';
+import NotFound from './NotFound';
 import { CHECK_ADMIN_DOCUMENT } from '../graphql';
 import type { CheckAdminQuery } from '../types/generated.types';
 

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export default function NotFound() {
+const NotFound = () => {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <h2 className="mb-3  font-semibold">페이지를 찾을 수 없습니다.</h2>
@@ -10,4 +10,6 @@ export default function NotFound() {
       </Link>
     </div>
   );
-}
+};
+
+export default NotFound;

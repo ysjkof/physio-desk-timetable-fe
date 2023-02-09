@@ -9,7 +9,7 @@ import loginRoute from './loginRoute';
 const LandingPage = lazy(
   () => import('../pages/home/components/organisms/LandingPage')
 );
-const NotFound = lazy(() => import('../_legacy_components/404'));
+const NotFound = lazy(() => import('../components/NotFound'));
 
 const CheckAdmin = lazy(() => import('../components/CheckAdmin'));
 const TestPage = lazy(() => import('../pages/TestPage'));
