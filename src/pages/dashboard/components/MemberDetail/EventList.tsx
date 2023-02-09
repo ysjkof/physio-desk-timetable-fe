@@ -38,7 +38,6 @@ const EventList = ({ date }: { date: Date }) => {
     GetReservationsOfMemberQueryVariables
   >(GET_RESERVATIONS_OF_MEMBER_DOCUMENT, {
     variables,
-    fetchPolicy: 'network-only',
     onCompleted({ getReservationsOfMember: { results, totalPages } }) {
       // 무한 스크롤일 때
       // setEventList((prev) => [...prev, ...(results || [])]);
