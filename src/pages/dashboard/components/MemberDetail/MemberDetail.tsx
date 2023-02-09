@@ -30,7 +30,7 @@ const MemberDetail = () => {
     <div className="flex h-full w-full overflow-x-scroll bg-[#F9F9FF]">
       <div className="mx-10 flex min-w-[750px] basis-full flex-col gap-y-6 py-10">
         <MemberCard member={data.getMember.member} />
-        <CardSection countOfPatient={data.getMember.countOfPatient} />
+        <CardSection countOfPatient={data.getMember.countOfPatient || 0} />
         <VacationTable />
       </div>
       <CalendarAndEventList />
