@@ -55,7 +55,7 @@ const Confirm = ({
       onSubmit={handleSubmit(onSubmit)}
       className="flex w-96 flex-col items-center py-8"
     >
-      {icon && icon}
+      <div className="mb-2">{icon && icon}</div>
       <div className="flex flex-col items-center justify-center text-lg text-[#34355B]">
         {messages.map(
           (message) => message && <span key={message}>{message}</span>
