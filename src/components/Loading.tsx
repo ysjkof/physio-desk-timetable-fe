@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function Loading() {
+const Loading = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -34,4 +34,6 @@ export default function Loading() {
       </p>
     </div>
   );
-}
+};
+
+export default Loading;

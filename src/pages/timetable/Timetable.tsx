@@ -15,7 +15,7 @@ import {
 import { TableDisplay } from '../../models';
 import type { LocationState } from '../../types/common.types';
 
-const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
+const Loading = lazy(() => import('../../components/Loading'));
 
 const TimeTable = () => {
   const { labels } = useTableLabel();

@@ -8,7 +8,7 @@ import { useMediaQuery, useWindowSize } from '../../hooks';
 const DocsSidebarModal = lazy(
   () => import('./components/molecules/DocsSidebarModal')
 );
-const Loading = lazy(() => import('../../_legacy_components/atoms/Loading'));
+const Loading = lazy(() => import('../../components/Loading'));
 
 export default function Docs() {
   const [isOpen, setOpen] = useState(false);

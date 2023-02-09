@@ -1,9 +1,10 @@
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import { ApolloProvider, useReactiveVar } from '@apollo/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { client, isLoggedInVar } from './apollo';
 import { GlobalLayout } from './components';
-import Loading from './_legacy_components/atoms/Loading';
+
+const Loading = lazy(() => import('./components/Loading'));
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);

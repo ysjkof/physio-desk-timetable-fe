@@ -23,9 +23,7 @@ import {
   IUserStatistics,
 } from '../../../../types/common.types';
 
-const Loading = lazy(
-  () => import('../../../../_legacy_components/atoms/Loading')
-);
+const Loading = lazy(() => import('../../../../components/Loading'));
 
 interface IChartsProps {
   userStatistics: IUserStatistics[];

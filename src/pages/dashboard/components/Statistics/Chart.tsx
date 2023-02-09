@@ -16,9 +16,7 @@ import type { GetStatisticsQuery } from '../../../../types/generated.types';
 import Charts from './Charts';
 import { createUserStatistics } from '../../../../utils/chart.tuils';
 
-const Loading = lazy(
-  () => import('../../../../_legacy_components/atoms/Loading')
-);
+const Loading = lazy(() => import('../../../../components/Loading'));
 
 export default function Chart() {
   useReactiveVar(clinicListsVar); // ui 새로고침 용
