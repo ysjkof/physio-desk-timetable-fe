@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { getStringOfDateTime } from '../../../../utils/date.utils';
 import { ConfirmModal } from '../../../../components';
 import { useDeactivateClinic, useLeaveClinic } from '../../../../hooks';
+import { BuildingLargeWithBan, BuildingLargeWithX } from '../../../../svgs';
 
 interface ClinicCardProps {
   memberId: number;
@@ -67,6 +68,7 @@ const ClinicCard = ({
           messages={['병원을 탈퇴합니다.']}
           targetName={name}
           buttonText="탈퇴하기"
+          icon={<BuildingLargeWithX />}
         />
       )}
       {showDeactivate && (
@@ -76,6 +78,7 @@ const ClinicCard = ({
           messages={['병원을 폐쇄합니다.']}
           targetName={name}
           buttonText="폐쇄하기"
+          icon={<BuildingLargeWithBan />}
         />
       )}
     </div>
