@@ -62,7 +62,7 @@ const splitLink = split(
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     return graphQLErrors.forEach((errors) => {
-      const { locations, message, path } = errors;
+      const { locations, message, path, extensions } = errors;
 
       if (message.includes('"$input" got invalid value'))
         printGraphQLErrors('gotInvalidValue');
@@ -71,7 +71,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         `[GraphQL error]:
         Message: ${message};
         Location: ${JSON.stringify(locations)};
-        Path: ${JSON.stringify(path)};`
+        Path: ${JSON.stringify(path)};
+        Extensions :${JSON.stringify(extensions)};`
       );
     });
 
