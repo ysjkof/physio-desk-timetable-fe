@@ -5,6 +5,7 @@ import {
   MemberManagement,
   NotSelected,
   PrescriptionManagement,
+  Statistics,
 } from '../pages/dashboard/components';
 import Setting from '../pages/setting/Setting';
 import {
@@ -109,7 +110,16 @@ const loginRoute = [
       },
     ],
   },
-  // { path: 'dashboard/clinic/statistics', element: <Dashboard /> },
+  {
+    path: 'dashboard/clinic/statistics',
+    element: <Dashboard />,
+    children: [
+      {
+        path: '',
+        element: <Statistics />,
+      },
+    ],
+  },
   {
     path: 'search',
     element: (
