@@ -2,7 +2,7 @@ import type {
   GenerateStorageKey,
   GetPrivateStorage,
   GetPublicLocalStorage,
-  LocalStorageKeysType,
+  LocalStorageType,
   RemovePrivateLocalStorage,
   RemovePublicLocalStorage,
   SetPrivateStorage,
@@ -10,9 +10,9 @@ import type {
 } from '../types/localStorage.types';
 
 class LocalStorage {
-  #storageKeyObj;
+  #storageKeyObj: LocalStorageType;
 
-  constructor(storageKeyObj: LocalStorageKeysType) {
+  constructor(storageKeyObj: LocalStorageType) {
     this.#storageKeyObj = storageKeyObj;
   }
 
@@ -61,12 +61,21 @@ class LocalStorage {
   }
 }
 
-export const LOCAL_STORAGE_KEY = {
-  token: 'muool-token',
-  createdAt: 'muool-local-storage-createdAt',
+export const PRIVATE_LOCAL_STORAGE_KEY_VALUE = {
   clinicLists: 'muool-clinic-lists-',
   viewOption: 'muool-view-option-',
   tableTime: 'muool-table-time-',
+  selectedClinicId: 'muool-selected-clinic-id-',
 } as const;
 
-export default new LocalStorage(LOCAL_STORAGE_KEY);
+export const PUBLIC_LOCAL_STORAGE_KEY_VALUE = {
+  token: 'muool-token',
+  createdAt: 'muool-local-storage-createdAt',
+} as const;
+
+export const LOCAL_STORAGE_KEY_VALUE = {
+  ...PRIVATE_LOCAL_STORAGE_KEY_VALUE,
+  ...PUBLIC_LOCAL_STORAGE_KEY_VALUE,
+};
+
+export default new LocalStorage(LOCAL_STORAGE_KEY_VALUE);
