@@ -17,7 +17,7 @@ export default function LoggedInGlobalNavBarMenu() {
 
   const logout = useLogout();
   const invokeLogout = () => {
-    logout(() => navigate('/'));
+    logout();
   };
   return (
     <>

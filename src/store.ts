@@ -1,6 +1,7 @@
 import { ApolloClient, NormalizedCacheObject, makeVar } from '@apollo/client';
 import { create } from 'zustand';
 import { TableDisplay, TableTime } from './models';
+import localStorageUtils from './utils/localStorage.utils';
 import type {
   TableDisplayOptions,
   LoggedInUser,
@@ -10,7 +11,6 @@ import type {
   SelectedPatientType,
   ClinicOfClient,
 } from './types/common.types';
-import localStorageUtils from './utils/localStorage.utils';
 
 // global state
 export const loggedInUserVar = makeVar<LoggedInUser>(undefined);
@@ -38,31 +38,31 @@ interface ZustandStoreState {
   isLoggedIn: boolean;
   authToken: string | null;
   client: ClientOfStore;
-}
-interface ZustandStoreAction {
-  setAuthToken: (token?: string) => void;
-  setClient: (client: ApolloClient<NormalizedCacheObject>) => void;
-  reset: () => void;
+  selectedClinicId: number;
 }
 
 const initialState = {
   isLoggedIn: false,
   authToken: null,
   client: null,
+  selectedClinicId: 0,
 };
 
-export const useStore = create<ZustandStoreState & ZustandStoreAction>(
-  (set) => ({
-    ...initialState,
-    setAuthToken: (_token) =>
-      set(() => {
-        let token: string | null | undefined = _token;
-        if (!_token) {
-          token = localStorageUtils.get({ key: 'token' });
-        }
-        return { authToken: token, isLoggedIn: !!token };
-      }),
-    setClient: (client) => set(() => ({ client })),
-    reset: () => set(initialState),
-  })
-);
+export const useStore = create<ZustandStoreState>(() => initialState);
+
+export const setAuthToken = (_token?: string) =>
+  useStore.setState(() => {
+    let token: string | null | undefined = _token;
+    if (!_token) {
+      token = localStorageUtils.get({ key: 'token' });
+    }
+    return { authToken: token, isLoggedIn: !!token };
+  });
+
+export const setClient = (client: ClientOfStore) =>
+  useStore.setState(() => ({ client }));
+
+export const selectClinicId = (clinicId: number) =>
+  useStore.setState(() => ({ selectedClinicId: clinicId }));
+
+export const resetStore = () => useStore.setState(() => initialState);
