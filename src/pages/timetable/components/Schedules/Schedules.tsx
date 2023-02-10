@@ -31,10 +31,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
     : weekEvents && [weekEvents[selectedDate.getDay()]];
 
   return (
-    <div
-      className="SCHEDULES grid w-full overflow-hidden"
-      style={containerStyle}
-    >
+    <div className="SCHEDULES grid" style={containerStyle}>
       {schedules.map((day, i) => {
         const usersOfCanSee = day.users.filter((member) => member.canSee);
         return (

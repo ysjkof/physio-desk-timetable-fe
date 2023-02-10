@@ -38,7 +38,7 @@ const TimetableTemplate = ({
       </div>
       <div
         id="timetable__body"
-        className="flex overflow-scroll"
+        className="flex overflow-y-scroll"
         style={{
           height: `${height - extraMargin}px`,
           width: `${width}px`,
