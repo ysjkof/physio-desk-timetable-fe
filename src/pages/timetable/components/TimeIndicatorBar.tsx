@@ -10,8 +10,8 @@ import type { IsActive } from '../../../types/common.types';
 export default function TimeIndicatorBar({ isActive }: IsActive) {
   const { firstTimeInMinute, lastTimeInMinute } = TableTime;
 
-  const [time, setTime] = useState(getStringOfTime(new Date()));
-  const [top, setTop] = useState<number>();
+  const [time, setTime] = useState('');
+  const [top, setTop] = useState(0);
 
   const setPosition = () => {
     const nowMinute = Date.now() / 1000 / 60; // 현재 시각을 분으로 변환
@@ -25,6 +25,7 @@ export default function TimeIndicatorBar({ isActive }: IsActive) {
       setTop(Math.floor((nowTime / TABLE_TIME_GAP) * TABLE_CELL_HEIGHT));
 
       if (!isActive) return;
+
       setTime(getStringOfTime(new Date(), true));
     }
   };
@@ -32,11 +33,11 @@ export default function TimeIndicatorBar({ isActive }: IsActive) {
   const disable = top === 0 || typeof top !== 'number';
 
   useEffect(() => {
+    setPosition();
     if (disable) {
       return;
     }
-    setPosition();
-    const id = setInterval(setPosition, 30000);
+    const id = setInterval(setPosition, 30_000);
     return () => clearInterval(id);
   }, []);
 

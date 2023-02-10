@@ -1,5 +1,5 @@
 import { cls } from '../../../../utils/common.utils';
-import TimeIndicatorBar from '../../_legacy_components/TimeIndicatorBar';
+import TimeIndicatorBar from '../TimeIndicatorBar';
 import ReservationButtons from './ReserveButtons';
 import EventBoxContainer from './EventBoxContainer';
 import type { ScheduleBoxProps } from '../../../../types/props.types';
