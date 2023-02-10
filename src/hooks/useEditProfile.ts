@@ -1,6 +1,6 @@
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { EDIT_PROFILE_DOCUMENT } from '../graphql';
-import { loggedInUserVar, toastVar } from '../store';
+import { loggedInUserVar, toastVar, useStore } from '../store';
 import {
   cacheUpdatePersonalClinicName,
   cacheUpdateUserName,
@@ -18,6 +18,7 @@ interface Input {
 
 export const useEditProfile = () => {
   const loggedInUser = useReactiveVar(loggedInUserVar);
+  const client = useStore((state) => state.client);
 
   return useMutation<EditProfileMutation, EditProfileMutationVariables>(
     EDIT_PROFILE_DOCUMENT,
@@ -35,8 +36,8 @@ export const useEditProfile = () => {
 
         const prevName = loggedInUser?.name;
         if (!loggedInUser || !newName || prevName === newName) return;
-        cacheUpdateUserName(loggedInUser.id, newName);
-        cacheUpdatePersonalClinicName(newName);
+        cacheUpdateUserName(client, loggedInUser.id, newName);
+        cacheUpdatePersonalClinicName(client, newName);
       },
     }
   );

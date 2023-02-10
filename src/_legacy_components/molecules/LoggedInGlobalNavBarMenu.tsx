@@ -1,9 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useMe } from '../../hooks';
+import { useLogout, useMe } from '../../hooks';
 import { clinicMenu, personalMenu, ROUTES } from '../../router/routes';
 import Dropdown from './Dropdown';
-import { logout } from '../../pages/auth/authServices';
 
 export default function LoggedInGlobalNavBarMenu() {
   const navigate = useNavigate();
@@ -15,6 +14,8 @@ export default function LoggedInGlobalNavBarMenu() {
     setValue('search', searchTrim);
     navigate(`/search?name=${searchTrim}`);
   };
+
+  const logout = useLogout();
   const invokeLogout = () => {
     logout(() => navigate('/'));
   };

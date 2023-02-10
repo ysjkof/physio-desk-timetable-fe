@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { ACCEPT_INVITATION_DOCUMENT } from '../graphql';
-import { toastVar } from '../store';
+import { toastVar, useStore } from '../store';
 import { cacheUpdateMemberAccepted } from '../utils/apolloCache.utils';
 import type {
   AcceptInvitationMutation,
@@ -13,6 +13,8 @@ export const useAcceptInvitation = ({ memberId }: { memberId: number }) => {
     AcceptInvitationMutationVariables
   >(ACCEPT_INVITATION_DOCUMENT);
 
+  const client = useStore((state) => state.client);
+
   const acceptInvitation = () => {
     acceptInvitationMutation({
       variables: { input: { memberId } },
@@ -21,7 +23,7 @@ export const useAcceptInvitation = ({ memberId }: { memberId: number }) => {
           return toastVar({ messages: ['병원 초대 수락 중 에러 발생'] });
         if (data.acceptInvitation.ok) {
           toastVar({ messages: ['병원 초대를 수락했습니다'] });
-          cacheUpdateMemberAccepted(memberId);
+          cacheUpdateMemberAccepted(client, memberId);
         }
       },
     });

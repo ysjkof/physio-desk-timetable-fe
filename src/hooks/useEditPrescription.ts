@@ -3,7 +3,6 @@ import {
   EDIT_PRESCRIPTION_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
-import { client } from '../apollo';
 import { toastVar } from '../store';
 import { ClinicsOfClient } from '../models';
 import { changeValueInArray } from '../utils/common.utils';
@@ -38,7 +37,7 @@ export const useEditPrescription = () => {
       const prescriptionInput: Input = clientOptions?.variables?.input;
       if (!prescriptionInput) return;
 
-      client.cache.updateQuery<FindPrescriptionsQuery>(
+      clientOptions?.client?.cache.updateQuery<FindPrescriptionsQuery>(
         { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
         (cacheData) => {
           const cachePrescriptions = cacheData?.findPrescriptions.prescriptions;
@@ -64,6 +63,33 @@ export const useEditPrescription = () => {
           return newData;
         }
       );
+
+      // client.cache.updateQuery<FindPrescriptionsQuery>(
+      //   { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
+      //   (cacheData) => {
+      //     const cachePrescriptions = cacheData?.findPrescriptions.prescriptions;
+      //     if (!cachePrescriptions) return cacheData;
+
+      //     const index = cachePrescriptions.findIndex(
+      //       (prescription) => prescription.id === prescriptionInput.id
+      //     );
+      //     if (index === -1) return cacheData;
+
+      //     const updatedPrescription = {
+      //       ...cachePrescriptions[index],
+      //       ...prescriptionInput,
+      //     };
+
+      //     const newData = structuredClone(cacheData);
+      //     newData.findPrescriptions.prescriptions = changeValueInArray(
+      //       cachePrescriptions,
+      //       updatedPrescription,
+      //       index
+      //     );
+
+      //     return newData;
+      //   }
+      // );
     },
   });
 };

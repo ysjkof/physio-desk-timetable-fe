@@ -3,16 +3,15 @@ import { Outlet } from 'react-router-dom';
 import { cls } from '../utils/common.utils';
 import Initialize from './Initialize';
 import Toast from '../_legacy_components/molecules/Toast';
+import { useStore } from '../store';
 
 const GlobalAside = lazy(() => import('./GlobalAside'));
 const GlobalNavBar = lazy(() => import('./GlobalNavBar'));
 const Loading = lazy(() => import('./Loading'));
 
-export interface IsLoggedIn {
-  isLoggedIn?: boolean;
-}
+function GlobalLayout() {
+  const isLoggedIn = useStore((state) => state.isLoggedIn);
 
-function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
   return (
     <div
       className={cls(

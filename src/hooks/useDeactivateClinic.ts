@@ -4,7 +4,6 @@ import {
   FIND_MY_CLINICS_DOCUMENT,
 } from '../graphql';
 import { toastVar } from '../store';
-import { client } from '../apollo';
 import {
   DeactivateClinicMutation,
   DeactivateClinicMutationVariables,
@@ -19,11 +18,14 @@ export const useDeactivateClinic = ({ clinicId }: { clinicId: number }) => {
   const deactivateClinic = () => {
     deactivateClinicMutation({
       variables: { input: { clinicId } },
-      onCompleted(data) {
+      onCompleted(data, clientOptions) {
         if (data.deactivateClinic.error)
           return toastVar({ messages: [data.deactivateClinic.error] });
 
-        client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
+        clientOptions?.client?.refetchQueries({
+          include: [FIND_MY_CLINICS_DOCUMENT],
+        });
+        // client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
         toastVar({
           messages: [`병원이 폐쇄됐습니다`],
           fade: true,

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { OperationVariables, useSubscription } from '@apollo/client';
-import { client } from '../../../apollo';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
@@ -17,6 +16,7 @@ import type {
 import { changeValueInArray } from '../../../utils/common.utils';
 import { LISTEN_CREATE_RESERVATION_DOCUMENT } from '../../../graphql/subscriptions/listenCreateReservation.gql';
 import { ReservationInList } from '../../../types/common.types';
+import { useStore } from '../../../store';
 
 interface UseSubscriptionsProps {
   variables: OperationVariables | undefined;
@@ -24,6 +24,7 @@ interface UseSubscriptionsProps {
 
 export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
   const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const client = useStore((state) => state.client);
 
   const { loading: loadingOfDelete, data: deleteResult } =
     useSubscription<ListenDeleteReservationSubscription>(
@@ -44,7 +45,7 @@ export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
     );
 
   const updateAfterDelete = (reservationId: number) => {
-    client.cache.updateQuery<Query, Variables>(
+    client?.cache.updateQuery<Query, Variables>(
       {
         query: LIST_RESERVATIONS_DOCUMENT,
         variables: variables as Variables,
@@ -73,7 +74,7 @@ export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
   const updateAfterUpdate = (
     reservation: ListenUpdateReservationSubscription['listenUpdateReservation']
   ) => {
-    client.cache.updateQuery<Query, Variables>(
+    client?.cache.updateQuery<Query, Variables>(
       {
         query: LIST_RESERVATIONS_DOCUMENT,
         variables: variables as Variables,
@@ -105,7 +106,7 @@ export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
   };
 
   const updateAfterCreate = (reservation: ReservationInList) => {
-    client.cache.updateQuery<Query, Variables>(
+    client?.cache.updateQuery<Query, Variables>(
       {
         query: LIST_RESERVATIONS_DOCUMENT,
         variables: variables as Variables,

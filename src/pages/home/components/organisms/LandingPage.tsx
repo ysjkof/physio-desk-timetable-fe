@@ -5,7 +5,6 @@ import {
   faBan,
   faCommentSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { isLoggedInVar } from '../../../../apollo';
 import { ROUTES } from '../../../../router/routes';
 import H2 from '../atoms/H2';
 import Li from '../atoms/Li';
@@ -17,9 +16,10 @@ import { Check } from '../../../../svgs';
 import H1 from '../atoms/H1';
 import H3 from '../atoms/H3';
 import { ReservationState } from '../../../../types/generated.types';
+import { useStore } from '../../../../store';
 
 export default function LandingPage() {
-  const isLoggedIn = isLoggedInVar();
+  const isLoggedIn = useStore((state) => state.isLoggedIn);
   const [isMobile] = useMediaQuery({ minWidth: '640' });
 
   const tableWide = '/images/landing-page/table-wide.webp';

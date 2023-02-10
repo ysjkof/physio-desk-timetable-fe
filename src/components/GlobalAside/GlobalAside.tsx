@@ -4,6 +4,7 @@ import { cls } from '../../utils/common.utils';
 import { CogSixTooth, Building, Table } from '../../svgs';
 import ClinicSelector from './ClinicSelector';
 import { useTableDisplay } from '../../pages/timetable/hooks';
+import { useLogout } from '../../hooks';
 
 interface LiProps extends PropsWithChildren {
   to: string;
@@ -22,6 +23,7 @@ const GlobalAside = () => {
 
   const menu = useLocation().pathname.split('/')[1];
 
+  const logout = useLogout();
   return (
     <aside
       id="global-aside"
@@ -69,7 +71,9 @@ const GlobalAside = () => {
       </Ul>
 
       <div className="flex flex-col gap-2 text-xs text-gray-400">
-        <button type="button">로그아웃</button>
+        <button type="button" onClick={logout}>
+          로그아웃
+        </button>
         <button type="button">문의하기</button>
       </div>
     </aside>

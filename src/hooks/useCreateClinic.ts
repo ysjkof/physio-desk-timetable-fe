@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_CLINIC_DOCUMENT } from '../graphql';
-import { toastVar } from '../store';
+import { toastVar, useStore } from '../store';
 import {
   cacheAddClinicToMyClinics,
   cacheUpdateMemberOfMe,
@@ -11,6 +11,7 @@ import type {
 } from '../types/generated.types';
 
 export const useCreateClinic = () => {
+  const client = useStore((state) => state.client);
   return useMutation<CreateClinicMutation, CreateClinicMutationVariables>(
     CREATE_CLINIC_DOCUMENT,
     {
@@ -30,8 +31,8 @@ export const useCreateClinic = () => {
           fade: true,
         });
 
-        cacheAddClinicToMyClinics(clinic);
-        cacheUpdateMemberOfMe(clinic);
+        cacheAddClinicToMyClinics(client, clinic);
+        cacheUpdateMemberOfMe(client, clinic);
       },
     }
   );

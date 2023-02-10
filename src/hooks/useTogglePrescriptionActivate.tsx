@@ -4,7 +4,6 @@ import {
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
 import { toastVar } from '../store';
-import { client } from '../apollo';
 import { ClinicsOfClient } from '../models';
 import type {
   EditPrescriptionMutation,
@@ -25,7 +24,7 @@ export const useTogglePrescriptionActivate = () => {
     const variables = { input: { id, activate: inputActivate } };
     callMutation({
       variables,
-      onCompleted(data) {
+      onCompleted(data, clientOptions) {
         const { error } = data.editPrescription;
         if (error) return toastVar({ messages: [error] });
 
@@ -34,7 +33,7 @@ export const useTogglePrescriptionActivate = () => {
           input: { clinicId, onlyLookUpActive: false },
         };
 
-        client.cache.updateQuery<FindPrescriptionsQuery>(
+        clientOptions?.client?.cache.updateQuery<FindPrescriptionsQuery>(
           { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
           (cacheData) => {
             const prescriptions = cacheData?.findPrescriptions.prescriptions;
@@ -60,6 +59,32 @@ export const useTogglePrescriptionActivate = () => {
             return newData;
           }
         );
+        // client.cache.updateQuery<FindPrescriptionsQuery>(
+        //   { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
+        //   (cacheData) => {
+        //     const prescriptions = cacheData?.findPrescriptions.prescriptions;
+        //     if (!prescriptions) return cacheData;
+
+        //     const index = prescriptions.findIndex(
+        //       (prescription) => prescription.id === id
+        //     );
+        //     if (index === -1) return cacheData;
+
+        //     const updatedPrescription = {
+        //       ...prescriptions[index],
+        //       activate: inputActivate,
+        //     };
+
+        //     const newData = structuredClone(cacheData);
+        //     newData.findPrescriptions.prescriptions = changeValueInArray(
+        //       prescriptions,
+        //       updatedPrescription,
+        //       index
+        //     );
+
+        //     return newData;
+        //   }
+        // );
       },
     });
   };

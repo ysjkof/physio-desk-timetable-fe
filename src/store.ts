@@ -1,4 +1,5 @@
-import { makeVar } from '@apollo/client';
+import { ApolloClient, NormalizedCacheObject, makeVar } from '@apollo/client';
+import { create } from 'zustand';
 import { TableDisplay, TableTime } from './models';
 import type {
   TableDisplayOptions,
@@ -9,6 +10,7 @@ import type {
   SelectedPatientType,
   ClinicOfClient,
 } from './types/common.types';
+import localStorageUtils from './utils/localStorage.utils';
 
 // global state
 export const loggedInUserVar = makeVar<LoggedInUser>(undefined);
@@ -30,3 +32,37 @@ export const selectedPatientVar = makeVar<SelectedPatientType>(undefined);
 
 export const selectedReservationVar =
   makeVar<SelectedReservationType>(undefined);
+
+export type ClientOfStore = ApolloClient<NormalizedCacheObject> | null;
+interface ZustandStoreState {
+  isLoggedIn: boolean;
+  authToken: string | null;
+  client: ClientOfStore;
+}
+interface ZustandStoreAction {
+  setAuthToken: (token?: string) => void;
+  setClient: (client: ApolloClient<NormalizedCacheObject>) => void;
+  reset: () => void;
+}
+
+const initialState = {
+  isLoggedIn: false,
+  authToken: null,
+  client: null,
+};
+
+export const useStore = create<ZustandStoreState & ZustandStoreAction>(
+  (set) => ({
+    ...initialState,
+    setAuthToken: (_token) =>
+      set(() => {
+        let token: string | null | undefined = _token;
+        if (!_token) {
+          token = localStorageUtils.get({ key: 'token' });
+        }
+        return { authToken: token, isLoggedIn: !!token };
+      }),
+    setClient: (client) => set(() => ({ client })),
+    reset: () => set(initialState),
+  })
+);

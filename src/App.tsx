@@ -1,19 +1,24 @@
 import { Suspense, lazy } from 'react';
-import { ApolloProvider, useReactiveVar } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { HelmetProvider } from 'react-helmet-async';
-import { client, isLoggedInVar } from './apollo';
+import { getApolloClient } from './apollo';
 import { GlobalLayout } from './components';
+import { useStore } from './store';
 
 const Loading = lazy(() => import('./components/Loading'));
 
 function App() {
-  const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const setAuthToken = useStore((state) => state.setAuthToken);
+  setAuthToken();
+  const token = useStore((state) => state.authToken);
+  const client = getApolloClient(token);
+  useStore((state) => state.setClient)(client);
 
   return (
     <ApolloProvider client={client}>
       <HelmetProvider>
         <Suspense fallback={<Loading />}>
-          <GlobalLayout isLoggedIn={isLoggedIn} />
+          <GlobalLayout />
         </Suspense>
       </HelmetProvider>
     </ApolloProvider>

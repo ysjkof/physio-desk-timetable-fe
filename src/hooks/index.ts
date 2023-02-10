@@ -10,6 +10,7 @@ import { useFindPrescriptions } from './useFindPrescriptions';
 import { useGetPrescription } from './useGetPrescription';
 import { useInviteUser } from './useInviteUser';
 import { useLeaveClinic } from './useLeaveClinic';
+import { useLogout } from './useLogout';
 import { useMe } from './useMe';
 import { useMediaQuery } from './useMediaQuery';
 import { useCloseModal } from './useModalClose';
@@ -32,6 +33,7 @@ export {
   useGetPrescription,
   useInviteUser,
   useLeaveClinic,
+  useLogout,
   useMe,
   useMediaQuery,
   useCloseModal,

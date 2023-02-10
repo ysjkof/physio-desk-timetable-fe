@@ -5,7 +5,7 @@ import {
 } from '../graphql';
 import { toastVar } from '../store';
 import { ClinicsOfClient } from '../models';
-import { client } from '../apollo';
+
 import type {
   CreatePrescriptionMutation,
   CreatePrescriptionMutationVariables,
@@ -32,22 +32,28 @@ export const useCreatePrescription = () => {
     CreatePrescriptionMutation,
     CreatePrescriptionMutationVariables
   >(CREATE_PRESCRIPTION_DOCUMENT, {
-    onCompleted: (data) => {
+    onCompleted: (data, clientOptions) => {
       const { error, prescription } = data.createPrescription;
-
       if (error) return toastVar({ messages: [error] });
       if (!prescription)
         return toastVar({
           messages: ['처방을 등록했지만 반환된 처방이 없습니다.'],
         });
 
-      client.cache.updateQuery<FindPrescriptionsQuery>(
+      clientOptions?.client?.cache.updateQuery<FindPrescriptionsQuery>(
         { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
         (cacheData) => {
           if (!cacheData?.findPrescriptions.prescriptions) return cacheData;
           return getCombinedData(cacheData, prescription);
         }
       );
+      // client.cache.updateQuery<FindPrescriptionsQuery>(
+      //   { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
+      //   (cacheData) => {
+      //     if (!cacheData?.findPrescriptions.prescriptions) return cacheData;
+      //     return getCombinedData(cacheData, prescription);
+      //   }
+      // );
     },
   });
 };
