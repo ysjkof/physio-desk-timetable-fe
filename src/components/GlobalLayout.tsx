@@ -4,7 +4,7 @@ import { cls } from '../utils/common.utils';
 import Initialize from './Initialize';
 import Toast from '../_legacy_components/molecules/Toast';
 
-const TableAside = lazy(() => import('./GlobalAside'));
+const GlobalAside = lazy(() => import('./GlobalAside'));
 const GlobalNavBar = lazy(() => import('./GlobalNavBar'));
 const Loading = lazy(() => import('./Loading'));
 
@@ -22,7 +22,7 @@ function GlobalLayout({ isLoggedIn }: IsLoggedIn) {
     >
       {isLoggedIn ? (
         <Initialize>
-          <TableAside />
+          <GlobalAside />
           <OutletWithSuspense />
         </Initialize>
       ) : (
