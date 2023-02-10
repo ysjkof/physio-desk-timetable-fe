@@ -312,6 +312,13 @@ export type GetMemberOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type GetMyClinicsStatusOutput = {
+  __typename?: 'GetMyClinicsStatusOutput';
+  clinics?: Maybe<Array<MemberStatus>>;
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type GetPatientInput = {
   id: Scalars['Int'];
 };
@@ -439,7 +446,6 @@ export type ListReservationsInput = {
   clinicId: Scalars['Int'];
   endDate: Scalars['DateTime'];
   startDate: Scalars['DateTime'];
-  userIds: Array<Scalars['Int']>;
 };
 
 export type ListReservationsOutput = {
@@ -490,6 +496,16 @@ export type Member = {
   staying: Scalars['Boolean'];
   updatedAt?: Maybe<Scalars['DateTime']>;
   user: User;
+};
+
+export type MemberStatus = {
+  __typename?: 'MemberStatus';
+  accepted: Scalars['Boolean'];
+  id: Scalars['Int'];
+  isPersonal: Scalars['Boolean'];
+  manager: Scalars['Boolean'];
+  name: Scalars['String'];
+  staying: Scalars['Boolean'];
 };
 
 export type Mutation = {
@@ -684,6 +700,7 @@ export type Query = {
   findPrescriptions: FindPrescriptionsOutput;
   getClinic: GetClinicOutput;
   getMember: GetMemberOutput;
+  getMyClinicsStatus: GetMyClinicsStatusOutput;
   getPatient: GetPatientOutput;
   getPatients: GetPatientsOutput;
   getPrescriptions: GetPrescriptionsOutput;
@@ -997,6 +1014,11 @@ export type GetMemberQueryVariables = Exact<{
 
 
 export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient?: number | null, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
+
+export type GetMyClinicsStatusQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyClinicsStatusQuery = { __typename?: 'Query', getMyClinicsStatus: { __typename?: 'GetMyClinicsStatusOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'MemberStatus', id: number, name: string, accepted: boolean, staying: boolean, manager: boolean, isPersonal: boolean }> | null } };
 
 export type InviteUserMutationVariables = Exact<{
   input: InviteUserInput;
