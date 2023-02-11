@@ -1,15 +1,14 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { InputWrapper } from '../../../../components';
 import { Input } from '../../../timetable/components/FormForReservation/InputForReserve';
-import { loggedInUserVar } from '../../../../store';
+import { useMe } from '../../../../hooks';
 import type { FormForEditEmailFields } from '../../../../types/props.types';
 
 const FormForEditEmail = () => {
-  const loggedInUser = useReactiveVar(loggedInUserVar);
+  const [meData] = useMe();
   const { register, handleSubmit } = useForm<FormForEditEmailFields>({
-    defaultValues: { email: loggedInUser?.email },
+    defaultValues: { email: meData?.email },
   });
   const [hasInputForAuthNumber, setHasInputForAuthNumber] = useState(false);
 

@@ -2,7 +2,7 @@ import { useReactiveVar } from '@apollo/client';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PropsWithChildren } from 'react';
 import { clinicListsVar, loggedInUserVar } from '../../store';
-import { useWindowSize } from '../../hooks';
+import { useMe, useWindowSize } from '../../hooks';
 import { cls } from '../../utils/common.utils';
 import { Building, BuildingPlus, User } from '../../svgs';
 
@@ -22,7 +22,7 @@ const Setting = () => {
 };
 
 const ProfileWithImage = () => {
-  const loggedInUser = useReactiveVar(loggedInUserVar);
+  const [meData] = useMe();
 
   const profileImageUrl = 'maybe-profile-image.png';
 
@@ -41,7 +41,7 @@ const ProfileWithImage = () => {
         <User className="position-center-x absolute top-3 h-full w-4/6 fill-white stroke-white" />
       </div>
       <div className="text-base">
-        <span>{loggedInUser?.name}</span>
+        <span>{meData?.name}</span>
       </div>
     </div>
   );

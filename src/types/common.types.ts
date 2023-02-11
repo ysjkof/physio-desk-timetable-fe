@@ -3,6 +3,7 @@ import {
   Clinic,
   FindMyClinicsQuery,
   FindMyMembersQuery,
+  GetClinicQuery,
   GetReservationsByPatientQuery,
   GetStatisticsQuery,
   ListReservationsQuery,
@@ -123,6 +124,13 @@ export interface ModifiedLoginUser
   members?: ModifiedClinicMemberWithClinic[] | null;
   notice?: ModifiedNotice[] | null;
 }
+
+// clinic
+export type ClinicOfGetMyClinic = GetClinicQuery['getClinic']['clinic'];
+export type ClinicOfGetMyClinicTruth = NonNullable<
+  GetClinicQuery['getClinic']['clinic']
+>;
+export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'];
 
 //
 

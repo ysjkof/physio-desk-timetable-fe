@@ -1,12 +1,17 @@
-import { useState } from 'react';
-import { ClinicsOfClient } from '../../../../models';
+import { useEffect, useState } from 'react';
 import AlignmentButtons from './AlignmentButtons';
 import MemberListItem from './MemberListItem';
+import { useGetClinic } from '../../../../hooks';
+import { MemberOfGetMyClinic } from '../../../../types/common.types';
 
 const MemberList = () => {
-  const [members, setMembers] = useState(
-    ClinicsOfClient.getSelectedClinic().members
-  );
+  const [myClinic] = useGetClinic();
+  const [members, setMembers] = useState<MemberOfGetMyClinic>([]);
+
+  useEffect(() => {
+    if (!myClinic?.members) return;
+    setMembers(myClinic.members);
+  }, [myClinic]);
 
   return (
     <div className="mb-8 border-y">

@@ -1,23 +1,22 @@
-import { useReactiveVar } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { loggedInUserVar, toastVar } from '../../../store';
-import { useEditProfile } from '../../../hooks';
+import { toastVar } from '../../../store';
+import { useEditProfile, useMe } from '../../../hooks';
 import type { FormForEditMyProfileFields } from '../../../types/form.types';
 
 const useFormForEditMyProfile = () => {
-  const loggedInUser = useReactiveVar(loggedInUserVar);
+  const [meData] = useMe();
 
   const { register, handleSubmit: handleSubmitWrapper } =
     useForm<FormForEditMyProfileFields>({
       defaultValues: {
-        name: loggedInUser?.name,
+        name: meData?.name,
       },
     });
 
   const [editProfile] = useEditProfile();
 
   const onSubmit: SubmitHandler<FormForEditMyProfileFields> = (data) => {
-    if (!loggedInUser) return;
+    if (!meData) return;
 
     const { name, currentPassword, newPassword1, newPassword2 } = data;
 
@@ -40,7 +39,7 @@ const useFormForEditMyProfile = () => {
       });
     }
 
-    const newName = name && (name !== loggedInUser.name || undefined) && name;
+    const newName = name && (name !== meData.name || undefined) && name;
     const newPassword =
       currentPassword &&
       (newPassword1 === newPassword2 || undefined) &&
