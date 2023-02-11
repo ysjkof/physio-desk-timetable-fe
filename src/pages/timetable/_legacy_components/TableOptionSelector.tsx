@@ -8,11 +8,7 @@ import {
   isStayMember,
   renameUseSplit,
 } from '../../../utils/common.utils';
-import {
-  clinicListsVar,
-  loggedInUserVar,
-  tableDisplayVar,
-} from '../../../store';
+import { loggedInUserVar, selectClinicId, useStore } from '../../../store';
 import { NEXT } from '../../../constants/constants';
 import { Selectbox } from '../../../components';
 import { getHoursByUnit, getMinutesByUnit } from '../../../utils/date.utils';
@@ -21,19 +17,20 @@ import BtnArrow from '../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../_legacy_components/molecules/Sidebar';
 import { Check } from '../../../svgs';
-import { ClinicsOfClient, TableDisplay, TableTime } from '../../../models';
+import { TableDisplay, TableTime } from '../../../models';
 import { useSelectedClinic, useTableDisplay, useTableTime } from '../hooks';
 import type {
   FirstAndLastTime,
   MemberOfClient,
 } from '../../../types/common.types';
+import { useFindMyClinics, useMe } from '../../../hooks';
 
 export default function TableOptionSelector() {
-  useReactiveVar(tableDisplayVar); // ui 업데이트 전용
+  const [meData] = useMe();
+  const clinicId = useStore((state) => state.selectedClinicId);
 
-  const clinicLists = useReactiveVar(clinicListsVar);
-
-  const { selectClinic, toggleUser } = useSelectedClinic();
+  const [myClinics] = useFindMyClinics();
+  const { toggleUser } = useSelectedClinic();
 
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
 
@@ -49,7 +46,11 @@ export default function TableOptionSelector() {
   };
 
   const onClickChangeSelectClinic = (clinicId: number) => {
-    selectClinic(clinicId);
+    if (!meData)
+      throw new Error(
+        '[onClickChangeSelectClinic] 여기서 meData가 없으면 안됩니다.'
+      );
+    selectClinicId({ clinicId, userId: meData.id, userName: meData.name });
   };
 
   const toggleSeeCancel = () => {
@@ -183,28 +184,26 @@ export default function TableOptionSelector() {
         </MenuButton>
       </div>
       <Sidebar noGap className="divide-y">
-        {clinicLists.map((clinic) => {
+        {myClinics?.map((clinic) => {
           const meMember = clinic.members.find(
             (member) => member.user.id === loggedInUser?.id
           );
           if (!meMember) return null;
 
-          const isSelectedClinic =
-            clinic.id === ClinicsOfClient.getSelectedClinic().id;
+          const isSelectedClinic = clinic.id === clinicId;
 
           const { staying, accepted, manager } = meMember;
           const memberState = getMemberState({ staying, accepted, manager });
           const isStay = isStayMember(memberState);
 
-          const sortMember = (members: MemberOfClient[]) =>
-            members.sort((a, b) => {
+          const sortMember = (members: MemberOfClient[]) => {
+            const updated = [...members];
+            return updated.sort((a, b) => {
               if (a.user.name > b.user.name) return 1;
               if (a.user.name < b.user.name) return -1;
               return 0;
             });
-
-          // 할일: selectedClinic을 CLinicsOfClient에 합치기.
-          // TODO: selectedClinic을 CLinicsOfClient에 합치기.
+          };
 
           return (
             <Sidebar.Ul

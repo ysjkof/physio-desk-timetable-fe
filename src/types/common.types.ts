@@ -49,8 +49,9 @@ export interface TableDisplayOptions {
 }
 
 // typescript type & interface
-export type IFindMyClinics = FindMyClinicsQuery['findMyClinics']['clinics'];
-export type MyClinic = NonNullable<FlatArray<IFindMyClinics, 0>>;
+export type ClinicsOfFindMyClinics =
+  FindMyClinicsQuery['findMyClinics']['clinics'];
+export type MyClinic = NonNullable<FlatArray<ClinicsOfFindMyClinics, 0>>;
 
 // TODO : MyClinicMember로 이름 변경
 export type IMember = MyClinic['members'][0];
@@ -82,6 +83,11 @@ export interface MyMembers {
   승인대기: MyMembersType;
   폐쇄: MyMembersType;
 }
+
+export type ResultOfListReservations =
+  | ListReservationsQuery['listReservations']
+  | null
+  | undefined;
 
 export type ReservationInList = NonNullable<
   ListReservationsQuery['listReservations']['results']

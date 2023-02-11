@@ -41,7 +41,7 @@ interface ZustandStoreState {
   selectedClinicId: number;
 }
 
-const initialState = {
+const initialState: ZustandStoreState = {
   isLoggedIn: false,
   client: null,
   selectedClinicId: 0,

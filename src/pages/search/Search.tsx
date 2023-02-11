@@ -18,11 +18,11 @@ import {
 } from './components';
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
 import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
-import { ClinicsOfClient } from '../../models';
+import { useStore } from '../../store';
 import type { SearchPatientQuery } from '../../types/generated.types';
 
 export default function Search() {
-  const selectedClinic = ClinicsOfClient.getSelectedClinic();
+  const clinicId = useStore((state) => state.selectedClinicId);
   const location = useLocation();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
@@ -32,7 +32,7 @@ export default function Search() {
   );
 
   const { register, getValues } = useForm<{ clinicIds: number[] }>({
-    defaultValues: { clinicIds: [selectedClinic.id] },
+    defaultValues: { clinicIds: [clinicId] },
   });
 
   const { height } = useWindowSize(true);
@@ -77,10 +77,7 @@ export default function Search() {
       >
         <div id="search__header" className="shadow-sm">
           <SearchNavigation invokeQuery={invokeQuery} loading={loading} />
-          <SearchCheckList
-            register={register}
-            selectedClinicId={selectedClinic.id}
-          />
+          <SearchCheckList register={register} />
           <SearchTitle
             subject={['병원', '등록번호', '이름', '성별', '생년월일', '기능']}
           />

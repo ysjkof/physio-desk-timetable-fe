@@ -53,10 +53,10 @@ export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
         if (!cacheData) return;
         const { listReservations } = cacheData;
 
-        const results = listReservations.results.filter(
+        const results = listReservations.results?.filter(
           (result) => result.id !== reservationId
         );
-        const totalCount = listReservations.totalCount - 1;
+        const totalCount = listReservations.totalCount || 0 - 1;
 
         return {
           ...cacheData,
@@ -82,7 +82,7 @@ export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
         if (!cacheData) return;
         const { listReservations } = cacheData;
 
-        const updatedIndex = listReservations.results.findIndex(
+        const updatedIndex = listReservations.results?.findIndex(
           (oldReservation) => oldReservation.id === reservation.id
         );
         if (updatedIndex === -1) return;

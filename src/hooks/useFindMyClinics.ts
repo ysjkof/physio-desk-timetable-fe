@@ -4,15 +4,18 @@ import type {
   FindMyClinicsQuery,
   FindMyClinicsQueryVariables,
 } from '../types/generated.types';
+import type { ClinicsOfFindMyClinics } from '../types/common.types';
 
 export const useFindMyClinics = (): [
-  FindMyClinicsQuery['findMyClinics']['clinics'],
+  ClinicsOfFindMyClinics,
   QueryResult<FindMyClinicsQuery, FindMyClinicsQueryVariables>
 ] => {
-  const variables = { input: { includeInactivate: true } };
+  // 비활성은 평소 볼 일이 많지 않기 때문에 필요시에 더 요청해서 보기
+  const variables = { input: { includeInactivate: false } };
   const results = useQuery<FindMyClinicsQuery, FindMyClinicsQueryVariables>(
     FIND_MY_CLINICS_DOCUMENT,
     { variables }
   );
+
   return [results.data?.findMyClinics.clinics, results];
 };

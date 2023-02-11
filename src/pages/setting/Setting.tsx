@@ -1,13 +1,10 @@
-import { useReactiveVar } from '@apollo/client';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PropsWithChildren } from 'react';
-import { clinicListsVar, loggedInUserVar } from '../../store';
 import { useMe, useWindowSize } from '../../hooks';
 import { cls } from '../../utils/common.utils';
 import { Building, BuildingPlus, User } from '../../svgs';
 
 const Setting = () => {
-  useReactiveVar(clinicListsVar); // 리렌더 위한 선언
   const { width } = useWindowSize(true);
   const outletWidth = width - 200;
   return (

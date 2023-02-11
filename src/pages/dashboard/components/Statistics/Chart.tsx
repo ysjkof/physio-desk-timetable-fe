@@ -10,29 +10,22 @@ import { getMonthStartEnd } from '../../../../utils/date.utils';
 import { IUserStatistics, MemberState } from '../../../../types/common.types';
 import { Checkbox, MenuButton, Warning } from '../../../../components';
 import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
-import { clinicListsVar, selectedDateVar } from '../../../../store';
-import { ClinicsOfClient } from '../../../../models';
-import type { GetStatisticsQuery } from '../../../../types/generated.types';
+import { selectedDateVar } from '../../../../store';
 import Charts from './Charts';
 import { createUserStatistics } from '../../../../utils/chart.tuils';
+import { useGetClinic } from '../../../../hooks';
+import type { GetStatisticsQuery } from '../../../../types/generated.types';
 
 const Loading = lazy(() => import('../../../../components/Loading'));
 
 export default function Chart() {
-  useReactiveVar(clinicListsVar); // ui 새로고침 용
-  const selectedClinic = ClinicsOfClient.getSelectedClinic();
+  const [clinic] = useGetClinic();
   const selectedDate = useReactiveVar(selectedDateVar);
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);
 
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    setValue,
-    formState: { isValid },
-  } = useForm<{
+  const { register, handleSubmit, getValues, setValue } = useForm<{
     userIds: number[];
     year: number;
     month: string;
@@ -44,7 +37,7 @@ export default function Chart() {
     },
   });
 
-  const acceptedMember: MemberState[] | undefined = selectedClinic.members
+  const acceptedMember: MemberState[] | undefined = clinic?.members
     .filter((member) => member.accepted)
     .map((member) => ({
       userId: member.user.id,
@@ -71,7 +64,7 @@ export default function Chart() {
         input: {
           startDate,
           endDate,
-          clinicId: selectedClinic.id,
+          clinicId: clinic?.id,
           userIds: Array.isArray(userIds)
             ? userIds.map((id) => +id)
             : [+userIds],
