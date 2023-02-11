@@ -6,8 +6,10 @@ import { useCreatePrescription } from './useCreatePrescription';
 import { useDeactivateClinic } from './useDeactivateClinic';
 import { useDebounce } from './useDebounce';
 import { useEditProfile } from './useEditProfile';
+import { useFindMyClinics } from './useFindMyClinics';
 import { useFindMyMembers } from './useFindMyMembers';
 import { useFindPrescriptions } from './useFindPrescriptions';
+import { useGetClinic } from './useGetClinic';
 import { useGetPrescription } from './useGetPrescription';
 import { useInviteUser } from './useInviteUser';
 import { useLeaveClinic } from './useLeaveClinic';
@@ -30,8 +32,10 @@ export {
   useDeactivateClinic,
   useDebounce,
   useEditProfile,
+  useFindMyClinics,
   useFindMyMembers,
   useFindPrescriptions,
+  useGetClinic,
   useGetPrescription,
   useInviteUser,
   useLeaveClinic,
