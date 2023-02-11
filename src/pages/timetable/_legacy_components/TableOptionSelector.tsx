@@ -30,7 +30,7 @@ import type {
 } from '../../../types/common.types';
 
 export default function TableOptionSelector() {
-  const [meData] = useMe();
+  const [meData, { getIdName }] = useMe();
   const clinicId = useStore((state) => state.selectedClinicId);
   const timeDurationOfTimetable = useStore(
     (state) => state.timeDurationOfTimetable
@@ -62,11 +62,17 @@ export default function TableOptionSelector() {
     selectClinicId({ clinicId, userId: meData.id, userName: meData.name });
   };
 
-  const toggleShowCancel = () => {
-    toggleShowCancelOfTimetable();
+  const toggleCancel = () => {
+    toggleShowCancelOfTimetable({
+      ...getIdName(),
+      value: !showCancelOfTimetable,
+    });
   };
-  const toggleShowNoshow = () => {
-    toggleShowNoshowOfTimetable();
+  const toggleNoshow = () => {
+    toggleShowNoshowOfTimetable({
+      ...getIdName(),
+      value: !showNoshowOfTimetable,
+    });
   };
 
   const changeTableTime = (key: keyof FirstAndLastTime, value: number) => {
@@ -178,11 +184,11 @@ export default function TableOptionSelector() {
         id="table-option-selector__toggle-visible-state"
         className="flex items-center gap-2 border-b py-1 px-3"
       >
-        <MenuButton enabled={showCancelOfTimetable} onClick={toggleShowCancel}>
+        <MenuButton enabled={showCancelOfTimetable} onClick={toggleCancel}>
           <FontAwesomeIcon icon={faBan} fontSize={14} />
           취소
         </MenuButton>
-        <MenuButton enabled={showNoshowOfTimetable} onClick={toggleShowNoshow}>
+        <MenuButton enabled={showNoshowOfTimetable} onClick={toggleNoshow}>
           <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />
           부도
         </MenuButton>

@@ -43,8 +43,8 @@ const initialState: ZustandStoreState = {
   isBigGlobalAside: true,
   isWeekCalendar: true,
   showSettingOfTimetable: false,
-  showCancelOfTimetable: false,
-  showNoshowOfTimetable: false,
+  showCancelOfTimetable: true,
+  showNoshowOfTimetable: true,
   showCalendarOfTimetable: false,
   timeDurationOfTimetable: {
     firstHour: 9,
@@ -99,13 +99,13 @@ export const toggleSettingOfTimetable = (value?: boolean) =>
       typeof value === 'undefined' ? !state.showSettingOfTimetable : value,
   }));
 
-export const toggleShowCancelOfTimetable = (value?: boolean) =>
+export const setShowCancelOfTimetable = (value?: boolean) =>
   useStore.setState((state) => ({
     showCancelOfTimetable:
       typeof value === 'undefined' ? !state.showCancelOfTimetable : value,
   }));
 
-export const toggleShowNoshowOfTimetable = (value?: boolean) =>
+export const setShowNoshowOfTimetable = (value?: boolean) =>
   useStore.setState((state) => ({
     showNoshowOfTimetable:
       typeof value === 'undefined' ? !state.showNoshowOfTimetable : value,
@@ -135,5 +135,41 @@ export const selectClinicId = ({
     value: clinicId,
     userId,
     userName,
+  });
+};
+
+export const toggleIsBigGlobalAside = () => {};
+
+interface SetStorageWithBoolean {
+  userId: number;
+  userName: string;
+  value: boolean;
+}
+
+export const toggleShowCancelOfTimetable = ({
+  userId,
+  userName,
+  value,
+}: SetStorageWithBoolean) => {
+  setShowCancelOfTimetable(value);
+  localStorageUtils.set({
+    key: 'showCancelOfTimetable',
+    userId,
+    userName,
+    value,
+  });
+};
+
+export const toggleShowNoshowOfTimetable = ({
+  userId,
+  userName,
+  value,
+}: SetStorageWithBoolean) => {
+  setShowNoshowOfTimetable(value);
+  localStorageUtils.set({
+    key: 'showNoshowOfTimetable',
+    userId,
+    userName,
+    value,
   });
 };

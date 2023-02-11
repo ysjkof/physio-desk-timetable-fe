@@ -66,6 +66,8 @@ export const PRIVATE_LOCAL_STORAGE_KEY_VALUE = {
   viewOption: 'muool-view-option-',
   tableTime: 'muool-table-time-',
   selectedClinicId: 'muool-selected-clinic-id-',
+  showCancelOfTimetable: 'muool-show-cancel-of-timetable-',
+  showNoshowOfTimetable: 'muool-show-noshow-of-timetable-',
 } as const;
 
 export const PUBLIC_LOCAL_STORAGE_KEY_VALUE = {
