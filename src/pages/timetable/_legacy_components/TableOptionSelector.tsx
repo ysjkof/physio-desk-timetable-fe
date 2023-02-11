@@ -22,8 +22,7 @@ import BtnArrow from '../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../_legacy_components/molecules/Sidebar';
 import { Check } from '../../../svgs';
-import { TableTime } from '../../../models';
-import { useSelectedClinic, useTableTime } from '../hooks';
+import { useSelectedClinic, useTimeDurationOfTimetable } from '../hooks';
 import { useFindMyClinics, useMe } from '../../../hooks';
 import type {
   FirstAndLastTime,
@@ -33,6 +32,9 @@ import type {
 export default function TableOptionSelector() {
   const [meData] = useMe();
   const clinicId = useStore((state) => state.selectedClinicId);
+  const timeDurationOfTimetable = useStore(
+    (state) => state.timeDurationOfTimetable
+  );
   const showCancelOfTimetable = useStore(
     (state) => state.showCancelOfTimetable
   );
@@ -43,7 +45,7 @@ export default function TableOptionSelector() {
   const [myClinics] = useFindMyClinics();
   const { toggleUser } = useSelectedClinic();
 
-  const { changeTableTIme } = useTableTime();
+  const { changeTimeDuration } = useTimeDurationOfTimetable();
 
   const closeOptionSelector = () => {
     toggleSettingOfTimetable(false);
@@ -68,10 +70,11 @@ export default function TableOptionSelector() {
   };
 
   const changeTableTime = (key: keyof FirstAndLastTime, value: number) => {
-    changeTableTIme(key, value);
+    changeTimeDuration(key, value);
   };
 
-  const { lastHour, lastMinute, firstHour, firstMinute } = TableTime.get();
+  const { lastHour, lastMinute, firstHour, firstMinute } =
+    timeDurationOfTimetable;
 
   const startHours = getHoursByUnit(0, 24);
   const endHours = startHours.filter((hour) => hour > firstHour);

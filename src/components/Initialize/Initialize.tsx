@@ -5,11 +5,10 @@ import {
   FIND_MY_CLINICS_DOCUMENT,
   GET_MY_CLINICS_STATUS_DOCUMENT,
 } from '../../graphql';
-import { ClinicsOfClient, TableTime } from '../../models';
+import { ClinicsOfClient } from '../../models';
 import localStorageUtils from '../../utils/localStorage.utils';
-import { tableTimeVar } from '../../store';
-import { useMe } from '../../hooks';
-import { initSelectedClinicId } from './initSelectedClinic';
+import { useMe, useSelectedClinicId } from '../../hooks';
+import { useTimeDurationOfTimetable } from '../../pages/timetable/hooks';
 import type { MyClinic, UserIdAndName } from '../../types/common.types';
 import type {
   FindMyClinicsQuery,
@@ -17,16 +16,19 @@ import type {
 } from '../../types/generated.types';
 
 const Initialize = ({ children }: PropsWithChildren) => {
+  const { initialize: initTimeDuration } = useTimeDurationOfTimetable();
   const [loading, setLoading] = useState(true);
 
   const [meData] = useMe();
 
+  const { initialize: initSelectedClinicId } = useSelectedClinicId();
   const { data: findMyClinicsData } = useQuery<FindMyClinicsQuery>(
     FIND_MY_CLINICS_DOCUMENT,
     {
       variables: { input: { includeInactivate: true } },
     }
   );
+
   const { data: myClinicsStatusData } = useQuery<GetMyClinicsStatusQuery>(
     GET_MY_CLINICS_STATUS_DOCUMENT
   );
@@ -52,11 +54,6 @@ const Initialize = ({ children }: PropsWithChildren) => {
     return console.info('Initialized New Local Storage');
   };
 
-  const initTableTime = (userIdAndName: UserIdAndName) => {
-    const tableTimeOptions = TableTime.initialize(userIdAndName);
-    tableTimeVar(tableTimeOptions);
-  };
-
   const initClinicsOfClient = (
     userIdAndName: UserIdAndName,
     clinics: MyClinic[]
@@ -78,14 +75,11 @@ const Initialize = ({ children }: PropsWithChildren) => {
     const userIdAndName = { userId: meData.id, userName: meData.name };
 
     checkLatestStorage(userIdAndName);
-    initTableTime(userIdAndName);
     initClinicsOfClient(userIdAndName, findMyClinicsData.findMyClinics.clinics);
 
     ///
-    initSelectedClinicId(
-      userIdAndName,
-      myClinicsStatusData.getMyClinicsStatus.clinics
-    );
+    initSelectedClinicId(myClinicsStatusData.getMyClinicsStatus.clinics);
+    initTimeDuration();
 
     setLoading(false);
   }, [meData, findMyClinicsData]);

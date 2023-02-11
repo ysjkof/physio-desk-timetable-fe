@@ -10,13 +10,14 @@ import {
 import { Calendar } from '../../../svgs';
 import { cls, getPositionRef } from '../../../utils/common.utils';
 import ModalPortal from '../../templates/ModalPortal';
-import { TableTime } from '../../../models';
+
 import {
   DatepickerCalendarButtonsProps,
   DatePickerInterface,
   DayProps,
   TimeSelectorProps,
 } from '../../../types/datepicker.types';
+import { useStore } from '../../../store';
 
 // TODO: 완전 새로 만들어야해
 function Buttons({ attributes }: DatepickerCalendarButtonsProps) {
@@ -198,10 +199,10 @@ export function DatepickerCalendar({
     return result;
   }
 
-  const listOfHours = getHoursByUnit(
-    TableTime.get().firstHour,
-    TableTime.get().lastHour
+  const { firstHour, lastHour } = useStore(
+    (state) => state.timeDurationOfTimetable
   );
+  const listOfHours = getHoursByUnit(firstHour, lastHour);
 
   const minutesUnit = 10; // 선택 가능한 분의 최소 단위. 10일 경우 10, 20, 30, 40, 50 분만 선택 가능
   const listOfMinutes = getMinutesByUnit(minutesUnit);

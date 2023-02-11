@@ -1,6 +1,5 @@
 import { ApolloClient, NormalizedCacheObject, makeVar } from '@apollo/client';
 import { create } from 'zustand';
-import { TableTime } from './models';
 import localStorageUtils from './utils/localStorage.utils';
 import type {
   ToastState,
@@ -18,8 +17,6 @@ export type ClientOfStore = ApolloClient<NormalizedCacheObject> | null;
 
 // Timetable state
 
-export const tableTimeVar = makeVar<TableTimeOptions>(TableTime.get());
-
 export const selectedDateVar = makeVar(new Date());
 
 export const selectedPatientVar = makeVar<SelectedPatientType>(undefined);
@@ -35,6 +32,7 @@ interface ZustandStoreState {
   showCancelOfTimetable: boolean;
   showNoshowOfTimetable: boolean;
   showCalendarOfTimetable: boolean;
+  timeDurationOfTimetable: TableTimeOptions;
 }
 
 const initialState: ZustandStoreState = {
@@ -48,6 +46,13 @@ const initialState: ZustandStoreState = {
   showCancelOfTimetable: false,
   showNoshowOfTimetable: false,
   showCalendarOfTimetable: false,
+  timeDurationOfTimetable: {
+    firstHour: 9,
+    firstMinute: 0,
+    lastHour: 19,
+    lastMinute: 0,
+    gap: TABLE_TIME_GAP,
+  },
 };
 
 export const useStore = create<ZustandStoreState>(() => initialState);
@@ -110,6 +115,9 @@ export const toggleShowCalendarOfTimetable = (value?: boolean) =>
     showCalendarOfTimetable:
       typeof value === 'undefined' ? !state.showCalendarOfTimetable : value,
   }));
+
+export const setTimeDurationOfTimetable = (value: TableTimeOptions) =>
+  useStore.setState(() => ({ timeDurationOfTimetable: value }));
 
 // store + localStorage
 

@@ -20,6 +20,7 @@ import { useCloseModal } from './useModalClose';
 import { useNavCreatePatient } from './useNavCreatePatient';
 import { useRefuseInvitation } from './useRefuseInvitation';
 import { useSearchPatient } from './useSearchPatient';
+import { useSelectedClinicId } from './useSelectedClinic';
 import { useTogglePrescriptionActivate } from './useTogglePrescriptionActivate';
 import { useWindowSize } from './useWindowSize';
 
@@ -46,6 +47,7 @@ export {
   useNavCreatePatient,
   useRefuseInvitation,
   useSearchPatient,
+  useSelectedClinicId,
   useTogglePrescriptionActivate,
   useWindowSize,
 };

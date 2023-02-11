@@ -7,7 +7,7 @@ import { useSchedules } from './useSchedules';
 import { useSelectedClinic } from './useSelectedClinic';
 import { useSubscriptions } from './useSubscriptions';
 import { useTableLabel } from './useTableLabel';
-import { useTableTime } from './useTableTime';
+import { useTimeDurationOfTimetable } from './useTimeDurationOfTimetable';
 
 export {
   useCreateReservation,
@@ -19,5 +19,5 @@ export {
   useSelectedClinic,
   useSubscriptions,
   useTableLabel,
-  useTableTime,
+  useTimeDurationOfTimetable,
 };
