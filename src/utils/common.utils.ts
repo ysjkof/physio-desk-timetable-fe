@@ -100,6 +100,14 @@ function removePersonalClinicNumber(name: string) {
   return splinted.length < 2 ? null : splinted[0];
 }
 
+export function addPrefixToNameWhenWaiting(name: string, isAccepted?: boolean) {
+  let prefix = '';
+  if (!isAccepted) {
+    prefix = '수락대기 : ';
+  }
+  return prefix + renameUseSplit(name);
+}
+
 /** ok, error만 있는 GraphQL 응답을 받고 토스트 출력이나 콜백 실행 */
 export function simpleCheckGQLError(
   ok: boolean,
