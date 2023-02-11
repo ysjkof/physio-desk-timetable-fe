@@ -1,18 +1,25 @@
 import { useQuery } from '@apollo/client';
 import { PropsWithChildren, useEffect, useState } from 'react';
-import { LATEST_STORAGE_VERSION } from '../constants/constants';
-import { FIND_MY_CLINICS_DOCUMENT } from '../graphql';
-import { ClinicsOfClient, TableDisplay, TableTime } from '../models';
-import localStorageUtils from '../utils/localStorage.utils';
+import { LATEST_STORAGE_VERSION } from '../../constants/constants';
+import {
+  FIND_MY_CLINICS_DOCUMENT,
+  GET_MY_CLINICS_STATUS_DOCUMENT,
+} from '../../graphql';
+import { ClinicsOfClient, TableDisplay, TableTime } from '../../models';
+import localStorageUtils from '../../utils/localStorage.utils';
 import {
   clinicListsVar,
   loggedInUserVar,
   tableDisplayVar,
   tableTimeVar,
-} from '../store';
-import { useMe } from '../hooks';
-import type { MyClinic, UserIdAndName } from '../types/common.types';
-import type { FindMyClinicsQuery } from '../types/generated.types';
+} from '../../store';
+import { useMe } from '../../hooks';
+import { initSelectedClinicId } from './initSelectedClinic';
+import type { MyClinic, UserIdAndName } from '../../types/common.types';
+import type {
+  FindMyClinicsQuery,
+  GetMyClinicsStatusQuery,
+} from '../../types/generated.types';
 
 const Initialize = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(true);
@@ -24,6 +31,9 @@ const Initialize = ({ children }: PropsWithChildren) => {
     {
       variables: { input: { includeInactivate: true } },
     }
+  );
+  const { data: myClinicsStatusData } = useQuery<GetMyClinicsStatusQuery>(
+    GET_MY_CLINICS_STATUS_DOCUMENT
   );
 
   const checkLatestStorage = (userIdAndName: UserIdAndName) => {
@@ -66,9 +76,15 @@ const Initialize = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
+    console.log('myClinicsStatusData >>>', myClinicsStatusData);
     setLoading(true);
 
-    if (!meData || !findMyClinicsData?.findMyClinics.clinics) return;
+    if (
+      !meData ||
+      !findMyClinicsData?.findMyClinics.clinics ||
+      !myClinicsStatusData?.getMyClinicsStatus.clinics
+    )
+      return;
 
     const userIdAndName = { userId: meData.me.id, userName: meData.me.name };
 
@@ -79,6 +95,12 @@ const Initialize = ({ children }: PropsWithChildren) => {
     initClinicsOfClient(userIdAndName, findMyClinicsData.findMyClinics.clinics);
 
     loggedInUserVar(meData.me);
+
+    ///
+    initSelectedClinicId(
+      userIdAndName,
+      myClinicsStatusData.getMyClinicsStatus.clinics
+    );
 
     setLoading(false);
   }, [meData, findMyClinicsData]);

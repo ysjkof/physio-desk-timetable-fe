@@ -1,12 +1,12 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 import { cls } from '../utils/common.utils';
-import Initialize from './Initialize';
-import Toast from '../_legacy_components/molecules/Toast';
+import { Initialize } from './Initialize';
 import { useStore } from '../store';
 
 const GlobalAside = lazy(() => import('./GlobalAside'));
 const GlobalNavBar = lazy(() => import('./GlobalNavBar'));
+const Toast = lazy(() => import('../_legacy_components/molecules/Toast'));
 const Loading = lazy(() => import('./Loading'));
 
 function GlobalLayout() {
