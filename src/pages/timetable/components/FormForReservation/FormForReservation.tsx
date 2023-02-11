@@ -22,11 +22,11 @@ const FormForReservation = ({
       defaultValues: { startDate: date, userId },
     });
 
-  const { data, loading } = useFindPrescriptions();
+  const [prescriptionData, { loading }] = useFindPrescriptions();
 
   const prescriptionList = useMemo(
-    () => new SelectedPrescriptions(data?.findPrescriptions.prescriptions),
-    [data, loading]
+    () => new SelectedPrescriptions(prescriptionData?.prescriptions),
+    [prescriptionData, loading]
   );
 
   register('userId', { required: true });
