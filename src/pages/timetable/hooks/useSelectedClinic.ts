@@ -1,5 +1,4 @@
 import { ClinicsOfClient } from '../../../models';
-import { clinicListsVar } from '../../../store';
 
 export const useSelectedClinic = () => {
   const toggleUser = (memberId: number) => {
@@ -8,7 +7,7 @@ export const useSelectedClinic = () => {
 
     ClinicsOfClient.saveToLocalStorage(toggledClinic);
     ClinicsOfClient.set(toggledClinic);
-    clinicListsVar([...toggledClinic]);
+    // clinicListsVar([...toggledClinic]);
   };
 
   return { toggleUser };

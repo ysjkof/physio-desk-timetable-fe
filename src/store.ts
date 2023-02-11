@@ -8,13 +8,10 @@ import type {
   TableTimeOptions,
   SelectedReservationType,
   SelectedPatientType,
-  ClinicOfClient,
   UserIdAndName,
 } from './types/common.types';
 
 // global state
-
-export const clinicListsVar = makeVar<ClinicOfClient[]>([]);
 
 export const toastVar = makeVar<ToastState>({});
 
