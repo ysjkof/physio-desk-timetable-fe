@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { useOutletContext } from 'react-router-dom';
 import FormForEditMyProfile from './FormForEditMyProfile';
-import { loggedInUserVar } from '../../../../store';
 import FormForEditEmail from './FormForEditEmail';
+import { useMe } from '../../../../hooks';
 import type { SettingOutletContext } from '../../../../types/common.types';
 
 const MyProfile = () => {
@@ -43,12 +42,11 @@ const Title = () => {
 };
 
 const ProfileMain = ({ toggleEditMode }: { toggleEditMode: () => void }) => {
-  const loggedInUser = useReactiveVar(loggedInUserVar);
-
+  const [meData] = useMe();
   return (
     <div className="flex w-80 flex-col gap-4">
-      <ProfileItem title="Email" textContent={loggedInUser?.email || '-'} />
-      <ProfileItem title="이름" textContent={loggedInUser?.name || '-'} />
+      <ProfileItem title="Email" textContent={meData?.email || '-'} />
+      <ProfileItem title="이름" textContent={meData?.name || '-'} />
       <button
         onClick={toggleEditMode}
         type="button"

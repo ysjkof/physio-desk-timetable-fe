@@ -1,26 +1,22 @@
-import {
-  gql,
-  useApolloClient,
-  useMutation,
-  useReactiveVar,
-} from '@apollo/client';
+import { gql, useApolloClient, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { MUOOL } from '../../../constants/constants';
-import { loggedInUserVar } from '../../../store';
 import { VERIFY_EMAIL_DOCUMENT } from '../../../graphql';
+import { useMe } from '../../../hooks';
 import type { VerifyEmailMutation } from '../../../types/generated.types';
 
 export default function ConfirmEmail() {
   const client = useApolloClient();
   const navigate = useNavigate();
-  const loggedInUser = useReactiveVar(loggedInUserVar);
+  const [meData] = useMe();
+
   const [message, setMessage] = useState(
     '화면을 닫지 말고 기다려주세요. 확인 중입니다.'
   );
 
-  if (loggedInUser?.verified) {
+  if (meData?.verified) {
     navigate('/');
   }
 
@@ -58,12 +54,12 @@ export default function ConfirmEmail() {
             return setMessage(error);
           }
 
-          if (loggedInUser?.id) {
+          if (meData) {
             // Reading and Writing Data to the cache guide: writeFragment
             // Fragment는 전체 DB에서 수정하고 싶은 일부분이다.
             client.writeFragment({
               // 캐시에서 User:1 이런식으로 돼 있기 때문에 아래처럼.
-              id: `User:${loggedInUser.id}`,
+              id: `User:${meData.id}`,
               // 이하 cache로 보내서 업데이트 됐으면 하는 프래그먼트로. 무엇을 바꾸고 싶은지 선언
               fragment: gql`
                 fragment VerifiedField on User {
@@ -89,7 +85,7 @@ export default function ConfirmEmail() {
     intervalUpdateMessage('코드가 없습니다. 잘못된 접근입니다.');
     const timeoutId = setTimeout(navigate, 5000, '/');
     return () => clearTimeout(timeoutId);
-  }, [loggedInUser?.id]);
+  }, [meData]);
 
   return (
     <div className="mt-52 flex flex-col items-center justify-center">

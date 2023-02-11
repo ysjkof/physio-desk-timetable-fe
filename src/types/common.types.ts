@@ -219,8 +219,6 @@ export interface SelectedPatient extends PatientInReservation {
 
 // utils
 
-export type LoggedInUser = MeQuery['me'] | undefined | null;
-
 export interface ToastState {
   messages?: string[];
   fade?: boolean;

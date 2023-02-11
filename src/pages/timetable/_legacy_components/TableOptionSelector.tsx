@@ -1,4 +1,3 @@
-import { useReactiveVar } from '@apollo/client';
 import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion, Variants } from 'framer-motion';
@@ -8,7 +7,7 @@ import {
   isStayMember,
   renameUseSplit,
 } from '../../../utils/common.utils';
-import { loggedInUserVar, selectClinicId, useStore } from '../../../store';
+import { selectClinicId, useStore } from '../../../store';
 import { NEXT } from '../../../constants/constants';
 import { Selectbox } from '../../../components';
 import { getHoursByUnit, getMinutesByUnit } from '../../../utils/date.utils';
@@ -19,11 +18,11 @@ import Sidebar from '../../../_legacy_components/molecules/Sidebar';
 import { Check } from '../../../svgs';
 import { TableDisplay, TableTime } from '../../../models';
 import { useSelectedClinic, useTableDisplay, useTableTime } from '../hooks';
+import { useFindMyClinics, useMe } from '../../../hooks';
 import type {
   FirstAndLastTime,
   MemberOfClient,
 } from '../../../types/common.types';
-import { useFindMyClinics, useMe } from '../../../hooks';
 
 export default function TableOptionSelector() {
   const [meData] = useMe();
@@ -35,8 +34,6 @@ export default function TableOptionSelector() {
   const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
 
   const { changeTableTIme } = useTableTime();
-
-  const loggedInUser = useReactiveVar(loggedInUserVar);
 
   const closeOptionSelector = () => {
     toggleDisplayController(false);
@@ -184,64 +181,65 @@ export default function TableOptionSelector() {
         </MenuButton>
       </div>
       <Sidebar noGap className="divide-y">
-        {myClinics?.map((clinic) => {
-          const meMember = clinic.members.find(
-            (member) => member.user.id === loggedInUser?.id
-          );
-          if (!meMember) return null;
+        {meData &&
+          myClinics?.map((clinic) => {
+            const meMember = clinic.members.find(
+              (member) => member.user.id === meData.id
+            );
+            if (!meMember) return null;
 
-          const isSelectedClinic = clinic.id === clinicId;
+            const isSelectedClinic = clinic.id === clinicId;
 
-          const { staying, accepted, manager } = meMember;
-          const memberState = getMemberState({ staying, accepted, manager });
-          const isStay = isStayMember(memberState);
+            const { staying, accepted, manager } = meMember;
+            const memberState = getMemberState({ staying, accepted, manager });
+            const isStay = isStayMember(memberState);
 
-          const sortMember = (members: MemberOfClient[]) => {
-            const updated = [...members];
-            return updated.sort((a, b) => {
-              if (a.user.name > b.user.name) return 1;
-              if (a.user.name < b.user.name) return -1;
-              return 0;
-            });
-          };
+            const sortMember = (members: MemberOfClient[]) => {
+              const updated = [...members];
+              return updated.sort((a, b) => {
+                if (a.user.name > b.user.name) return 1;
+                if (a.user.name < b.user.name) return -1;
+                return 0;
+              });
+            };
 
-          return (
-            <Sidebar.Ul
-              key={clinic.id}
-              removePadding
-              opacity={!isSelectedClinic}
-              title={
-                <Sidebar.Button
-                  className={cls(
-                    'text-left',
-                    isSelectedClinic ? '' : 'font-normal'
-                  )}
-                  onClick={() => onClickChangeSelectClinic(clinic.id)}
-                >
-                  <Check className="mr-2" />
-                  {renameUseSplit(clinic.name)}
-                </Sidebar.Button>
-              }
-            >
-              {isStay ? (
-                sortMember(clinic.members).map((member) => {
-                  if (!member.staying) return null;
-                  return (
-                    <Sidebar.Li
-                      key={member.id}
-                      onClick={() => onClickToggleUser(member.id)}
-                      selected={isSelectedClinic && member.canSee}
-                    >
-                      {member.user.name}
-                    </Sidebar.Li>
-                  );
-                })
-              ) : (
-                <StateBadge state={memberState} />
-              )}
-            </Sidebar.Ul>
-          );
-        })}
+            return (
+              <Sidebar.Ul
+                key={clinic.id}
+                removePadding
+                opacity={!isSelectedClinic}
+                title={
+                  <Sidebar.Button
+                    className={cls(
+                      'text-left',
+                      isSelectedClinic ? '' : 'font-normal'
+                    )}
+                    onClick={() => onClickChangeSelectClinic(clinic.id)}
+                  >
+                    <Check className="mr-2" />
+                    {renameUseSplit(clinic.name)}
+                  </Sidebar.Button>
+                }
+              >
+                {isStay ? (
+                  sortMember(clinic.members).map((member) => {
+                    if (!member.staying) return null;
+                    return (
+                      <Sidebar.Li
+                        key={member.id}
+                        onClick={() => onClickToggleUser(member.id)}
+                        selected={isSelectedClinic && member.canSee}
+                      >
+                        {member.user.name}
+                      </Sidebar.Li>
+                    );
+                  })
+                ) : (
+                  <StateBadge state={memberState} />
+                )}
+              </Sidebar.Ul>
+            );
+          })}
       </Sidebar>
     </motion.div>
   );

@@ -7,12 +7,7 @@ import {
 } from '../../graphql';
 import { ClinicsOfClient, TableDisplay, TableTime } from '../../models';
 import localStorageUtils from '../../utils/localStorage.utils';
-import {
-  clinicListsVar,
-  loggedInUserVar,
-  tableDisplayVar,
-  tableTimeVar,
-} from '../../store';
+import { clinicListsVar, tableDisplayVar, tableTimeVar } from '../../store';
 import { useMe } from '../../hooks';
 import { initSelectedClinicId } from './initSelectedClinic';
 import type { MyClinic, UserIdAndName } from '../../types/common.types';
@@ -92,8 +87,6 @@ const Initialize = ({ children }: PropsWithChildren) => {
     initTableDisplay(userIdAndName);
     initTableTime(userIdAndName);
     initClinicsOfClient(userIdAndName, findMyClinicsData.findMyClinics.clinics);
-
-    loggedInUserVar(meData);
 
     ///
     initSelectedClinicId(

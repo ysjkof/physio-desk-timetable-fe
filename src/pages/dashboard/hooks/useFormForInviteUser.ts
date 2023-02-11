@@ -1,17 +1,14 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import { useReactiveVar } from '@apollo/client';
-import { loggedInUserVar } from '../../../store';
 import { useInviteUser } from '../../../hooks';
-import { ClinicsOfClient } from '../../../models';
 import { REG_EXP } from '../../../constants/regex';
+import { useStore } from '../../../store';
 
 interface UseFormForInviteUserFields {
   name: string;
 }
 
 export const useFormForInviteUser = () => {
-  const loggedInUser = useReactiveVar(loggedInUserVar);
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const clinicId = useStore((state) => state.selectedClinicId);
 
   const {
     register,
@@ -22,8 +19,6 @@ export const useFormForInviteUser = () => {
   const [inviteUser] = useInviteUser();
 
   const onSubmit: SubmitHandler<UseFormForInviteUserFields> = (data) => {
-    if (!loggedInUser) return;
-
     const { name } = data;
     if (!name) return;
 

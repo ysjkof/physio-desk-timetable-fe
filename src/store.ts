@@ -4,7 +4,6 @@ import { TableDisplay, TableTime } from './models';
 import localStorageUtils from './utils/localStorage.utils';
 import type {
   TableDisplayOptions,
-  LoggedInUser,
   ToastState,
   TableTimeOptions,
   SelectedReservationType,
@@ -14,7 +13,6 @@ import type {
 } from './types/common.types';
 
 // global state
-export const loggedInUserVar = makeVar<LoggedInUser>(undefined);
 
 export const clinicListsVar = makeVar<ClinicOfClient[]>([]);
 
