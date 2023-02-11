@@ -452,26 +452,14 @@ export type ListReservationsOutput = {
   __typename?: 'ListReservationsOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-  results: Array<Reservation>;
-  totalCount: Scalars['Int'];
-};
-
-export type ListenCreateReservationInput = {
-  clinicId: Scalars['Int'];
-};
-
-export type ListenDeleteReservationInput = {
-  clinicId: Scalars['Int'];
+  results?: Maybe<Array<Reservation>>;
+  totalCount?: Maybe<Scalars['Int']>;
 };
 
 export type ListenDeleteReservationOutput = {
   __typename?: 'ListenDeleteReservationOutput';
   clinicId: Scalars['Int'];
   id: Scalars['Int'];
-};
-
-export type ListenUpdateReservationInput = {
-  clinicId: Scalars['Int'];
 };
 
 export type LoginInput = {
@@ -872,21 +860,6 @@ export type Subscription = {
   listenUpdateReservation: Reservation;
 };
 
-
-export type SubscriptionListenCreateReservationArgs = {
-  input: ListenCreateReservationInput;
-};
-
-
-export type SubscriptionListenDeleteReservationArgs = {
-  input: ListenDeleteReservationInput;
-};
-
-
-export type SubscriptionListenUpdateReservationArgs = {
-  input: ListenUpdateReservationInput;
-};
-
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -1173,25 +1146,19 @@ export type ListReservationsQueryVariables = Exact<{
 }>;
 
 
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount: number, results: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> } };
+export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
 
-export type ListenCreateReservationSubscriptionVariables = Exact<{
-  input: ListenCreateReservationInput;
-}>;
+export type ListenCreateReservationSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ListenCreateReservationSubscription = { __typename?: 'Subscription', listenCreateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null } };
 
-export type ListenDeleteReservationSubscriptionVariables = Exact<{
-  input: ListenDeleteReservationInput;
-}>;
+export type ListenDeleteReservationSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ListenDeleteReservationSubscription = { __typename?: 'Subscription', listenDeleteReservation: { __typename?: 'ListenDeleteReservationOutput', id: number, clinicId: number } };
 
-export type ListenUpdateReservationSubscriptionVariables = Exact<{
-  input: ListenUpdateReservationInput;
-}>;
+export type ListenUpdateReservationSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ListenUpdateReservationSubscription = { __typename?: 'Subscription', listenUpdateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number }, patient?: { __typename?: 'Patient', id: number, name: string } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number }, prescriptions?: Array<{ __typename?: 'Prescription', id: number }> | null } };
