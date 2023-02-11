@@ -9,8 +9,8 @@ export const LISTEN_CREATE_RESERVATION_DOCUMENT = gql`
   ${ALL_PATIENT_FIELDS}
   ${USER_ID_NAME_EMAIL_FIELDS}
   ${COMMON_PRESCRIPTION_FIELDS}
-  subscription listenCreateReservation {
-    listenCreateReservation {
+  subscription listenCreateReservation($input: ListenCreateReservationInput!) {
+    listenCreateReservation(input: $input) {
       ...CommonReservationFields
       user {
         id
