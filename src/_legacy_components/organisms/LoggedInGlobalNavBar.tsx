@@ -5,13 +5,13 @@ import GlobalNavBarLayout from '../../components/GlobalNavBar/GlobalNavBarLayout
 import LoggedInGlobalNavBarMenu from '../molecules/LoggedInGlobalNavBarMenu';
 
 export default function LoggedInGlobalNavBar() {
-  const { data: meData } = useMe();
+  const [meData] = useMe();
   const [hasBanner, setHasBanner] = useState(true);
   const closeBanner = () => setHasBanner(false);
 
   return (
     <>
-      {hasBanner && meData && !meData.me.verified && (
+      {hasBanner && meData && !meData.verified && (
         <Banner close={closeBanner} />
       )}
       <GlobalNavBarLayout>

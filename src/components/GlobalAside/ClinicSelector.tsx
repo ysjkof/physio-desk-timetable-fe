@@ -1,15 +1,16 @@
 import { addPrefixToNameWhenWaiting } from '../../utils/common.utils';
-import { useFindMyMembers } from '../../hooks';
+import { useFindMyMembers, useMe } from '../../hooks';
 import { selectClinicId, useStore } from '../../store';
 import Selectbox from '../Selectbox';
 
 const ClinicSelector = () => {
-  const { data } = useFindMyMembers();
+  const [meData] = useMe();
+
+  const [myMembers] = useFindMyMembers();
+
   const selectedClinicId = useStore((state) => state.selectedClinicId);
 
-  const member = data?.findMyMembers.members?.find(
-    (member) => member.id === selectedClinicId
-  );
+  const member = myMembers?.find((member) => member.id === selectedClinicId);
 
   return (
     <Selectbox
@@ -21,15 +22,22 @@ const ClinicSelector = () => {
       backgroundColor="#262850"
     >
       <Selectbox.Options>
-        {data?.findMyMembers.members?.map((member) => (
-          <Selectbox.Option
-            key={member.id}
-            selected={member.id === selectedClinicId}
-            onClick={() => selectClinicId(member.id)}
-          >
-            {addPrefixToNameWhenWaiting(member.clinic.name, member.accepted)}
-          </Selectbox.Option>
-        ))}
+        {meData &&
+          myMembers?.map((member) => (
+            <Selectbox.Option
+              key={member.id}
+              selected={member.id === selectedClinicId}
+              onClick={() =>
+                selectClinicId({
+                  clinicId: member.id,
+                  userId: meData.id,
+                  userName: meData.name,
+                })
+              }
+            >
+              {addPrefixToNameWhenWaiting(member.clinic.name, member.accepted)}
+            </Selectbox.Option>
+          ))}
       </Selectbox.Options>
     </Selectbox>
   );

@@ -24,7 +24,7 @@ import type {
 const Initialize = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState(true);
 
-  const { data: meData } = useMe();
+  const [meData] = useMe();
 
   const { data: findMyClinicsData } = useQuery<FindMyClinicsQuery>(
     FIND_MY_CLINICS_DOCUMENT,
@@ -76,7 +76,6 @@ const Initialize = ({ children }: PropsWithChildren) => {
   };
 
   useEffect(() => {
-    console.log('myClinicsStatusData >>>', myClinicsStatusData);
     setLoading(true);
 
     if (
@@ -86,7 +85,7 @@ const Initialize = ({ children }: PropsWithChildren) => {
     )
       return;
 
-    const userIdAndName = { userId: meData.me.id, userName: meData.me.name };
+    const userIdAndName = { userId: meData.id, userName: meData.name };
 
     checkLatestStorage(userIdAndName);
 
@@ -94,7 +93,7 @@ const Initialize = ({ children }: PropsWithChildren) => {
     initTableTime(userIdAndName);
     initClinicsOfClient(userIdAndName, findMyClinicsData.findMyClinics.clinics);
 
-    loggedInUserVar(meData.me);
+    loggedInUserVar(meData);
 
     ///
     initSelectedClinicId(

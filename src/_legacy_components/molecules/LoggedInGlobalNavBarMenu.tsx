@@ -7,7 +7,7 @@ import Dropdown from './Dropdown';
 export default function LoggedInGlobalNavBarMenu() {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues, setValue } = useForm();
-  const { data: meData } = useMe();
+  const [meData] = useMe();
   const onSubmitSearch = () => {
     const { search } = getValues();
     const searchTrim = search.trim();
@@ -35,7 +35,7 @@ export default function LoggedInGlobalNavBarMenu() {
       <Link to={ROUTES.timetable}>
         <span className="whitespace-nowrap">시간표</span>
       </Link>
-      <Dropdown title={meData?.me.name}>
+      <Dropdown title={meData?.name}>
         <Dropdown.Container width="12rem">
           <Dropdown.Ul>
             {clinicMenu.map((menu, idx) => (
