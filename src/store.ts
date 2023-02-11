@@ -36,14 +36,12 @@ export const selectedReservationVar =
 export type ClientOfStore = ApolloClient<NormalizedCacheObject> | null;
 interface ZustandStoreState {
   isLoggedIn: boolean;
-  authToken: string | null;
   client: ClientOfStore;
   selectedClinicId: number;
 }
 
 const initialState = {
   isLoggedIn: false,
-  authToken: null,
   client: null,
   selectedClinicId: 0,
 };
@@ -56,7 +54,7 @@ export const setAuthToken = (_token?: string) =>
     if (!_token) {
       token = localStorageUtils.get({ key: 'token' });
     }
-    return { authToken: token, isLoggedIn: !!token };
+    return { isLoggedIn: !!token };
   });
 
 export const setClient = (client: ClientOfStore) =>
