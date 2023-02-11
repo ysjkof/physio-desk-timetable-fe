@@ -12,7 +12,6 @@ import {
   TimeLabels,
   TimetableTemplate,
 } from './components';
-import { TableDisplay } from '../../models';
 import type { LocationState } from '../../types/common.types';
 
 const Loading = lazy(() => import('../../components/Loading'));
@@ -33,7 +32,7 @@ const TimeTable = () => {
     clearLocationState();
   }, []);
 
-  if (!TableDisplay.get() || !schedules) return <Loading />;
+  if (!schedules) return <Loading />;
   return (
     <>
       <Helmet>
@@ -43,14 +42,9 @@ const TimeTable = () => {
         nav={<TableController />}
         labels={<TimeLabels labels={labels} />}
         columns={
-          <>
-            {TableDisplay.get().seeList === false && (
-              <AnimatePresence>
-                <Schedules labels={labels} weekEvents={schedules} />
-              </AnimatePresence>
-            )}
-            {TableDisplay.get().seeList === true && '준비 중'}
-          </>
+          <AnimatePresence>
+            <Schedules labels={labels} weekEvents={schedules} />
+          </AnimatePresence>
         }
       />
       {locationState?.createReservation && <ReserveOrDayoff />}

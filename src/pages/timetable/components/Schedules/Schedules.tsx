@@ -6,7 +6,7 @@ import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
 import { cls } from '../../../../utils/common.utils';
-import { selectedDateVar, tableDisplayVar } from '../../../../store';
+import { selectedDateVar, useStore } from '../../../../store';
 import type { SchedulesProps } from '../../../../types/props.types';
 
 const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
@@ -14,19 +14,19 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
 
   const userLength = weekEvents[0].users.filter((user) => user.canSee).length;
 
-  const { hasWeekView } = useReactiveVar(tableDisplayVar);
+  const isWeekCalendar = useStore((state) => state.isWeekCalendar);
 
-  const containerStyle = hasWeekView
+  const containerStyle = isWeekCalendar
     ? SchedulesStyle.week.template(userLength)
     : SchedulesStyle.day.template();
 
-  const columnStyle = hasWeekView
+  const columnStyle = isWeekCalendar
     ? SchedulesStyle.week.userColumn(userLength)
     : SchedulesStyle.day.userColumn(userLength);
 
   const selectedDate = useReactiveVar(selectedDateVar);
 
-  const schedules = hasWeekView
+  const schedules = isWeekCalendar
     ? weekEvents
     : weekEvents && [weekEvents[selectedDate.getDay()]];
 

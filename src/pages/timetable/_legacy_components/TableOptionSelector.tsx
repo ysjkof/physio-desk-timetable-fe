@@ -10,6 +10,8 @@ import {
 import {
   selectClinicId,
   toggleSettingOfTimetable,
+  toggleShowCancelOfTimetable,
+  toggleShowNoshowOfTimetable,
   useStore,
 } from '../../../store';
 import { NEXT } from '../../../constants/constants';
@@ -20,7 +22,7 @@ import BtnArrow from '../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../_legacy_components/molecules/Sidebar';
 import { Check } from '../../../svgs';
-import { TableDisplay, TableTime } from '../../../models';
+import { TableTime } from '../../../models';
 import { useSelectedClinic, useTableTime } from '../hooks';
 import { useFindMyClinics, useMe } from '../../../hooks';
 import type {
@@ -31,6 +33,12 @@ import type {
 export default function TableOptionSelector() {
   const [meData] = useMe();
   const clinicId = useStore((state) => state.selectedClinicId);
+  const showCancelOfTimetable = useStore(
+    (state) => state.showCancelOfTimetable
+  );
+  const showNoshowOfTimetable = useStore(
+    (state) => state.showNoshowOfTimetable
+  );
 
   const [myClinics] = useFindMyClinics();
   const { toggleUser } = useSelectedClinic();
@@ -52,11 +60,11 @@ export default function TableOptionSelector() {
     selectClinicId({ clinicId, userId: meData.id, userName: meData.name });
   };
 
-  const toggleSeeCancel = () => {
-    toggleDisplayOption('seeCancel');
+  const toggleShowCancel = () => {
+    toggleShowCancelOfTimetable();
   };
-  const toggleSeeNoshow = () => {
-    toggleDisplayOption('seeNoshow');
+  const toggleShowNoshow = () => {
+    toggleShowNoshowOfTimetable();
   };
 
   const changeTableTime = (key: keyof FirstAndLastTime, value: number) => {
@@ -167,17 +175,11 @@ export default function TableOptionSelector() {
         id="table-option-selector__toggle-visible-state"
         className="flex items-center gap-2 border-b py-1 px-3"
       >
-        <MenuButton
-          enabled={TableDisplay.get().seeCancel}
-          onClick={toggleSeeCancel}
-        >
+        <MenuButton enabled={showCancelOfTimetable} onClick={toggleShowCancel}>
           <FontAwesomeIcon icon={faBan} fontSize={14} />
           취소
         </MenuButton>
-        <MenuButton
-          enabled={TableDisplay.get().seeNoshow}
-          onClick={toggleSeeNoshow}
-        >
+        <MenuButton enabled={showNoshowOfTimetable} onClick={toggleShowNoshow}>
           <FontAwesomeIcon icon={faCommentSlash} fontSize={14} />
           부도
         </MenuButton>

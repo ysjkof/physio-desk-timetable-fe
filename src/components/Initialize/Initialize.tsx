@@ -5,9 +5,9 @@ import {
   FIND_MY_CLINICS_DOCUMENT,
   GET_MY_CLINICS_STATUS_DOCUMENT,
 } from '../../graphql';
-import { ClinicsOfClient, TableDisplay, TableTime } from '../../models';
+import { ClinicsOfClient, TableTime } from '../../models';
 import localStorageUtils from '../../utils/localStorage.utils';
-import { tableDisplayVar, tableTimeVar } from '../../store';
+import { tableTimeVar } from '../../store';
 import { useMe } from '../../hooks';
 import { initSelectedClinicId } from './initSelectedClinic';
 import type { MyClinic, UserIdAndName } from '../../types/common.types';
@@ -52,11 +52,6 @@ const Initialize = ({ children }: PropsWithChildren) => {
     return console.info('Initialized New Local Storage');
   };
 
-  const initTableDisplay = (userIdAndName: UserIdAndName) => {
-    const tableDisplayOptions = TableDisplay.initialize(userIdAndName);
-    tableDisplayVar(tableDisplayOptions);
-  };
-
   const initTableTime = (userIdAndName: UserIdAndName) => {
     const tableTimeOptions = TableTime.initialize(userIdAndName);
     tableTimeVar(tableTimeOptions);
@@ -83,8 +78,6 @@ const Initialize = ({ children }: PropsWithChildren) => {
     const userIdAndName = { userId: meData.id, userName: meData.name };
 
     checkLatestStorage(userIdAndName);
-
-    initTableDisplay(userIdAndName);
     initTableTime(userIdAndName);
     initClinicsOfClient(userIdAndName, findMyClinicsData.findMyClinics.clinics);
 

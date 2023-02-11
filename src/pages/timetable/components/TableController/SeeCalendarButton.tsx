@@ -2,14 +2,20 @@ import { useRef } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Calendar } from '../../../../svgs';
 import { Datepicker, MenuButton, Modal } from '../../../../components';
-import { useTableDisplay } from '../../hooks';
 import { getPositionRef } from '../../../../utils/common.utils';
-import { selectedDateVar } from '../../../../store';
+import {
+  selectedDateVar,
+  toggleShowCalendarOfTimetable,
+  useStore,
+} from '../../../../store';
 
 const SeeCalendarButton = () => {
-  const { tableDisplay, toggleDisplayOption } = useTableDisplay();
+  const showCalendarOfTimetable = useStore(
+    (state) => state.showCalendarOfTimetable
+  );
+
   const toggleCalender = () => {
-    toggleDisplayOption('seeCalendar');
+    toggleShowCalendarOfTimetable();
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -24,14 +30,14 @@ const SeeCalendarButton = () => {
     <>
       <MenuButton
         onClick={toggleCalender}
-        isActivated={tableDisplay.seeCalendar}
+        isActivated={showCalendarOfTimetable}
         ref={buttonRef}
         hasBorder
       >
         <Calendar />
         달력보기
       </MenuButton>
-      {tableDisplay.seeCalendar && (
+      {showCalendarOfTimetable && (
         <Modal top={top} right={10} closeAction={toggleCalender}>
           <Datepicker
             selectedDate={selectedDate}

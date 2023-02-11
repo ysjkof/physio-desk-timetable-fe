@@ -1,17 +1,18 @@
 import { TwoLabelSwitch } from '../../../../components';
-import { useTableDisplay } from '../../hooks';
+import { toggleIsWeekCalendar, useStore } from '../../../../store';
 
 const SwitchWeekViewButton = () => {
-  const { tableDisplay, toggleDisplayOption } = useTableDisplay();
+  const isWeekCalendar = useStore((state) => state.isWeekCalendar);
+
   const toggleWeekOrDay = () => {
-    toggleDisplayOption('hasWeekView');
+    toggleIsWeekCalendar();
   };
 
   return (
     <TwoLabelSwitch
       labels={['하루', '주단위']}
       onClick={toggleWeekOrDay}
-      isActivated={tableDisplay.hasWeekView}
+      isActivated={isWeekCalendar}
     />
   );
 };

@@ -7,8 +7,8 @@ import TableOptionSelector from '../../_legacy_components/TableOptionSelector';
 import { MenuButton, Modal } from '../../../../components';
 
 const DisplayControlButton = () => {
-  const hasSettingOfTimetable = useStore(
-    (state) => state.hasSettingOfTimetable
+  const showSettingOfTimetable = useStore(
+    (state) => state.showSettingOfTimetable
   );
   const settingRef = useRef<HTMLButtonElement>(null);
 
@@ -26,7 +26,7 @@ const DisplayControlButton = () => {
       </MenuButton>
 
       <AnimatePresence>
-        {hasSettingOfTimetable && (
+        {showSettingOfTimetable && (
           <Modal
             top={top}
             right={10}

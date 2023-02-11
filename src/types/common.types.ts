@@ -23,16 +23,16 @@ export interface TimeLabelArg {
   readonly colors: string[];
 }
 
+export interface HoursAndMinutes {
+  hours?: number;
+  minutes?: number;
+}
+
 export interface FirstAndLastTime {
   firstHour: number;
   firstMinute: number;
   lastHour: number;
   lastMinute: number;
-}
-
-export interface HoursAndMinutes {
-  hours?: number;
-  minutes?: number;
 }
 
 export interface TableTimeOptions extends FirstAndLastTime {

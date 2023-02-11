@@ -1,15 +1,15 @@
 import { ApolloClient, NormalizedCacheObject, makeVar } from '@apollo/client';
 import { create } from 'zustand';
-import { TableDisplay, TableTime } from './models';
+import { TableTime } from './models';
 import localStorageUtils from './utils/localStorage.utils';
 import type {
-  TableDisplayOptions,
   ToastState,
   TableTimeOptions,
   SelectedReservationType,
   SelectedPatientType,
   UserIdAndName,
 } from './types/common.types';
+import { TABLE_TIME_GAP } from './constants/constants';
 
 export const selectedReservationVar =
   makeVar<SelectedReservationType>(undefined);
@@ -19,8 +19,6 @@ export type ClientOfStore = ApolloClient<NormalizedCacheObject> | null;
 // Timetable state
 
 export const tableTimeVar = makeVar<TableTimeOptions>(TableTime.get());
-
-export const tableDisplayVar = makeVar<TableDisplayOptions>(TableDisplay.get());
 
 export const selectedDateVar = makeVar(new Date());
 
@@ -32,7 +30,11 @@ interface ZustandStoreState {
   selectedClinicId: number;
   toast: ToastState;
   isBigGlobalAside: boolean;
-  hasSettingOfTimetable: boolean;
+  isWeekCalendar: boolean;
+  showSettingOfTimetable: boolean;
+  showCancelOfTimetable: boolean;
+  showNoshowOfTimetable: boolean;
+  showCalendarOfTimetable: boolean;
 }
 
 const initialState: ZustandStoreState = {
@@ -41,10 +43,16 @@ const initialState: ZustandStoreState = {
   selectedClinicId: 0,
   toast: {},
   isBigGlobalAside: true,
-  hasSettingOfTimetable: false,
+  isWeekCalendar: true,
+  showSettingOfTimetable: false,
+  showCancelOfTimetable: false,
+  showNoshowOfTimetable: false,
+  showCalendarOfTimetable: false,
 };
 
 export const useStore = create<ZustandStoreState>(() => initialState);
+
+// 전역
 
 export const setAuthToken = (_token?: string) =>
   useStore.setState(() => {
@@ -70,13 +78,40 @@ export const toggleGlobalAside = (value?: boolean) =>
       typeof value === 'undefined' ? !state.isBigGlobalAside : value,
   }));
 
-export const toggleSettingOfTimetable = (value?: boolean) =>
+export const resetStore = () => useStore.setState(() => initialState);
+
+// 시간표
+
+export const toggleIsWeekCalendar = (value?: boolean) =>
   useStore.setState((state) => ({
-    hasSettingOfTimetable:
-      typeof value === 'undefined' ? !state.hasSettingOfTimetable : value,
+    isWeekCalendar:
+      typeof value === 'undefined' ? !state.isWeekCalendar : value,
   }));
 
-export const resetStore = () => useStore.setState(() => initialState);
+export const toggleSettingOfTimetable = (value?: boolean) =>
+  useStore.setState((state) => ({
+    showSettingOfTimetable:
+      typeof value === 'undefined' ? !state.showSettingOfTimetable : value,
+  }));
+
+export const toggleShowCancelOfTimetable = (value?: boolean) =>
+  useStore.setState((state) => ({
+    showCancelOfTimetable:
+      typeof value === 'undefined' ? !state.showCancelOfTimetable : value,
+  }));
+
+export const toggleShowNoshowOfTimetable = (value?: boolean) =>
+  useStore.setState((state) => ({
+    showNoshowOfTimetable:
+      typeof value === 'undefined' ? !state.showNoshowOfTimetable : value,
+  }));
+export const toggleShowCalendarOfTimetable = (value?: boolean) =>
+  useStore.setState((state) => ({
+    showCalendarOfTimetable:
+      typeof value === 'undefined' ? !state.showCalendarOfTimetable : value,
+  }));
+
+// store + localStorage
 
 interface SelectClinicId extends UserIdAndName {
   clinicId: number;
