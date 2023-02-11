@@ -17,7 +17,6 @@ export const selectedReservationVar =
 export type ClientOfStore = ApolloClient<NormalizedCacheObject> | null;
 
 // Timetable state
-export const hasTableDisplayVar = makeVar(false);
 
 export const tableTimeVar = makeVar<TableTimeOptions>(TableTime.get());
 
@@ -33,6 +32,7 @@ interface ZustandStoreState {
   selectedClinicId: number;
   toast: ToastState;
   isBigGlobalAside: boolean;
+  hasSettingOfTimetable: boolean;
 }
 
 const initialState: ZustandStoreState = {
@@ -41,6 +41,7 @@ const initialState: ZustandStoreState = {
   selectedClinicId: 0,
   toast: {},
   isBigGlobalAside: true,
+  hasSettingOfTimetable: false,
 };
 
 export const useStore = create<ZustandStoreState>(() => initialState);
@@ -67,6 +68,12 @@ export const toggleGlobalAside = (value?: boolean) =>
   useStore.setState((state) => ({
     isBigGlobalAside:
       typeof value === 'undefined' ? !state.isBigGlobalAside : value,
+  }));
+
+export const toggleSettingOfTimetable = (value?: boolean) =>
+  useStore.setState((state) => ({
+    hasSettingOfTimetable:
+      typeof value === 'undefined' ? !state.hasSettingOfTimetable : value,
   }));
 
 export const resetStore = () => useStore.setState(() => initialState);

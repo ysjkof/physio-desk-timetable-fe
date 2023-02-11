@@ -1,26 +1,23 @@
 import { useRef } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { AnimatePresence } from 'framer-motion';
-import { hasTableDisplayVar } from '../../../../store';
+import { toggleSettingOfTimetable, useStore } from '../../../../store';
 import { getPositionRef } from '../../../../utils/common.utils';
 import { EllipsisVertical } from '../../../../svgs';
 import TableOptionSelector from '../../_legacy_components/TableOptionSelector';
 import { MenuButton, Modal } from '../../../../components';
-import { useTableDisplay } from '../../hooks';
 
 const DisplayControlButton = () => {
-  const hasTableDisplay = useReactiveVar(hasTableDisplayVar);
-
+  const hasSettingOfTimetable = useStore(
+    (state) => state.hasSettingOfTimetable
+  );
   const settingRef = useRef<HTMLButtonElement>(null);
-
-  const { toggleDisplayController } = useTableDisplay();
 
   const { top } = getPositionRef(settingRef);
 
   return (
     <>
       <MenuButton
-        onClick={() => toggleDisplayController()}
+        onClick={() => toggleSettingOfTimetable()}
         ref={settingRef}
         className="bg-deep-blue text-white"
       >
@@ -29,11 +26,11 @@ const DisplayControlButton = () => {
       </MenuButton>
 
       <AnimatePresence>
-        {hasTableDisplay && (
+        {hasSettingOfTimetable && (
           <Modal
             top={top}
             right={10}
-            closeAction={() => toggleDisplayController(false)}
+            closeAction={() => toggleSettingOfTimetable(false)}
           >
             <TableOptionSelector />
           </Modal>

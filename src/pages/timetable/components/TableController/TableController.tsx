@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useTableDisplay } from '../../hooks';
 import DateController from './DateController';
 import SwitchWeekViewButton from './SwitchWeekViewButton';
 import SeeCalendarButton from './SeeCalendarButton';
@@ -7,12 +6,11 @@ import UserSelector from './UserSelector';
 import ReservationForCopy from './ReservationForCopy';
 import CreatePatientButton from './CreatePatientButton';
 import DisplayControlButton from './DisplayControlButton';
+import { toggleSettingOfTimetable } from '../../../../store';
 
 const TableController = () => {
-  const { toggleDisplayController } = useTableDisplay();
-
   useEffect(() => {
-    return () => toggleDisplayController(false);
+    return () => toggleSettingOfTimetable(false);
   }, []);
 
   return (

@@ -7,7 +7,11 @@ import {
   isStayMember,
   renameUseSplit,
 } from '../../../utils/common.utils';
-import { selectClinicId, useStore } from '../../../store';
+import {
+  selectClinicId,
+  toggleSettingOfTimetable,
+  useStore,
+} from '../../../store';
 import { NEXT } from '../../../constants/constants';
 import { Selectbox } from '../../../components';
 import { getHoursByUnit, getMinutesByUnit } from '../../../utils/date.utils';
@@ -17,7 +21,7 @@ import StateBadge from '../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../_legacy_components/molecules/Sidebar';
 import { Check } from '../../../svgs';
 import { TableDisplay, TableTime } from '../../../models';
-import { useSelectedClinic, useTableDisplay, useTableTime } from '../hooks';
+import { useSelectedClinic, useTableTime } from '../hooks';
 import { useFindMyClinics, useMe } from '../../../hooks';
 import type {
   FirstAndLastTime,
@@ -31,12 +35,10 @@ export default function TableOptionSelector() {
   const [myClinics] = useFindMyClinics();
   const { toggleUser } = useSelectedClinic();
 
-  const { toggleDisplayController, toggleDisplayOption } = useTableDisplay();
-
   const { changeTableTIme } = useTableTime();
 
   const closeOptionSelector = () => {
-    toggleDisplayController(false);
+    toggleSettingOfTimetable(false);
   };
   const onClickToggleUser = (memberId: number) => {
     toggleUser(memberId);
