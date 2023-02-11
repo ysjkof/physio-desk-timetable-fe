@@ -5,7 +5,6 @@ import {
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
   LIST_RESERVATIONS_DOCUMENT,
 } from '../../../graphql';
-import { ClinicsOfClient } from '../../../models';
 import type {
   ListenCreateReservationSubscription,
   ListenDeleteReservationSubscription,
@@ -23,7 +22,7 @@ interface UseSubscriptionsProps {
 }
 
 export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const clinicId = useStore((state) => state.selectedClinicId);
   const client = useStore((state) => state.client);
 
   const { loading: loadingOfDelete, data: deleteResult } =

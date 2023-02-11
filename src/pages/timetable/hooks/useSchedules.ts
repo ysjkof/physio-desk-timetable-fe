@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { Schedules } from '../../../models';
 import { useListReservations } from './useListReservations';
-import { useMe } from '../../../hooks';
 import { clinicListsVar, selectedDateVar } from '../../../store';
 import type { ISchedules } from '../../../types/common.types';
 
@@ -13,10 +12,8 @@ export const useSchedules = () => {
 
   const listReservations = useListReservations();
 
-  const { data: loginUser } = useMe();
-
   useEffect(() => {
-    if (!listReservations.data?.listReservations.results || !loginUser) return;
+    if (!listReservations.data?.listReservations.results) return;
 
     setSchedules(
       new Schedules(
