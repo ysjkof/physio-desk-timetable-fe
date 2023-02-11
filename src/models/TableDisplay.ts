@@ -8,7 +8,6 @@ export class TableDisplay {
     seeNoshow: true,
     seeList: false,
     seeCalendar: false,
-    asideExtension: true,
   };
 
   static #userIdAndName: UserIdAndName;

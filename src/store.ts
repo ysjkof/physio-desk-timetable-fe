@@ -11,6 +11,11 @@ import type {
   UserIdAndName,
 } from './types/common.types';
 
+export const selectedReservationVar =
+  makeVar<SelectedReservationType>(undefined);
+
+export type ClientOfStore = ApolloClient<NormalizedCacheObject> | null;
+
 // Timetable state
 export const hasTableDisplayVar = makeVar(false);
 
@@ -22,15 +27,12 @@ export const selectedDateVar = makeVar(new Date());
 
 export const selectedPatientVar = makeVar<SelectedPatientType>(undefined);
 
-export const selectedReservationVar =
-  makeVar<SelectedReservationType>(undefined);
-
-export type ClientOfStore = ApolloClient<NormalizedCacheObject> | null;
 interface ZustandStoreState {
   isLoggedIn: boolean;
   client: ClientOfStore;
   selectedClinicId: number;
   toast: ToastState;
+  isBigGlobalAside: boolean;
 }
 
 const initialState: ZustandStoreState = {
@@ -38,6 +40,7 @@ const initialState: ZustandStoreState = {
   client: null,
   selectedClinicId: 0,
   toast: {},
+  isBigGlobalAside: true,
 };
 
 export const useStore = create<ZustandStoreState>(() => initialState);
@@ -59,6 +62,12 @@ export const setClinicId = (clinicId: number) =>
 
 export const setToast = (props: ToastState) =>
   useStore.setState(() => ({ toast: props }));
+
+export const toggleGlobalAside = (value?: boolean) =>
+  useStore.setState((state) => ({
+    isBigGlobalAside:
+      typeof value === 'undefined' ? !state.isBigGlobalAside : value,
+  }));
 
 export const resetStore = () => useStore.setState(() => initialState);
 
