@@ -1,4 +1,4 @@
-import { toastVar } from '../store';
+import { setToast } from '../store';
 import { MemberStatus } from '../types/common.types';
 import { ReservationState } from '../types/generated.types';
 
@@ -115,7 +115,7 @@ export function simpleCheckGQLError(
   callback?: () => void
 ) {
   if (error) {
-    toastVar({ messages: [`오류가 발생했습니다; ${error}`] });
+    setToast({ messages: [`오류가 발생했습니다; ${error}`] });
   }
   if (callback && ok) callback();
 }

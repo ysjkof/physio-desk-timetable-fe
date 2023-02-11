@@ -3,7 +3,7 @@ import {
   FIND_MY_CLINICS_DOCUMENT,
   REFUSE_INVITATION_DOCUMENT,
 } from '../graphql';
-import { toastVar } from '../store';
+import { setToast } from '../store';
 import type {
   RefuseInvitationMutation,
   RefuseInvitationMutationVariables,
@@ -20,7 +20,7 @@ export const useRefuseInvitation = ({ memberId }: { memberId: number }) => {
       variables: { input: { memberId } },
       onCompleted(data, clientOptions) {
         if (data.refuseInvitation.error)
-          return toastVar({
+          return setToast({
             messages: ['초대 거절 중에 에러 발생', data.refuseInvitation.error],
           });
 

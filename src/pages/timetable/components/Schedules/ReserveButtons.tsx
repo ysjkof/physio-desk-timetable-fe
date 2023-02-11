@@ -5,7 +5,7 @@ import {
   createDate,
   getFrom4DigitTime,
 } from '../../../../utils/date.utils';
-import { selectedReservationVar, toastVar } from '../../../../store';
+import { selectedReservationVar, setToast } from '../../../../store';
 import ReserveButton from './ReserveButton';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
 import type { CreateReservationMutation } from '../../../../types/generated.types';
@@ -84,7 +84,7 @@ const ReservationButtons = ({
       },
       onCompleted(data) {
         const { error } = data.createReservation;
-        if (error) toastVar({ messages: [error], fade: true });
+        if (error) setToast({ messages: [error], fade: true });
       },
     });
     // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기

@@ -3,7 +3,7 @@ import {
   EDIT_PRESCRIPTION_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
-import { toastVar, useStore } from '../store';
+import { setToast, useStore } from '../store';
 import type {
   EditPrescriptionMutation,
   EditPrescriptionMutationVariables,
@@ -27,7 +27,7 @@ export const useTogglePrescriptionActivate = () => {
       variables,
       onCompleted(data, clientOptions) {
         const { error } = data.editPrescription;
-        if (error) return toastVar({ messages: [error] });
+        if (error) return setToast({ messages: [error] });
 
         const variables: FindPrescriptionsQueryVariables = {
           input: { clinicId, onlyLookUpActive: false },

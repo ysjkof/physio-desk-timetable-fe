@@ -11,10 +11,6 @@ import type {
   UserIdAndName,
 } from './types/common.types';
 
-// global state
-
-export const toastVar = makeVar<ToastState>({});
-
 // Timetable state
 export const hasTableDisplayVar = makeVar(false);
 
@@ -34,12 +30,14 @@ interface ZustandStoreState {
   isLoggedIn: boolean;
   client: ClientOfStore;
   selectedClinicId: number;
+  toast: ToastState;
 }
 
 const initialState: ZustandStoreState = {
   isLoggedIn: false,
   client: null,
   selectedClinicId: 0,
+  toast: {},
 };
 
 export const useStore = create<ZustandStoreState>(() => initialState);
@@ -58,6 +56,9 @@ export const setClient = (client: ClientOfStore) =>
 
 export const setClinicId = (clinicId: number) =>
   useStore.setState(() => ({ selectedClinicId: clinicId }));
+
+export const setToast = (props: ToastState) =>
+  useStore.setState(() => ({ toast: props }));
 
 export const resetStore = () => useStore.setState(() => initialState);
 

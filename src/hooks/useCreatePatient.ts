@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client';
-import { CreatePatientMutation } from '../types/generated.types';
 import { CREATE_PATIENT_DOCUMENT } from '../graphql';
-import { selectedPatientVar, toastVar, useStore } from '../store';
-import { FormForCreatePatientFields } from '../types/form.types';
+import { selectedPatientVar, setToast, useStore } from '../store';
+import type { CreatePatientMutation } from '../types/generated.types';
+import type { FormForCreatePatientFields } from '../types/form.types';
 
 export const useCreatePatient = () => {
   const clinicId = useStore((state) => state.selectedClinicId);
@@ -32,7 +32,7 @@ export const useCreatePatient = () => {
           createPatient: { ok, patient },
         } = data;
         if (ok && patient) {
-          toastVar({ messages: [`"${patient.name}"님을 등록했습니다`] });
+          setToast({ messages: [`"${patient.name}"님을 등록했습니다`] });
           closeAction();
           selectedPatientVar({ ...patient, user: patient.users?.[0] });
         }

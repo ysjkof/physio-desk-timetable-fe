@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { toastVar } from '../../../store';
+import { setToast } from '../../../store';
 import Input from '../../../_legacy_components/molecules/Input';
 import FormError from '../../../_legacy_components/atoms/FormError';
 import Button from '../../../_legacy_components/molecules/Button';
@@ -44,7 +44,7 @@ export default function Login() {
           } = data;
 
           if (error) {
-            return toastVar({ messages: [error] });
+            return setToast({ messages: [error] });
           }
 
           if (ok && token) {

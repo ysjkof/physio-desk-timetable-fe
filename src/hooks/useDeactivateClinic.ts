@@ -3,7 +3,7 @@ import {
   DEACTIVATE_CLINIC_DOCUMENT,
   FIND_MY_CLINICS_DOCUMENT,
 } from '../graphql';
-import { toastVar } from '../store';
+import { setToast } from '../store';
 import {
   DeactivateClinicMutation,
   DeactivateClinicMutationVariables,
@@ -20,13 +20,13 @@ export const useDeactivateClinic = ({ clinicId }: { clinicId: number }) => {
       variables: { input: { clinicId } },
       onCompleted(data, clientOptions) {
         if (data.deactivateClinic.error)
-          return toastVar({ messages: [data.deactivateClinic.error] });
+          return setToast({ messages: [data.deactivateClinic.error] });
 
         clientOptions?.client?.refetchQueries({
           include: [FIND_MY_CLINICS_DOCUMENT],
         });
         // client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
-        toastVar({
+        setToast({
           messages: [`병원이 폐쇄됐습니다`],
           fade: true,
           bgColor: true,

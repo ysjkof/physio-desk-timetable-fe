@@ -3,7 +3,7 @@ import {
   EDIT_PRESCRIPTION_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
-import { toastVar, useStore } from '../store';
+import { setToast, useStore } from '../store';
 import { changeValueInArray } from '../utils/common.utils';
 import type {
   EditPrescriptionMutation,
@@ -31,7 +31,7 @@ export const useEditPrescription = () => {
   >(EDIT_PRESCRIPTION_DOCUMENT, {
     onCompleted(data, clientOptions) {
       const { error } = data.editPrescription;
-      if (error) return toastVar({ messages: [error] });
+      if (error) return setToast({ messages: [error] });
 
       const prescriptionInput: Input = clientOptions?.variables?.input;
       if (!prescriptionInput) return;

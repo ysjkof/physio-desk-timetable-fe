@@ -2,7 +2,7 @@ import { QueryResult, useQuery, useReactiveVar } from '@apollo/client';
 import { endOfDay, nextSaturday } from 'date-fns';
 import { getSunday } from '../../../utils/date.utils';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
-import { selectedDateVar, toastVar, useStore } from '../../../store';
+import { selectedDateVar, setToast, useStore } from '../../../store';
 import type {
   ListReservationsQuery,
   ListReservationsQueryVariables,
@@ -29,7 +29,7 @@ export const useListReservations = (): [
     onCompleted(data) {
       const { error } = data.listReservations;
       if (error) {
-        toastVar({ messages: [error] });
+        setToast({ messages: [error] });
       }
     },
   });

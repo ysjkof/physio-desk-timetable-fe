@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { FIND_MY_CLINICS_DOCUMENT, INVITE_USER_DOCUMENT } from '../graphql';
-import { toastVar } from '../store';
+import { setToast } from '../store';
 import type {
   InviteUserMutation,
   InviteUserMutationVariables,
@@ -12,12 +12,12 @@ export const useInviteUser = () => {
     {
       onCompleted(data, clientOptions) {
         if (data.inviteUser.error)
-          return toastVar({
+          return setToast({
             messages: ['초대를 실패했습니다.', data.inviteUser.error],
           });
 
         const useName = clientOptions?.variables?.input.name;
-        toastVar({
+        setToast({
           messages: [`${useName}님을 초대했습니다.`],
         });
 
