@@ -5,25 +5,23 @@ import {
   parseISO,
   setDay,
 } from 'date-fns';
-import { ClinicsOfClient } from './ClinicsOfClient';
 import type {
   ISchedules,
   ReservationInList,
   MemberOfClient,
+  ClinicOfGetMyClinicTruth,
 } from '../types/common.types';
 
+interface SchedulesProps {
+  data: ReservationInList[];
+  date: Date;
+  clinic: ClinicOfGetMyClinicTruth;
+}
 export class Schedules {
   #value: ISchedules[];
 
-  #clinic = ClinicsOfClient.getSelectedClinic();
-
-  constructor(data: ReservationInList[], date: Date) {
-    if (!this.#clinic)
-      throw new Error('selectedClinic이 없습니다.', {
-        cause: ' 초기화가 되지 않았습니다.',
-      });
-
-    const form = this.#createForm(date);
+  constructor({ data, date, clinic }: SchedulesProps) {
+    const form = this.#createForm(date, clinic);
     this.#value = this.#addEventToForm(form, data);
   }
 
@@ -31,11 +29,11 @@ export class Schedules {
     return this.#value;
   }
 
-  #createForm(date: Date) {
+  #createForm(date: Date, clinic: ClinicOfGetMyClinicTruth) {
     const week = this.#createWeek(date);
     return week.map((dateInWeek) => ({
       date: dateInWeek,
-      users: this.#createMembersForTable(),
+      users: this.#createMembersForTable(clinic),
     }));
   }
 
@@ -49,8 +47,8 @@ export class Schedules {
     return { start, end };
   }
 
-  #createMembersForTable() {
-    const membersForTable = this.#clinic.members.map(this.#addKeyToMember);
+  #createMembersForTable(clinic: ClinicOfGetMyClinicTruth) {
+    const membersForTable = clinic.members.map(this.#addKeyToMember);
     return membersForTable.sort((a, b) => {
       if (a.user.name > b.user.name) return 1;
       if (a.user.name < b.user.name) return -1;

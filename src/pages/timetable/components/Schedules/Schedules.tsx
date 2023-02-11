@@ -33,7 +33,6 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
   return (
     <div className="SCHEDULES grid" style={containerStyle}>
       {schedules.map((day, i) => {
-        const usersOfCanSee = day.users.filter((member) => member.canSee);
         return (
           <div key={i} className="flex flex-col">
             <PaddingWrapper>
@@ -46,7 +45,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
             </PaddingWrapper>
             <PaddingWrapper hasBorder>
               <MemberName
-                users={usersOfCanSee}
+                users={day.users}
                 viewPeriodStyle={columnStyle}
                 userLength={userLength}
               />
@@ -56,7 +55,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
                 date={day.date}
                 labels={labels}
                 labelMaxLength={labels.length}
-                users={usersOfCanSee}
+                users={day.users}
                 viewPeriodStyle={columnStyle}
                 userLength={userLength}
                 enableTimeIndicator={compareDateMatch(

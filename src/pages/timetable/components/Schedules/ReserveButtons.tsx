@@ -68,6 +68,7 @@ const ReservationButtons = ({
     });
     const endDate = new Date(startDate);
     endDate.setMinutes(endDate.getMinutes() + requiredTime);
+    console.log('selectedReservation >>>', selectedReservation);
 
     createReservationMutation({
       variables: {

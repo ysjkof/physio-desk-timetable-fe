@@ -1,12 +1,11 @@
 import { useMutation } from '@apollo/client';
-import { ClinicsOfClient } from '../models';
 import { CreatePatientMutation } from '../types/generated.types';
 import { CREATE_PATIENT_DOCUMENT } from '../graphql';
-import { selectedPatientVar, toastVar } from '../store';
+import { selectedPatientVar, toastVar, useStore } from '../store';
 import { FormForCreatePatientFields } from '../types/form.types';
 
 export const useCreatePatient = () => {
-  const selectedClinic = ClinicsOfClient.getSelectedClinic();
+  const clinicId = useStore((state) => state.selectedClinicId);
 
   const [createMutation, { loading }] = useMutation<CreatePatientMutation>(
     CREATE_PATIENT_DOCUMENT
@@ -17,7 +16,6 @@ export const useCreatePatient = () => {
     closeAction: () => void
   ) => {
     if (loading) return;
-    if (!selectedClinic) throw new Error('선택된 병원이 없습니다');
 
     createMutation({
       variables: {
@@ -25,7 +23,7 @@ export const useCreatePatient = () => {
           name,
           gender,
           memo,
-          clinicId: selectedClinic.id,
+          clinicId,
           ...(birthday && { birthday }),
         },
       },

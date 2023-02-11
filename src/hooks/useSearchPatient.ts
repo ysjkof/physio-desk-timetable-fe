@@ -1,17 +1,18 @@
 import { useLazyQuery } from '@apollo/client';
 import { useState } from 'react';
 import { SEARCH_PATIENT_DOCUMENT } from '../graphql';
-import { ClinicsOfClient } from '../models';
 import { SearchPatientQuery } from '../types/generated.types';
+import { useStore } from '../store';
 
 export const useSearchPatient = () => {
-  const selectedClinic = ClinicsOfClient.getSelectedClinic();
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState([1]);
 
   const [callQuery, queryResult] = useLazyQuery<SearchPatientQuery>(
     SEARCH_PATIENT_DOCUMENT
   );
+
+  const clinicId = useStore((state) => state.selectedClinicId);
 
   const patientQuery = (name: string) => {
     const query = name.trim();
@@ -21,7 +22,7 @@ export const useSearchPatient = () => {
         input: {
           page,
           query,
-          clinicIds: [selectedClinic.id],
+          clinicIds: [clinicId],
         },
       },
       onCompleted(data) {

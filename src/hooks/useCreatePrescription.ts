@@ -3,9 +3,7 @@ import {
   CREATE_PRESCRIPTION_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
-import { toastVar } from '../store';
-import { ClinicsOfClient } from '../models';
-
+import { toastVar, useStore } from '../store';
 import type {
   CreatePrescriptionMutation,
   CreatePrescriptionMutationVariables,
@@ -14,10 +12,9 @@ import type {
 import type { PrescriptionForFind } from '../types/props.types';
 
 export const useCreatePrescription = () => {
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
-  const variables = {
-    input: { clinicId, onlyLookUpActive: false },
-  };
+  const clinicId = useStore((state) => state.selectedClinicId);
+
+  const variables = { input: { clinicId, onlyLookUpActive: false } };
 
   const getCombinedData = (
     cacheData: FindPrescriptionsQuery,
@@ -47,13 +44,6 @@ export const useCreatePrescription = () => {
           return getCombinedData(cacheData, prescription);
         }
       );
-      // client.cache.updateQuery<FindPrescriptionsQuery>(
-      //   { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
-      //   (cacheData) => {
-      //     if (!cacheData?.findPrescriptions.prescriptions) return cacheData;
-      //     return getCombinedData(cacheData, prescription);
-      //   }
-      // );
     },
   });
 };

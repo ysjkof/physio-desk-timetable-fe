@@ -2,8 +2,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useQuery } from '@apollo/client';
 import { FIND_ATOM_PRESCRIPTIONS_DOCUMENT } from '../../../graphql';
 import { useCreatePrescription } from '../../../hooks';
-import { ClinicsOfClient } from '../../../models';
 import { REG_EXP } from '../../../constants/regex';
+import { useStore } from '../../../store';
 import type {
   CreatePrescriptionMutationVariables,
   FindAtomPrescriptionsQuery,
@@ -11,6 +11,7 @@ import type {
 import type { FormForCreatePrescriptionFields } from '../../../types/form.types';
 
 export const useFormForCreatePrescription = () => {
+  const clinicId = useStore((state) => state.selectedClinicId);
   const {
     register,
     handleSubmit: handleSubmitWrapper,
@@ -31,7 +32,7 @@ export const useFormForCreatePrescription = () => {
 
     const variables: CreatePrescriptionMutationVariables = {
       input: {
-        clinicId: ClinicsOfClient.getSelectedClinic().id,
+        clinicId,
         name: name.trim(),
         requiredTime,
         price,

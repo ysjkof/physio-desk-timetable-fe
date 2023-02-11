@@ -21,6 +21,7 @@ import type {
   FindAllPatientsQuery,
   FindPrescriptionsQuery,
 } from '../types/generated.types';
+import { useGetClinic } from '../hooks';
 
 export default function TestPage() {
   return (
@@ -233,7 +234,8 @@ function CreateReservation() {
 }
 
 function CreateDummyData() {
-  const selectedClinic = ClinicsOfClient.getSelectedClinic();
+  const [clinic] = useGetClinic();
+
   const [reserveDate] = useState(new Date().getMonth() + 1);
 
   const [createAccount] = useMutation<CreateAccountMutation>(
@@ -252,15 +254,15 @@ function CreateDummyData() {
     CREATE_ATOM_PRESCRIPTION_DOCUMENT
   );
 
-  const clinicId = selectedClinic.id;
-  if (!clinicId) return <p>Not Permission</p>;
+  if (!clinic) return <p>Not Permission</p>;
+
   return (
     <div className="px-4 ">
       <h1 className="text-base font-extrabold">Create Dummy Data</h1>
       <p>
-        병원 id: {clinicId}
+        병원 id: {clinic.id}
         <br />
-        병원이름 : {selectedClinic.name}
+        병원이름 : {clinic.name}
         <br />
         예약될 월 : {reserveDate}
         <br />
@@ -302,9 +304,9 @@ function CreateDummyData() {
         </button>
         <button
           onClick={() => {
-            if (!clinicId) throw new Error('clinicId false');
+            if (!clinic.id) throw new Error('clinicId false');
             arr
-              .map((_, idx) => makePatient(`환자님${idx}`, clinicId))
+              .map((_, idx) => makePatient(`환자님${idx}`, clinic.id))
               .forEach((acc) => {
                 const { clinicId, name, gender, birthday } = acc;
 
@@ -345,13 +347,12 @@ function CreateDummyData() {
         </button>
         <button
           onClick={() => {
-            if (!clinicId) throw new Error('clinicId false');
             newPrescriptions.forEach(
               ({ name, prescriptionAtomIds, price, requiredTime }) =>
                 createPrescription({
                   variables: {
                     input: {
-                      clinicId,
+                      clinicId: clinic.id,
                       name,
                       prescriptionAtomIds,
                       price,

@@ -1,4 +1,4 @@
-import { ApolloClient, NormalizedCacheObject, gql } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { ClinicsOfClient } from '../models';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
 import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';

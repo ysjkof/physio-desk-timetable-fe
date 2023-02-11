@@ -3,12 +3,12 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { startOfWeek, endOfWeek } from 'date-fns';
 import { GET_RESERVATIONS_OF_MEMBER_DOCUMENT } from '../../../../graphql';
-import { ClinicsOfClient } from '../../../../models';
 import {
   getMonthStartEnd,
   getStringOfDateTime,
 } from '../../../../utils/date.utils';
 import { PersonPlus } from '../../../../svgs';
+import { useStore } from '../../../../store';
 import type {
   GetReservationsOfMemberQuery,
   GetReservationsOfMemberQueryVariables,
@@ -26,7 +26,7 @@ const EventList = ({ date }: { date: Date }) => {
   const [startOfMonth, endOfMonth] = getMonthStartEnd(date);
   const startDate = startOfWeek(startOfMonth);
   const endDate = endOfWeek(endOfMonth);
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const clinicId = useStore((state) => state.selectedClinicId);
   const { memberId } = useParams();
 
   const variables = {
