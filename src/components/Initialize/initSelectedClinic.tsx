@@ -1,5 +1,5 @@
-import { selectClinicId } from '../../store';
 import { UserIdAndName } from '../../types/common.types';
+import { selectClinicId, setClinicId } from '../../store';
 import localStorageUtils from '../../utils/localStorage.utils';
 import type { GetMyClinicsStatusQuery } from '../../types/generated.types';
 
@@ -17,13 +17,8 @@ export const initSelectedClinicId = (
     if (!clinicId)
       throw new Error('initSelectedClinicId >> clinicId가 없습니다.');
 
-    localStorageUtils.set({
-      ...userIdAndName,
-      key: 'selectedClinicId',
-      value: clinicId,
-    });
-    selectClinicId(clinicId);
+    selectClinicId({ clinicId, ...userIdAndName });
     return;
   }
-  selectClinicId(localStorageData);
+  setClinicId(localStorageData);
 };

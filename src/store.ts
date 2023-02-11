@@ -10,6 +10,7 @@ import type {
   SelectedReservationType,
   SelectedPatientType,
   ClinicOfClient,
+  UserIdAndName,
 } from './types/common.types';
 
 // global state
@@ -60,7 +61,24 @@ export const setAuthToken = (_token?: string) =>
 export const setClient = (client: ClientOfStore) =>
   useStore.setState(() => ({ client }));
 
-export const selectClinicId = (clinicId: number) =>
+export const setClinicId = (clinicId: number) =>
   useStore.setState(() => ({ selectedClinicId: clinicId }));
 
 export const resetStore = () => useStore.setState(() => initialState);
+
+interface SelectClinicId extends UserIdAndName {
+  clinicId: number;
+}
+export const selectClinicId = ({
+  clinicId,
+  userId,
+  userName,
+}: SelectClinicId) => {
+  setClinicId(clinicId);
+  localStorageUtils.set({
+    key: 'selectedClinicId',
+    value: clinicId,
+    userId,
+    userName,
+  });
+};
