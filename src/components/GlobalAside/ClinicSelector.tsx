@@ -1,8 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import {
-  addPrefixToNameWhenWaiting,
-  getMemberState,
-} from '../../utils/common.utils';
+import { addStatusToUserName, getMemberState } from '../../utils/common.utils';
 import { useFindMyMembers, useMe } from '../../hooks';
 import { pickClinicId, useStore } from '../../store';
 import Selectbox from '../Selectbox';
@@ -17,11 +14,16 @@ const ClinicSelector = () => {
   const member = myMembers?.find(
     (member) => member.clinic.id === selectedClinicId
   );
+  const name = member?.clinic?.name || '';
+  const state =
+    member &&
+    getMemberState({
+      accepted: member.accepted,
+      manager: member.manager,
+      staying: member.staying,
+    });
 
-  const clinicName = addPrefixToNameWhenWaiting(
-    member?.clinic?.name || '',
-    member?.accepted
-  );
+  const clinicName = addStatusToUserName(name, state);
 
   const navigate = useNavigate();
 
@@ -38,7 +40,6 @@ const ClinicSelector = () => {
         {myMembers?.map((member) => {
           const { accepted, manager, staying } = member;
           const state = getMemberState({ accepted, manager, staying });
-          if (state === '탈퇴') return null;
 
           const onClick =
             state === '수락대기'
@@ -51,7 +52,7 @@ const ClinicSelector = () => {
               selected={member.id === selectedClinicId}
               onClick={onClick}
             >
-              {addPrefixToNameWhenWaiting(member.clinic.name, member.accepted)}
+              {addStatusToUserName(member.clinic.name, state)}
             </Selectbox.Option>
           );
         })}

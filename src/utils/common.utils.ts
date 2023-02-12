@@ -1,4 +1,7 @@
-import type { MemberStatus } from '../types/common.types';
+import type {
+  MemberStatusOptions,
+  MemberStatusType,
+} from '../types/common.types';
 import type { ReservationState } from '../types/generated.types';
 
 export function cls(...classnames: string[]) {
@@ -38,7 +41,7 @@ export function getMemberState({
   staying,
   accepted,
   manager,
-}: MemberStatus): '관리자' | '직원' | '탈퇴' | '수락대기' {
+}: MemberStatusOptions): MemberStatusType {
   if (staying && accepted) {
     return manager ? '관리자' : '직원';
   }
@@ -99,11 +102,9 @@ function removePersonalClinicNumber(name: string) {
   return splinted.length < 2 ? null : splinted[0];
 }
 
-export function addPrefixToNameWhenWaiting(name: string, isAccepted?: boolean) {
+export function addStatusToUserName(name: string, status?: MemberStatusType) {
   let prefix = '';
-  if (!isAccepted) {
-    prefix = '수락대기 : ';
-  }
+  if (status === '수락대기' || status === '탈퇴') prefix = `${status} : `;
   return prefix + renameUseSplit(name);
 }
 

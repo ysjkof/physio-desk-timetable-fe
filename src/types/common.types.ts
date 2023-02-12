@@ -117,11 +117,13 @@ export type PatientInSearch = NonNullable<
 >[0];
 
 // me
-export interface MemberStatus
+
+export type MemberStatusType = '관리자' | '직원' | '탈퇴' | '수락대기';
+export interface MemberStatusOptions
   extends Pick<Member, 'staying' | 'manager' | 'accepted'> {}
 interface ModifiedClinicMemberWithClinic
   extends Pick<Member, 'id'>,
-    MemberStatus {
+    MemberStatusOptions {
   clinic: Pick<Clinic, 'id' | 'name' | 'isActivated'>;
 }
 type ModifiedNotice = Pick<Notice, 'message' | 'read'>;
