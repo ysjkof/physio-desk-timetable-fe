@@ -1,5 +1,5 @@
 import { LATEST_STORAGE_VERSION } from '../constants/constants';
-import type { UserIdAndName } from '../types/common.types';
+import { changeValueInArray } from './common.utils';
 import type {
   GenerateStorageKey,
   GetPrivateStorage,
@@ -12,6 +12,11 @@ import type {
   SetPrivateStorage,
   SetPublicStorage,
 } from '../types/localStorage.types';
+import type {
+  ClinicIdAndHiddenUsers,
+  HiddenUsersArr,
+} from '../types/store.types';
+import type { UserIdAndName } from '../types/common.types';
 
 class LocalStorage {
   #storageKeyObj: LocalStorageType;
@@ -93,6 +98,7 @@ export const PRIVATE_LOCAL_STORAGE_KEY_VALUE = {
   selectedClinicId: 'muool-selected-clinic-id',
   showCancelOfTimetable: 'muool-show-cancel-of-timetable',
   showNoshowOfTimetable: 'muool-show-noshow-of-timetable',
+  hiddenUsers: 'muool-hidden-users',
 } as const;
 
 export const PUBLIC_LOCAL_STORAGE_KEY_VALUE = {
@@ -108,24 +114,51 @@ export const LOCAL_STORAGE_KEY_VALUE = {
 
 export const localStorageUtils = new LocalStorage(LOCAL_STORAGE_KEY_VALUE);
 
-export const checkAndRefreshLatestStorage = (userIdAndName: UserIdAndName) => {
-  if (isLatestStorage()) return;
+export const updateLocalStorageHiddenUsers = ({
+  hiddenUsers,
+  clinicId,
+  userId,
+  userName,
+}: {
+  hiddenUsers: HiddenUsersArr;
+  clinicId: number;
+  userId: number;
+  userName: string;
+}) => {
+  let newHiddenUsers;
 
-  localStorageUtils.removeAll(userIdAndName);
+  const newClinicAndHiddenUser = [clinicId, hiddenUsers];
+
+  const prevHiddenUsersArr = localStorageUtils.get<ClinicIdAndHiddenUsers[]>({
+    key: 'hiddenUsers',
+    userId,
+    userName,
+  });
+
+  const clinicIdx = prevHiddenUsersArr?.findIndex(
+    ([_clinicId]) => _clinicId === clinicId
+  );
+
+  if (!prevHiddenUsersArr) {
+    newHiddenUsers = [newClinicAndHiddenUser];
+  }
+
+  if (prevHiddenUsersArr && clinicIdx === -1) {
+    newHiddenUsers = [...prevHiddenUsersArr, newClinicAndHiddenUser];
+  }
+
+  if (prevHiddenUsersArr && clinicIdx !== -1) {
+    newHiddenUsers = changeValueInArray(
+      prevHiddenUsersArr,
+      newClinicAndHiddenUser,
+      clinicIdx || 0
+    );
+  }
 
   localStorageUtils.set({
-    key: 'createdAt',
-    value: LATEST_STORAGE_VERSION,
+    key: 'hiddenUsers',
+    userId,
+    userName,
+    value: newHiddenUsers,
   });
-  return console.info('Refresh Local Storage');
-};
-
-const isLatestStorage = () => {
-  const localCreatedAt = localStorageUtils.get<string>({
-    key: 'createdAt',
-  });
-  const createdAt = localCreatedAt && new Date(localCreatedAt);
-  return !!(
-    createdAt && createdAt.getTime() >= LATEST_STORAGE_VERSION.getTime()
-  );
 };

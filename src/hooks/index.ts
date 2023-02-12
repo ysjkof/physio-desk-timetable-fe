@@ -21,6 +21,7 @@ import { useNavCreatePatient } from './useNavCreatePatient';
 import { useRefuseInvitation } from './useRefuseInvitation';
 import { useSearchPatient } from './useSearchPatient';
 import { useSelectedClinicId } from './useSelectedClinic';
+import { useHiddenUsers } from './useSetHiddenUsers';
 import { useTogglePrescriptionActivate } from './useTogglePrescriptionActivate';
 import { useWindowSize } from './useWindowSize';
 
@@ -48,6 +49,7 @@ export {
   useRefuseInvitation,
   useSearchPatient,
   useSelectedClinicId,
+  useHiddenUsers as useSetHiddenUsers,
   useTogglePrescriptionActivate,
   useWindowSize,
 };

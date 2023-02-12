@@ -3,10 +3,10 @@ import { AnimatePresence } from 'framer-motion';
 import { toggleSettingOfTimetable, useStore } from '../../../../store';
 import { getPositionRef } from '../../../../utils/common.utils';
 import { EllipsisVertical } from '../../../../svgs';
-import TableOptionSelector from '../../_legacy_components/TableOptionSelector';
+import SettingOfTimetable from '../SettingOfTimetable/SettingOfTimetable';
 import { MenuButton, Modal } from '../../../../components';
 
-const DisplayControlButton = () => {
+const ToggleSettingOfTimetable = () => {
   const showSettingOfTimetable = useStore(
     (state) => state.showSettingOfTimetable
   );
@@ -32,7 +32,7 @@ const DisplayControlButton = () => {
             right={10}
             closeAction={() => toggleSettingOfTimetable(false)}
           >
-            <TableOptionSelector />
+            <SettingOfTimetable />
           </Modal>
         )}
       </AnimatePresence>
@@ -40,4 +40,4 @@ const DisplayControlButton = () => {
   );
 };
 
-export default DisplayControlButton;
+export default ToggleSettingOfTimetable;

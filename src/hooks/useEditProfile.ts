@@ -4,11 +4,11 @@ import { setToast, useStore } from '../store';
 import {
   cacheUpdatePersonalClinicName,
   cacheUpdateUserName,
-} from '../utils/apolloCache.utils';
+} from '../utils/apollo.utils';
 import {
   ClinicType,
-  EditProfileMutation,
-  EditProfileMutationVariables,
+  type EditProfileMutation,
+  type EditProfileMutationVariables,
 } from '../types/generated.types';
 import { useMe } from './useMe';
 

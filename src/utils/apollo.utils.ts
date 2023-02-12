@@ -2,7 +2,19 @@ import { gql } from '@apollo/client';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
 import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
 import type { MyClinic } from '../types/common.types';
-import type { ClientOfStore } from '../store';
+import { type ClientOfStore, setToast } from '../store';
+
+/** ok, error만 있는 GraphQL 응답을 받고 토스트 출력이나 콜백 실행 */
+export function simpleCheckGQLError(
+  ok: boolean,
+  error?: string | null,
+  callback?: () => void
+) {
+  if (error) {
+    setToast({ messages: [`오류가 발생했습니다; ${error}`] });
+  }
+  if (callback && ok) callback();
+}
 
 export const cacheUpdateUserName = (
   client: ClientOfStore,

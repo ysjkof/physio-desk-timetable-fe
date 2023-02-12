@@ -4,7 +4,7 @@ import { setToast, useStore } from '../store';
 import {
   cacheAddClinicToMyClinics,
   cacheUpdateMemberOfMe,
-} from '../utils/apolloCache.utils';
+} from '../utils/apollo.utils';
 import type {
   CreateClinicMutation,
   CreateClinicMutationVariables,

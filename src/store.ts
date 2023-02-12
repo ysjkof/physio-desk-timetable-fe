@@ -1,5 +1,6 @@
 import { ApolloClient, NormalizedCacheObject, makeVar } from '@apollo/client';
 import { create } from 'zustand';
+import { TABLE_TIME_GAP } from './constants/constants';
 import { localStorageUtils } from './utils/localStorage.utils';
 import type {
   ToastState,
@@ -8,7 +9,7 @@ import type {
   SelectedPatientType,
   UserIdAndName,
 } from './types/common.types';
-import { TABLE_TIME_GAP } from './constants/constants';
+import type { HiddenUsersArr, HiddenUsersSet } from './types/store.types';
 
 export const selectedReservationVar =
   makeVar<SelectedReservationType>(undefined);
@@ -33,6 +34,7 @@ interface ZustandStoreState {
   showNoshowOfTimetable: boolean;
   showCalendarOfTimetable: boolean;
   timeDurationOfTimetable: TableTimeOptions;
+  hiddenUsers: HiddenUsersSet;
 }
 
 const initialState: ZustandStoreState = {
@@ -53,6 +55,7 @@ const initialState: ZustandStoreState = {
     lastMinute: 0,
     gap: TABLE_TIME_GAP,
   },
+  hiddenUsers: new Set(),
 };
 
 export const useStore = create<ZustandStoreState>(() => initialState);
@@ -119,7 +122,10 @@ export const toggleShowCalendarOfTimetable = (value?: boolean) =>
 export const setTimeDurationOfTimetable = (value: TableTimeOptions) =>
   useStore.setState(() => ({ timeDurationOfTimetable: value }));
 
-// store + localStorage
+export const setHiddenUsers = (value: HiddenUsersArr) =>
+  useStore.setState(() => ({ hiddenUsers: new Set(value) }));
+
+// store + etc(localStorage, callback ...)
 
 interface SelectClinicId extends UserIdAndName {
   clinicId: number;
@@ -176,3 +182,19 @@ export const toggleShowNoshowOfTimetable = ({
     value,
   });
 };
+
+export const toggleHiddenUsers = (
+  memberId: number,
+  callback?: (hiddenUsersArr: HiddenUsersArr) => void
+) =>
+  useStore.setState((prev) => {
+    const hiddenUsers = new Set(prev.hiddenUsers);
+    if (hiddenUsers.has(memberId)) {
+      hiddenUsers.delete(memberId);
+    } else {
+      hiddenUsers.add(memberId);
+    }
+
+    if (callback) callback([...hiddenUsers]);
+    return { hiddenUsers };
+  });

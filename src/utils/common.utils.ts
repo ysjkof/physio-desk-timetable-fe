@@ -1,6 +1,5 @@
-import { setToast } from '../store';
-import { MemberStatus } from '../types/common.types';
-import { ReservationState } from '../types/generated.types';
+import type { MemberStatus } from '../types/common.types';
+import type { ReservationState } from '../types/generated.types';
 
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
@@ -106,18 +105,6 @@ export function addPrefixToNameWhenWaiting(name: string, isAccepted?: boolean) {
     prefix = '수락대기 : ';
   }
   return prefix + renameUseSplit(name);
-}
-
-/** ok, error만 있는 GraphQL 응답을 받고 토스트 출력이나 콜백 실행 */
-export function simpleCheckGQLError(
-  ok: boolean,
-  error?: string | null,
-  callback?: () => void
-) {
-  if (error) {
-    setToast({ messages: [`오류가 발생했습니다; ${error}`] });
-  }
-  if (callback && ok) callback();
 }
 
 // FIXME: checkLengthIsZero로 대체. 지울 것.

@@ -5,7 +5,7 @@ import SeeCalendarButton from './SeeCalendarButton';
 import UserSelector from './UserSelector';
 import ReservationForCopy from './ReservationForCopy';
 import CreatePatientButton from './CreatePatientButton';
-import DisplayControlButton from './DisplayControlButton';
+import ToggleSettingOfTimetable from './ToggleSettingOfTimetable';
 import { toggleSettingOfTimetable } from '../../../../store';
 
 const TableController = () => {
@@ -27,7 +27,7 @@ const TableController = () => {
         <ReservationForCopy />
         <div className="flex items-center justify-end gap-x-2">
           <CreatePatientButton />
-          <DisplayControlButton />
+          <ToggleSettingOfTimetable />
         </div>
       </div>
     </>

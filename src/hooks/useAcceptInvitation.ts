@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { ACCEPT_INVITATION_DOCUMENT } from '../graphql';
 import { setToast, useStore } from '../store';
-import { cacheUpdateMemberAccepted } from '../utils/apolloCache.utils';
+import { cacheUpdateMemberAccepted } from '../utils/apollo.utils';
 import type {
   AcceptInvitationMutation,
   AcceptInvitationMutationVariables,

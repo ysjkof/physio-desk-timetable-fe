@@ -3,16 +3,35 @@ import { USER_COLORS } from '../../../../constants/constants';
 import { CheckableButton } from '../../../../components';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
-import { useGetClinic } from '../../../../hooks';
+import { useGetClinic, useMe } from '../../../../hooks';
+import { updateLocalStorageHiddenUsers } from '../../../../utils/localStorage.utils';
+import { toggleHiddenUsers, useStore } from '../../../../store';
+import type { HiddenUsersArr } from '../../../../types/store.types';
 
 const UserSelector = () => {
   const [isSpreading, setIsSpreading] = useState(false);
+  const [clinic, { variables }] = useGetClinic();
+  const [, { getIdName }] = useMe();
 
-  const [clinic] = useGetClinic();
+  const hiddenUsers = useStore((state) => state.hiddenUsers);
+
+  const isShowUser = (memberId: number) => {
+    return !hiddenUsers.has(memberId);
+  };
 
   const toggleUsers = (memberId: number) => {
-    // TODO:
-    toggleUser(memberId);
+    const callback = (hiddenUsers: HiddenUsersArr) => {
+      if (!variables?.input.clinicId)
+        throw new Error('UserSelector에서 clinic 변수 id를 못 받았습니다');
+
+      updateLocalStorageHiddenUsers({
+        ...getIdName(),
+        clinicId: variables.input.clinicId,
+        hiddenUsers,
+      });
+    };
+
+    toggleHiddenUsers(memberId, callback);
   };
 
   return (
@@ -27,7 +46,7 @@ const UserSelector = () => {
             <CheckableButton
               key={i}
               personalColor={USER_COLORS[i].deep}
-              canSee={!!member.canSee} // TODO:
+              canSee={isShowUser(member.id)}
               label={member.user.name}
               onClick={() => toggleUsers(member.id)}
             />

@@ -1,13 +1,13 @@
-import { useMe } from '../../../hooks';
 import { TimeDurationOfTimetable } from '../../../models/TimeDurationOfTimetable';
 import { setTimeDurationOfTimetable } from '../../../store';
-import type { FirstAndLastTime } from '../../../types/common.types';
+import type {
+  FirstAndLastTime,
+  UserIdAndName,
+} from '../../../types/common.types';
 
 export const useTimeDurationOfTimetable = () => {
-  const [, { getIdName }] = useMe();
-
-  const initialize = () => {
-    const tableTimeOptions = TimeDurationOfTimetable.initialize(getIdName());
+  const initialize = (idAndName: UserIdAndName) => {
+    const tableTimeOptions = TimeDurationOfTimetable.initialize(idAndName);
     setTimeDurationOfTimetable(tableTimeOptions);
   };
 
