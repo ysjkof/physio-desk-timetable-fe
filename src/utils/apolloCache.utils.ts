@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { ClinicsOfClient } from '../models';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
 import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
 import type { MyClinic } from '../types/common.types';
@@ -21,13 +20,19 @@ export const cacheUpdateUserName = (
   });
 };
 
-export const cacheUpdatePersonalClinicName = (
-  client: ClientOfStore,
-  name: string
-) => {
-  const { id: clinicId, name: clinicName } =
-    ClinicsOfClient.getPersonalClinic();
+interface CacheUpdatePersonalClinicNameProps {
+  client: ClientOfStore;
+  clinicId: number;
+  clinicName: string;
+  userName: string;
+}
 
+export const cacheUpdatePersonalClinicName = ({
+  client,
+  clinicId,
+  clinicName,
+  userName,
+}: CacheUpdatePersonalClinicNameProps) => {
   client?.writeFragment({
     id: `Clinic:${clinicId}`,
     fragment: gql`
@@ -35,7 +40,7 @@ export const cacheUpdatePersonalClinicName = (
         name
       }
     `,
-    data: { name: `${name}:${clinicName.split(':').at(-1)}` },
+    data: { name: `${userName}:${clinicName.split(':').at(-1)}` },
   });
 };
 

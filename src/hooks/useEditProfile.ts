@@ -6,6 +6,7 @@ import {
   cacheUpdateUserName,
 } from '../utils/apolloCache.utils';
 import {
+  ClinicType,
   EditProfileMutation,
   EditProfileMutationVariables,
 } from '../types/generated.types';
@@ -38,8 +39,22 @@ export const useEditProfile = () => {
 
         const prevName = meData.name;
         if (!newName || prevName === newName) return;
+
+        const personalClinic = meData.members?.find(
+          (member) => member.clinic.type === ClinicType.Personal
+        )?.clinic;
+        if (!personalClinic)
+          return setToast({
+            messages: ['meData에서 개인용 병원을 찾지 못했습니다'],
+          });
+
         cacheUpdateUserName(client, meData.id, newName);
-        cacheUpdatePersonalClinicName(client, newName);
+        cacheUpdatePersonalClinicName({
+          client,
+          userName: newName,
+          clinicId: personalClinic.id,
+          clinicName: personalClinic.name,
+        });
       },
     }
   );
