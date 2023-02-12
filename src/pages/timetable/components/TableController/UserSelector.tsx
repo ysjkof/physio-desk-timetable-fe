@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { USER_COLORS } from '../../../../constants/constants';
 import { CheckableButton } from '../../../../components';
-import { useSelectedClinic } from '../../hooks';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
 import { useGetClinic } from '../../../../hooks';
@@ -11,8 +10,8 @@ const UserSelector = () => {
 
   const [clinic] = useGetClinic();
 
-  const { toggleUser } = useSelectedClinic();
   const toggleUsers = (memberId: number) => {
+    // TODO:
     toggleUser(memberId);
   };
 

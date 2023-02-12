@@ -4,7 +4,6 @@ import { useDeleteReservation } from './useDeleteReservation';
 import { useListReservations } from './useListReservations';
 import { useReserve } from './useReserve';
 import { useSchedules } from './useSchedules';
-import { useSelectedClinic } from './useSelectedClinic';
 import { useSubscriptions } from './useSubscriptions';
 import { useTableLabel } from './useTableLabel';
 import { useTimeDurationOfTimetable } from './useTimeDurationOfTimetable';
@@ -16,7 +15,6 @@ export {
   useListReservations,
   useReserve,
   useSchedules,
-  useSelectedClinic,
   useSubscriptions,
   useTableLabel,
   useTimeDurationOfTimetable,

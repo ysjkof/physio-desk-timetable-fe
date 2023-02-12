@@ -22,7 +22,7 @@ import BtnArrow from '../../../_legacy_components/atoms/ButtonArrow';
 import StateBadge from '../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../_legacy_components/molecules/Sidebar';
 import { Check } from '../../../svgs';
-import { useSelectedClinic, useTimeDurationOfTimetable } from '../hooks';
+import { useTimeDurationOfTimetable } from '../hooks';
 import { useFindMyClinics, useMe } from '../../../hooks';
 import type {
   FirstAndLastTime,
@@ -42,8 +42,7 @@ export default function TableOptionSelector() {
     (state) => state.showNoshowOfTimetable
   );
 
-  const [myClinics] = useFindMyClinics();
-  const { toggleUser } = useSelectedClinic();
+  const [myClinics] = useFindMyClinics({});
 
   const { changeTimeDuration } = useTimeDurationOfTimetable();
 
@@ -51,6 +50,7 @@ export default function TableOptionSelector() {
     toggleSettingOfTimetable(false);
   };
   const onClickToggleUser = (memberId: number) => {
+    // TODO:
     toggleUser(memberId);
   };
 
