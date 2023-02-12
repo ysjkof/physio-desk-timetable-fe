@@ -10,8 +10,10 @@ interface UseFindMyClinicsProps {
   hasInactivate?: boolean;
 }
 
+// TODO: hasInactivate는 findMyMembers와 findMyClinics가 동일해야 한다.
+// SettingOfTimetable과 ClinicSelector의 탈퇴 병원 표시 방법 정한 뒤 적용할 것.
 export const useFindMyClinics = ({
-  hasInactivate = false,
+  hasInactivate = true,
 }: UseFindMyClinicsProps): [
   ClinicsOfFindMyClinics,
   QueryResult<FindMyClinicsQuery, FindMyClinicsQueryVariables>
