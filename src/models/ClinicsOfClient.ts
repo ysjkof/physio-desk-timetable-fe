@@ -1,4 +1,4 @@
-import localStorageUtils from '../utils/localStorage.utils';
+import { localStorageUtils } from '../utils/localStorage.utils';
 import { ClinicType } from '../types/generated.types';
 import type {
   ClinicOfClient,

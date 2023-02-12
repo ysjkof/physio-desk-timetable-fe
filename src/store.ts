@@ -1,6 +1,6 @@
 import { ApolloClient, NormalizedCacheObject, makeVar } from '@apollo/client';
 import { create } from 'zustand';
-import localStorageUtils from './utils/localStorage.utils';
+import { localStorageUtils } from './utils/localStorage.utils';
 import type {
   ToastState,
   TableTimeOptions,

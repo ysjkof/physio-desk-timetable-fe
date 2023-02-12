@@ -1,5 +1,5 @@
 import { setAuthToken } from '../store';
-import localStorageUtils from '../utils/localStorage.utils';
+import { localStorageUtils } from '../utils/localStorage.utils';
 
 export const useLogin = () => {
   const login = (token: string, callback?: () => void) => {

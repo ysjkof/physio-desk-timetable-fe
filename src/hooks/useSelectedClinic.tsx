@@ -1,5 +1,5 @@
 import { selectClinicId, setClinicId } from '../store';
-import localStorageUtils from '../utils/localStorage.utils';
+import { localStorageUtils } from '../utils/localStorage.utils';
 import { useMe } from './useMe';
 import type { GetMyClinicsStatusQuery } from '../types/generated.types';
 

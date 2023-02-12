@@ -4,9 +4,10 @@ import {
 } from '../utils/localStorage.utils';
 import type { UserIdAndName, Value } from './common.types';
 
-type PrivateLocalStorageKey = keyof typeof PRIVATE_LOCAL_STORAGE_KEY_VALUE;
+export type PrivateLocalStorageKey =
+  keyof typeof PRIVATE_LOCAL_STORAGE_KEY_VALUE;
 
-type PublicLocalStorageKey = keyof typeof PUBLIC_LOCAL_STORAGE_KEY_VALUE;
+export type PublicLocalStorageKey = keyof typeof PUBLIC_LOCAL_STORAGE_KEY_VALUE;
 
 export type LocalStorageType = typeof PUBLIC_LOCAL_STORAGE_KEY_VALUE &
   typeof PRIVATE_LOCAL_STORAGE_KEY_VALUE;
