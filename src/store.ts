@@ -77,7 +77,7 @@ export const setClinicId = (clinicId: number) =>
 export const setToast = (props: ToastState) =>
   useStore.setState(() => ({ toast: props }));
 
-export const toggleGlobalAside = (value?: boolean) =>
+export const setGlobalAside = (value?: boolean) =>
   useStore.setState((state) => ({
     isBigGlobalAside:
       typeof value === 'undefined' ? !state.isBigGlobalAside : value,
@@ -138,7 +138,10 @@ export const selectClinicId = ({
   });
 };
 
-export const toggleIsBigGlobalAside = () => {};
+export const toggleIsBigGlobalAside = (value: boolean) => {
+  setGlobalAside(value);
+  localStorageUtils.set({ key: 'isBigGlobalAside', value });
+};
 
 interface SetStorageWithBoolean {
   userId: number;

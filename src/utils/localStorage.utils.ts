@@ -55,24 +55,25 @@ class LocalStorage {
 
   #generateKey({ key, userId, userName }: GenerateStorageKey) {
     if (userId && userName) {
-      return `${this.#storageKeyObj[key] + userId}-${userName}`;
+      return `${this.#storageKeyObj[key]}-${userId}-${userName}`;
     }
-    return key;
+    return this.#storageKeyObj[key];
   }
 }
 
 export const PRIVATE_LOCAL_STORAGE_KEY_VALUE = {
-  clinicLists: 'muool-clinic-lists-',
-  viewOption: 'muool-view-option-',
-  tableTime: 'muool-table-time-',
-  selectedClinicId: 'muool-selected-clinic-id-',
-  showCancelOfTimetable: 'muool-show-cancel-of-timetable-',
-  showNoshowOfTimetable: 'muool-show-noshow-of-timetable-',
+  clinicLists: 'muool-clinic-lists',
+  viewOption: 'muool-view-option',
+  tableTime: 'muool-table-time',
+  selectedClinicId: 'muool-selected-clinic-id',
+  showCancelOfTimetable: 'muool-show-cancel-of-timetable',
+  showNoshowOfTimetable: 'muool-show-noshow-of-timetable',
 } as const;
 
 export const PUBLIC_LOCAL_STORAGE_KEY_VALUE = {
   token: 'muool-token',
   createdAt: 'muool-local-storage-createdAt',
+  isBigGlobalAside: 'muool-is-big-global-aside',
 } as const;
 
 export const LOCAL_STORAGE_KEY_VALUE = {

@@ -4,7 +4,7 @@ import { cls } from '../../utils/common.utils';
 import { CogSixTooth, Building, Table } from '../../svgs';
 import ClinicSelector from './ClinicSelector';
 import { useLogout } from '../../hooks';
-import { toggleGlobalAside, useStore } from '../../store';
+import { toggleIsBigGlobalAside, useStore } from '../../store';
 
 interface LiProps extends PropsWithChildren {
   to: string;
@@ -15,7 +15,7 @@ const GlobalAside = () => {
   const isBigGlobalAside = useStore((state) => state.isBigGlobalAside);
 
   const toggleAside = () => {
-    toggleGlobalAside();
+    toggleIsBigGlobalAside(!isBigGlobalAside);
   };
 
   const menu = useLocation().pathname.split('/')[1];
