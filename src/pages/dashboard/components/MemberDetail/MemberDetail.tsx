@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { ClinicsOfClient } from '../../../../models';
 import { GET_MEMBER_DOCUMENT } from '../../../../graphql';
 import MemberCard from './MemberCard';
 import CardSection from './CardSection';
@@ -11,16 +10,16 @@ import type {
   GetMemberQuery,
   GetMemberQueryVariables,
 } from '../../../../types/generated.types';
+import { useStore } from '../../../../store';
 
 const MemberDetail = () => {
   const { memberId } = useParams();
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const clinicId = useStore((state) => state.pickedClinicId);
 
+  const variables = { input: { clinicId, id: Number(memberId) } };
   const { data } = useQuery<GetMemberQuery, GetMemberQueryVariables>(
     GET_MEMBER_DOCUMENT,
-    {
-      variables: { input: { clinicId, id: Number(memberId) } },
-    }
+    { variables }
   );
 
   if (!data || !data.getMember.member)

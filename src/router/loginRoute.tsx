@@ -24,7 +24,7 @@ const loginRoute = [
   {
     path: 'tt',
     element: (
-      <ProtectRoute whenFail={<Warning type="verifyEmail" />} failWhenLogout>
+      <ProtectRoute whenFail="/" failWhenLogout>
         <TimeTable />
       </ProtectRoute>
     ),

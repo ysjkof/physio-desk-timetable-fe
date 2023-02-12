@@ -1,65 +1,60 @@
-import { useReactiveVar } from '@apollo/client';
-import { renameUseSplit } from '../../utils/common.utils';
-import { useMe } from '../../hooks';
-import { clinicListsVar } from '../../store';
-import { ClinicsOfClient } from '../../models';
-import { useSelectedClinic } from '../../pages/timetable/hooks';
+import { useNavigate } from 'react-router-dom';
+import {
+  addPrefixToNameWhenWaiting,
+  getMemberState,
+} from '../../utils/common.utils';
+import { useFindMyMembers, useMe } from '../../hooks';
+import { pickClinicId, useStore } from '../../store';
 import Selectbox from '../Selectbox';
 
 const ClinicSelector = () => {
-  const clinicLists = useReactiveVar(clinicListsVar);
-  const { selectClinic } = useSelectedClinic();
-  const { data: meData } = useMe();
-  if (!meData) return <></>;
+  const [, { getIdName }] = useMe();
 
-  const clinicListsSelectMeMember = clinicLists.map((clinic) => {
-    const idx = clinic.members.findIndex(
-      (member) => member.user.id === meData.me.id
-    );
-    return {
-      id: clinic.id,
-      name: clinic.name,
-      type: clinic.type,
-      member: clinic.members[idx],
-    };
-  });
+  const [myMembers] = useFindMyMembers();
 
-  const changeSelectedClinic = (id: number) => {
-    selectClinic(id);
+  const selectedClinicId = useStore((state) => state.pickedClinicId);
+
+  const member = myMembers?.find(
+    (member) => member.clinic.id === selectedClinicId
+  );
+
+  const clinicName = addPrefixToNameWhenWaiting(
+    member?.clinic?.name || '',
+    member?.accepted
+  );
+
+  const navigate = useNavigate();
+
+  const selectClinic = (clinicId: number) => {
+    pickClinicId({
+      ...getIdName(),
+      clinicId,
+    });
   };
-
-  const changeName = (name: string, isAccepted?: boolean) => {
-    let prefix = '';
-    if (!isAccepted) {
-      prefix = '수락대기 : ';
-    }
-
-    return prefix + renameUseSplit(name);
-  };
-
-  const isAccepted = meData?.me.members?.find(
-    (member) => member.clinic.id === ClinicsOfClient.getSelectedClinic().id
-  )?.accepted;
 
   return (
-    <Selectbox
-      selectedValue={changeName(
-        ClinicsOfClient.getSelectedClinic().name,
-        isAccepted
-      )}
-      hasBorder
-      backgroundColor="#262850"
-    >
+    <Selectbox selectedValue={clinicName} hasBorder backgroundColor="#262850">
       <Selectbox.Options>
-        {clinicListsSelectMeMember.map((clinic) => (
-          <Selectbox.Option
-            key={clinic.id}
-            selected={clinic.id === ClinicsOfClient.getSelectedClinic().id}
-            onClick={() => changeSelectedClinic(clinic.id)}
-          >
-            {changeName(clinic.name, clinic.member.accepted)}
-          </Selectbox.Option>
-        ))}
+        {myMembers?.map((member) => {
+          const { accepted, manager, staying } = member;
+          const state = getMemberState({ accepted, manager, staying });
+          if (state === '탈퇴') return null;
+
+          const onClick =
+            state === '수락대기'
+              ? () => navigate('/setting/my-clinics')
+              : () => selectClinic(member.clinic.id);
+
+          return (
+            <Selectbox.Option
+              key={member.id}
+              selected={member.id === selectedClinicId}
+              onClick={onClick}
+            >
+              {addPrefixToNameWhenWaiting(member.clinic.name, member.accepted)}
+            </Selectbox.Option>
+          );
+        })}
       </Selectbox.Options>
     </Selectbox>
   );

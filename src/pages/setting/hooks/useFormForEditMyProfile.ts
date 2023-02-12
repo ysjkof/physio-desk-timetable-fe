@@ -1,23 +1,22 @@
-import { useReactiveVar } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { loggedInUserVar, toastVar } from '../../../store';
-import { useEditProfile } from '../../../hooks';
+import { setToast } from '../../../store';
+import { useEditProfile, useMe } from '../../../hooks';
 import type { FormForEditMyProfileFields } from '../../../types/form.types';
 
 const useFormForEditMyProfile = () => {
-  const loggedInUser = useReactiveVar(loggedInUserVar);
+  const [meData] = useMe();
 
   const { register, handleSubmit: handleSubmitWrapper } =
     useForm<FormForEditMyProfileFields>({
       defaultValues: {
-        name: loggedInUser?.name,
+        name: meData?.name,
       },
     });
 
   const [editProfile] = useEditProfile();
 
   const onSubmit: SubmitHandler<FormForEditMyProfileFields> = (data) => {
-    if (!loggedInUser) return;
+    if (!meData) return;
 
     const { name, currentPassword, newPassword1, newPassword2 } = data;
 
@@ -26,7 +25,7 @@ const useFormForEditMyProfile = () => {
     );
 
     if (passwords.length === 1 || passwords.length === 2) {
-      return toastVar({
+      return setToast({
         messages: [
           '비밀번호를 변경하려면 현재 비밀번호,',
           '새 비밀번호, 새 비밀번호 확인을 모두 입력해주세요.',
@@ -35,12 +34,12 @@ const useFormForEditMyProfile = () => {
     }
 
     if (passwords.length === 3 && newPassword1 !== newPassword2) {
-      return toastVar({
+      return setToast({
         messages: ['새 비밀번호와 새 비밀번호 확인이 다릅니다.'],
       });
     }
 
-    const newName = name && (name !== loggedInUser.name || undefined) && name;
+    const newName = name && (name !== meData.name || undefined) && name;
     const newPassword =
       currentPassword &&
       (newPassword1 === newPassword2 || undefined) &&

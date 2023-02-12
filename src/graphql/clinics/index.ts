@@ -12,6 +12,7 @@ import {
   COMMON_MEMBER_FIELDS,
 } from './_clinicsFragments.gql';
 import { GET_MEMBER_DOCUMENT } from './getMember.gql';
+import { GET_MY_CLINICS_STATUS_DOCUMENT } from './getMyClinicsStatus.gql';
 
 export {
   ACCEPT_INVITATION_DOCUMENT,
@@ -26,4 +27,5 @@ export {
   COMMON_CLINIC_FIELDS,
   COMMON_MEMBER_FIELDS,
   GET_MEMBER_DOCUMENT,
+  GET_MY_CLINICS_STATUS_DOCUMENT,
 };

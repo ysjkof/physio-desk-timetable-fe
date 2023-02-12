@@ -1,19 +1,24 @@
 import { Suspense, lazy } from 'react';
-import { ApolloProvider, useReactiveVar } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
 import { HelmetProvider } from 'react-helmet-async';
-import { client, isLoggedInVar } from './apollo';
+import { getApolloClient } from './apollo';
 import { GlobalLayout } from './components';
+import { setAuthToken, setClient, useStore } from './store';
+import { localStorageUtils } from './utils/localStorage.utils';
 
 const Loading = lazy(() => import('./components/Loading'));
 
 function App() {
-  const isLoggedIn = useReactiveVar(isLoggedInVar);
+  useStore((state) => state.isLoggedIn); // 새로고침 시 리렌더 위한 사용
+  setAuthToken();
+  const client = getApolloClient(localStorageUtils.get({ key: 'token' }));
+  setClient(client);
 
   return (
     <ApolloProvider client={client}>
       <HelmetProvider>
         <Suspense fallback={<Loading />}>
-          <GlobalLayout isLoggedIn={isLoggedIn} />
+          <GlobalLayout />
         </Suspense>
       </HelmetProvider>
     </ApolloProvider>

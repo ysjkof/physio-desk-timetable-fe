@@ -1,22 +1,23 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useMe } from '../../hooks';
+import { useLogout, useMe } from '../../hooks';
 import { clinicMenu, personalMenu, ROUTES } from '../../router/routes';
 import Dropdown from './Dropdown';
-import { logout } from '../../pages/auth/authServices';
 
 export default function LoggedInGlobalNavBarMenu() {
   const navigate = useNavigate();
   const { register, handleSubmit, getValues, setValue } = useForm();
-  const { data: meData } = useMe();
+  const [meData] = useMe();
   const onSubmitSearch = () => {
     const { search } = getValues();
     const searchTrim = search.trim();
     setValue('search', searchTrim);
     navigate(`/search?name=${searchTrim}`);
   };
+
+  const logout = useLogout();
   const invokeLogout = () => {
-    logout(() => navigate('/'));
+    logout();
   };
   return (
     <>
@@ -34,7 +35,7 @@ export default function LoggedInGlobalNavBarMenu() {
       <Link to={ROUTES.timetable}>
         <span className="whitespace-nowrap">시간표</span>
       </Link>
-      <Dropdown title={meData?.me.name}>
+      <Dropdown title={meData?.name}>
         <Dropdown.Container width="12rem">
           <Dropdown.Ul>
             {clinicMenu.map((menu, idx) => (

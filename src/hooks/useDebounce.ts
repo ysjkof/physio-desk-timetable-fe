@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 let timer: NodeJS.Timeout;
-let apiCallNumber = 0;
 
 interface UseDebounceProps {
   callback: () => void;
@@ -20,8 +19,6 @@ export const useDebounce = ({ callback, timeout = 300 }: UseDebounceProps) => {
 
     const timerHandler = () => {
       callback();
-      apiCallNumber += 1;
-      console.log('Api call count :', apiCallNumber);
     };
 
     if (timer) clearTimeout(timer);

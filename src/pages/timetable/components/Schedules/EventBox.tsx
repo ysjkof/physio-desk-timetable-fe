@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useReactiveVar } from '@apollo/client';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -8,7 +7,6 @@ import {
   faCommentSlash,
   faLock,
 } from '@fortawesome/free-solid-svg-icons';
-import { tableDisplayVar } from '../../../../store';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
@@ -23,6 +21,7 @@ import type {
   PatientInReservation,
   ReservationInList,
 } from '../../../../types/common.types';
+import { useStore } from '../../../../store';
 
 interface EventBoxProps {
   userIndex: number;
@@ -41,7 +40,6 @@ const EventBox = ({
   event,
 }: EventBoxProps) => {
   const navigate = useNavigate();
-  const tableDisplay = useReactiveVar(tableDisplayVar);
   const [isHover, setIsHover] = useState(false);
 
   const personalColor = USER_COLORS[userIndex]?.deep || 'inherit';
@@ -108,6 +106,13 @@ const EventBox = ({
     if (isHover) positioningTooltip();
   }, [isHover]);
 
+  const showCancelOfTimetable = useStore(
+    (state) => state.showCancelOfTimetable
+  );
+  const showNoshowOfTimetable = useStore(
+    (state) => state.showNoshowOfTimetable
+  );
+
   return (
     <motion.div
       ref={eventBox}
@@ -118,8 +123,8 @@ const EventBox = ({
       onHoverEnd={() => setIsHover(false)}
       className={cls(
         'EVENT_BOX group absolute z-30 cursor-pointer',
-        !tableDisplay.seeCancel && isCancel ? 'hidden' : '',
-        !tableDisplay.seeNoshow && isNoshow ? 'hidden' : '',
+        !showCancelOfTimetable && isCancel ? 'hidden' : '',
+        !showNoshowOfTimetable && isNoshow ? 'hidden' : '',
         isDayOff ? 'z-[31]' : ''
       )}
       style={{ inset, height }}

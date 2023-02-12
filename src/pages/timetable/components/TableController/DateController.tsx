@@ -1,32 +1,33 @@
-import { useReactiveVar } from '@apollo/client';
 import { addDays, getMonth, getWeekOfMonth, subDays } from 'date-fns';
-import { selectedDateVar } from '../../../../store';
+import { setPickedDate, useStore } from '../../../../store';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
 
 const DateController = () => {
-  const selectedDate = useReactiveVar(selectedDateVar);
-  const today = new Date();
+  const pickedDate = useStore((state) => state.pickedDate);
 
-  const handleDateNavMovePrev = () => {
-    selectedDateVar(subDays(selectedDate, 7));
+  const goPrevWeek = () => {
+    setPickedDate(subDays(pickedDate, 7));
   };
-  const handleDateNavMoveNext = () => {
-    selectedDateVar(addDays(selectedDate, 7));
+  const goAfterWeek = () => {
+    setPickedDate(addDays(pickedDate, 7));
+  };
+  const setToday = () => {
+    setPickedDate(new Date());
   };
 
-  const weekNumber = getWeekOfMonth(selectedDate);
-  const month = `${getMonth(selectedDate) + 1}`.padStart(2, '0');
+  const weekNumber = getWeekOfMonth(pickedDate);
+  const month = `${getMonth(pickedDate) + 1}`.padStart(2, '0');
 
   return (
     <div className="flex items-center gap-4">
       <ChevronLeft
         className="rounded-sm border stroke-2"
         iconSize="LG"
-        onClick={handleDateNavMovePrev}
+        onClick={goPrevWeek}
       />
       <button
         className="w-32 whitespace-nowrap text-3xl font-medium hover:font-bold"
-        onClick={() => selectedDateVar(today)}
+        onClick={setToday}
         type="button"
       >
         {`${month}월 ${weekNumber}주차`}
@@ -34,7 +35,7 @@ const DateController = () => {
       <ChevronRight
         className="rounded-sm border stroke-2"
         iconSize="LG"
-        onClick={handleDateNavMoveNext}
+        onClick={goAfterWeek}
       />
     </div>
   );

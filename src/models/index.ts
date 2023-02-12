@@ -1,17 +1,15 @@
 import { Calendar } from './Calendar';
 import { ClinicsOfClient } from './ClinicsOfClient';
-import { SelectedPrescriptions } from './SelectedPrescriptions';
+import { PickedPrescriptions } from './PickedPrescriptions';
 import { Schedules } from './Schedules';
-import { TableDisplay } from './TableDisplay';
-import { TableTime } from './TableTime';
+import { TimeDurationOfTimetable } from './TimeDurationOfTimetable';
 import { TimeLabel } from './TimeLabel';
 
 export {
   Calendar,
   ClinicsOfClient,
-  SelectedPrescriptions,
+  PickedPrescriptions,
   Schedules,
-  TableDisplay,
-  TableTime,
+  TimeDurationOfTimetable,
   TimeLabel,
 };

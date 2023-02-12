@@ -1,16 +1,37 @@
 import { useState } from 'react';
 import { USER_COLORS } from '../../../../constants/constants';
 import { CheckableButton } from '../../../../components';
-import { useSelectedClinic } from '../../hooks';
-import { ClinicsOfClient } from '../../../../models';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
+import { useGetClinic, useMe } from '../../../../hooks';
+import { updateLocalStorageHiddenUsers } from '../../../../utils/localStorage.utils';
+import { toggleHiddenUsers, useStore } from '../../../../store';
+import type { HiddenUsersArr } from '../../../../types/store.types';
 
 const UserSelector = () => {
   const [isSpreading, setIsSpreading] = useState(false);
-  const { toggleUser } = useSelectedClinic();
+  const [clinic, { variables }] = useGetClinic();
+  const [, { getIdName }] = useMe();
+
+  const hiddenUsers = useStore((state) => state.hiddenUsers);
+
+  const isShowUser = (memberId: number) => {
+    return !hiddenUsers.has(memberId);
+  };
+
   const toggleUsers = (memberId: number) => {
-    toggleUser(memberId);
+    const callback = (hiddenUsers: HiddenUsersArr) => {
+      if (!variables?.input.clinicId)
+        throw new Error('UserSelector에서 clinic 변수 id를 못 받았습니다');
+
+      updateLocalStorageHiddenUsers({
+        ...getIdName(),
+        clinicId: variables.input.clinicId,
+        hiddenUsers,
+      });
+    };
+
+    toggleHiddenUsers(memberId, callback);
   };
 
   return (
@@ -21,11 +42,11 @@ const UserSelector = () => {
       />
       {isSpreading && (
         <div className="flex flex-wrap items-center gap-2">
-          {ClinicsOfClient.getSelectedClinic().members.map((member, i) => (
+          {clinic?.members.map((member, i) => (
             <CheckableButton
               key={i}
               personalColor={USER_COLORS[i].deep}
-              canSee={!!member.canSee}
+              canSee={isShowUser(member.id)}
               label={member.user.name}
               onClick={() => toggleUsers(member.id)}
             />

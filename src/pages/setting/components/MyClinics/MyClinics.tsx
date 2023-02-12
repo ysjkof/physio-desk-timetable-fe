@@ -1,37 +1,35 @@
-import { useOutletContext } from 'react-router-dom';
 import { type PropsWithChildren } from 'react';
-import { useQuery } from '@apollo/client';
+import { useOutletContext } from 'react-router-dom';
 import {
   BuildingLarge,
   BuildingLargeWithBan,
   BuildingLargeWithX,
   HourglassWithArrow,
 } from '../../../../svgs';
-import { FIND_MY_MEMBERS_DOCUMENT } from '../../../../graphql/clinics';
 import { getMemberState, renameUseSplit } from '../../../../utils/common.utils';
 import WaitingCard from './WaitingCard';
 import ClinicCard from './ClinicCard';
 import DisabledCard from './DisabledCard';
-import type { FindMyMembersQuery } from '../../../../types/generated.types';
 import type {
   MyMembers,
   SettingOutletContext,
 } from '../../../../types/common.types';
+import { useFindMyMembers } from '../../../../hooks';
 
 const MyClinics = () => {
   const { outletWidth } = useOutletContext<SettingOutletContext>();
 
-  const { data } = useQuery<FindMyMembersQuery>(FIND_MY_MEMBERS_DOCUMENT);
+  const [myMembers] = useFindMyMembers();
 
   const members: MyMembers = {
     관리자: [],
     직원: [],
     탈퇴: [],
-    승인대기: [],
+    수락대기: [],
     폐쇄: [],
   };
 
-  data?.findMyMembers.members.forEach((member) => {
+  myMembers?.forEach((member) => {
     if (!member.clinic.isActivated) {
       members.폐쇄.push(member);
       return;
@@ -51,8 +49,8 @@ const MyClinics = () => {
     >
       <Title />
       <div className="mt-10 flex flex-col gap-10">
-        <ClinicsContainer title="승인대기 병원">
-          {members.승인대기.map((member) => (
+        <ClinicsContainer title="수락대기 병원">
+          {members.수락대기.map((member) => (
             <WaitingCard
               key={member.id}
               memberId={member.id}

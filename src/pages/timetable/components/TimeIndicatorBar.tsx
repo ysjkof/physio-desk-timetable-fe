@@ -3,12 +3,13 @@ import {
   TABLE_CELL_HEIGHT,
   TABLE_TIME_GAP,
 } from '../../../constants/constants';
-import { TableTime } from '../../../models';
+import { TimeDurationOfTimetable } from '../../../models';
 import { getStringOfTime } from '../../../utils/date.utils';
 import type { IsActive } from '../../../types/common.types';
 
 export default function TimeIndicatorBar({ isActive }: IsActive) {
-  const { firstTimeInMinute, lastTimeInMinute } = TableTime;
+  const firstTimeInMinute = TimeDurationOfTimetable.getFirstTimeInMinute();
+  const lastTimeInMinute = TimeDurationOfTimetable.getLastTimeInMinute();
 
   const [time, setTime] = useState('');
   const [top, setTop] = useState(0);

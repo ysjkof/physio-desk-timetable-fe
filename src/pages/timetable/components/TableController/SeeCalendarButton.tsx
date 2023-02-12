@@ -1,40 +1,45 @@
 import { useRef } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { Calendar } from '../../../../svgs';
 import { Datepicker, MenuButton, Modal } from '../../../../components';
-import { useTableDisplay } from '../../hooks';
 import { getPositionRef } from '../../../../utils/common.utils';
-import { selectedDateVar } from '../../../../store';
+import {
+  setPickedDate,
+  toggleShowCalendarOfTimetable,
+  useStore,
+} from '../../../../store';
 
 const SeeCalendarButton = () => {
-  const { tableDisplay, toggleDisplayOption } = useTableDisplay();
+  const showCalendarOfTimetable = useStore(
+    (state) => state.showCalendarOfTimetable
+  );
+
   const toggleCalender = () => {
-    toggleDisplayOption('seeCalendar');
+    toggleShowCalendarOfTimetable();
   };
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { top } = getPositionRef(buttonRef);
 
-  const selectedDate = useReactiveVar(selectedDateVar);
+  const pickedDate = useStore((state) => state.pickedDate);
   const setDate = (date: Date) => {
-    selectedDateVar(date);
+    setPickedDate(date);
   };
 
   return (
     <>
       <MenuButton
         onClick={toggleCalender}
-        isActivated={tableDisplay.seeCalendar}
+        isActivated={showCalendarOfTimetable}
         ref={buttonRef}
         hasBorder
       >
         <Calendar />
         달력보기
       </MenuButton>
-      {tableDisplay.seeCalendar && (
+      {showCalendarOfTimetable && (
         <Modal top={top} right={10} closeAction={toggleCalender}>
           <Datepicker
-            selectedDate={selectedDate}
+            selectedDate={pickedDate}
             selectDate={setDate}
             closeAction={toggleCalender}
           />

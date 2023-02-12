@@ -6,7 +6,8 @@ import AutoCompleteForUser from './AutoCompleteForUser';
 import AutoCompleteForPatient from './AutoCompleteForPatient';
 import AutoCompleteForPrescription from './AutoCompleteForPrescription';
 import { Textarea } from './InputForReserve';
-import { ClinicsOfClient, SelectedPrescriptions } from '../../../../models';
+import { PickedPrescriptions } from '../../../../models';
+import { useStore } from '../../../../store';
 import { useFindPrescriptions } from '../../../../hooks';
 import { useCreateReservation } from '../../hooks';
 import type { FormOfReserveFields } from '../../../../types/form.types';
@@ -22,11 +23,11 @@ const FormForReservation = ({
       defaultValues: { startDate: date, userId },
     });
 
-  const { data, loading } = useFindPrescriptions();
+  const [prescriptionData, { loading }] = useFindPrescriptions();
 
   const prescriptionList = useMemo(
-    () => new SelectedPrescriptions(data?.findPrescriptions.prescriptions),
-    [data, loading]
+    () => new PickedPrescriptions(prescriptionData?.prescriptions),
+    [prescriptionData, loading]
   );
 
   register('userId', { required: true });
@@ -36,14 +37,15 @@ const FormForReservation = ({
 
   const { createReservation } = useCreateReservation();
 
+  const clinicId = useStore((state) => state.pickedClinicId);
   const onSubmit = () => {
     const { startDate, memo, patientId, prescriptions, userId } = getValues();
     const formData = {
       startDate,
-      endDate: addMinutes(startDate, prescriptionList.getSelection().minute),
+      endDate: addMinutes(startDate, prescriptionList.get().minute),
       memo,
       userId,
-      clinicId: ClinicsOfClient.getSelectedClinic().id,
+      clinicId,
       patientId,
       prescriptionIds: prescriptions,
     };

@@ -8,7 +8,7 @@ import Input from '../../../_legacy_components/molecules/Input';
 import FormError from '../../../_legacy_components/atoms/FormError';
 import Button from '../../../_legacy_components/molecules/Button';
 import { REG_EXP } from '../../../constants/regex';
-import { toastVar } from '../../../store';
+import { setToast } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
 import { CREATE_ACCOUNT_DOCUMENT } from '../../../graphql';
 import type {
@@ -39,13 +39,13 @@ export default function SignUp() {
     } = data;
 
     if (error) {
-      return toastVar({
+      return setToast({
         messages: [error],
       });
     }
 
     if (ok) {
-      toastVar({
+      setToast({
         messages: [
           '계정을 만들었습니다.',
           '입력하신 이메일 주소로 인증 코드를 보냈습니다.',

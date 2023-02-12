@@ -4,11 +4,9 @@ import { useDeleteReservation } from './useDeleteReservation';
 import { useListReservations } from './useListReservations';
 import { useReserve } from './useReserve';
 import { useSchedules } from './useSchedules';
-import { useSelectedClinic } from './useSelectedClinic';
 import { useSubscriptions } from './useSubscriptions';
-import { useTableDisplay } from './useTableDisplay';
 import { useTableLabel } from './useTableLabel';
-import { useTableTime } from './useTableTime';
+import { useTimeDurationOfTimetable } from './useTimeDurationOfTimetable';
 
 export {
   useCreateReservation,
@@ -17,9 +15,7 @@ export {
   useListReservations,
   useReserve,
   useSchedules,
-  useSelectedClinic,
   useSubscriptions,
-  useTableDisplay,
   useTableLabel,
-  useTableTime,
+  useTimeDurationOfTimetable,
 };

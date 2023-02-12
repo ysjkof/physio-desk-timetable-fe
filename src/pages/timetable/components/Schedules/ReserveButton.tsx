@@ -6,7 +6,7 @@ import {
   USER_COLORS,
 } from '../../../../constants/constants';
 import { cls } from '../../../../utils/common.utils';
-import type { SelectedReservationType } from '../../../../types/common.types';
+import type { PickedReservationType } from '../../../../types/common.types';
 
 interface ReserveBtnProps {
   label: string;
@@ -14,7 +14,7 @@ interface ReserveBtnProps {
   userId: number;
   userIndex: number;
   isActiveBorderTop: boolean;
-  selectedReservation: SelectedReservationType;
+  pickedReservation: PickedReservationType;
   quickCreateReservation: () => void;
 }
 
@@ -24,7 +24,7 @@ const ReserveButton = ({
   userId,
   userIndex,
   isActiveBorderTop = false,
-  selectedReservation,
+  pickedReservation,
   quickCreateReservation,
 }: ReserveBtnProps) => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const ReserveButton = ({
   };
 
   const handleClickButton = () => {
-    if (selectedReservation) {
+    if (pickedReservation) {
       quickCreateReservation();
     } else {
       openReserveModal();
@@ -71,15 +71,15 @@ const ReserveButton = ({
       role="button"
     >
       <span className="reserve-btn">+ {label}</span>
-      {selectedReservation && isHover && (
+      {pickedReservation && isHover && (
         <div
           className="absolute top-0 w-full border-2"
           style={{
             borderColor: USER_COLORS[userIndex]?.deep ?? 'black',
             height: `${
               getTimeLength(
-                selectedReservation.startDate,
-                selectedReservation.endDate,
+                pickedReservation.startDate,
+                pickedReservation.endDate,
                 '20minute'
               ) * TABLE_CELL_HEIGHT
             }px`,

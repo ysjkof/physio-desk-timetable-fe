@@ -1,16 +1,15 @@
-import { useReactiveVar } from '@apollo/client';
 import { faRectangleXmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { selectedReservationVar } from '../../../../store';
+import { setPickedReservation, useStore } from '../../../../store';
 
-const ReservationForCopy = () => {
-  const selectedReservation = useReactiveVar(selectedReservationVar);
+const PickedReservation = () => {
+  const pickedReservation = useStore((state) => state.pickedReservation);
 
   const clearSelectedReservation = () => {
-    selectedReservationVar(undefined);
+    setPickedReservation(undefined);
   };
 
-  if (!selectedReservation) return null;
+  if (!pickedReservation) return null;
   return (
     <div className="flex items-center justify-center whitespace-nowrap">
       <span className="mr-4 flex">
@@ -18,7 +17,7 @@ const ReservationForCopy = () => {
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-blue-800" />
       </span>
       <span className="mr-2 scale-150 font-bold">
-        {selectedReservation.patient?.name}
+        {pickedReservation.patient?.name}
       </span>
       님의 예약을 복사했습니다
       <FontAwesomeIcon
@@ -31,4 +30,4 @@ const ReservationForCopy = () => {
   );
 };
 
-export default ReservationForCopy;
+export default PickedReservation;

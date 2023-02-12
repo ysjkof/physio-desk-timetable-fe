@@ -1,4 +1,4 @@
-import { toastVar } from '../store';
+import { setToast } from '../store';
 
 export function printNetworkError(route?: string) {
   const messages: string[] = [
@@ -9,7 +9,7 @@ export function printNetworkError(route?: string) {
 
   if (route) messages.push(`문제가 발생한 곳 : ${route}`);
 
-  toastVar({ messages });
+  setToast({ messages });
 }
 
 const GQL_ERROR = {
@@ -17,5 +17,5 @@ const GQL_ERROR = {
 } as const;
 
 export function printGraphQLErrors(error: keyof typeof GQL_ERROR) {
-  toastVar({ messages: [GQL_ERROR[error]] });
+  setToast({ messages: [GQL_ERROR[error]] });
 }

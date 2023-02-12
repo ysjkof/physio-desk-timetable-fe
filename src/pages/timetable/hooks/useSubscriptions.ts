@@ -1,71 +1,71 @@
 import { useEffect } from 'react';
-import { OperationVariables, useSubscription } from '@apollo/client';
-import { client } from '../../../apollo';
+import { useSubscription } from '@apollo/client';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
   LIST_RESERVATIONS_DOCUMENT,
 } from '../../../graphql';
-import { ClinicsOfClient } from '../../../models';
+import { changeValueInArray } from '../../../utils/common.utils';
+import { LISTEN_CREATE_RESERVATION_DOCUMENT } from '../../../graphql/subscriptions/listenCreateReservation.gql';
+import { useStore } from '../../../store';
 import type {
+  QueryListReservationsArgs,
   ListenCreateReservationSubscription,
   ListenDeleteReservationSubscription,
   ListenUpdateReservationSubscription,
   ListReservationsQuery as Query,
   ListReservationsQueryVariables as Variables,
 } from '../../../types/generated.types';
-import { changeValueInArray } from '../../../utils/common.utils';
-import { LISTEN_CREATE_RESERVATION_DOCUMENT } from '../../../graphql/subscriptions/listenCreateReservation.gql';
-import { ReservationInList } from '../../../types/common.types';
+import type { ReservationInList } from '../../../types/common.types';
 
 interface UseSubscriptionsProps {
-  variables: OperationVariables | undefined;
+  variables: QueryListReservationsArgs | undefined;
 }
 
+// variables는 listReservation의 변수다.
 export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const clinicId = useStore((state) => state.pickedClinicId);
+  const client = useStore((state) => state.client);
+
+  const subscriptionVariables = { input: { clinicId } };
 
   const { loading: loadingOfDelete, data: deleteResult } =
     useSubscription<ListenDeleteReservationSubscription>(
       LISTEN_DELETE_RESERVATION_DOCUMENT,
-      { variables: { input: { clinicId } } }
+      { variables: subscriptionVariables }
     );
 
   const { loading: loadingOfUpdate, data: updateResult } =
     useSubscription<ListenUpdateReservationSubscription>(
       LISTEN_UPDATE_RESERVATION_DOCUMENT,
-      { variables: { input: { clinicId } } }
+      { variables: subscriptionVariables }
     );
 
   const { loading: loadingOfCreate, data: resultOfCreate } =
     useSubscription<ListenCreateReservationSubscription>(
       LISTEN_CREATE_RESERVATION_DOCUMENT,
-      { variables: { input: { clinicId } } }
+      { variables: subscriptionVariables }
     );
 
-  const updateAfterDelete = (reservationId: number) => {
-    client.cache.updateQuery<Query, Variables>(
-      {
-        query: LIST_RESERVATIONS_DOCUMENT,
-        variables: variables as Variables,
-      },
-      (cacheData) => {
-        if (!cacheData) return;
-        const { listReservations } = cacheData;
+  const cacheUpdateOptions = { query: LIST_RESERVATIONS_DOCUMENT, variables };
 
-        const results = listReservations.results.filter(
+  const updateAfterDelete = (reservationId: number) => {
+    client?.cache.updateQuery<Query, Variables>(
+      cacheUpdateOptions,
+      (cacheData) => {
+        const cacheResults = cacheData?.listReservations;
+        if (!cacheResults) return;
+
+        const reservations = cacheResults.results?.filter(
           (result) => result.id !== reservationId
         );
-        const totalCount = listReservations.totalCount - 1;
+        const totalCount = Math.max(cacheResults.totalCount || 0 - 1, 0);
 
-        return {
-          ...cacheData,
-          listReservations: {
-            ...listReservations,
-            results,
-            totalCount,
-          },
-        };
+        const newData = structuredClone(cacheData);
+        newData.listReservations.results = reservations;
+        newData.listReservations.totalCount = totalCount;
+
+        return newData;
       }
     );
   };
@@ -73,52 +73,37 @@ export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
   const updateAfterUpdate = (
     reservation: ListenUpdateReservationSubscription['listenUpdateReservation']
   ) => {
-    client.cache.updateQuery<Query, Variables>(
-      {
-        query: LIST_RESERVATIONS_DOCUMENT,
-        variables: variables as Variables,
-      },
+    client?.cache.updateQuery<Query, Variables>(
+      cacheUpdateOptions,
       (cacheData) => {
-        if (!cacheData) return;
-        const { listReservations } = cacheData;
+        const cacheResults = cacheData?.listReservations.results;
+        if (!cacheResults) return;
 
-        const updatedIndex = listReservations.results.findIndex(
+        const updatedIndex = cacheResults.findIndex(
           (oldReservation) => oldReservation.id === reservation.id
         );
-        if (updatedIndex === -1) return;
+        if (updatedIndex === -1) return cacheData;
 
-        const results = changeValueInArray(
-          listReservations.results,
+        const newData = structuredClone(cacheData);
+        newData.listReservations.results = changeValueInArray(
+          cacheResults,
           reservation as ReservationInList, // 하위 필드에 id값만 받아서 경고 나타나지만 정상작동하므로 타입단언함.
           updatedIndex
         );
 
-        return {
-          ...cacheData,
-          listReservations: {
-            ...cacheData.listReservations,
-            results,
-          },
-        };
+        return newData;
       }
     );
   };
 
   const updateAfterCreate = (reservation: ReservationInList) => {
-    client.cache.updateQuery<Query, Variables>(
-      {
-        query: LIST_RESERVATIONS_DOCUMENT,
-        variables: variables as Variables,
-      },
+    client?.cache.updateQuery<Query, Variables>(
+      cacheUpdateOptions,
       (cacheData) => {
         if (!cacheData) return;
-        return {
-          ...cacheData,
-          listReservations: {
-            ...cacheData.listReservations,
-            results: [...cacheData.listReservations.results, reservation],
-          },
-        };
+        const newData = structuredClone(cacheData);
+        newData.listReservations.results?.push(reservation);
+        return newData;
       }
     );
   };

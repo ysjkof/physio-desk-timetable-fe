@@ -1,6 +1,5 @@
-import { toastVar } from '../store';
-import { MemberStatus } from '../types/common.types';
-import { ReservationState } from '../types/generated.types';
+import type { MemberStatus } from '../types/common.types';
+import type { ReservationState } from '../types/generated.types';
 
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
@@ -39,12 +38,12 @@ export function getMemberState({
   staying,
   accepted,
   manager,
-}: MemberStatus): '관리자' | '직원' | '탈퇴' | '승인대기' {
+}: MemberStatus): '관리자' | '직원' | '탈퇴' | '수락대기' {
   if (staying && accepted) {
     return manager ? '관리자' : '직원';
   }
   if (!staying && accepted) return '탈퇴';
-  if (!staying && !accepted) return '승인대기';
+  if (!staying && !accepted) return '수락대기';
   throw new Error('getMemberState >> 불가능한 경우의 수');
 }
 
@@ -52,7 +51,7 @@ export type StayingState = ReturnType<typeof getMemberState>;
 
 export function isStayMember(state: StayingState) {
   const memberState = {
-    승인대기: false,
+    수락대기: false,
     관리자: true,
     직원: true,
     탈퇴: false,
@@ -100,16 +99,12 @@ function removePersonalClinicNumber(name: string) {
   return splinted.length < 2 ? null : splinted[0];
 }
 
-/** ok, error만 있는 GraphQL 응답을 받고 토스트 출력이나 콜백 실행 */
-export function simpleCheckGQLError(
-  ok: boolean,
-  error?: string | null,
-  callback?: () => void
-) {
-  if (error) {
-    toastVar({ messages: [`오류가 발생했습니다; ${error}`] });
+export function addPrefixToNameWhenWaiting(name: string, isAccepted?: boolean) {
+  let prefix = '';
+  if (!isAccepted) {
+    prefix = '수락대기 : ';
   }
-  if (callback && ok) callback();
+  return prefix + renameUseSplit(name);
 }
 
 // FIXME: checkLengthIsZero로 대체. 지울 것.

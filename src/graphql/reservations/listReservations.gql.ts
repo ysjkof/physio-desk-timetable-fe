@@ -12,6 +12,7 @@ export const LIST_RESERVATIONS_DOCUMENT = gql`
   query listReservations($input: ListReservationsInput!) {
     listReservations(input: $input) {
       ok
+      error
       totalCount
       results {
         ...CommonReservationFields

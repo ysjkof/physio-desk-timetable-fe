@@ -1,7 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { USER_COLORS } from '../../../../constants/constants';
 import { cls, getMemberState } from '../../../../utils/common.utils';
-import { loggedInUserVar } from '../../../../store';
 import type { MemberOfClient } from '../../../../types/common.types';
 
 interface MemberListItemProps {
@@ -18,7 +17,6 @@ const MemberListItem = ({ member, userIndex }: MemberListItemProps) => {
 
   const { memberId } = useParams();
   const enabled = member.id === Number(memberId);
-  const isMe = member.user.id === loggedInUserVar()?.id;
 
   return (
     <li key={member.id}>
@@ -41,7 +39,7 @@ const MemberListItem = ({ member, userIndex }: MemberListItemProps) => {
         <span
           className={cls(
             'w-24',
-            memberState === '승인대기'
+            memberState === '수락대기'
               ? 'text-caution'
               : 'text-table-day-strong'
           )}

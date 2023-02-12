@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
-import { client } from '../../../apollo';
 import { MUOOL } from '../../../constants/constants';
-import { loggedInUserVar } from '../../../store';
+import { useStore } from '../../../store';
 import {
   USER_EMAIL_AND_VERIFY_FIELDS,
   VERIFY_CHANGE_EMAIL_DOCUMENT,
 } from '../../../graphql';
 import type { VerifyChangeEmailMutation } from '../../../types/generated.types';
+import { useMe } from '../../../hooks';
 
 export default function ChangeEmail() {
-  const loggedInUser = useReactiveVar(loggedInUserVar);
   const [message, setMessage] = useState('');
+  const [meData] = useMe();
 
   const [verifyChangeEmailMutation, { loading }] =
     useMutation<VerifyChangeEmailMutation>(VERIFY_CHANGE_EMAIL_DOCUMENT);
+  const client = useStore((state) => state.client);
 
   useEffect(() => {
     if (loading) return;
@@ -44,12 +45,12 @@ export default function ChangeEmail() {
             );
           }
 
-          if (loggedInUser?.id) {
+          if (meData) {
             // Reading and Writing Data to the cache guide: writeFragment
             // Fragment는 전체 DB에서 수정하고 싶은 일부분이다.
-            client.writeFragment({
+            client?.writeFragment({
               // 캐시에서 User:1 이런식으로 돼 있기 때문에 아래처럼.
-              id: `User:${loggedInUser.id}`,
+              id: `User:${meData.id}`,
               // 이하 cache로 보내서 업데이트 됐으면 하는 프래그먼트로. 무엇을 바꾸고 싶은지 선언
               fragment: USER_EMAIL_AND_VERIFY_FIELDS,
               // 그 data를 보냄.

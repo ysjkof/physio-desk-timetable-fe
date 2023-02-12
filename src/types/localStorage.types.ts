@@ -1,19 +1,18 @@
-import { LOCAL_STORAGE_KEY } from '../utils/localStorage.utils';
+import {
+  PRIVATE_LOCAL_STORAGE_KEY_VALUE,
+  PUBLIC_LOCAL_STORAGE_KEY_VALUE,
+} from '../utils/localStorage.utils';
 import type { UserIdAndName, Value } from './common.types';
 
-type PrivateLocalStorageKey = keyof Pick<
-  typeof LOCAL_STORAGE_KEY,
-  'clinicLists' | 'viewOption' | 'tableTime'
->;
+export type PrivateLocalStorageKey =
+  keyof typeof PRIVATE_LOCAL_STORAGE_KEY_VALUE;
 
-type PublicLocalStorageKey = keyof Pick<
-  typeof LOCAL_STORAGE_KEY,
-  'token' | 'createdAt'
->;
+export type PublicLocalStorageKey = keyof typeof PUBLIC_LOCAL_STORAGE_KEY_VALUE;
 
-export type LocalStorageKeysType = typeof LOCAL_STORAGE_KEY;
-export type LocalStorageKey = keyof LocalStorageKeysType;
-export type LocalStorageValue = typeof LOCAL_STORAGE_KEY[LocalStorageKey];
+export type LocalStorageType = typeof PUBLIC_LOCAL_STORAGE_KEY_VALUE &
+  typeof PRIVATE_LOCAL_STORAGE_KEY_VALUE;
+
+export type LocalStorageKey = keyof LocalStorageType;
 
 // CREATE
 export interface GenerateStorageKey extends Partial<UserIdAndName> {

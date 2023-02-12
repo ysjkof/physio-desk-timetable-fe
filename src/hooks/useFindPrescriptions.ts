@@ -1,21 +1,23 @@
-import { useQuery } from '@apollo/client';
+import { QueryResult, useQuery } from '@apollo/client';
 import { FIND_PRESCRIPTIONS_DOCUMENT } from '../graphql';
-import { ClinicsOfClient } from '../models';
+import { useStore } from '../store';
 import type {
   FindPrescriptionsQuery,
   FindPrescriptionsQueryVariables,
 } from '../types/generated.types';
 
-export const useFindPrescriptions = () => {
-  const selectedClinic = ClinicsOfClient.getSelectedClinic();
+export const useFindPrescriptions = (): [
+  FindPrescriptionsQuery['findPrescriptions'] | null | undefined,
+  QueryResult<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>
+] => {
+  const clinicId = useStore((state) => state.pickedClinicId);
 
-  const queryResult = useQuery<
+  const variables = { input: { clinicId, onlyLookUpActive: true } };
+  const results = useQuery<
     FindPrescriptionsQuery,
     FindPrescriptionsQueryVariables
   >(FIND_PRESCRIPTIONS_DOCUMENT, {
-    variables: {
-      input: { clinicId: selectedClinic.id, onlyLookUpActive: true },
-    },
+    variables,
     onCompleted(data) {
       const { ok, error } = data.findPrescriptions;
       if (!ok) {
@@ -25,5 +27,5 @@ export const useFindPrescriptions = () => {
     },
   });
 
-  return queryResult;
+  return [results.data?.findPrescriptions, results];
 };

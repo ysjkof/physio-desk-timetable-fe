@@ -2,8 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { login } from '../authServices';
-import { toastVar } from '../../../store';
+import { setToast } from '../../../store';
 import Input from '../../../_legacy_components/molecules/Input';
 import FormError from '../../../_legacy_components/atoms/FormError';
 import Button from '../../../_legacy_components/molecules/Button';
@@ -11,6 +10,7 @@ import { REG_EXP } from '../../../constants/regex';
 import { MUOOL } from '../../../constants/constants';
 import { LOGIN_DOCUMENT } from '../../../graphql';
 import type { LoginInput, LoginMutation } from '../../../types/generated.types';
+import { useLogin } from '../../../components';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -23,6 +23,8 @@ export default function Login() {
 
   const [loginMutation, { loading }] =
     useMutation<LoginMutation>(LOGIN_DOCUMENT);
+
+  const login = useLogin();
 
   const onSubmit = () => {
     if (!loading) {
@@ -42,7 +44,7 @@ export default function Login() {
           } = data;
 
           if (error) {
-            return toastVar({ messages: [error] });
+            return setToast({ messages: [error] });
           }
 
           if (ok && token) {

@@ -1,8 +1,10 @@
 import { SVGProps } from 'react';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import {
   Clinic,
   FindMyClinicsQuery,
   FindMyMembersQuery,
+  GetClinicQuery,
   GetReservationsByPatientQuery,
   GetStatisticsQuery,
   ListReservationsQuery,
@@ -22,16 +24,16 @@ export interface TimeLabelArg {
   readonly colors: string[];
 }
 
+export interface HoursAndMinutes {
+  hours?: number;
+  minutes?: number;
+}
+
 export interface FirstAndLastTime {
   firstHour: number;
   firstMinute: number;
   lastHour: number;
   lastMinute: number;
-}
-
-export interface HoursAndMinutes {
-  hours?: number;
-  minutes?: number;
 }
 
 export interface TableTimeOptions extends FirstAndLastTime {
@@ -44,12 +46,12 @@ export interface TableDisplayOptions {
   seeNoshow: boolean;
   seeList: boolean;
   seeCalendar: boolean;
-  asideExtension: boolean;
 }
 
 // typescript type & interface
-export type IFindMyClinics = FindMyClinicsQuery['findMyClinics']['clinics'];
-export type MyClinic = NonNullable<FlatArray<IFindMyClinics, 0>>;
+export type ClinicsOfFindMyClinics =
+  FindMyClinicsQuery['findMyClinics']['clinics'];
+export type MyClinic = NonNullable<FlatArray<ClinicsOfFindMyClinics, 0>>;
 
 // TODO : MyClinicMember로 이름 변경
 export type IMember = MyClinic['members'][0];
@@ -78,9 +80,14 @@ export interface MyMembers {
   관리자: MyMembersType;
   직원: MyMembersType;
   탈퇴: MyMembersType;
-  승인대기: MyMembersType;
+  수락대기: MyMembersType;
   폐쇄: MyMembersType;
 }
+
+export type ResultOfListReservations =
+  | ListReservationsQuery['listReservations']
+  | null
+  | undefined;
 
 export type ReservationInList = NonNullable<
   ListReservationsQuery['listReservations']['results']
@@ -123,6 +130,13 @@ export interface ModifiedLoginUser
   members?: ModifiedClinicMemberWithClinic[] | null;
   notice?: ModifiedNotice[] | null;
 }
+
+// clinic
+export type ClinicOfGetMyClinic = GetClinicQuery['getClinic']['clinic'];
+export type ClinicOfGetMyClinicTruth = NonNullable<
+  GetClinicQuery['getClinic']['clinic']
+>;
+export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'];
 
 //
 
@@ -173,7 +187,7 @@ export interface MemberState {
 
 ///
 
-export interface SelectedPrescription {
+export interface PickedPrescription {
   price: number;
   minute: number;
   prescriptions: number[];
@@ -187,25 +201,23 @@ export interface ReserveFormType {
 
 //
 
-export interface UserWithEvent extends MemberOfClient {
+export interface MemberWithEvent extends MemberOfClient {
   events: ReservationInList[];
 }
 export interface ISchedules {
   date: Date;
-  users: UserWithEvent[];
+  members: MemberWithEvent[];
 }
 
-export type SelectedReservationType = ReservationInList | undefined;
-
-export type SelectedPatientType = SelectedPatient | undefined | null;
-export interface SelectedPatient extends PatientInReservation {
+export interface PickedPatient extends PatientInReservation {
   clinic: ClinicInReservation;
   user: UserInReservation | null | undefined;
 }
 
-// utils
+export type PickedReservationType = ReservationInList | undefined;
 
-export type LoggedInUser = MeQuery['me'] | undefined | null;
+export type PickedPatientType = PickedPatient | undefined | null;
+// utils
 
 export interface ToastState {
   messages?: string[];
@@ -245,3 +257,5 @@ export interface DashboardOutletContext {
 }
 
 export interface SettingOutletContext extends DashboardOutletContext {}
+
+export type ApolloClientType = ApolloClient<NormalizedCacheObject> | null;

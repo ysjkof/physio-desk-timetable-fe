@@ -1,91 +1,74 @@
+import { type PropsWithChildren, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { GET_MY_CLINICS_STATUS_DOCUMENT } from '../graphql';
+import { localStorageUtils } from '../utils/localStorage.utils';
+import { useHiddenUsers, useMe, usePickedClinicId } from '../hooks';
+import { useTimeDurationOfTimetable } from '../pages/timetable/hooks';
 import { LATEST_STORAGE_VERSION } from '../constants/constants';
-import { FIND_MY_CLINICS_DOCUMENT } from '../graphql';
-import { ClinicsOfClient, TableDisplay, TableTime } from '../models';
-import localStorageUtils from '../utils/localStorage.utils';
-import {
-  clinicListsVar,
-  loggedInUserVar,
-  tableDisplayVar,
-  tableTimeVar,
-} from '../store';
-import { useMe } from '../hooks';
-import type { MyClinic, UserIdAndName } from '../types/common.types';
-import type { FindMyClinicsQuery } from '../types/generated.types';
+import { useStore } from '../store';
+import type { UserIdAndName } from '../types/common.types';
+import type { GetMyClinicsStatusQuery } from '../types/generated.types';
 
 const Initialize = ({ children }: PropsWithChildren) => {
+  useStore((state) => state.pickedClinicId); // 리렌더용
   const [loading, setLoading] = useState(true);
 
-  const { data: meData } = useMe();
+  const [, { getIdName }] = useMe();
 
-  const { data: findMyClinicsData } = useQuery<FindMyClinicsQuery>(
-    FIND_MY_CLINICS_DOCUMENT,
-    {
-      variables: { input: { includeInactivate: true } },
-    }
+  const { data: myClinicsStatusData } = useQuery<GetMyClinicsStatusQuery>(
+    GET_MY_CLINICS_STATUS_DOCUMENT
   );
 
-  const checkLatestStorage = (userIdAndName: UserIdAndName) => {
-    const localCreatedAt = localStorageUtils.get<string>({
-      key: 'createdAt',
-    });
-
-    const createdAt = localCreatedAt ? new Date(localCreatedAt) : null;
-
-    const latestCreatedAt = new Date(LATEST_STORAGE_VERSION);
-
-    if (createdAt && createdAt.getTime() >= latestCreatedAt.getTime()) return;
-
-    localStorageUtils.remove({ ...userIdAndName, key: 'clinicLists' });
-    localStorageUtils.remove({ ...userIdAndName, key: 'viewOption' });
-
-    localStorageUtils.set({
-      key: 'createdAt',
-      value: latestCreatedAt,
-    });
-    return console.info('Initialized New Local Storage');
-  };
-
-  const initTableDisplay = (userIdAndName: UserIdAndName) => {
-    const tableDisplayOptions = TableDisplay.initialize(userIdAndName);
-    tableDisplayVar(tableDisplayOptions);
-  };
-
-  const initTableTime = (userIdAndName: UserIdAndName) => {
-    const tableTimeOptions = TableTime.initialize(userIdAndName);
-    tableTimeVar(tableTimeOptions);
-  };
-
-  const initClinicsOfClient = (
-    userIdAndName: UserIdAndName,
-    clinics: MyClinic[]
-  ) => {
-    const myClinics = ClinicsOfClient.initialize(userIdAndName, clinics);
-    clinicListsVar(myClinics);
-  };
+  const { initialize: initSelectedClinicId } = usePickedClinicId();
+  const { initialize: initTimeDuration } = useTimeDurationOfTimetable();
+  const { initialize: initHiddenUsers } = useHiddenUsers();
 
   useEffect(() => {
     setLoading(true);
 
-    if (!meData || !findMyClinicsData?.findMyClinics.clinics) return;
+    if (!myClinicsStatusData?.getMyClinicsStatus.clinics) return;
 
-    const userIdAndName = { userId: meData.me.id, userName: meData.me.name };
+    const clinicId = myClinicsStatusData?.getMyClinicsStatus.clinics.find(
+      (clinic) => clinic.isPersonal
+    )?.id;
 
-    checkLatestStorage(userIdAndName);
+    if (!clinicId) throw new Error('초기화 중 clinicId가 없습니다');
 
-    initTableDisplay(userIdAndName);
-    initTableTime(userIdAndName);
-    initClinicsOfClient(userIdAndName, findMyClinicsData.findMyClinics.clinics);
+    const idAndName = getIdName();
+    checkAndRefreshLatestStorage(idAndName);
 
-    loggedInUserVar(meData.me);
+    const selectedClinicId = initSelectedClinicId(idAndName, clinicId);
+    initHiddenUsers(idAndName, selectedClinicId);
+    initTimeDuration(idAndName);
 
     setLoading(false);
-  }, [meData, findMyClinicsData]);
+  }, [myClinicsStatusData]);
 
   if (loading) return <></>;
 
   return <>{children}</>;
+};
+
+const checkAndRefreshLatestStorage = (userIdAndName: UserIdAndName) => {
+  if (isLatestStorage()) return;
+
+  localStorageUtils.removeAll(userIdAndName);
+
+  localStorageUtils.set({
+    key: 'createdAt',
+    value: LATEST_STORAGE_VERSION,
+  });
+  return console.info('Refresh Local Storage');
+};
+
+const isLatestStorage = () => {
+  const localCreatedAt = localStorageUtils.get<string>({
+    key: 'createdAt',
+  });
+  const createdAt = localCreatedAt && new Date(localCreatedAt);
+  return !!(
+    createdAt && createdAt.getTime() >= LATEST_STORAGE_VERSION.getTime()
+  );
 };
 
 export default Initialize;

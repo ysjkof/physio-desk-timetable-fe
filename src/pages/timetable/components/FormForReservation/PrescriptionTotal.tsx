@@ -1,7 +1,7 @@
-import type { SelectedPrescription } from '../../../../types/common.types';
+import type { PickedPrescription } from '../../../../types/common.types';
 
 interface PrescriptionTotalProps {
-  selectedPrescription: SelectedPrescription;
+  selectedPrescription: PickedPrescription;
 }
 
 export const PrescriptionTotal = ({

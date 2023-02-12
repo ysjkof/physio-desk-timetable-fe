@@ -1,14 +1,16 @@
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { EDIT_PROFILE_DOCUMENT } from '../graphql';
-import { loggedInUserVar, toastVar } from '../store';
+import { setToast, useStore } from '../store';
 import {
   cacheUpdatePersonalClinicName,
   cacheUpdateUserName,
-} from '../utils/apolloCache.utils';
+} from '../utils/apollo.utils';
 import {
-  EditProfileMutation,
-  EditProfileMutationVariables,
+  ClinicType,
+  type EditProfileMutation,
+  type EditProfileMutationVariables,
 } from '../types/generated.types';
+import { useMe } from './useMe';
 
 interface Input {
   name?: string;
@@ -17,7 +19,8 @@ interface Input {
 }
 
 export const useEditProfile = () => {
-  const loggedInUser = useReactiveVar(loggedInUserVar);
+  const [meData] = useMe();
+  const client = useStore((state) => state.client);
 
   return useMutation<EditProfileMutation, EditProfileMutationVariables>(
     EDIT_PROFILE_DOCUMENT,
@@ -25,18 +28,33 @@ export const useEditProfile = () => {
       onCompleted(data, clientOptions) {
         const { error } = data.editProfile;
         if (error) {
-          return toastVar({ messages: [error] });
+          return setToast({ messages: [error] });
         }
+        if (!meData) throw new Error('meData가 없습니다');
 
         const profileInput: Input = clientOptions?.variables?.input;
         const newName = profileInput.name;
 
-        toastVar({ messages: ['사용자 정보 수정완료'], fade: true });
+        setToast({ messages: ['사용자 정보 수정완료'], fade: true });
 
-        const prevName = loggedInUser?.name;
-        if (!loggedInUser || !newName || prevName === newName) return;
-        cacheUpdateUserName(loggedInUser.id, newName);
-        cacheUpdatePersonalClinicName(newName);
+        const prevName = meData.name;
+        if (!newName || prevName === newName) return;
+
+        const personalClinic = meData.members?.find(
+          (member) => member.clinic.type === ClinicType.Personal
+        )?.clinic;
+        if (!personalClinic)
+          return setToast({
+            messages: ['meData에서 개인용 병원을 찾지 못했습니다'],
+          });
+
+        cacheUpdateUserName(client, meData.id, newName);
+        cacheUpdatePersonalClinicName({
+          client,
+          userName: newName,
+          clinicId: personalClinic.id,
+          clinicName: personalClinic.name,
+        });
       },
     }
   );

@@ -1,18 +1,27 @@
+import { LATEST_STORAGE_VERSION } from '../constants/constants';
+import { changeValueInArray } from './common.utils';
 import type {
   GenerateStorageKey,
   GetPrivateStorage,
   GetPublicLocalStorage,
-  LocalStorageKeysType,
+  LocalStorageType,
+  PrivateLocalStorageKey,
+  PublicLocalStorageKey,
   RemovePrivateLocalStorage,
   RemovePublicLocalStorage,
   SetPrivateStorage,
   SetPublicStorage,
 } from '../types/localStorage.types';
+import type {
+  ClinicIdAndHiddenUsers,
+  HiddenUsersArr,
+} from '../types/store.types';
+import type { UserIdAndName } from '../types/common.types';
 
 class LocalStorage {
-  #storageKeyObj;
+  #storageKeyObj: LocalStorageType;
 
-  constructor(storageKeyObj: LocalStorageKeysType) {
+  constructor(storageKeyObj: LocalStorageType) {
     this.#storageKeyObj = storageKeyObj;
   }
 
@@ -53,20 +62,103 @@ class LocalStorage {
     localStorage.removeItem(storageKey);
   }
 
+  removeAll(userIdAndName: UserIdAndName) {
+    this.#removeAllOfPublic();
+    this.#removeAllOfPrivate(userIdAndName);
+  }
+
+  #removeAllOfPublic() {
+    Object.keys(PUBLIC_LOCAL_STORAGE_KEY_VALUE).forEach((key) => {
+      if (key === 'token' || key === 'createdAt') return;
+      this.remove({ key: key as PublicLocalStorageKey });
+    });
+  }
+
+  #removeAllOfPrivate(userIdAndName: UserIdAndName) {
+    Object.keys(PRIVATE_LOCAL_STORAGE_KEY_VALUE).forEach((key) => {
+      this.remove({
+        ...userIdAndName,
+        key: key as PrivateLocalStorageKey,
+      });
+    });
+  }
+
   #generateKey({ key, userId, userName }: GenerateStorageKey) {
     if (userId && userName) {
-      return `${this.#storageKeyObj[key] + userId}-${userName}`;
+      return `${this.#storageKeyObj[key]}-${userId}-${userName}`;
     }
-    return key;
+    return this.#storageKeyObj[key];
   }
 }
 
-export const LOCAL_STORAGE_KEY = {
-  token: 'muool-token',
-  createdAt: 'muool-local-storage-createdAt',
-  clinicLists: 'muool-clinic-lists-',
-  viewOption: 'muool-view-option-',
-  tableTime: 'muool-table-time-',
+export const PRIVATE_LOCAL_STORAGE_KEY_VALUE = {
+  clinicLists: 'muool-clinic-lists',
+  viewOption: 'muool-view-option',
+  tableTime: 'muool-table-time',
+  pickedClinicId: 'muool-picked-clinic-id',
+  showCancelOfTimetable: 'muool-show-cancel-of-timetable',
+  showNoshowOfTimetable: 'muool-show-noshow-of-timetable',
+  hiddenUsers: 'muool-hidden-users',
 } as const;
 
-export default new LocalStorage(LOCAL_STORAGE_KEY);
+export const PUBLIC_LOCAL_STORAGE_KEY_VALUE = {
+  token: 'muool-token',
+  createdAt: 'muool-createdAt',
+  isBigGlobalAside: 'muool-is-big-global-aside',
+} as const;
+
+export const LOCAL_STORAGE_KEY_VALUE = {
+  ...PRIVATE_LOCAL_STORAGE_KEY_VALUE,
+  ...PUBLIC_LOCAL_STORAGE_KEY_VALUE,
+};
+
+export const localStorageUtils = new LocalStorage(LOCAL_STORAGE_KEY_VALUE);
+
+export const updateLocalStorageHiddenUsers = ({
+  hiddenUsers,
+  clinicId,
+  userId,
+  userName,
+}: {
+  hiddenUsers: HiddenUsersArr;
+  clinicId: number;
+  userId: number;
+  userName: string;
+}) => {
+  let newHiddenUsers;
+
+  const newClinicAndHiddenUser = [clinicId, hiddenUsers];
+
+  const prevHiddenUsersArr = localStorageUtils.get<ClinicIdAndHiddenUsers[]>({
+    key: 'hiddenUsers',
+    userId,
+    userName,
+  });
+
+  const clinicIdx = prevHiddenUsersArr?.findIndex(
+    ([_clinicId]) => _clinicId === clinicId
+  );
+
+  if (!prevHiddenUsersArr) {
+    newHiddenUsers = [newClinicAndHiddenUser];
+  }
+
+  if (prevHiddenUsersArr && clinicIdx === -1) {
+    newHiddenUsers = [...prevHiddenUsersArr, newClinicAndHiddenUser];
+  }
+
+  if (prevHiddenUsersArr && clinicIdx !== -1) {
+    newHiddenUsers = changeValueInArray(
+      prevHiddenUsersArr,
+      newClinicAndHiddenUser,
+      clinicIdx || 0
+    );
+  }
+
+  localStorageUtils.set({
+    key: 'hiddenUsers',
+    userId,
+    userName,
+    value: newHiddenUsers,
+  });
+};

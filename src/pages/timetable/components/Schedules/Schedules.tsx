@@ -1,39 +1,45 @@
 import { ReactNode } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { compareDateMatch } from '../../../../utils/date.utils';
 import { SchedulesStyle } from '../../../../styles/timetable.styles';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
 import { cls } from '../../../../utils/common.utils';
-import { selectedDateVar, tableDisplayVar } from '../../../../store';
+import { useStore } from '../../../../store';
 import type { SchedulesProps } from '../../../../types/props.types';
 
 const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
   const today = new Date();
 
-  const userLength = weekEvents[0].users.filter((user) => user.canSee).length;
+  const hiddenUsers = useStore((state) => state.hiddenUsers);
 
-  const { hasWeekView } = useReactiveVar(tableDisplayVar);
+  const isShowUser = (memberId: number) => {
+    return !hiddenUsers.has(memberId);
+  };
 
-  const containerStyle = hasWeekView
+  const userLength = weekEvents[0].members.filter((member) =>
+    isShowUser(member.id)
+  ).length;
+
+  const isWeekCalendar = useStore((state) => state.isWeekCalendar);
+
+  const containerStyle = isWeekCalendar
     ? SchedulesStyle.week.template(userLength)
     : SchedulesStyle.day.template();
 
-  const columnStyle = hasWeekView
+  const columnStyle = isWeekCalendar
     ? SchedulesStyle.week.userColumn(userLength)
     : SchedulesStyle.day.userColumn(userLength);
 
-  const selectedDate = useReactiveVar(selectedDateVar);
+  const pickedDate = useStore((state) => state.pickedDate);
 
-  const schedules = hasWeekView
+  const schedules = isWeekCalendar
     ? weekEvents
-    : weekEvents && [weekEvents[selectedDate.getDay()]];
+    : weekEvents && [weekEvents[pickedDate.getDay()]];
 
   return (
     <div className="SCHEDULES grid" style={containerStyle}>
       {schedules.map((day, i) => {
-        const usersOfCanSee = day.users.filter((member) => member.canSee);
         return (
           <div key={i} className="flex flex-col">
             <PaddingWrapper>
@@ -41,12 +47,12 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
                 date={day.date}
                 userLength={userLength}
                 isToday={compareDateMatch(today, day.date, 'ymd')}
-                isSelectedMonth={compareDateMatch(selectedDate, day.date, 'ym')}
+                isPickedMonth={compareDateMatch(pickedDate, day.date, 'ym')}
               />
             </PaddingWrapper>
             <PaddingWrapper hasBorder>
               <MemberName
-                users={usersOfCanSee}
+                members={day.members}
                 viewPeriodStyle={columnStyle}
                 userLength={userLength}
               />
@@ -56,12 +62,12 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
                 date={day.date}
                 labels={labels}
                 labelMaxLength={labels.length}
-                users={usersOfCanSee}
+                members={day.members}
                 viewPeriodStyle={columnStyle}
                 userLength={userLength}
                 enableTimeIndicator={compareDateMatch(
                   day.date,
-                  selectedDate,
+                  pickedDate,
                   'ymd'
                 )}
               />

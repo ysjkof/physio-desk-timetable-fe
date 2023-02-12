@@ -1,37 +1,38 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_CLINIC_DOCUMENT } from '../graphql';
-import { toastVar } from '../store';
+import { setToast, useStore } from '../store';
 import {
   cacheAddClinicToMyClinics,
   cacheUpdateMemberOfMe,
-} from '../utils/apolloCache.utils';
+} from '../utils/apollo.utils';
 import type {
   CreateClinicMutation,
   CreateClinicMutationVariables,
 } from '../types/generated.types';
 
 export const useCreateClinic = () => {
+  const client = useStore((state) => state.client);
   return useMutation<CreateClinicMutation, CreateClinicMutationVariables>(
     CREATE_CLINIC_DOCUMENT,
     {
       onCompleted(data) {
         const { error, clinic } = data.createClinic;
         if (error) {
-          return toastVar({ messages: [error] });
+          return setToast({ messages: [error] });
         }
         if (!clinic) {
-          return toastVar({
+          return setToast({
             messages: ['병원 만들기 후 병원을 반환받지 못했습니다.'],
           });
         }
 
-        toastVar({
+        setToast({
           messages: [`병원 "${clinic.name}"을 만들었습니다`],
           fade: true,
         });
 
-        cacheAddClinicToMyClinics(clinic);
-        cacheUpdateMemberOfMe(clinic);
+        cacheAddClinicToMyClinics(client, clinic);
+        cacheUpdateMemberOfMe(client, clinic);
       },
     }
   );

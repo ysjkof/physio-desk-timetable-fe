@@ -3,9 +3,7 @@ import {
   EDIT_PRESCRIPTION_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
-import { client } from '../apollo';
-import { toastVar } from '../store';
-import { ClinicsOfClient } from '../models';
+import { setToast, useStore } from '../store';
 import { changeValueInArray } from '../utils/common.utils';
 import type {
   EditPrescriptionMutation,
@@ -22,7 +20,7 @@ interface Input {
 }
 
 export const useEditPrescription = () => {
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const clinicId = useStore((state) => state.pickedClinicId);
   const variables: FindPrescriptionsQueryVariables = {
     input: { clinicId, onlyLookUpActive: false },
   };
@@ -33,12 +31,12 @@ export const useEditPrescription = () => {
   >(EDIT_PRESCRIPTION_DOCUMENT, {
     onCompleted(data, clientOptions) {
       const { error } = data.editPrescription;
-      if (error) return toastVar({ messages: [error] });
+      if (error) return setToast({ messages: [error] });
 
       const prescriptionInput: Input = clientOptions?.variables?.input;
       if (!prescriptionInput) return;
 
-      client.cache.updateQuery<FindPrescriptionsQuery>(
+      clientOptions?.client?.cache.updateQuery<FindPrescriptionsQuery>(
         { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
         (cacheData) => {
           const cachePrescriptions = cacheData?.findPrescriptions.prescriptions;

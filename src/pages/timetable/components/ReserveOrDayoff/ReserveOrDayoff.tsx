@@ -1,13 +1,12 @@
 import { ButtonHTMLAttributes, useState, type PropsWithChildren } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { useLocation } from 'react-router-dom';
 import { set, setDay } from 'date-fns';
 import { Modal } from '../../../../components';
-import { selectedDateVar } from '../../../../store';
 import { cls } from '../../../../utils/common.utils';
 import { FormForReservation } from '../FormForReservation';
 import { useCloseModal } from '../../../../hooks';
 import { FormForDayoff } from '../FormForDayoff';
+import { useStore } from '../../../../store';
 import type { IsActive, LocationState } from '../../../../types/common.types';
 
 const ReserveOrDayoff = () => {
@@ -20,8 +19,8 @@ const ReserveOrDayoff = () => {
 
   const [isReserve, setIsReserve] = useState(!isDayoff);
 
-  const selectedDate = useReactiveVar(selectedDateVar);
-  const date = setDay(set(selectedDate, { hours, minutes }), dayIndex);
+  const pickedDate = useStore((state) => state.pickedDate);
+  const date = setDay(set(pickedDate, { hours, minutes }), dayIndex);
 
   const seeReserve = () => setIsReserve(true);
   const seeDayoff = () => setIsReserve(false);

@@ -1,14 +1,14 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { ClinicsOfClient } from '../models';
 import { GET_PRESCRIPTIONS_DOCUMENT } from '../graphql/prescriptions/getPrescriptions.gql';
 import type {
   GetPrescriptionsQuery,
   GetPrescriptionsQueryVariables,
 } from '../types/generated.types';
+import { useStore } from '../store';
 
 export const useGetPrescription = () => {
-  const clinicId = ClinicsOfClient.getSelectedClinic().id;
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const { prescriptionId } = useParams();
 

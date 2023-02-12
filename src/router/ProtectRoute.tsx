@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { isLoggedInVar } from '../apollo';
+import { localStorageUtils } from '../utils/localStorage.utils';
 
 interface ProtectRouteProps {
   children: ReactNode;
@@ -35,26 +35,19 @@ export default function ProtectRoute({
   failWhenLogin,
   failWhenLogout,
 }: ProtectRouteType) {
-  console.log(
-    'isLoggedInVar >>',
-    isLoggedInVar(),
-    'failWhenLogin >>',
-    failWhenLogin,
-    'failWhenLogout >>',
-    failWhenLogout
-  );
+  const authToken = localStorageUtils.get<string>({ key: 'token' });
 
   if (failWhenLogin && typeof whenFail === 'string') {
-    return isLoggedInVar() ? Navigate({ to: whenFail }) : <>{children}</>;
+    return authToken ? Navigate({ to: whenFail }) : <>{children}</>;
   }
   if (failWhenLogin) {
-    return isLoggedInVar() ? <>{whenFail}</> : <>{children}</>;
+    return authToken ? <>{whenFail}</> : <>{children}</>;
   }
   if (failWhenLogout && typeof whenFail === 'string') {
-    return isLoggedInVar() ? <>{children}</> : Navigate({ to: whenFail });
+    return authToken ? <>{children}</> : Navigate({ to: whenFail });
   }
   if (failWhenLogout) {
-    return isLoggedInVar() ? <>{children}</> : <>{whenFail}</>;
+    return authToken ? <>{children}</> : <>{whenFail}</>;
   }
   return isPass ? <>{children}</> : <>{whenFail}</>;
 }

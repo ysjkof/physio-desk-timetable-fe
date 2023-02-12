@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { cls } from '../../../../utils/common.utils';
 import { InputWithRef } from './InputForReserve';
-import { useAutoComplete } from '../../../../hooks';
-import { ClinicsOfClient } from '../../../../models';
+import { useAutoComplete, useGetClinic } from '../../../../hooks';
 import { SelectedValue } from './SelectedValue';
 
 interface AutoCompleteForUserProps {
@@ -17,13 +15,12 @@ const AutoCompleteForUser = ({
   userId,
   setParentValue,
 }: AutoCompleteForUserProps) => {
-  const selectionList = useState(
-    ClinicsOfClient.getSelectedClinic().members
-  )[0];
-  const name = selectionList.find((member) => member.user.id === userId)?.user
+  const [clinic] = useGetClinic();
+
+  const name = clinic?.members.find((member) => member.user.id === userId)?.user
     .name;
   const getUserId = (name: string) => {
-    const user = selectionList.find(
+    const user = clinic?.members.find(
       (member) => member.user.name === name
     )?.user;
     if (!user) throw new Error('사용자를 찾을 수 없습니다.');
@@ -34,7 +31,7 @@ const AutoCompleteForUser = ({
     defaultValues: { name },
   });
 
-  const firstListItem = selectionList[0];
+  const firstListItem = clinic?.members[0];
   const firstButtonId = firstListItem
     ? `auto-complete__user_${firstListItem.id}-${firstListItem.user.name}`
     : '';
@@ -76,7 +73,7 @@ const AutoCompleteForUser = ({
         placeholder="성함을 입력하시면 검색이 가능합니다."
         className={cls(
           'text-cst-blue outline-none',
-          hasList && !selectedValue && selectionList
+          hasList && !selectedValue && clinic
             ? 'rounded-b-none border-2 border-b-0 border-cst-blue'
             : ''
         )}
@@ -85,7 +82,7 @@ const AutoCompleteForUser = ({
         onFocus={handleFocus}
         ref={inputRef}
       />
-      {hasList && !selectedValue && selectionList && (
+      {hasList && !selectedValue && clinic && (
         <ul
           className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white"
           ref={ulRef}
@@ -93,7 +90,7 @@ const AutoCompleteForUser = ({
           <div>
             <div className="mx-3 border-b" />
           </div>
-          {selectionList.map((member) => (
+          {clinic?.members.map((member) => (
             <li key={`auto-complete__user_${member.id}-${member.user.name}`}>
               <button
                 id={`auto-complete__user_${member.id}-${member.user.name}`}

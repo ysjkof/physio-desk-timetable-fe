@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { simpleCheckGQLError } from '../../../utils/common.utils';
+import { simpleCheckGQLError } from '../../../utils/apollo.utils';
 import {
   CREATE_RESERVATION_DOCUMENT,
   EDIT_RESERVATION_DOCUMENT,

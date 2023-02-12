@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { TableTime } from '../../models';
+import { TimeDurationOfTimetable } from '../../models';
 import { cls } from '../../utils/common.utils';
 import { TimepickerContext } from './TimepickerStore';
 
@@ -7,8 +7,8 @@ export const TimepickerMain = () => {
   const { selectionTime, setHours, setMinutes, closeAction } =
     useContext(TimepickerContext);
 
-  const hours = TableTime.getHours();
-  const minutes = TableTime.getMinutes();
+  const hours = TimeDurationOfTimetable.getHours();
+  const minutes = TimeDurationOfTimetable.getMinutes();
 
   const selectHour = (hours: number) => {
     if (selectionTime.hours === hours) return closeAction();

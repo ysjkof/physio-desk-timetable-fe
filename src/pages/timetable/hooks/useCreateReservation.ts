@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { simpleCheckGQLError } from '../../../utils/common.utils';
+import { simpleCheckGQLError } from '../../../utils/apollo.utils';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../graphql';
 import type {
   CreateReservationInput,

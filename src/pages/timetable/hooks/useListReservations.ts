@@ -1,32 +1,38 @@
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { QueryResult, useQuery } from '@apollo/client';
 import { endOfDay, nextSaturday } from 'date-fns';
 import { getSunday } from '../../../utils/date.utils';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
-import { ClinicsOfClient } from '../../../models';
-import { selectedDateVar } from '../../../store';
-import type { ListReservationsQuery } from '../../../types/generated.types';
+import { setToast, useStore } from '../../../store';
+import type {
+  ListReservationsQuery,
+  ListReservationsQueryVariables,
+} from '../../../types/generated.types';
+import type { ResultOfListReservations } from '../../../types/common.types';
 
-export const useListReservations = () => {
-  const selectedDate = useReactiveVar(selectedDateVar);
-
-  const selectedClinic = ClinicsOfClient.getSelectedClinic();
-
-  const startDate = getSunday(selectedDate);
+export const useListReservations = (): [
+  ResultOfListReservations,
+  QueryResult<ListReservationsQuery, ListReservationsQueryVariables>
+] => {
+  const pickedDate = useStore((state) => state.pickedDate);
+  const startDate = getSunday(pickedDate);
   const endDate = endOfDay(nextSaturday(startDate));
+  const clinicId = useStore((state) => state.pickedClinicId);
 
-  if (!selectedClinic) throw new Error('선택된 병원이 없습니다.');
+  const variables = { input: { startDate, endDate, clinicId } };
 
-  return {
-    ...useQuery<ListReservationsQuery>(LIST_RESERVATIONS_DOCUMENT, {
-      variables: {
-        input: {
-          startDate,
-          endDate,
-          userIds: selectedClinic.members.map((m) => m.user.id),
-          clinicId: selectedClinic.id,
-        },
-      },
-      fetchPolicy: 'cache-and-network',
-    }),
-  };
+  const results = useQuery<
+    ListReservationsQuery,
+    ListReservationsQueryVariables
+  >(LIST_RESERVATIONS_DOCUMENT, {
+    variables,
+    fetchPolicy: 'cache-and-network',
+    onCompleted(data) {
+      const { error } = data.listReservations;
+      if (error) {
+        setToast({ messages: [error] });
+      }
+    },
+  });
+
+  return [results.data?.listReservations, results];
 };

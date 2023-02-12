@@ -1,17 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useWindowSize } from '../../../hooks';
-import { useTableDisplay } from '../hooks';
 import type { TimetableTemplateProps } from '../../../types/props.types';
+import { useStore } from '../../../store';
 
 const TimetableTemplate = ({
   nav,
   labels,
   columns,
 }: TimetableTemplateProps) => {
-  const {
-    tableDisplay: { asideExtension },
-  } = useTableDisplay();
+  const isBigGlobalAside = useStore((state) => state.isBigGlobalAside);
 
   const { height, width, changeHeight, changeWidth } = useWindowSize(true);
   const navRef = useRef<HTMLDivElement>(null);
@@ -21,7 +19,7 @@ const TimetableTemplate = ({
     if (!navRef.current) return;
     changeHeight(navRef.current.clientHeight);
     changeWidth();
-  }, [asideExtension]);
+  }, [isBigGlobalAside]);
 
   return (
     <motion.div

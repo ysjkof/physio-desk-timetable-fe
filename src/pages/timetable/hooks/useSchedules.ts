@@ -1,30 +1,29 @@
 import { useEffect, useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { Schedules } from '../../../models';
 import { useListReservations } from './useListReservations';
-import { useMe } from '../../../hooks';
-import { clinicListsVar, selectedDateVar } from '../../../store';
+import { useStore } from '../../../store';
+import { useGetClinic } from '../../../hooks';
 import type { ISchedules } from '../../../types/common.types';
 
 export const useSchedules = () => {
-  const clinicList = useReactiveVar(clinicListsVar);
-  const selectedDate = useReactiveVar(selectedDateVar);
+  const pickedDate = useStore((state) => state.pickedDate);
   const [schedules, setSchedules] = useState<ISchedules[] | null>(null);
 
-  const listReservations = useListReservations();
+  const [clinic] = useGetClinic();
 
-  const { data: loginUser } = useMe();
+  const [reservations, { variables }] = useListReservations();
 
   useEffect(() => {
-    if (!listReservations.data?.listReservations.results || !loginUser) return;
+    if (!reservations?.results || !clinic) return;
 
     setSchedules(
-      new Schedules(
-        listReservations.data.listReservations.results,
-        selectedDate
-      ).get()
+      new Schedules({
+        data: reservations.results,
+        date: pickedDate,
+        clinic,
+      }).get()
     );
-  }, [listReservations.data, clinicList]);
+  }, [reservations, clinic]);
 
-  return { schedules, variables: listReservations.variables };
+  return { schedules, variables };
 };

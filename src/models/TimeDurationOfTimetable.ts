@@ -4,14 +4,14 @@ import {
   createDate,
   get4DigitHour,
 } from '../utils/date.utils';
-import localStorageUtils from '../utils/localStorage.utils';
+import { localStorageUtils } from '../utils/localStorage.utils';
 import type {
   FirstAndLastTime,
   TableTimeOptions,
   UserIdAndName,
 } from '../types/common.types';
 
-export class TableTime {
+export class TimeDurationOfTimetable {
   static #options = {
     firstHour: 9,
     firstMinute: 0,
@@ -114,15 +114,15 @@ export class TableTime {
     });
   }
 
-  static get firstTimeInMinute() {
+  static getFirstTimeInMinute() {
     return convertMinuteFromDate(this.getFirstTime());
   }
 
-  static get lastTimeInMinute() {
+  static getLastTimeInMinute() {
     return convertMinuteFromDate(this.getLastTime());
   }
 
-  static get labels() {
+  static getLabels() {
     return this.#timeGap().map((label) => get4DigitHour(label));
   }
 

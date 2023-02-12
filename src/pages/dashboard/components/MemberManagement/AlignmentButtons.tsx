@@ -1,10 +1,10 @@
 import { Dispatch, useState } from 'react';
 import { sortByBoolean, sortByString } from '../../../../utils/common.utils';
 import { VerticalCrossArrow } from '../../../../svgs';
-import type { MemberOfClient } from '../../../../types/common.types';
+import type { MemberOfGetMyClinic } from '../../../../types/common.types';
 
 interface AlignmentButtonsProps {
-  setMembers: Dispatch<React.SetStateAction<MemberOfClient[]>>;
+  setMembers: Dispatch<React.SetStateAction<MemberOfGetMyClinic>>;
 }
 
 const AlignmentButtons = ({ setMembers }: AlignmentButtonsProps) => {
@@ -20,9 +20,12 @@ const AlignmentButtons = ({ setMembers }: AlignmentButtonsProps) => {
   };
 
   const sortAscByLetter = () => {
-    setMembers((prev) => [
-      ...prev.sort((a, b) => sortByString(a.user.name, b.user.name, 'ASC')),
-    ]);
+    setMembers((prev) => {
+      const updated = [...prev];
+      return updated.sort((a, b) =>
+        sortByString(a.user.name, b.user.name, 'ASC')
+      );
+    });
   };
 
   const sortDescByLetter = () => {
@@ -41,15 +44,21 @@ const AlignmentButtons = ({ setMembers }: AlignmentButtonsProps) => {
   };
 
   const sortAscByWaitingForApproval = () => {
-    setMembers((prev) => [
-      ...prev.sort((a, b) => sortByBoolean(a.accepted, b.accepted, 'ASC')),
-    ]);
+    setMembers((prev) => {
+      const updated = [...prev];
+      return updated.sort((a, b) =>
+        sortByBoolean(a.accepted, b.accepted, 'ASC')
+      );
+    });
   };
 
   const sortDescByWaitingForApproval = () => {
-    setMembers((prev) => [
-      ...prev.sort((a, b) => sortByBoolean(a.accepted, b.accepted, 'DESC')),
-    ]);
+    setMembers((prev) => {
+      const updated = [...prev];
+      return updated.sort((a, b) =>
+        sortByBoolean(a.accepted, b.accepted, 'DESC')
+      );
+    });
   };
   return (
     <div className="flex gap-8 border-b py-2 px-4 text-xs">
@@ -58,7 +67,7 @@ const AlignmentButtons = ({ setMembers }: AlignmentButtonsProps) => {
         className="flex gap-1"
         onClick={sortByWaitingForApproval}
       >
-        <VerticalCrossArrow /> 승인대기
+        <VerticalCrossArrow /> 수락대기
       </button>
       <button type="button" className="flex gap-1" onClick={sortByLetter}>
         <VerticalCrossArrow /> 가나다

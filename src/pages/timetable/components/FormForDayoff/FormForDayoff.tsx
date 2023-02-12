@@ -2,7 +2,7 @@ import { type PropsWithChildren } from 'react';
 import { useForm } from 'react-hook-form';
 import { addHours } from 'date-fns';
 import { DateForm, InputWrapper, MenuButton } from '../../../../components';
-import { ClinicsOfClient } from '../../../../models';
+import { useStore } from '../../../../store';
 import { useCreateReservation } from '../../hooks';
 import AutoCompleteForUser from '../FormForReservation/AutoCompleteForUser';
 import { Textarea } from '../FormForReservation/InputForReserve';
@@ -11,6 +11,7 @@ import type { FormForDayoffProps } from '../../../../types/props.types';
 import type { CreateReservationMutationVariables } from '../../../../types/generated.types';
 
 const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
+  const clinicId = useStore((state) => state.pickedClinicId);
   const { register, setValue, getValues, handleSubmit } =
     useForm<FormForDayoffFields>({
       defaultValues: { userId, startDate: date, endDate: addHours(date, 2) },
@@ -24,7 +25,7 @@ const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
       memo,
       userId,
       isDayoff: true,
-      clinicId: ClinicsOfClient.getSelectedClinic().id,
+      clinicId,
     };
     createReservation(formData);
   };
