@@ -20,7 +20,7 @@ export const ClinicAndUserSelector = () => {
 
   const onClickToggleUser = (memberId: number) => {
     // TODO:
-    toggleUser(memberId);
+    // toggleUser(memberId);
   };
 
   const onClickChangeSelectClinic = (clinicId: number) => {
