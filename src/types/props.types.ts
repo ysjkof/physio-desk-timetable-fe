@@ -28,7 +28,7 @@ export interface SchedulesProps extends ILabels {
 
 export interface DateTitleProps extends IUserLength, IDate {
   isToday: boolean;
-  isSelectedMonth: boolean;
+  isPickedMonth: boolean;
 }
 export interface MemberNameProps extends IUserLength {
   members: MemberWithEvent[];

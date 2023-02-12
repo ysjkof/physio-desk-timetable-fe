@@ -3,7 +3,7 @@ import DateController from './DateController';
 import SwitchWeekViewButton from './SwitchWeekViewButton';
 import SeeCalendarButton from './SeeCalendarButton';
 import UserSelector from './UserSelector';
-import ReservationForCopy from './ReservationForCopy';
+import PickedReservation from './ReservationForCopy';
 import CreatePatientButton from './CreatePatientButton';
 import ToggleSettingOfTimetable from './ToggleSettingOfTimetable';
 import { toggleSettingOfTimetable } from '../../../../store';
@@ -24,7 +24,7 @@ const TableController = () => {
       </div>
       <div className="flex w-full items-center gap-x-6 pb-3">
         <UserSelector />
-        <ReservationForCopy />
+        <PickedReservation />
         <div className="flex items-center justify-end gap-x-2">
           <CreatePatientButton />
           <ToggleSettingOfTimetable />

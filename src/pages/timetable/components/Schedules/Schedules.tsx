@@ -47,7 +47,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
                 date={day.date}
                 userLength={userLength}
                 isToday={compareDateMatch(today, day.date, 'ymd')}
-                isSelectedMonth={compareDateMatch(pickedDate, day.date, 'ym')}
+                isPickedMonth={compareDateMatch(pickedDate, day.date, 'ym')}
               />
             </PaddingWrapper>
             <PaddingWrapper hasBorder>

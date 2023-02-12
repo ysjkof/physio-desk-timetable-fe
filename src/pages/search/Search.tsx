@@ -22,7 +22,7 @@ import { useStore } from '../../store';
 import type { SearchPatientQuery } from '../../types/generated.types';
 
 export default function Search() {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const location = useLocation();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);

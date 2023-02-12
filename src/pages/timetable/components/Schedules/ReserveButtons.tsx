@@ -1,16 +1,16 @@
 import { memo } from 'react';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import {
   compareDateMatch,
   createDate,
   getFrom4DigitTime,
 } from '../../../../utils/date.utils';
-import { selectedReservationVar, setToast } from '../../../../store';
+import { setPickedReservation, setToast, useStore } from '../../../../store';
 import ReserveButton from './ReserveButton';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
+import { LABEL_VISIBLE_MINUTES } from '../../../../constants/constants';
 import type { CreateReservationMutation } from '../../../../types/generated.types';
 import type { PrescriptionsInReservation } from '../../../../types/common.types';
-import { LABEL_VISIBLE_MINUTES } from '../../../../constants/constants';
 
 interface ReservationButtonsProps {
   userIndex: number;
@@ -26,7 +26,7 @@ const ReservationButtons = ({
   labels,
   labelMaxLength,
 }: ReservationButtonsProps) => {
-  const selectedReservation = useReactiveVar(selectedReservationVar);
+  const pickedReservation = useStore((state) => state.pickedReservation);
 
   const getPrescriptionInfo = (prescriptions: PrescriptionsInReservation) => {
     type ReturnType = {
@@ -55,11 +55,11 @@ const ReservationButtons = ({
 
   const invokeQuickCreateReservation = (label: string) => {
     if (loading) return;
-    if (!selectedReservation?.prescriptions)
+    if (!pickedReservation?.prescriptions)
       throw new Error('복사할 예약이 선택되지 않았습니다');
 
     const { prescriptionIds, requiredTime } = getPrescriptionInfo(
-      selectedReservation.prescriptions
+      pickedReservation.prescriptions
     );
 
     const startDate = createDate(date, {
@@ -68,14 +68,14 @@ const ReservationButtons = ({
     });
     const endDate = new Date(startDate);
     endDate.setMinutes(endDate.getMinutes() + requiredTime);
-    console.log('selectedReservation >>>', selectedReservation);
+    console.log('pickedReservation >>>', pickedReservation);
 
     createReservationMutation({
       variables: {
         input: {
-          clinicId: selectedReservation.clinic.id,
-          patientId: selectedReservation.patient?.id,
-          memo: selectedReservation.memo,
+          clinicId: pickedReservation.clinic.id,
+          patientId: pickedReservation.patient?.id,
+          memo: pickedReservation.memo,
           userId,
           startDate,
           endDate,
@@ -92,7 +92,7 @@ const ReservationButtons = ({
   };
 
   const clearSelectedReservation = () => {
-    selectedReservationVar(undefined);
+    setPickedReservation(undefined);
   };
 
   const dayIndex = date.getDay();
@@ -111,7 +111,7 @@ const ReservationButtons = ({
             userId={userId}
             isActiveBorderTop={hasBorder(label)}
             userIndex={userIndex}
-            selectedReservation={selectedReservation}
+            pickedReservation={pickedReservation}
             quickCreateReservation={() => invokeQuickCreateReservation(label)}
           />
         )

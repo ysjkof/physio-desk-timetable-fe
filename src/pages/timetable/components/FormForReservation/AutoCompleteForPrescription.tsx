@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { useForm, UseFormSetValue } from 'react-hook-form';
 import { cls } from '../../../../utils/common.utils';
 import { useAutoComplete } from '../../../../hooks';
-import { SelectedPrescriptions } from '../../../../models';
+import { PickedPrescriptions } from '../../../../models';
 import { InputWithRef } from './InputForReserve';
 import { SelectedValue } from './SelectedValue';
 import { PrescriptionTotal } from './PrescriptionTotal';
 import type { FormOfReserveFields } from '../../../../types/form.types';
 import type { Prescription } from '../../../../types/generated.types';
-import type { SelectedPrescription } from '../../../../types/common.types';
+import type { PickedPrescription } from '../../../../types/common.types';
 
 interface AutoCompleteForPrescriptionProps {
   label: string;
-  prescriptionList: SelectedPrescriptions;
+  prescriptionList: PickedPrescriptions;
   setValue: UseFormSetValue<FormOfReserveFields>;
 }
 
@@ -52,11 +52,11 @@ const AutoCompleteForPrescription = ({
   });
 
   const [selectedPrescription, setSelectedPrescription] =
-    useState<SelectedPrescription>(prescriptionList.getSelection());
+    useState<PickedPrescription>(prescriptionList.get());
 
   const toggleValue = (prescriptionId: number) => {
     const freshSelection = prescriptionList.toggleById(prescriptionId);
-    setSelectedPrescription({ ...freshSelection.getSelection() });
+    setSelectedPrescription({ ...freshSelection.get() });
     setValue('prescriptions', freshSelection.getNames());
   };
 

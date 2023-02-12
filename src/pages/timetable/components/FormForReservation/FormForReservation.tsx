@@ -6,7 +6,7 @@ import AutoCompleteForUser from './AutoCompleteForUser';
 import AutoCompleteForPatient from './AutoCompleteForPatient';
 import AutoCompleteForPrescription from './AutoCompleteForPrescription';
 import { Textarea } from './InputForReserve';
-import { SelectedPrescriptions } from '../../../../models';
+import { PickedPrescriptions } from '../../../../models';
 import { useStore } from '../../../../store';
 import { useFindPrescriptions } from '../../../../hooks';
 import { useCreateReservation } from '../../hooks';
@@ -26,7 +26,7 @@ const FormForReservation = ({
   const [prescriptionData, { loading }] = useFindPrescriptions();
 
   const prescriptionList = useMemo(
-    () => new SelectedPrescriptions(prescriptionData?.prescriptions),
+    () => new PickedPrescriptions(prescriptionData?.prescriptions),
     [prescriptionData, loading]
   );
 
@@ -37,12 +37,12 @@ const FormForReservation = ({
 
   const { createReservation } = useCreateReservation();
 
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const onSubmit = () => {
     const { startDate, memo, patientId, prescriptions, userId } = getValues();
     const formData = {
       startDate,
-      endDate: addMinutes(startDate, prescriptionList.getSelection().minute),
+      endDate: addMinutes(startDate, prescriptionList.get().minute),
       memo,
       userId,
       clinicId,

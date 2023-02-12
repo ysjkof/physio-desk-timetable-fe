@@ -8,7 +8,7 @@ import type {
 import { useStore } from '../store';
 
 export const useGetPrescription = () => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const { prescriptionId } = useParams();
 

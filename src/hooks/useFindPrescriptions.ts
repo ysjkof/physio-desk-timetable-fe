@@ -10,7 +10,7 @@ export const useFindPrescriptions = (): [
   FindPrescriptionsQuery['findPrescriptions'] | null | undefined,
   QueryResult<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>
 ] => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const variables = { input: { clinicId, onlyLookUpActive: true } };
   const results = useQuery<

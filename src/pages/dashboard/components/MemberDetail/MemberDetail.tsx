@@ -14,7 +14,7 @@ import { useStore } from '../../../../store';
 
 const MemberDetail = () => {
   const { memberId } = useParams();
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const variables = { input: { clinicId, id: Number(memberId) } };
   const { data } = useQuery<GetMemberQuery, GetMemberQueryVariables>(

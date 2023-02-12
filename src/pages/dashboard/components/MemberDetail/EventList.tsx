@@ -26,7 +26,7 @@ const EventList = ({ date }: { date: Date }) => {
   const [startOfMonth, endOfMonth] = getMonthStartEnd(date);
   const startDate = startOfWeek(startOfMonth);
   const endDate = endOfWeek(endOfMonth);
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const { memberId } = useParams();
 
   const variables = {

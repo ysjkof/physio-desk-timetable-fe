@@ -95,7 +95,7 @@ export const PRIVATE_LOCAL_STORAGE_KEY_VALUE = {
   clinicLists: 'muool-clinic-lists',
   viewOption: 'muool-view-option',
   tableTime: 'muool-table-time',
-  selectedClinicId: 'muool-selected-clinic-id',
+  pickedClinicId: 'muool-picked-clinic-id',
   showCancelOfTimetable: 'muool-show-cancel-of-timetable',
   showNoshowOfTimetable: 'muool-show-noshow-of-timetable',
   hiddenUsers: 'muool-hidden-users',

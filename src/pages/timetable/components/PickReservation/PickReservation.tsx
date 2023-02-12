@@ -1,14 +1,14 @@
 import { MenuButton } from '../../../../components';
-import { selectedReservationVar } from '../../../../store';
 import { cls } from '../../../../utils/common.utils';
+import { setPickedReservation } from '../../../../store';
 import type { ReservationInList } from '../../../../types/common.types';
 
-interface SelectReservationProps {
+interface PickReservationProps {
   reservation: ReservationInList;
 }
-const SelectReservation = ({ reservation }: SelectReservationProps) => {
+const PickReservation = ({ reservation }: PickReservationProps) => {
   const select = () => {
-    selectedReservationVar(reservation);
+    setPickedReservation(reservation);
   };
   return (
     <MenuButton
@@ -23,4 +23,4 @@ const SelectReservation = ({ reservation }: SelectReservationProps) => {
   );
 };
 
-export default SelectReservation;
+export default PickReservation;

@@ -11,7 +11,7 @@ import type { FormForDayoffProps } from '../../../../types/props.types';
 import type { CreateReservationMutationVariables } from '../../../../types/generated.types';
 
 const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const { register, setValue, getValues, handleSubmit } =
     useForm<FormForDayoffFields>({
       defaultValues: { userId, startDate: date, endDate: addHours(date, 2) },

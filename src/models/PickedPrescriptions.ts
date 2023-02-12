@@ -1,12 +1,12 @@
-import { SelectedPrescription } from '../types/common.types';
-import { Prescription } from '../types/generated.types';
+import type { PickedPrescription } from '../types/common.types';
+import type { Prescription } from '../types/generated.types';
 
 type Prescriptions = Prescription[] | null | undefined;
 
-export class SelectedPrescriptions {
+export class PickedPrescriptions {
   #prescriptions: Prescription[];
 
-  #list: SelectedPrescription = {
+  #list: PickedPrescription = {
     minute: 0,
     price: 0,
     prescriptions: [],
@@ -20,7 +20,7 @@ export class SelectedPrescriptions {
     return this.#prescriptions;
   }
 
-  getSelection() {
+  get() {
     return this.#list;
   }
 
@@ -50,7 +50,7 @@ export class SelectedPrescriptions {
     this.#list.price = price;
   }
 
-  #getTotalPriceAndMinute(ids: SelectedPrescription['prescriptions']) {
+  #getTotalPriceAndMinute(ids: PickedPrescription['prescriptions']) {
     let price = 0;
     let minute = 0;
     ids.forEach((id) => {

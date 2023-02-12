@@ -24,7 +24,7 @@ interface UseSubscriptionsProps {
 
 // variables는 listReservation의 변수다.
 export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const client = useStore((state) => state.client);
 
   const subscriptionVariables = { input: { clinicId } };

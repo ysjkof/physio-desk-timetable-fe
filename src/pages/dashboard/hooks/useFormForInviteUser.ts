@@ -8,7 +8,7 @@ interface UseFormForInviteUserFields {
 }
 
 export const useFormForInviteUser = () => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const {
     register,

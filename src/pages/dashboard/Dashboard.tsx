@@ -21,7 +21,7 @@ const Dashboard = () => {
 
 const ProfileWithImage = () => {
   const [meData] = useMe();
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const [myMembers] = useFindMyMembers();
   const position = myMembers?.find((member) => member.clinic.id === clinicId)
     ?.manager

@@ -8,7 +8,7 @@ const DateTitle = ({
   userLength,
   date,
   isToday,
-  isSelectedMonth,
+  isPickedMonth,
 }: DateTitleProps) => {
   const dayNumber = date.getDay();
   const dayString = new Intl.DateTimeFormat(LOCALE, { day: 'numeric' }).format(
@@ -36,7 +36,7 @@ const DateTitle = ({
       className={cls(
         'DATE-TITLE mb-1 flex cursor-pointer select-none items-center bg-white text-table-day-color hover:bg-gray-200',
         userLength === 1 ? 'border-x-inherit' : '',
-        isSelectedMonth ? '' : 'opacity-50'
+        isPickedMonth ? '' : 'opacity-50'
       )}
       onClick={moveScroll}
       onKeyDown={moveScroll}

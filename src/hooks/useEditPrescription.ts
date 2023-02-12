@@ -20,7 +20,7 @@ interface Input {
 }
 
 export const useEditPrescription = () => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const variables: FindPrescriptionsQueryVariables = {
     input: { clinicId, onlyLookUpActive: false },
   };

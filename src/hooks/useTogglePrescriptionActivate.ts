@@ -13,7 +13,7 @@ import type {
 import { changeValueInArray } from '../utils/common.utils';
 
 export const useTogglePrescriptionActivate = () => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const [callMutation] = useMutation<
     EditPrescriptionMutation,

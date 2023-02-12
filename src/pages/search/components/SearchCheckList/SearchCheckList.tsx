@@ -11,7 +11,7 @@ export const SearchCheckList = ({
     clinicIds: number[];
   }>;
 }) => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const [myMembers] = useFindMyMembers();
 

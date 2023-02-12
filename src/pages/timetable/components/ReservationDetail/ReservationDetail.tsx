@@ -4,7 +4,7 @@ import {
   getStringOfDateTime,
   getStringOfDate,
 } from '../../../../utils/date.utils';
-import { SelectReservation } from '../SelectReservation';
+import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
 import type { ReservationInList } from '../../../../types/common.types';
 
@@ -31,7 +31,7 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
           예약 자세히 보기
         </h2>
         {/* TODO: SelectReservation가 왼쪽에 가서 클릭을 위한 마우스 이동 최소화 고려 */}
-        <SelectReservation reservation={reservation} />
+        <PickReservation reservation={reservation} />
       </div>
       <div className="space-y-2 border-t border-navy pt-2">
         <DetailBox title="환자정보">

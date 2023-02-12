@@ -11,7 +11,7 @@ export const useGetClinic = (): [
   ClinicOfGetMyClinic,
   QueryResult<GetClinicQuery, GetClinicQueryVariables>
 ] => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const results = useQuery<GetClinicQuery, GetClinicQueryVariables>(
     GET_CLINIC_DOCUMENT,

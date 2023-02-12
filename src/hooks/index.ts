@@ -20,8 +20,8 @@ import { useCloseModal } from './useModalClose';
 import { useNavCreatePatient } from './useNavCreatePatient';
 import { useRefuseInvitation } from './useRefuseInvitation';
 import { useSearchPatient } from './useSearchPatient';
-import { useSelectedClinicId } from './useSelectedClinic';
-import { useHiddenUsers } from './useSetHiddenUsers';
+import { usePickedClinicId } from './usePickedClinicId';
+import { useHiddenUsers } from './useHiddenUsers';
 import { useTogglePrescriptionActivate } from './useTogglePrescriptionActivate';
 import { useWindowSize } from './useWindowSize';
 
@@ -48,8 +48,8 @@ export {
   useNavCreatePatient,
   useRefuseInvitation,
   useSearchPatient,
-  useSelectedClinicId,
-  useHiddenUsers as useSetHiddenUsers,
+  usePickedClinicId,
+  useHiddenUsers,
   useTogglePrescriptionActivate,
   useWindowSize,
 };

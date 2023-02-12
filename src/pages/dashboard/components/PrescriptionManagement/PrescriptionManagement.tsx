@@ -14,7 +14,7 @@ const PrescriptionManagement = () => {
 
   const [showInactivate, setShowInactivate] = useState(false);
 
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const [queryData] = useFindPrescriptions();
 

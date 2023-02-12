@@ -187,7 +187,7 @@ export interface MemberState {
 
 ///
 
-export interface SelectedPrescription {
+export interface PickedPrescription {
   price: number;
   minute: number;
   prescriptions: number[];
@@ -209,14 +209,14 @@ export interface ISchedules {
   members: MemberWithEvent[];
 }
 
-export type SelectedReservationType = ReservationInList | undefined;
-
-export type SelectedPatientType = SelectedPatient | undefined | null;
-export interface SelectedPatient extends PatientInReservation {
+export interface PickedPatient extends PatientInReservation {
   clinic: ClinicInReservation;
   user: UserInReservation | null | undefined;
 }
 
+export type PickedReservationType = ReservationInList | undefined;
+
+export type PickedPatientType = PickedPatient | undefined | null;
 // utils
 
 export interface ToastState {

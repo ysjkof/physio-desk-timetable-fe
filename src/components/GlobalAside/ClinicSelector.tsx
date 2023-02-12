@@ -4,7 +4,7 @@ import {
   getMemberState,
 } from '../../utils/common.utils';
 import { useFindMyMembers, useMe } from '../../hooks';
-import { selectClinicId, useStore } from '../../store';
+import { pickClinicId, useStore } from '../../store';
 import Selectbox from '../Selectbox';
 
 const ClinicSelector = () => {
@@ -12,7 +12,7 @@ const ClinicSelector = () => {
 
   const [myMembers] = useFindMyMembers();
 
-  const selectedClinicId = useStore((state) => state.selectedClinicId);
+  const selectedClinicId = useStore((state) => state.pickedClinicId);
 
   const member = myMembers?.find(
     (member) => member.clinic.id === selectedClinicId
@@ -26,7 +26,7 @@ const ClinicSelector = () => {
   const navigate = useNavigate();
 
   const selectClinic = (clinicId: number) => {
-    selectClinicId({
+    pickClinicId({
       ...getIdName(),
       clinicId,
     });

@@ -11,7 +11,7 @@ import type {
 import type { FormForCreatePrescriptionFields } from '../../../types/form.types';
 
 export const useFormForCreatePrescription = () => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const {
     register,
     handleSubmit: handleSubmitWrapper,

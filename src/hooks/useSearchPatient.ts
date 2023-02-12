@@ -12,7 +12,7 @@ export const useSearchPatient = () => {
     SEARCH_PATIENT_DOCUMENT
   );
 
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const patientQuery = (name: string) => {
     const query = name.trim();

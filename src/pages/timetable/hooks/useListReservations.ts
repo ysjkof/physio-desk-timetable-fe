@@ -16,7 +16,7 @@ export const useListReservations = (): [
   const pickedDate = useStore((state) => state.pickedDate);
   const startDate = getSunday(pickedDate);
   const endDate = endOfDay(nextSaturday(startDate));
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const variables = { input: { startDate, endDate, clinicId } };
 

@@ -1,7 +1,7 @@
 import StateBadge from '../../../../_legacy_components/atoms/StateBadge';
 import Sidebar from '../../../../_legacy_components/molecules/Sidebar';
 import { useFindMyClinics, useMe } from '../../../../hooks';
-import { selectClinicId, useStore } from '../../../../store';
+import { pickClinicId, useStore } from '../../../../store';
 import { Check } from '../../../../svgs';
 import {
   cls,
@@ -13,7 +13,7 @@ import type { MemberOfClient } from '../../../../types/common.types';
 
 export const ClinicAndUserSelector = () => {
   const [, { getIdName }] = useMe();
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
   const userIdAndName = getIdName();
 
   const [myClinics] = useFindMyClinics({});
@@ -24,7 +24,7 @@ export const ClinicAndUserSelector = () => {
   };
 
   const onClickChangeSelectClinic = (clinicId: number) => {
-    selectClinicId({ clinicId, ...getIdName() });
+    pickClinicId({ clinicId, ...getIdName() });
   };
 
   return (

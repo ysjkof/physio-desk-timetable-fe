@@ -1,28 +1,19 @@
-import { makeVar } from '@apollo/client';
 import { create } from 'zustand';
 import { TABLE_TIME_GAP } from './constants/constants';
 import { localStorageUtils } from './utils/localStorage.utils';
 import type {
   ToastState,
   TableTimeOptions,
-  SelectedReservationType,
-  SelectedPatientType,
+  PickedReservationType,
   UserIdAndName,
   ApolloClientType,
 } from './types/common.types';
 import type { HiddenUsersArr, HiddenUsersSet } from './types/store.types';
 
-export const selectedReservationVar =
-  makeVar<SelectedReservationType>(undefined);
-
-// Timetable state
-
-export const selectedPatientVar = makeVar<SelectedPatientType>(undefined);
-
 interface ZustandStoreState {
   isLoggedIn: boolean;
   client: ApolloClientType;
-  selectedClinicId: number;
+  pickedClinicId: number;
   toast: ToastState;
   isBigGlobalAside: boolean;
   isWeekCalendar: boolean;
@@ -33,12 +24,13 @@ interface ZustandStoreState {
   timeDurationOfTimetable: TableTimeOptions;
   hiddenUsers: HiddenUsersSet;
   pickedDate: Date;
+  pickedReservation: PickedReservationType;
 }
 
 const initialState: ZustandStoreState = {
   isLoggedIn: false,
   client: null,
-  selectedClinicId: 0,
+  pickedClinicId: 0,
   toast: {},
   isBigGlobalAside: true,
   isWeekCalendar: true,
@@ -55,6 +47,7 @@ const initialState: ZustandStoreState = {
   },
   hiddenUsers: new Set(),
   pickedDate: new Date(),
+  pickedReservation: undefined,
 };
 
 export const useStore = create<ZustandStoreState>(() => initialState);
@@ -74,7 +67,7 @@ export const setClient = (client: ApolloClientType) =>
   useStore.setState(() => ({ client }));
 
 export const setClinicId = (clinicId: number) =>
-  useStore.setState(() => ({ selectedClinicId: clinicId }));
+  useStore.setState(() => ({ pickedClinicId: clinicId }));
 
 export const setToast = (props: ToastState) =>
   useStore.setState(() => ({ toast: props }));
@@ -127,19 +120,18 @@ export const setHiddenUsers = (value: HiddenUsersArr) =>
 export const setPickedDate = (value: Date) =>
   useStore.setState(() => ({ pickedDate: value }));
 
+export const setPickedReservation = (value: PickedReservationType) =>
+  useStore.setState(() => ({ pickedReservation: value }));
+
 // store + etc(localStorage, callback ...)
 
-interface SelectClinicId extends UserIdAndName {
+interface PickClinicId extends UserIdAndName {
   clinicId: number;
 }
-export const selectClinicId = ({
-  clinicId,
-  userId,
-  userName,
-}: SelectClinicId) => {
+export const pickClinicId = ({ clinicId, userId, userName }: PickClinicId) => {
   setClinicId(clinicId);
   localStorageUtils.set({
-    key: 'selectedClinicId',
+    key: 'pickedClinicId',
     value: clinicId,
     userId,
     userName,

@@ -12,7 +12,7 @@ import type {
 import type { PrescriptionForFind } from '../types/props.types';
 
 export const useCreatePrescription = () => {
-  const clinicId = useStore((state) => state.selectedClinicId);
+  const clinicId = useStore((state) => state.pickedClinicId);
 
   const variables = { input: { clinicId, onlyLookUpActive: false } };
 

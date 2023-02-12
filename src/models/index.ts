@@ -1,6 +1,6 @@
 import { Calendar } from './Calendar';
 import { ClinicsOfClient } from './ClinicsOfClient';
-import { SelectedPrescriptions } from './SelectedPrescriptions';
+import { PickedPrescriptions } from './PickedPrescriptions';
 import { Schedules } from './Schedules';
 import { TimeDurationOfTimetable } from './TimeDurationOfTimetable';
 import { TimeLabel } from './TimeLabel';
@@ -8,7 +8,7 @@ import { TimeLabel } from './TimeLabel';
 export {
   Calendar,
   ClinicsOfClient,
-  SelectedPrescriptions,
+  PickedPrescriptions,
   Schedules,
   TimeDurationOfTimetable,
   TimeLabel,

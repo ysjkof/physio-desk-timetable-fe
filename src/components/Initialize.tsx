@@ -2,7 +2,7 @@ import { type PropsWithChildren, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_MY_CLINICS_STATUS_DOCUMENT } from '../graphql';
 import { localStorageUtils } from '../utils/localStorage.utils';
-import { useMe, useSelectedClinicId, useSetHiddenUsers } from '../hooks';
+import { useHiddenUsers, useMe, usePickedClinicId } from '../hooks';
 import { useTimeDurationOfTimetable } from '../pages/timetable/hooks';
 import { LATEST_STORAGE_VERSION } from '../constants/constants';
 import { useStore } from '../store';
@@ -10,7 +10,7 @@ import type { UserIdAndName } from '../types/common.types';
 import type { GetMyClinicsStatusQuery } from '../types/generated.types';
 
 const Initialize = ({ children }: PropsWithChildren) => {
-  useStore((state) => state.selectedClinicId); // 리렌더용
+  useStore((state) => state.pickedClinicId); // 리렌더용
   const [loading, setLoading] = useState(true);
 
   const [, { getIdName }] = useMe();
@@ -19,9 +19,9 @@ const Initialize = ({ children }: PropsWithChildren) => {
     GET_MY_CLINICS_STATUS_DOCUMENT
   );
 
-  const { initialize: initSelectedClinicId } = useSelectedClinicId();
+  const { initialize: initSelectedClinicId } = usePickedClinicId();
   const { initialize: initTimeDuration } = useTimeDurationOfTimetable();
-  const { initialize: initHiddenUsers } = useSetHiddenUsers();
+  const { initialize: initHiddenUsers } = useHiddenUsers();
 
   useEffect(() => {
     setLoading(true);
