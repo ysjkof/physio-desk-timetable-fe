@@ -10,6 +10,7 @@ import type {
   ReservationInList,
   MemberOfClient,
   ClinicOfGetMyClinicTruth,
+  MemberWithEvent,
 } from '../types/common.types';
 
 interface SchedulesProps {
@@ -29,11 +30,11 @@ export class Schedules {
     return this.#value;
   }
 
-  #createForm(date: Date, clinic: ClinicOfGetMyClinicTruth) {
+  #createForm(date: Date, clinic: ClinicOfGetMyClinicTruth): ISchedules[] {
     const week = this.#createWeek(date);
     return week.map((dateInWeek) => ({
       date: dateInWeek,
-      users: this.#createMembersForTable(clinic),
+      members: this.#createMembersForTable(clinic),
     }));
   }
 
@@ -47,7 +48,7 @@ export class Schedules {
     return { start, end };
   }
 
-  #createMembersForTable(clinic: ClinicOfGetMyClinicTruth) {
+  #createMembersForTable(clinic: ClinicOfGetMyClinicTruth): MemberWithEvent[] {
     const membersForTable = clinic.members.map(this.#addKeyToMember);
     return membersForTable.sort((a, b) => {
       if (a.user.name > b.user.name) return 1;
@@ -68,12 +69,12 @@ export class Schedules {
       );
       if (dateIndex === -1) return;
 
-      const userIndex = result[dateIndex].users.findIndex(
+      const userIndex = result[dateIndex].members.findIndex(
         (member) => member.user.id === event.user.id
       );
       if (userIndex === -1) return;
 
-      result[dateIndex].users[userIndex].events.push(event);
+      result[dateIndex].members[userIndex].events.push(event);
     });
     return result;
   }

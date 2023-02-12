@@ -67,7 +67,7 @@ const AlignmentButtons = ({ setMembers }: AlignmentButtonsProps) => {
         className="flex gap-1"
         onClick={sortByWaitingForApproval}
       >
-        <VerticalCrossArrow /> 승인대기
+        <VerticalCrossArrow /> 수락대기
       </button>
       <button type="button" className="flex gap-1" onClick={sortByLetter}>
         <VerticalCrossArrow /> 가나다

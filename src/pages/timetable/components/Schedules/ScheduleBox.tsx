@@ -8,7 +8,7 @@ const ScheduleBox = ({
   userLength,
   enableTimeIndicator,
   viewPeriodStyle,
-  users,
+  members,
   date,
   labelMaxLength,
   labels,
@@ -22,7 +22,7 @@ const ScheduleBox = ({
       style={viewPeriodStyle}
     >
       <TimeIndicatorBar isActive={enableTimeIndicator} />
-      {users.map((member, userIndex) => (
+      {members.map((member, userIndex) => (
         <div
           key={member.id}
           className="USER_COL relative w-full divide-y divide-table-line bg-table-bg hover:bg-gray-200/50"

@@ -1,4 +1,4 @@
-import { ApolloClient, NormalizedCacheObject, makeVar } from '@apollo/client';
+import { makeVar } from '@apollo/client';
 import { create } from 'zustand';
 import { TABLE_TIME_GAP } from './constants/constants';
 import { localStorageUtils } from './utils/localStorage.utils';
@@ -8,23 +8,20 @@ import type {
   SelectedReservationType,
   SelectedPatientType,
   UserIdAndName,
+  ApolloClientType,
 } from './types/common.types';
 import type { HiddenUsersArr, HiddenUsersSet } from './types/store.types';
 
 export const selectedReservationVar =
   makeVar<SelectedReservationType>(undefined);
 
-export type ClientOfStore = ApolloClient<NormalizedCacheObject> | null;
-
 // Timetable state
-
-export const selectedDateVar = makeVar(new Date());
 
 export const selectedPatientVar = makeVar<SelectedPatientType>(undefined);
 
 interface ZustandStoreState {
   isLoggedIn: boolean;
-  client: ClientOfStore;
+  client: ApolloClientType;
   selectedClinicId: number;
   toast: ToastState;
   isBigGlobalAside: boolean;
@@ -35,6 +32,7 @@ interface ZustandStoreState {
   showCalendarOfTimetable: boolean;
   timeDurationOfTimetable: TableTimeOptions;
   hiddenUsers: HiddenUsersSet;
+  pickedDate: Date;
 }
 
 const initialState: ZustandStoreState = {
@@ -56,6 +54,7 @@ const initialState: ZustandStoreState = {
     gap: TABLE_TIME_GAP,
   },
   hiddenUsers: new Set(),
+  pickedDate: new Date(),
 };
 
 export const useStore = create<ZustandStoreState>(() => initialState);
@@ -71,7 +70,7 @@ export const setAuthToken = (_token?: string) =>
     return { isLoggedIn: !!token };
   });
 
-export const setClient = (client: ClientOfStore) =>
+export const setClient = (client: ApolloClientType) =>
   useStore.setState(() => ({ client }));
 
 export const setClinicId = (clinicId: number) =>
@@ -124,6 +123,9 @@ export const setTimeDurationOfTimetable = (value: TableTimeOptions) =>
 
 export const setHiddenUsers = (value: HiddenUsersArr) =>
   useStore.setState(() => ({ hiddenUsers: new Set(value) }));
+
+export const setPickedDate = (value: Date) =>
+  useStore.setState(() => ({ pickedDate: value }));
 
 // store + etc(localStorage, callback ...)
 

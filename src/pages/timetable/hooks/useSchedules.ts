@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useReactiveVar } from '@apollo/client';
 import { Schedules } from '../../../models';
 import { useListReservations } from './useListReservations';
-import { selectedDateVar } from '../../../store';
+import { useStore } from '../../../store';
 import { useGetClinic } from '../../../hooks';
 import type { ISchedules } from '../../../types/common.types';
 
 export const useSchedules = () => {
-  const selectedDate = useReactiveVar(selectedDateVar);
+  const pickedDate = useStore((state) => state.pickedDate);
   const [schedules, setSchedules] = useState<ISchedules[] | null>(null);
 
   const [clinic] = useGetClinic();
@@ -20,7 +19,7 @@ export const useSchedules = () => {
     setSchedules(
       new Schedules({
         data: reservations.results,
-        date: selectedDate,
+        date: pickedDate,
         clinic,
       }).get()
     );

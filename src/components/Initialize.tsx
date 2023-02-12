@@ -5,13 +5,15 @@ import { localStorageUtils } from '../utils/localStorage.utils';
 import { useMe, useSelectedClinicId, useSetHiddenUsers } from '../hooks';
 import { useTimeDurationOfTimetable } from '../pages/timetable/hooks';
 import { LATEST_STORAGE_VERSION } from '../constants/constants';
+import { useStore } from '../store';
 import type { UserIdAndName } from '../types/common.types';
 import type { GetMyClinicsStatusQuery } from '../types/generated.types';
 
 const Initialize = ({ children }: PropsWithChildren) => {
+  useStore((state) => state.selectedClinicId); // 리렌더용
   const [loading, setLoading] = useState(true);
 
-  const [meData, { getIdName }] = useMe();
+  const [, { getIdName }] = useMe();
 
   const { data: myClinicsStatusData } = useQuery<GetMyClinicsStatusQuery>(
     GET_MY_CLINICS_STATUS_DOCUMENT
@@ -24,7 +26,7 @@ const Initialize = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     setLoading(true);
 
-    if (!meData || !myClinicsStatusData?.getMyClinicsStatus.clinics) return;
+    if (!myClinicsStatusData?.getMyClinicsStatus.clinics) return;
 
     const clinicId = myClinicsStatusData?.getMyClinicsStatus.clinics.find(
       (clinic) => clinic.isPersonal
@@ -40,7 +42,7 @@ const Initialize = ({ children }: PropsWithChildren) => {
     initTimeDuration(idAndName);
 
     setLoading(false);
-  }, [meData, myClinicsStatusData]);
+  }, [myClinicsStatusData]);
 
   if (loading) return <></>;
 

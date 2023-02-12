@@ -5,7 +5,7 @@ import type { MemberNameProps } from '../../../../types/props.types';
 const MemberName = ({
   userLength,
   viewPeriodStyle,
-  users,
+  members,
 }: MemberNameProps) => {
   return (
     <div
@@ -15,7 +15,7 @@ const MemberName = ({
       )}
       style={viewPeriodStyle}
     >
-      {users.map((member, idx) => (
+      {members.map((member, idx) => (
         <div
           key={member.id}
           className="flex items-center justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 pt-4 font-medium"

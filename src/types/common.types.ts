@@ -1,4 +1,5 @@
 import { SVGProps } from 'react';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import {
   Clinic,
   FindMyClinicsQuery,
@@ -79,7 +80,7 @@ export interface MyMembers {
   관리자: MyMembersType;
   직원: MyMembersType;
   탈퇴: MyMembersType;
-  승인대기: MyMembersType;
+  수락대기: MyMembersType;
   폐쇄: MyMembersType;
 }
 
@@ -200,12 +201,12 @@ export interface ReserveFormType {
 
 //
 
-export interface UserWithEvent extends MemberOfClient {
+export interface MemberWithEvent extends MemberOfClient {
   events: ReservationInList[];
 }
 export interface ISchedules {
   date: Date;
-  users: UserWithEvent[];
+  members: MemberWithEvent[];
 }
 
 export type SelectedReservationType = ReservationInList | undefined;
@@ -256,3 +257,5 @@ export interface DashboardOutletContext {
 }
 
 export interface SettingOutletContext extends DashboardOutletContext {}
+
+export type ApolloClientType = ApolloClient<NormalizedCacheObject> | null;

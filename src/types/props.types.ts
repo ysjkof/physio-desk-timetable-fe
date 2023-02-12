@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { ISchedules, UserWithEvent } from './common.types';
+import type { ISchedules, MemberWithEvent } from './common.types';
 import { FindPrescriptionsQuery } from './generated.types';
 import { FormForEditPrescriptionFields } from './form.types';
 
@@ -31,7 +31,7 @@ export interface DateTitleProps extends IUserLength, IDate {
   isSelectedMonth: boolean;
 }
 export interface MemberNameProps extends IUserLength {
-  users: UserWithEvent[];
+  members: MemberWithEvent[];
   viewPeriodStyle: { gridTemplateColumns: string };
 }
 

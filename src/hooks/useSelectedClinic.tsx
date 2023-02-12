@@ -9,12 +9,9 @@ export const useSelectedClinicId = () => {
       ...idAndName,
     });
 
-    if (localStorageData === null) {
-      selectClinicId({ clinicId, ...idAndName });
-      return clinicId;
-    }
-    setClinicId(localStorageData);
-    return localStorageData;
+    if (localStorageData === null) selectClinicId({ clinicId, ...idAndName });
+    else setClinicId(localStorageData);
+    return localStorageData || clinicId;
   };
 
   return { initialize };

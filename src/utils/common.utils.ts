@@ -38,12 +38,12 @@ export function getMemberState({
   staying,
   accepted,
   manager,
-}: MemberStatus): '관리자' | '직원' | '탈퇴' | '승인대기' {
+}: MemberStatus): '관리자' | '직원' | '탈퇴' | '수락대기' {
   if (staying && accepted) {
     return manager ? '관리자' : '직원';
   }
   if (!staying && accepted) return '탈퇴';
-  if (!staying && !accepted) return '승인대기';
+  if (!staying && !accepted) return '수락대기';
   throw new Error('getMemberState >> 불가능한 경우의 수');
 }
 
@@ -51,7 +51,7 @@ export type StayingState = ReturnType<typeof getMemberState>;
 
 export function isStayMember(state: StayingState) {
   const memberState = {
-    승인대기: false,
+    수락대기: false,
     관리자: true,
     직원: true,
     탈퇴: false,

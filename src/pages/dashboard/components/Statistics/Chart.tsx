@@ -1,26 +1,29 @@
 import { lazy, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLazyQuery, useReactiveVar } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { getMonthStartEnd } from '../../../../utils/date.utils';
-import { IUserStatistics, MemberState } from '../../../../types/common.types';
 import { Checkbox, MenuButton, Warning } from '../../../../components';
 import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
-import { selectedDateVar } from '../../../../store';
 import Charts from './Charts';
-import { createUserStatistics } from '../../../../utils/chart.tuils';
+import { createUserStatistics } from '../../../../utils/chart.utils';
 import { useGetClinic } from '../../../../hooks';
+import { useStore } from '../../../../store';
+import type {
+  IUserStatistics,
+  MemberState,
+} from '../../../../types/common.types';
 import type { GetStatisticsQuery } from '../../../../types/generated.types';
 
 const Loading = lazy(() => import('../../../../components/Loading'));
 
 export default function Chart() {
   const [clinic] = useGetClinic();
-  const selectedDate = useReactiveVar(selectedDateVar);
+  const pickedDate = useStore((state) => state.pickedDate);
   const [userStatistics, setUserStatistics] = useState<
     IUserStatistics[] | null
   >(null);
@@ -32,8 +35,8 @@ export default function Chart() {
   }>({
     mode: 'onChange',
     defaultValues: {
-      year: selectedDate.getFullYear(),
-      month: String(selectedDate.getMonth() + 1),
+      year: pickedDate.getFullYear(),
+      month: String(pickedDate.getMonth() + 1),
     },
   });
 
@@ -91,8 +94,8 @@ export default function Chart() {
   };
 
   const resetYear = () => {
-    setValue('year', selectedDate.getFullYear());
-    setValue('month', String(selectedDate.getMonth() + 1));
+    setValue('year', pickedDate.getFullYear());
+    setValue('month', String(pickedDate.getMonth() + 1));
   };
 
   useEffect(() => {

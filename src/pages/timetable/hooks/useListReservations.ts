@@ -1,8 +1,8 @@
-import { QueryResult, useQuery, useReactiveVar } from '@apollo/client';
+import { QueryResult, useQuery } from '@apollo/client';
 import { endOfDay, nextSaturday } from 'date-fns';
 import { getSunday } from '../../../utils/date.utils';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
-import { selectedDateVar, setToast, useStore } from '../../../store';
+import { setToast, useStore } from '../../../store';
 import type {
   ListReservationsQuery,
   ListReservationsQueryVariables,
@@ -13,8 +13,8 @@ export const useListReservations = (): [
   ResultOfListReservations,
   QueryResult<ListReservationsQuery, ListReservationsQueryVariables>
 ] => {
-  const selectedDate = useReactiveVar(selectedDateVar);
-  const startDate = getSunday(selectedDate);
+  const pickedDate = useStore((state) => state.pickedDate);
+  const startDate = getSunday(pickedDate);
   const endDate = endOfDay(nextSaturday(startDate));
   const clinicId = useStore((state) => state.selectedClinicId);
 

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
+import { setToast } from '../store';
 import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
-import type { MyClinic } from '../types/common.types';
-import { type ClientOfStore, setToast } from '../store';
+import type { ApolloClientType, MyClinic } from '../types/common.types';
 
 /** ok, error만 있는 GraphQL 응답을 받고 토스트 출력이나 콜백 실행 */
 export function simpleCheckGQLError(
@@ -17,7 +17,7 @@ export function simpleCheckGQLError(
 }
 
 export const cacheUpdateUserName = (
-  client: ClientOfStore,
+  client: ApolloClientType,
   id: number,
   name: string
 ) => {
@@ -33,7 +33,7 @@ export const cacheUpdateUserName = (
 };
 
 interface CacheUpdatePersonalClinicNameProps {
-  client: ClientOfStore;
+  client: ApolloClientType;
   clinicId: number;
   clinicName: string;
   userName: string;
@@ -57,7 +57,7 @@ export const cacheUpdatePersonalClinicName = ({
 };
 
 export const cacheUpdateMemberAccepted = (
-  client: ClientOfStore,
+  client: ApolloClientType,
   id: number
 ) => {
   client?.writeFragment({
@@ -73,7 +73,7 @@ export const cacheUpdateMemberAccepted = (
 };
 
 export const cacheAddClinicToMyClinics = (
-  client: ClientOfStore,
+  client: ApolloClientType,
   clinic: MyClinic
 ) => {
   const variables = { input: { includeInactivate: true } };
@@ -93,7 +93,7 @@ export const cacheAddClinicToMyClinics = (
 };
 
 export const cacheUpdateMemberOfMe = (
-  client: ClientOfStore,
+  client: ApolloClientType,
   clinic: MyClinic
 ) => {
   client?.cache.updateQuery<MeQuery>({ query: ME_DOCUMENT }, (cacheData) => {

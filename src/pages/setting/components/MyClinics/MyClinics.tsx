@@ -25,7 +25,7 @@ const MyClinics = () => {
     관리자: [],
     직원: [],
     탈퇴: [],
-    승인대기: [],
+    수락대기: [],
     폐쇄: [],
   };
 
@@ -49,8 +49,8 @@ const MyClinics = () => {
     >
       <Title />
       <div className="mt-10 flex flex-col gap-10">
-        <ClinicsContainer title="승인대기 병원">
-          {members.승인대기.map((member) => (
+        <ClinicsContainer title="수락대기 병원">
+          {members.수락대기.map((member) => (
             <WaitingCard
               key={member.id}
               memberId={member.id}

@@ -10,7 +10,6 @@ interface ButtonProps extends PropsWithChildren {
 interface OptionProps extends PropsWithChildren {
   onClick: () => void;
   selected?: boolean;
-  suffix?: string;
 }
 
 interface SelectboxProps extends PropsWithChildren {
@@ -38,7 +37,7 @@ const Button = ({ children, onClick, iconSize = 14 }: ButtonProps) => {
   );
 };
 
-const Option = ({ children, selected, suffix, onClick }: OptionProps) => {
+const Option = ({ children, selected, onClick }: OptionProps) => {
   return (
     <span
       onClick={onClick}
@@ -51,7 +50,6 @@ const Option = ({ children, selected, suffix, onClick }: OptionProps) => {
       )}
     >
       <span>{children}</span>
-      <span>{suffix || ''}</span>
     </span>
   );
 };

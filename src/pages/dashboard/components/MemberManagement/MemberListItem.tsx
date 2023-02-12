@@ -39,7 +39,7 @@ const MemberListItem = ({ member, userIndex }: MemberListItemProps) => {
         <span
           className={cls(
             'w-24',
-            memberState === '승인대기'
+            memberState === '수락대기'
               ? 'text-caution'
               : 'text-table-day-strong'
           )}
