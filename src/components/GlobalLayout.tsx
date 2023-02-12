@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 import { cls } from '../utils/common.utils';
-import { Initialize } from './Initialize';
+import Initialize from './Initialize';
 import { useStore } from '../store';
 
 const GlobalAside = lazy(() => import('./GlobalAside'));
