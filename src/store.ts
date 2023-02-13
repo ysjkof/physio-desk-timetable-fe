@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { TABLE_TIME_GAP } from './constants/constants';
-import { localStorageUtils } from './utils/localStorage.utils';
+import {
+  localStorageUtils,
+  updateLocalStorageHiddenUsers,
+} from './utils/localStorage.utils';
 import type {
   ToastState,
   TableTimeOptions,
@@ -179,7 +182,7 @@ export const toggleShowNoshowOfTimetable = ({
 
 export const toggleHiddenUsers = (
   memberId: number,
-  callback?: (hiddenUsersArr: HiddenUsersArr) => void
+  { userId, userName }: UserIdAndName
 ) =>
   useStore.setState((prev) => {
     const hiddenUsers = new Set(prev.hiddenUsers);
@@ -189,6 +192,12 @@ export const toggleHiddenUsers = (
       hiddenUsers.add(memberId);
     }
 
-    if (callback) callback([...hiddenUsers]);
+    const clinicId = useStore.getState().pickedClinicId;
+    updateLocalStorageHiddenUsers({
+      hiddenUsers: [...hiddenUsers],
+      clinicId,
+      userId,
+      userName,
+    });
     return { hiddenUsers };
   });

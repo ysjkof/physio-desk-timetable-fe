@@ -4,13 +4,11 @@ import { CheckableButton } from '../../../../components';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
 import { useGetClinic, useMe } from '../../../../hooks';
-import { updateLocalStorageHiddenUsers } from '../../../../utils/localStorage.utils';
 import { toggleHiddenUsers, useStore } from '../../../../store';
-import type { HiddenUsersArr } from '../../../../types/store.types';
 
 const UserSelector = () => {
   const [isSpreading, setIsSpreading] = useState(false);
-  const [clinic, { variables }] = useGetClinic();
+  const [clinic] = useGetClinic();
   const [, { getIdName }] = useMe();
 
   const hiddenUsers = useStore((state) => state.hiddenUsers);
@@ -20,18 +18,7 @@ const UserSelector = () => {
   };
 
   const toggleUsers = (memberId: number) => {
-    const callback = (hiddenUsers: HiddenUsersArr) => {
-      if (!variables?.input.clinicId)
-        throw new Error('UserSelector에서 clinic 변수 id를 못 받았습니다');
-
-      updateLocalStorageHiddenUsers({
-        ...getIdName(),
-        clinicId: variables.input.clinicId,
-        hiddenUsers,
-      });
-    };
-
-    toggleHiddenUsers(memberId, callback);
+    toggleHiddenUsers(memberId, getIdName());
   };
 
   return (
