@@ -1,7 +1,7 @@
-import { useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { getStringOfDateTime } from '../../../../utils/date.utils';
 import { useAcceptInvitation, useRefuseInvitation } from '../../../../hooks';
-import { ConfirmModal } from '../../../../components';
+import { setConfirm } from '../../../../store';
 
 interface WaitingCardProps {
   memberId: number;
@@ -12,14 +12,28 @@ interface WaitingCardProps {
 
 const WaitingCard = ({ memberId, icon, name, createAt }: WaitingCardProps) => {
   const { refuseInvitation } = useRefuseInvitation({ memberId });
-  const [showReject, setShowReject] = useState(false);
-  const closeReject = () => setShowReject(false);
-  const openReject = () => setShowReject(true);
+
+  const openReject = () => {
+    setConfirm({
+      confirmAction: refuseInvitation,
+      messages: ['초대를 거절합니다.'],
+      targetName: name,
+      buttonText: '거절하기',
+      hasCheck: true,
+    });
+  };
 
   const { acceptInvitation } = useAcceptInvitation({ memberId });
-  const [showInvitation, setShowInvitation] = useState(false);
-  const closeInvitation = () => setShowInvitation(false);
-  const openInvitation = () => setShowInvitation(true);
+
+  const openInvitation = () => {
+    setConfirm({
+      confirmAction: acceptInvitation,
+      messages: ['초대를 수락합니다.'],
+      targetName: name,
+      buttonText: '수락하기',
+      hasCheck: true,
+    });
+  };
 
   return (
     <div className="flex h-full w-80 items-center gap-4 rounded-md border bg-white p-4">
@@ -48,24 +62,6 @@ const WaitingCard = ({ memberId, icon, name, createAt }: WaitingCardProps) => {
           </button>
         </div>
       </div>
-      {showReject && (
-        <ConfirmModal
-          closeAction={closeReject}
-          confirmAction={refuseInvitation}
-          messages={['초대를 거절합니다.']}
-          targetName={name}
-          buttonText="거절하기"
-        />
-      )}
-      {showInvitation && (
-        <ConfirmModal
-          closeAction={closeInvitation}
-          confirmAction={acceptInvitation}
-          messages={['초대를 수락합니다.']}
-          targetName={name}
-          buttonText="수락하기"
-        />
-      )}
     </div>
   );
 };

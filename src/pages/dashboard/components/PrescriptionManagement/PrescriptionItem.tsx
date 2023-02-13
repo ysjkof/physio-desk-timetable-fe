@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { Pencil, TrashPot } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
 import { useTogglePrescriptionActivate } from '../../../../hooks';
-import { ConfirmModal } from '../../../../components';
 import type {
   CardProps,
   TogglePrescriptionActivateProps,
 } from '../../../../types/props.types';
+import { setConfirm } from '../../../../store';
 
 const PrescriptionItem = ({ prescription, showInactivate }: CardProps) => {
   const {
@@ -66,15 +65,6 @@ const TogglePrescriptionActivate = ({
   name,
   activate,
 }: TogglePrescriptionActivateProps) => {
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const openConfirm = () => {
-    setShowConfirm(true);
-  };
-  const closeConfirm = () => {
-    setShowConfirm(false);
-  };
-
   const { toggleActivation } = useTogglePrescriptionActivate();
   const invokeToggleActivation = () => {
     toggleActivation(id, activate);
@@ -87,21 +77,20 @@ const TogglePrescriptionActivate = ({
   ];
   const buttonText = `${todo}하기`;
 
+  const openConfirm = () => {
+    setConfirm({
+      confirmAction: invokeToggleActivation,
+      messages,
+      targetName: name,
+      buttonText,
+      hasCheck: true,
+    });
+  };
+
   return (
-    <>
-      <button onClick={openConfirm} type="button">
-        <TrashPot className="" />
-      </button>
-      {showConfirm && (
-        <ConfirmModal
-          closeAction={closeConfirm}
-          confirmAction={invokeToggleActivation}
-          messages={messages}
-          targetName={name}
-          buttonText={buttonText}
-        />
-      )}
-    </>
+    <button onClick={openConfirm} type="button">
+      <TrashPot className="" />
+    </button>
   );
 };
 

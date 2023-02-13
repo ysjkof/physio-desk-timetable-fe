@@ -16,7 +16,7 @@ import GlobalAside from './GlobalAside';
 import GlobalNavBar from './GlobalNavBar';
 import GlobalLayout from './GlobalLayout';
 import Warning from './Warning';
-import ConfirmModal from './ConfirmModal';
+import Confirm from './Confirm';
 import Loading from './Loading';
 import NotFound from './NotFound';
 import { useLogin } from '../hooks/useLogin';
@@ -42,7 +42,7 @@ export {
   GlobalNavBar,
   GlobalLayout,
   Warning,
-  ConfirmModal,
+  Confirm,
   Loading,
   NotFound,
   useLogin,

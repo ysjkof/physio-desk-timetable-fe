@@ -1,12 +1,13 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 import { cls } from '../utils/common.utils';
-import Initialize from './Initialize';
 import { useStore } from '../store';
+import Initialize from './Initialize';
+import Toast from './Toast';
+import Confirm from './Confirm';
 
 const GlobalAside = lazy(() => import('./GlobalAside'));
 const GlobalNavBar = lazy(() => import('./GlobalNavBar'));
-const Toast = lazy(() => import('./Toast'));
 const Loading = lazy(() => import('./Loading'));
 
 function GlobalLayout() {
@@ -31,6 +32,7 @@ function GlobalLayout() {
         </>
       )}
       <Toast />
+      <Confirm />
     </div>
   );
 }

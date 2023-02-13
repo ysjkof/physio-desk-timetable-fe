@@ -1,8 +1,8 @@
-import { useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { getStringOfDateTime } from '../../../../utils/date.utils';
-import { ConfirmModal } from '../../../../components';
 import { useDeactivateClinic, useLeaveClinic } from '../../../../hooks';
 import { BuildingLargeWithBan, BuildingLargeWithX } from '../../../../svgs';
+import { setConfirm } from '../../../../store';
 
 interface ClinicCardProps {
   memberId: number;
@@ -22,14 +22,30 @@ const ClinicCard = ({
   createAt,
 }: ClinicCardProps) => {
   const { leaveClinic } = useLeaveClinic({ memberId });
-  const [showRetirement, setShowRetirement] = useState(false);
-  const closeRetirement = () => setShowRetirement(false);
-  const openRetirement = () => setShowRetirement(true);
+
+  const openRetirement = () => {
+    setConfirm({
+      confirmAction: leaveClinic,
+      messages: ['병원을 탈퇴합니다.'],
+      targetName: name,
+      buttonText: '탈퇴하기',
+      icon: <BuildingLargeWithX />,
+      hasCheck: true,
+    });
+  };
 
   const { deactivateClinic } = useDeactivateClinic({ clinicId });
-  const [showDeactivate, setShowDeactivate] = useState(false);
-  const closeDeactivate = () => setShowDeactivate(false);
-  const openDeactivate = () => setShowDeactivate(true);
+
+  const openDeactivate = () => {
+    setConfirm({
+      confirmAction: deactivateClinic,
+      messages: ['병원을 폐쇄합니다.'],
+      targetName: name,
+      buttonText: '폐쇄하기',
+      icon: <BuildingLargeWithBan />,
+      hasCheck: true,
+    });
+  };
 
   return (
     <div className="flex h-full w-80 items-center gap-4 rounded-md border bg-white p-4">
@@ -61,26 +77,6 @@ const ClinicCard = ({
           )}
         </div>
       </div>
-      {showRetirement && (
-        <ConfirmModal
-          closeAction={closeRetirement}
-          confirmAction={leaveClinic}
-          messages={['병원을 탈퇴합니다.']}
-          targetName={name}
-          buttonText="탈퇴하기"
-          icon={<BuildingLargeWithX />}
-        />
-      )}
-      {showDeactivate && (
-        <ConfirmModal
-          closeAction={closeDeactivate}
-          confirmAction={deactivateClinic}
-          messages={['병원을 폐쇄합니다.']}
-          targetName={name}
-          buttonText="폐쇄하기"
-          icon={<BuildingLargeWithBan />}
-        />
-      )}
     </div>
   );
 };

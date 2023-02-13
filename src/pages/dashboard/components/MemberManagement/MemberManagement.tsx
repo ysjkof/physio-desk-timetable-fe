@@ -11,7 +11,7 @@ const MemberManagement = () => {
         <MemberList />
       </div>
       <div
-        className="css_dashboard__member-management-column__2nd"
+        className="css_dashboard__member-management-column__2nd relative"
         style={{ width: 'calc(100% - 560px)' }}
       >
         <Outlet />

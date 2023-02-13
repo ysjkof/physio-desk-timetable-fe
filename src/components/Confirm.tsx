@@ -1,36 +1,43 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { setConfirm, useStore } from '../store';
+import { ConfirmFormFields } from '../types/form.types';
+import { ConfirmProps } from '../types/props.types';
 import Modal from './Modal';
-import Checkbox from './Checkbox';
 import FormError from './FormError';
-import type { ConfirmFormFields } from '../types/form.types';
-import type { ConfirmProps } from '../types/props.types';
+import Checkbox from './Checkbox';
 
-const ConfirmModal = ({
-  closeAction,
-  confirmAction,
-  icon,
-  messages,
-  targetName,
-  buttonText,
-}: ConfirmProps) => {
+export default function Confirm() {
+  const confirmState = useStore((state) => state.confirm);
+
+  const closeToast = () => {
+    setConfirm(undefined);
+  };
+
+  if (!confirmState) return null;
+
+  const { buttonText, confirmAction, messages, targetName, icon, hasCheck } =
+    confirmState;
+
   return (
-    <Modal closeAction={closeAction}>
-      <Confirm
-        closeAction={closeAction}
+    <Modal closeAction={closeToast}>
+      <ConfirmBody
+        closeAction={closeToast}
         confirmAction={confirmAction}
         icon={icon}
+        hasCheck={hasCheck}
         messages={messages}
         targetName={targetName}
         buttonText={buttonText}
       />
     </Modal>
   );
-};
+}
 
-const Confirm = ({
+const ConfirmBody = ({
   closeAction,
   confirmAction,
   icon,
+  hasCheck,
   messages,
   targetName,
   buttonText,
@@ -39,7 +46,7 @@ const Confirm = ({
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<ConfirmFormFields>();
+  } = useForm<ConfirmFormFields>({ defaultValues: { agree: !hasCheck } });
 
   const onSubmit: SubmitHandler<ConfirmFormFields> = (data) => {
     if (!data.agree) return;
@@ -64,16 +71,18 @@ const Confirm = ({
           {targetName}
         </span>
       </div>
-      <div className="relative mt-2 w-full">
-        <Checkbox
-          id="confirm-of-modal"
-          type="checkbox"
-          label="동의하기"
-          register={register('agree', { required: true })}
-          autoFocus
-        />
-        {errorMessage && <FormError error={errorMessage} top="14px" />}
-      </div>
+      {hasCheck && (
+        <div className="relative mt-2 w-full">
+          <Checkbox
+            id="confirm-of-modal"
+            type="checkbox"
+            label="동의하기"
+            register={register('agree', { required: true })}
+            autoFocus
+          />
+          {errorMessage && <FormError error={errorMessage} top="14px" />}
+        </div>
+      )}
       <div className="mt-5 flex gap-4 text-base">
         <button
           type="button"
@@ -92,5 +101,3 @@ const Confirm = ({
     </form>
   );
 };
-
-export default ConfirmModal;

@@ -83,13 +83,16 @@ export interface UseFormForEditPrescriptionProps {
   defaultValues: FormForEditPrescriptionFields | undefined;
 }
 
-export interface ConfirmProps extends CloseAction {
+export interface ConfirmState {
   messages: string[];
   targetName: string;
   buttonText: string;
   confirmAction: () => void;
   icon?: ReactNode;
+  hasCheck?: boolean;
 }
+export type ConfirmStateType = ConfirmState | undefined;
+export interface ConfirmProps extends CloseAction, ConfirmState {}
 
 export interface TogglePrescriptionActivateProps {
   id: number;
