@@ -1,4 +1,3 @@
-import { LATEST_STORAGE_VERSION } from '../constants/constants';
 import { changeValueInArray } from './common.utils';
 import type {
   GenerateStorageKey,
@@ -25,46 +24,37 @@ class LocalStorage {
     this.#storageKeyObj = storageKeyObj;
   }
 
+  // 로그인 유저의 id와 name이다.
   get<T>({
     key,
-    userId,
-    userName,
+    id,
+    name,
   }: GetPrivateStorage | GetPublicLocalStorage): T | null {
-    const storageKey = this.#generateKey({
-      key,
-      userId,
-      userName,
-    });
+    const storageKey = this.#generateKey({ key, id, name });
     const item = localStorage.getItem(storageKey);
     if (!item || item === 'undefined') return null;
     return JSON.parse(item);
   }
 
-  set({ key, userId, userName, value }: SetPrivateStorage | SetPublicStorage) {
-    const storageKey = this.#generateKey({
-      key,
-      userId,
-      userName,
-    });
+  // 로그인 유저의 id와 name이다.
+  set({ key, id, name, value }: SetPrivateStorage | SetPublicStorage) {
+    const storageKey = this.#generateKey({ key, id, name });
     localStorage.setItem(storageKey, JSON.stringify(value));
   }
 
+  // 로그인 유저의 id와 name이다.
   remove({
     key,
-    userId,
-    userName,
+    id,
+    name,
   }: RemovePrivateLocalStorage | RemovePublicLocalStorage) {
-    const storageKey = this.#generateKey({
-      key,
-      userId,
-      userName,
-    });
+    const storageKey = this.#generateKey({ key, id, name });
     localStorage.removeItem(storageKey);
   }
 
-  removeAll(userIdAndName: UserIdAndName) {
+  removeAll(user: UserIdAndName) {
     this.#removeAllOfPublic();
-    this.#removeAllOfPrivate(userIdAndName);
+    this.#removeAllOfPrivate(user);
   }
 
   #removeAllOfPublic() {
@@ -74,18 +64,18 @@ class LocalStorage {
     });
   }
 
-  #removeAllOfPrivate(userIdAndName: UserIdAndName) {
+  #removeAllOfPrivate(user: UserIdAndName) {
     Object.keys(PRIVATE_LOCAL_STORAGE_KEY_VALUE).forEach((key) => {
       this.remove({
-        ...userIdAndName,
+        ...user,
         key: key as PrivateLocalStorageKey,
       });
     });
   }
 
-  #generateKey({ key, userId, userName }: GenerateStorageKey) {
-    if (userId && userName) {
-      return `${this.#storageKeyObj[key]}-${userId}-${userName}`;
+  #generateKey({ key, id, name }: GenerateStorageKey) {
+    if (id && name) {
+      return `${this.#storageKeyObj[key]}-${id}-${name}`;
     }
     return this.#storageKeyObj[key];
   }
@@ -114,25 +104,18 @@ export const LOCAL_STORAGE_KEY_VALUE = {
 
 export const localStorageUtils = new LocalStorage(LOCAL_STORAGE_KEY_VALUE);
 
-export const updateLocalStorageHiddenUsers = ({
-  hiddenUsers,
-  clinicId,
-  userId,
-  userName,
-}: {
-  hiddenUsers: HiddenUsersArr;
-  clinicId: number;
-  userId: number;
-  userName: string;
-}) => {
+export const updateLocalStorageHiddenUsers = (
+  hiddenUsers: HiddenUsersArr,
+  clinicId: number,
+  user: UserIdAndName
+) => {
   let newHiddenUsers;
 
   const newClinicAndHiddenUser = [clinicId, hiddenUsers];
 
   const prevHiddenUsersArr = localStorageUtils.get<ClinicIdAndHiddenUsers[]>({
     key: 'hiddenUsers',
-    userId,
-    userName,
+    ...user,
   });
 
   const clinicIdx = prevHiddenUsersArr?.findIndex(
@@ -157,8 +140,7 @@ export const updateLocalStorageHiddenUsers = ({
 
   localStorageUtils.set({
     key: 'hiddenUsers',
-    userId,
-    userName,
+    ...user,
     value: newHiddenUsers,
   });
 };

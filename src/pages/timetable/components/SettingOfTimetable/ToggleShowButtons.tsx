@@ -6,11 +6,9 @@ import {
   toggleShowNoshowOfTimetable,
   useStore,
 } from '../../../../store';
-import { useMe } from '../../../../hooks';
 
 export const ToggleShowButtons = () => {
-  const [, { getIdName }] = useMe();
-  const userIdAndName = getIdName();
+  const user = useStore((state) => state.user);
 
   const showCancelOfTimetable = useStore(
     (state) => state.showCancelOfTimetable
@@ -21,17 +19,11 @@ export const ToggleShowButtons = () => {
   );
 
   const toggleCancel = () => {
-    toggleShowCancelOfTimetable({
-      ...userIdAndName,
-      value: !showCancelOfTimetable,
-    });
+    toggleShowCancelOfTimetable(user, !showCancelOfTimetable);
   };
 
   const toggleNoshow = () => {
-    toggleShowNoshowOfTimetable({
-      ...userIdAndName,
-      value: !showNoshowOfTimetable,
-    });
+    toggleShowNoshowOfTimetable(user, !showNoshowOfTimetable);
   };
 
   return (

@@ -3,13 +3,12 @@ import { USER_COLORS } from '../../../../constants/constants';
 import { CheckableButton } from '../../../../components';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
 import { cls } from '../../../../utils/common.utils';
-import { useGetClinic, useMe } from '../../../../hooks';
+import { useGetClinic } from '../../../../hooks';
 import { toggleHiddenUsers, useStore } from '../../../../store';
 
 const UserSelector = () => {
   const [isSpreading, setIsSpreading] = useState(false);
   const [clinic] = useGetClinic();
-  const [, { getIdName }] = useMe();
 
   const hiddenUsers = useStore((state) => state.hiddenUsers);
 
@@ -18,7 +17,7 @@ const UserSelector = () => {
   };
 
   const toggleUsers = (memberId: number) => {
-    toggleHiddenUsers(memberId, getIdName());
+    toggleHiddenUsers(memberId);
   };
 
   return (

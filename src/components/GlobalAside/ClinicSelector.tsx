@@ -1,18 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { addStatusToUserName, getMemberState } from '../../utils/common.utils';
-import { useFindMyMembers, useMe } from '../../hooks';
+import { useFindMyMembers } from '../../hooks';
 import { pickClinicId, useStore } from '../../store';
 import Selectbox from '../Selectbox';
 
 const ClinicSelector = () => {
-  const [, { getIdName }] = useMe();
-
   const [myMembers] = useFindMyMembers();
 
-  const selectedClinicId = useStore((state) => state.pickedClinicId);
+  const pickedClinicId = useStore((state) => state.pickedClinicId);
 
   const member = myMembers?.find(
-    (member) => member.clinic.id === selectedClinicId
+    (member) => member.clinic.id === pickedClinicId
   );
   const name = member?.clinic?.name || '';
   const state =
@@ -28,10 +26,7 @@ const ClinicSelector = () => {
   const navigate = useNavigate();
 
   const selectClinic = (clinicId: number) => {
-    pickClinicId({
-      ...getIdName(),
-      clinicId,
-    });
+    pickClinicId(clinicId);
   };
 
   return (
@@ -49,7 +44,7 @@ const ClinicSelector = () => {
           return (
             <Selectbox.Option
               key={member.id}
-              selected={member.id === selectedClinicId}
+              selected={member.id === pickedClinicId}
               onClick={onClick}
             >
               {addStatusToUserName(member.clinic.name, state)}

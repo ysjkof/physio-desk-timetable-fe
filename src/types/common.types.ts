@@ -146,10 +146,8 @@ export interface IdAndName {
   id: number;
   name: string;
 }
-export interface UserIdAndName {
-  userId: number;
-  userName: string;
-}
+
+export interface UserIdAndName extends IdAndName {}
 
 export interface Value {
   value: unknown;

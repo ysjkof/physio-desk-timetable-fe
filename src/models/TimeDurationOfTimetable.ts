@@ -24,8 +24,8 @@ export class TimeDurationOfTimetable {
 
   static #localStorageUtil = localStorageUtils;
 
-  static initialize(userIdAndName: UserIdAndName) {
-    this.#userIdAndName = userIdAndName;
+  static initialize(user: UserIdAndName) {
+    this.#userIdAndName = user;
     const localViewOptions = this.#getFromLocalStorage();
     if (localViewOptions === null) {
       this.saveToLocalStorage(this.#options);

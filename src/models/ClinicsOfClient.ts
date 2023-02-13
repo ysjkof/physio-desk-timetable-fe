@@ -70,7 +70,7 @@ export class ClinicsOfClient {
 
   static #getKeyForGroup(clinic: MyClinic): ClinicOfClientState {
     const userInClinic = clinic.members.find(
-      (member) => member.user.id === this.#userIdAndName.userId
+      (member) => member.user.id === this.#userIdAndName.id
     );
 
     if (!userInClinic)

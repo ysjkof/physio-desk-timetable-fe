@@ -10,10 +10,12 @@ import type {
   PickedReservationType,
   UserIdAndName,
   ApolloClientType,
+  IdAndName,
 } from './types/common.types';
 import type { HiddenUsersArr, HiddenUsersSet } from './types/store.types';
 
 interface ZustandStoreState {
+  user: UserIdAndName;
   isLoggedIn: boolean;
   client: ApolloClientType;
   pickedClinicId: number;
@@ -31,6 +33,7 @@ interface ZustandStoreState {
 }
 
 const initialState: ZustandStoreState = {
+  user: { id: 0, name: '' },
   isLoggedIn: false,
   client: null,
   pickedClinicId: 0,
@@ -56,6 +59,8 @@ const initialState: ZustandStoreState = {
 export const useStore = create<ZustandStoreState>(() => initialState);
 
 // 전역
+
+export const setUser = (user: IdAndName) => useStore.setState(() => ({ user }));
 
 export const setAuthToken = (_token?: string) =>
   useStore.setState(() => {
@@ -128,16 +133,13 @@ export const setPickedReservation = (value: PickedReservationType) =>
 
 // store + etc(localStorage, callback ...)
 
-interface PickClinicId extends UserIdAndName {
-  clinicId: number;
-}
-export const pickClinicId = ({ clinicId, userId, userName }: PickClinicId) => {
+export const pickClinicId = (clinicId: number) => {
+  const { user } = useStore.getState();
   setClinicId(clinicId);
   localStorageUtils.set({
     key: 'pickedClinicId',
     value: clinicId,
-    userId,
-    userName,
+    ...user,
   });
 };
 
@@ -146,44 +148,31 @@ export const toggleIsBigGlobalAside = (value: boolean) => {
   localStorageUtils.set({ key: 'isBigGlobalAside', value });
 };
 
-interface SetStorageWithBoolean {
-  userId: number;
-  userName: string;
-  value: boolean;
-}
-
-export const toggleShowCancelOfTimetable = ({
-  userId,
-  userName,
-  value,
-}: SetStorageWithBoolean) => {
+export const toggleShowCancelOfTimetable = (
+  user: UserIdAndName,
+  value: boolean
+) => {
   setShowCancelOfTimetable(value);
   localStorageUtils.set({
     key: 'showCancelOfTimetable',
-    userId,
-    userName,
+    ...user,
     value,
   });
 };
 
-export const toggleShowNoshowOfTimetable = ({
-  userId,
-  userName,
-  value,
-}: SetStorageWithBoolean) => {
+export const toggleShowNoshowOfTimetable = (
+  user: UserIdAndName,
+  value: boolean
+) => {
   setShowNoshowOfTimetable(value);
   localStorageUtils.set({
     key: 'showNoshowOfTimetable',
-    userId,
-    userName,
+    ...user,
     value,
   });
 };
 
-export const toggleHiddenUsers = (
-  memberId: number,
-  { userId, userName }: UserIdAndName
-) =>
+export const toggleHiddenUsers = (memberId: number) =>
   useStore.setState((prev) => {
     const hiddenUsers = new Set(prev.hiddenUsers);
     if (hiddenUsers.has(memberId)) {
@@ -193,11 +182,8 @@ export const toggleHiddenUsers = (
     }
 
     const clinicId = useStore.getState().pickedClinicId;
-    updateLocalStorageHiddenUsers({
-      hiddenUsers: [...hiddenUsers],
-      clinicId,
-      userId,
-      userName,
-    });
+    const { user } = useStore.getState();
+
+    updateLocalStorageHiddenUsers([...hiddenUsers], clinicId, user);
     return { hiddenUsers };
   });
