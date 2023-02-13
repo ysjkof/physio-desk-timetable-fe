@@ -1,4 +1,5 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useRef } from 'react';
 import { setConfirm, useStore } from '../store';
 import { ConfirmFormFields } from '../types/form.types';
 import { ConfirmProps } from '../types/props.types';
@@ -57,6 +58,12 @@ const ConfirmBody = ({
   const errorMessage =
     errors.agree?.type === 'required' && '동의해야 수행할 수 있습니다.';
 
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    closeBtnRef.current?.focus();
+  }, []);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -88,6 +95,7 @@ const ConfirmBody = ({
           type="button"
           className="css_default-button w-36 bg-[#E4E4E4] text-[#5E5A5A]"
           onClick={closeAction}
+          ref={closeBtnRef}
         >
           창 닫기
         </button>
