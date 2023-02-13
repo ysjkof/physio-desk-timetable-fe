@@ -3,25 +3,42 @@ import { useState } from 'react';
 import { InputWrapper } from '../../../../components';
 import { Input } from '../../../timetable/components/FormForReservation/InputForReserve';
 import { useMe } from '../../../../hooks';
+import { useSendChangeEmail } from '../../hooks/useSendChangeEmail';
 import type { FormForEditEmailFields } from '../../../../types/props.types';
 
 const FormForEditEmail = () => {
   const [meData] = useMe();
-  const { register, handleSubmit } = useForm<FormForEditEmailFields>({
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<FormForEditEmailFields>({
     defaultValues: { email: meData?.email },
   });
+
   const [hasInputForAuthNumber, setHasInputForAuthNumber] = useState(false);
 
+  const sendEmailToChangeEmail = useSendChangeEmail();
+
   const onSubmit: SubmitHandler<FormForEditEmailFields> = (data) => {
-    if (!data.email) return null;
-    // TODO: 이메일 변경 인증 이메일 전송하기
+    const newEmail = data.email.trim();
+    if (newEmail === meData?.email) {
+      setError('email', {
+        message: '이메일을 변경하려면 전과 다른 이메일을 입력하세요',
+      });
+      return;
+    }
+
     setHasInputForAuthNumber(true);
+    sendEmailToChangeEmail(data.email);
   };
 
   return (
     <div className="flex flex-col gap-2">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputWrapper label="Email" align="col">
+        <InputWrapper label="Email" align="col" error={errors.email?.message}>
           <div className="flex gap-2">
             <Input label="Email" register={register('email')} />
             <button
@@ -33,41 +50,14 @@ const FormForEditEmail = () => {
           </div>
         </InputWrapper>
       </form>
-      {hasInputForAuthNumber && <FormForAuthenticationCode />}
+      {hasInputForAuthNumber && (
+        <p className="text-sm text-[#BFBFD3]">
+          새로 입력한 주소로 이메일을 보냈습니다. 받은 이메일을 확인하세요.
+          <br />
+          5분이 지나도 이메일이 도착하지 않으면 다시 요청해주세요.
+        </p>
+      )}
     </div>
-  );
-};
-
-interface FormForAuthenticationCodeFields {
-  code: number;
-}
-const FormForAuthenticationCode = () => {
-  const { register, handleSubmit } = useForm<FormForAuthenticationCodeFields>();
-
-  const onSubmit: SubmitHandler<FormForAuthenticationCodeFields> = (data) => {
-    if (!data.code) return null;
-    // TODO: 코드 인증 요청하기
-    // TODO: 인증되면 인증완료 표현하기
-  };
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-      <InputWrapper label="인증번호" align="col">
-        <div className="flex w-2/3 gap-2">
-          <Input label="인증번호" register={register('code')} />
-          <button
-            className="css_default-button rounded-md border border-[#8D8DAD] px-6 py-5 text-[#8D8DAD]"
-            type="submit"
-          >
-            인증하기
-          </button>
-        </div>
-      </InputWrapper>
-      <p className="text-sm text-[#BFBFD3]">
-        5분 내에 인증번호가 도착합니다. 5분이 뒤까지 도착하지 않으면 다시
-        요청해주세요.
-      </p>
-    </form>
   );
 };
 
