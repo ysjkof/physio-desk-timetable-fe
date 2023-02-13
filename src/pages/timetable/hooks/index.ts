@@ -6,7 +6,6 @@ import { useReserve } from './useReserve';
 import { useSchedules } from './useSchedules';
 import { useSubscriptions } from './useSubscriptions';
 import { useTableLabel } from './useTableLabel';
-import { useTimeDurationOfTimetable } from './useTimeDurationOfTimetable';
 
 export {
   useCreateReservation,
@@ -17,5 +16,4 @@ export {
   useSchedules,
   useSubscriptions,
   useTableLabel,
-  useTimeDurationOfTimetable,
 };

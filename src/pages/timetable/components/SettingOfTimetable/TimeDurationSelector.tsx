@@ -1,93 +1,140 @@
-import { useStore } from '../../../../store';
+import { ReactNode } from 'react';
+import { setTimeDurationOfTimetable, useStore } from '../../../../store';
 import { getHoursByUnit, getMinutesByUnit } from '../../../../utils/date.utils';
-import { useTimeDurationOfTimetable } from '../../hooks';
-import { Selectbox } from '../../../../components';
+import { cls } from '../../../../utils/common.utils';
+import { TimeDurationOfTimetable } from '../../../../models';
 import type { FirstAndLastTime } from '../../../../types/common.types';
 
 export const TimeDurationSelector = () => {
-  const timeDurationOfTimetable = useStore(
+  const { lastHour, lastMinute, firstHour, firstMinute } = useStore(
     (state) => state.timeDurationOfTimetable
   );
-  const { lastHour, lastMinute, firstHour, firstMinute } =
-    timeDurationOfTimetable;
 
-  const startHours = getHoursByUnit(0, 24);
-  const endHours = startHours.filter((hour) => hour > firstHour);
-  const startMinutes = getMinutesByUnit(10);
-  const endMinutes = startMinutes;
+  const hours = getHoursByUnit(0, 24);
+  const minutes = getMinutesByUnit(10);
 
-  const { changeTimeDuration } = useTimeDurationOfTimetable();
+  const changeTimeDuration = (key: keyof FirstAndLastTime, value: number) => {
+    const options = TimeDurationOfTimetable.createTimeOptions(key, value);
+    TimeDurationOfTimetable.set(options);
+    TimeDurationOfTimetable.saveToLocalStorage(options);
+    setTimeDurationOfTimetable(options);
+  };
 
   const changeTableTime = (key: keyof FirstAndLastTime, value: number) => {
     changeTimeDuration(key, value);
   };
 
   return (
-    <div
-      id="table-option-selector__view-time"
-      className="flex items-center whitespace-nowrap border-b py-1"
-    >
-      <Selectbox
-        selectedValue={`${String(firstHour).padStart(2, '0')}`}
-        iconSize={8}
-      >
-        <Selectbox.Options>
-          {startHours.map((hour) => (
-            <Selectbox.Option
+    <div className="flex whitespace-nowrap">
+      <ColWrapper label="시작">
+        <TimeWrapper label="시간">
+          {hours.map((hour) => (
+            <button
+              type="button"
               key={hour}
-              onClick={() => changeTableTime('firstHour', hour)}
+              onClick={
+                hour < lastHour
+                  ? () => changeTableTime('firstHour', hour)
+                  : undefined
+              }
+              className={cls(
+                'py-1',
+                firstHour === hour ? 'bg-[#6BA6FF] font-bold text-white' : '',
+                hour >= lastHour
+                  ? 'pointer-events-none bg-gray-100 text-gray-400'
+                  : ''
+              )}
             >
               {hour}
-            </Selectbox.Option>
+            </button>
           ))}
-        </Selectbox.Options>
-      </Selectbox>
-      <Selectbox
-        selectedValue={`${String(firstMinute).padStart(2, '0')}`}
-        iconSize={8}
-      >
-        <Selectbox.Options>
-          {startMinutes.map((minute) => (
-            <Selectbox.Option
+        </TimeWrapper>
+        <TimeWrapper label="분">
+          {minutes.map((minute) => (
+            <button
+              type="button"
               key={minute}
               onClick={() => changeTableTime('firstMinute', minute)}
+              className={cls(
+                'py-1',
+                firstMinute === minute
+                  ? 'bg-[#6BA6FF] font-bold text-white'
+                  : ''
+              )}
             >
               {minute}
-            </Selectbox.Option>
+            </button>
           ))}
-        </Selectbox.Options>
-      </Selectbox>
-      ~
-      <Selectbox
-        selectedValue={`${String(lastHour).padStart(2, '0')}`}
-        iconSize={8}
-      >
-        <Selectbox.Options>
-          {endHours.map((hour) => (
-            <Selectbox.Option
+        </TimeWrapper>
+      </ColWrapper>
+      <ColWrapper label="종료">
+        <TimeWrapper label="시간">
+          {hours.map((hour) => (
+            <button
+              type="button"
               key={hour}
-              onClick={() => changeTableTime('lastHour', hour)}
+              onClick={
+                hour > firstHour
+                  ? () => changeTableTime('lastHour', hour)
+                  : undefined
+              }
+              className={cls(
+                'py-1',
+                hour === lastHour ? 'bg-[#6BA6FF] font-bold text-white' : '',
+                hour <= firstHour
+                  ? 'pointer-events-none bg-gray-100 text-gray-400'
+                  : ''
+              )}
             >
               {hour}
-            </Selectbox.Option>
+            </button>
           ))}
-        </Selectbox.Options>
-      </Selectbox>
-      <Selectbox
-        selectedValue={`${String(lastMinute).padStart(2, '0')}`}
-        iconSize={8}
-      >
-        <Selectbox.Options>
-          {endMinutes.map((minute) => (
-            <Selectbox.Option
+        </TimeWrapper>
+        <TimeWrapper label="분">
+          {minutes.map((minute) => (
+            <button
+              type="button"
               key={minute}
               onClick={() => changeTableTime('lastMinute', minute)}
+              className={cls(
+                'py-1',
+                lastMinute === minute ? 'bg-[#6BA6FF] font-bold text-white' : ''
+              )}
             >
               {minute}
-            </Selectbox.Option>
+            </button>
           ))}
-        </Selectbox.Options>
-      </Selectbox>
+        </TimeWrapper>
+      </ColWrapper>
+    </div>
+  );
+};
+
+const ColWrapper = ({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) => {
+  return (
+    <div className="flex w-full flex-col border-r last:border-0">
+      <span className="border-b text-center">{label}</span>
+      <div className="flex divide-x">{children}</div>
+    </div>
+  );
+};
+const TimeWrapper = ({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) => {
+  return (
+    <div className="flex w-full flex-col">
+      <span className="border-b text-center">{label}</span>
+      {children}
     </div>
   );
 };
