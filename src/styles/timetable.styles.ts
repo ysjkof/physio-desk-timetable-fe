@@ -13,7 +13,7 @@ export const SchedulesStyle = {
   },
   day: {
     template() {
-      return {};
+      return { gridTemplateColumns: 'repeat(2, 1fr)' };
     },
     userColumn(userLength: number) {
       return { gridTemplateColumns: getGridTemplateColumns(userLength) };

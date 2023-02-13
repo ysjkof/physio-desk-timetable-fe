@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useWindowSize } from '../../../hooks';
-import type { TimetableTemplateProps } from '../../../types/props.types';
 import { useStore } from '../../../store';
+import type { TimetableTemplateProps } from '../../../types/props.types';
 
 const TimetableTemplate = ({
   nav,

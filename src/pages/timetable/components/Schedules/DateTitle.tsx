@@ -34,28 +34,20 @@ const DateTitle = ({
     <div
       id={SCROLL_ADDRESS + date}
       className={cls(
-        'DATE-TITLE mb-1 flex cursor-pointer select-none items-center bg-white text-table-day-color hover:bg-gray-200',
+        'timetable-date-title cursor-pointer hover:bg-gray-200',
         userLength === 1 ? 'border-x-inherit' : '',
-        isPickedMonth ? '' : 'opacity-50'
+        isPickedMonth ? '' : 'opacity-50',
+        isToday ? 'bg-table-day-strong font-bold text-white' : '',
+        dayNumber === 0 ? 'sunday' : '',
+        dayNumber === 6 ? 'saturday' : ''
       )}
       onClick={moveScroll}
       onKeyDown={moveScroll}
       role="button"
       tabIndex={0}
     >
-      <div
-        className={cls(
-          'flex w-full items-center justify-center gap-2 whitespace-nowrap py-0.5 text-base',
-          isToday
-            ? 'bg-table-day-strong font-bold text-white'
-            : 'bg-table-day-light',
-          dayNumber === 0 ? 'sunday' : '',
-          dayNumber === 6 ? 'saturday' : ''
-        )}
-      >
-        <span>{weekday}</span>
-        <span>{dayString}</span>
-      </div>
+      <span>{weekday}</span>
+      <span>{dayString}</span>
     </div>
   );
 };

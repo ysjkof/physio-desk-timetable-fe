@@ -6,6 +6,7 @@ import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
 import { cls } from '../../../../utils/common.utils';
 import { useStore } from '../../../../store';
+import EventList from './EventList';
 import type { SchedulesProps } from '../../../../types/props.types';
 
 const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
@@ -38,7 +39,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
     : weekEvents && [weekEvents[pickedDate.getDay()]];
 
   return (
-    <div className="SCHEDULES grid" style={containerStyle}>
+    <div className="grid" style={containerStyle}>
       {schedules.map((day, i) => {
         return (
           <div key={i} className="flex flex-col">
@@ -75,6 +76,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
           </div>
         );
       })}
+      {!isWeekCalendar && <EventList events={schedules[0]} />}
     </div>
   );
 };
