@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Check } from '../svgs';
 import { cls } from '../utils/common.utils';
 
@@ -6,6 +7,7 @@ interface CheckableButtonProps {
   personalColor: string;
   canSee: boolean;
   onClick: () => void;
+  icon?: ReactNode;
 }
 
 const CheckableButton = ({
@@ -13,6 +15,7 @@ const CheckableButton = ({
   personalColor,
   canSee,
   onClick,
+  icon,
 }: CheckableButtonProps) => {
   return (
     <div
@@ -28,15 +31,17 @@ const CheckableButton = ({
         ...(canSee && { color: personalColor, borderColor: personalColor }),
       }}
     >
-      <Check
-        className={cls('rounded-sm bg-gray-300 text-white')}
-        iconSize="SM"
-        style={{
-          ...(canSee && {
-            backgroundColor: personalColor,
-          }),
-        }}
-      />
+      {icon || (
+        <Check
+          className={cls('rounded-sm bg-gray-300 text-white')}
+          iconSize="SM"
+          style={{
+            ...(canSee && {
+              backgroundColor: personalColor,
+            }),
+          }}
+        />
+      )}
       {label}
     </div>
   );
