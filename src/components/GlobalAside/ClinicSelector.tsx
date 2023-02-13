@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { addStatusToUserName, getMemberState } from '../../utils/common.utils';
 import { useFindMyMembers } from '../../hooks';
-import { pickClinicId, useStore } from '../../store';
+import { pickClinicId, setConfirm, useStore } from '../../store';
 import Selectbox from '../Selectbox';
 
 const ClinicSelector = () => {
@@ -35,10 +35,20 @@ const ClinicSelector = () => {
         {myMembers?.map((member) => {
           const { accepted, manager, staying } = member;
           const state = getMemberState({ accepted, manager, staying });
+          const clinicName = addStatusToUserName(member.clinic.name, state);
 
           const onClick =
             state === '수락대기'
-              ? () => navigate('/setting/my-clinics')
+              ? () =>
+                  setConfirm({
+                    buttonText: '이동하기',
+                    messages: [
+                      '병원에 초대 받았습니다.',
+                      '이동하기를 눌러서 확인하세요.',
+                    ],
+                    targetName: clinicName,
+                    confirmAction: () => navigate('/setting/my-clinics'),
+                  })
               : () => selectClinic(member.clinic.id);
 
           return (
@@ -47,7 +57,7 @@ const ClinicSelector = () => {
               selected={member.id === pickedClinicId}
               onClick={onClick}
             >
-              {addStatusToUserName(member.clinic.name, state)}
+              {clinicName}
             </Selectbox.Option>
           );
         })}
