@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../router/routes';
 import { cls } from '../../utils/common.utils';
-import Logo from '../../_legacy_components/atoms/Logo';
+import LogoOfText from '../LogoOfText';
 
 export default function GlobalNavBarLayout({ children }: PropsWithChildren) {
   const location = useLocation();
@@ -23,7 +23,7 @@ export default function GlobalNavBarLayout({ children }: PropsWithChildren) {
       )}
     >
       <Link to="/">
-        <Logo />
+        <LogoOfText />
       </Link>
       <div className="flex w-full items-center justify-end gap-3 sm:gap-6 sm:text-sm">
         {children}

@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import Logo from '../../../_legacy_components/atoms/Logo';
+import LogoOfText from '../../../components/LogoOfText';
 import { ROUTES } from '../../../router/routes';
 
 export default function AuthContainer({
@@ -13,7 +13,7 @@ export default function AuthContainer({
     <div className="mt-10 flex h-screen flex-col items-center lg:mt-28">
       <div className="flex w-full max-w-screen-sm flex-col items-center px-5">
         <Link className="mb-5" to="/">
-          <Logo size={2} className="mb-6" />
+          <LogoOfText size={2} className="mb-6" />
         </Link>
 
         {children}

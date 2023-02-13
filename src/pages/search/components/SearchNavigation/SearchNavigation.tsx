@@ -1,4 +1,4 @@
-import Button from '../../../../_legacy_components/molecules/Button';
+import Button from '../../../auth/components/Button';
 
 interface SearchNavigationProps {
   invokeQuery: () => void;

@@ -108,12 +108,6 @@ export function addStatusToUserName(name: string, status?: MemberStatusType) {
   return prefix + renameUseSplit(name);
 }
 
-// FIXME: checkLengthIsZero로 대체. 지울 것.
-export function checkArrayIncludeValue<T>(arr: T[] | undefined | null) {
-  if (!arr) return false;
-  return arr.length >= 1 ? arr : false;
-}
-
 export function createArrayFromLength(length: number) {
   const numbers = [1];
   while (numbers.length < length) {

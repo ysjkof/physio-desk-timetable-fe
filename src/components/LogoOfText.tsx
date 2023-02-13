@@ -1,11 +1,11 @@
 import { HTMLAttributes } from 'react';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../utils/common.utils';
 
-interface LogoProps extends HTMLAttributes<HTMLHeadElement> {
+interface LogoOfTextProps extends HTMLAttributes<HTMLHeadElement> {
   size?: 1 | 2;
 }
 
-export default function Logo({ size = 1, ...args }: LogoProps) {
+export default function LogoOfText({ size = 1, ...args }: LogoOfTextProps) {
   return (
     <h1
       {...args}

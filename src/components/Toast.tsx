@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { defaultToastTimeout } from '../../constants/constants';
-import { setToast, useStore } from '../../store';
-import { cls } from '../../utils/common.utils';
+import { defaultToastTimeout } from '../constants/constants';
+import { setToast, useStore } from '../store';
+import { cls } from '../utils/common.utils';
 
 export default function Toast() {
   const { messages, fade, milliseconds, bgColor } = useStore(

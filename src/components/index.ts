@@ -20,6 +20,8 @@ import ConfirmModal from './ConfirmModal';
 import Loading from './Loading';
 import NotFound from './NotFound';
 import { useLogin } from '../hooks/useLogin';
+import Toast from './Toast';
+import LogoOfText from './LogoOfText';
 
 export {
   ButtonOfPages,
@@ -44,4 +46,6 @@ export {
   Loading,
   NotFound,
   useLogin,
+  Toast,
+  LogoOfText,
 };

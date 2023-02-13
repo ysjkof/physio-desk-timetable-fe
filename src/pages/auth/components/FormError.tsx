@@ -1,5 +1,5 @@
-import { ClassNameProps } from '../../types/common.types';
-import { cls } from '../../utils/common.utils';
+import { ClassNameProps } from '../../../types/common.types';
+import { cls } from '../../../utils/common.utils';
 
 interface FormErrorProps extends ClassNameProps {
   errorMessage: string;

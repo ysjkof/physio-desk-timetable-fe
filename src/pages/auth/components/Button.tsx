@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from 'react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../../../utils/common.utils';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   canClick: boolean | null | undefined;

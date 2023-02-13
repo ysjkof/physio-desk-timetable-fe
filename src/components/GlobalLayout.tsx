@@ -6,7 +6,7 @@ import { useStore } from '../store';
 
 const GlobalAside = lazy(() => import('./GlobalAside'));
 const GlobalNavBar = lazy(() => import('./GlobalNavBar'));
-const Toast = lazy(() => import('../_legacy_components/molecules/Toast'));
+const Toast = lazy(() => import('./Toast'));
 const Loading = lazy(() => import('./Loading'));
 
 function GlobalLayout() {
