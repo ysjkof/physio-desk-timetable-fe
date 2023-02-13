@@ -1,36 +1,14 @@
-import { ReactNode } from 'react';
-import { BriefCase, PersonPlus } from '../../../../svgs';
+import { type ReactNode } from 'react';
+import { PersonPlus } from '../../../../svgs';
 
 const CardSection = ({ countOfPatient }: { countOfPatient: number }) => {
   return (
     <div className="flex justify-between gap-x-4 text-[#64648E]">
       <CardInDetail
-        icon={<BriefCase className="h-8 w-8" />}
-        iconBgColor="#35BEFF"
-        title="병원근속년수"
-        textContent="2년차"
-      />
-      <CardInDetail
         icon={<PersonPlus className="h-8 w-8" />}
         iconBgColor="#6BA6FF"
         title="담당환자수"
         textContent={`${countOfPatient}명`}
-      />
-      <CardInDetail
-        icon={
-          <div className="h-8 w-8 bg-[url('/images/calendar-with-clock-green.png')]" />
-        }
-        iconBgColor="#68BB89"
-        title="발생한 연차"
-        textContent="15일"
-      />
-      <CardInDetail
-        icon={
-          <div className="h-8 w-8 bg-[url('/images/calendar-with-clock-red.png')]" />
-        }
-        iconBgColor="#D85F66"
-        title="남은 연차"
-        textContent="12일"
       />
     </div>
   );
