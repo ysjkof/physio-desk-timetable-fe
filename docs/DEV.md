@@ -81,12 +81,12 @@ event-box : 30 { hover: 32, DayOff : 31 }
 table-labels : 32
 table-sub-header : 32
 TABLE_HEADER : 34
-modal-portal : 40
 USER_VIEW_CONTROLLER : 35
 dropdown menu in Header : 50(table-clinic-selector과 겹침)
 Toast : 50
-Toast modal background : 40
 Tool-tip : 31
+Selectbox : 50
+modal-parents : 50
 
 **추후확인**
 section-layout(dashboard) 50
