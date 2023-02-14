@@ -3,9 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 const SearchPrescription = () => {
-  const searchMembers = (event: ChangeEvent<HTMLInputElement>) => {
-    // TODO: 어떤 방식으로 검색할 것인가?
-  };
+  const searchMembers = (event: ChangeEvent<HTMLInputElement>) => {};
 
   return (
     <label className="relative w-full" htmlFor="dashboard-prescription-search">
