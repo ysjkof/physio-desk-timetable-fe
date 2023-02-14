@@ -1,14 +1,12 @@
 import { lazy } from 'react';
-import { ROUTES } from './routes';
 import AuthContainer from '../pages/auth/components/AuthContainer';
-import ProtectRoute from './ProtectRoute';
-import NotFound from '../components/NotFound';
+
+const ProtectRoute = lazy(() => import('./ProtectRoute'));
+const Warning = lazy(() => import('../components/Warning'));
 
 const Home = lazy(() => import('../pages/home/Home'));
 const Login = lazy(() => import('../pages/auth/Login/Login'));
 const SignUp = lazy(() => import('../pages/auth/SignUp/SignUp'));
-
-const { login, signUp } = ROUTES;
 
 const logoutRoute = [
   {
@@ -22,7 +20,10 @@ const logoutRoute = [
   {
     path: 'login',
     element: (
-      <ProtectRoute whenFail={<NotFound />} failWhenLogin>
+      <ProtectRoute
+        whenFail={<Warning type="useAfterLoggedOut" />}
+        failWhenLogin
+      >
         <AuthContainer>
           <Login />
         </AuthContainer>
@@ -32,7 +33,10 @@ const logoutRoute = [
   {
     path: 'sign-up',
     element: (
-      <ProtectRoute whenFail={<NotFound />} failWhenLogin>
+      <ProtectRoute
+        whenFail={<Warning type="useAfterLoggedOut" />}
+        failWhenLogin
+      >
         <AuthContainer>
           <SignUp />
         </AuthContainer>

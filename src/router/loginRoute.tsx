@@ -6,57 +6,37 @@ import {
   PrescriptionManagement,
   Statistics,
 } from '../pages/dashboard/components';
-import Setting from '../pages/setting/Setting';
+import InviteUser from '../pages/dashboard/components/MemberManagement/InviteUser';
 import {
   CreateClinic,
   MyClinics,
   MyProfile,
 } from '../pages/setting/components';
-import InviteUser from '../pages/dashboard/components/MemberManagement/InviteUser';
+import Search from '../pages/search/Search';
 
 const ProtectRoute = lazy(() => import('./ProtectRoute'));
+const Warning = lazy(() => import('../components/Warning'));
+
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
-const Search = lazy(() => import('../pages/search/Search'));
-const Warning = lazy(() => import('../components/Warning'));
+const Setting = lazy(() => import('../pages/setting/Setting'));
 
 const loginRoute = [
   {
     path: 'tt',
     element: (
-      <ProtectRoute whenFail="/" failWhenLogout>
+      <ProtectRoute whenFail="/login" failWhenLogout>
         <TimeTable />
       </ProtectRoute>
     ),
   },
   {
-    path: 'setting',
-    element: <Setting />,
-    children: [
-      {
-        path: 'my-info',
-        element: <MyProfile />,
-      },
-      {
-        path: 'my-clinics',
-        element: <MyClinics />,
-      },
-      {
-        path: 'clinic/create',
-        element: (
-          <ProtectRoute
-            whenFail={<Warning type="verifyEmail" />}
-            failWhenLogout
-          >
-            <CreateClinic />,
-          </ProtectRoute>
-        ),
-      },
-    ],
-  },
-  {
     path: 'dashboard/clinic/members',
-    element: <Dashboard />,
+    element: (
+      <ProtectRoute whenFail="/login" failWhenLogout>
+        <Dashboard />
+      </ProtectRoute>
+    ),
     children: [
       {
         path: '',
@@ -69,14 +49,7 @@ const loginRoute = [
           },
           {
             path: 'invite',
-            element: (
-              <ProtectRoute
-                whenFail={<Warning type="verifyEmail" />}
-                failWhenLogout
-              >
-                <InviteUser />,
-              </ProtectRoute>
-            ),
+            element: <InviteUser />,
           },
         ],
       },
@@ -84,7 +57,11 @@ const loginRoute = [
   },
   {
     path: 'dashboard/clinic/prescriptions',
-    element: <Dashboard />,
+    element: (
+      <ProtectRoute whenFail="/login" failWhenLogout>
+        <Dashboard />
+      </ProtectRoute>
+    ),
     children: [
       {
         path: '',
@@ -98,18 +75,37 @@ const loginRoute = [
   },
   {
     path: 'dashboard/clinic/statistics',
-    element: <Dashboard />,
+    element: (
+      <ProtectRoute whenFail="/login" failWhenLogout>
+        <Dashboard />
+      </ProtectRoute>
+    ),
     children: [
       {
         path: '',
-        element: (
-          <ProtectRoute
-            whenFail={<Warning type="verifyEmail" />}
-            failWhenLogout
-          >
-            <Statistics />,
-          </ProtectRoute>
-        ),
+        element: <Statistics />,
+      },
+    ],
+  },
+  {
+    path: 'setting',
+    element: (
+      <ProtectRoute whenFail="/" failWhenLogout>
+        <Setting />
+      </ProtectRoute>
+    ),
+    children: [
+      {
+        path: 'my-info',
+        element: <MyProfile />,
+      },
+      {
+        path: 'my-clinics',
+        element: <MyClinics />,
+      },
+      {
+        path: 'clinic/create',
+        element: <CreateClinic />,
       },
     ],
   },
@@ -121,14 +117,6 @@ const loginRoute = [
       </ProtectRoute>
     ),
   },
-  // {
-  //   path: invite,
-  //   element: (
-  //     <ProtectRoute whenFail={<Warning type="verifyEmail" />} failWhenLogout>
-  //       <InviteClinic />
-  //     </ProtectRoute>
-  //   ),
-  // },
 ];
 
 export default loginRoute;
