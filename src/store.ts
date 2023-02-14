@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { addDays } from 'date-fns';
 import { TABLE_TIME_GAP } from './constants/constants';
 import {
   localStorageUtils,
@@ -131,8 +132,15 @@ export const setTimeDurationOfTimetable = (value: TableTimeOptions) =>
 export const setHiddenUsers = (value: HiddenUsersArr) =>
   useStore.setState(() => ({ hiddenUsers: new Set(value) }));
 
-export const setPickedDate = (value: Date) =>
-  useStore.setState(() => ({ pickedDate: value }));
+export const setPickedDate = (value?: Date, calcBy?: number) =>
+  useStore.setState((prev) => {
+    const date = value || prev.pickedDate;
+    if (calcBy) {
+      if (calcBy > 0) return { pickedDate: addDays(date, calcBy) };
+      if (calcBy < 0) return { pickedDate: addDays(date, calcBy) };
+    }
+    return { pickedDate: date };
+  });
 
 export const setPickedReservation = (value: PickedReservationType) =>
   useStore.setState(() => ({ pickedReservation: value }));
