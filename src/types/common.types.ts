@@ -5,6 +5,7 @@ import {
   FindMyClinicsQuery,
   FindMyMembersQuery,
   GetClinicQuery,
+  GetMemberQuery,
   GetReservationsByPatientQuery,
   GetStatisticsQuery,
   ListReservationsQuery,
@@ -140,7 +141,9 @@ export type ClinicOfGetMyClinicTruth = NonNullable<
 >;
 export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'];
 
-//
+export type MemberOfGetMember = NonNullable<
+  GetMemberQuery['getMember']['member']
+>;
 
 export interface IdAndName {
   id: number;

@@ -1,13 +1,9 @@
 import { PropsWithChildren } from 'react';
 import { Mail, Phone } from '../../../../svgs';
 import { getMemberState } from '../../../../utils/common.utils';
-import type { GetMemberQuery } from '../../../../types/generated.types';
+import type { MemberOfGetMember } from '../../../../types/common.types';
 
-const MemberCard = ({
-  member,
-}: {
-  member: NonNullable<GetMemberQuery['getMember']['member']>;
-}) => {
+const MemberCard = ({ member }: { member: MemberOfGetMember }) => {
   const {
     accepted,
     manager,
@@ -29,11 +25,9 @@ const MemberCard = ({
             {role}
           </span>
         </div>
-        <div className="basis-full overflow-y-scroll ">
-          Introduce yourself. 자기소개하세요.
-        </div>
+        <div className="grow overflow-y-scroll " />
         <div className="flex flex-wrap items-center gap-1 ">
-          <PhoneBadge>010-9999-8888</PhoneBadge>
+          <PhoneBadge>010-0000-0000</PhoneBadge>
           <MailBadge>{email}</MailBadge>
         </div>
       </div>
