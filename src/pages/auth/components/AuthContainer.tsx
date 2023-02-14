@@ -1,45 +1,29 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { type PropsWithChildren } from 'react';
 import LogoOfText from '../../../components/LogoOfText';
 
-export default function AuthContainer({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const location = useLocation();
-
+export default function AuthContainer({ children }: PropsWithChildren) {
   return (
     <div className="mt-10 flex h-screen flex-col items-center lg:mt-28">
       <div className="flex w-full max-w-screen-sm flex-col items-center px-5">
-        <Link className="mb-5" to="/">
+        <Link className="mb-4" to="/">
           <LogoOfText size={2} className="mb-6" />
         </Link>
-
         {children}
-
-        <NavLink
+        <Link
           to="/sign-up"
-          className={
-            location.pathname === '/create-account'
-              ? 'font-bold text-sky-500 hover:underline'
-              : 'text-sky-500 opacity-50 hover:underline'
-          }
+          className="mb-1 font-medium text-[#0052cc] hover:underline"
         >
-          <span className="">계정이 없습니까? </span>
+          <span className="mr-2">계정이 없습니까?</span>
           회원가입
-        </NavLink>
-
-        <NavLink
+        </Link>
+        <Link
           to="/login"
-          className={
-            location.pathname === '/'
-              ? 'font-bold text-sky-500 hover:underline'
-              : 'text-sky-500 opacity-50 hover:underline'
-          }
+          className="font-medium text-[#0052cc] hover:underline"
         >
-          <span className="">이미 계정이 있습니까? </span>
+          <span className="mr-2">이미 계정이 있습니까?</span>
           로그인
-        </NavLink>
+        </Link>
       </div>
     </div>
   );

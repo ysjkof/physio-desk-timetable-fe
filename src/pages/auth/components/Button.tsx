@@ -36,7 +36,7 @@ export default function Button({
           className="absolute mx-auto animate-spin"
         />
       ) : (
-        ''
+        '로그인'
       )}
       <span
         className={cls('whitespace-nowrap', loading ? 'text-transparent' : '')}

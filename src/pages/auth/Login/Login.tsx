@@ -3,23 +3,28 @@ import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { setToast } from '../../../store';
-import Input from '../components/Input';
-import FormError from '../components/FormError';
-import Button from '../components/Button';
 import { REG_EXP } from '../../../constants/regex';
 import { MUOOL } from '../../../constants/constants';
 import { LOGIN_DOCUMENT } from '../../../graphql';
 import type { LoginInput, LoginMutation } from '../../../types/generated.types';
-import { useLogin } from '../../../components';
+import { MenuButton, useLogin } from '../../../components';
+import { Input } from '../../timetable/components/FormForReservation/InputForReserve';
+import FormError from '../../../components/FormError';
 
 export default function Login() {
   const navigate = useNavigate();
   const {
     register,
     getValues,
-    formState: { errors, isValid },
+    formState: { errors },
     handleSubmit,
   } = useForm<LoginInput>({ mode: 'onChange' });
+
+  const printErrorText =
+    errors.email?.message || errors.email?.type === 'pattern'
+      ? REG_EXP.email.condition
+      : errors.password?.message ||
+        (errors.password?.type === 'pattern' && REG_EXP.password.condition);
 
   const [loginMutation, { loading }] =
     useMutation<LoginMutation>(LOGIN_DOCUMENT);
@@ -61,40 +66,31 @@ export default function Login() {
         <title>로그인 | {MUOOL}</title>
       </Helmet>
 
-      <h4 className="mb-6 text-center text-base font-semibold">
-        물리치료사를 위한 하나의 앱
-      </h4>
+      <h2 className="mb-8 text-center text-base font-semibold">
+        무울시간표에 로그인
+      </h2>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-5 mb-5 grid w-full gap-3"
+        className="relative mb-6 grid w-full gap-4"
       >
         <Input
           id="login__email"
           label="Email"
           type="email"
-          placeholder="Email"
+          placeholder="Email을 입력하세요"
           maxLength={REG_EXP.email.maxLength}
           register={register('email', {
             required: 'Email을 입력하세요',
             pattern: REG_EXP.email.pattern,
           })}
-        >
-          <>
-            {errors.email?.message ? (
-              <FormError errorMessage={errors.email.message} />
-            ) : (
-              errors.email?.type === 'pattern' && (
-                <FormError errorMessage={REG_EXP.email.condition} />
-              )
-            )}
-          </>
-        </Input>
+        />
+
         <Input
           id="login__password"
           label="비밀번호"
           type="password"
-          placeholder="Password"
+          placeholder="비밀번호를 입력하세요"
           register={register('password', {
             required: '비밀번호를 입력하세요',
             pattern:
@@ -102,18 +98,14 @@ export default function Login() {
                 ? REG_EXP.password.pattern
                 : undefined,
           })}
+        />
+        <MenuButton
+          type="submit"
+          className="rounded-md bg-[#6BA6FF] text-base font-bold text-white"
         >
-          {errors.password?.message ? (
-            <FormError errorMessage={errors.password.message} />
-          ) : (
-            errors.password?.type === 'pattern' && (
-              <FormError errorMessage={REG_EXP.password.condition} />
-            )
-          )}
-        </Input>
-        <Button type="submit" canClick={isValid} loading={loading}>
           로그인
-        </Button>
+        </MenuButton>
+        {printErrorText && <FormError top="-1.75rem" error={printErrorText} />}
       </form>
     </>
   );
