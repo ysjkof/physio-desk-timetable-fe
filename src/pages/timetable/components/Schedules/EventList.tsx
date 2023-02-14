@@ -20,15 +20,13 @@ const EventList = ({ events }: { events: ISchedules }) => {
     <div className="flex basis-full flex-col pl-2 pr-6">
       <div className="timetable-date-title">예약 목록</div>
       <ul className="flex h-screen flex-col gap-4 overflow-y-scroll shadow-b">
-        {sortedEvents.map((event) => {
-          return <EventListItem key={event.id} event={event} />;
-        })}
-        {sortedEvents.map((event) => {
-          return <EventListItem key={event.id} event={event} />;
-        })}
-        {sortedEvents.map((event) => {
-          return <EventListItem key={event.id} event={event} />;
-        })}
+        {sortedEvents.length === 0 ? (
+          <span className="mt-10 text-center text-xl">예약이 없습니다</span>
+        ) : (
+          sortedEvents.map((event) => {
+            return <EventListItem key={event.id} event={event} />;
+          })
+        )}
       </ul>
     </div>
   );
@@ -74,23 +72,6 @@ const EventListItemIcon = () => {
     <div className="flex aspect-square h-full items-center justify-center rounded-lg bg-[#6BA6FF] p-1 text-white">
       <PersonPlus className="h-full w-full" />
     </div>
-  );
-};
-
-interface PagesButtonProps {
-  pages: number[];
-  setPage: (page: number) => void;
-}
-
-const PagesButton = ({ pages, setPage }: PagesButtonProps) => {
-  return (
-    <>
-      {pages.map((page) => (
-        <button key={page} type="button" onClick={() => setPage(page)}>
-          {page}
-        </button>
-      ))}
-    </>
   );
 };
 
