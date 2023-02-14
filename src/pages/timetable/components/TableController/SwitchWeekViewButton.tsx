@@ -5,7 +5,7 @@ const SwitchWeekViewButton = () => {
   const isWeekCalendar = useStore((state) => state.isWeekCalendar);
 
   const toggleWeekOrDay = () => {
-    toggleIsWeekCalendar();
+    toggleIsWeekCalendar(!isWeekCalendar);
   };
 
   return (

@@ -97,7 +97,7 @@ export const resetStore = () => useStore.setState(() => initialState);
 
 // 시간표
 
-export const toggleIsWeekCalendar = (value?: boolean) =>
+export const setIsWeekCalendar = (value?: boolean) =>
   useStore.setState((state) => ({
     isWeekCalendar:
       typeof value === 'undefined' ? !state.isWeekCalendar : value,
@@ -160,6 +160,11 @@ export const pickClinicId = (clinicId: number) => {
 export const toggleIsBigGlobalAside = (value: boolean) => {
   setGlobalAside(value);
   localStorageUtils.set({ key: 'isBigGlobalAside', value });
+};
+
+export const toggleIsWeekCalendar = (value: boolean) => {
+  setIsWeekCalendar(value);
+  localStorageUtils.set({ key: 'isWeekCalendar', value });
 };
 
 export const toggleShowCancelOfTimetable = (

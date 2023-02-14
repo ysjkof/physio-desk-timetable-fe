@@ -2,7 +2,9 @@ import { LATEST_STORAGE_VERSION } from '../../constants/constants';
 import { TimeDurationOfTimetable } from '../../models';
 import {
   setClinicId,
+  setGlobalAside,
   setHiddenUsers,
+  setIsWeekCalendar,
   setShowCancelOfTimetable,
   setShowNoshowOfTimetable,
   setTimeDurationOfTimetable,
@@ -85,12 +87,22 @@ export const loadShowCancel = (user: UserIdAndName) => {
     key: 'showCancelOfTimetable',
     ...user,
   });
-  setShowCancelOfTimetable(typeof value === 'boolean' || true);
+  setShowCancelOfTimetable(typeof value === 'boolean' ? value : true);
 };
 export const loadShowNoshow = (user: UserIdAndName) => {
   const value = localStorageUtils.get({
     key: 'showNoshowOfTimetable',
     ...user,
   });
-  setShowNoshowOfTimetable(typeof value === 'boolean' || true);
+  setShowNoshowOfTimetable(typeof value === 'boolean' ? value : true);
+};
+
+export const loadIsWeekCalendar = () => {
+  const value = localStorageUtils.get({ key: 'isWeekCalendar' });
+  setIsWeekCalendar(typeof value === 'boolean' ? value : true);
+};
+
+export const loadIsBigGlobalAside = () => {
+  const value = localStorageUtils.get({ key: 'isBigGlobalAside' });
+  setGlobalAside(typeof value === 'boolean' ? value : true);
 };

@@ -6,6 +6,8 @@ import {
   initHiddenUsers,
   initPickedClinicId,
   initTimeDurationOfTimetable,
+  loadIsBigGlobalAside,
+  loadIsWeekCalendar,
   loadShowCancel,
   loadShowNoshow,
 } from './initialize.utils';
@@ -42,6 +44,8 @@ const Initialize = ({ children }: PropsWithChildren) => {
     initHiddenUsers(user);
     loadShowCancel(user);
     loadShowNoshow(user);
+    loadIsWeekCalendar();
+    loadIsBigGlobalAside();
 
     setLoading(false);
   }, [meData, myClinicsStatusData]);

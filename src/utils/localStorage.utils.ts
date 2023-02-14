@@ -95,6 +95,7 @@ export const PUBLIC_LOCAL_STORAGE_KEY_VALUE = {
   token: 'muool-token',
   createdAt: 'muool-createdAt',
   isBigGlobalAside: 'muool-is-big-global-aside',
+  isWeekCalendar: 'muool-is-week-calendar',
 } as const;
 
 export const LOCAL_STORAGE_KEY_VALUE = {
