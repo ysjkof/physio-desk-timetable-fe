@@ -10,7 +10,7 @@ const MemberName = ({
   return (
     <div
       className={cls(
-        'USER_COLS relative mb-1 grid h-9 gap-2',
+        'timetable-member-name-title grid',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
       style={viewPeriodStyle}

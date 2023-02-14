@@ -16,7 +16,7 @@ const ScheduleBox = ({
   return (
     <div
       className={cls(
-        'USER_COLS relative grid gap-2',
+        'relative grid gap-2',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
       style={viewPeriodStyle}
