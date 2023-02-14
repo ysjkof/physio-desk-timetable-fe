@@ -61,7 +61,7 @@ const AlignmentButtons = ({ setMembers }: AlignmentButtonsProps) => {
     });
   };
   return (
-    <div className="flex gap-8 border-b py-2 px-4 text-xs">
+    <div className="flex gap-8 border-y py-2 px-4 text-xs">
       <button
         type="button"
         className="flex gap-1"
