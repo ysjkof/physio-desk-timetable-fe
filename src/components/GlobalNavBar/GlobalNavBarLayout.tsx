@@ -8,18 +8,14 @@ export default function GlobalNavBarLayout({ children }: PropsWithChildren) {
   const location = useLocation();
   const { pathname } = location;
 
-  const isTimetable = pathname.startsWith(ROUTES.timetable);
-  const isDashboard = pathname.startsWith(ROUTES.dashboard);
   const isDocs = pathname.startsWith(ROUTES.docs);
 
   return (
     <header
       id="global-header"
       className={cls(
-        'relative z-40 flex items-center bg-white px-10 transition-all duration-200',
-        isTimetable || isDashboard ? 'py-2' : 'py-6',
-        isDocs ? 'shadow-md' : '',
-        isDashboard ? 'border-b' : ''
+        'relative z-40 flex items-center bg-white px-10 py-6 transition-all duration-200',
+        isDocs ? 'shadow-md' : ''
       )}
     >
       <Link to="/">
