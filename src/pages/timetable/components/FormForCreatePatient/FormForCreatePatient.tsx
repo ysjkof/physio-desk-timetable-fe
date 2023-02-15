@@ -1,15 +1,11 @@
-import { useForm } from 'react-hook-form';
-import {
-  Checkbox,
-  DateForm,
-  InputWrapper,
-  MenuButton,
-} from '../../../../components';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Checkbox, InputWrapper, MenuButton } from '../../../../components';
 import { Input, Textarea } from '../FormForReservation/InputForReserve';
 import { Buttons } from '../FormForReservation/FormForReservation';
 import { GENDER_KOR } from '../../../../constants/constants';
 import { REG_EXP } from '../../../../constants/regex';
 import { useCreatePatient } from '../../../../hooks';
+import { isValidDateFrom8Digit } from '../../../../utils/dateUtils';
 import type { FormForCreatePatientFields } from '../../../../types/formTypes';
 import type { CloseAction } from '../../../../types/propsTypes';
 
@@ -19,17 +15,15 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
   const {
     handleSubmit,
     register,
-    getValues,
-    setValue,
     formState: { errors },
+    setError,
   } = useForm<FormForCreatePatientFields>();
 
-  const setParentValue = (date: Date) => {
-    setValue('birthday', date);
-  };
-
-  const onSubmit = () => {
-    createPatientMutation(getValues(), closeAction);
+  const onSubmit: SubmitHandler<FormForCreatePatientFields> = (data) => {
+    if (data.birthday && !isValidDateFrom8Digit(String(data.birthday))) {
+      return setError('birthday', { message: '잘못된 날짜입니다.' });
+    }
+    createPatientMutation(data, closeAction);
   };
 
   const nameError =
@@ -37,6 +31,9 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
     (errors.name?.type === 'pattern' && REG_EXP.personName.condition);
   const genderError = errors.gender?.message;
   const memoError = errors.memo?.message;
+  const birthError =
+    errors.birthday?.message ||
+    (errors.birthday?.type === 'pattern' && REG_EXP.birthday.condition);
 
   return (
     <form
@@ -68,10 +65,14 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
             ))}
           </div>
         </InputWrapper>
-        <InputWrapper label="생일">
-          <DateForm
-            date={getValues('birthday')}
-            setParentValue={setParentValue}
+        <InputWrapper label="생일" error={birthError}>
+          <Input
+            label="생일"
+            type="number"
+            placeholder="생년월일 숫자만 8자를 입력하세요"
+            register={register('birthday', {
+              pattern: REG_EXP.birthday.pattern,
+            })}
           />
         </InputWrapper>
         <InputWrapper label="메모" error={memoError}>

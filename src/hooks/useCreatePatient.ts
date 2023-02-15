@@ -1,15 +1,20 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_PATIENT_DOCUMENT } from '../graphql';
 import { setToast, useStore } from '../store';
-import type { CreatePatientMutation } from '../types/generatedTypes';
+import { getDateFromStr8Digit } from '../utils/dateUtils';
+import type {
+  CreatePatientMutation,
+  CreatePatientMutationVariables,
+} from '../types/generatedTypes';
 import type { FormForCreatePatientFields } from '../types/formTypes';
 
 export const useCreatePatient = () => {
   const clinicId = useStore((state) => state.pickedClinicId);
 
-  const [createMutation, { loading }] = useMutation<CreatePatientMutation>(
-    CREATE_PATIENT_DOCUMENT
-  );
+  const [createMutation, { loading }] = useMutation<
+    CreatePatientMutation,
+    CreatePatientMutationVariables
+  >(CREATE_PATIENT_DOCUMENT);
 
   const createPatientMutation = (
     { name, gender, memo, birthday }: FormForCreatePatientFields,
@@ -24,7 +29,7 @@ export const useCreatePatient = () => {
           gender,
           memo,
           clinicId,
-          ...(birthday && { birthday }),
+          ...(birthday && { birthday: getDateFromStr8Digit(String(birthday)) }),
         },
       },
       onCompleted(data) {

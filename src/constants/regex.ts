@@ -31,6 +31,10 @@ export const REG_EXP = {
     condition: '3~15자로 한글, 영문, 숫자, 특수문자(.@!%*#&)를 사용',
     maxLength: 15,
   },
+  birthday: {
+    pattern: /^(19|20)\d\d(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/,
+    condition: '생년월일 순으로 8글자입니다',
+  },
 };
 
 const year = /^(19|20)\d{2}$/;

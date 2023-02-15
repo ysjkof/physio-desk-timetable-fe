@@ -21,7 +21,7 @@ export interface FormForDayoffFields {
 export interface FormForCreatePatientFields {
   name: string;
   gender: 'male' | 'female';
-  birthday?: Date;
+  birthday?: number;
   memo?: string;
 }
 
