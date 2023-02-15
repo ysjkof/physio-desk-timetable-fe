@@ -283,3 +283,33 @@ export function convertMinuteFromDate(date: Date) {
 export function isPastDate(dateToCheck: Date, referenceDate: Date) {
   return dateToCheck.getTime() < referenceDate.getTime();
 }
+
+export function isValidDateFrom8Digit(dateString: string) {
+  const year = parseInt(dateString.substring(0, 4), 10);
+  const month = parseInt(dateString.substring(4, 6), 10);
+  const day = parseInt(dateString.substring(6, 8), 10);
+
+  const date = new Date(year, month - 1, day);
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    return false;
+  }
+
+  // Check the number of days in the month
+  const daysInMonth = new Date(year, month, 0).getDate();
+  if (day > daysInMonth) {
+    return false;
+  }
+
+  return true;
+}
+
+export function getDateFromStr8Digit(dateString: string) {
+  const year = parseInt(dateString.substring(0, 4), 10);
+  const month = parseInt(dateString.substring(4, 6), 10) - 1;
+  const day = parseInt(dateString.substring(6, 8), 10);
+  return new Date(year, month, day);
+}
