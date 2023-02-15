@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useCreateClinic } from '../../../hooks';
 import { REG_EXP } from '../../../constants/regex';
-import type { FormForCreateClinicFields } from '../../../types/form.types';
+import type { FormForCreateClinicFields } from '../../../types/formTypes';
 
 const useFormForCreateClinic = () => {
   const {

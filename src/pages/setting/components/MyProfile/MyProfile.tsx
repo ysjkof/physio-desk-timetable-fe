@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import FormForEditMyProfile from './FormForEditMyProfile';
 import FormForEditEmail from './FormForEditEmail';
 import { useMe } from '../../../../hooks';
-import type { SettingOutletContext } from '../../../../types/common.types';
+import type { SettingOutletContext } from '../../../../types/commonTypes';
 
 const MyProfile = () => {
   const { outletWidth } = useOutletContext<SettingOutletContext>();

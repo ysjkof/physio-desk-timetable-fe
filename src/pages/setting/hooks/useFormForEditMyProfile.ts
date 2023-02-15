@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { setToast } from '../../../store';
 import { useEditProfile, useMe } from '../../../hooks';
-import type { FormForEditMyProfileFields } from '../../../types/form.types';
+import type { FormForEditMyProfileFields } from '../../../types/formTypes';
 
 const useFormForEditMyProfile = () => {
   const [meData] = useMe();

@@ -6,7 +6,7 @@ import {
 import { Buttons } from '../../../timetable/components/FormForReservation/FormForReservation';
 import { REG_EXP } from '../../../../constants/regex';
 import { useFormForCreatePrescription } from '../../hooks/useFormForCreatePrescription';
-import type { CloseAction } from '../../../../types/props.types';
+import type { CloseAction } from '../../../../types/propsTypes';
 
 const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
   const { handleSubmit, register, atomPrescription, error } =

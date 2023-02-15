@@ -1,7 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import { useState } from 'react';
 import { SEARCH_PATIENT_DOCUMENT } from '../graphql';
-import { SearchPatientQuery } from '../types/generated.types';
+import { SearchPatientQuery } from '../types/generatedTypes';
 import { useStore } from '../store';
 
 export const useSearchPatient = () => {

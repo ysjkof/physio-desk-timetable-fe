@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFrom4DigitTime, getTimeLength } from '../../../../utils/date.utils';
+import { getFrom4DigitTime, getTimeLength } from '../../../../utils/dateUtils';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
 } from '../../../../constants/constants';
-import { cls } from '../../../../utils/common.utils';
-import type { PickedReservationType } from '../../../../types/common.types';
+import { cls } from '../../../../utils/commonUtils';
+import type { PickedReservationType } from '../../../../types/commonTypes';
 
 interface ReserveBtnProps {
   label: string;

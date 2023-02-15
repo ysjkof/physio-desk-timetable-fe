@@ -13,7 +13,7 @@ import {
 } from './initialize.utils';
 import { useMe } from '../../hooks';
 import { GET_MY_CLINICS_STATUS_DOCUMENT } from '../../graphql';
-import { GetMyClinicsStatusQuery } from '../../types/generated.types';
+import { GetMyClinicsStatusQuery } from '../../types/generatedTypes';
 
 const Initialize = ({ children }: PropsWithChildren) => {
   useStore((state) => state.pickedClinicId); // 리렌더용

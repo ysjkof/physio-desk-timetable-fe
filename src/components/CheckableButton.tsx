@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Check } from '../svgs';
-import { cls } from '../utils/common.utils';
+import { cls } from '../utils/commonUtils';
 
 interface CheckableButtonProps {
   label: string;

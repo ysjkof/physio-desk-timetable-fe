@@ -11,7 +11,7 @@ import type {
   MemberOfClient,
   ClinicOfGetMyClinicTruth,
   MemberWithEvent,
-} from '../types/common.types';
+} from '../types/commonTypes';
 
 interface SchedulesProps {
   data: ReservationInList[];

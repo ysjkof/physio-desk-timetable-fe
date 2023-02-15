@@ -4,7 +4,7 @@ import { DatepickerContext } from './DatepickerStore';
 import { DatepickerNavigation } from './DatepickerNavigation';
 import { DatepickerMain } from './DatepickerMain';
 import { DatepickerButtons } from './DatepickerButtons';
-import { DatepickerProps } from '../../types/props.types';
+import { DatepickerProps } from '../../types/propsTypes';
 
 export const Datepicker = ({
   closeAction,

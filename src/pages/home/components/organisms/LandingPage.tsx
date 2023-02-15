@@ -15,7 +15,7 @@ import DocsEventBox from '../molecules/DocsEventBox';
 import { Check } from '../../../../svgs';
 import H1 from '../atoms/H1';
 import H3 from '../atoms/H3';
-import { ReservationState } from '../../../../types/generated.types';
+import { ReservationState } from '../../../../types/generatedTypes';
 import { useStore } from '../../../../store';
 
 export default function LandingPage() {

@@ -1,18 +1,18 @@
-import { ACCEPT_INVITATION_DOCUMENT } from './acceptInvitation.gql';
-import { REFUSE_INVITATION_DOCUMENT } from './refuseInvitation.gql';
-import { CREATE_CLINIC_DOCUMENT } from './createClinic.gql';
-import { FIND_MY_CLINICS_DOCUMENT } from './findMyClinics.gql';
-import { FIND_MY_MEMBERS_DOCUMENT } from './findMyMembers.gql';
-import { GET_CLINIC_DOCUMENT } from './getClinic.gql';
-import { DEACTIVATE_CLINIC_DOCUMENT } from './deactivateClinic.gql';
-import { INVITE_USER_DOCUMENT } from './inviteUser.gql';
-import { LEAVE_CLINIC_DOCUMENT } from './leaveClinic.gql';
+import { ACCEPT_INVITATION_DOCUMENT } from './acceptInvitationGql';
+import { REFUSE_INVITATION_DOCUMENT } from './refuseInvitationGql';
+import { CREATE_CLINIC_DOCUMENT } from './createClinicGql';
+import { FIND_MY_CLINICS_DOCUMENT } from './findMyClinicsGql';
+import { FIND_MY_MEMBERS_DOCUMENT } from './findMyMembersGql';
+import { GET_CLINIC_DOCUMENT } from './getClinicGql';
+import { DEACTIVATE_CLINIC_DOCUMENT } from './deactivateClinicGql';
+import { INVITE_USER_DOCUMENT } from './inviteUserGql';
+import { LEAVE_CLINIC_DOCUMENT } from './leaveClinicGql';
 import {
   COMMON_CLINIC_FIELDS,
   COMMON_MEMBER_FIELDS,
-} from './_clinicsFragments.gql';
-import { GET_MEMBER_DOCUMENT } from './getMember.gql';
-import { GET_MY_CLINICS_STATUS_DOCUMENT } from './getMyClinicsStatus.gql';
+} from './_clinicsFragmentsGql';
+import { GET_MEMBER_DOCUMENT } from './getMemberGql';
+import { GET_MY_CLINICS_STATUS_DOCUMENT } from './getMyClinicsStatusGql';
 
 export {
   ACCEPT_INVITATION_DOCUMENT,

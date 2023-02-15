@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useForm, UseFormSetValue } from 'react-hook-form';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { useAutoComplete } from '../../../../hooks';
 import { PickedPrescriptions } from '../../../../models';
 import { InputWithRef } from './InputForReserve';
 import { SelectedValue } from './SelectedValue';
 import { PrescriptionTotal } from './PrescriptionTotal';
-import type { FormOfReserveFields } from '../../../../types/form.types';
-import type { Prescription } from '../../../../types/generated.types';
-import type { PickedPrescription } from '../../../../types/common.types';
+import type { FormOfReserveFields } from '../../../../types/formTypes';
+import type { Prescription } from '../../../../types/generatedTypes';
+import type { PickedPrescription } from '../../../../types/commonTypes';
 
 interface AutoCompleteForPrescriptionProps {
   label: string;

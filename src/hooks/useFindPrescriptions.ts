@@ -4,7 +4,7 @@ import { useStore } from '../store';
 import type {
   FindPrescriptionsQuery,
   FindPrescriptionsQueryVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 export const useFindPrescriptions = (): [
   FindPrescriptionsQuery['findPrescriptions'] | null | undefined,

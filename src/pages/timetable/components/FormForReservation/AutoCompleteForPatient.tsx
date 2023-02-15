@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { checkLengthIsZero, cls } from '../../../../utils/common.utils';
+import { checkLengthIsZero, cls } from '../../../../utils/commonUtils';
 import { InputWithRef } from './InputForReserve';
 import { useSearchPatient } from '../../../../hooks';
 import { useAutoComplete } from '../../../../hooks/useAutoComplete';
 import { SelectedValue } from './SelectedValue';
-import type { SearchPatientQuery } from '../../../../types/generated.types';
-import type { PatientInSearch } from '../../../../types/common.types';
+import type { SearchPatientQuery } from '../../../../types/generatedTypes';
+import type { PatientInSearch } from '../../../../types/commonTypes';
 
 interface AutoCompleteForPatientProps {
   label: string;

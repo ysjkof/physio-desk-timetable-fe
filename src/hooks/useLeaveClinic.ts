@@ -4,7 +4,7 @@ import { setToast } from '../store';
 import type {
   LeaveClinicMutation,
   LeaveClinicMutationVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 export const useLeaveClinic = ({ memberId }: { memberId: number }) => {
   const [leaveInvitationMutation] = useMutation<

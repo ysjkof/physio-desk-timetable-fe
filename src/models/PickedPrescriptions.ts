@@ -1,5 +1,5 @@
-import type { PickedPrescription } from '../types/common.types';
-import type { Prescription } from '../types/generated.types';
+import type { PickedPrescription } from '../types/commonTypes';
+import type { Prescription } from '../types/generatedTypes';
 
 type Prescriptions = Prescription[] | null | undefined;
 

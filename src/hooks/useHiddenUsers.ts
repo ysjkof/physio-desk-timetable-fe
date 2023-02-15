@@ -1,7 +1,7 @@
 import { setHiddenUsers } from '../store';
-import { localStorageUtils } from '../utils/localStorage.utils';
-import type { UserIdAndName } from '../types/common.types';
-import type { ClinicIdAndHiddenUsers } from '../types/store.types';
+import { localStorageUtils } from '../utils/localStorageUtils';
+import type { UserIdAndName } from '../types/commonTypes';
+import type { ClinicIdAndHiddenUsers } from '../types/storeTypes';
 
 export const useHiddenUsers = () => {
   const initialize = (idAndName: UserIdAndName, clinicId: number) => {

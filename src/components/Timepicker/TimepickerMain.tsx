@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { TimeDurationOfTimetable } from '../../models';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../../utils/commonUtils';
 import { TimepickerContext } from './TimepickerStore';
 
 export const TimepickerMain = () => {

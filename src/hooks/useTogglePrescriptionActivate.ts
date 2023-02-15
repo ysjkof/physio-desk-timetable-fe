@@ -9,8 +9,8 @@ import type {
   EditPrescriptionMutationVariables,
   FindPrescriptionsQuery,
   FindPrescriptionsQueryVariables,
-} from '../types/generated.types';
-import { changeValueInArray } from '../utils/common.utils';
+} from '../types/generatedTypes';
+import { changeValueInArray } from '../utils/commonUtils';
 
 export const useTogglePrescriptionActivate = () => {
   const clinicId = useStore((state) => state.pickedClinicId);

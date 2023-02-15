@@ -13,7 +13,7 @@ import {
   compareDateMatch,
   getHowManyDayFromMillisecond,
   getYMD,
-} from '../../../../utils/date.utils';
+} from '../../../../utils/dateUtils';
 import TableChartColLayout from '../../../legacy_dashboard/components/molecules/TableChartColLayout';
 
 import { STATISTICS_LABEL } from '../../../../constants/constants';
@@ -21,7 +21,7 @@ import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
-} from '../../../../types/common.types';
+} from '../../../../types/commonTypes';
 
 const Loading = lazy(() => import('../../../../components/Loading'));
 

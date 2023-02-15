@@ -1,11 +1,11 @@
 import { useMutation } from '@apollo/client';
 import { ACCEPT_INVITATION_DOCUMENT } from '../graphql';
 import { setToast, useStore } from '../store';
-import { cacheUpdateMemberAccepted } from '../utils/apollo.utils';
+import { cacheUpdateMemberAccepted } from '../utils/apolloUtils';
 import type {
   AcceptInvitationMutation,
   AcceptInvitationMutationVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 export const useAcceptInvitation = ({ memberId }: { memberId: number }) => {
   const [acceptInvitationMutation] = useMutation<

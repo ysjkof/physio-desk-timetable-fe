@@ -1,4 +1,4 @@
-import type { PickedPrescription } from '../../../../types/common.types';
+import type { PickedPrescription } from '../../../../types/commonTypes';
 
 interface PrescriptionTotalProps {
   selectedPrescription: PickedPrescription;

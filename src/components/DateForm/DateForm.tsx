@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../../utils/commonUtils';
 import Datepicker from '../Datepicker';
 import Timepicker from '../Timepicker';
 import { InputForDateForm } from './InputForDateForm';
-import type { HoursAndMinutes } from '../../types/common.types';
+import type { HoursAndMinutes } from '../../types/commonTypes';
 
 interface DateFormFields {
   year: number;

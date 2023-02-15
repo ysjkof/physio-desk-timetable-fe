@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
-import { ALL_PATIENT_FIELDS } from '../patients/_patientsFragments.gql';
-import { COMMON_PRESCRIPTION_FIELDS } from '../prescriptions/_prescriptionsFragments.gql';
-import { USER_ID_NAME_EMAIL_FIELDS } from '../users/_usersFragments.gql';
-import { COMMON_RESERVATION_FIELDS } from './_reservationsFragments.gql';
+import { ALL_PATIENT_FIELDS } from '../patients/_patientsFragmentsGql';
+import { COMMON_PRESCRIPTION_FIELDS } from '../prescriptions/_prescriptionsFragmentsGql';
+import { USER_ID_NAME_EMAIL_FIELDS } from '../users/_usersFragmentsGql';
+import { COMMON_RESERVATION_FIELDS } from './_reservationsFragmentsGql';
 
 export const LIST_RESERVATIONS_DOCUMENT = gql`
   ${COMMON_RESERVATION_FIELDS}

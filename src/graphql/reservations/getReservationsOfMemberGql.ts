@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { COMMON_RESERVATION_FIELDS } from './_reservationsFragments.gql';
+import { COMMON_RESERVATION_FIELDS } from './_reservationsFragmentsGql';
 import { COMMON_PATIENT_FIELDS } from '../patients';
 
 export const GET_RESERVATIONS_OF_MEMBER_DOCUMENT = gql`

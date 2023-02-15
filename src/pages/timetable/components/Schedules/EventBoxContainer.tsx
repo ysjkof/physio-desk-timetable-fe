@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { get4DigitHour, getTimeLength } from '../../../../utils/date.utils';
+import { get4DigitHour, getTimeLength } from '../../../../utils/dateUtils';
 import EventBox from './EventBox';
 import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
-import type { ReservationInList } from '../../../../types/common.types';
+import type { ReservationInList } from '../../../../types/commonTypes';
 
 interface EventBoxContainerProps {
   userIndex: number;

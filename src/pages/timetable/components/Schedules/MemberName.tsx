@@ -1,6 +1,6 @@
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { USER_COLORS } from '../../../../constants/constants';
-import type { MemberNameProps } from '../../../../types/props.types';
+import type { MemberNameProps } from '../../../../types/propsTypes';
 
 const MemberName = ({
   userLength,

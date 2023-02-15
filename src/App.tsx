@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { getApolloClient } from './apollo';
 import { GlobalLayout } from './components';
 import { setAuthToken, setClient, useStore } from './store';
-import { localStorageUtils } from './utils/localStorage.utils';
+import { localStorageUtils } from './utils/localStorageUtils';
 
 function App() {
   useStore((state) => state.isLoggedIn); // 새로고침 시 리렌더 위한 사용

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { USER_COLORS } from '../../../../constants/constants';
 import { CheckableButton } from '../../../../components';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { useGetClinic } from '../../../../hooks';
 import { toggleHiddenUsers, useStore } from '../../../../store';
 

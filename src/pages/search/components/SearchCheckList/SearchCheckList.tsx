@@ -1,5 +1,5 @@
 import { UseFormRegister } from 'react-hook-form';
-import { renameUseSplit } from '../../../../utils/common.utils';
+import { renameUseSplit } from '../../../../utils/commonUtils';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
 import { useFindMyMembers } from '../../../../hooks';
 import { useStore } from '../../../../store';

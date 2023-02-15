@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ChevronDown, ChevronUp } from '../../../../svgs';
 import { ListCell } from '../../../../components';
 import { PreviousReservation } from './PreviousReservation';
-import type { Patient } from '../../../../types/generated.types';
+import type { Patient } from '../../../../types/generatedTypes';
 
 interface SearchListProps
   extends Pick<

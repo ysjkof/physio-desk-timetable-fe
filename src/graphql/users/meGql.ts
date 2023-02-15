@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import {
   COMMON_CLINIC_FIELDS,
   COMMON_MEMBER_FIELDS,
-} from '../clinics/_clinicsFragments.gql';
+} from '../clinics/_clinicsFragmentsGql';
 
 export const ME_DOCUMENT = gql`
   ${COMMON_CLINIC_FIELDS}

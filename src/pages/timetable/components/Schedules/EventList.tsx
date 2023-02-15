@@ -6,14 +6,14 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { PropsWithChildren } from 'react';
-import { getStringOfTime } from '../../../../utils/date.utils';
+import { getStringOfTime } from '../../../../utils/dateUtils';
 import { ChevronLeft, ChevronRight, PersonPlus } from '../../../../svgs';
 import { setPickedDate, useStore } from '../../../../store';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import type {
   ReservationInList,
   ISchedules,
-} from '../../../../types/common.types';
+} from '../../../../types/commonTypes';
 
 const EventList = ({ events }: { events: ISchedules }) => {
   const sortedEvents = events.members

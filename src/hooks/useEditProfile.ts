@@ -4,12 +4,12 @@ import { setToast, useStore } from '../store';
 import {
   cacheUpdatePersonalClinicName,
   cacheUpdateUserName,
-} from '../utils/apollo.utils';
+} from '../utils/apolloUtils';
 import {
   ClinicType,
   type EditProfileMutation,
   type EditProfileMutationVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 import { useMe } from './useMe';
 
 interface Input {

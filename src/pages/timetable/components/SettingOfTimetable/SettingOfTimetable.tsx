@@ -1,6 +1,6 @@
 import { motion, Variants } from 'framer-motion';
 import { useState } from 'react';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { ToggleShowButtons } from './ToggleShowButtons';
 import { TimeDurationSelector } from './TimeDurationSelector';
 

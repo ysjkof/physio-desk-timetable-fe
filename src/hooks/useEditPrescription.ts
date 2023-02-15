@@ -4,13 +4,13 @@ import {
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
 import { setToast, useStore } from '../store';
-import { changeValueInArray } from '../utils/common.utils';
+import { changeValueInArray } from '../utils/commonUtils';
 import type {
   EditPrescriptionMutation,
   EditPrescriptionMutationVariables,
   FindPrescriptionsQuery,
   FindPrescriptionsQueryVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 // FormForEditPrescriptionFields의 값과 같다. EditPrescriptionInput가 InputMaybe<Scalars['String]>> 이런 타입을 쓰기 때문에 여기서 따로 선언함
 interface Input {

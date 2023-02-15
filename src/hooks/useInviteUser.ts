@@ -4,7 +4,7 @@ import { setToast } from '../store';
 import type {
   InviteUserMutation,
   InviteUserMutationVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 export const useInviteUser = () => {
   return useMutation<InviteUserMutation, InviteUserMutationVariables>(

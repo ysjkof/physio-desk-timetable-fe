@@ -4,11 +4,11 @@ import { setAlert, setToast, useStore } from '../store';
 import {
   cacheAddClinicToMyClinics,
   cacheUpdateMemberOfMe,
-} from '../utils/apollo.utils';
+} from '../utils/apolloUtils';
 import type {
   CreateClinicMutation,
   CreateClinicMutationVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 export const useCreateClinic = () => {
   const client = useStore((state) => state.client);

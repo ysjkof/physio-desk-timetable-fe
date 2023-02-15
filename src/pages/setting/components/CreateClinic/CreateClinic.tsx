@@ -1,6 +1,6 @@
 import { useOutletContext } from 'react-router-dom';
 import FormForCreateClinic from './FormForCreateClinic';
-import type { SettingOutletContext } from '../../../../types/common.types';
+import type { SettingOutletContext } from '../../../../types/commonTypes';
 
 const CreateClinic = () => {
   const { outletWidth } = useOutletContext<SettingOutletContext>();

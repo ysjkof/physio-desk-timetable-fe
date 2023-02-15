@@ -3,8 +3,8 @@ import { FIND_MY_CLINICS_DOCUMENT } from '../graphql';
 import type {
   FindMyClinicsQuery,
   FindMyClinicsQueryVariables,
-} from '../types/generated.types';
-import type { ClinicsOfFindMyClinics } from '../types/common.types';
+} from '../types/generatedTypes';
+import type { ClinicsOfFindMyClinics } from '../types/commonTypes';
 
 interface UseFindMyClinicsProps {
   hasInactivate?: boolean;

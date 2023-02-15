@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../../utils/commonUtils';
 import { CogSixTooth, Building, Table } from '../../svgs';
 import ClinicSelector from './ClinicSelector';
 import { useLogout } from '../../hooks';

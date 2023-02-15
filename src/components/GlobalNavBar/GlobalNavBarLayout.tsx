@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../router/routes';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../../utils/commonUtils';
 import LogoOfText from '../LogoOfText';
 
 export default function GlobalNavBarLayout({ children }: PropsWithChildren) {

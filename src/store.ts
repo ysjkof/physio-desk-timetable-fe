@@ -4,7 +4,7 @@ import { TABLE_TIME_GAP } from './constants/constants';
 import {
   localStorageUtils,
   updateLocalStorageHiddenUsers,
-} from './utils/localStorage.utils';
+} from './utils/localStorageUtils';
 import type {
   ToastState,
   TableTimeOptions,
@@ -12,9 +12,9 @@ import type {
   UserIdAndName,
   ApolloClientType,
   IdAndName,
-} from './types/common.types';
-import type { HiddenUsersArr, HiddenUsersSet } from './types/store.types';
-import type { AlertType, ConfirmStateType } from './types/props.types';
+} from './types/commonTypes';
+import type { HiddenUsersArr, HiddenUsersSet } from './types/storeTypes';
+import type { AlertType, ConfirmStateType } from './types/propsTypes';
 
 interface ZustandStoreState {
   user: UserIdAndName;

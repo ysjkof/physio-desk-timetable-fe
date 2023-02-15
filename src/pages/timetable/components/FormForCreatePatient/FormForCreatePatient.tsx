@@ -10,8 +10,8 @@ import { Buttons } from '../FormForReservation/FormForReservation';
 import { GENDER_KOR } from '../../../../constants/constants';
 import { REG_EXP } from '../../../../constants/regex';
 import { useCreatePatient } from '../../../../hooks';
-import type { FormForCreatePatientFields } from '../../../../types/form.types';
-import type { CloseAction } from '../../../../types/props.types';
+import type { FormForCreatePatientFields } from '../../../../types/formTypes';
+import type { CloseAction } from '../../../../types/propsTypes';
 
 const FormForCreatePatient = ({ closeAction }: CloseAction) => {
   const { createPatientMutation } = useCreatePatient();

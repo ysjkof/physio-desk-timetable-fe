@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { simpleCheckGQLError } from '../../../utils/apollo.utils';
+import { simpleCheckGQLError } from '../../../utils/apolloUtils';
 import {
   CREATE_RESERVATION_DOCUMENT,
   EDIT_RESERVATION_DOCUMENT,
@@ -10,8 +10,8 @@ import type {
   CreateReservationMutation,
   EditReservationInput,
   EditReservationMutation,
-} from '../../../types/generated.types';
-import type { CloseAction } from '../../../types/props.types';
+} from '../../../types/generatedTypes';
+import type { CloseAction } from '../../../types/propsTypes';
 
 interface UseDayoffProps extends CloseAction {
   isCreate: boolean;

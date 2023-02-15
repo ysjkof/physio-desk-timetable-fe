@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { ALL_PRESCRIPTION_FIELDS } from './_prescriptionsFragments.gql';
+import { ALL_PRESCRIPTION_FIELDS } from './_prescriptionsFragmentsGql';
 
 export const FIND_PRESCRIPTIONS_DOCUMENT = gql`
   ${ALL_PRESCRIPTION_FIELDS}

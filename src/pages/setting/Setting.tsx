@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PropsWithChildren } from 'react';
 import { useMe, useWindowSize } from '../../hooks';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../../utils/commonUtils';
 import { Building, BuildingPlus, User } from '../../svgs';
 
 const Setting = () => {

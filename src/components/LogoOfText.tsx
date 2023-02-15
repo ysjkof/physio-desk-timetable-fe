@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import { cls } from '../utils/common.utils';
+import { cls } from '../utils/commonUtils';
 
 interface LogoOfTextProps extends HTMLAttributes<HTMLHeadElement> {
   size?: 1 | 2;

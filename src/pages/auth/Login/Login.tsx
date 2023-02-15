@@ -6,7 +6,7 @@ import { setToast } from '../../../store';
 import { REG_EXP } from '../../../constants/regex';
 import { MUOOL } from '../../../constants/constants';
 import { LOGIN_DOCUMENT } from '../../../graphql';
-import type { LoginInput, LoginMutation } from '../../../types/generated.types';
+import type { LoginInput, LoginMutation } from '../../../types/generatedTypes';
 import { MenuButton, useLogin } from '../../../components';
 import { Input } from '../../timetable/components/FormForReservation/InputForReserve';
 import FormError from '../../../components/FormError';

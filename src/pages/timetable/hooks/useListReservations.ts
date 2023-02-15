@@ -1,13 +1,13 @@
 import { QueryResult, useQuery } from '@apollo/client';
 import { endOfDay, nextSaturday } from 'date-fns';
-import { getSunday } from '../../../utils/date.utils';
+import { getSunday } from '../../../utils/dateUtils';
 import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
 import { setToast, useStore } from '../../../store';
 import type {
   ListReservationsQuery,
   ListReservationsQueryVariables,
-} from '../../../types/generated.types';
-import type { ResultOfListReservations } from '../../../types/common.types';
+} from '../../../types/generatedTypes';
+import type { ResultOfListReservations } from '../../../types/commonTypes';
 
 export const useListReservations = (): [
   ResultOfListReservations,

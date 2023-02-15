@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { EDIT_RESERVATION_DOCUMENT } from '../../../../graphql';
 import { MenuButton } from '../../../../components';
@@ -9,8 +9,8 @@ import { XMark } from '../../../../svgs';
 import {
   type EditReservationMutation,
   ReservationState,
-} from '../../../../types/generated.types';
-import type { ReservationInList } from '../../../../types/common.types';
+} from '../../../../types/generatedTypes';
+import type { ReservationInList } from '../../../../types/commonTypes';
 
 interface EditReservationStateProps {
   reservation: ReservationInList;

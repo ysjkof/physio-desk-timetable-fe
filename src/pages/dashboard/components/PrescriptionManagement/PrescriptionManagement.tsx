@@ -7,7 +7,7 @@ import { CreatePrescription } from '../CreatePrescription';
 import EditPrescription from '../EditPrescription/EditPrescription';
 import { useStore } from '../../../../store';
 import { useFindPrescriptions } from '../../../../hooks';
-import type { DashboardOutletContext } from '../../../../types/common.types';
+import type { DashboardOutletContext } from '../../../../types/commonTypes';
 
 const PrescriptionManagement = () => {
   const { outletWidth } = useOutletContext<DashboardOutletContext>();

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import type { ISchedules, MemberWithEvent } from './common.types';
-import { FindPrescriptionsQuery } from './generated.types';
-import { FormForEditPrescriptionFields } from './form.types';
+import type { ISchedules, MemberWithEvent } from './commonTypes';
+import { FindPrescriptionsQuery } from './generatedTypes';
+import { FormForEditPrescriptionFields } from './formTypes';
 
 // TimeTable
 export interface IUserLength {

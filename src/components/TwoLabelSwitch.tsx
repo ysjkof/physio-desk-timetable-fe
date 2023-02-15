@@ -1,4 +1,4 @@
-import { cls } from '../utils/common.utils';
+import { cls } from '../utils/commonUtils';
 
 type Label = string;
 interface SwitchProps {

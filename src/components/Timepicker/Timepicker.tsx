@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { TimepickerContext } from './TimepickerStore';
 import { TimepickerMain } from './TimepickerMain';
 import { TimepickerButtons } from './TimepickerButtons';
-import type { CloseAction } from '../../types/props.types';
-import type { HoursAndMinutes } from '../../types/common.types';
+import type { CloseAction } from '../../types/propsTypes';
+import type { HoursAndMinutes } from '../../types/commonTypes';
 
 interface TimepickerProps extends CloseAction {
   setTime: (args: HoursAndMinutes) => void;

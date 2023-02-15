@@ -6,9 +6,9 @@ import { useStore } from '../../../../store';
 import { useCreateReservation } from '../../hooks';
 import AutoCompleteForUser from '../FormForReservation/AutoCompleteForUser';
 import { Textarea } from '../FormForReservation/InputForReserve';
-import type { FormForDayoffFields } from '../../../../types/form.types';
-import type { FormForDayoffProps } from '../../../../types/props.types';
-import type { CreateReservationMutationVariables } from '../../../../types/generated.types';
+import type { FormForDayoffFields } from '../../../../types/formTypes';
+import type { FormForDayoffProps } from '../../../../types/propsTypes';
+import type { CreateReservationMutationVariables } from '../../../../types/generatedTypes';
 
 const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
   const clinicId = useStore((state) => state.pickedClinicId);

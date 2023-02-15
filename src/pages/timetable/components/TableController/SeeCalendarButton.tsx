@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Calendar } from '../../../../svgs';
 import { Datepicker, MenuButton, Modal } from '../../../../components';
-import { getPositionRef } from '../../../../utils/common.utils';
+import { getPositionRef } from '../../../../utils/commonUtils';
 import {
   setPickedDate,
   toggleShowCalendarOfTimetable,

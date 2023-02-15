@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TimeDurationOfTimetable } from '../../../models/TimeDurationOfTimetable';
 import { useStore } from '../../../store';
-import type { TableTimeOptions } from '../../../types/common.types';
+import type { TableTimeOptions } from '../../../types/commonTypes';
 
 export const useTableLabel = () => {
   const timeDurationOptions = useStore(

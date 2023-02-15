@@ -1,17 +1,18 @@
 import { gql } from '@apollo/client';
+
 import {
   COMMON_CLINIC_FIELDS,
   COMMON_MEMBER_FIELDS,
-} from './_clinicsFragments.gql';
+} from './_clinicsFragmentsGql';
 
-export const CREATE_CLINIC_DOCUMENT = gql`
+export const FIND_MY_CLINICS_DOCUMENT = gql`
   ${COMMON_CLINIC_FIELDS}
   ${COMMON_MEMBER_FIELDS}
-  mutation createClinic($input: CreateClinicInput!) {
-    createClinic(input: $input) {
+  query findMyClinics($input: FindMyClinicsInput!) {
+    findMyClinics(input: $input) {
       ok
       error
-      clinic {
+      clinics {
         ...CommonClinicFields
         members {
           ...CommonMemberFields

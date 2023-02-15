@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PropsWithChildren } from 'react';
 import { useStore } from '../../store';
 import { useFindMyMembers, useMe, useWindowSize } from '../../hooks';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../../utils/commonUtils';
 import { BrokenLine, Heart, Medicine, User } from '../../svgs';
 
 const Dashboard = () => {

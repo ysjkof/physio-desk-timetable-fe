@@ -7,7 +7,7 @@ import {
   startOfMonth,
   subMonths,
 } from 'date-fns';
-import { getStringOfDate } from '../utils/date.utils';
+import { getStringOfDate } from '../utils/dateUtils';
 import { CalendarDate } from './CalendarDate';
 
 export class Calendar {

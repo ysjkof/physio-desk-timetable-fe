@@ -3,7 +3,7 @@ import { Schedules } from '../../../models';
 import { useListReservations } from './useListReservations';
 import { useStore } from '../../../store';
 import { useGetClinic } from '../../../hooks';
-import type { ISchedules } from '../../../types/common.types';
+import type { ISchedules } from '../../../types/commonTypes';
 
 export const useSchedules = () => {
   const pickedDate = useStore((state) => state.pickedDate);

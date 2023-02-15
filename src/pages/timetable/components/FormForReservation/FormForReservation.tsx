@@ -10,8 +10,8 @@ import { PickedPrescriptions } from '../../../../models';
 import { useStore } from '../../../../store';
 import { useFindPrescriptions } from '../../../../hooks';
 import { useCreateReservation } from '../../hooks';
-import type { FormOfReserveFields } from '../../../../types/form.types';
-import type { FormForReservationProps } from '../../../../types/props.types';
+import type { FormOfReserveFields } from '../../../../types/formTypes';
+import type { FormForReservationProps } from '../../../../types/propsTypes';
 
 const FormForReservation = ({
   date,

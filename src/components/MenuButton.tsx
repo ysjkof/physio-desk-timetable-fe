@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
-import { cls } from '../utils/common.utils';
+import { cls } from '../utils/commonUtils';
 
 interface MenuButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isActivated?: boolean;

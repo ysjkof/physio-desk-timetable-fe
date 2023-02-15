@@ -7,8 +7,8 @@ import { useStore } from '../../../store';
 import type {
   CreatePrescriptionMutationVariables,
   FindAtomPrescriptionsQuery,
-} from '../../../types/generated.types';
-import type { FormForCreatePrescriptionFields } from '../../../types/form.types';
+} from '../../../types/generatedTypes';
+import type { FormForCreatePrescriptionFields } from '../../../types/formTypes';
 
 export const useFormForCreatePrescription = () => {
   const clinicId = useStore((state) => state.pickedClinicId);

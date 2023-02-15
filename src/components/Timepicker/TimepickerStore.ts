@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import type { HoursAndMinutes } from '../../types/common.types';
-import type { CloseAction } from '../../types/props.types';
+import type { HoursAndMinutes } from '../../types/commonTypes';
+import type { CloseAction } from '../../types/propsTypes';
 
 interface TimepickerContextProps extends CloseAction {
   selectionTime: HoursAndMinutes;

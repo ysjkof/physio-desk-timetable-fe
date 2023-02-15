@@ -3,7 +3,7 @@ import { FIND_MY_MEMBERS_DOCUMENT } from '../graphql/clinics';
 import {
   FindMyMembersQuery,
   FindMyMembersQueryVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 export const useFindMyMembers = (): [
   FindMyMembersQuery['findMyMembers']['members'] | undefined,

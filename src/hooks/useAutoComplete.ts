@@ -1,7 +1,7 @@
 import { KeyboardEvent, useRef, useState } from 'react';
 import { useDebounce } from './useDebounce';
-import type { ObjValueIsFx } from '../types/common.types';
-import type { UseAutoCompleteProps } from '../types/props.types';
+import type { ObjValueIsFx } from '../types/commonTypes';
+import type { UseAutoCompleteProps } from '../types/propsTypes';
 
 export const useAutoComplete = <T>({
   firstButtonId,

@@ -1,12 +1,12 @@
-import { CREATE_DAY_OFF_DOCUMENT } from './createDayOff.gql';
-import { CREATE_RESERVATION_DOCUMENT } from './createReservation.gql';
-import { DELETE_RESERVATION_DOCUMENT } from './deleteReservation.gql';
-import { EDIT_RESERVATION_DOCUMENT } from './editReservation.gql';
-import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from './getReservationsByPatient.gql';
-import { GET_STATISTICS_DOCUMENT } from './getStastics.gql';
-import { LIST_RESERVATIONS_DOCUMENT } from './listReservations.gql';
-import { COMMON_RESERVATION_FIELDS } from './_reservationsFragments.gql';
-import { GET_RESERVATIONS_OF_MEMBER_DOCUMENT } from './getReservationsOfMember.gql';
+import { CREATE_DAY_OFF_DOCUMENT } from './createDayOffGql';
+import { CREATE_RESERVATION_DOCUMENT } from './createReservationGql';
+import { DELETE_RESERVATION_DOCUMENT } from './deleteReservationGql';
+import { EDIT_RESERVATION_DOCUMENT } from './editReservationGql';
+import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from './getReservationsByPatientGql';
+import { GET_STATISTICS_DOCUMENT } from './getStasticsGql';
+import { LIST_RESERVATIONS_DOCUMENT } from './listReservationsGql';
+import { COMMON_RESERVATION_FIELDS } from './_reservationsFragmentsGql';
+import { GET_RESERVATIONS_OF_MEMBER_DOCUMENT } from './getReservationsOfMemberGql';
 
 export {
   CREATE_DAY_OFF_DOCUMENT,

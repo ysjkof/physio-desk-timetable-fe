@@ -1,7 +1,7 @@
 import { OperationVariables, QueryResult, useQuery } from '@apollo/client';
 import { ME_DOCUMENT } from '../graphql';
 import { useLogout } from './useLogout';
-import type { MeQuery } from '../types/generated.types';
+import type { MeQuery } from '../types/generatedTypes';
 
 export const useMe = (): [
   MeQuery['me'] | undefined,

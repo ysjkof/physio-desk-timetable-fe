@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { compareDateMatch } from '../../../../utils/date.utils';
-import { cls } from '../../../../utils/common.utils';
+import { compareDateMatch } from '../../../../utils/dateUtils';
+import { cls } from '../../../../utils/commonUtils';
 import { LOCALE, SCROLL_ADDRESS } from '../../../../constants/constants';
-import type { DateTitleProps } from '../../../../types/props.types';
+import type { DateTitleProps } from '../../../../types/propsTypes';
 
 const DateTitle = ({
   userLength,

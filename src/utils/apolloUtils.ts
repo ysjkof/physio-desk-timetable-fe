@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
 import { setToast } from '../store';
-import type { FindMyClinicsQuery, MeQuery } from '../types/generated.types';
-import type { ApolloClientType, MyClinic } from '../types/common.types';
+import type { FindMyClinicsQuery, MeQuery } from '../types/generatedTypes';
+import type { ApolloClientType, MyClinic } from '../types/commonTypes';
 
 /** ok, error만 있는 GraphQL 응답을 받고 토스트 출력이나 콜백 실행 */
 export function simpleCheckGQLError(

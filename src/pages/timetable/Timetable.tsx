@@ -12,7 +12,7 @@ import {
   TimeLabels,
   TimetableTemplate,
 } from './components';
-import type { LocationState } from '../../types/common.types';
+import type { LocationState } from '../../types/commonTypes';
 
 const Loading = lazy(() => import('../../components/Loading'));
 

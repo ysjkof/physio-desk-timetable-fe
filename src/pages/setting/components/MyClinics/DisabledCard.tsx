@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { getStringOfDateTime } from '../../../../utils/date.utils';
+import { getStringOfDateTime } from '../../../../utils/dateUtils';
 
 interface DisabledCardProps {
   icon: ReactNode;

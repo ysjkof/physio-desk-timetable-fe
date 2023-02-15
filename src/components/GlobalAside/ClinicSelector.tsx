@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { addStatusToUserName, getMemberState } from '../../utils/common.utils';
+import { addStatusToUserName, getMemberState } from '../../utils/commonUtils';
 import { useFindMyMembers } from '../../hooks';
 import { pickClinicId, setConfirm, useStore } from '../../store';
 import Selectbox from '../Selectbox';

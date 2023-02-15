@@ -7,7 +7,7 @@ import { setToast } from '../store';
 import type {
   RefuseInvitationMutation,
   RefuseInvitationMutationVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 export const useRefuseInvitation = ({ memberId }: { memberId: number }) => {
   const [cancelInvitationMutation] = useMutation<

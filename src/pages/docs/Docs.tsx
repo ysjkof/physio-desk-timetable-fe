@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Outlet, useMatch } from 'react-router-dom';
 import DocsSidebar from './components/organisms/DocsSidebar';
 import { BarBottomLeft, XMark } from '../../svgs';
-import { cls } from '../../utils/common.utils';
+import { cls } from '../../utils/commonUtils';
 import { useMediaQuery, useWindowSize } from '../../hooks';
 
 const DocsSidebarModal = lazy(

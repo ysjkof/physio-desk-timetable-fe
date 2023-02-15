@@ -1,12 +1,12 @@
-import { localStorageUtils } from '../utils/localStorage.utils';
-import { ClinicType } from '../types/generated.types';
+import { localStorageUtils } from '../utils/localStorageUtils';
+import { ClinicType } from '../types/generatedTypes';
 import type {
   ClinicOfClient,
   ClinicOfClientState,
   IMember,
   MyClinic,
   UserIdAndName,
-} from '../types/common.types';
+} from '../types/commonTypes';
 
 export class ClinicsOfClient {
   static #clinics: ClinicOfClient[];

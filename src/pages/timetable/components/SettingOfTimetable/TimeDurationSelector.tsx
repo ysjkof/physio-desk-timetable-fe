@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 import { setTimeDurationOfTimetable, useStore } from '../../../../store';
-import { getHoursByUnit, getMinutesByUnit } from '../../../../utils/date.utils';
-import { cls } from '../../../../utils/common.utils';
+import { getHoursByUnit, getMinutesByUnit } from '../../../../utils/dateUtils';
+import { cls } from '../../../../utils/commonUtils';
 import { TimeDurationOfTimetable } from '../../../../models';
-import type { FirstAndLastTime } from '../../../../types/common.types';
+import type { FirstAndLastTime } from '../../../../types/commonTypes';
 
 export const TimeDurationSelector = () => {
   const { lastHour, lastMinute, firstHour, firstMinute } = useStore(

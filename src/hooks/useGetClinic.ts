@@ -4,8 +4,8 @@ import { useStore } from '../store';
 import type {
   GetClinicQuery,
   GetClinicQueryVariables,
-} from '../types/generated.types';
-import type { ClinicOfGetMyClinic } from '../types/common.types';
+} from '../types/generatedTypes';
+import type { ClinicOfGetMyClinic } from '../types/commonTypes';
 
 export const useGetClinic = (): [
   ClinicOfGetMyClinic,

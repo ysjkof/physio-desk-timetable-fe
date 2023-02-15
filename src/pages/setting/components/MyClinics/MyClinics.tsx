@@ -6,14 +6,14 @@ import {
   BuildingLargeWithX,
   HourglassWithArrow,
 } from '../../../../svgs';
-import { getMemberState, renameUseSplit } from '../../../../utils/common.utils';
+import { getMemberState, renameUseSplit } from '../../../../utils/commonUtils';
 import WaitingCard from './WaitingCard';
 import ClinicCard from './ClinicCard';
 import DisabledCard from './DisabledCard';
 import type {
   MyMembers,
   SettingOutletContext,
-} from '../../../../types/common.types';
+} from '../../../../types/commonTypes';
 import { useFindMyMembers } from '../../../../hooks';
 
 const MyClinics = () => {

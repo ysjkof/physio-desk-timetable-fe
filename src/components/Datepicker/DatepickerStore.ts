@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import type { CalendarDate } from '../../models/CalendarDate';
-import type { CloseAction } from '../../types/props.types';
+import type { CloseAction } from '../../types/propsTypes';
 
 interface DatepickerContextProps extends Partial<CloseAction> {
   month: CalendarDate[];

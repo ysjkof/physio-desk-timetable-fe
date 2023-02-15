@@ -1,4 +1,4 @@
-import { cls } from '../utils/common.utils';
+import { cls } from '../utils/commonUtils';
 
 interface FormErrorProps {
   error: string;

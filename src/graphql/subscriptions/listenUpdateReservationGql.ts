@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
-import { COMMON_RESERVATION_FIELDS } from '../reservations/_reservationsFragments.gql';
-import { USER_ID_NAME_EMAIL_FIELDS } from '../users/_usersFragments.gql';
+import { COMMON_RESERVATION_FIELDS } from '../reservations/_reservationsFragmentsGql';
+import { USER_ID_NAME_EMAIL_FIELDS } from '../users/_usersFragmentsGql';
 
 export const LISTEN_UPDATE_RESERVATION_DOCUMENT = gql`
   ${COMMON_RESERVATION_FIELDS}

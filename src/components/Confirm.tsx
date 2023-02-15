@@ -1,8 +1,8 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useRef } from 'react';
 import { setConfirm, useStore } from '../store';
-import { ConfirmFormFields } from '../types/form.types';
-import { ConfirmProps } from '../types/props.types';
+import { ConfirmFormFields } from '../types/formTypes';
+import { ConfirmProps } from '../types/propsTypes';
 import Modal from './Modal';
 import FormError from './FormError';
 import Checkbox from './Checkbox';

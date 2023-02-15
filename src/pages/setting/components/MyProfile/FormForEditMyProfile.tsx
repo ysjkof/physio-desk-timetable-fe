@@ -1,7 +1,7 @@
 import { InputWrapper, MenuButton } from '../../../../components';
 import { Input } from '../../../timetable/components/FormForReservation/InputForReserve';
 import useFormForEditMyProfile from '../../hooks/useFormForEditMyProfile';
-import type { ToggleEditMode } from '../../../../types/props.types';
+import type { ToggleEditMode } from '../../../../types/propsTypes';
 
 const FormForEditMyProfile = ({ toggleEditMode }: ToggleEditMode) => {
   const { handleSubmit, register } = useFormForEditMyProfile();

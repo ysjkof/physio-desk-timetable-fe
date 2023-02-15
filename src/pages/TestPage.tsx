@@ -10,7 +10,7 @@ import {
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
 import { ClinicsOfClient } from '../models';
-import { PrescriptionWithSelect } from '../types/common.types';
+import { PrescriptionWithSelect } from '../types/commonTypes';
 import type {
   CreateAccountMutation,
   CreateAtomPrescriptionMutation,
@@ -20,7 +20,7 @@ import type {
   CreateReservationMutation,
   FindAllPatientsQuery,
   FindPrescriptionsQuery,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 import { useGetClinic } from '../hooks';
 
 export default function TestPage() {

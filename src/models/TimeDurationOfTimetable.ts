@@ -3,13 +3,13 @@ import {
   convertMinuteFromDate,
   createDate,
   get4DigitHour,
-} from '../utils/date.utils';
-import { localStorageUtils } from '../utils/localStorage.utils';
+} from '../utils/dateUtils';
+import { localStorageUtils } from '../utils/localStorageUtils';
 import type {
   FirstAndLastTime,
   TableTimeOptions,
   UserIdAndName,
-} from '../types/common.types';
+} from '../types/commonTypes';
 
 export class TimeDurationOfTimetable {
   static #options = {

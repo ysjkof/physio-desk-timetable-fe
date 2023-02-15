@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
-import { cls } from '../utils/common.utils';
+import { cls } from '../utils/commonUtils';
 import { useStore } from '../store';
 import Initialize from './Initialize';
 import Toast from './Toast';

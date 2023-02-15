@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import FormError from './FormError';
-import { cls } from '../utils/common.utils';
+import { cls } from '../utils/commonUtils';
 
 interface InputWrapperProps extends PropsWithChildren {
   label: string;

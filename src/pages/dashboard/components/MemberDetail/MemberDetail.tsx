@@ -8,8 +8,8 @@ import { useStore } from '../../../../store';
 import type {
   GetMemberQuery,
   GetMemberQueryVariables,
-} from '../../../../types/generated.types';
-import type { MemberOfGetMember } from '../../../../types/common.types';
+} from '../../../../types/generatedTypes';
+import type { MemberOfGetMember } from '../../../../types/commonTypes';
 
 const Warning = lazy(() => import('../../../../components/Warning'));
 

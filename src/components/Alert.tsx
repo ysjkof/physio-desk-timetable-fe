@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { setAlert, useStore } from '../store';
 import Modal from './Modal';
-import type { AlertProps, CloseAction } from '../types/props.types';
+import type { AlertProps, CloseAction } from '../types/propsTypes';
 
 export default function Alert() {
   const alertState = useStore((state) => state.alert);

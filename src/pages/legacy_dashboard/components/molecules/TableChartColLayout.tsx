@@ -2,8 +2,8 @@ import {
   IDailyPrescription,
   IDailyReport,
   IUserStatistics,
-} from '../../../../types/common.types';
-import { makeArrFromLength } from '../../../../utils/common.utils';
+} from '../../../../types/commonTypes';
+import { makeArrFromLength } from '../../../../utils/commonUtils';
 import DashboardLi from './DashboardLi';
 import TableChartCol from './TableChartCol';
 

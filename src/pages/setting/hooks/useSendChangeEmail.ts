@@ -4,7 +4,7 @@ import { setToast } from '../../../store';
 import type {
   SendChangeEmailMutation,
   SendChangeEmailMutationVariables,
-} from '../../../types/generated.types';
+} from '../../../types/generatedTypes';
 
 export const useSendChangeEmail = () => {
   const [sendChangeEmailMutation] = useMutation<

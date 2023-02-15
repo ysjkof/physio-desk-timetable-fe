@@ -1,11 +1,11 @@
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
-import { getDateAndDifference } from '../../../../utils/date.utils';
-import { createArrayFromLength } from '../../../../utils/common.utils';
+import { getDateAndDifference } from '../../../../utils/dateUtils';
+import { createArrayFromLength } from '../../../../utils/commonUtils';
 import { ButtonOfPages, ListCell } from '../../../../components';
-import type { GetReservationsByPatientQuery } from '../../../../types/generated.types';
-import type { ReservationInPatient } from '../../../../types/common.types';
+import type { GetReservationsByPatientQuery } from '../../../../types/generatedTypes';
+import type { ReservationInPatient } from '../../../../types/commonTypes';
 import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from '../../../../graphql';
 
 interface PreviousReservationProps {

@@ -1,7 +1,7 @@
 import { MenuButton } from '../../../../components';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { setPickedReservation } from '../../../../store';
-import type { ReservationInList } from '../../../../types/common.types';
+import type { ReservationInList } from '../../../../types/commonTypes';
 
 interface PickReservationProps {
   reservation: ReservationInList;

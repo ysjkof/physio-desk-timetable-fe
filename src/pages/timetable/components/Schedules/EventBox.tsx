@@ -11,16 +11,16 @@ import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
 } from '../../../../constants/constants';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import TooltipForReservationDetail from './TooltipForReservation';
 import {
   type Reservation,
   ReservationState,
-} from '../../../../types/generated.types';
+} from '../../../../types/generatedTypes';
 import type {
   PatientInReservation,
   ReservationInList,
-} from '../../../../types/common.types';
+} from '../../../../types/commonTypes';
 import { useStore } from '../../../../store';
 
 interface EventBoxProps {

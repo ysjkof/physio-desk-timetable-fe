@@ -1,7 +1,7 @@
 import {
   CreatePrescriptionInput,
   EditPrescriptionInput,
-} from './generated.types';
+} from './generatedTypes';
 
 export interface FormOfReserveFields {
   userId: number;

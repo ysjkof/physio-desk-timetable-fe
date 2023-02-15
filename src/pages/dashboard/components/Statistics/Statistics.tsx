@@ -1,5 +1,5 @@
 import { useOutletContext } from 'react-router-dom';
-import { DashboardOutletContext } from '../../../../types/common.types';
+import { DashboardOutletContext } from '../../../../types/commonTypes';
 import Chart from './Chart';
 
 const Statistics = () => {

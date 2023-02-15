@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
-import { cls } from '../../../../utils/common.utils';
-import type { ClassNameProps } from '../../../../types/common.types';
+import { cls } from '../../../../utils/commonUtils';
+import type { ClassNameProps } from '../../../../types/commonTypes';
 
 interface PProps extends PropsWithChildren, ClassNameProps {}
 

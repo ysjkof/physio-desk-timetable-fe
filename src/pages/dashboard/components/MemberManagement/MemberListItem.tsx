@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { USER_COLORS } from '../../../../constants/constants';
-import { cls, getMemberState } from '../../../../utils/common.utils';
-import type { MemberOfClient } from '../../../../types/common.types';
+import { cls, getMemberState } from '../../../../utils/commonUtils';
+import type { MemberOfClient } from '../../../../types/commonTypes';
 
 interface MemberListItemProps {
   member: MemberOfClient;

@@ -3,12 +3,9 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import {
-  createArrayFromLength,
-  renameUseSplit,
-} from '../../utils/common.utils';
+import { createArrayFromLength, renameUseSplit } from '../../utils/commonUtils';
 import { useWindowSize } from '../../hooks';
-import { getYMD } from '../../utils/date.utils';
+import { getYMD } from '../../utils/dateUtils';
 import { ButtonOfPages, Warning } from '../../components';
 import {
   SearchCheckList,
@@ -19,7 +16,7 @@ import {
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
 import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
 import { useStore } from '../../store';
-import type { SearchPatientQuery } from '../../types/generated.types';
+import type { SearchPatientQuery } from '../../types/generatedTypes';
 
 export default function Search() {
   const clinicId = useStore((state) => state.pickedClinicId);

@@ -4,7 +4,7 @@ import {
   LABEL_VISIBLE_MINUTES,
 } from '../../../../constants/constants';
 import { TimeLabel } from '../../../../models';
-import type { ILabels } from '../../../../types/props.types';
+import type { ILabels } from '../../../../types/propsTypes';
 
 const TimeLabels = ({ labels }: ILabels) => {
   const getTimeLabels = (_labels: string[]) =>

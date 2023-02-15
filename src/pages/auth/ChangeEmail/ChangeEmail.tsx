@@ -7,7 +7,7 @@ import {
   USER_EMAIL_AND_VERIFY_FIELDS,
   VERIFY_CHANGE_EMAIL_DOCUMENT,
 } from '../../../graphql';
-import type { VerifyChangeEmailMutation } from '../../../types/generated.types';
+import type { VerifyChangeEmailMutation } from '../../../types/generatedTypes';
 import { useMe } from '../../../hooks';
 
 export default function ChangeEmail() {

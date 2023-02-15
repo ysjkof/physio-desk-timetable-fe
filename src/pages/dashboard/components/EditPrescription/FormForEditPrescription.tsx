@@ -7,7 +7,7 @@ import { Buttons } from '../../../timetable/components/FormForReservation/FormFo
 import { REG_EXP } from '../../../../constants/regex';
 import { useFormForEditPrescription } from '../../hooks/useFormForEditPrescription';
 import { useGetPrescription } from '../../../../hooks';
-import type { CloseAction } from '../../../../types/props.types';
+import type { CloseAction } from '../../../../types/propsTypes';
 
 const FormForEditPrescription = ({ closeAction }: CloseAction) => {
   const { data } = useGetPrescription();

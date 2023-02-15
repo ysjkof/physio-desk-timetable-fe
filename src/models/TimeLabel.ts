@@ -1,4 +1,4 @@
-import { TimeLabelArg } from '../types/common.types';
+import { TimeLabelArg } from '../types/commonTypes';
 
 export class TimeLabel {
   value: string;

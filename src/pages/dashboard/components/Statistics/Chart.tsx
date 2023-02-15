@@ -6,18 +6,18 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { getMonthStartEnd } from '../../../../utils/date.utils';
+import { getMonthStartEnd } from '../../../../utils/dateUtils';
 import { Checkbox, MenuButton, Warning } from '../../../../components';
 import { GET_STATISTICS_DOCUMENT } from '../../../../graphql';
 import Charts from './Charts';
-import { createUserStatistics } from '../../../../utils/chart.utils';
+import { createUserStatistics } from '../../../../utils/chartUtils';
 import { useGetClinic } from '../../../../hooks';
 import { useStore } from '../../../../store';
 import type {
   IUserStatistics,
   MemberState,
-} from '../../../../types/common.types';
-import type { GetStatisticsQuery } from '../../../../types/generated.types';
+} from '../../../../types/commonTypes';
+import type { GetStatisticsQuery } from '../../../../types/generatedTypes';
 
 const Loading = lazy(() => import('../../../../components/Loading'));
 

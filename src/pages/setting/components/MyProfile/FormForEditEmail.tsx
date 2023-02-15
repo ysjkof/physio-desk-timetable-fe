@@ -4,7 +4,7 @@ import { InputWrapper } from '../../../../components';
 import { Input } from '../../../timetable/components/FormForReservation/InputForReserve';
 import { useMe } from '../../../../hooks';
 import { useSendChangeEmail } from '../../hooks/useSendChangeEmail';
-import type { FormForEditEmailFields } from '../../../../types/props.types';
+import type { FormForEditEmailFields } from '../../../../types/propsTypes';
 
 const FormForEditEmail = () => {
   const [meData] = useMe();

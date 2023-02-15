@@ -4,8 +4,8 @@ import {
   TABLE_TIME_GAP,
 } from '../../../constants/constants';
 import { TimeDurationOfTimetable } from '../../../models';
-import { getStringOfTime } from '../../../utils/date.utils';
-import type { IsActive } from '../../../types/common.types';
+import { getStringOfTime } from '../../../utils/dateUtils';
+import type { IsActive } from '../../../types/commonTypes';
 
 export default function TimeIndicatorBar({ isActive }: IsActive) {
   const firstTimeInMinute = TimeDurationOfTimetable.getFirstTimeInMinute();

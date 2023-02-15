@@ -1,8 +1,8 @@
 import { endOfYesterday } from 'date-fns';
 import { useContext } from 'react';
 import { CalendarDate } from '../../models/CalendarDate';
-import { cls } from '../../utils/common.utils';
-import { compareDateMatch, isPastDate } from '../../utils/date.utils';
+import { cls } from '../../utils/commonUtils';
+import { compareDateMatch, isPastDate } from '../../utils/dateUtils';
 import { DatepickerContext } from './DatepickerStore';
 
 interface DatepickerMainProps {

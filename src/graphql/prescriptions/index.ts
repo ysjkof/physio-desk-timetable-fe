@@ -1,12 +1,12 @@
-import { CREATE_ATOM_PRESCRIPTION_DOCUMENT } from './createAtomPrescription.gql';
-import { CREATE_PRESCRIPTION_DOCUMENT } from './createPrescription.gql';
-import { EDIT_PRESCRIPTION_DOCUMENT } from './editPrescription.gql';
-import { FIND_ATOM_PRESCRIPTIONS_DOCUMENT } from './findAtomPrescriptions.gql';
-import { FIND_PRESCRIPTIONS_DOCUMENT } from './findPrescriptions.gql';
+import { CREATE_ATOM_PRESCRIPTION_DOCUMENT } from './createAtomPrescriptionGql';
+import { CREATE_PRESCRIPTION_DOCUMENT } from './createPrescriptionGql';
+import { EDIT_PRESCRIPTION_DOCUMENT } from './editPrescriptionGql';
+import { FIND_ATOM_PRESCRIPTIONS_DOCUMENT } from './findAtomPrescriptionsGql';
+import { FIND_PRESCRIPTIONS_DOCUMENT } from './findPrescriptionsGql';
 import {
   ALL_PRESCRIPTION_FIELDS,
   COMMON_PRESCRIPTION_FIELDS,
-} from './_prescriptionsFragments.gql';
+} from './_prescriptionsFragmentsGql';
 
 export {
   CREATE_ATOM_PRESCRIPTION_DOCUMENT,

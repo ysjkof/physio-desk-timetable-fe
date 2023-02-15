@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { cls } from '../utils/common.utils';
+import { cls } from '../utils/commonUtils';
 
 interface ButtonProps extends PropsWithChildren {
   onClick: () => void;

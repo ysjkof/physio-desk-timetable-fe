@@ -1,4 +1,4 @@
-import { changeValueInArray } from './common.utils';
+import { changeValueInArray } from './commonUtils';
 import type {
   GenerateStorageKey,
   GetPrivateStorage,
@@ -10,12 +10,12 @@ import type {
   RemovePublicLocalStorage,
   SetPrivateStorage,
   SetPublicStorage,
-} from '../types/localStorage.types';
+} from '../types/localStorageTypes';
 import type {
   ClinicIdAndHiddenUsers,
   HiddenUsersArr,
-} from '../types/store.types';
-import type { UserIdAndName } from '../types/common.types';
+} from '../types/storeTypes';
+import type { UserIdAndName } from '../types/commonTypes';
 
 class LocalStorage {
   #storageKeyObj: LocalStorageType;

@@ -1,8 +1,8 @@
 import type {
   MemberStatusOptions,
   MemberStatusType,
-} from '../types/common.types';
-import type { ReservationState } from '../types/generated.types';
+} from '../types/commonTypes';
+import type { ReservationState } from '../types/generatedTypes';
 
 export function cls(...classnames: string[]) {
   return classnames.join(' ');

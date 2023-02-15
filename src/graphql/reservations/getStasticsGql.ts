@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { COMMON_RESERVATION_FIELDS } from './_reservationsFragments.gql';
+import { COMMON_RESERVATION_FIELDS } from './_reservationsFragmentsGql';
 
 export const GET_STATISTICS_DOCUMENT = gql`
   ${COMMON_RESERVATION_FIELDS}

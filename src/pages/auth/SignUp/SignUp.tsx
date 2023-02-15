@@ -12,7 +12,7 @@ import { MenuButton } from '../../../components';
 import type {
   CreateAccountInput,
   CreateAccountMutation,
-} from '../../../types/generated.types';
+} from '../../../types/generatedTypes';
 
 export default function SignUp() {
   const navigate = useNavigate();

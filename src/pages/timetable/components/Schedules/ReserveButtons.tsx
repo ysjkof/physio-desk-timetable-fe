@@ -4,13 +4,13 @@ import {
   compareDateMatch,
   createDate,
   getFrom4DigitTime,
-} from '../../../../utils/date.utils';
+} from '../../../../utils/dateUtils';
 import { setPickedReservation, setToast, useStore } from '../../../../store';
 import ReserveButton from './ReserveButton';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
 import { LABEL_VISIBLE_MINUTES } from '../../../../constants/constants';
-import type { CreateReservationMutation } from '../../../../types/generated.types';
-import type { PrescriptionsInReservation } from '../../../../types/common.types';
+import type { CreateReservationMutation } from '../../../../types/generatedTypes';
+import type { PrescriptionsInReservation } from '../../../../types/commonTypes';
 
 interface ReservationButtonsProps {
   userIndex: number;

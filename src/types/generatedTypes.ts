@@ -1052,6 +1052,13 @@ export type CreatePatientMutationVariables = Exact<{
 
 export type CreatePatientMutation = { __typename?: 'Mutation', createPatient: { __typename?: 'CreatePatientOutput', ok: boolean, error?: string | null, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null, clinic: { __typename?: 'Clinic', id: number, name: string }, users?: Array<{ __typename?: 'User', id: number, name: string }> | null } | null } };
 
+export type EditPatientMutationVariables = Exact<{
+  input: EditPatientInput;
+}>;
+
+
+export type EditPatientMutation = { __typename?: 'Mutation', editPatient: { __typename?: 'EditPatientOutput', ok: boolean, error?: string | null } };
+
 export type FindAllPatientsQueryVariables = Exact<{
   input: FindAllPatientsInput;
 }>;

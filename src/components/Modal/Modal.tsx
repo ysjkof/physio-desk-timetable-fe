@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
-import { cls } from '../../utils/common.utils';
-import type { CloseAction } from '../../types/props.types';
+import { cls } from '../../utils/commonUtils';
+import type { CloseAction } from '../../types/propsTypes';
 
 interface ModalProps extends CloseAction, PropsWithChildren {
   left?: number;

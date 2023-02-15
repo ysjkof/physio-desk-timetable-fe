@@ -1,8 +1,8 @@
 import {
   PRIVATE_LOCAL_STORAGE_KEY_VALUE,
   PUBLIC_LOCAL_STORAGE_KEY_VALUE,
-} from '../utils/localStorage.utils';
-import type { UserIdAndName, Value } from './common.types';
+} from '../utils/localStorageUtils';
+import type { UserIdAndName, Value } from './commonTypes';
 
 export type PrivateLocalStorageKey =
   keyof typeof PRIVATE_LOCAL_STORAGE_KEY_VALUE;

@@ -7,7 +7,7 @@ import { setToast } from '../store';
 import {
   DeactivateClinicMutation,
   DeactivateClinicMutationVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 
 export const useDeactivateClinic = ({ clinicId }: { clinicId: number }) => {
   const [deactivateClinicMutation] = useMutation<

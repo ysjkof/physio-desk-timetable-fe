@@ -1,10 +1,10 @@
 import { useMutation } from '@apollo/client';
-import { simpleCheckGQLError } from '../../../utils/apollo.utils';
+import { simpleCheckGQLError } from '../../../utils/apolloUtils';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../graphql';
 import type {
   CreateReservationInput,
   CreateReservationMutation,
-} from '../../../types/generated.types';
+} from '../../../types/generatedTypes';
 
 export const useCreateReservation = () => {
   const [createReservationMutation, { loading }] =

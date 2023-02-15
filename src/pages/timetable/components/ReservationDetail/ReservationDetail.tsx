@@ -1,12 +1,12 @@
 import { PropsWithChildren } from 'react';
-import { getStringFromReservationState } from '../../../../utils/common.utils';
+import { getStringFromReservationState } from '../../../../utils/commonUtils';
 import {
   getStringOfDateTime,
   getStringOfDate,
-} from '../../../../utils/date.utils';
+} from '../../../../utils/dateUtils';
 import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
-import type { ReservationInList } from '../../../../types/common.types';
+import type { ReservationInList } from '../../../../types/commonTypes';
 
 interface ReservationDetailProps {
   reservation: ReservationInList;

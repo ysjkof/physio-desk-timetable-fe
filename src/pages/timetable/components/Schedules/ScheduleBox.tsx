@@ -1,8 +1,8 @@
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import TimeIndicatorBar from '../TimeIndicatorBar';
 import ReservationButtons from './ReserveButtons';
 import EventBoxContainer from './EventBoxContainer';
-import type { ScheduleBoxProps } from '../../../../types/props.types';
+import type { ScheduleBoxProps } from '../../../../types/propsTypes';
 
 const ScheduleBox = ({
   userLength,

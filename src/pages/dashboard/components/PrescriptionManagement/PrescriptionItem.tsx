@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Pencil, TrashPot } from '../../../../svgs';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { useTogglePrescriptionActivate } from '../../../../hooks';
 import type {
   CardProps,
   TogglePrescriptionActivateProps,
-} from '../../../../types/props.types';
+} from '../../../../types/propsTypes';
 import { setConfirm } from '../../../../store';
 
 const PrescriptionItem = ({ prescription, showInactivate }: CardProps) => {

@@ -7,9 +7,9 @@ import { useEditPrescription } from '../../../hooks/useEditPrescription';
 import type {
   EditPrescriptionMutationVariables,
   FindAtomPrescriptionsQuery,
-} from '../../../types/generated.types';
-import type { FormForEditPrescriptionFields } from '../../../types/form.types';
-import type { UseFormForEditPrescriptionProps } from '../../../types/props.types';
+} from '../../../types/generatedTypes';
+import type { FormForEditPrescriptionFields } from '../../../types/formTypes';
+import type { UseFormForEditPrescriptionProps } from '../../../types/propsTypes';
 
 export const useFormForEditPrescription = ({
   defaultValues,

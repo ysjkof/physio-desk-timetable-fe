@@ -1,6 +1,6 @@
-import { LISTEN_CREATE_RESERVATION_DOCUMENT } from './listenCreateReservation.gql';
-import { LISTEN_DELETE_RESERVATION_DOCUMENT } from './listenDeleteReservation.gql';
-import { LISTEN_UPDATE_RESERVATION_DOCUMENT } from './listenUpdateReservation.gql';
+import { LISTEN_CREATE_RESERVATION_DOCUMENT } from './listenCreateReservationGql';
+import { LISTEN_DELETE_RESERVATION_DOCUMENT } from './listenDeleteReservationGql';
+import { LISTEN_UPDATE_RESERVATION_DOCUMENT } from './listenUpdateReservationGql';
 
 export {
   LISTEN_CREATE_RESERVATION_DOCUMENT,

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { toggleSettingOfTimetable, useStore } from '../../../../store';
-import { getPositionRef } from '../../../../utils/common.utils';
+import { getPositionRef } from '../../../../utils/commonUtils';
 import { EllipsisVertical } from '../../../../svgs';
 import SettingOfTimetable from '../SettingOfTimetable/SettingOfTimetable';
 import { MenuButton, Modal } from '../../../../components';

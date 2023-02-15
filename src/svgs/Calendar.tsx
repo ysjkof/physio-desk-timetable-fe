@@ -1,5 +1,5 @@
-import { SVG } from '../types/common.types';
-import { cls } from '../utils/common.utils';
+import { SVG } from '../types/commonTypes';
+import { cls } from '../utils/commonUtils';
 
 const Calendar = ({ iconSize = 'MD', ...args }: SVG) => {
   return (

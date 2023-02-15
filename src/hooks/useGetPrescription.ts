@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_PRESCRIPTIONS_DOCUMENT } from '../graphql/prescriptions/getPrescriptions.gql';
+import { GET_PRESCRIPTIONS_DOCUMENT } from '../graphql/prescriptions/getPrescriptionsGql';
 import type {
   GetPrescriptionsQuery,
   GetPrescriptionsQueryVariables,
-} from '../types/generated.types';
+} from '../types/generatedTypes';
 import { useStore } from '../store';
 
 export const useGetPrescription = () => {

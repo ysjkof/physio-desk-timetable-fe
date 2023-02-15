@@ -10,7 +10,7 @@ import { onError } from '@apollo/client/link/error';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
-import { printGraphQLErrors, printNetworkError } from './utils/error.utils';
+import { printGraphQLErrors, printNetworkError } from './utils/errorUtils';
 
 export const getApolloClient = (token: string | null) => {
   const isDevelopment = import.meta.env.MODE === 'development';

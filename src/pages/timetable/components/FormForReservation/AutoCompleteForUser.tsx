@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { InputWithRef } from './InputForReserve';
 import { useAutoComplete, useGetClinic } from '../../../../hooks';
 import { SelectedValue } from './SelectedValue';

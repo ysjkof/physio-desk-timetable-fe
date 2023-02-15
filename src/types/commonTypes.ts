@@ -15,7 +15,7 @@ import {
   Prescription,
   SearchPatientQuery,
   User,
-} from './generated.types';
+} from './generatedTypes';
 
 // models
 

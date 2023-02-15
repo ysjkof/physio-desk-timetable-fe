@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { localStorageUtils } from '../utils/localStorage.utils';
+import { localStorageUtils } from '../utils/localStorageUtils';
 
 interface ProtectRouteProps {
   children: ReactNode;

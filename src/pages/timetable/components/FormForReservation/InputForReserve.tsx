@@ -5,7 +5,7 @@ import {
   type TextareaHTMLAttributes,
 } from 'react';
 import type { UseFormRegisterReturn } from 'react-hook-form';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 
 interface InputCommonProps {
   label: string;

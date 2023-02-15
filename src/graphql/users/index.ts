@@ -1,16 +1,16 @@
-import { CHECK_ADMIN_DOCUMENT } from './checkAdmin.gql';
-import { CREATE_ACCOUNT_DOCUMENT } from './createAccount.gql';
-import { EDIT_PROFILE_DOCUMENT } from './editProfile.gql';
-import { LOGIN_DOCUMENT } from './login.gql';
-import { ME_DOCUMENT } from './me.gql';
-import { SEARCH_USERS_DOCUMENT } from './searchUsers.gql';
-import { SEND_CHANGE_EMAIL_DOCUMENT } from './sendChangeEmail.gql';
-import { VERIFY_CHANGE_EMAIL_DOCUMENT } from './verifyChangeEmail.gql';
-import { VERIFY_EMAIL_DOCUMENT } from './verifyEmail.gql';
+import { CHECK_ADMIN_DOCUMENT } from './checkAdminGql';
+import { CREATE_ACCOUNT_DOCUMENT } from './createAccountGql';
+import { EDIT_PROFILE_DOCUMENT } from './editProfileGql';
+import { LOGIN_DOCUMENT } from './loginGql';
+import { ME_DOCUMENT } from './meGql';
+import { SEARCH_USERS_DOCUMENT } from './searchUsersGql';
+import { SEND_CHANGE_EMAIL_DOCUMENT } from './sendChangeEmailGql';
+import { VERIFY_CHANGE_EMAIL_DOCUMENT } from './verifyChangeEmailGql';
+import { VERIFY_EMAIL_DOCUMENT } from './verifyEmailGql';
 import {
   USER_EMAIL_AND_VERIFY_FIELDS,
   USER_ID_NAME_EMAIL_FIELDS,
-} from './_usersFragments.gql';
+} from './_usersFragmentsGql';
 
 export {
   CHECK_ADMIN_DOCUMENT,

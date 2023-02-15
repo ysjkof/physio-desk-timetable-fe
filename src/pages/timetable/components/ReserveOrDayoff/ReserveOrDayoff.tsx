@@ -2,12 +2,12 @@ import { ButtonHTMLAttributes, useState, type PropsWithChildren } from 'react';
 import { useLocation } from 'react-router-dom';
 import { set, setDay } from 'date-fns';
 import { Modal } from '../../../../components';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { FormForReservation } from '../FormForReservation';
 import { useCloseModal } from '../../../../hooks';
 import { FormForDayoff } from '../FormForDayoff';
 import { useStore } from '../../../../store';
-import type { IsActive, LocationState } from '../../../../types/common.types';
+import type { IsActive, LocationState } from '../../../../types/commonTypes';
 
 const ReserveOrDayoff = () => {
   const closeModal = useCloseModal();

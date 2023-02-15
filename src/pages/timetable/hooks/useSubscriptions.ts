@@ -5,8 +5,8 @@ import {
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
   LIST_RESERVATIONS_DOCUMENT,
 } from '../../../graphql';
-import { changeValueInArray } from '../../../utils/common.utils';
-import { LISTEN_CREATE_RESERVATION_DOCUMENT } from '../../../graphql/subscriptions/listenCreateReservation.gql';
+import { changeValueInArray } from '../../../utils/commonUtils';
+import { LISTEN_CREATE_RESERVATION_DOCUMENT } from '../../../graphql/subscriptions/listenCreateReservationGql';
 import { useStore } from '../../../store';
 import type {
   QueryListReservationsArgs,
@@ -15,8 +15,8 @@ import type {
   ListenUpdateReservationSubscription,
   ListReservationsQuery as Query,
   ListReservationsQueryVariables as Variables,
-} from '../../../types/generated.types';
-import type { ReservationInList } from '../../../types/common.types';
+} from '../../../types/generatedTypes';
+import type { ReservationInList } from '../../../types/commonTypes';
 
 interface UseSubscriptionsProps {
   variables: QueryListReservationsArgs | undefined;

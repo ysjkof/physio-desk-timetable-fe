@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
-import { compareDateMatch } from '../../../../utils/date.utils';
-import { SchedulesStyle } from '../../../../styles/timetable.styles';
+import { compareDateMatch } from '../../../../utils/dateUtils';
+import { SchedulesStyle } from '../../../../styles/timetableStyles';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
-import { cls } from '../../../../utils/common.utils';
+import { cls } from '../../../../utils/commonUtils';
 import { useStore } from '../../../../store';
 import EventList from './EventList';
-import type { SchedulesProps } from '../../../../types/props.types';
+import type { SchedulesProps } from '../../../../types/propsTypes';
 
 const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
   const today = new Date();

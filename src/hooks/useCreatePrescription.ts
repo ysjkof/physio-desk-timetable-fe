@@ -8,8 +8,8 @@ import type {
   CreatePrescriptionMutation,
   CreatePrescriptionMutationVariables,
   FindPrescriptionsQuery,
-} from '../types/generated.types';
-import type { PrescriptionForFind } from '../types/props.types';
+} from '../types/generatedTypes';
+import type { PrescriptionForFind } from '../types/propsTypes';
 
 export const useCreatePrescription = () => {
   const clinicId = useStore((state) => state.pickedClinicId);
