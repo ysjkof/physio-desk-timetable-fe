@@ -34,11 +34,6 @@ const isLatestStorage = () => {
   });
 
   const createdAt = localCreatedAt && new Date(localCreatedAt);
-  console.log(
-    createdAt && createdAt.getTime() >= LATEST_STORAGE_VERSION.getTime(),
-    createdAt,
-    LATEST_STORAGE_VERSION
-  );
 
   return !!(
     createdAt && createdAt.getTime() >= LATEST_STORAGE_VERSION.getTime()

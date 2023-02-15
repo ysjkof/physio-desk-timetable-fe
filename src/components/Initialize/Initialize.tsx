@@ -10,10 +10,10 @@ import {
   loadIsWeekCalendar,
   loadShowCancel,
   loadShowNoshow,
-} from './initialize.utils';
+} from './initializeUtils';
 import { useMe } from '../../hooks';
 import { GET_MY_CLINICS_STATUS_DOCUMENT } from '../../graphql';
-import { GetMyClinicsStatusQuery } from '../../types/generatedTypes';
+import type { GetMyClinicsStatusQuery } from '../../types/generatedTypes';
 
 const Initialize = ({ children }: PropsWithChildren) => {
   useStore((state) => state.pickedClinicId); // 리렌더용
