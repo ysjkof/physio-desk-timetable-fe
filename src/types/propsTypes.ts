@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { ISchedules, MemberWithEvent } from './commonTypes';
-import { FindPrescriptionsQuery } from './generatedTypes';
-import { FormForEditPrescriptionFields } from './formTypes';
+import type { FormForEditPrescriptionFields } from './formTypes';
+import type { PrescriptionForFind } from './processedGeneratedTypes';
 
 // TimeTable
 export interface IUserLength {
@@ -41,10 +41,6 @@ export interface ScheduleBoxProps extends MemberNameProps, ILabels, IDate {
 }
 
 // Dashboard
-
-export type PrescriptionForFind = NonNullable<
-  FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
->;
 
 export interface CardProps {
   clinicId: number;

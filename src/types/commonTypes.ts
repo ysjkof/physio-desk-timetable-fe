@@ -1,21 +1,17 @@
-import { SVGProps } from 'react';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
-import {
-  Clinic,
-  FindMyClinicsQuery,
-  FindMyMembersQuery,
-  GetClinicQuery,
-  GetMemberQuery,
-  GetReservationsByPatientQuery,
-  GetStatisticsQuery,
-  ListReservationsQuery,
-  Member,
-  MeQuery,
-  Notice,
-  Prescription,
-  SearchPatientQuery,
-  User,
-} from './generatedTypes';
+import type { SVGProps } from 'react';
+import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import type { Prescription } from './generatedTypes';
+import type {
+  ClinicInReservation,
+  IDailyPrescription,
+  IDailyReport,
+  IMember,
+  MyClinic,
+  MyMembersType,
+  PatientInReservation,
+  ReservationInList,
+  UserInReservation,
+} from './processedGeneratedTypes';
 
 // models
 
@@ -49,14 +45,11 @@ export interface TableDisplayOptions {
   seeCalendar: boolean;
 }
 
-// typescript type & interface
-export type ClinicsOfFindMyClinics =
-  FindMyClinicsQuery['findMyClinics']['clinics'];
-export type MyClinic = NonNullable<FlatArray<ClinicsOfFindMyClinics, 0>>;
-
-// TODO : MyClinicMember로 이름 변경
-export type IMember = MyClinic['members'][0];
-
+export interface ClinicOfClient
+  extends Omit<MyClinic, 'members'>,
+    ClinicOfClientState {
+  members: MemberOfClient[];
+}
 export interface MemberOfClient extends IMember {
   canSee?: boolean;
 }
@@ -70,13 +63,6 @@ export interface ClinicOfClientState {
   isAccepted: boolean;
   position: ClinicPosition;
 }
-export interface ClinicOfClient
-  extends Omit<MyClinic, 'members'>,
-    ClinicOfClientState {
-  members: MemberOfClient[];
-}
-
-export type MyMembersType = FindMyMembersQuery['findMyMembers']['members'];
 export interface MyMembers {
   관리자: MyMembersType;
   직원: MyMembersType;
@@ -84,26 +70,6 @@ export interface MyMembers {
   수락대기: MyMembersType;
   폐쇄: MyMembersType;
 }
-
-export type ResultOfListReservations =
-  | ListReservationsQuery['listReservations']
-  | null
-  | undefined;
-
-export type ReservationInList = NonNullable<
-  ListReservationsQuery['listReservations']['results']
->[0];
-
-export type PatientInReservation = NonNullable<ReservationInList['patient']>;
-export type ClinicInReservation = NonNullable<ReservationInList['clinic']>;
-export type UserInReservation = ReservationInList['user'];
-export type PrescriptionsInReservation = NonNullable<
-  ReservationInList['prescriptions']
->;
-
-export type ReservationInPatient = NonNullable<
-  GetReservationsByPatientQuery['getReservationsByPatient']['results']
->[0];
 
 export interface PrescriptionWithSelect extends Prescription {
   isSelect: boolean;
@@ -113,37 +79,11 @@ export interface IsActive {
   isActive: boolean;
 }
 
-export type PatientInSearch = NonNullable<
-  SearchPatientQuery['searchPatient']['patients']
->[0];
-
 // me
 
 export type MemberStatusType = '관리자' | '직원' | '탈퇴' | '수락대기';
-export interface MemberStatusOptions
-  extends Pick<Member, 'staying' | 'manager' | 'accepted'> {}
-interface ModifiedClinicMemberWithClinic
-  extends Pick<Member, 'id'>,
-    MemberStatusOptions {
-  clinic: Pick<Clinic, 'id' | 'name' | 'isActivated'>;
-}
-type ModifiedNotice = Pick<Notice, 'message' | 'read'>;
-export interface ModifiedLoginUser
-  extends Pick<User, 'id' | 'name' | 'email' | 'role' | 'verified'> {
-  members?: ModifiedClinicMemberWithClinic[] | null;
-  notice?: ModifiedNotice[] | null;
-}
 
 // clinic
-export type ClinicOfGetMyClinic = GetClinicQuery['getClinic']['clinic'];
-export type ClinicOfGetMyClinicTruth = NonNullable<
-  GetClinicQuery['getClinic']['clinic']
->;
-export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'];
-
-export type MemberOfGetMember = NonNullable<
-  GetMemberQuery['getMember']['member']
->;
 
 export interface IdAndName {
   id: number;
@@ -155,14 +95,6 @@ export interface UserIdAndName extends IdAndName {}
 export interface Value {
   value: unknown;
 }
-// statistics
-
-type IDailyReports = GetStatisticsQuery['getStatistics']['dailyReports'];
-export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
-export type IUserInDaily = IDailyReport['users'][0];
-
-type IDailyPrescriptions = GetStatisticsQuery['getStatistics']['prescriptions'];
-export type IDailyPrescription = NonNullable<FlatArray<IDailyPrescriptions, 0>>;
 export interface IDailyPrescriptionWithCount extends IDailyPrescription {
   count: number;
 }

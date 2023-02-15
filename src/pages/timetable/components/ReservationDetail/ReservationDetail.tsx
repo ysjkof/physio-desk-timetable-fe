@@ -6,7 +6,7 @@ import {
 } from '../../../../utils/dateUtils';
 import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
-import type { ReservationInList } from '../../../../types/commonTypes';
+import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
 
 interface ReservationDetailProps {
   reservation: ReservationInList;

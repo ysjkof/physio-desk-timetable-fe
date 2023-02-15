@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { Mail, Phone } from '../../../../svgs';
 import { getMemberState } from '../../../../utils/commonUtils';
-import type { MemberOfGetMember } from '../../../../types/commonTypes';
+import type { MemberOfGetMember } from '../../../../types/processedGeneratedTypes';
 
 const MemberCard = ({ member }: { member: MemberOfGetMember }) => {
   const {

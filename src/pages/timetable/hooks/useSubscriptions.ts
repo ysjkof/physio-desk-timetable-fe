@@ -16,7 +16,7 @@ import type {
   ListReservationsQuery as Query,
   ListReservationsQueryVariables as Variables,
 } from '../../../types/generatedTypes';
-import type { ReservationInList } from '../../../types/commonTypes';
+import type { ReservationInList } from '../../../types/processedGeneratedTypes';
 
 interface UseSubscriptionsProps {
   variables: QueryListReservationsArgs | undefined;

@@ -4,9 +4,9 @@ import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { getDateAndDifference } from '../../../../utils/dateUtils';
 import { createArrayFromLength } from '../../../../utils/commonUtils';
 import { ButtonOfPages, ListCell } from '../../../../components';
-import type { GetReservationsByPatientQuery } from '../../../../types/generatedTypes';
-import type { ReservationInPatient } from '../../../../types/commonTypes';
 import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from '../../../../graphql';
+import type { GetReservationsByPatientQuery } from '../../../../types/generatedTypes';
+import type { ReservationInPatient } from '../../../../types/processedGeneratedTypes';
 
 interface PreviousReservationProps {
   userId: number;

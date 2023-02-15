@@ -7,7 +7,7 @@ import type {
   ListReservationsQuery,
   ListReservationsQueryVariables,
 } from '../../../types/generatedTypes';
-import type { ResultOfListReservations } from '../../../types/commonTypes';
+import type { ResultOfListReservations } from '../../../types/processedGeneratedTypes';
 
 export const useListReservations = (): [
   ResultOfListReservations,

@@ -3,10 +3,9 @@ import { ClinicType } from '../types/generatedTypes';
 import type {
   ClinicOfClient,
   ClinicOfClientState,
-  IMember,
-  MyClinic,
   UserIdAndName,
 } from '../types/commonTypes';
+import type { IMember, MyClinic } from '../types/processedGeneratedTypes';
 
 export class ClinicsOfClient {
   static #clinics: ClinicOfClient[];

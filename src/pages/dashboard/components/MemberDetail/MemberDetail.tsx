@@ -9,7 +9,7 @@ import type {
   GetMemberQuery,
   GetMemberQueryVariables,
 } from '../../../../types/generatedTypes';
-import type { MemberOfGetMember } from '../../../../types/commonTypes';
+import type { MemberOfGetMember } from '../../../../types/processedGeneratedTypes';
 
 const Warning = lazy(() => import('../../../../components/Warning'));
 

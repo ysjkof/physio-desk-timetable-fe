@@ -1,11 +1,11 @@
-import {
-  IDailyPrescription,
-  IDailyReport,
-  IUserStatistics,
-} from '../../../../types/commonTypes';
 import { makeArrFromLength } from '../../../../utils/commonUtils';
 import DashboardLi from './DashboardLi';
 import TableChartCol from './TableChartCol';
+import type { IUserStatistics } from '../../../../types/commonTypes';
+import type {
+  IDailyPrescription,
+  IDailyReport,
+} from '../../../../types/processedGeneratedTypes';
 
 interface TableChartColLayoutProps {
   userStatistics: IUserStatistics[];

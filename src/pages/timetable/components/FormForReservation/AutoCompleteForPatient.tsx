@@ -6,7 +6,7 @@ import { useSearchPatient } from '../../../../hooks';
 import { useAutoComplete } from '../../../../hooks/useAutoComplete';
 import { SelectedValue } from './SelectedValue';
 import type { SearchPatientQuery } from '../../../../types/generatedTypes';
-import type { PatientInSearch } from '../../../../types/commonTypes';
+import type { PatientInSearch } from '../../../../types/processedGeneratedTypes';
 
 interface AutoCompleteForPatientProps {
   label: string;

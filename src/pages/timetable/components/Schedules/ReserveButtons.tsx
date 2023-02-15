@@ -10,7 +10,7 @@ import ReserveButton from './ReserveButton';
 import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
 import { LABEL_VISIBLE_MINUTES } from '../../../../constants/constants';
 import type { CreateReservationMutation } from '../../../../types/generatedTypes';
-import type { PrescriptionsInReservation } from '../../../../types/commonTypes';
+import type { PrescriptionsInReservation } from '../../../../types/processedGeneratedTypes';
 
 interface ReservationButtonsProps {
   userIndex: number;

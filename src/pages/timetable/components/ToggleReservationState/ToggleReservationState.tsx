@@ -10,7 +10,7 @@ import {
   type EditReservationMutation,
   ReservationState,
 } from '../../../../types/generatedTypes';
-import type { ReservationInList } from '../../../../types/commonTypes';
+import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
 
 interface EditReservationStateProps {
   reservation: ReservationInList;

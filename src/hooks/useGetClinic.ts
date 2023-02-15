@@ -5,7 +5,7 @@ import type {
   GetClinicQuery,
   GetClinicQueryVariables,
 } from '../types/generatedTypes';
-import type { ClinicOfGetMyClinic } from '../types/commonTypes';
+import type { ClinicOfGetMyClinic } from '../types/processedGeneratedTypes';
 
 export const useGetClinic = (): [
   ClinicOfGetMyClinic,

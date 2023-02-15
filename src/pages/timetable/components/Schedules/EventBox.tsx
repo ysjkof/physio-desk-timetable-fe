@@ -17,11 +17,11 @@ import {
   type Reservation,
   ReservationState,
 } from '../../../../types/generatedTypes';
+import { useStore } from '../../../../store';
 import type {
   PatientInReservation,
   ReservationInList,
-} from '../../../../types/commonTypes';
-import { useStore } from '../../../../store';
+} from '../../../../types/processedGeneratedTypes';
 
 interface EventBoxProps {
   userIndex: number;

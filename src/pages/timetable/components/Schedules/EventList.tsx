@@ -10,10 +10,8 @@ import { getStringOfTime } from '../../../../utils/dateUtils';
 import { ChevronLeft, ChevronRight, PersonPlus } from '../../../../svgs';
 import { setPickedDate, useStore } from '../../../../store';
 import { cls } from '../../../../utils/commonUtils';
-import type {
-  ReservationInList,
-  ISchedules,
-} from '../../../../types/commonTypes';
+import type { ISchedules } from '../../../../types/commonTypes';
+import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
 
 const EventList = ({ events }: { events: ISchedules }) => {
   const sortedEvents = events.members

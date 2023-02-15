@@ -1,7 +1,7 @@
 import { Dispatch, useState } from 'react';
 import { sortByBoolean, sortByString } from '../../../../utils/commonUtils';
 import { VerticalCrossArrow } from '../../../../svgs';
-import type { MemberOfGetMyClinic } from '../../../../types/commonTypes';
+import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
 
 interface AlignmentButtonsProps {
   setMembers: Dispatch<React.SetStateAction<MemberOfGetMyClinic>>;

@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { ReservationDetail } from '../ReservationDetail';
 import { Trash } from '../../../../svgs';
 import { useDeleteReservation } from '../../hooks';
-import type { ReservationInList } from '../../../../types/commonTypes';
+import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
 
 interface TooltipForReservationDetailProps {
   reservation: ReservationInList;

@@ -1,5 +1,5 @@
 import MemberListItem from './MemberListItem';
-import type { MemberOfGetMyClinic } from '../../../../types/commonTypes';
+import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
 
 const MemberList = ({ members }: { members: MemberOfGetMyClinic }) => {
   return (

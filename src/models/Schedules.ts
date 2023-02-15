@@ -7,11 +7,13 @@ import {
 } from 'date-fns';
 import type {
   ISchedules,
-  ReservationInList,
   MemberOfClient,
-  ClinicOfGetMyClinicTruth,
   MemberWithEvent,
 } from '../types/commonTypes';
+import type {
+  ClinicOfGetMyClinicTruth,
+  ReservationInList,
+} from '../types/processedGeneratedTypes';
 
 interface SchedulesProps {
   data: ReservationInList[];

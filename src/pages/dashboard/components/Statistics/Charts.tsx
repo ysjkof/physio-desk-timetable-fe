@@ -15,13 +15,12 @@ import {
   getYMD,
 } from '../../../../utils/dateUtils';
 import TableChartColLayout from '../../../legacy_dashboard/components/molecules/TableChartColLayout';
-
 import { STATISTICS_LABEL } from '../../../../constants/constants';
-import {
+import type { IUserStatistics } from '../../../../types/commonTypes';
+import type {
   IDailyPrescription,
   IDailyReport,
-  IUserStatistics,
-} from '../../../../types/commonTypes';
+} from '../../../../types/processedGeneratedTypes';
 
 const Loading = lazy(() => import('../../../../components/Loading'));
 

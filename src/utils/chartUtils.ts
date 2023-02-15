@@ -1,10 +1,12 @@
-import {
-  IDailyPrescription,
+import type {
   IDailyPrescriptionWithCount,
-  IDailyReport,
   IPrescriptionOfUser,
   MemberState,
 } from '../types/commonTypes';
+import type {
+  IDailyPrescription,
+  IDailyReport,
+} from '../types/processedGeneratedTypes';
 
 interface CombineUserStatistics {
   dailyReports: IDailyReport[];

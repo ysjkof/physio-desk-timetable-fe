@@ -6,7 +6,7 @@ import SearchMember from './SearchMember';
 import AlignmentButtons from './AlignmentButtons';
 import MemberList from './MemberList';
 import { useGetClinic } from '../../../../hooks';
-import type { MemberOfGetMyClinic } from '../../../../types/commonTypes';
+import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
 
 const MemberManagement = () => {
   const [myClinic] = useGetClinic();

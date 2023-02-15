@@ -4,7 +4,7 @@ import type {
   FindMyClinicsQuery,
   FindMyClinicsQueryVariables,
 } from '../types/generatedTypes';
-import type { ClinicsOfFindMyClinics } from '../types/commonTypes';
+import type { ClinicsOfFindMyClinics } from '../types/processedGeneratedTypes';
 
 interface UseFindMyClinicsProps {
   hasInactivate?: boolean;
