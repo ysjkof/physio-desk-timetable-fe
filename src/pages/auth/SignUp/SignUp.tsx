@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { REG_EXP } from '../../../constants/regex';
-import { setToast } from '../../../store';
+import { setAlert } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
 import { CREATE_ACCOUNT_DOCUMENT } from '../../../graphql';
 import FormError from '../../../components/FormError';
@@ -50,20 +50,17 @@ export default function SignUp() {
     } = data;
 
     if (error) {
-      return setToast({
+      return setAlert({
         messages: [error],
       });
     }
 
     if (ok) {
-      setToast({
+      setAlert({
         messages: [
-          '계정을 만들었습니다.',
-          '입력하신 이메일 주소로 인증 코드를 보냈습니다.',
-          '이메일 서비스에 따라 1~10분 소요될 수 있습니다.',
-          '이메일 인증을 하면 모든 기능을 사용할 수 있습니다.',
-          '메일이 오지 않을 경우 스팸메일함을 확인하거나,',
-          '오른쪽 상단 내 이름 클릭 -> 나의 정보에서 인증메일 다시받기 해주세요',
+          '입력한 주소로 인증 이메일을 전송했습니다.',
+          '이메일이 도착하는데 1~10분 필요합니다.',
+          '설정 > 나의 정보에서 인증 이메일을 다시 보낼 수 있습니다.',
         ],
       });
       return navigate('/login');

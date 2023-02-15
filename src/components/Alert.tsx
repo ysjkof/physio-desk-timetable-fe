@@ -30,11 +30,11 @@ const AlertBody = ({ closeAction, messages }: AlertProps & CloseAction) => {
 
   return (
     <div className="flex w-96 flex-col items-center py-8">
-      <div className="flex flex-col items-center justify-center text-lg text-[#34355B]">
+      <p className="flex flex-col gap-y-2 px-8 text-base text-[#34355B]">
         {messages.map(
           (message) => message && <span key={message}>{message}</span>
         )}
-      </div>
+      </p>
       <div className="mt-5 flex gap-4 text-base">
         <button
           type="button"
