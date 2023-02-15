@@ -72,9 +72,6 @@ export const USER_COLORS = [
 //   { deep: "#C4B5FD", light: "#F5F3FF" },
 // ];
 
-const milliseconds = 3000;
-export const defaultToastTimeout = milliseconds;
-
 export const MUOOL = 'Muool';
 
 export const GENDER_KOR = {

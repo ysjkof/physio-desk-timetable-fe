@@ -9,11 +9,12 @@ module.exports = {
       },
       keyframes: {
         fadeout: {
-          '0%, 40%': { opacity: 1 },
+          '0%, 75%': { opacity: 1 },
+          '95%': { opacity: 0 },
           '100%': { opacity: 0 },
         },
       },
-      animation: { fadeout: 'fadeout 3s linear 1' },
+      animation: { fadeout: 'fadeout 8s linear 1' },
       screens: {
         sm: '375px',
         md: '640px',
