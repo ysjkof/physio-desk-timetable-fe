@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_CLINIC_DOCUMENT } from '../graphql';
-import { setToast, useStore } from '../store';
+import { setAlert, setToast, useStore } from '../store';
 import {
   cacheAddClinicToMyClinics,
   cacheUpdateMemberOfMe,
@@ -18,7 +18,7 @@ export const useCreateClinic = () => {
       onCompleted(data) {
         const { error, clinic } = data.createClinic;
         if (error) {
-          return setToast({ messages: [error] });
+          return setAlert({ messages: [error] });
         }
         if (!clinic) {
           return setToast({
