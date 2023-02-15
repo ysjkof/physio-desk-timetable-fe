@@ -92,6 +92,7 @@ export interface ConfirmProps extends CloseAction, ConfirmState {}
 
 export interface AlertProps {
   messages: string[];
+  isPositive?: boolean;
 }
 
 export type AlertType = AlertProps | undefined;
