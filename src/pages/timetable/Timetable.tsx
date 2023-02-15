@@ -13,6 +13,8 @@ import {
   TimetableTemplate,
 } from './components';
 import type { LocationState } from '../../types/commonTypes';
+import { setToast } from '../../store';
+import { useMe } from '../../hooks';
 
 const Loading = lazy(() => import('../../components/Loading'));
 
@@ -28,11 +30,19 @@ const TimeTable = () => {
     navigate('', { state: null });
   };
 
+  const [meData] = useMe();
+
+  if (schedules && !meData?.verified) {
+    setToast({
+      messages: ['이메일 인증을 하면 모든 기능을 사용할 수 있습니다.'],
+    });
+  }
   useEffect(() => {
     clearLocationState();
   }, []);
 
   if (!schedules) return <Loading />;
+
   return (
     <>
       <Helmet>
