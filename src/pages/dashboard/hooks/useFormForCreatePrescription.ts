@@ -16,6 +16,7 @@ export const useFormForCreatePrescription = () => {
     register,
     handleSubmit: handleSubmitWrapper,
     formState: { errors },
+    reset,
   } = useForm<FormForCreatePrescriptionFields>({ mode: 'onChange' });
 
   const { data } = useQuery<FindAtomPrescriptionsQuery>(
@@ -40,7 +41,10 @@ export const useFormForCreatePrescription = () => {
         prescriptionAtomIds: prescriptionAtomIds.map((id) => +id),
       },
     };
-    createPrescription({ variables });
+    createPrescription({
+      variables,
+    });
+    reset();
   };
 
   const handleSubmit = handleSubmitWrapper(onSubmit);

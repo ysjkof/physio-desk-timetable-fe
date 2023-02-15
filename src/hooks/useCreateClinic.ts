@@ -28,7 +28,6 @@ export const useCreateClinic = () => {
 
         setToast({
           messages: [`병원 "${clinic.name}"을 만들었습니다`],
-          fade: true,
         });
 
         cacheAddClinicToMyClinics(client, clinic);
