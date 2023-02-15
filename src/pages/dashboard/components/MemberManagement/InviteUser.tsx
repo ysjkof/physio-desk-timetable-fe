@@ -1,11 +1,21 @@
+import { useGetClinic } from '../../../../hooks';
+import { ClinicType } from '../../../../types/generatedTypes';
 import FormForInviteUser from './FormForInviteUser';
 
 const InviteUser = () => {
+  const [myClinic] = useGetClinic();
+
+  const isPersonal = myClinic?.type === ClinicType.Personal;
+
   return (
     <div className="h-full w-full overflow-scroll px-14 py-10">
       <Title />
       <div className="mt-10 flex w-[460px] flex-col gap-4">
-        <FormForInviteUser />
+        {isPersonal ? (
+          <p>개인용 병원은 직원을 초대할 수 없습니다.</p>
+        ) : (
+          <FormForInviteUser />
+        )}
       </div>
     </div>
   );

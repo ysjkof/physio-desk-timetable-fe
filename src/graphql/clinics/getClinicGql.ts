@@ -12,6 +12,7 @@ export const GET_CLINIC_DOCUMENT = gql`
       clinic {
         id
         name
+        type
         members {
           ...CommonMemberFields
           user {

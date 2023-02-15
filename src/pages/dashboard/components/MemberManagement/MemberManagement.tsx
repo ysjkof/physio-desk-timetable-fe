@@ -1,7 +1,5 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import SearchMember from './SearchMember';
 import AlignmentButtons from './AlignmentButtons';
 import MemberList from './MemberList';
@@ -32,7 +30,6 @@ const MemberManagement = () => {
             members={myClinic?.members}
             setSearchInput={setSearchInput}
           />
-          <InviteMemberBtn />
         </div>
         <AlignmentButtons setMembers={setMembers} />
         <MemberList members={members} />
@@ -44,22 +41,6 @@ const MemberManagement = () => {
         <Outlet />
       </div>
     </>
-  );
-};
-
-const InviteMemberBtn = () => {
-  return (
-    <Link
-      to="invite"
-      className="css_default-button rounded-md bg-cst-green text-sm text-white"
-    >
-      <FontAwesomeIcon
-        icon={faPlus}
-        className="rounded-full border p-0.5"
-        size="xs"
-      />
-      직원 초대하기
-    </Link>
   );
 };
 

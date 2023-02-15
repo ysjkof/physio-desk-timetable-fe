@@ -1,5 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PropsWithChildren } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useStore } from '../../store';
 import { useFindMyMembers, useMe, useWindowSize } from '../../hooks';
 import { cls } from '../../utils/commonUtils';
@@ -12,7 +14,7 @@ const Dashboard = () => {
     <div className="flex text-base" style={{ width }}>
       <div className="css_dashboard__column-container">
         <ProfileWithImage />
-        <MenuContainer />
+        <LinkBtns />
       </div>
       <Outlet context={{ outletWidth }} />
     </div>
@@ -52,16 +54,27 @@ const ProfileWithImage = () => {
   );
 };
 
-const MenuContainer = () => {
+const LinkBtns = () => {
   const { pathname } = useLocation();
+
   return (
     <div className="flex flex-col text-sm">
       <LinkButton
         path="/dashboard/clinic/members"
-        isActivate={pathname.startsWith('/dashboard/clinic/members')}
+        isActivate={
+          pathname.startsWith('/dashboard/clinic/members') &&
+          !pathname.endsWith('/invite')
+        }
       >
         <Heart />
         직원열람 및 관리
+      </LinkButton>
+      <LinkButton
+        path="/dashboard/clinic/members/invite"
+        isActivate={pathname.startsWith('/dashboard/clinic/members/invite')}
+      >
+        <FontAwesomeIcon icon={faPlus} fontSize="1rem" />
+        직원초대
       </LinkButton>
       <LinkButton
         path="/dashboard/clinic/prescriptions"
