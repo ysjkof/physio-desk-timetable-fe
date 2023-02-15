@@ -5,6 +5,7 @@ import { useStore } from '../store';
 import Initialize from './Initialize';
 import Toast from './Toast';
 import Confirm from './Confirm';
+import Alert from './Alert';
 
 const GlobalAside = lazy(() => import('./GlobalAside'));
 const GlobalNavBar = lazy(() => import('./GlobalNavBar'));
@@ -33,6 +34,7 @@ function GlobalLayout() {
       )}
       <Toast />
       <Confirm />
+      <Alert />
     </div>
   );
 }

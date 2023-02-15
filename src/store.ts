@@ -14,7 +14,7 @@ import type {
   IdAndName,
 } from './types/common.types';
 import type { HiddenUsersArr, HiddenUsersSet } from './types/store.types';
-import type { ConfirmStateType } from './types/props.types';
+import type { AlertType, ConfirmStateType } from './types/props.types';
 
 interface ZustandStoreState {
   user: UserIdAndName;
@@ -22,6 +22,7 @@ interface ZustandStoreState {
   client: ApolloClientType;
   pickedClinicId: number;
   toast: ToastState;
+  alert: AlertType;
   confirm: ConfirmStateType;
   isBigGlobalAside: boolean;
   isWeekCalendar: boolean;
@@ -41,6 +42,7 @@ const initialState: ZustandStoreState = {
   client: null,
   pickedClinicId: 0,
   toast: {},
+  alert: undefined,
   confirm: undefined,
   isBigGlobalAside: true,
   isWeekCalendar: true,
@@ -83,6 +85,9 @@ export const setClinicId = (clinicId: number) =>
 
 export const setToast = (props: ToastState) =>
   useStore.setState(() => ({ toast: props }));
+
+export const setAlert = (props: AlertType) =>
+  useStore.setState(() => ({ alert: props }));
 
 export const setConfirm = (props: ConfirmStateType) =>
   useStore.setState(() => ({ confirm: props }));

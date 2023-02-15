@@ -94,6 +94,12 @@ export interface ConfirmState {
 export type ConfirmStateType = ConfirmState | undefined;
 export interface ConfirmProps extends CloseAction, ConfirmState {}
 
+export interface AlertProps {
+  messages: string[];
+}
+
+export type AlertType = AlertProps | undefined;
+
 export interface TogglePrescriptionActivateProps {
   id: number;
   name: string;
