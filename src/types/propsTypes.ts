@@ -96,6 +96,13 @@ export interface AlertProps {
 
 export type AlertType = AlertProps | undefined;
 
+export interface ToastProps {
+  messages: string[];
+  ms?: number;
+}
+
+export type ToastType = ToastProps | undefined;
+
 export interface TogglePrescriptionActivateProps {
   id: number;
   name: string;

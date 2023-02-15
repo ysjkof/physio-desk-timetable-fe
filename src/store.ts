@@ -6,7 +6,6 @@ import {
   updateLocalStorageHiddenUsers,
 } from './utils/localStorageUtils';
 import type {
-  ToastState,
   TableTimeOptions,
   PickedReservationType,
   UserIdAndName,
@@ -14,14 +13,18 @@ import type {
   IdAndName,
 } from './types/commonTypes';
 import type { HiddenUsersArr, HiddenUsersSet } from './types/storeTypes';
-import type { AlertType, ConfirmStateType } from './types/propsTypes';
+import type {
+  AlertType,
+  ConfirmStateType,
+  ToastType,
+} from './types/propsTypes';
 
 interface ZustandStoreState {
   user: UserIdAndName;
   isLoggedIn: boolean;
   client: ApolloClientType;
   pickedClinicId: number;
-  toast: ToastState;
+  toast: ToastType;
   alert: AlertType;
   confirm: ConfirmStateType;
   isBigGlobalAside: boolean;
@@ -41,7 +44,7 @@ const initialState: ZustandStoreState = {
   isLoggedIn: false,
   client: null,
   pickedClinicId: 0,
-  toast: {},
+  toast: undefined,
   alert: undefined,
   confirm: undefined,
   isBigGlobalAside: true,
@@ -83,7 +86,7 @@ export const setClient = (client: ApolloClientType) =>
 export const setClinicId = (clinicId: number) =>
   useStore.setState(() => ({ pickedClinicId: clinicId }));
 
-export const setToast = (props: ToastState) =>
+export const setToast = (props: ToastType) =>
   useStore.setState(() => ({ toast: props }));
 
 export const setAlert = (props: AlertType) =>

@@ -152,14 +152,6 @@ export interface PickedPatient extends PatientInReservation {
 export type PickedReservationType = ReservationInList | undefined;
 
 export type PickedPatientType = PickedPatient | undefined | null;
-// utils
-
-export interface ToastState {
-  messages?: string[];
-  fade?: boolean;
-  milliseconds?: number;
-  bgColor?: boolean;
-}
 
 export interface SVG extends SVGProps<SVGSVGElement> {
   iconSize?: 'LG' | 'MD' | 'SM';
