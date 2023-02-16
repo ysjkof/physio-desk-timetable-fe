@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_CLINIC_DOCUMENT } from '../graphql';
-import { setAlert, setToast, useStore } from '../store';
+import { setAlert, useStore } from '../store';
 import {
   cacheAddClinicToMyClinics,
   cacheUpdateMemberOfMe,
@@ -21,13 +21,14 @@ export const useCreateClinic = () => {
           return setAlert({ messages: [error] });
         }
         if (!clinic) {
-          return setToast({
+          return setAlert({
             messages: ['병원 만들기 후 병원을 반환받지 못했습니다.'],
           });
         }
 
-        setToast({
+        setAlert({
           messages: [`병원 "${clinic.name}"을 만들었습니다`],
+          isPositive: true,
         });
 
         cacheAddClinicToMyClinics(client, clinic);
