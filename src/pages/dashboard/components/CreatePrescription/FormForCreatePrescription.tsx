@@ -57,10 +57,10 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
               valueAsNumber: true,
               validate: { step10: (value) => !(value % 10) },
             })}
-            className="mr-2 w-20"
+            className="pr-10"
             type="number"
           />
-          분
+          <span className="position-center-y absolute right-4">분</span>
         </InputWrapper>
         <InputWrapper label="가격" required error={error.priceError}>
           <Input
@@ -75,10 +75,10 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
               },
               valueAsNumber: true,
             })}
-            className="mr-2 w-48"
+            className="pr-10"
             type="number"
           />
-          원
+          <span className="position-center-y absolute right-4">원</span>
         </InputWrapper>
         <InputWrapper label="설명" error={error.descriptionError}>
           <Textarea
