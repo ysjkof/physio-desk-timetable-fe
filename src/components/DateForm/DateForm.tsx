@@ -62,8 +62,14 @@ export const DateForm = ({
 
   const setParentDate = () => {
     const { year, month, day, hours, minutes } = getValues();
+
+    const monthStr = String(month).padStart(2, '0');
+    const dayStr = String(day).padStart(2, '0');
+    const hoursStr = String(hours).padStart(2, '0');
+    const minutesStr = String(minutes).padStart(2, '0');
+
     const startDate = new Date(
-      `${year}-${month}-${day}T${hours}:${minutes}:00`
+      `${year}-${monthStr}-${dayStr}T${hoursStr}:${minutesStr}:00`
     );
     setParentValue(startDate);
   };
