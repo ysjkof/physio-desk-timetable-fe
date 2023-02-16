@@ -1,8 +1,17 @@
 import { gql } from '@apollo/client';
 import { client } from '../apollo';
-import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
-import type { FindMyClinicsQuery, MeQuery } from '../types/generatedTypes';
+import {
+  FIND_MY_CLINICS_DOCUMENT,
+  FIND_MY_MEMBERS_DOCUMENT,
+  ME_DOCUMENT,
+} from '../graphql';
+import type {
+  FindMyClinicsQuery,
+  FindMyMembersQuery,
+  MeQuery,
+} from '../types/generatedTypes';
 import type { MyClinic } from '../types/processedGeneratedTypes';
+import { MyMembersType } from '../types/processedGeneratedTypes';
 
 export const cacheUpdateUserName = (id: number, name: string) => {
   client?.writeFragment({
@@ -51,18 +60,23 @@ export const cacheUpdateMemberAccepted = (id: number) => {
   });
 };
 
-export const cacheAddClinicToMyClinics = (clinic: MyClinic) => {
-  const variables = { input: { includeInactivate: true } };
-  client?.cache.updateQuery<FindMyClinicsQuery>(
-    { query: FIND_MY_CLINICS_DOCUMENT, variables },
+export const cacheAddClinicToMyMembers = (clinic: MyClinic) => {
+  client?.cache.updateQuery<FindMyMembersQuery>(
+    { query: FIND_MY_MEMBERS_DOCUMENT },
     (cacheData) => {
-      if (!cacheData?.findMyClinics.clinics)
+      if (!cacheData?.findMyMembers.members)
         throw new Error(
           'useCreateClinic에서 캐시 업데이트 중에 clinic이 없습니다.'
         );
 
       const newData = structuredClone(cacheData);
-      newData?.findMyClinics.clinics?.push(clinic);
+
+      const member = clinic.members[0];
+      const newMember: FlatArray<MyMembersType, 1> = {
+        clinic,
+        ...member,
+      };
+      newData?.findMyMembers.members?.push(newMember);
       return newData;
     }
   );

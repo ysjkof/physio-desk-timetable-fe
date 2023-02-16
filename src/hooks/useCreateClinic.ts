@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client';
 import { CREATE_CLINIC_DOCUMENT } from '../graphql';
 import { setAlert } from '../store';
 import {
-  cacheAddClinicToMyClinics,
+  cacheAddClinicToMyMembers,
   cacheUpdateMemberOfMe,
 } from '../utils/apolloUtils';
 import type {
@@ -30,7 +30,7 @@ export const useCreateClinic = () => {
           isPositive: true,
         });
 
-        cacheAddClinicToMyClinics(clinic);
+        cacheAddClinicToMyMembers(clinic);
         cacheUpdateMemberOfMe(clinic);
       },
     }
