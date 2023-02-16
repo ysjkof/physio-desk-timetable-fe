@@ -14,10 +14,16 @@ import type {
   MyMembers,
   SettingOutletContext,
 } from '../../../../types/commonTypes';
-import { useFindMyMembers } from '../../../../hooks';
+import { useFindMyMembers, useMe } from '../../../../hooks';
+import { ClinicType } from '../../../../types/generatedTypes';
 
 const MyClinics = () => {
   const { outletWidth } = useOutletContext<SettingOutletContext>();
+
+  const [meData] = useMe();
+  const personalClinicId = meData?.members?.find(
+    (member) => member.clinic.type === ClinicType.Personal
+  )?.id;
 
   const [myMembers] = useFindMyMembers();
 
@@ -69,6 +75,7 @@ const MyClinics = () => {
               icon={<BuildingLarge className="h-full w-full" />}
               name={member.clinic.name}
               memberRole="직원"
+              isPersonal={member.clinic.id === personalClinicId}
               createAt={member.createdAt}
             />
           ))}
@@ -80,6 +87,7 @@ const MyClinics = () => {
               icon={<BuildingLarge className="h-full w-full" />}
               name={renameUseSplit(member.clinic.name)}
               memberRole="관리자"
+              isPersonal={member.clinic.id === personalClinicId}
               createAt={member.createdAt}
             />
           ))}

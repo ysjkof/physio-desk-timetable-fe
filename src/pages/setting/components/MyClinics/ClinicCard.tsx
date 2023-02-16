@@ -10,6 +10,7 @@ interface ClinicCardProps {
   icon: ReactNode;
   name: string;
   memberRole: string;
+  isPersonal: boolean;
   createAt: string;
 }
 
@@ -19,6 +20,7 @@ const ClinicCard = ({
   icon,
   name,
   memberRole,
+  isPersonal,
   createAt,
 }: ClinicCardProps) => {
   const { leaveClinic } = useLeaveClinic({ memberId });
@@ -58,24 +60,28 @@ const ClinicCard = ({
           </span>
           <span className="text-xs text-[#8D8DAD]">{memberRole}</span>
         </div>
-        <div className="mt-4 flex justify-end gap-2 text-sm">
-          <button
-            className="css_default-button w-1/2 bg-[#E4E4ED] text-[#262850]"
-            type="button"
-            onClick={openRetirement}
-          >
-            탈퇴하기
-          </button>
-          {memberRole === '관리자' && (
-            <button
-              className="css_default-button w-1/2 bg-[#F0817A] text-white"
-              type="button"
-              onClick={openDeactivate}
-            >
-              폐쇄하기
-            </button>
-          )}
-        </div>
+        {isPersonal || (
+          <div className="mt-4 flex justify-end gap-2 text-sm">
+            {memberRole !== '관리자' && (
+              <button
+                className="css_default-button w-1/2 bg-[#E4E4ED] text-[#262850]"
+                type="button"
+                onClick={openRetirement}
+              >
+                탈퇴하기
+              </button>
+            )}
+            {memberRole === '관리자' && (
+              <button
+                className="css_default-button w-1/2 bg-[#F0817A] text-white"
+                type="button"
+                onClick={openDeactivate}
+              >
+                폐쇄하기
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
