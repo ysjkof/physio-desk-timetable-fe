@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
-import { simpleCheckGQLError } from '../../../utils/apolloUtils';
 import { DELETE_RESERVATION_DOCUMENT } from '../../../graphql';
 import type { DeleteReservationMutation } from '../../../types/generatedTypes';
+import { setAlert } from '../../../store';
 
 interface DeleteReservation {
   reservationId: number;
@@ -25,7 +25,11 @@ export const useDeleteReservation = () => {
           const {
             deleteReservation: { ok, error },
           } = data;
-          simpleCheckGQLError(ok, error, closeAction);
+          if (error) {
+            return setAlert({ messages: [`오류가 발생했습니다; ${error}`] });
+          }
+
+          closeAction?.();
         },
       });
     }

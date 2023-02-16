@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { simpleCheckGQLError } from '../../../utils/apolloUtils';
+import { setAlert } from '../../../store';
 import {
   CREATE_RESERVATION_DOCUMENT,
   EDIT_RESERVATION_DOCUMENT,
@@ -45,8 +45,12 @@ export const useReserve = ({ isCreate, closeAction }: UseDayoffProps) => {
         },
       },
       onCompleted(data) {
-        const { ok, error } = data.createReservation;
-        simpleCheckGQLError(ok, error, closeAction);
+        const { error } = data.createReservation;
+        if (error) {
+          return setAlert({ messages: [`오류가 발생했습니다; ${error}`] });
+        }
+
+        closeAction();
       },
     });
   };
@@ -74,8 +78,12 @@ export const useReserve = ({ isCreate, closeAction }: UseDayoffProps) => {
         },
       },
       onCompleted(data) {
-        const { ok, error } = data.editReservation;
-        simpleCheckGQLError(ok, error, closeAction);
+        const { error } = data.editReservation;
+        if (error) {
+          return setAlert({ messages: [`오류가 발생했습니다; ${error}`] });
+        }
+
+        closeAction();
       },
     });
   };
