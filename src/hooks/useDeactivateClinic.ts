@@ -28,8 +28,6 @@ export const useDeactivateClinic = ({ clinicId }: { clinicId: number }) => {
         // client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
         setToast({
           messages: [`병원이 폐쇄됐습니다`],
-          fade: true,
-          bgColor: true,
         });
       },
     });

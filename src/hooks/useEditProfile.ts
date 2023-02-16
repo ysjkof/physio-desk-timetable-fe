@@ -35,7 +35,7 @@ export const useEditProfile = () => {
         const profileInput: Input = clientOptions?.variables?.input;
         const newName = profileInput.name;
 
-        setToast({ messages: ['사용자 정보 수정완료'], fade: true });
+        setToast({ messages: ['사용자 정보 수정완료'] });
 
         const prevName = meData.name;
         if (!newName || prevName === newName) return;

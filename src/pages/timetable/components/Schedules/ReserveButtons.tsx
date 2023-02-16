@@ -68,7 +68,6 @@ const ReservationButtons = ({
     });
     const endDate = new Date(startDate);
     endDate.setMinutes(endDate.getMinutes() + requiredTime);
-    console.log('pickedReservation >>>', pickedReservation);
 
     createReservationMutation({
       variables: {
@@ -84,7 +83,7 @@ const ReservationButtons = ({
       },
       onCompleted(data) {
         const { error } = data.createReservation;
-        if (error) setToast({ messages: [error], fade: true });
+        if (error) setToast({ messages: [error] });
       },
     });
     // 할일: 연속예약을 하기 위해서 키보드 조작으로 아래 동작 안하기
