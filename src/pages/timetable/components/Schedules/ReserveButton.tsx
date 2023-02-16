@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { endOfYesterday, set, setDay } from 'date-fns';
 import { getFrom4DigitTime, getTimeLength } from '../../../../utils/dateUtils';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
 } from '../../../../constants/constants';
 import { cls } from '../../../../utils/commonUtils';
+import { setAlert, useStore } from '../../../../store';
 import type { PickedReservationType } from '../../../../types/commonTypes';
 
 interface ReserveBtnProps {
@@ -30,21 +32,30 @@ const ReserveButton = ({
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
 
+  const hours = Number.parseInt(getFrom4DigitTime(label, 'hour'), 10);
+  const minutes = Number.parseInt(getFrom4DigitTime(label, 'minute'), 10);
+
   const openReserveModal = () => {
     navigate('', {
       state: {
         createReservation: true,
-        startDate: {
-          hours: Number.parseInt(getFrom4DigitTime(label, 'hour'), 10),
-          minutes: Number.parseInt(getFrom4DigitTime(label, 'minute'), 10),
-          dayIndex,
-        },
+        startDate: { hours, minutes, dayIndex },
         userId,
       },
     });
   };
 
+  const pickedDate = useStore((state) => state.pickedDate);
+  const isPastDay = () => {
+    return (
+      setDay(set(pickedDate, { hours, minutes }), dayIndex) <= endOfYesterday()
+    );
+  };
+
   const handleClickButton = () => {
+    if (isPastDay()) {
+      return setAlert({ messages: ['지나간 날은 예약할 수 없습니다.'] });
+    }
     if (pickedReservation) {
       quickCreateReservation();
     } else {
