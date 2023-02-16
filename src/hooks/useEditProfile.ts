@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { EDIT_PROFILE_DOCUMENT } from '../graphql';
-import { setToast, useStore } from '../store';
+import { setToast } from '../store';
 import {
   cacheUpdatePersonalClinicName,
   cacheUpdateUserName,
@@ -20,7 +20,6 @@ interface Input {
 
 export const useEditProfile = () => {
   const [meData] = useMe();
-  const client = useStore((state) => state.client);
 
   return useMutation<EditProfileMutation, EditProfileMutationVariables>(
     EDIT_PROFILE_DOCUMENT,
@@ -48,9 +47,8 @@ export const useEditProfile = () => {
             messages: ['meData에서 개인용 병원을 찾지 못했습니다'],
           });
 
-        cacheUpdateUserName(client, meData.id, newName);
+        cacheUpdateUserName(meData.id, newName);
         cacheUpdatePersonalClinicName({
-          client,
           userName: newName,
           clinicId: personalClinic.id,
           clinicName: personalClinic.name,

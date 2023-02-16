@@ -3,6 +3,7 @@ import {
   createHttpLink,
   from,
   InMemoryCache,
+  NormalizedCacheObject,
   split,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
@@ -11,6 +12,9 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { printGraphQLErrors, printNetworkError } from './utils/errorUtils';
+
+// eslint-disable-next-line import/no-mutable-exports
+let client: ApolloClient<NormalizedCacheObject> | null = null;
 
 export const getApolloClient = (token: string | null) => {
   const isDevelopment = import.meta.env.MODE === 'development';
@@ -84,8 +88,11 @@ export const getApolloClient = (token: string | null) => {
     }
   });
 
-  return new ApolloClient({
+  client = new ApolloClient({
     link: from([errorLink, splitLink]),
     cache: new InMemoryCache(),
   });
+  return client;
 };
+
+export { client };

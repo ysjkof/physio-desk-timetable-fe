@@ -9,7 +9,6 @@ import type {
   TableTimeOptions,
   PickedReservationType,
   UserIdAndName,
-  ApolloClientType,
   IdAndName,
 } from './types/commonTypes';
 import type { HiddenUsersArr, HiddenUsersSet } from './types/storeTypes';
@@ -22,7 +21,6 @@ import type {
 interface ZustandStoreState {
   user: UserIdAndName;
   isLoggedIn: boolean;
-  client: ApolloClientType;
   pickedClinicId: number;
   toast: ToastType;
   alert: AlertType;
@@ -42,7 +40,6 @@ interface ZustandStoreState {
 const initialState: ZustandStoreState = {
   user: { id: 0, name: '' },
   isLoggedIn: false,
-  client: null,
   pickedClinicId: 0,
   toast: undefined,
   alert: undefined,
@@ -79,9 +76,6 @@ export const setAuthToken = (_token?: string) =>
     }
     return { isLoggedIn: !!token };
   });
-
-export const setClient = (client: ApolloClientType) =>
-  useStore.setState(() => ({ client }));
 
 export const setClinicId = (clinicId: number) =>
   useStore.setState(() => ({ pickedClinicId: clinicId }));

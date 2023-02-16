@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { ACCEPT_INVITATION_DOCUMENT } from '../graphql';
-import { setToast, useStore } from '../store';
+import { setAlert } from '../store';
 import { cacheUpdateMemberAccepted } from '../utils/apolloUtils';
 import type {
   AcceptInvitationMutation,
@@ -13,18 +13,24 @@ export const useAcceptInvitation = ({ memberId }: { memberId: number }) => {
     AcceptInvitationMutationVariables
   >(ACCEPT_INVITATION_DOCUMENT);
 
-  const client = useStore((state) => state.client);
-
   const acceptInvitation = () => {
     acceptInvitationMutation({
       variables: { input: { memberId } },
       onCompleted(data) {
-        if (data.acceptInvitation.error)
-          return setToast({ messages: ['병원 초대 수락 중 에러 발생'] });
-        if (data.acceptInvitation.ok) {
-          setToast({ messages: ['병원 초대를 수락했습니다'] });
-          cacheUpdateMemberAccepted(client, memberId);
+        const { error, ok } = data.acceptInvitation;
+        if (error) return setAlert({ messages: [`오류: ${error}`] });
+
+        if (ok) {
+          cacheUpdateMemberAccepted(memberId);
+          return setAlert({
+            messages: ['초대를 수락했습니다'],
+            isPositive: true,
+          });
         }
+
+        setAlert({
+          messages: ['초대 수락을 실패했습니다'],
+        });
       },
     });
   };

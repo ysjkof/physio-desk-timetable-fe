@@ -1,14 +1,10 @@
 import { gql } from '@apollo/client';
+import { client } from '../apollo';
 import { FIND_MY_CLINICS_DOCUMENT, ME_DOCUMENT } from '../graphql';
 import type { FindMyClinicsQuery, MeQuery } from '../types/generatedTypes';
-import type { ApolloClientType } from '../types/commonTypes';
 import type { MyClinic } from '../types/processedGeneratedTypes';
 
-export const cacheUpdateUserName = (
-  client: ApolloClientType,
-  id: number,
-  name: string
-) => {
+export const cacheUpdateUserName = (id: number, name: string) => {
   client?.writeFragment({
     id: `User:${id}`,
     fragment: gql`
@@ -21,14 +17,12 @@ export const cacheUpdateUserName = (
 };
 
 interface CacheUpdatePersonalClinicNameProps {
-  client: ApolloClientType;
   clinicId: number;
   clinicName: string;
   userName: string;
 }
 
 export const cacheUpdatePersonalClinicName = ({
-  client,
   clinicId,
   clinicName,
   userName,
@@ -44,10 +38,7 @@ export const cacheUpdatePersonalClinicName = ({
   });
 };
 
-export const cacheUpdateMemberAccepted = (
-  client: ApolloClientType,
-  id: number
-) => {
+export const cacheUpdateMemberAccepted = (id: number) => {
   client?.writeFragment({
     id: `Member:${id}`,
     fragment: gql`
@@ -60,10 +51,7 @@ export const cacheUpdateMemberAccepted = (
   });
 };
 
-export const cacheAddClinicToMyClinics = (
-  client: ApolloClientType,
-  clinic: MyClinic
-) => {
+export const cacheAddClinicToMyClinics = (clinic: MyClinic) => {
   const variables = { input: { includeInactivate: true } };
   client?.cache.updateQuery<FindMyClinicsQuery>(
     { query: FIND_MY_CLINICS_DOCUMENT, variables },
@@ -80,10 +68,7 @@ export const cacheAddClinicToMyClinics = (
   );
 };
 
-export const cacheUpdateMemberOfMe = (
-  client: ApolloClientType,
-  clinic: MyClinic
-) => {
+export const cacheUpdateMemberOfMe = (clinic: MyClinic) => {
   client?.cache.updateQuery<MeQuery>({ query: ME_DOCUMENT }, (cacheData) => {
     if (!cacheData?.me.members) {
       throw new Error(

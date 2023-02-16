@@ -2,9 +2,11 @@ import { useMutation } from '@apollo/client';
 import {
   DEACTIVATE_CLINIC_DOCUMENT,
   FIND_MY_CLINICS_DOCUMENT,
+  FIND_MY_MEMBERS_DOCUMENT,
 } from '../graphql';
-import { setToast } from '../store';
-import {
+import { setAlert } from '../store';
+import { client } from '../apollo';
+import type {
   DeactivateClinicMutation,
   DeactivateClinicMutationVariables,
 } from '../types/generatedTypes';
@@ -18,17 +20,21 @@ export const useDeactivateClinic = ({ clinicId }: { clinicId: number }) => {
   const deactivateClinic = () => {
     deactivateClinicMutation({
       variables: { input: { clinicId } },
-      onCompleted(data, clientOptions) {
-        if (data.deactivateClinic.error)
-          return setToast({ messages: [data.deactivateClinic.error] });
+      onCompleted(data) {
+        const { error, ok } = data.deactivateClinic;
+        if (error) return setAlert({ messages: [`오류: ${error}`] });
 
-        clientOptions?.client?.refetchQueries({
-          include: [FIND_MY_CLINICS_DOCUMENT],
-        });
-        // client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
-        setToast({
-          messages: [`병원이 폐쇄됐습니다`],
-        });
+        if (ok) {
+          client?.refetchQueries({
+            include: [FIND_MY_CLINICS_DOCUMENT, FIND_MY_MEMBERS_DOCUMENT],
+          });
+          return setAlert({
+            messages: [`병원이 폐쇄됐습니다`],
+            isPositive: true,
+          });
+        }
+
+        setAlert({ messages: ['병원 폐쇄를 실패했습니다'] });
       },
     });
   };
