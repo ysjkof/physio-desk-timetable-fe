@@ -71,7 +71,7 @@ export type CreateAtomPrescriptionOutput = {
 };
 
 export type CreateClinicInput = {
-  isPersonal?: InputMaybe<Scalars['Boolean']>;
+  isPersonal?: Scalars['Boolean'];
   name: Scalars['String'];
 };
 
@@ -244,7 +244,7 @@ export type EditReservationOutput = {
 
 export type FindAllPatientsInput = {
   clinicId: Scalars['Int'];
-  page?: InputMaybe<Scalars['Int']>;
+  page?: Scalars['Int'];
 };
 
 export type FindAllPatientsOutput = {
@@ -368,7 +368,7 @@ export type GetReservationOutput = {
 
 export type GetReservationsByPatientInput = {
   id: Scalars['Int'];
-  page?: InputMaybe<Scalars['Int']>;
+  page?: Scalars['Int'];
 };
 
 export type GetReservationsByPatientOutput = {
@@ -384,7 +384,7 @@ export type GetReservationsOfMemberInput = {
   clinicId: Scalars['Int'];
   endDate: Scalars['DateTime'];
   memberId: Scalars['Int'];
-  page?: InputMaybe<Scalars['Int']>;
+  page?: Scalars['Int'];
   startDate: Scalars['DateTime'];
 };
 
@@ -830,7 +830,7 @@ export enum ReservationState {
 
 export type SearchPatientInput = {
   clinicIds: Array<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
+  page?: Scalars['Int'];
   query: Scalars['String'];
 };
 
@@ -980,7 +980,7 @@ export type CreateClinicMutationVariables = Exact<{
 }>;
 
 
-export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> } | null } };
+export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', createdAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> } | null } };
 
 export type DeactivateClinicMutationVariables = Exact<{
   input: DeactivateClinicInput;
