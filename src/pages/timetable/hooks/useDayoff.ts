@@ -54,7 +54,7 @@ export const useDayoff = ({ isCreate, closeAction }: UseDayoffProps) => {
       onCompleted(data) {
         const { error } = data.createReservation;
         if (error) {
-          return setAlert({ messages: [`오류가 발생했습니다; ${error}`] });
+          return setAlert({ messages: [`오류: ${error}`] });
         }
 
         closeAction();
@@ -85,7 +85,7 @@ export const useDayoff = ({ isCreate, closeAction }: UseDayoffProps) => {
       onCompleted(data) {
         const { error } = data.editReservation;
         if (error) {
-          return setAlert({ messages: [`오류가 발생했습니다; ${error}`] });
+          return setAlert({ messages: [`오류: ${error}`] });
         }
 
         closeAction();

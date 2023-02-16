@@ -26,7 +26,7 @@ export const useDeleteReservation = () => {
             deleteReservation: { ok, error },
           } = data;
           if (error) {
-            return setAlert({ messages: [`오류가 발생했습니다; ${error}`] });
+            return setAlert({ messages: [`오류: ${error}`] });
           }
 
           closeAction?.();

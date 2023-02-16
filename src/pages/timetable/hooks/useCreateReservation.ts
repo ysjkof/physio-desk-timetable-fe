@@ -19,7 +19,7 @@ export const useCreateReservation = () => {
       onCompleted(data) {
         const { ok, error } = data.createReservation;
         if (error) {
-          return setAlert({ messages: [`오류가 발생했습니다; ${error}`] });
+          return setAlert({ messages: [`오류: ${error}`] });
         }
 
         setAlert({ messages: ['예약완료'], isPositive: true });
