@@ -49,7 +49,7 @@ const FormForReservation = ({
       patientId,
       prescriptionIds: prescriptions,
     };
-    createReservation(formData);
+    createReservation(formData, closeAction);
   };
 
   const setUserId = (userId: number) => {
