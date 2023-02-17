@@ -92,7 +92,7 @@ export function changeValueInArray<T>(array: T[], value: T, index: number) {
 
 export function renameUseSplit(name: string) {
   const isSplit = removePersonalClinicNumber(name);
-  return isSplit ? `전용 : ${isSplit}` : name;
+  return isSplit ? `전용: ${isSplit}` : name;
 }
 
 function removePersonalClinicNumber(name: string) {
