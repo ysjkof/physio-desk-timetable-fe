@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
-import { FIND_MY_CLINICS_DOCUMENT, INVITE_USER_DOCUMENT } from '../graphql';
-import { setToast } from '../store';
+import { GET_CLINIC_DOCUMENT, INVITE_USER_DOCUMENT } from '../graphql';
+import { client } from '../apollo';
+import { setAlert } from '../store';
 import type {
   InviteUserMutation,
   InviteUserMutationVariables,
@@ -12,20 +13,18 @@ export const useInviteUser = () => {
     {
       onCompleted(data, clientOptions) {
         if (data.inviteUser.error)
-          return setToast({
+          return setAlert({
             messages: ['초대를 실패했습니다.', data.inviteUser.error],
           });
 
         const useName = clientOptions?.variables?.input.name;
-        setToast({
+        setAlert({
           messages: [`${useName}님을 초대했습니다.`],
+          isPositive: true,
         });
 
         // TODO: 캐시업데이트
-        clientOptions?.client?.refetchQueries({
-          include: [FIND_MY_CLINICS_DOCUMENT],
-        });
-        // client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
+        client?.refetchQueries({ include: [GET_CLINIC_DOCUMENT] });
       },
     }
   );
