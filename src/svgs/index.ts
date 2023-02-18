@@ -19,6 +19,7 @@ import Heart from './Heart';
 import HourglassWithArrow from './HourglassWithArrow';
 import Mail from './Mail';
 import Medicine from './Medicine';
+import MenuOpen from './MenuOpen';
 import Pencil from './Pencil';
 import PersonPlus from './PersonPlus';
 import Phone from './Phone';
@@ -52,6 +53,7 @@ export {
   HourglassWithArrow,
   Mail,
   Medicine,
+  MenuOpen,
   Pencil,
   PersonPlus,
   Phone,
