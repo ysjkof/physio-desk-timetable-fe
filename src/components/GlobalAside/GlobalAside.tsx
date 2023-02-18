@@ -2,7 +2,7 @@ import React, { type PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { cls } from '../../utils/commonUtils';
-import { CogSixTooth, Building, Table } from '../../svgs';
+import { CogSixTooth, Building, Table, MenuOpen } from '../../svgs';
 import ClinicSelector from './ClinicSelector';
 import { useLogout } from '../../hooks';
 import { toggleIsBigGlobalAside, useStore } from '../../store';
@@ -17,10 +17,11 @@ const GlobalAside = () => {
   const menu = useLocation().pathname.split('/')[1];
 
   const logout = useLogout();
+
   return (
     <aside
       id="global-aside"
-      className="flex h-full flex-col justify-between bg-table-aside-bg py-4 text-white"
+      className="relative flex h-full flex-col justify-between bg-table-aside-bg py-4 text-white"
     >
       <div
         className={cls(
@@ -42,9 +43,11 @@ const GlobalAside = () => {
       <button
         type="button"
         onClick={toggleAside}
-        className="ml-4 mb-4 w-fit rounded-sm border px-2 py-0.5"
+        className="absolute -top-0.5 -right-2.5 z-40 w-fit rounded-full bg-inherit p-1"
       >
-        {isBigGlobalAside ? '작게' : '크게'}
+        <MenuOpen
+          className={cls('h-7 w-7', isBigGlobalAside ? '' : '-scale-x-100')}
+        />
       </button>
 
       <Ul>
