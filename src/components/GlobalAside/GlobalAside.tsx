@@ -1,15 +1,11 @@
-import type { PropsWithChildren } from 'react';
+import React, { type PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { ReactNode } from 'react';
 import { cls } from '../../utils/commonUtils';
 import { CogSixTooth, Building, Table } from '../../svgs';
 import ClinicSelector from './ClinicSelector';
 import { useLogout } from '../../hooks';
 import { toggleIsBigGlobalAside, useStore } from '../../store';
-
-interface LiProps extends PropsWithChildren {
-  to: string;
-  selected?: boolean;
-}
 
 const GlobalAside = () => {
   const isBigGlobalAside = useStore((state) => state.isBigGlobalAside);
@@ -40,14 +36,13 @@ const GlobalAside = () => {
             >
               <img src="/images/Logo.png" alt="logo" />
             </Link>
-            <ClinicSelector />
           </>
         )}
       </div>
       <button
         type="button"
         onClick={toggleAside}
-        className="mx-auto mb-4 w-fit rounded-sm border px-2 py-0.5"
+        className="ml-4 mb-4 w-fit rounded-sm border px-2 py-0.5"
       >
         {isBigGlobalAside ? '작게' : '크게'}
       </button>
@@ -60,6 +55,7 @@ const GlobalAside = () => {
         <Li to="dashboard/clinic/members" selected={menu === 'dashboard'}>
           <Building />
           {isBigGlobalAside && '병원'}
+          {isBigGlobalAside && menu === 'dashboard' && <ClinicSelector />}
         </Li>
         <Li to="setting" selected={menu === 'setting'}>
           <CogSixTooth />
@@ -77,30 +73,44 @@ const GlobalAside = () => {
   );
 };
 
-const Ul = ({ children }: PropsWithChildren) => {
+interface UlProps extends PropsWithChildren {}
+
+const Ul = ({ children }: UlProps) => {
   return (
-    <div className={cls('flex h-full flex-col')}>
+    <div className="flex h-full flex-col text-gray-500">
       <ul>{children}</ul>
     </div>
   );
 };
 
+interface LiProps extends PropsWithChildren {
+  to: string;
+  selected?: boolean;
+}
+
 const Li = ({ to, children, selected }: LiProps) => {
+  const MainMenu: ReactNode[] = [];
+  const SubMenu: ReactNode[] = [];
+  React.Children.forEach(children, (child) => {
+    if (React.isValidElement(child) && child.type === ClinicSelector) {
+      SubMenu.push(child);
+      return;
+    }
+    MainMenu.push(child);
+  });
+
   return (
-    <li
-      className={cls(
-        'relative w-full cursor-pointer list-none whitespace-nowrap text-xs',
-        selected
-          ? 'bg-[#7477B2] font-medium text-white'
-          : 'text-gray-500 hover:text-white'
-      )}
-    >
+    <li className="relative w-full cursor-pointer list-none whitespace-nowrap text-xs">
       <Link
         to={to}
-        className="flex h-full w-full items-center gap-1 py-1.5 px-4 text-left"
+        className={cls(
+          'flex h-full w-full items-center gap-1 py-1.5 px-4 text-left',
+          selected ? 'bg-[#7477B2] font-medium text-white' : 'hover:text-white'
+        )}
       >
-        {children}
+        {MainMenu}
       </Link>
+      {SubMenu.length > 0 && <div className="ml-4">{SubMenu}</div>}
     </li>
   );
 };
