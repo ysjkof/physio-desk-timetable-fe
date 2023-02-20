@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { cls } from '../../utils/commonUtils';
 import { CogSixTooth, Building, Table, MenuOpen } from '../../svgs';
-import ClinicSelector from './ClinicSelector';
+import { ClinicSelector } from '../ClinicSelector';
 import { useLogout } from '../../hooks';
 import { toggleIsBigGlobalAside, useStore } from '../../store';
 
