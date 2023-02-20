@@ -22,7 +22,7 @@ import NotFound from './NotFound';
 import { useLogin } from '../hooks/useLogin';
 import Toast from './Toast';
 import LogoOfText from './LogoOfText';
-import { ClinicSelector, ClinicSelectorBtn } from './ClinicSelector';
+import { ClinicSelector } from './ClinicSelector';
 
 export {
   ButtonOfPages,
@@ -50,5 +50,4 @@ export {
   Toast,
   LogoOfText,
   ClinicSelector,
-  ClinicSelectorBtn,
 };

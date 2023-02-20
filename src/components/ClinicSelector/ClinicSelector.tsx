@@ -1,15 +1,28 @@
 import { useFindMyMembers } from '../../hooks';
+import { useStore } from '../../store';
+import { BarsArrowDown } from '../../svgs';
+import { renameUseSplit } from '../../utils/commonUtils';
 import ClinicSelectorBtn from './ClinicSelectorBtn';
 
 const ClinicSelector = () => {
-  const [myMembers] = useFindMyMembers();
+  const [myMember] = useFindMyMembers();
+  const pickedClinicId = useStore((state) => state.pickedClinicId);
+  const clinic = myMember?.find(
+    (member) => member.clinic.id === pickedClinicId
+  )?.clinic;
 
   return (
-    <div className="flex flex-col">
-      {myMembers?.map((member) => (
-        <ClinicSelectorBtn key={member.id} member={member} />
-      ))}
-    </div>
+    <details className="relative z-40 mx-auto flex w-[18.75rem] cursor-pointer flex-col items-center justify-center text-center">
+      <summary className="flex list-none items-center justify-center gap-2 py-1 text-xl">
+        {renameUseSplit(clinic?.name || '')}
+        <BarsArrowDown iconSize="LG" />
+      </summary>
+      <div className="absolute top-9 w-full overflow-hidden rounded-md bg-white text-base shadow-cst">
+        {myMember?.map((member) => (
+          <ClinicSelectorBtn key={member.id} member={member} />
+        ))}
+      </div>
+    </details>
   );
 };
 

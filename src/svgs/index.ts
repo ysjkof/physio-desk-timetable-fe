@@ -1,4 +1,5 @@
 import BarBottomLeft from './BarBottomLeft';
+import BarsArrowDown from './BarzArrowDown';
 import BriefCase from './BriefCase';
 import BrokenLine from './BrokenLine';
 import Building from './Building';
@@ -32,6 +33,7 @@ import VerticalCrossArrow from './VerticalCrossArrow';
 import XMark from './XMark';
 
 export {
+  BarsArrowDown,
   BarBottomLeft,
   BriefCase,
   BrokenLine,
