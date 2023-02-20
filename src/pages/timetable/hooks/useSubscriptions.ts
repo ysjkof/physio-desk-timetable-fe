@@ -8,6 +8,7 @@ import {
 import { changeValueInArray } from '../../../utils/commonUtils';
 import { LISTEN_CREATE_RESERVATION_DOCUMENT } from '../../../graphql/subscriptions/listenCreateReservationGql';
 import { useStore } from '../../../store';
+import { client } from '../../../apollo';
 import type {
   QueryListReservationsArgs,
   ListenCreateReservationSubscription,
@@ -25,7 +26,6 @@ interface UseSubscriptionsProps {
 // variables는 listReservation의 변수다.
 export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
   const clinicId = useStore((state) => state.pickedClinicId);
-  const client = useStore((state) => state.client);
 
   const subscriptionVariables = { input: { clinicId } };
 

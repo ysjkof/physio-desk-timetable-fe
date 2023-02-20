@@ -4,6 +4,7 @@ import {
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
 import { setAlert, setToast, useStore } from '../store';
+import { client } from '../apollo';
 import type {
   CreatePrescriptionMutation,
   CreatePrescriptionMutationVariables,
@@ -12,8 +13,6 @@ import type {
 import type { PrescriptionForFind } from '../types/processedGeneratedTypes';
 
 export const useCreatePrescription = () => {
-  const client = useStore((state) => state.client);
-
   const clinicId = useStore((state) => state.pickedClinicId);
 
   const variables = { input: { clinicId, onlyLookUpActive: false } };

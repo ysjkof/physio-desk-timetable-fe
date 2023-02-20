@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
 import { MUOOL } from '../../../constants/constants';
-import { useStore } from '../../../store';
+import { useMe } from '../../../hooks';
+import { client } from '../../../apollo';
 import {
   USER_EMAIL_AND_VERIFY_FIELDS,
   VERIFY_CHANGE_EMAIL_DOCUMENT,
 } from '../../../graphql';
 import type { VerifyChangeEmailMutation } from '../../../types/generatedTypes';
-import { useMe } from '../../../hooks';
 
 export default function ChangeEmail() {
   const [message, setMessage] = useState('');
@@ -16,7 +16,6 @@ export default function ChangeEmail() {
 
   const [verifyChangeEmailMutation, { loading }] =
     useMutation<VerifyChangeEmailMutation>(VERIFY_CHANGE_EMAIL_DOCUMENT);
-  const client = useStore((state) => state.client);
 
   useEffect(() => {
     if (loading) return;
