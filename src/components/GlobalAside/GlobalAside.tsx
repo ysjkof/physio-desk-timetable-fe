@@ -1,9 +1,7 @@
-import React, { type PropsWithChildren } from 'react';
+import { type PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ReactNode } from 'react';
 import { cls } from '../../utils/commonUtils';
 import { CogSixTooth, Building, Table, MenuOpen } from '../../svgs';
-import { ClinicSelector } from '../ClinicSelector';
 import { useLogout } from '../../hooks';
 import { toggleIsBigGlobalAside, useStore } from '../../store';
 
@@ -58,7 +56,6 @@ const GlobalAside = () => {
         <Li to="dashboard/clinic/members" selected={menu === 'dashboard'}>
           <Building />
           {isBigGlobalAside && '병원'}
-          {isBigGlobalAside && menu === 'dashboard' && <ClinicSelector />}
         </Li>
         <Li to="setting" selected={menu === 'setting'}>
           <CogSixTooth />
@@ -92,16 +89,6 @@ interface LiProps extends PropsWithChildren {
 }
 
 const Li = ({ to, children, selected }: LiProps) => {
-  const MainMenu: ReactNode[] = [];
-  const SubMenu: ReactNode[] = [];
-  React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child) && child.type === ClinicSelector) {
-      SubMenu.push(child);
-      return;
-    }
-    MainMenu.push(child);
-  });
-
   return (
     <li className="relative w-full cursor-pointer list-none whitespace-nowrap text-xs">
       <Link
@@ -111,9 +98,8 @@ const Li = ({ to, children, selected }: LiProps) => {
           selected ? 'bg-[#7477B2] font-medium text-white' : 'hover:text-white'
         )}
       >
-        {MainMenu}
+        {children}
       </Link>
-      {SubMenu.length > 0 && <div className="ml-4">{SubMenu}</div>}
     </li>
   );
 };
