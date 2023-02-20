@@ -1,15 +1,8 @@
-import { useOutletContext } from 'react-router-dom';
-import { DashboardOutletContext } from '../../../../types/commonTypes';
 import Chart from './Chart';
 
 const Statistics = () => {
-  const { outletWidth } = useOutletContext<DashboardOutletContext>();
-
   return (
-    <div
-      className="whitespace-nowrap bg-[#F9F9FF] p-10"
-      style={{ width: outletWidth }}
-    >
+    <div className="grow whitespace-nowrap bg-[#F9F9FF] p-10">
       <StatisticsHeader />
       <DateSelector />
       <UserSelector />

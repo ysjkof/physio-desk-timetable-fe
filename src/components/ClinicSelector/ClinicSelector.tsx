@@ -17,7 +17,7 @@ const ClinicSelector = () => {
         {renameUseSplit(clinic?.name || '')}
         <BarsArrowDown iconSize="LG" />
       </summary>
-      <div className="absolute top-9 w-full overflow-hidden rounded-md bg-white text-base shadow-cst">
+      <div className="absolute top-9 flex w-full flex-col overflow-hidden rounded-md bg-white text-base shadow-cst">
         {myMember?.map((member) => (
           <ClinicSelectorBtn key={member.id} member={member} />
         ))}

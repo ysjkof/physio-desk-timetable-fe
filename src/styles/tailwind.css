@@ -127,7 +127,7 @@
     @apply flex h-full w-[360px] flex-col overflow-y-scroll border-r border-r-table-line pt-16;
   }
   .css_dashboard__member-management-column__2nd {
-    @apply flex flex-col items-center justify-center;
+    @apply flex grow flex-col items-center justify-center;
   }
 
   .prescription-management-item-container {

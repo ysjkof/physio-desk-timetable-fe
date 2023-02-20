@@ -6,17 +6,20 @@ import { useStore } from '../../store';
 import { useFindMyMembers, useMe, useWindowSize } from '../../hooks';
 import { cls } from '../../utils/commonUtils';
 import { BrokenLine, Heart, Medicine, User } from '../../svgs';
+import { ClinicSelector } from '../../components';
 
 const Dashboard = () => {
   const { width } = useWindowSize(true);
-  const outletWidth = width - 200;
   return (
     <div className="flex text-base" style={{ width }}>
       <div className="css_dashboard__column-container">
         <ProfileWithImage />
         <LinkBtns />
       </div>
-      <Outlet context={{ outletWidth }} />
+      <div className="flex w-full flex-col divide-y">
+        <ClinicSelector />
+        <Outlet />
+      </div>
     </div>
   );
 };

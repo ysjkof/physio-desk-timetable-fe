@@ -7,6 +7,7 @@ import PickedReservation from './ReservationForCopy';
 import CreatePatientButton from './CreatePatientButton';
 import ToggleSettingOfTimetable from './ToggleSettingOfTimetable';
 import { toggleSettingOfTimetable } from '../../../../store';
+import { ClinicSelector } from '../../../../components';
 
 const TableController = () => {
   useEffect(() => {
@@ -14,9 +15,10 @@ const TableController = () => {
   }, []);
 
   return (
-    <>
+    <div className="flex w-full flex-col justify-between bg-white">
       <div className="mb-1.5 flex w-full items-center justify-between border-b py-1">
         <DateController />
+        <ClinicSelector />
         <div className="flex gap-2">
           <SwitchWeekViewButton />
           <SeeCalendarButton />
@@ -30,7 +32,7 @@ const TableController = () => {
           <ToggleSettingOfTimetable />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

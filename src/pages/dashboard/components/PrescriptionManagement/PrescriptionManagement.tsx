@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PrescriptionManagementHeader from './PrescriptionManagementHeader';
 import PrescriptionItemHeader from './PrescriptionItemHeader';
 import PrescriptionItem from './PrescriptionItem';
@@ -7,11 +7,8 @@ import { CreatePrescription } from '../CreatePrescription';
 import EditPrescription from '../EditPrescription/EditPrescription';
 import { useStore } from '../../../../store';
 import { useFindPrescriptions } from '../../../../hooks';
-import type { DashboardOutletContext } from '../../../../types/commonTypes';
 
 const PrescriptionManagement = () => {
-  const { outletWidth } = useOutletContext<DashboardOutletContext>();
-
   const [showInactivate, setShowInactivate] = useState(false);
 
   const clinicId = useStore((state) => state.pickedClinicId);
@@ -28,10 +25,7 @@ const PrescriptionManagement = () => {
   };
 
   return (
-    <div
-      className="whitespace-nowrap bg-[#F9F9FF] p-10"
-      style={{ width: outletWidth }}
-    >
+    <div className="grow whitespace-nowrap bg-[#F9F9FF] p-10">
       <PrescriptionManagementHeader
         seeInactivate={showInactivate}
         setSeeInactivate={setShowInactivate}

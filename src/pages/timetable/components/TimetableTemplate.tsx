@@ -29,7 +29,7 @@ const TimetableTemplate = ({
     >
       <div
         id="timetable__nav"
-        className="relative z-[34] mt-4 flex w-full flex-col  justify-between bg-white px-2"
+        className="relative z-[34] mt-4 px-2"
         ref={navRef}
       >
         {nav}

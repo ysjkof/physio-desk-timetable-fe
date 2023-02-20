@@ -179,10 +179,8 @@ export interface LocationState {
   createPatient?: boolean;
 }
 
-export interface DashboardOutletContext {
+export interface SettingOutletContext {
   outletWidth: number;
 }
-
-export interface SettingOutletContext extends DashboardOutletContext {}
 
 export type ApolloClientType = ApolloClient<NormalizedCacheObject> | null;

@@ -22,7 +22,7 @@ const MemberManagement = () => {
   }, [myClinic, searchInput]);
 
   return (
-    <>
+    <div className="flex h-full">
       <div className="css_dashboard__member-management-column__1st">
         <h1 className="mb-8 pl-4 text-3xl font-medium">직원열람 및 관리</h1>
         <div className="relative mb-7 flex items-center justify-between gap-4 px-4">
@@ -34,13 +34,10 @@ const MemberManagement = () => {
         <AlignmentButtons setMembers={setMembers} />
         <MemberList members={members} />
       </div>
-      <div
-        className="css_dashboard__member-management-column__2nd relative"
-        style={{ width: 'calc(100% - 560px)' }}
-      >
+      <div className="css_dashboard__member-management-column__2nd relative">
         <Outlet />
       </div>
-    </>
+    </div>
   );
 };
 
