@@ -1,6 +1,6 @@
 import { useGetClinic } from '../../../../hooks';
-import { ClinicType } from '../../../../types/generatedTypes';
 import FormForInviteUser from './FormForInviteUser';
+import { ClinicType } from '../../../../types/generatedTypes';
 
 const InviteUser = () => {
   const [myClinic] = useGetClinic();
@@ -10,7 +10,7 @@ const InviteUser = () => {
   return (
     <div className="h-full w-full overflow-scroll px-14 py-10">
       <Title />
-      <div className="mt-10 flex w-[460px] flex-col gap-4">
+      <div className="mt-10 flex max-w-md flex-col gap-4">
         {isPersonal ? (
           <p>개인용 병원은 직원을 초대할 수 없습니다.</p>
         ) : (

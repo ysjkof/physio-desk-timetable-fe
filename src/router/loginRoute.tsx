@@ -47,11 +47,11 @@ const loginRoute = [
             path: ':memberId',
             element: <MemberDetail />,
           },
-          {
-            path: 'invite',
-            element: <InviteUser />,
-          },
         ],
+      },
+      {
+        path: 'invite',
+        element: <InviteUser />,
       },
     ],
   },
