@@ -5,9 +5,10 @@ import type {
   FindPrescriptionsQuery,
   FindPrescriptionsQueryVariables,
 } from '../types/generatedTypes';
+import type { ResultOfFindPrescriptions } from '../types/processedGeneratedTypes';
 
 export const useFindPrescriptions = (): [
-  FindPrescriptionsQuery['findPrescriptions'] | null | undefined,
+  ResultOfFindPrescriptions | null | undefined,
   QueryResult<FindPrescriptionsQuery, FindPrescriptionsQueryVariables>
 ] => {
   const clinicId = useStore((state) => state.pickedClinicId);

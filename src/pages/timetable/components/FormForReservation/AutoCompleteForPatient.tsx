@@ -5,8 +5,10 @@ import { InputWithRef } from './InputForReserve';
 import { useSearchPatient } from '../../../../hooks';
 import { useAutoComplete } from '../../../../hooks/useAutoComplete';
 import { SelectedValue } from './SelectedValue';
-import type { SearchPatientQuery } from '../../../../types/generatedTypes';
-import type { PatientInSearch } from '../../../../types/processedGeneratedTypes';
+import type {
+  PatientInSearch,
+  PatientsInSearch,
+} from '../../../../types/processedGeneratedTypes';
 
 interface AutoCompleteForPatientProps {
   label: string;
@@ -17,8 +19,7 @@ const AutoCompleteForPatient = ({
   label,
   setParentValue,
 }: AutoCompleteForPatientProps) => {
-  const [selectionList, setSelectionList] =
-    useState<SearchPatientQuery['searchPatient']['patients']>();
+  const [selectionList, setSelectionList] = useState<PatientsInSearch>();
 
   const { register, setValue } = useForm<{ name: string }>();
 

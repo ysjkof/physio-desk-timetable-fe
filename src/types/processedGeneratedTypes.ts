@@ -30,14 +30,17 @@ export type ClinicInReservation = NonNullable<ReservationInList['clinic']>;
 
 export type PatientInReservation = NonNullable<ReservationInList['patient']>;
 
-export type PatientInSearch = NonNullable<
-  SearchPatientQuery['searchPatient']['patients']
->[0];
+export type PatientsInSearch = SearchPatientQuery['searchPatient']['patients'];
+
+export type PatientInSearch = NonNullable<PatientsInSearch>[0];
 
 // prescriptions
 
+export type ResultOfFindPrescriptions =
+  FindPrescriptionsQuery['findPrescriptions'];
+
 export type PrescriptionForFind = NonNullable<
-  FlatArray<FindPrescriptionsQuery['findPrescriptions']['prescriptions'], 1>
+  FlatArray<ResultOfFindPrescriptions['prescriptions'], 1>
 >;
 
 export type PrescriptionsInReservation = NonNullable<
