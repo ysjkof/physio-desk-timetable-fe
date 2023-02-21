@@ -21,7 +21,7 @@ const UserSelector = () => {
   };
 
   return (
-    <div className="flex basis-full items-center gap-2">
+    <div className="flex grow items-center gap-2">
       <SpreadingToggleButton
         isSpreading={isSpreading}
         setIsSpreading={setIsSpreading}
