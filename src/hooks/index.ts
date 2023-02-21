@@ -1,53 +1,25 @@
-import { useAcceptInvitation } from './useAcceptInvitation';
-import { useAutoComplete } from './useAutoComplete';
-import { useCreateClinic } from './useCreateClinic';
-import { useCreatePatient } from './useCreatePatient';
-import { useCreatePrescription } from './useCreatePrescription';
-import { useDeactivateClinic } from './useDeactivateClinic';
-import { useDebounce } from './useDebounce';
-import { useEditProfile } from './useEditProfile';
-import { useFindMyClinics } from './useFindMyClinics';
-import { useFindMyMembers } from './useFindMyMembers';
-import { useFindPrescriptions } from './useFindPrescriptions';
-import { useGetClinic } from './useGetClinic';
-import { useGetPrescription } from './useGetPrescription';
-import { useInviteUser } from './useInviteUser';
-import { useLeaveClinic } from './useLeaveClinic';
-import { useLogout } from './useLogout';
-import { useMe } from './useMe';
-import { useMediaQuery } from './useMediaQuery';
-import { useCloseModal } from './useModalClose';
-import { useNavCreatePatient } from './useNavCreatePatient';
-import { useRefuseInvitation } from './useRefuseInvitation';
-import { useSearchPatient } from './useSearchPatient';
-import { useHiddenUsers } from './useHiddenUsers';
-import { useTogglePrescriptionActivate } from './useTogglePrescriptionActivate';
-import { useWindowSize } from './useWindowSize';
-
-export {
-  useAcceptInvitation,
-  useAutoComplete,
-  useCreateClinic,
-  useCreatePatient,
-  useCreatePrescription,
-  useDeactivateClinic,
-  useDebounce,
-  useEditProfile,
-  useFindMyClinics,
-  useFindMyMembers,
-  useFindPrescriptions,
-  useGetClinic,
-  useGetPrescription,
-  useInviteUser,
-  useLeaveClinic,
-  useLogout,
-  useMe,
-  useMediaQuery,
-  useCloseModal,
-  useNavCreatePatient,
-  useRefuseInvitation,
-  useSearchPatient,
-  useHiddenUsers,
-  useTogglePrescriptionActivate,
-  useWindowSize,
-};
+export * from './useAcceptInvitation';
+export * from './useAutoComplete';
+export * from './useCreateClinic';
+export * from './useCreatePatient';
+export * from './useCreatePrescription';
+export * from './useDeactivateClinic';
+export * from './useDebounce';
+export * from './useEditProfile';
+export * from './useFindMyClinics';
+export * from './useFindMyMembers';
+export * from './useFindPrescriptions';
+export * from './useGetClinic';
+export * from './useGetPrescription';
+export * from './useInviteUser';
+export * from './useLeaveClinic';
+export * from './useLogout';
+export * from './useMe';
+export * from './useMediaQuery';
+export * from './useModalClose';
+export * from './useNavCreatePatient';
+export * from './useRefuseInvitation';
+export * from './useLazySearchPatient';
+export * from './useHiddenUsers';
+export * from './useTogglePrescriptionActivate';
+export * from './useWindowSize';
