@@ -6,6 +6,7 @@ interface CheckableButtonProps {
   label: string;
   personalColor: string;
   canSee: boolean;
+  hasBorder?: boolean;
   onClick: () => void;
   icon?: ReactNode;
 }
@@ -14,6 +15,7 @@ const CheckableButton = ({
   label,
   personalColor,
   canSee,
+  hasBorder = true,
   onClick,
   icon,
 }: CheckableButtonProps) => {
@@ -24,7 +26,8 @@ const CheckableButton = ({
       role="button"
       tabIndex={0}
       className={cls(
-        'flex h-fit select-none items-center gap-2 whitespace-nowrap rounded-sm border border-gray-300 px-2 py-0.5 text-gray-300',
+        'flex h-fit select-none items-center gap-2 whitespace-nowrap rounded-sm px-2 py-0.5 text-gray-300',
+        hasBorder ? 'border border-gray-300' : '',
         canSee ? 'text-white' : 'bg-white'
       )}
       style={{

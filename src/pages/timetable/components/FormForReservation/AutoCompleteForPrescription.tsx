@@ -1,146 +1,92 @@
-import { useEffect, useState } from 'react';
-import { useForm, UseFormSetValue } from 'react-hook-form';
-import { cls } from '../../../../utils/commonUtils';
-import { useAutoComplete } from '../../../../hooks';
+import { useState } from 'react';
+import { useForm, type UseFormSetValue } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { isArrayAndValue } from '../../../../utils/commonUtils';
 import { PickedPrescriptions } from '../../../../models';
-import { InputWithRef } from './InputForReserve';
-import { SelectedValue } from './SelectedValue';
 import { PrescriptionTotal } from './PrescriptionTotal';
+import { CheckableButton } from '../../../../components';
 import type { FormOfReserveFields } from '../../../../types/formTypes';
-import type { Prescription } from '../../../../types/generatedTypes';
 import type { PickedPrescription } from '../../../../types/commonTypes';
 
 interface AutoCompleteForPrescriptionProps {
-  label: string;
   prescriptionList: PickedPrescriptions;
   setValue: UseFormSetValue<FormOfReserveFields>;
 }
 
 const AutoCompleteForPrescription = ({
-  label,
   prescriptionList,
   setValue: setValueOfParentInput,
 }: AutoCompleteForPrescriptionProps) => {
-  const [selectionList, setSelectionList] = useState<Prescription[]>();
+  const [isInputMode, setIsInputMode] = useState(false);
 
-  const { register, setValue, getValues } = useForm<{
-    prescriptions: string;
-  }>();
+  const onInputMode = () => setIsInputMode(true);
+  const offInputMode = () => setIsInputMode(false);
 
-  const firstListItem = prescriptionList.getAll()[0];
-  const firstButtonId = firstListItem
-    ? `auto-complete__prescription_${firstListItem.id}-${firstListItem.name}`
-    : '';
+  const { setValue, getValues } = useForm<{ prescriptions: string }>();
 
-  const {
-    hasList,
-    selectedValue,
-    ulRef,
-    inputRef,
-    keydownAtInput,
-    keydownAtButton,
-    openList,
-    select,
-    clearValue,
-  } = useAutoComplete<number[]>({
-    firstButtonId,
-    setInput(value) {
-      if (!value) throw Error('Input 값의 유형이 바르지 않습니다.');
-      setValue('prescriptions', prescriptionList.getNames());
-      setValueOfParentInput('prescriptions', value);
-    },
-  });
-
-  const [selectedPrescription, setSelectedPrescription] =
+  const [pickedPrescriptions, setPickedPrescriptions] =
     useState<PickedPrescription>(prescriptionList.get());
 
   const toggleValue = (prescriptionId: number) => {
     const freshSelection = prescriptionList.toggleById(prescriptionId);
-    setSelectedPrescription({ ...freshSelection.get() });
+    setPickedPrescriptions({ ...freshSelection.get() });
     setValue('prescriptions', freshSelection.getNames());
+    setValueOfParentInput('prescriptions', freshSelection.get().prescriptions);
   };
 
-  const handleFocus = () => {
-    if (!firstListItem || hasList) return;
-    openList();
-  };
+  const prescriptions = prescriptionList.getAll();
 
-  useEffect(() => {
-    setSelectionList(prescriptionList.getAll());
-  }, [prescriptionList.getAll()]);
-
-  if (selectedValue) {
+  if (!isArrayAndValue(prescriptions))
     return (
-      <>
-        <SelectedValue clearValue={clearValue}>
-          {getValues('prescriptions')}
-        </SelectedValue>
-        {selectedPrescription && (
-          <PrescriptionTotal selectedPrescription={selectedPrescription} />
-        )}
-      </>
+      <div>
+        처방이 없습니다.
+        <Link
+          className="font-medium text-blue-500"
+          to="/dashboard/clinic/prescriptions/create"
+        >
+          만들기
+        </Link>
+      </div>
     );
-  }
 
   return (
     <>
-      <InputWithRef
-        label={label}
-        placeholder="처방을 입력하시면 검색이 가능합니다."
-        className={cls(
-          'text-cst-blue outline-none',
-          hasList && !selectedValue && selectionList
-            ? 'rounded-b-none border-2 border-b-0 border-cst-blue'
-            : ''
-        )}
-        register={register('prescriptions')}
-        onKeyDown={keydownAtInput}
-        onFocus={handleFocus}
-        ref={inputRef}
-      />
-      {hasList && !selectedValue && !selectionList && (
-        <div>처방이 없습니다.</div>
-      )}
-      {hasList && !selectedValue && selectionList && (
-        <ul
-          className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white"
-          ref={ulRef}
-        >
-          <div>
-            <div className="mx-3 border-b" />
-          </div>
-          {selectionList.map((prescription) => (
-            <li
-              key={`auto-complete__patient_${prescription.id}-${prescription.name}`}
-              className={cls(
-                'border-y',
-                selectedPrescription.prescriptions.find(
-                  (id) => id === prescription.id
-                )
-                  ? 'border-cst-blue bg-light-blue'
-                  : 'border-transparent'
-              )}
-            >
-              <button
-                id={`auto-complete__patient_${prescription.id}-${prescription.name}`}
-                type="button"
-                value={prescription.id}
-                className="w-full py-1.5 px-3 text-left"
-                onClick={() => toggleValue(prescription.id)}
-                onKeyDown={keydownAtButton}
-              >
-                {prescription.name}
-              </button>
-            </li>
-          ))}
+      <button
+        className="flex w-full justify-between rounded-md border bg-disable py-2 px-3"
+        onClick={onInputMode}
+        type="button"
+      >
+        {getValues('prescriptions') || '선택해주세요'}
+      </button>
+      <PrescriptionTotal selectedPrescription={pickedPrescriptions} />
+
+      {isInputMode && (
+        <div className="absolute top-16 z-10 w-full overflow-hidden rounded-md border-2 border-cst-blue bg-white">
+          <ul className="">
+            {prescriptions.map((prescription) => (
+              <li key={prescription.id}>
+                <CheckableButton
+                  label={prescription.name}
+                  canSee={
+                    !!pickedPrescriptions.prescriptions.find(
+                      (id) => id === prescription.id
+                    )
+                  }
+                  hasBorder={false}
+                  personalColor="rgb(107 166 255)"
+                  onClick={() => toggleValue(prescription.id)}
+                />
+              </li>
+            ))}
+          </ul>
           <button
             type="button"
             className="w-full bg-cst-blue text-white"
-            onClick={() => select(selectedPrescription.prescriptions)}
+            onClick={offInputMode}
           >
-            적용
+            닫기
           </button>
-        </ul>
+        </div>
       )}
     </>
   );

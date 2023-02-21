@@ -80,7 +80,6 @@ const FormForReservation = ({
         </InputWrapper>
         <InputWrapper label="처방" required>
           <AutoCompleteForPrescription
-            label="처방"
             setValue={setValue}
             prescriptionList={prescriptionList}
           />
