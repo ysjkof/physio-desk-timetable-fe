@@ -53,8 +53,10 @@ const InputWithRef = forwardRef<HTMLInputElement, InputProps>(
             return element;
           }
           refOfRegister(element);
-          // eslint-disable-next-line no-param-reassign
-          (ref as MutableRefObject<HTMLInputElement>).current = element;
+          if (ref) {
+            // eslint-disable-next-line no-param-reassign
+            (ref as MutableRefObject<HTMLInputElement>).current = element;
+          }
         }}
       />
     );
