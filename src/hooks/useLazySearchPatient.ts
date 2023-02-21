@@ -4,7 +4,7 @@ import { SEARCH_PATIENT_DOCUMENT } from '../graphql';
 import { SearchPatientQuery } from '../types/generatedTypes';
 import { useStore } from '../store';
 
-export const useSearchPatient = () => {
+export const useLazySearchPatient = () => {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState([1]);
 
@@ -28,6 +28,7 @@ export const useSearchPatient = () => {
       onCompleted(data) {
         const { totalPages } = data.searchPatient;
         if (!totalPages) return;
+
         setPages(getPages(totalPages));
       },
       fetchPolicy: 'network-only',

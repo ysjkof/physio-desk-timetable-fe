@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { checkLengthIsZero, cls } from '../../../../utils/commonUtils';
 import { InputWithRef } from './InputForReserve';
-import { useSearchPatient } from '../../../../hooks';
+import { useLazySearchPatient } from '../../../../hooks';
 import { useAutoComplete } from '../../../../hooks/useAutoComplete';
 import { SelectedValue } from './SelectedValue';
 import type {
@@ -23,7 +23,7 @@ const AutoCompleteForPatient = ({
 
   const { register, setValue } = useForm<{ name: string }>();
 
-  const { patientQuery, data, loading } = useSearchPatient();
+  const { patientQuery, data, loading } = useLazySearchPatient();
 
   const firstListItem = data?.searchPatient.patients?.[0];
   const firstButtonId = firstListItem
