@@ -22,7 +22,6 @@ export type ClinicOfGetMyClinic = GetClinicQuery['getClinic']['clinic'];
 export type ClinicOfGetMyClinicTruth = NonNullable<
   GetClinicQuery['getClinic']['clinic']
 >;
-export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'];
 
 export type ClinicInReservation = NonNullable<ReservationInList['clinic']>;
 
@@ -52,6 +51,8 @@ export type PrescriptionsInReservation = NonNullable<
 export type MemberOfGetMember = NonNullable<
   GetMemberQuery['getMember']['member']
 >;
+
+export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'];
 
 // TODO : MyClinicMember로 이름 변경
 export type IMember = MyClinic['members'][0];

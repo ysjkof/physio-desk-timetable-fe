@@ -45,7 +45,7 @@ export interface FormForEditMyProfileFields {
   newPassword2?: string;
 }
 
-interface PropsWithName {
+export interface PropsWithName {
   name: string;
 }
 
