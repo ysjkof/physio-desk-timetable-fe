@@ -5,6 +5,7 @@ export * from './useCreatePatient';
 export * from './useCreatePrescription';
 export * from './useDeactivateClinic';
 export * from './useDebounce';
+export * from './useDebounceCallback';
 export * from './useEditProfile';
 export * from './useFindMyClinics';
 export * from './useFindMyMembers';
