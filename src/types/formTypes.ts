@@ -45,6 +45,10 @@ export interface FormForEditMyProfileFields {
   newPassword2?: string;
 }
 
-export interface FormForCreateClinicFields {
+interface PropsWithName {
   name: string;
 }
+
+export interface FormForCreateClinicFields extends PropsWithName {}
+
+export interface SearchPatientFormFields extends PropsWithName {}

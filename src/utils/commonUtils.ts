@@ -114,9 +114,9 @@ export function createArrayFromLength(length: number) {
   return numbers;
 }
 
-export function checkLengthIsZero<T>(arr?: T | null) {
-  if (!Array.isArray(arr)) return undefined;
-  return arr?.length === 0 ? undefined : arr;
+export function isArrayAndValue(arr?: unknown | null) {
+  if (!Array.isArray(arr)) return false;
+  return arr.length !== 0;
 }
 
 export function sortByString(

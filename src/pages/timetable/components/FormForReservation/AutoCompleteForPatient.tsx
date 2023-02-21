@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { checkLengthIsZero, cls } from '../../../../utils/commonUtils';
-import { InputWithRef } from './InputForReserve';
-import { useLazySearchPatient } from '../../../../hooks';
-import { useAutoComplete } from '../../../../hooks/useAutoComplete';
-import { SelectedValue } from './SelectedValue';
-import type {
-  PatientInSearch,
-  PatientsInSearch,
-} from '../../../../types/processedGeneratedTypes';
+import { isArrayAndValue, cls } from '../../../../utils/commonUtils';
+import { Input } from './InputForReserve';
+import { useDebouncedCallback, useLazySearchPatient } from '../../../../hooks';
+import type { PatientsInSearch } from '../../../../types/processedGeneratedTypes';
+import type { SearchPatientFormFields } from '../../../../types/formTypes';
 
 interface AutoCompleteForPatientProps {
   label: string;
@@ -19,88 +15,57 @@ const AutoCompleteForPatient = ({
   label,
   setParentValue,
 }: AutoCompleteForPatientProps) => {
-  const [selectionList, setSelectionList] = useState<PatientsInSearch>();
+  const [patients, setPatients] = useState<PatientsInSearch>();
 
-  const { register, setValue } = useForm<{ name: string }>();
+  const clearPatient = () => setPatients(undefined);
+
+  const { register, setValue } = useForm<SearchPatientFormFields>();
 
   const { patientQuery, data, loading } = useLazySearchPatient();
 
-  const firstListItem = data?.searchPatient.patients?.[0];
-  const firstButtonId = firstListItem
-    ? `auto-complete__patient_${firstListItem.id}-${firstListItem.name}`
-    : '';
+  const debounceQuery = useDebouncedCallback(patientQuery);
 
-  const {
-    hasList,
-    selectedValue,
-    ulRef,
-    inputRef,
-    keydownAtInput,
-    keydownAtButton,
-    openList,
-    select,
-    clearValue,
-  } = useAutoComplete<PatientInSearch>({
-    firstButtonId,
-    setInput(value) {
-      if (!value) throw Error('Input 값의 유형이 바르지 않습니다.');
-      setValue('name', value.name);
-      setParentValue(value.id);
-    },
-    clearList() {
-      setSelectionList(null);
-    },
-    query: (query: string) => patientQuery(query),
-  });
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    if (!value) return clearPatient();
+    debounceQuery(value);
+  };
+
+  const select = (id: number, name: string) => {
+    setValue('name', name);
+    setParentValue(id);
+    clearPatient();
+  };
 
   useEffect(() => {
     if (loading) return;
-    const freshList = checkLengthIsZero(data?.searchPatient.patients);
-    setSelectionList(freshList);
+    if (!data || !isArrayAndValue(data.searchPatient.patients)) {
+      return clearPatient();
+    }
 
-    if (!freshList) return;
-    openList();
-  }, [data]);
-
-  if (selectedValue)
-    return (
-      <SelectedValue clearValue={clearValue}>
-        {selectedValue.name}
-      </SelectedValue>
-    );
+    setPatients(data.searchPatient.patients);
+  }, [data?.searchPatient.patients]);
 
   return (
     <>
-      <InputWithRef
+      <Input
         label={label}
-        placeholder="성함을 입력하시면 검색이 가능합니다."
+        placeholder="이름을 입력하면 검색이 가능합니다."
         className={cls(
           'text-cst-blue outline-none',
-          hasList && !selectedValue && selectionList
-            ? 'rounded-b-none border-2 border-b-0 border-cst-blue'
-            : ''
+          patients ? 'rounded-b-none border-2 border-b-0 border-cst-blue' : ''
         )}
-        register={register('name')}
-        onKeyDown={keydownAtInput}
-        ref={inputRef}
+        register={register('name', { onChange })}
       />
-      {hasList && !selectedValue && selectionList && (
-        <ul
-          className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white"
-          ref={ulRef}
-        >
-          <div>
-            <div className="mx-3 border-b" />
-          </div>
-          {selectionList.map((patient) => (
-            <li key={`auto-complete__patient_${patient.id}-${patient.name}`}>
+      {patients && (
+        <ul className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white">
+          <div className="mx-2 border-b" />
+          {patients.map((patient) => (
+            <li key={patient.id}>
               <button
-                id={`auto-complete__patient_${patient.id}-${patient.name}`}
                 type="button"
-                value={patient.id}
                 className="w-full py-1.5 px-3 text-left"
-                onClick={() => select(patient)}
-                onKeyDown={(e) => keydownAtButton(e, patient)}
+                onClick={() => select(patient.id, patient.name)}
               >
                 {patient.name}
               </button>

@@ -4,10 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '../../timetable/components/FormForReservation/InputForReserve';
 import { useDebouncedCallback, useLazySearchPatient } from '../../../hooks';
 import type { PatientsInSearch } from '../../../types/processedGeneratedTypes';
-
-interface SearchPatientFormFields {
-  name: string;
-}
+import type { SearchPatientFormFields } from '../../../types/formTypes';
 
 export const SearchPatientForm = () => {
   const { patientQuery, data } = useLazySearchPatient();
