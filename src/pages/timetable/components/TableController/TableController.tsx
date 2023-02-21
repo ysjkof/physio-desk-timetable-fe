@@ -8,6 +8,7 @@ import CreatePatientButton from './CreatePatientButton';
 import ToggleSettingOfTimetable from './ToggleSettingOfTimetable';
 import { toggleSettingOfTimetable } from '../../../../store';
 import { ClinicSelector } from '../../../../components';
+import { SearchPatientForm } from '../../../search/components';
 
 const TableController = () => {
   useEffect(() => {
@@ -28,6 +29,7 @@ const TableController = () => {
         <UserSelector />
         <PickedReservation />
         <div className="flex items-center justify-end gap-x-2">
+          <SearchPatientForm />
           <CreatePatientButton />
           <ToggleSettingOfTimetable />
         </div>
