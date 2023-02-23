@@ -23,7 +23,7 @@ interface WarningProps {
 
 const Warning = ({ type, children }: WarningProps | ChildrenProps) => {
   return (
-    <p className="my-10 mx-auto text-center text-base font-semibold">
+    <p className="my-10 mx-auto w-full text-center text-base font-semibold">
       {type ? messages[type] : children}
     </p>
   );

@@ -7,6 +7,7 @@ import { CreatePrescription } from '../CreatePrescription';
 import EditPrescription from '../EditPrescription/EditPrescription';
 import { useStore } from '../../../../store';
 import { useFindPrescriptions } from '../../../../hooks';
+import { ProtectStayMember, Warning } from '../../../../components';
 
 const PrescriptionManagement = () => {
   const [showInactivate, setShowInactivate] = useState(false);
@@ -25,30 +26,35 @@ const PrescriptionManagement = () => {
   };
 
   return (
-    <div className="grow whitespace-nowrap bg-[#F9F9FF] p-10">
-      <PrescriptionManagementHeader
-        seeInactivate={showInactivate}
-        setSeeInactivate={setShowInactivate}
-        count={queryData?.count}
-        maximumCount={queryData?.maximumCount}
-      />
-      <PrescriptionItemHeader />
-      <div
-        className="prescription-management-item-container"
-        style={{ height: 'calc(100% - 92px)' }}
-      >
-        {queryData?.prescriptions?.map((prescription) => (
-          <PrescriptionItem
-            key={prescription.id}
-            prescription={prescription}
-            clinicId={clinicId}
-            showInactivate={showInactivate}
-          />
-        ))}
+    <ProtectStayMember
+      clinicId={clinicId}
+      fallback={<Warning type="hasNotPermission" />}
+    >
+      <div className="grow whitespace-nowrap bg-[#F9F9FF] p-10">
+        <PrescriptionManagementHeader
+          seeInactivate={showInactivate}
+          setSeeInactivate={setShowInactivate}
+          count={queryData?.count}
+          maximumCount={queryData?.maximumCount}
+        />
+        <PrescriptionItemHeader />
+        <div
+          className="prescription-management-item-container"
+          style={{ height: 'calc(100% - 92px)' }}
+        >
+          {queryData?.prescriptions?.map((prescription) => (
+            <PrescriptionItem
+              key={prescription.id}
+              prescription={prescription}
+              clinicId={clinicId}
+              showInactivate={showInactivate}
+            />
+          ))}
+        </div>
+        {hasCreate && <CreatePrescription closeAction={closeAction} />}
+        {hasEdit && <EditPrescription closeAction={closeAction} />}
       </div>
-      {hasCreate && <CreatePrescription closeAction={closeAction} />}
-      {hasEdit && <EditPrescription closeAction={closeAction} />}
-    </div>
+    </ProtectStayMember>
   );
 };
 
