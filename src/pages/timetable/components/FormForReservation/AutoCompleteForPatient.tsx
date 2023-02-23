@@ -5,6 +5,7 @@ import { Input } from './InputForReserve';
 import { useDebouncedCallback, useLazySearchPatient } from '../../../../hooks';
 import type { PatientsInSearch } from '../../../../types/processedGeneratedTypes';
 import type { SearchPatientFormFields } from '../../../../types/formTypes';
+import { getStringYearMonthDay } from '../../../../utils/dateUtils';
 
 interface AutoCompleteForPatientProps {
   label: string;
@@ -60,17 +61,31 @@ const AutoCompleteForPatient = ({
       {patients && (
         <ul className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white">
           <div className="mx-2 border-b" />
-          {patients.map((patient) => (
-            <li key={patient.id}>
-              <button
-                type="button"
-                className="w-full py-1.5 px-3 text-left"
-                onClick={() => select(patient.id, patient.name)}
-              >
-                {patient.name}
-              </button>
-            </li>
-          ))}
+          {patients.map((patient) => {
+            const { registrationNumber, birthday, name } = patient;
+
+            return (
+              <li key={patient.id}>
+                <button
+                  type="button"
+                  className="flex w-full flex-col py-1.5 px-3 text-left"
+                  onClick={() => select(patient.id, patient.name)}
+                >
+                  <div>
+                    <span>{name}</span>
+                    <span className="ml-2 text-xs text-gray-500">
+                      {registrationNumber}
+                    </span>
+                  </div>
+                  {birthday && (
+                    <span className="whitespace-nowrap text-xs text-gray-500">
+                      {getStringYearMonthDay(new Date(birthday))}
+                    </span>
+                  )}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
     </>

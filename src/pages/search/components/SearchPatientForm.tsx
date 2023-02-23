@@ -5,6 +5,7 @@ import { Input } from '../../timetable/components/FormForReservation/InputForRes
 import { useDebouncedCallback, useLazySearchPatient } from '../../../hooks';
 import type { PatientsInSearch } from '../../../types/processedGeneratedTypes';
 import type { SearchPatientFormFields } from '../../../types/formTypes';
+import { getStringYearMonthDay } from '../../../utils/dateUtils';
 
 export const SearchPatientForm = () => {
   const { patientQuery, data, loading } = useLazySearchPatient();
@@ -51,7 +52,7 @@ export const SearchPatientForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="relative rounded-md">
-      <div className="relative w-36">
+      <div className="relative w-44">
         <button
           className="position-center-y absolute right-2 rounded-md border px-2 py-0.5 shadow-sm"
           type="submit"
@@ -67,20 +68,34 @@ export const SearchPatientForm = () => {
       </div>
       {patients && (
         <ul className="absolute top-10 w-full rounded-md border bg-white py-1 text-base shadow-cst">
-          {patients.map((patient) => (
-            <li
-              key={patient.id}
-              className="px-1 hover:bg-deep-blue hover:text-white"
-            >
-              <button
-                type="button"
-                className="w-full py-1.5 px-3 text-left"
-                onClick={() => goSearchWithQuery(patient.name)}
+          {patients.map((patient) => {
+            const { registrationNumber, birthday, name } = patient;
+
+            return (
+              <li
+                key={patient.id}
+                className="px-1 hover:bg-deep-blue hover:text-white"
               >
-                {patient.name}
-              </button>
-            </li>
-          ))}
+                <button
+                  type="button"
+                  className="flex w-full flex-col py-1.5 px-3 text-left"
+                  onClick={() => goSearchWithQuery(patient.name)}
+                >
+                  <div>
+                    <span>{name}</span>
+                    <span className="ml-2 text-xs text-gray-500">
+                      {registrationNumber}
+                    </span>
+                  </div>
+                  {birthday && (
+                    <span className="whitespace-nowrap text-xs text-gray-500">
+                      {getStringYearMonthDay(new Date(birthday))}
+                    </span>
+                  )}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
     </form>
