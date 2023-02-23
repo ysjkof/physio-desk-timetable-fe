@@ -23,6 +23,7 @@ import { useLogin } from '../hooks/useLogin';
 import Toast from './Toast';
 import LogoOfText from './LogoOfText';
 import { ClinicSelector } from './ClinicSelector';
+import { ProtectStayMember } from './ProtectStayMember';
 
 export {
   ButtonOfPages,
@@ -50,4 +51,5 @@ export {
   Toast,
   LogoOfText,
   ClinicSelector,
+  ProtectStayMember,
 };
