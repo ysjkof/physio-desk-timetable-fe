@@ -1,6 +1,10 @@
 import { type ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { cls, isArrayAndValue } from '../../../../utils/commonUtils';
+import {
+  cls,
+  getMemberState,
+  isArrayAndValue,
+} from '../../../../utils/commonUtils';
 import { InputWithRef } from './InputForReserve';
 import { useGetClinic } from '../../../../hooks';
 import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
@@ -62,18 +66,24 @@ const AutoCompleteForUser = ({
       {members && (
         <ul className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white">
           <div className="mx-2 border-b" />
-          {members.map((member) => (
-            <li key={member.id}>
-              <button
-                type="button"
-                value={member.user.id}
-                className="w-full py-1.5 px-3 text-left"
-                onClick={() => select(member.user.name)}
-              >
-                {member.user.name}
-              </button>
-            </li>
-          ))}
+          {members.map((member) => {
+            const { accepted, manager, staying } = member;
+            const state = getMemberState({ accepted, manager, staying });
+            if (state === '탈퇴' || state === '수락대기') return null;
+
+            return (
+              <li key={member.id}>
+                <button
+                  type="button"
+                  value={member.user.id}
+                  className="w-full py-1.5 px-3 text-left"
+                  onClick={() => select(member.user.name)}
+                >
+                  {member.user.name}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

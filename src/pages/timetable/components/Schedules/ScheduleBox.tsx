@@ -1,4 +1,4 @@
-import { cls } from '../../../../utils/commonUtils';
+import { cls, getMemberState } from '../../../../utils/commonUtils';
 import TimeIndicatorBar from '../TimeIndicatorBar';
 import ReservationButtons from './ReserveButtons';
 import EventBoxContainer from './EventBoxContainer';
@@ -22,27 +22,34 @@ const ScheduleBox = ({
       style={viewPeriodStyle}
     >
       <TimeIndicatorBar isActive={enableTimeIndicator} />
-      {members.map((member, userIndex) => (
-        <div
-          key={member.id}
-          className="USER_COL relative w-full divide-y divide-table-line bg-table-bg hover:bg-gray-200/50"
-        >
-          <ReservationButtons
-            labelMaxLength={labelMaxLength}
-            date={date}
-            labels={labels}
-            userId={member.user.id}
-            userIndex={userIndex}
-          />
-          <EventBoxContainer
-            labelMaxLength={labelMaxLength}
-            labels={labels}
-            events={member.events}
-            userIndex={userIndex}
-            isSingleUser={userLength === 1}
-          />
-        </div>
-      ))}
+      {members.map((member, userIndex) => {
+        const { accepted, manager, staying } = member;
+        const state = getMemberState({ accepted, manager, staying });
+
+        return (
+          <div
+            key={member.id}
+            className="USER_COL relative w-full divide-y divide-table-line bg-table-bg hover:bg-gray-200/50"
+          >
+            {state === '탈퇴' || (
+              <ReservationButtons
+                labelMaxLength={labelMaxLength}
+                date={date}
+                labels={labels}
+                userId={member.user.id}
+                userIndex={userIndex}
+              />
+            )}
+            <EventBoxContainer
+              labelMaxLength={labelMaxLength}
+              labels={labels}
+              events={member.events}
+              userIndex={userIndex}
+              isSingleUser={userLength === 1}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };

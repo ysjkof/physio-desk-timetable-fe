@@ -1,4 +1,4 @@
-import { cls } from '../../../../utils/commonUtils';
+import { cls, getMemberState } from '../../../../utils/commonUtils';
 import { USER_COLORS } from '../../../../constants/constants';
 import type { MemberNameProps } from '../../../../types/propsTypes';
 
@@ -15,17 +15,25 @@ const MemberName = ({
       )}
       style={viewPeriodStyle}
     >
-      {members.map((member, idx) => (
-        <div
-          key={member.id}
-          className="flex items-center justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 pt-4 font-medium"
-          style={{ borderBottomColor: USER_COLORS[idx]?.deep || 'inherit' }}
-        >
-          <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-            {member.user.name}
-          </span>
-        </div>
-      ))}
+      {members.map((member, idx) => {
+        const { accepted, manager, staying } = member;
+        const state = getMemberState({ accepted, manager, staying });
+
+        return (
+          <div
+            key={member.id}
+            className="flex flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium"
+            style={{ borderBottomColor: USER_COLORS[idx]?.deep || 'inherit' }}
+          >
+            <span className="h-4 overflow-hidden text-ellipsis whitespace-nowrap">
+              {state === '탈퇴' && '탈퇴'}
+            </span>
+            <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+              {member.user.name}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 };

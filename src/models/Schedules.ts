@@ -14,6 +14,7 @@ import type {
   ClinicOfGetMyClinicTruth,
   ReservationInList,
 } from '../types/processedGeneratedTypes';
+import { getMemberState } from '../utils/commonUtils';
 
 interface SchedulesProps {
   data: ReservationInList[];
@@ -51,12 +52,21 @@ export class Schedules {
   }
 
   #createMembersForTable(clinic: ClinicOfGetMyClinicTruth): MemberWithEvent[] {
-    const membersForTable = clinic.members.map(this.#addKeyToMember);
+    const membersForTable = this.#removeWaitMember(clinic.members).map(
+      this.#addKeyToMember
+    );
     return membersForTable.sort((a, b) => {
       if (a.user.name > b.user.name) return 1;
       if (a.user.name < b.user.name) return -1;
       return 0;
     });
+  }
+
+  #removeWaitMember(members: MemberOfClient[]) {
+    return members.filter(
+      ({ accepted, staying, manager }) =>
+        getMemberState({ accepted, staying, manager }) !== '수락대기'
+    );
   }
 
   #addKeyToMember(member: MemberOfClient) {
