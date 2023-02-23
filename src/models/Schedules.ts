@@ -35,6 +35,14 @@ export class Schedules {
     return this.#value;
   }
 
+  getMembers(): MemberWithEvent[] {
+    const initValue: MemberWithEvent[] = [];
+    return this.#value.reduce((cur, acc) => {
+      if (cur.length >= acc.members.length) return cur;
+      return acc.members;
+    }, initValue);
+  }
+
   #createForm(date: Date, clinic: ClinicOfGetMyClinicTruth): ISchedules[] {
     const week = this.#createWeek(date);
     return week.map((date) => ({

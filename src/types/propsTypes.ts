@@ -39,6 +39,11 @@ export interface ScheduleBoxProps extends MemberNameProps, ILabels, IDate {
   enableTimeIndicator: boolean;
 }
 
+export interface TableControllerProps {
+  members: MemberWithEvent[];
+}
+export interface UserSelectorProps extends TableControllerProps {}
+
 // Dashboard
 
 export interface CardProps {

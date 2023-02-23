@@ -2,6 +2,8 @@ import { cls, getMemberState } from '../../../../utils/commonUtils';
 import TimeIndicatorBar from '../TimeIndicatorBar';
 import ReservationButtons from './ReserveButtons';
 import EventBoxContainer from './EventBoxContainer';
+import { useStore } from '../../../../store';
+import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
 import type { ScheduleBoxProps } from '../../../../types/propsTypes';
 
 const ScheduleBox = ({
@@ -12,6 +14,8 @@ const ScheduleBox = ({
   labelMaxLength,
   labels,
 }: ScheduleBoxProps) => {
+  const hiddenUsers = useStore((state) => state.hiddenUsers);
+
   return (
     <div
       className={cls(
@@ -21,7 +25,10 @@ const ScheduleBox = ({
     >
       <TimeIndicatorBar isActive={enableTimeIndicator} />
       {members.map((member, userIndex) => {
-        const { accepted, manager, staying } = member;
+        const { id, accepted, manager, staying } = member;
+
+        if (hiddenUsers.has(id)) return null;
+
         const state = getMemberState({ accepted, manager, staying });
 
         return (
@@ -31,6 +38,7 @@ const ScheduleBox = ({
               'USER_COL relative w-full divide-y divide-table-line bg-table-bg hover:bg-gray-200/50',
               state === '탈퇴' ? 'border bg-gray-200/50 hover:bg-none' : ''
             )}
+            style={{ height: labels.length * TABLE_CELL_HEIGHT }}
           >
             {state === '탈퇴' || (
               <ReservationButtons

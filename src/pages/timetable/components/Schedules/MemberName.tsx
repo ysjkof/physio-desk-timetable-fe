@@ -1,8 +1,11 @@
 import { cls, getMemberState } from '../../../../utils/commonUtils';
 import { USER_COLORS } from '../../../../constants/constants';
+import { useStore } from '../../../../store';
 import type { MemberNameProps } from '../../../../types/propsTypes';
 
 const MemberName = ({ userLength, members }: MemberNameProps) => {
+  const hiddenUsers = useStore((state) => state.hiddenUsers);
+
   return (
     <div
       className={cls(
@@ -11,7 +14,10 @@ const MemberName = ({ userLength, members }: MemberNameProps) => {
       )}
     >
       {members.map((member, idx) => {
-        const { accepted, manager, staying } = member;
+        const { id, accepted, manager, staying } = member;
+
+        if (hiddenUsers.has(id)) return null;
+
         const state = getMemberState({ accepted, manager, staying });
 
         return (

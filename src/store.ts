@@ -193,14 +193,12 @@ export const toggleShowNoshowOfTimetable = (
   });
 };
 
-export const toggleHiddenUsers = (memberId: number) =>
+export const toggleHiddenUsers = (memberId: number, maxMember: number) =>
   useStore.setState((prev) => {
     const hiddenUsers = new Set(prev.hiddenUsers);
     if (hiddenUsers.has(memberId)) {
       hiddenUsers.delete(memberId);
-    } else {
-      hiddenUsers.add(memberId);
-    }
+    } else if (maxMember - 1 !== hiddenUsers.size) hiddenUsers.add(memberId);
 
     const clinicId = useStore.getState().pickedClinicId;
     const { user } = useStore.getState();

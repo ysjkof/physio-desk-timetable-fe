@@ -9,8 +9,9 @@ import ToggleSettingOfTimetable from './ToggleSettingOfTimetable';
 import { toggleSettingOfTimetable } from '../../../../store';
 import { ClinicSelector } from '../../../../components';
 import { SearchPatientForm } from '../../../search/components';
+import type { TableControllerProps } from '../../../../types/propsTypes';
 
-const TableController = () => {
+const TableController = ({ members }: TableControllerProps) => {
   useEffect(() => {
     return () => toggleSettingOfTimetable(false);
   }, []);
@@ -26,7 +27,7 @@ const TableController = () => {
         </div>
       </div>
       <div className="flex w-full items-center gap-x-6 pb-3">
-        <UserSelector />
+        <UserSelector members={members} />
         <PickedReservation />
         <div className="flex items-center justify-end gap-x-2">
           <SearchPatientForm />

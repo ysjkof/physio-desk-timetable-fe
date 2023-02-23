@@ -20,7 +20,7 @@ const Loading = lazy(() => import('../../components/Loading'));
 
 const TimeTable = () => {
   const { labels } = useTableLabel();
-  const { schedules, variables } = useSchedules();
+  const { schedules, members, variables } = useSchedules();
   useSubscriptions({ variables });
 
   const locationState = useLocation().state as LocationState;
@@ -49,7 +49,7 @@ const TimeTable = () => {
         <title>시간표 | {MUOOL}</title>
       </Helmet>
       <TimetableTemplate
-        nav={<TableController />}
+        nav={<TableController members={members} />}
         labels={<TimeLabels labels={labels} />}
         columns={
           <AnimatePresence>
