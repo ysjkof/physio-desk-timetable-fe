@@ -29,7 +29,10 @@ const ScheduleBox = ({
         return (
           <div
             key={member.id}
-            className="USER_COL relative w-full divide-y divide-table-line bg-table-bg hover:bg-gray-200/50"
+            className={cls(
+              'USER_COL relative w-full divide-y divide-table-line bg-table-bg hover:bg-gray-200/50',
+              state === '탈퇴' ? 'border bg-gray-200/50 hover:bg-none' : ''
+            )}
           >
             {state === '탈퇴' || (
               <ReservationButtons

@@ -280,8 +280,8 @@ export function convertMinuteFromDate(date: Date) {
   return date.getTime() / 1000 / 60;
 }
 
-export function isPastDate(dateToCheck: Date, referenceDate: Date) {
-  return dateToCheck.getTime() < referenceDate.getTime();
+export function isPastDay(yesterday: Date, today: Date) {
+  return yesterday.getTime() >= today.getTime();
 }
 
 export function isValidDateFrom8Digit(dateString: string) {

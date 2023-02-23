@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { endOfYesterday, set, setDay } from 'date-fns';
-import { getFrom4DigitTime, getTimeLength } from '../../../../utils/dateUtils';
+import {
+  getFrom4DigitTime,
+  getTimeLength,
+  isPastDay,
+} from '../../../../utils/dateUtils';
 import {
   TABLE_CELL_HEIGHT,
   USER_COLORS,
@@ -46,14 +50,9 @@ const ReserveButton = ({
   };
 
   const pickedDate = useStore((state) => state.pickedDate);
-  const isPastDay = () => {
-    return (
-      setDay(set(pickedDate, { hours, minutes }), dayIndex) <= endOfYesterday()
-    );
-  };
-
   const handleClickButton = () => {
-    if (isPastDay()) {
+    const btnDate = setDay(set(pickedDate, { hours, minutes }), dayIndex);
+    if (isPastDay(endOfYesterday(), btnDate)) {
       return setAlert({ messages: ['지나간 날은 예약할 수 없습니다.'] });
     }
     if (pickedReservation) {

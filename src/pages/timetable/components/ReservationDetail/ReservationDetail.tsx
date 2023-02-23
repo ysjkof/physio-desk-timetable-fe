@@ -1,11 +1,15 @@
 import { PropsWithChildren } from 'react';
+import { endOfYesterday } from 'date-fns';
 import { getStringFromReservationState } from '../../../../utils/commonUtils';
 import {
   getStringOfDateTime,
   getStringOfDate,
+  isPastDay,
 } from '../../../../utils/dateUtils';
 import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
+import { Trash } from '../../../../svgs';
+import { useDeleteReservation } from '../../hooks';
 import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
 
 interface ReservationDetailProps {
@@ -23,6 +27,10 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
     memo,
     state,
   } = reservation;
+
+  const { deleteReservation } = useDeleteReservation();
+
+  const isEnableEdit = !isPastDay(endOfYesterday(), new Date(startDate));
 
   return (
     <div className="w-[300px] pb-4">
@@ -57,9 +65,11 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
         </DetailBox>
         <DetailBox title="예약상태">
           {getStringFromReservationState(state)}
-          <div className="mt-2 ml-2 flex w-full gap-2">
-            <ToggleReservationState reservation={reservation} />
-          </div>
+          {isEnableEdit && (
+            <div className="mt-2 ml-2 flex w-full gap-2">
+              <ToggleReservationState reservation={reservation} />
+            </div>
+          )}
         </DetailBox>
         <DetailBox title="수정정보">
           <li>
@@ -68,6 +78,15 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
             })`}
           </li>
         </DetailBox>
+        {isEnableEdit && (
+          <button
+            type="button"
+            onClick={() => deleteReservation({ reservationId: reservation.id })}
+            className="absolute top-16 right-4"
+          >
+            <Trash iconSize="LG" />
+          </button>
+        )}
       </div>
     </div>
   );
