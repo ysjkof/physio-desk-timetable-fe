@@ -4,7 +4,10 @@ import {
   nextSaturday,
   parseISO,
   setDay,
+  startOfDay,
 } from 'date-fns';
+import { getMemberState } from '../utils/commonUtils';
+import { isPastDay } from '../utils/dateUtils';
 import type {
   ISchedules,
   MemberOfClient,
@@ -14,8 +17,6 @@ import type {
   ClinicOfGetMyClinicTruth,
   ReservationInList,
 } from '../types/processedGeneratedTypes';
-import { getMemberState } from '../utils/commonUtils';
-import { isPastDay } from '../utils/dateUtils';
 
 interface SchedulesProps {
   data: ReservationInList[];
@@ -56,22 +57,24 @@ export class Schedules {
     clinic: ClinicOfGetMyClinicTruth,
     date: Date
   ): MemberWithEvent[] {
-    const membersWithoutLeftMember = this.#removeLeftMember(
-      clinic.members,
-      date
-    );
-    const membersForTable = this.#removeWaitMember(
-      membersWithoutLeftMember
-    ).map(this.#addKeyToMember);
+    const membersInRange = this.filterOutOfCreatedAt(clinic.members, date);
+    const withoutLeftMember = this.filterLeftMember(membersInRange, date);
+    const membersForTable = this.#filterWithoutWait(withoutLeftMember);
 
-    return membersForTable.sort((a, b) => {
+    return membersForTable.map(this.#addKeyToMember).sort((a, b) => {
       if (a.user.name > b.user.name) return 1;
       if (a.user.name < b.user.name) return -1;
       return 0;
     });
   }
 
-  #removeLeftMember(members: MemberOfClient[], date: Date) {
+  filterOutOfCreatedAt(members: MemberOfClient[], date: Date) {
+    return members.filter(
+      ({ createdAt }) => startOfDay(new Date(createdAt)) <= date
+    );
+  }
+
+  filterLeftMember(members: MemberOfClient[], date: Date) {
     return members.filter(
       ({ accepted, staying, manager, updatedAt }) =>
         !(
@@ -81,7 +84,7 @@ export class Schedules {
     );
   }
 
-  #removeWaitMember(members: MemberOfClient[]) {
+  #filterWithoutWait(members: MemberOfClient[]) {
     return members.filter(
       ({ accepted, staying, manager }) =>
         getMemberState({ accepted, staying, manager }) !== '수락대기'

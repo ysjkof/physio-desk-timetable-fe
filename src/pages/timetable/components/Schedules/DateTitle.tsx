@@ -34,7 +34,7 @@ const DateTitle = ({
     <div
       id={SCROLL_ADDRESS + date}
       className={cls(
-        'timetable-date-title cursor-pointer hover:bg-gray-200',
+        'timetable-date-title cursor-pointer px-2 hover:bg-gray-200',
         userLength === 1 ? 'border-x-inherit' : '',
         isPickedMonth ? '' : 'opacity-50',
         isToday ? 'bg-table-day-strong font-bold text-white' : '',

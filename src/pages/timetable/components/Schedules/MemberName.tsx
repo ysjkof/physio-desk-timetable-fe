@@ -2,18 +2,13 @@ import { cls, getMemberState } from '../../../../utils/commonUtils';
 import { USER_COLORS } from '../../../../constants/constants';
 import type { MemberNameProps } from '../../../../types/propsTypes';
 
-const MemberName = ({
-  userLength,
-  viewPeriodStyle,
-  members,
-}: MemberNameProps) => {
+const MemberName = ({ userLength, members }: MemberNameProps) => {
   return (
     <div
       className={cls(
-        'timetable-member-name-title grid',
+        'timetable-member-name-title flex',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
-      style={viewPeriodStyle}
     >
       {members.map((member, idx) => {
         const { accepted, manager, staying } = member;
@@ -22,7 +17,7 @@ const MemberName = ({
         return (
           <div
             key={member.id}
-            className="flex flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium"
+            className="flex w-[6rem] flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium"
             style={{ borderBottomColor: USER_COLORS[idx]?.deep || 'inherit' }}
           >
             <span className="h-4 overflow-hidden text-ellipsis whitespace-nowrap">

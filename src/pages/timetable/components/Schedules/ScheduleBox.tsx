@@ -7,7 +7,6 @@ import type { ScheduleBoxProps } from '../../../../types/propsTypes';
 const ScheduleBox = ({
   userLength,
   enableTimeIndicator,
-  viewPeriodStyle,
   members,
   date,
   labelMaxLength,
@@ -16,10 +15,9 @@ const ScheduleBox = ({
   return (
     <div
       className={cls(
-        'relative grid gap-2',
+        'relative flex gap-2',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
-      style={viewPeriodStyle}
     >
       <TimeIndicatorBar isActive={enableTimeIndicator} />
       {members.map((member, userIndex) => {

@@ -32,7 +32,6 @@ export interface DateTitleProps extends IUserLength, IDate {
 }
 export interface MemberNameProps extends IUserLength {
   members: MemberWithEvent[];
-  viewPeriodStyle: { gridTemplateColumns: string };
 }
 
 export interface ScheduleBoxProps extends MemberNameProps, ILabels, IDate {

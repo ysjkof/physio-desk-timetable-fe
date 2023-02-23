@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import { compareDateMatch } from '../../../../utils/dateUtils';
-import { SchedulesStyle } from '../../../../styles/timetableStyles';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberName from './MemberName';
@@ -29,10 +28,6 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
 
   const isWeekCalendar = useStore((state) => state.isWeekCalendar);
 
-  const containerStyle = isWeekCalendar
-    ? SchedulesStyle.week.template(userLength)
-    : SchedulesStyle.day.template();
-
   const pickedDate = useStore((state) => state.pickedDate);
 
   const schedules = isWeekCalendar
@@ -40,12 +35,8 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
     : weekEvents && [weekEvents[pickedDate.getDay()]];
 
   return (
-    <div className="grid" style={containerStyle}>
+    <div className="flex">
       {schedules.map((day, i) => {
-        const columnStyle = isWeekCalendar
-          ? SchedulesStyle.week.userColumn(day.members.length)
-          : SchedulesStyle.day.userColumn(day.members.length);
-
         return (
           <div key={i} className="flex flex-col">
             <PaddingWrapper>
@@ -56,28 +47,29 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
                 isPickedMonth={compareDateMatch(pickedDate, day.date, 'ym')}
               />
             </PaddingWrapper>
-            <PaddingWrapper hasBorder>
-              <MemberName
-                members={day.members}
-                viewPeriodStyle={columnStyle}
-                userLength={userLength}
-              />
-            </PaddingWrapper>
-            <PaddingWrapper hasBorder>
-              <ScheduleBox
-                date={day.date}
-                labels={labels}
-                labelMaxLength={labels.length}
-                members={day.members}
-                viewPeriodStyle={columnStyle}
-                userLength={userLength}
-                enableTimeIndicator={compareDateMatch(
-                  day.date,
-                  pickedDate,
-                  'ymd'
-                )}
-              />
-            </PaddingWrapper>
+            {day.members.length === 0 ? (
+              <p className="text-center">멤버가 없습니다</p>
+            ) : (
+              <>
+                <PaddingWrapper hasBorder>
+                  <MemberName members={day.members} userLength={userLength} />
+                </PaddingWrapper>
+                <PaddingWrapper hasBorder>
+                  <ScheduleBox
+                    date={day.date}
+                    labels={labels}
+                    labelMaxLength={labels.length}
+                    members={day.members}
+                    userLength={userLength}
+                    enableTimeIndicator={compareDateMatch(
+                      day.date,
+                      pickedDate,
+                      'ymd'
+                    )}
+                  />
+                </PaddingWrapper>
+              </>
+            )}
           </div>
         );
       })}
