@@ -9,7 +9,6 @@ import {
   FIND_ALL_PATIENTS_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
-import { ClinicsOfClient } from '../models';
 import { PrescriptionWithSelect } from '../types/commonTypes';
 import type {
   CreateAccountMutation,
@@ -22,6 +21,7 @@ import type {
   FindPrescriptionsQuery,
 } from '../types/generatedTypes';
 import { useGetClinic } from '../hooks';
+import { useStore } from '../store';
 
 export default function TestPage() {
   return (
@@ -108,8 +108,8 @@ function CreateReservation() {
     totalCount: 0,
     thisCount: 0,
   });
-  const selectedClinic = ClinicsOfClient.getSelectedClinic();
-  const clinicId = selectedClinic.id;
+  const clinicId = useStore((state) => state.pickedClinicId);
+  const [myClinic] = useGetClinic();
 
   const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
     FIND_PRESCRIPTIONS_DOCUMENT,
@@ -172,10 +172,10 @@ function CreateReservation() {
           Math.random() * (patients.length || 0)
         );
         const memberRandom = Math.floor(
-          Math.random() * (selectedClinic.members.length || 0)
+          Math.random() * (myClinic?.members.length || 0)
         );
         const patientId = patients[patientRandom].id;
-        const userId = selectedClinic.members[memberRandom].user.id;
+        const userId = myClinic?.members[memberRandom].user.id;
 
         createReservationMutation({
           variables: {
@@ -224,7 +224,7 @@ function CreateReservation() {
       <p>
         병원 id: {clinicId}
         <br />
-        병원이름 : {selectedClinic.name}
+        병원이름 : {myClinic?.name}
         <br />
         예약한 수 : {createdReservation.thisCount}
         <br />총 예약한 수 : {createdReservation.totalCount}
