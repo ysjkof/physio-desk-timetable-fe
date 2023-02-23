@@ -1,35 +1,45 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Input } from '../../timetable/components/FormForReservation/InputForReserve';
 import { useDebouncedCallback, useLazySearchPatient } from '../../../hooks';
 import type { PatientsInSearch } from '../../../types/processedGeneratedTypes';
 import type { SearchPatientFormFields } from '../../../types/formTypes';
 
 export const SearchPatientForm = () => {
-  const { patientQuery, data } = useLazySearchPatient();
+  const { patientQuery, data, loading } = useLazySearchPatient();
 
   const [patients, setPatients] = useState<PatientsInSearch>();
 
-  const { register, handleSubmit } = useForm<SearchPatientFormFields>();
+  const [params] = useSearchParams();
 
-  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<SearchPatientFormFields>({
+    defaultValues: { name: params.get('name') || '' },
+  });
 
   const onSubmit: SubmitHandler<SearchPatientFormFields> = (data) => {
     const { name } = data;
     if (!name) return null;
-    navigate(`/search?name=${name}`);
+    goSearchWithQuery(name);
   };
+
+  const goSearchWithQuery = (query: string) => {
+    navigate(`/search?name=${query}`);
+    setPatients(null);
+  };
+  const navigate = useNavigate();
 
   const debounceQuery = useDebouncedCallback(patientQuery);
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     if (!value) return setPatients(null);
+
     debounceQuery(value);
   };
 
   useEffect(() => {
+    if (loading) return;
     if (
       !data?.searchPatient.patients ||
       data?.searchPatient.patients.length < 1
@@ -62,7 +72,13 @@ export const SearchPatientForm = () => {
               key={patient.id}
               className="px-1 hover:bg-deep-blue hover:text-white"
             >
-              {patient.name}
+              <button
+                type="button"
+                className="w-full py-1.5 px-3 text-left"
+                onClick={() => goSearchWithQuery(patient.name)}
+              >
+                {patient.name}
+              </button>
             </li>
           ))}
         </ul>

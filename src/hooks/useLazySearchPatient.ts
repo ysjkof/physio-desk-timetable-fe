@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { SEARCH_PATIENT_DOCUMENT } from '../graphql';
 import { SearchPatientQuery } from '../types/generatedTypes';
 import { useStore } from '../store';
+import { getDateFromStr8Digit } from '../utils/dateUtils';
 
 export const useLazySearchPatient = () => {
   const [page, setPage] = useState(1);
@@ -14,15 +15,22 @@ export const useLazySearchPatient = () => {
 
   const clinicId = useStore((state) => state.pickedClinicId);
 
-  const patientQuery = (name: string) => {
-    const query = name.trim();
-    if (queryResult.loading || !query) return;
+  const patientQuery = (name: string, clinicIds?: number[]) => {
+    if (queryResult.loading || !name) return;
+
+    let query: string | Date = name.trim();
+
+    if (parseInt(query, 10)) {
+      if (query.length === 8) query = getDateFromStr8Digit(name);
+      else return;
+    }
+
     callQuery({
       variables: {
         input: {
           page,
           query,
-          clinicIds: [clinicId],
+          clinicIds: clinicIds || [clinicId],
         },
       },
       onCompleted(data) {

@@ -1,11 +1,10 @@
-import { useLazyQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { createArrayFromLength, renameUseSplit } from '../../utils/commonUtils';
-import { useWindowSize } from '../../hooks';
-import { getYMD } from '../../utils/dateUtils';
+import { useLazySearchPatient, useWindowSize } from '../../hooks';
+import { getStringYearMonthDay } from '../../utils/dateUtils';
 import { ButtonOfPages, Warning } from '../../components';
 import {
   SearchCheckList,
@@ -14,19 +13,14 @@ import {
   SearchTitle,
 } from './components';
 import { GENDER_KOR, MUOOL } from '../../constants/constants';
-import { SEARCH_PATIENT_DOCUMENT } from '../../graphql';
 import { useStore } from '../../store';
-import type { SearchPatientQuery } from '../../types/generatedTypes';
 
 export default function Search() {
   const clinicId = useStore((state) => state.pickedClinicId);
   const location = useLocation();
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
 
-  const [callQuery, { data }] = useLazyQuery<SearchPatientQuery>(
-    SEARCH_PATIENT_DOCUMENT
-  );
+  const { patientQuery, data, page, changePage } = useLazySearchPatient();
 
   const { register, getValues } = useForm<{ clinicIds: number[] }>({
     defaultValues: { clinicIds: [clinicId] },
@@ -41,25 +35,15 @@ export default function Search() {
     if (!name) return navigate(-1);
 
     const { clinicIds } = getValues();
-    callQuery({
-      variables: {
-        input: {
-          page,
-          query: name,
-          clinicIds: clinicIds.map((id) => +id),
-        },
-      },
-    });
+    patientQuery(
+      name,
+      clinicIds.map((id) => +id)
+    );
   };
 
   const numberOfPages = createArrayFromLength(
     data?.searchPatient.totalPages || 1
   );
-
-  const changePage = (pageNumber: number) => {
-    if (page === pageNumber) return;
-    setPage(pageNumber);
-  };
 
   useEffect(() => {
     invokeQuery();
@@ -91,17 +75,23 @@ export default function Search() {
               'name'
             )}"의 검색결과가 없습니다`}</Warning>
           ) : (
-            data.searchPatient.patients.map((patient, idx) => (
-              <SearchList
-                key={idx}
-                id={patient.id}
-                clinicName={renameUseSplit(patient.clinic?.name || 'error')}
-                registrationNumber={patient.registrationNumber}
-                name={patient.name}
-                gender={GENDER_KOR[patient.gender as keyof typeof GENDER_KOR]}
-                birthday={getYMD(patient.birthday, 'yyyymmdd', '-')}
-              />
-            ))
+            data.searchPatient.patients.map((patient, idx) => {
+              const { id, registrationNumber, name, gender, birthday, clinic } =
+                patient;
+              return (
+                <SearchList
+                  key={idx}
+                  id={id}
+                  clinicName={renameUseSplit(clinic.name || 'error')}
+                  registrationNumber={registrationNumber}
+                  name={name}
+                  gender={GENDER_KOR[gender as keyof typeof GENDER_KOR]}
+                  birthday={
+                    birthday && getStringYearMonthDay(new Date(birthday))
+                  }
+                />
+              );
+            })
           )}
         </div>
         <div

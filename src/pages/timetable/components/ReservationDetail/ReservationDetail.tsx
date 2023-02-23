@@ -3,7 +3,7 @@ import { endOfYesterday } from 'date-fns';
 import { getStringFromReservationState } from '../../../../utils/commonUtils';
 import {
   getStringOfDateTime,
-  getStringOfDate,
+  getStringYearMonth,
   isPastDay,
 } from '../../../../utils/dateUtils';
 import { PickReservation } from '../PickReservation';
@@ -46,7 +46,7 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
           <li>등록번호 : {patient?.registrationNumber}</li>
           <li>이름 : {patient?.name}</li>
           <li>성별 : {patient?.gender}</li>
-          <li>생일 : {getStringOfDate(new Date(patient?.birthday))}</li>
+          <li>생일 : {getStringYearMonth(new Date(patient?.birthday))}</li>
         </DetailBox>
         <DetailBox title="담당치료사">
           <li>{user.name}</li>

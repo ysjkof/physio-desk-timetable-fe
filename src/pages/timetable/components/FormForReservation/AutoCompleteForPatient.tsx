@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { isArrayAndValue, cls } from '../../../../utils/commonUtils';
 import { Input } from './InputForReserve';

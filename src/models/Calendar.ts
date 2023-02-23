@@ -7,7 +7,7 @@ import {
   startOfMonth,
   subMonths,
 } from 'date-fns';
-import { getStringOfDate } from '../utils/dateUtils';
+import { getStringYearMonth } from '../utils/dateUtils';
 import { CalendarDate } from './CalendarDate';
 
 export class Calendar {
@@ -43,7 +43,7 @@ export class Calendar {
   }
 
   toStringYearMonth() {
-    return getStringOfDate(this.#getReferenceDate());
+    return getStringYearMonth(this.#getReferenceDate());
   }
 
   setToNextMonth() {

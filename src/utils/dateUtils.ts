@@ -20,29 +20,6 @@ export function getWeeks(dateOfSunday: Date) {
   return result;
 }
 
-export function getYMD(
-  inputDate: string | Date,
-  option: 'yyyymmdd' | 'yymmdd' | 'mmdd',
-  separator?: '-' | '/'
-) {
-  const localDate = new Date(inputDate);
-
-  const yearGetObj = {
-    mmdd: '',
-    yymmdd: String(localDate.getFullYear()).substring(2),
-    yyyymmdd: String(localDate.getFullYear()),
-  };
-  const year = yearGetObj[option];
-  const month = String(localDate.getMonth() + 1).padStart(2, '0');
-  const date = String(localDate.getDate()).padStart(2, '0');
-
-  if (!separator) return year ? `${year}${month}${date}` : `${month}${date}`;
-
-  return year
-    ? `${year}${separator}${month}${separator}${date}`
-    : `${month}${separator}${date}`;
-}
-
 /**
  * 다음 형태로 시각 반환한다. 다음: 오전 11:38
  * @param date
@@ -66,10 +43,25 @@ export function getStringOfDateTime(date: Date) {
   });
 }
 
-export function getStringOfDate(date: Date) {
+export function getStringYearMonthDay(date: Date) {
+  return intlFormat(date, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+}
+
+export function getStringYearMonth(date: Date) {
   return intlFormat(date, {
     year: 'numeric',
     month: 'long',
+  });
+}
+
+export function getStringMonthDay(date: Date) {
+  return intlFormat(date, {
+    month: 'long',
+    day: 'numeric',
   });
 }
 

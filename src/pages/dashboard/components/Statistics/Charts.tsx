@@ -12,7 +12,7 @@ import DashboardSectionLayout from '../../../legacy_dashboard/components/templat
 import {
   compareDateMatch,
   getHowManyDayFromMillisecond,
-  getYMD,
+  getStringMonthDay,
 } from '../../../../utils/dateUtils';
 import TableChartColLayout from '../../../legacy_dashboard/components/molecules/TableChartColLayout';
 import { STATISTICS_LABEL } from '../../../../constants/constants';
@@ -193,7 +193,7 @@ function Charts({
                   }}
                   tickValues={finalDailyReports.map((day) => day.date)}
                   tickFormat={(tick) => {
-                    return getYMD(tick, 'mmdd', '-');
+                    return getStringMonthDay(tick);
                   }}
                   tickLabelComponent={<VictoryLabel dy={-5.5} />}
                   label="(월/일)"

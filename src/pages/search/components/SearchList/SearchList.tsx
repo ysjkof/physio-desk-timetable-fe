@@ -42,7 +42,7 @@ export default function SearchList({
           {name}
         </ListCell>
         <ListCell>{gender}</ListCell>
-        <ListCell>{birthday}</ListCell>
+        <ListCell>{birthday || '-'}</ListCell>
         <ListCell>-</ListCell>
       </div>
       {canSeeMore && <PreviousReservation userId={id} />}

@@ -1,5 +1,5 @@
 import { useMemo, type PropsWithChildren } from 'react';
-import { useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { addMinutes } from 'date-fns';
 import { DateForm, InputWrapper, MenuButton } from '../../../../components';
 import AutoCompleteForUser from './AutoCompleteForUser';
@@ -38,8 +38,8 @@ const FormForReservation = ({
   const { createReservation } = useCreateReservation();
 
   const clinicId = useStore((state) => state.pickedClinicId);
-  const onSubmit = () => {
-    const { startDate, memo, patientId, prescriptions, userId } = getValues();
+  const onSubmit: SubmitHandler<FormOfReserveFields> = (data) => {
+    const { startDate, memo, patientId, prescriptions, userId } = data;
     const formData = {
       startDate,
       endDate: addMinutes(startDate, prescriptionList.get().minute),
