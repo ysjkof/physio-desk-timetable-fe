@@ -21,7 +21,7 @@ export const SchedulesStyle = {
   },
 };
 
-export const getGridTemplateColumns = (repeat: number, minWidth?: number) => {
+const getGridTemplateColumns = (repeat: number, minWidth?: number) => {
   return minWidth
     ? `repeat(${repeat}, minmax(${minWidth}rem, 1fr))`
     : `repeat(${repeat}, minmax(0, 1fr))`;

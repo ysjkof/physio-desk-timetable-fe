@@ -6,6 +6,7 @@ import type {
   IDailyPrescription,
   IDailyReport,
   IMember,
+  MemberOfGetMyClinic,
   MyClinic,
   MyMembersType,
   PatientInReservation,
@@ -50,7 +51,7 @@ export interface ClinicOfClient
     ClinicOfClientState {
   members: MemberOfClient[];
 }
-export interface MemberOfClient extends IMember {
+export interface MemberOfClient extends MemberOfGetMyClinic {
   canSee?: boolean;
 }
 

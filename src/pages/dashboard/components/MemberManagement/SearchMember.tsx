@@ -4,7 +4,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
 
 interface SearchAndInviteMemberProps {
-  members: MemberOfGetMyClinic | undefined;
+  members: MemberOfGetMyClinic[] | undefined;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
 }
 

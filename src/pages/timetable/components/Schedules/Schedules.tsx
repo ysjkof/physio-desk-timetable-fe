@@ -18,19 +18,20 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
     return !hiddenUsers.has(memberId);
   };
 
-  const userLength = weekEvents[0].members.filter((member) =>
-    isShowUser(member.id)
-  ).length;
+  const userLength = weekEvents.reduce(
+    (acc, cur) =>
+      Math.max(
+        acc,
+        cur.members.filter((member) => isShowUser(member.id)).length
+      ),
+    1
+  );
 
   const isWeekCalendar = useStore((state) => state.isWeekCalendar);
 
   const containerStyle = isWeekCalendar
     ? SchedulesStyle.week.template(userLength)
     : SchedulesStyle.day.template();
-
-  const columnStyle = isWeekCalendar
-    ? SchedulesStyle.week.userColumn(userLength)
-    : SchedulesStyle.day.userColumn(userLength);
 
   const pickedDate = useStore((state) => state.pickedDate);
 
@@ -41,6 +42,10 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
   return (
     <div className="grid" style={containerStyle}>
       {schedules.map((day, i) => {
+        const columnStyle = isWeekCalendar
+          ? SchedulesStyle.week.userColumn(day.members.length)
+          : SchedulesStyle.day.userColumn(day.members.length);
+
         return (
           <div key={i} className="flex flex-col">
             <PaddingWrapper>

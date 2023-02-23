@@ -15,6 +15,7 @@ export const GET_CLINIC_DOCUMENT = gql`
         type
         members {
           ...CommonMemberFields
+          updatedAt
           user {
             ...UserIdNameEmailFields
           }

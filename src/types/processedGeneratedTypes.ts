@@ -52,7 +52,7 @@ export type MemberOfGetMember = NonNullable<
   GetMemberQuery['getMember']['member']
 >;
 
-export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'];
+export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'][0];
 
 // TODO : MyClinicMember로 이름 변경
 export type IMember = MyClinic['members'][0];

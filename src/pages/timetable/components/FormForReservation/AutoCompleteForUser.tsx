@@ -21,7 +21,7 @@ const AutoCompleteForUser = ({
   userId,
   setParentValue,
 }: AutoCompleteForUserProps) => {
-  const [members, setMembers] = useState<MemberOfGetMyClinic>();
+  const [members, setMembers] = useState<MemberOfGetMyClinic[]>();
 
   const clearMembers = () => setMembers(undefined);
 

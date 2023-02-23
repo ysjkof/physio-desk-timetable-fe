@@ -8,7 +8,7 @@ import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTy
 
 const MemberManagement = () => {
   const [myClinic] = useGetClinic();
-  const [members, setMembers] = useState<MemberOfGetMyClinic>([]);
+  const [members, setMembers] = useState<MemberOfGetMyClinic[]>([]);
   const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {

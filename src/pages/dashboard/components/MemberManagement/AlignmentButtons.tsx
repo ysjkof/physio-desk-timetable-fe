@@ -4,7 +4,7 @@ import { VerticalCrossArrow } from '../../../../svgs';
 import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
 
 interface AlignmentButtonsProps {
-  setMembers: Dispatch<React.SetStateAction<MemberOfGetMyClinic>>;
+  setMembers: Dispatch<React.SetStateAction<MemberOfGetMyClinic[]>>;
 }
 
 const AlignmentButtons = ({ setMembers }: AlignmentButtonsProps) => {

@@ -15,6 +15,7 @@ import type {
   ReservationInList,
 } from '../types/processedGeneratedTypes';
 import { getMemberState } from '../utils/commonUtils';
+import { isPastDay } from '../utils/dateUtils';
 
 interface SchedulesProps {
   data: ReservationInList[];
@@ -35,9 +36,9 @@ export class Schedules {
 
   #createForm(date: Date, clinic: ClinicOfGetMyClinicTruth): ISchedules[] {
     const week = this.#createWeek(date);
-    return week.map((dateInWeek) => ({
-      date: dateInWeek,
-      members: this.#createMembersForTable(clinic),
+    return week.map((date) => ({
+      date,
+      members: this.#createMembersForTable(clinic, date),
     }));
   }
 
@@ -51,15 +52,33 @@ export class Schedules {
     return { start, end };
   }
 
-  #createMembersForTable(clinic: ClinicOfGetMyClinicTruth): MemberWithEvent[] {
-    const membersForTable = this.#removeWaitMember(clinic.members).map(
-      this.#addKeyToMember
+  #createMembersForTable(
+    clinic: ClinicOfGetMyClinicTruth,
+    date: Date
+  ): MemberWithEvent[] {
+    const membersWithoutLeftMember = this.#removeLeftMember(
+      clinic.members,
+      date
     );
+    const membersForTable = this.#removeWaitMember(
+      membersWithoutLeftMember
+    ).map(this.#addKeyToMember);
+
     return membersForTable.sort((a, b) => {
       if (a.user.name > b.user.name) return 1;
       if (a.user.name < b.user.name) return -1;
       return 0;
     });
+  }
+
+  #removeLeftMember(members: MemberOfClient[], date: Date) {
+    return members.filter(
+      ({ accepted, staying, manager, updatedAt }) =>
+        !(
+          getMemberState({ accepted, staying, manager }) === '탈퇴' &&
+          isPastDay(date, new Date(updatedAt))
+        )
+    );
   }
 
   #removeWaitMember(members: MemberOfClient[]) {

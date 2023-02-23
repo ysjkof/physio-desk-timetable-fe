@@ -1006,7 +1006,7 @@ export type GetClinicQueryVariables = Exact<{
 }>;
 
 
-export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, members: Array<{ __typename?: 'Member', updatedAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
 
 export type GetMemberQueryVariables = Exact<{
   input: GetMemberInput;
