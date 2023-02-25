@@ -68,7 +68,7 @@ const ProfileItem = ({
   return (
     <div className="flex flex-col gap-1">
       <span className="text-[#8D8DAD]">{title}</span>
-      <span className="css_default-input text-[#5D5A5A]">{textContent}</span>
+      <span className="input text-[#5D5A5A]">{textContent}</span>
     </div>
   );
 };

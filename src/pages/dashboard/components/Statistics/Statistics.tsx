@@ -1,11 +1,16 @@
 import DateSelector from './DateSelector';
+import { TableChart } from './TableChart';
 
 const Statistics = () => {
   return (
-    <div className="grow whitespace-nowrap bg-[#F9F9FF] p-10">
+    <div className="flex grow flex-col whitespace-nowrap bg-[#F9F9FF] p-10">
       <StatisticsHeader />
       <DateSelector />
-      {/* <Chart /> */}
+      <div className="flex justify-between gap-8">
+        <div className="">그래픽차트</div>
+        {/* <Chart /> */}
+        <TableChart />
+      </div>
     </div>
   );
 };

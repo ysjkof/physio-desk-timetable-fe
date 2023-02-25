@@ -26,10 +26,7 @@ const Input = ({ label, register, ...args }: InputProps) => {
       {...args}
       {...register}
       id={`form-of-reserve__input-${label}`}
-      className={cls(
-        'w-full rounded-md border py-2 px-3 placeholder:text-sm',
-        args.className || ''
-      )}
+      className={cls('input', args.className || '')}
     />
   );
 };
@@ -41,10 +38,7 @@ const InputWithRef = forwardRef<HTMLInputElement, InputProps>(
       <input
         {...args}
         id={`form-of-reserve__input-${label}`}
-        className={cls(
-          'w-full rounded-md border py-2 px-3 placeholder:text-sm',
-          args.className || ''
-        )}
+        className={cls('input', args.className || '')}
         {...rest}
         ref={(element) => {
           // share ref

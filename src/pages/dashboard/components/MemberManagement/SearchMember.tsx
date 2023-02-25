@@ -30,7 +30,7 @@ const SearchMember = ({
       <input
         id="dashboard-search-member"
         type="text"
-        className="css_default-input pl-9"
+        className="input pl-9"
         placeholder="직원을 검색하세요"
         onChange={searchMembers}
       />

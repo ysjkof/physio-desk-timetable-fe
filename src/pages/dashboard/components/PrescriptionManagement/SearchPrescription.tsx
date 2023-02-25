@@ -14,7 +14,7 @@ const SearchPrescription = () => {
       <input
         id="dashboard-prescription-search"
         type="text"
-        className="css_default-input py-1 pl-7"
+        className="input py-1 pl-7"
         placeholder="처방이름을 검색하세요"
         onChange={searchMembers}
       />
