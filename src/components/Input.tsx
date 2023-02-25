@@ -1,43 +1,28 @@
-import {
-  forwardRef,
-  type MutableRefObject,
-  type InputHTMLAttributes,
-  type TextareaHTMLAttributes,
-} from 'react';
-import type { UseFormRegisterReturn } from 'react-hook-form';
-import { cls } from '../../../../utils/commonUtils';
+import { forwardRef, type MutableRefObject } from 'react';
+import { cls } from '../utils/commonUtils';
+import type {
+  InputProps,
+  InputPropsWithRegister,
+  TextareaProps,
+} from '../types/propsTypes';
 
-interface InputCommonProps {
-  label: string;
-  register: UseFormRegisterReturn;
-}
-
-interface InputProps
-  extends InputCommonProps,
-    InputHTMLAttributes<HTMLInputElement> {}
-
-interface TextareaProps
-  extends InputCommonProps,
-    TextareaHTMLAttributes<HTMLTextAreaElement> {}
-
-const Input = ({ label, register, ...args }: InputProps) => {
+const Input = ({ register, ...args }: InputProps) => {
   return (
     <input
       {...args}
       {...register}
-      id={`form-of-reserve__input-${label}`}
       className={cls('input', args.className || '')}
     />
   );
 };
 
-const InputWithRef = forwardRef<HTMLInputElement, InputProps>(
+const InputWithRef = forwardRef<HTMLInputElement, InputPropsWithRegister>(
   ({ label, register, ...args }, ref) => {
     const { ref: refOfRegister, ...rest } = register;
     return (
       <input
         {...args}
-        id={`form-of-reserve__input-${label}`}
+        id={label}
         className={cls('input', args.className || '')}
         {...rest}
         ref={(element) => {
@@ -59,12 +44,11 @@ const InputWithRef = forwardRef<HTMLInputElement, InputProps>(
 
 InputWithRef.displayName = 'InputRefWrapper';
 
-const Textarea = ({ label, register, ...args }: TextareaProps) => {
+const Textarea = ({ register, ...args }: TextareaProps) => {
   return (
     <textarea
       {...args}
       {...register}
-      id={`form-of-reserve__input-${label}`}
       className="w-full rounded-md border py-2 px-3 placeholder:text-sm"
     />
   );

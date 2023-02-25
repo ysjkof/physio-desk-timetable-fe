@@ -67,10 +67,8 @@ test.describe('테스트를 위한 회원가입 등 자료 생성', () => {
 
     await linkToSetting.click();
     await page.getByRole('link', { name: '병원 만들기' }).click();
-    await page
-      .locator('[id="form-of-reserve__input-병원이름"]')
-      .fill(CLINIC_NAME);
-    await page.locator('[id="form-of-reserve__input-병원이름"]').press('Enter');
+    await page.locator('[id="병원이름"]').fill(CLINIC_NAME);
+    await page.locator('[id="병원이름"]').press('Enter');
     await expect(page.getByText(/을 만들었습니다/)).toBeVisible();
     alertCloseBtn.click();
 

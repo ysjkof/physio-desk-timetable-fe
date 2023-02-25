@@ -1,8 +1,5 @@
 import { Checkbox, InputWrapper, MenuButton } from '../../../../components';
-import {
-  Input,
-  Textarea,
-} from '../../../timetable/components/FormForReservation/InputForReserve';
+import { Input, Textarea } from '../../../../components';
 import { Buttons } from '../../../timetable/components/FormForReservation/FormForReservation';
 import { REG_EXP } from '../../../../constants/regex';
 import { useFormForCreatePrescription } from '../../hooks/useFormForCreatePrescription';
@@ -18,9 +15,14 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
       className="flex h-full flex-col gap-5 bg-white pt-8"
     >
       <div className="flex basis-full flex-col justify-between gap-5 px-4">
-        <InputWrapper label="이름" required error={error.nameError}>
+        <InputWrapper
+          label="이름"
+          htmlFor="이름"
+          required
+          error={error.nameError}
+        >
           <Input
-            label="이름"
+            id="이름"
             placeholder="도수30, 집중형충격파1, MT20"
             type="text"
             register={register('name', {
@@ -29,7 +31,12 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
             })}
           />
         </InputWrapper>
-        <InputWrapper label="처방" required error={error.prescriptionAtomIds}>
+        <InputWrapper
+          label="처방"
+          htmlFor="처방"
+          required
+          error={error.prescriptionAtomIds}
+        >
           <div className="flex w-full flex-wrap gap-4 px-2 py-1.5">
             {atomPrescription.map((option) => (
               <Checkbox
@@ -45,9 +52,14 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
             ))}
           </div>
         </InputWrapper>
-        <InputWrapper label="소요시간" required error={error.requiredTimeError}>
+        <InputWrapper
+          label="소요시간"
+          htmlFor="소요시간"
+          required
+          error={error.requiredTimeError}
+        >
           <Input
-            label="소요시간"
+            id="소요시간"
             placeholder="10분 단위, 0 이상의 숫자"
             step={10}
             register={register('requiredTime', {
@@ -62,9 +74,14 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
           />
           <span className="position-center-y absolute right-4">분</span>
         </InputWrapper>
-        <InputWrapper label="가격" required error={error.priceError}>
+        <InputWrapper
+          label="가격"
+          htmlFor="가격"
+          required
+          error={error.priceError}
+        >
           <Input
-            label="가격"
+            id="가격"
             placeholder="0 이상의 숫자"
             register={register('price', {
               required: '가격을 입력해주세요',
@@ -80,9 +97,13 @@ const FormForCreatePrescription = ({ closeAction }: CloseAction) => {
           />
           <span className="position-center-y absolute right-4">원</span>
         </InputWrapper>
-        <InputWrapper label="설명" error={error.descriptionError}>
+        <InputWrapper
+          label="설명"
+          htmlFor="설명"
+          error={error.descriptionError}
+        >
           <Textarea
-            label="설명"
+            id="설명"
             placeholder="처방에 대한 설명"
             rows={3}
             register={register('description', {

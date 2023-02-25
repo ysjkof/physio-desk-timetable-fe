@@ -1,6 +1,6 @@
 import { InputWrapper, MenuButton } from '../../../../components';
 import { REG_EXP } from '../../../../constants/regex';
-import { Input } from '../../../timetable/components/FormForReservation/InputForReserve';
+import { Input } from '../../../../components';
 import { useFormForInviteUser } from '../../hooks/useFormForInviteUser';
 
 const FormForInviteUser = () => {
@@ -8,9 +8,14 @@ const FormForInviteUser = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <InputWrapper label="직원 이름" align="col" error={error.nameError}>
+      <InputWrapper
+        label="직원 이름"
+        htmlFor="직원 이름"
+        align="col"
+        error={error.nameError}
+      >
         <Input
-          label="직원 이름"
+          id="직원 이름"
           register={register('name', { pattern: REG_EXP.personName.pattern })}
         />
       </InputWrapper>

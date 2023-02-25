@@ -1,5 +1,5 @@
 import { InputWrapper, MenuButton } from '../../../../components';
-import { Input } from '../../../timetable/components/FormForReservation/InputForReserve';
+import { Input } from '../../../../components';
 import useFormForEditMyProfile from '../../hooks/useFormForEditMyProfile';
 import type { ToggleEditMode } from '../../../../types/propsTypes';
 
@@ -8,26 +8,26 @@ const FormForEditMyProfile = ({ toggleEditMode }: ToggleEditMode) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <InputWrapper label="이름" align="col">
-        <Input label="이름" register={register('name')} />
+      <InputWrapper label="이름" htmlFor="이름" align="col">
+        <Input id="이름" register={register('name')} />
       </InputWrapper>
-      <InputWrapper label="현재 비밀번호" align="col">
+      <InputWrapper label="현재 비밀번호" htmlFor="현재 비밀번호" align="col">
         <Input
-          label="현재 비밀번호"
+          id="현재 비밀번호"
           register={register('currentPassword')}
           type="password"
         />
       </InputWrapper>
-      <InputWrapper label="새 비밀번호" align="col">
+      <InputWrapper label="새 비밀번호" htmlFor="새 비밀번호" align="col">
         <Input
-          label="새 비밀번호"
+          id="새 비밀번호"
           register={register('newPassword1')}
           type="password"
         />
       </InputWrapper>
-      <InputWrapper label="새 비밀번호 확인" align="col">
+      <InputWrapper label="새 비밀번호 확인" htmlFor="새 비밀번호" align="col">
         <Input
-          label="새 비밀번호 확인"
+          id="새 비밀번호 확인"
           register={register('newPassword2')}
           type="password"
         />

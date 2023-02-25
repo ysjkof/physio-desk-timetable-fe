@@ -7,7 +7,7 @@ import { REG_EXP } from '../../../constants/regex';
 import { MUOOL } from '../../../constants/constants';
 import { LOGIN_DOCUMENT } from '../../../graphql';
 import { MenuButton, useLogin } from '../../../components';
-import { Input } from '../../timetable/components/FormForReservation/InputForReserve';
+import { Input } from '../../../components';
 import FormError from '../../../components/FormError';
 import type { LoginInput, LoginMutation } from '../../../types/generatedTypes';
 
@@ -75,8 +75,6 @@ export default function Login() {
         className="relative mb-6 grid w-full gap-4"
       >
         <Input
-          id="login__email"
-          label="Email"
           type="email"
           placeholder="Email을 입력하세요"
           maxLength={REG_EXP.email.maxLength}
@@ -87,8 +85,6 @@ export default function Login() {
         />
 
         <Input
-          id="login__password"
-          label="비밀번호"
           type="password"
           placeholder="비밀번호를 입력하세요"
           register={register('password', {

@@ -7,7 +7,7 @@ import { setAlert } from '../../../store';
 import { MUOOL } from '../../../constants/constants';
 import { CREATE_ACCOUNT_DOCUMENT } from '../../../graphql';
 import FormError from '../../../components/FormError';
-import { Input } from '../../timetable/components/FormForReservation/InputForReserve';
+import { Input } from '../../../components';
 import { MenuButton } from '../../../components';
 import type {
   CreateAccountInput,
@@ -97,8 +97,7 @@ export default function SignUp() {
       >
         {showError && <FormError top="-1.7rem" error={showError} />}
         <Input
-          id="sign-up__email"
-          label="Email"
+          name="Email"
           type="email"
           placeholder="로그인에 사용할 Email을 입력하세요"
           maxLength={REG_EXP.email.maxLength}
@@ -109,8 +108,7 @@ export default function SignUp() {
         />
 
         <Input
-          id="sign-up__name"
-          label="이름"
+          name="name"
           type="text"
           placeholder="이름을 입력하세요"
           maxLength={REG_EXP.personName.maxLength}
@@ -120,8 +118,7 @@ export default function SignUp() {
           })}
         />
         <Input
-          id="sign-up__password"
-          label="비밀번호"
+          name="password"
           type="password"
           placeholder="비밀번호를 입력하세요"
           maxLength={REG_EXP.password.maxLength}

@@ -5,7 +5,7 @@ import {
   getMemberState,
   isArrayAndValue,
 } from '../../../../utils/commonUtils';
-import { InputWithRef } from './InputForReserve';
+import { InputWithRef } from '../../../../components';
 import { useGetClinic } from '../../../../hooks';
 import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
 import type { PropsWithName } from '../../../../types/formTypes';

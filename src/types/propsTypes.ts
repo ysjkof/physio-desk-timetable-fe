@@ -1,7 +1,12 @@
-import type { ReactNode } from 'react';
+import type {
+  InputHTMLAttributes,
+  ReactNode,
+  TextareaHTMLAttributes,
+} from 'react';
 import type { ISchedules, MemberWithEvent } from './commonTypes';
 import type { FormForEditPrescriptionFields } from './formTypes';
 import type { PrescriptionForFind } from './processedGeneratedTypes';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 // TimeTable
 export interface IUserLength {
@@ -121,3 +126,24 @@ export interface ToggleEditMode {
 export interface FormForEditEmailFields {
   email: string;
 }
+
+interface InputCommonProps {
+  register?: UseFormRegisterReturn;
+}
+
+export interface InputProps
+  extends InputCommonProps,
+    InputHTMLAttributes<HTMLInputElement> {}
+
+interface InputCommonPropsWithRegister {
+  label: string;
+  register: UseFormRegisterReturn;
+}
+
+export interface InputPropsWithRegister
+  extends InputCommonPropsWithRegister,
+    InputHTMLAttributes<HTMLInputElement> {}
+
+export interface TextareaProps
+  extends InputCommonProps,
+    TextareaHTMLAttributes<HTMLTextAreaElement> {}
