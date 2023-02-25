@@ -1,21 +1,14 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { FormEvent, useState } from 'react';
 import {
-  CREATE_ACCOUNT_DOCUMENT,
   CREATE_ATOM_PRESCRIPTION_DOCUMENT,
-  CREATE_CLINIC_DOCUMENT,
-  CREATE_PATIENT_DOCUMENT,
   CREATE_RESERVATION_DOCUMENT,
   FIND_ALL_PATIENTS_DOCUMENT,
   FIND_PRESCRIPTIONS_DOCUMENT,
 } from '../graphql';
 import { PrescriptionWithSelect } from '../types/commonTypes';
 import type {
-  CreateAccountMutation,
   CreateAtomPrescriptionMutation,
-  CreateClinicMutation,
-  CreatePatientMutation,
-  CreatePrescriptionMutation,
   CreateReservationMutation,
   FindAllPatientsQuery,
   FindPrescriptionsQuery,
@@ -27,86 +20,67 @@ export default function TestPage() {
   return (
     <div className="px-4 ">
       <h1 className="text-base font-extrabold">TEST PAGE</h1>
-      <div className="flex h-[500px]" />
-
       {/* 이하 더미 자료 만드는 곳 */}
       <CreateDummyData />
     </div>
   );
 }
 
-const makeAccount = (email: string, name: string) => ({
-  email,
-  name,
-  password: '123',
-});
-const makePatient = (name: string, clinicId: number) => ({
-  name,
-  clinicId,
-  gender: Math.ceil(Math.random() * 2) === 1 ? 'male' : 'female',
-  birthday: new Date('2002-10-13'),
-});
+function CreateDummyData() {
+  const [clinic] = useGetClinic();
+
+  const [reserveDate] = useState(new Date().getMonth() + 1);
+
+  const [createAtom] = useMutation<CreateAtomPrescriptionMutation>(
+    CREATE_ATOM_PRESCRIPTION_DOCUMENT
+  );
+
+  const invokeCreateAtom = () => {
+    ['도수치료', '충격파'].forEach((name) =>
+      createAtom({
+        variables: {
+          input: {
+            name,
+          },
+        },
+      })
+    );
+  };
+
+  if (!clinic) return <p>Not Permission</p>;
+
+  return (
+    <div className="px-4 ">
+      <h1 className="text-base font-extrabold">Create Dummy Data</h1>
+      <p>
+        병원 id: {clinic.id}
+        <br />
+        병원이름 : {clinic.name}
+        <br />
+        예약될 월 : {reserveDate}
+        <br />
+      </p>
+      <br />
+      <div className="flex gap-4">
+        <button onClick={invokeCreateAtom} type="button">
+          아톰 만들기
+        </button>
+      </div>
+      <CreateReservation />
+    </div>
+  );
+}
 
 const length = 10;
 const arr: unknown[] = [];
 arr.length = length;
 arr.fill(0);
-const accountArr = arr.map((_, idx) =>
-  makeAccount(`test${idx}@t.co`, `치료사${idx}`)
-);
-
-const newPrescriptions = [
-  { name: 'MT1', price: 80000, requiredTime: 30, prescriptionAtomIds: [1] },
-  { name: 'MT2', price: 130000, requiredTime: 50, prescriptionAtomIds: [1] },
-  { name: 'ET1', price: 40000, requiredTime: 10, prescriptionAtomIds: [2] },
-  { name: 'ET1', price: 80000, requiredTime: 10, prescriptionAtomIds: [2] },
-].map(({ name, prescriptionAtomIds, price, requiredTime }) => ({
-  name,
-  prescriptionAtomIds,
-  price,
-  requiredTime,
-}));
-
-function getOneDayReservationInputDateForTest(
-  inputStartDate: Date,
-  inputPrescription: { id: number; requiredTime: number; name: string }
-) {
-  const numberOfReservationsPerDay = Math.floor(Math.random() * 8);
-  const startDate = new Date(inputStartDate);
-  const dates: Date[] = [];
-  dates.length = numberOfReservationsPerDay;
-  dates.fill(startDate);
-
-  return dates.map((d) => {
-    const sd = new Date(d);
-    const ed = new Date(d);
-    let th = Math.floor(Math.random() * (19 - 9) + 9);
-    let tm = Math.floor(Math.random() * 6) * 10;
-    while (dates.find((dateInWhile) => dateInWhile.getHours() === th)) {
-      th = Math.floor(Math.random() * (19 - 9) + 9);
-    }
-    if (tm === 6) tm = 0;
-    sd.setHours(th, tm, 0, 0);
-    ed.setHours(th, tm + inputPrescription.requiredTime, 0, 0);
-    return [sd, ed];
-  });
-}
-function selectPrescriptionForTest(
-  inputPrescription: PrescriptionWithSelect[]
-) {
-  const selected =
-    inputPrescription[Math.floor(Math.random() * inputPrescription.length)];
-  return {
-    id: selected?.id,
-    name: selected?.name,
-    requiredTime: selected?.requiredTime,
-  };
-}
 
 function CreateReservation() {
   const [createdReservation, setCreatedReservation] = useState({
-    totalCount: 0,
-    thisCount: 0,
+    tryCount: 0,
+    okCount: 0,
+    errors: {},
   });
   const clinicId = useStore((state) => state.pickedClinicId);
   const [myClinic] = useGetClinic();
@@ -141,7 +115,7 @@ function CreateReservation() {
 
     if (!clinicId || !date) return console.warn('날짜와 병원 id가 잘못됐다.');
 
-    const [year, month] = date.split('-');
+    const [year, month, day] = date.split('-');
 
     const prescriptions: PrescriptionWithSelect[] =
       prescriptionsData?.findPrescriptions.prescriptions?.map(
@@ -151,17 +125,22 @@ function CreateReservation() {
         })
       ) || [];
 
-    const firstDate = new Date(`${year}-${month}-1`);
+    const firstDate = new Date(`${year}-${month}-${day}`);
 
-    let count = 0;
-    for (let i = 0; i < 30; i += 1) {
+    const lastDay = new Date(firstDate);
+    lastDay.setMonth(lastDay.getMonth() + 1);
+    lastDay.setDate(0);
+
+    let tryCount = 0;
+    let okCount = 0;
+    const errors: { [key: string]: number } = {};
+    for (let i = 0; i < lastDay.getDate(); i += 1) {
       firstDate.setDate(i + 1);
       const prescription = selectPrescriptionForTest(prescriptions);
       const times = getOneDayReservationInputDateForTest(
         firstDate,
         prescription
       );
-      count = count + times.length;
 
       const patients = allPatients?.findAllPatients.results;
 
@@ -188,13 +167,23 @@ function CreateReservation() {
               prescriptionIds: [prescription.id],
             },
           },
+          onCompleted({ createReservation: { ok, error } }) {
+            tryCount += 1;
+            if (ok) {
+              okCount += 1;
+            } else if (error) {
+              errors[error] ? (errors[error] += 1) : (errors[error] = 1);
+            }
+
+            setCreatedReservation({
+              tryCount,
+              okCount,
+              errors,
+            });
+          },
         });
       });
     }
-    setCreatedReservation((prevValue) => ({
-      thisCount: count,
-      totalCount: prevValue.thisCount + count,
-    }));
   };
 
   return (
@@ -207,11 +196,8 @@ function CreateReservation() {
             id="test-page-date"
             name="date"
             className="rounded-md border px-1"
-            type="date"
-            defaultValue={new Intl.DateTimeFormat('ko-KR')
-              .format(new Date())
-              .replaceAll('. ', '-')
-              .replace('.', '')}
+            type="text"
+            placeholder="yyyy-mm-dd"
           />
         </label>
         <button
@@ -226,148 +212,55 @@ function CreateReservation() {
         <br />
         병원이름 : {myClinic?.name}
         <br />
-        예약한 수 : {createdReservation.thisCount}
-        <br />총 예약한 수 : {createdReservation.totalCount}
+        예약 시도 수 : {createdReservation.tryCount}
+        <br />
+        예약 성공 수 : {createdReservation.okCount}
+        <br />
+        에러 :
+        {Object.entries(createdReservation.errors).map(([key, value]) => (
+          <div key={key}>
+            {key}: {value as number}
+          </div>
+        ))}
       </p>
     </div>
   );
 }
 
-function CreateDummyData() {
-  const [clinic] = useGetClinic();
+function getOneDayReservationInputDateForTest(
+  inputStartDate: Date,
+  inputPrescription: { id: number; requiredTime: number; name: string }
+) {
+  const numberOfReservationsPerDay = Math.floor(Math.random() * 8);
+  const startDate = new Date(inputStartDate);
+  const dates: Date[] = [];
+  dates.length = numberOfReservationsPerDay;
+  dates.fill(startDate);
 
-  const [reserveDate] = useState(new Date().getMonth() + 1);
+  return dates.map((d) => {
+    const sd = new Date(d);
+    const ed = new Date(d);
+    let th = Math.floor(Math.random() * (19 - 9) + 9);
+    let tm = Math.floor(Math.random() * 6) * 10;
+    while (dates.find((dateInWhile) => dateInWhile.getHours() === th)) {
+      th = Math.floor(Math.random() * (19 - 9) + 9);
+    }
+    if (tm === 6) tm = 0;
+    sd.setHours(th, tm, 0, 0);
+    ed.setHours(th, tm + inputPrescription.requiredTime, 0, 0);
+    console.log('날짜 >>>', th, tm, sd, ed);
 
-  const [createAccount] = useMutation<CreateAccountMutation>(
-    CREATE_ACCOUNT_DOCUMENT
-  );
-  const [createClinic] = useMutation<CreateClinicMutation>(
-    CREATE_CLINIC_DOCUMENT
-  );
-  const [createPatient] = useMutation<CreatePatientMutation>(
-    CREATE_PATIENT_DOCUMENT
-  );
-  const [createAtom] = useMutation<CreateAtomPrescriptionMutation>(
-    CREATE_ATOM_PRESCRIPTION_DOCUMENT
-  );
-  const [createPrescription] = useMutation<CreatePrescriptionMutation>(
-    CREATE_ATOM_PRESCRIPTION_DOCUMENT
-  );
-
-  if (!clinic) return <p>Not Permission</p>;
-
-  return (
-    <div className="px-4 ">
-      <h1 className="text-base font-extrabold">Create Dummy Data</h1>
-      <p>
-        병원 id: {clinic.id}
-        <br />
-        병원이름 : {clinic.name}
-        <br />
-        예약될 월 : {reserveDate}
-        <br />
-      </p>
-      <br />
-      <div className="flex gap-4">
-        <button
-          onClick={() =>
-            accountArr.forEach((acc) => {
-              const { email, name, password } = acc;
-              createAccount({
-                variables: {
-                  input: {
-                    email,
-                    name,
-                    password,
-                  },
-                },
-              });
-            })
-          }
-          type="button"
-        >
-          계정생성
-        </button>
-        <button
-          onClick={() =>
-            createClinic({
-              variables: {
-                input: {
-                  name: '테스트정형외과의원',
-                },
-              },
-            })
-          }
-          type="button"
-        >
-          병원생성
-        </button>
-        <button
-          onClick={() => {
-            if (!clinic.id) throw new Error('clinicId false');
-            arr
-              .map((_, idx) => makePatient(`환자님${idx}`, clinic.id))
-              .forEach((acc) => {
-                const { clinicId, name, gender, birthday } = acc;
-
-                createPatient({
-                  variables: {
-                    input: {
-                      name,
-                      clinicId,
-                      gender,
-                      birthday,
-                    },
-                  },
-                });
-              });
-          }}
-          type="button"
-        >
-          환자생성
-        </button>
-        <button onClick={() => {}} type="button">
-          치료사 초대
-        </button>
-        <button
-          onClick={() =>
-            ['도수치료', '충격파'].forEach((name) =>
-              createAtom({
-                variables: {
-                  input: {
-                    name,
-                  },
-                },
-              })
-            )
-          }
-          type="button"
-        >
-          아톰 만들기
-        </button>
-        <button
-          onClick={() => {
-            newPrescriptions.forEach(
-              ({ name, prescriptionAtomIds, price, requiredTime }) =>
-                createPrescription({
-                  variables: {
-                    input: {
-                      clinicId: clinic.id,
-                      name,
-                      prescriptionAtomIds,
-                      price,
-                      requiredTime,
-                    },
-                  },
-                })
-            );
-          }}
-          type="button"
-        >
-          처방 만들기
-        </button>
-      </div>
-      <CreateReservation />
-    </div>
-  );
+    return [sd, ed];
+  });
+}
+function selectPrescriptionForTest(
+  inputPrescription: PrescriptionWithSelect[]
+) {
+  const selected =
+    inputPrescription[Math.floor(Math.random() * inputPrescription.length)];
+  return {
+    id: selected?.id,
+    name: selected?.name,
+    requiredTime: selected?.requiredTime,
+  };
 }

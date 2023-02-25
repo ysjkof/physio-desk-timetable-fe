@@ -66,9 +66,9 @@ const ReserveButton = ({
   const deactivateHover = () => setIsHover(false);
 
   return (
-    <div
+    <button
       className={cls(
-        'reserve-btn-box group',
+        'reserve-btn group',
         isActiveBorderTop ? ' border-t border-gray-200 first:border-t-0' : ''
       )}
       onMouseOver={activateHover}
@@ -77,10 +77,9 @@ const ReserveButton = ({
       onBlur={deactivateHover}
       onClick={handleClickButton}
       onKeyDown={handleClickButton}
-      tabIndex={0}
-      role="button"
+      type="button"
     >
-      <span className="reserve-btn">+ {label}</span>
+      <span className="reserve-btn__label">+ {label}</span>
       {pickedReservation && isHover && (
         <div
           className="absolute top-0 w-full border-2"
@@ -96,7 +95,7 @@ const ReserveButton = ({
           }}
         />
       )}
-    </div>
+    </button>
   );
 };
 

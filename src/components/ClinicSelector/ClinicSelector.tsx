@@ -12,7 +12,7 @@ const ClinicSelector = () => {
   )?.clinic;
 
   return (
-    <details className="relative z-40 mx-auto flex w-[18.75rem] cursor-pointer flex-col items-center justify-center text-center">
+    <details className="clinic-selector">
       <summary className="flex list-none items-center justify-center gap-2 py-1 text-xl">
         {renameUseSplit(clinic?.name || '')}
         <BarsArrowDown iconSize="LG" />

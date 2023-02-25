@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_PATIENT_DOCUMENT } from '../graphql';
-import { setToast, useStore } from '../store';
+import { setAlert, useStore } from '../store';
 import { getDateFromStr8Digit } from '../utils/dateUtils';
 import type {
   CreatePatientMutation,
@@ -37,7 +37,10 @@ export const useCreatePatient = () => {
           createPatient: { ok, patient },
         } = data;
         if (ok && patient) {
-          setToast({ messages: [`"${patient.name}"님을 등록했습니다`] });
+          setAlert({
+            messages: [`"${patient.name}"님을 등록했습니다`],
+            isPositive: true,
+          });
           closeAction();
         }
       },

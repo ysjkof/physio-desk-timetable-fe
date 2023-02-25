@@ -26,6 +26,26 @@
     @apply w-full rounded-md border py-2 px-3 placeholder:text-sm;
   }
 
+  #alert {
+    @apply flex w-96 flex-col items-center gap-8 px-8 pt-8 pb-5;
+  }
+
+  #confirm {
+    @apply flex w-96 flex-col items-center py-8;
+  }
+
+  .schedules__column {
+    @apply flex flex-col;
+  }
+
+  .clinic-selector {
+    @apply relative z-40 mx-auto flex w-[18.75rem] cursor-pointer flex-col items-center justify-center text-center;
+  }
+
+  .clinic-card {
+    @apply flex h-full w-80 items-center gap-4 rounded-md border bg-white p-4;
+  }
+
   .sunday {
     @apply text-red-400;
   }
@@ -47,10 +67,10 @@
     @apply pointer-events-none absolute left-0 z-[31] flex w-full border-t border-red-500 text-red-500;
   }
 
-  .reserve-btn-box {
+  .reserve-btn {
     @apply relative z-10 h-5 w-full cursor-pointer from-sky-500 to-indigo-500 text-center hover:bg-gradient-to-r;
   }
-  .reserve-btn {
+  .reserve-btn__label {
     @apply invisible mx-auto whitespace-nowrap align-middle text-white group-hover:visible;
   }
   .modal-parents {

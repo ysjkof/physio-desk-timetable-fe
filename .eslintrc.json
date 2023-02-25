@@ -29,7 +29,8 @@
     "react",
     "react-hooks",
     "jsx-a11y",
-    "import"
+    "import",
+    "playwright"
   ],
   "rules": {
     "prettier/prettier": 0, // prettier error는 출력하지 않는다

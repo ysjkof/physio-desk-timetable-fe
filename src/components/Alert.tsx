@@ -38,7 +38,7 @@ const AlertBody = ({
   }, []);
 
   return (
-    <div className="flex w-96 flex-col items-center gap-8 px-8 pt-8 pb-5">
+    <div id="alert">
       <p className="flex flex-col gap-y-2 text-base text-[#34355B] ">
         {messages.map(
           (message) => message && <span key={message}>{message}</span>

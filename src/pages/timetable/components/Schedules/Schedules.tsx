@@ -38,7 +38,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
     <div className="flex">
       {schedules.map((day, i) => {
         return (
-          <div key={i} className="flex flex-col">
+          <div key={i} className="schedules__column">
             <PaddingWrapper>
               <DateTitle
                 date={day.date}

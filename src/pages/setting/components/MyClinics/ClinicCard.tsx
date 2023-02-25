@@ -50,7 +50,7 @@ const ClinicCard = ({
   };
 
   return (
-    <div className="flex h-full w-80 items-center gap-4 rounded-md border bg-white p-4">
+    <div className="clinic-card">
       <div className="h-full w-24">{icon}</div>
       <div className="w-full">
         <div className="flex flex-col">

@@ -44,3 +44,9 @@ dist-ssr
 .vscode
 stats.html
 .env
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/test-results/
+/playwright-report/
+/playwright/.cache/
