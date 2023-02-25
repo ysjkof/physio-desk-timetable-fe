@@ -127,12 +127,12 @@ export interface FormForEditEmailFields {
   email: string;
 }
 
-interface InputCommonProps {
+interface InputRegisterProps {
   register?: UseFormRegisterReturn;
 }
 
 export interface InputProps
-  extends InputCommonProps,
+  extends InputRegisterProps,
     InputHTMLAttributes<HTMLInputElement> {}
 
 interface InputCommonPropsWithRegister {
@@ -145,5 +145,5 @@ export interface InputPropsWithRegister
     InputHTMLAttributes<HTMLInputElement> {}
 
 export interface TextareaProps
-  extends InputCommonProps,
+  extends InputRegisterProps,
     TextareaHTMLAttributes<HTMLTextAreaElement> {}

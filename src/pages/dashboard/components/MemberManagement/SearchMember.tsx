@@ -1,6 +1,5 @@
 import { type ChangeEvent } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { SearchInput } from '../../../../components';
 import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
 
 interface SearchAndInviteMemberProps {
@@ -22,19 +21,12 @@ const SearchMember = ({
   };
 
   return (
-    <label className="relative w-full" htmlFor="dashboard-search-member">
-      <FontAwesomeIcon
-        icon={faMagnifyingGlass}
-        className="position-center-y absolute left-3"
-      />
-      <input
-        id="dashboard-search-member"
-        type="text"
-        className="input pl-9"
-        placeholder="직원을 검색하세요"
-        onChange={searchMembers}
-      />
-    </label>
+    <SearchInput
+      id="dashboard-search-member"
+      name="dashboard-search-member"
+      placeholder="직원을 검색하세요"
+      onChange={searchMembers}
+    />
   );
 };
 
