@@ -18,22 +18,22 @@ import TableChartColLayout from '../../../legacy_dashboard/components/molecules/
 import { STATISTICS_LABEL } from '../../../../constants/constants';
 import type { IUserStatistics } from '../../../../types/commonTypes';
 import type {
-  IDailyPrescription,
-  IDailyReport,
+  PrescriptionOfGetStatistics,
+  DailyReportOfGetStatistics,
 } from '../../../../types/processedGeneratedTypes';
 
 const Loading = lazy(() => import('../../../../components/Loading'));
 
 interface IChartsProps {
   userStatistics: IUserStatistics[];
-  prescriptions: IDailyPrescription[];
-  dailyReports: IDailyReport[];
+  prescriptions: PrescriptionOfGetStatistics[];
+  dailyReports: DailyReportOfGetStatistics[];
   startDate: Date;
   endDate: Date;
 }
 
 function injectEveryDayToDailyReports(
-  dailyReports: IDailyReport[],
+  dailyReports: DailyReportOfGetStatistics[],
   startD: Date,
   endD: Date
 ) {

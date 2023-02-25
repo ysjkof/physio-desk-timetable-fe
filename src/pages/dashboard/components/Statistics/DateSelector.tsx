@@ -34,6 +34,7 @@ const DateSelector = () => {
         <Selectbox.Options>
           {years.map((year, idx) => (
             <Selectbox.Option
+              key={year.getTime()}
               onClick={() => setYear(year.getFullYear())}
               isActivate={isSameYear(year, date)}
             >
@@ -50,6 +51,7 @@ const DateSelector = () => {
         <Selectbox.Options>
           {months.map((nothing, idx) => (
             <Selectbox.Option
+              key={idx}
               onClick={() => setMonth(idx)}
               isActivate={idx === date.getMonth()}
             >

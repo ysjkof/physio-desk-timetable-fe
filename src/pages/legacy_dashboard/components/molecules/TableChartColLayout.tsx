@@ -3,14 +3,14 @@ import DashboardLi from './DashboardLi';
 import TableChartCol from './TableChartCol';
 import type { IUserStatistics } from '../../../../types/commonTypes';
 import type {
-  IDailyPrescription,
-  IDailyReport,
+  PrescriptionOfGetStatistics,
+  DailyReportOfGetStatistics,
 } from '../../../../types/processedGeneratedTypes';
 
 interface TableChartColLayoutProps {
   userStatistics: IUserStatistics[];
-  dailyReports?: IDailyReport[];
-  prescriptionInfo: IDailyPrescription[];
+  dailyReports?: DailyReportOfGetStatistics[];
+  prescriptionInfo: PrescriptionOfGetStatistics[];
   labelNames?: string[];
   renderIt: 'counts' | 'prescriptions';
   hasTotalInRow?: boolean;

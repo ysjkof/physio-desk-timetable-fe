@@ -3,8 +3,8 @@ import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import type { Prescription } from './generatedTypes';
 import type {
   ClinicInReservation,
-  IDailyPrescription,
-  IDailyReport,
+  PrescriptionOfGetStatistics,
+  DailyReportOfGetStatistics,
   IMember,
   MemberOfGetMyClinic,
   MyClinic,
@@ -96,18 +96,25 @@ export interface UserIdAndName extends IdAndName {}
 export interface Value {
   value: unknown;
 }
-export interface IDailyPrescriptionWithCount extends IDailyPrescription {
+export interface IDailyPrescriptionWithCount
+  extends PrescriptionOfGetStatistics {
   count: number;
 }
-export type IPrescriptionOfUser = IDailyReport['users'][0]['prescriptions'][0];
+export type IPrescriptionOfUser =
+  DailyReportOfGetStatistics['users'][0]['prescriptions'][0];
 
-export type CountLists = {
+export interface PrimaryCountList {
+  [key: string]: PrimaryCountListItem;
+}
+export interface PrimaryCountListItem {
   reservationCount: number;
   newPatient: number;
   noshow: number;
   cancel: number;
+}
+export interface CountLists extends PrimaryCountListItem {
   visitMoreThanThirty: number;
-};
+}
 
 export interface IUserStatistics {
   name: string;

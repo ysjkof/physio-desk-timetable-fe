@@ -2,16 +2,18 @@ import type {
   IDailyPrescriptionWithCount,
   IPrescriptionOfUser,
   MemberState,
+  PrimaryCountList,
 } from '../types/commonTypes';
 import type {
-  IDailyPrescription,
-  IDailyReport,
+  PrescriptionOfGetStatistics,
+  DailyReportOfGetStatistics,
+  DailyReportsOfGetStatistics,
 } from '../types/processedGeneratedTypes';
 
 interface CombineUserStatistics {
-  dailyReports: IDailyReport[];
+  dailyReports: DailyReportOfGetStatistics[];
   memberState?: MemberState[];
-  prescriptions: IDailyPrescription[];
+  prescriptions: PrescriptionOfGetStatistics[];
 }
 
 interface ObjReport {
@@ -30,7 +32,7 @@ export const createUserStatistics = ({
   memberState,
   prescriptions,
 }: CombineUserStatistics) => {
-  const flattening = (reports: IDailyReport[]) =>
+  const flattening = (reports: DailyReportOfGetStatistics[]) =>
     reports.map((day) => day.users).flat(1);
 
   const combineSameUser = (flatReports: ReturnType<typeof flattening>) => {
@@ -156,4 +158,26 @@ export const createUserStatistics = ({
     if (a.name < b.name) return -1;
     return 0;
   });
+};
+
+export const getReportsByUser = (dailyReports: DailyReportsOfGetStatistics) => {
+  const reportsByUser: PrimaryCountList = {};
+
+  dailyReports?.forEach((report) => {
+    const { users } = report;
+
+    users.forEach((user) => {
+      const { cancel, newPatient, noshow, reservationCount } = user;
+      const prevValue = reportsByUser[user.userId];
+
+      reportsByUser[user.userId] = {
+        cancel: (prevValue?.cancel || 0) + cancel,
+        newPatient: (prevValue?.newPatient || 0) + newPatient,
+        noshow: (prevValue?.noshow || 0) + noshow,
+        reservationCount: (prevValue?.reservationCount || 0) + reservationCount,
+      };
+    });
+  });
+
+  return reportsByUser;
 };

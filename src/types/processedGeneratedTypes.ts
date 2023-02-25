@@ -82,12 +82,18 @@ export type UserInReservation = ReservationInList['user'];
 
 // statistics
 
-type IDailyPrescriptions = GetStatisticsQuery['getStatistics']['prescriptions'];
+type PrescriptionsOfGetStatistics =
+  GetStatisticsQuery['getStatistics']['prescriptions'];
 
-export type IDailyPrescription = NonNullable<FlatArray<IDailyPrescriptions, 0>>;
+export type PrescriptionOfGetStatistics = NonNullable<
+  FlatArray<PrescriptionsOfGetStatistics, 0>
+>;
 
-type IDailyReports = GetStatisticsQuery['getStatistics']['dailyReports'];
+export type DailyReportsOfGetStatistics =
+  GetStatisticsQuery['getStatistics']['dailyReports'];
 
-export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
+export type DailyReportOfGetStatistics = NonNullable<
+  FlatArray<DailyReportsOfGetStatistics, 0>
+>;
 
-export type IUserInDaily = IDailyReport['users'][0];
+export type UsersOfGetStatistics = DailyReportOfGetStatistics['users'][0];
