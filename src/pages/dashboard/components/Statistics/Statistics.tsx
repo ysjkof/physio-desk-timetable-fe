@@ -1,12 +1,11 @@
-import Chart from './Chart';
+import DateSelector from './DateSelector';
 
 const Statistics = () => {
   return (
     <div className="grow whitespace-nowrap bg-[#F9F9FF] p-10">
       <StatisticsHeader />
       <DateSelector />
-      <UserSelector />
-      <Chart />
+      {/* <Chart /> */}
     </div>
   );
 };
@@ -18,13 +17,6 @@ const StatisticsHeader = () => {
       <div />
     </div>
   );
-};
-
-const DateSelector = () => {
-  return <div className="flex items-center">날짜 선택기</div>;
-};
-const UserSelector = () => {
-  return <div className="flex items-center">치료사 선택기</div>;
 };
 
 export default Statistics;
