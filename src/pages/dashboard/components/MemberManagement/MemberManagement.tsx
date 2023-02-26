@@ -28,9 +28,9 @@ const MemberManagement = () => {
       fallback={<Warning type="hasNotPermission" />}
     >
       <div className="member-management">
-        <div className="member-management__col--1st">
-          <h1 className="mb-8 pl-4 text-3xl font-medium">직원열람 및 관리</h1>
-          <div className="relative mb-7 flex items-center justify-between gap-4 px-4">
+        <div className="member-management__nav overflow-y-scroll">
+          <h1 className="dashboard-menu-title mb-6 px-10">직원열람 및 관리</h1>
+          <div className="mb-6 px-10">
             <SearchMember
               members={myClinic?.members}
               setSearchInput={setSearchInput}
@@ -39,7 +39,7 @@ const MemberManagement = () => {
           <AlignmentButtons setMembers={setMembers} />
           <MemberList members={members} />
         </div>
-        <div className="member-management__col--2nd relative">
+        <div className="member-management__member-detail-container">
           <Outlet />
         </div>
       </div>

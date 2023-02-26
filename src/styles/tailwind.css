@@ -34,6 +34,10 @@
     @apply flex w-96 flex-col items-center py-8;
   }
 
+  .dashboard-menu-title {
+    @apply text-2xl font-semibold text-[#262850];
+  }
+
   .sunday {
     @apply text-red-400;
   }
@@ -140,39 +144,39 @@
     @apply flex h-full;
   }
 
-  .member-management__col--1st {
-    @apply flex h-full w-[360px] flex-col overflow-y-scroll border-r border-r-table-line pt-16;
+  .member-management__nav {
+    @apply flex h-full w-[360px] flex-col border-r border-r-table-line pt-6;
   }
 
-  .member-management__col--2nd {
-    @apply flex grow flex-col items-center justify-center;
+  .member-management__member-detail-container {
+    @apply relative flex grow flex-col items-center justify-center;
   }
 
-  .prescription-management-item-container {
+  .prescription-management__table-body {
     @apply flex flex-col gap-2 overflow-y-scroll pb-6;
   }
-  .prescription-management-item {
+  .prescription-management__table-row {
     @apply flex w-full items-center justify-between gap-x-6 whitespace-nowrap rounded-md px-6;
   }
-  .prescription-management-item__col1 {
+  .prescription-management__table-row-col1 {
     @apply w-full max-w-[160px];
   }
-  .prescription-management-item__col2 {
+  .prescription-management__table-row-col2 {
     @apply w-full max-w-[110px];
   }
-  .prescription-management-item__col3 {
+  .prescription-management__table-row-col3 {
     @apply w-full max-w-[140px];
   }
-  .prescription-management-item__col4 {
+  .prescription-management__table-row-col4 {
     @apply w-full max-w-[120px];
   }
-  .prescription-management-item__col5 {
+  .prescription-management__table-row-col5 {
     @apply w-full;
   }
-  .prescription-management-item__col6 {
+  .prescription-management__table-row-col6 {
     @apply w-full max-w-[90px];
   }
-  .prescription-management-item__col7 {
+  .prescription-management__table-row-col7 {
     @apply w-full max-w-[70px];
   }
 

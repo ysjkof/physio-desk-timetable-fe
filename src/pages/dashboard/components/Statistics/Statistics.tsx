@@ -14,7 +14,7 @@ const Statistics = () => {
       style={{ height }}
     >
       <div className="flex grow flex-col justify-between gap-6 overflow-scroll pb-10">
-        <h1 className="text-2xl font-semibold text-[#262850]">예약통계</h1>
+        <h1 className="dashboard-menu-title">예약통계</h1>
         <GraphChart data={data} />
       </div>
       <div className="flex flex-col gap-6">
