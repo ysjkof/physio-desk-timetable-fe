@@ -26,7 +26,7 @@ export const useWindowSize = (hasEventListener?: boolean) => {
 
   const getHeight = () => {
     const GNBHeight =
-      document.getElementById('global-header')?.clientHeight || 0;
+      document.querySelector('.clinic-selector')?.clientHeight || 0;
     setHeight(window.innerHeight - GNBHeight - minusToHeight);
   };
 

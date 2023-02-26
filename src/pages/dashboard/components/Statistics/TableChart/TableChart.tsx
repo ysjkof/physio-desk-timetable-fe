@@ -14,7 +14,7 @@ const TableChart = ({ countList }: TableChartProps) => {
   const debounceQuery = useDebouncedCallback(handleInput);
 
   return (
-    <div className="table-chart w-[270px] gap-4">
+    <div className="table-chart h-[88%] w-[270px] gap-4">
       <SearchInput
         id="table-chart__search-patient"
         name="table-chart__search-patient"

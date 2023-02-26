@@ -1,5 +1,5 @@
 import { eachDayOfInterval, endOfMonth, startOfMonth } from 'date-fns';
-import { PrimaryCountList } from '../../src/types/commonTypes';
+import { CountListOfEachUser } from '../../src/types/commonTypes';
 
 const prescriptions = [
   {
@@ -247,7 +247,7 @@ export const dailyReports = eachDayOfMonth.map((date, idx) => {
   };
 });
 
-export const result: PrimaryCountList = {};
+export const result: CountListOfEachUser = {};
 userIds.forEach((id) => {
   const reservationCount = eachDayOfMonth.reduce(
     (acc, cur) => acc + cur.getDate() * id,

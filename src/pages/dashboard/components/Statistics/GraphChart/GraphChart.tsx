@@ -16,7 +16,7 @@ const GraphChart = ({ data }: GraphChartProps) => {
   );
 
   return (
-    <div className="graph-chart overflow-y-scroll">
+    <div className="graph-chart">
       <TotalGraph data={graphData} />
       <TotalGraph data={graphData} />
     </div>
