@@ -1,12 +1,31 @@
 import { VictoryArea, VictoryAxis, VictoryChart } from 'victory';
-import type { TotalGraphProps } from '../../../../../types/propsTypes';
+import { Loading } from '../../../../../components';
+import type { DailyGraphProps } from '../../../../../types/propsTypes';
 
-export const TotalGraph = ({ data }: TotalGraphProps) => {
-  const total = data?.reduce((acc, cur) => acc + cur.y.reservationCount, 0);
+export const DailyGraph = ({ data, type }: DailyGraphProps) => {
+  const total = data?.reduce((acc, cur) => acc + cur.y[type], 0);
+  const TITLE = {
+    cancel: '일별취소',
+    newPatient: '일별신환',
+    noshow: '일별부도',
+    reservationCount: '총방문',
+  };
+  const COLOR = {
+    cancel: '#FF567F',
+    newPatient: '#ffd556',
+    noshow: '#9EE2E2',
+    reservationCount: 'rgba(121,100,200,1)',
+  };
+
+  if (!data) return <Loading />;
+
   return (
     <div className="graph-chart__total-graph">
-      <div className="graph-chart__graph-title border-l-[rgba(121,100,200,1)]">
-        <h2 className="">총방문</h2>
+      <div
+        className="graph-chart__graph-title border-l-[#]"
+        style={{ borderColor: COLOR[type] }}
+      >
+        <h2>{TITLE[type]}</h2>
         <span className="text-base text-[#A0A0C2]">총합: {total}</span>
       </div>
 
@@ -41,14 +60,20 @@ export const TotalGraph = ({ data }: TotalGraphProps) => {
             },
           }}
           data={data}
-          y="y.reservationCount"
+          y={`y.${type}`}
         />
         <VictoryAxis
           crossAxis
           tickFormat={(tick) => new Date(tick).getDate()}
           style={{ grid: { strokeWidth: 1 } }}
         />
-        <VictoryAxis dependentAxis tickFormat={(tick) => `${tick}명`} />
+        <VictoryAxis
+          dependentAxis
+          tickFormat={(tick) => {
+            const value = Number.isInteger(tick) ? tick : 0;
+            return `${value}명`;
+          }}
+        />
       </VictoryChart>
     </div>
   );

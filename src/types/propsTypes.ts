@@ -160,3 +160,7 @@ export interface TableChartProps {
 export interface TotalGraphProps {
   data: GraphData[] | undefined;
 }
+
+export interface DailyGraphProps extends TotalGraphProps {
+  type: 'cancel' | 'newPatient' | 'noshow' | 'reservationCount';
+}
