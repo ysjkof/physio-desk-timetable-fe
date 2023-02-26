@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 import { endOfMonth, startOfMonth } from 'date-fns';
 import { useQuery } from '@apollo/client';
-import { GET_STATISTICS_DOCUMENT } from '../../../../../graphql';
-import { useStore } from '../../../../../store';
-import { useGetClinic } from '../../../../../hooks';
-import { getReportsByUser } from '../../../../../utils/chartUtils';
+import { GET_STATISTICS_DOCUMENT } from '../../../graphql';
+import { useStore } from '../../../store';
+import { useGetClinic } from '../../../hooks';
+import { getReportsByUser } from '../../../utils/chartUtils';
 import type {
   GetStatisticsQuery,
   GetStatisticsQueryVariables,
-} from '../../../../../types/generatedTypes';
-import type { PrimaryCountList } from '../../../../../types/commonTypes';
+} from '../../../types/generatedTypes';
+import type { CountListOfEachUser } from '../../../types/commonTypes';
 
-export const useTableChart = () => {
+export const useStatistics = () => {
   const clinicId = useStore((state) => state.pickedClinicId);
   const [clinic] = useGetClinic();
 
-  const [countList, setCountList] = useState<PrimaryCountList>();
+  const [countList, setCountList] = useState<CountListOfEachUser>();
 
   const date = new Date();
   const startDate = startOfMonth(date);
@@ -44,5 +44,5 @@ export const useTableChart = () => {
     setCountList(getReportsByUser(dailyReports));
   }, [data]);
 
-  return { countList };
+  return { countList, data };
 };
