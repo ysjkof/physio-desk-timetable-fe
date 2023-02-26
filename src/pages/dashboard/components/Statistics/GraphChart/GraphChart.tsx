@@ -1,4 +1,5 @@
 import { TotalGraph } from './TotalGraph';
+import { DailyCancelationGraph } from './DailyCancelationGraph';
 import type { GetStatisticsQuery } from '../../../../../types/generatedTypes';
 
 interface GraphChartProps {
@@ -15,10 +16,15 @@ const GraphChart = ({ data }: GraphChartProps) => {
     })
   );
 
+  console.log(
+    'graphData >>>',
+    graphData?.map((d) => d.y.cancel)
+  );
+
   return (
     <div className="graph-chart">
       <TotalGraph data={graphData} />
-      <TotalGraph data={graphData} />
+      <DailyCancelationGraph data={graphData} />
     </div>
   );
 };

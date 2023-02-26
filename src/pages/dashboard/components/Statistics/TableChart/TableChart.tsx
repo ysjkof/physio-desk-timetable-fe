@@ -28,18 +28,6 @@ const TableChart = ({ countList }: TableChartProps) => {
               <TableChartCard key={key} userId={key} {...value} query={query} />
             );
           })}
-        {countList &&
-          Object.entries(countList).map(([key, value]) => {
-            return (
-              <TableChartCard key={key} userId={key} {...value} query={query} />
-            );
-          })}
-        {countList &&
-          Object.entries(countList).map(([key, value]) => {
-            return (
-              <TableChartCard key={key} userId={key} {...value} query={query} />
-            );
-          })}
       </div>
     </div>
   );

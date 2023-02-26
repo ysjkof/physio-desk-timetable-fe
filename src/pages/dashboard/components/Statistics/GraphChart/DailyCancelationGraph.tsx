@@ -1,12 +1,12 @@
 import { VictoryArea, VictoryAxis, VictoryChart } from 'victory';
 import type { TotalGraphProps } from '../../../../../types/propsTypes';
 
-export const TotalGraph = ({ data }: TotalGraphProps) => {
-  const total = data?.reduce((acc, cur) => acc + cur.y.reservationCount, 0);
+export const DailyCancelationGraph = ({ data }: TotalGraphProps) => {
+  const total = data?.reduce((acc, cur) => acc + cur.y.cancel, 0);
   return (
     <div className="graph-chart__total-graph">
-      <div className="graph-chart__graph-title border-l-[rgba(121,100,200,1)]">
-        <h2 className="">총방문</h2>
+      <div className="graph-chart__graph-title border-l-[#FF567F]">
+        <h2 className="">일별취소</h2>
         <span className="text-base text-[#A0A0C2]">총합: {total}</span>
       </div>
 
@@ -41,14 +41,20 @@ export const TotalGraph = ({ data }: TotalGraphProps) => {
             },
           }}
           data={data}
-          y="y.reservationCount"
+          y="y.cancel"
         />
         <VictoryAxis
           crossAxis
           tickFormat={(tick) => new Date(tick).getDate()}
           style={{ grid: { strokeWidth: 1 } }}
         />
-        <VictoryAxis dependentAxis tickFormat={(tick) => `${tick}명`} />
+        <VictoryAxis
+          dependentAxis
+          tickFormat={(tick) => {
+            const value = Number.isInteger(tick) ? tick : 0;
+            return `${value}명`;
+          }}
+        />
       </VictoryChart>
     </div>
   );

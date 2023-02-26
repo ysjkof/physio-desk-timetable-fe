@@ -196,7 +196,7 @@
   }
 
   .graph-chart__graph-title {
-    @apply absolute top-4 border-l-8 pl-2 text-xl font-medium;
+    @apply absolute top-4 flex items-baseline gap-2 border-l-8 pl-2 text-xl font-medium;
   }
 
   .table-chart {
