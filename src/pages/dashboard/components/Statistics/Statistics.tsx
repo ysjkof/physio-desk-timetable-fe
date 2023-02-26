@@ -1,15 +1,18 @@
 import DateSelector from './DateSelector';
+import { GraphChart } from './GraphChart';
 import { TableChart } from './TableChart';
+import { useStatistics } from '../../hooks/useStatistics';
 
 const Statistics = () => {
+  const { countList, data } = useStatistics();
+
   return (
     <div className="flex grow flex-col whitespace-nowrap bg-[#F9F9FF] p-10">
       <StatisticsHeader />
       <DateSelector />
-      <div className="flex justify-between gap-8">
-        <div className="">그래픽차트</div>
-        {/* <Chart /> */}
-        <TableChart />
+      <div className="mt-6 flex h-[630px] justify-between gap-8 overflow-hidden">
+        <GraphChart data={data} />
+        <TableChart countList={countList} />
       </div>
     </div>
   );

@@ -103,9 +103,14 @@ export interface IDailyPrescriptionWithCount
 export type IPrescriptionOfUser =
   DailyReportOfGetStatistics['users'][0]['prescriptions'][0];
 
-export interface PrimaryCountList {
+export interface CountListOfEachUser {
   [key: string]: PrimaryCountListItem;
 }
+
+export interface CountListWithDate extends PrimaryCountListItem {
+  date: Date;
+}
+
 export interface PrimaryCountListItem {
   reservationCount: number;
   newPatient: number;
@@ -192,3 +197,13 @@ export interface SettingOutletContext {
 }
 
 export type ApolloClientType = ApolloClient<NormalizedCacheObject> | null;
+
+export interface GraphData {
+  x: any;
+  y: {
+    cancel: number;
+    newPatient: number;
+    noshow: number;
+    reservationCount: number;
+  };
+}

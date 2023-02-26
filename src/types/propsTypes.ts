@@ -3,7 +3,12 @@ import type {
   ReactNode,
   TextareaHTMLAttributes,
 } from 'react';
-import type { ISchedules, MemberWithEvent } from './commonTypes';
+import type {
+  CountListOfEachUser,
+  GraphData,
+  ISchedules,
+  MemberWithEvent,
+} from './commonTypes';
 import type { FormForEditPrescriptionFields } from './formTypes';
 import type { PrescriptionForFind } from './processedGeneratedTypes';
 import { UseFormRegisterReturn } from 'react-hook-form';
@@ -147,3 +152,11 @@ export interface InputPropsWithRegister
 export interface TextareaProps
   extends InputRegisterProps,
     TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+export interface TableChartProps {
+  countList: CountListOfEachUser | undefined;
+}
+
+export interface TotalGraphProps {
+  data: GraphData[] | undefined;
+}

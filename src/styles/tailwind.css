@@ -183,8 +183,20 @@
     @apply flex h-full w-80 items-center gap-4 rounded-md border bg-white p-4;
   }
 
+  .graph-chart {
+    @apply flex grow flex-col gap-8;
+  }
+
+  .graph-chart__total-graph {
+    @apply relative rounded-md border border-[#A0A0C2] bg-white;
+  }
+
+  .graph-chart__graph-title {
+    @apply absolute top-4 border-l-8 pl-2 text-xl font-medium;
+  }
+
   .table-chart {
-    @apply flex w-fit flex-col items-center rounded-md border border-[#A0A0C2] bg-white p-4;
+    @apply sticky top-0 flex w-fit flex-col items-center rounded-md border border-[#A0A0C2] bg-white p-4;
   }
   .table-chart__card {
     @apply rounded-md border p-2;

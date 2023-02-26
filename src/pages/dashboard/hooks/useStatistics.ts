@@ -17,7 +17,7 @@ export const useStatistics = () => {
 
   const [countList, setCountList] = useState<CountListOfEachUser>();
 
-  const date = new Date();
+  const date = new Date('2023-03-01');
   const startDate = startOfMonth(date);
   const endDate = endOfMonth(date);
 

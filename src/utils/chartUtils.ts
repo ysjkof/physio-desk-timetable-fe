@@ -2,7 +2,7 @@ import type {
   IDailyPrescriptionWithCount,
   IPrescriptionOfUser,
   MemberState,
-  PrimaryCountList,
+  CountListOfEachUser,
 } from '../types/commonTypes';
 import type {
   PrescriptionOfGetStatistics,
@@ -161,7 +161,7 @@ export const createUserStatistics = ({
 };
 
 export const getReportsByUser = (dailyReports: DailyReportsOfGetStatistics) => {
-  const reportsByUser: PrimaryCountList = {};
+  const reportsByUser: CountListOfEachUser = {};
 
   dailyReports?.forEach((report) => {
     const { users } = report;
