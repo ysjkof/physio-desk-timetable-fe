@@ -13,7 +13,7 @@ export default defineConfig({
     mdx({ remarkPlugins: [remarkGfm] }),
   ],
   test: {
-    include: ['test/*'],
+    include: ['tests/*'],
     coverage: { provider: 'c8', reporter: ['html-spa'] },
   },
 });

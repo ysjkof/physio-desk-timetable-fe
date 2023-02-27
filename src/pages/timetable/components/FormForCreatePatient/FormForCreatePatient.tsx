@@ -56,7 +56,7 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
             {['male', 'female'].map((gender) => (
               <Checkbox
                 key={gender}
-                id={`create-patient-form__gender-${gender}`}
+                id={`create-patient-gender-${gender}`}
                 label={GENDER_KOR[gender as 'male' | 'female']}
                 type="radio"
                 value={gender}
