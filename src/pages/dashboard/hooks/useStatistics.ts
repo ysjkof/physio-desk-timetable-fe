@@ -22,14 +22,12 @@ export const useStatistics = () => {
     const result = new Set(disabledUserIds);
     if (result.has(id)) result.delete(id);
     else result.add(id);
-    console.log('result.size >>>', result.size);
-
     setDisabledUserIds(result);
   };
 
   const [countList, setCountList] = useState<CountListOfEachUser>();
 
-  const date = new Date('2023-03-01');
+  const [date, setDate] = useState(new Date());
   const startDate = startOfMonth(date);
   const endDate = endOfMonth(date);
 
@@ -55,7 +53,7 @@ export const useStatistics = () => {
         },
       });
     }
-  }, [clinic?.members]);
+  }, [clinic?.members, date]);
 
   useEffect(() => {
     if (!data) return;
@@ -64,5 +62,5 @@ export const useStatistics = () => {
     setCountList(getReportsByUser(dailyReports));
   }, [data]);
 
-  return { countList, data, disabledUserIds, toggleUserId };
+  return { countList, data, disabledUserIds, toggleUserId, date, setDate };
 };

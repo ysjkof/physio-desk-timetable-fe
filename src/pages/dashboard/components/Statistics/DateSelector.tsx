@@ -1,11 +1,15 @@
+import { type Dispatch } from 'react';
 import { eachYearOfInterval, isSameYear, set } from 'date-fns';
-import { useState } from 'react';
 import { Selectbox } from '../../../../components';
 import { getStringYear } from '../../../../utils/dateUtils';
 
-const DateSelector = () => {
+interface DateSelectorProps {
+  date: Date;
+  setDate: Dispatch<Date>;
+}
+
+const DateSelector = ({ date, setDate }: DateSelectorProps) => {
   const today = new Date();
-  const [date, setDate] = useState(today);
 
   const years = eachYearOfInterval({
     start: new Date('1970-01-01'),

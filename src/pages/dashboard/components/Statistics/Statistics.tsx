@@ -6,7 +6,8 @@ import { useWindowSize } from '../../../../hooks';
 
 const Statistics = () => {
   const { height } = useWindowSize(true);
-  const { countList, data, disabledUserIds, toggleUserId } = useStatistics();
+  const { countList, data, disabledUserIds, toggleUserId, date, setDate } =
+    useStatistics();
 
   return (
     <div
@@ -18,7 +19,7 @@ const Statistics = () => {
         <GraphChart data={data} disabledIds={disabledUserIds} />
       </div>
       <div className="flex flex-col gap-6">
-        <DateSelector />
+        <DateSelector date={date} setDate={setDate} />
         <TableChart
           countList={countList}
           disabledIds={disabledUserIds}
