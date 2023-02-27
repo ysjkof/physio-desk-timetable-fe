@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import { addHours } from 'date-fns';
 import { DateForm, InputWrapper, MenuButton } from '../../../../components';
 import { useStore } from '../../../../store';
-import { useCreateReservation } from '../../hooks';
+import { useCreateDayoff } from '../../hooks';
 import AutoCompleteForUser from '../FormForReservation/AutoCompleteForUser';
 import { Textarea } from '../../../../components';
 import type { FormForDayoffFields } from '../../../../types/formTypes';
 import type { FormForDayoffProps } from '../../../../types/propsTypes';
-import type { CreateReservationMutationVariables } from '../../../../types/generatedTypes';
+import type { CreateDayoffInput } from '../../../../types/processedGeneratedTypes';
 
 const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
   const clinicId = useStore((state) => state.pickedClinicId);
@@ -17,20 +17,19 @@ const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
       defaultValues: { userId, startDate: date, endDate: addHours(date, 2) },
     });
 
+  const { createDayoff } = useCreateDayoff();
+
   const onSubmit = () => {
     const { startDate, endDate, userId, memo } = getValues();
-    const formData: CreateReservationMutationVariables['input'] = {
+    const formData: CreateDayoffInput = {
       startDate,
       endDate,
       memo,
       userId,
-      isDayoff: true,
       clinicId,
     };
-    createReservation(formData);
+    createDayoff(formData);
   };
-
-  const { createReservation } = useCreateReservation();
 
   const setUserId = (userId: number) => {
     setValue('userId', userId);
