@@ -1,6 +1,8 @@
 import { DailyGraph } from './DailyGraph';
 import { sumObjValue } from '../../../../../utils/chartUtils';
+import { Warning } from '../../../../../components';
 import type { GraphChartProps } from '../../../../../types/propsTypes';
+import type { GraphData } from '../../../../../types/commonTypes';
 
 const GraphChart = ({ data, disabledIds }: GraphChartProps) => {
   const iniValue = {
@@ -10,7 +12,7 @@ const GraphChart = ({ data, disabledIds }: GraphChartProps) => {
     reservationCount: 0,
   };
 
-  let graphData;
+  let graphData: GraphData[] | undefined;
 
   if (disabledIds.size === 0) {
     graphData = data?.getStatistics.dailyReports?.map(
@@ -33,6 +35,13 @@ const GraphChart = ({ data, disabledIds }: GraphChartProps) => {
       };
     });
   }
+
+  if (graphData?.length === 0)
+    return (
+      <div className="h-full w-full">
+        <Warning>통계 내역이 없습니다</Warning>
+      </div>
+    );
 
   return (
     <div className="graph-chart">
