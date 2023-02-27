@@ -3,6 +3,7 @@ import type {
   IPrescriptionOfUser,
   MemberState,
   CountListOfEachUser,
+  ObjValueIsNumber,
 } from '../types/commonTypes';
 import type {
   PrescriptionOfGetStatistics,
@@ -180,4 +181,15 @@ export const getReportsByUser = (dailyReports: DailyReportsOfGetStatistics) => {
   });
 
   return reportsByUser;
+};
+
+export const sumObjValue = <T extends ObjValueIsNumber>(
+  obj1: T,
+  obj2: T
+): T => {
+  const result: T = {} as T;
+  for (let key in obj1) {
+    result[key] = ((obj1[key] || 0) + obj2[key]) as T[Extract<keyof T, string>];
+  }
+  return result;
 };

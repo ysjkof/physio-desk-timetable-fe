@@ -1,19 +1,38 @@
 import { DailyGraph } from './DailyGraph';
-import type { GetStatisticsQuery } from '../../../../../types/generatedTypes';
+import { sumObjValue } from '../../../../../utils/chartUtils';
+import type { GraphChartProps } from '../../../../../types/propsTypes';
 
-interface GraphChartProps {
-  data: GetStatisticsQuery | undefined;
-}
+const GraphChart = ({ data, disabledIds }: GraphChartProps) => {
+  const iniValue = {
+    cancel: 0,
+    newPatient: 0,
+    noshow: 0,
+    reservationCount: 0,
+  };
 
-const GraphChart = ({ data }: GraphChartProps) => {
-  const dailyReports = data?.getStatistics.dailyReports;
+  let graphData;
 
-  const graphData = dailyReports?.map(
-    ({ cancel, newPatient, date, noshow, reservationCount }) => ({
-      x: date,
-      y: { cancel, newPatient, noshow, reservationCount },
-    })
-  );
+  if (disabledIds.size === 0) {
+    graphData = data?.getStatistics.dailyReports?.map(
+      ({ date, cancel, newPatient, noshow, reservationCount }) => {
+        return {
+          x: date,
+          y: { cancel, newPatient, noshow, reservationCount },
+        };
+      }
+    );
+  } else {
+    graphData = data?.getStatistics.dailyReports?.map(({ date, users }) => {
+      const y = users
+        .filter((user) => !disabledIds.has(user.userId))
+        .reduce((acc, cur) => sumObjValue(acc, cur), iniValue);
+
+      return {
+        x: date,
+        y,
+      };
+    });
+  }
 
   return (
     <div className="graph-chart">

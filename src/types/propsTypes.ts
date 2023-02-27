@@ -12,6 +12,7 @@ import type {
 import type { FormForEditPrescriptionFields } from './formTypes';
 import type { PrescriptionForFind } from './processedGeneratedTypes';
 import { UseFormRegisterReturn } from 'react-hook-form';
+import { GetStatisticsQuery } from './generatedTypes';
 
 // TimeTable
 export interface IUserLength {
@@ -153,14 +154,25 @@ export interface TextareaProps
   extends InputRegisterProps,
     TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
-export interface TableChartProps {
+interface ToggleUserIdProps {
+  toggleUserId: (id: number) => void;
+}
+interface DisabledIds {
+  disabledIds: Set<number>;
+}
+interface StatisticsUserIdProps extends ToggleUserIdProps, DisabledIds {}
+
+export interface TableChartProps extends StatisticsUserIdProps {
   countList: CountListOfEachUser | undefined;
 }
 
-export interface TotalGraphProps {
+export interface GraphChartProps extends DisabledIds {
+  data: GetStatisticsQuery | undefined;
+}
+export interface DailyGraphDataProps {
   data: GraphData[] | undefined;
 }
 
-export interface DailyGraphProps extends TotalGraphProps {
+export interface DailyGraphProps extends DailyGraphDataProps {
   type: 'cancel' | 'newPatient' | 'noshow' | 'reservationCount';
 }

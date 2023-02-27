@@ -1,14 +1,28 @@
 import { useGetClinic } from '../../../../../hooks';
 import { cls } from '../../../../../utils/commonUtils';
+import { CheckableButton } from '../../../../../components';
+import { USER_COLORS } from '../../../../../constants/constants';
 import type { PrimaryCountListItem } from '../../../../../types/commonTypes';
 
 interface TableChartCardProps extends PrimaryCountListItem {
   userId: string;
   query: string;
+  isActivate: boolean;
+  onClick: () => void;
 }
 
 const TableChartCard = (props: TableChartCardProps) => {
-  const { cancel, newPatient, noshow, reservationCount, userId, query } = props;
+  const {
+    cancel,
+    newPatient,
+    noshow,
+    reservationCount,
+    userId,
+    query,
+    isActivate,
+    onClick,
+  } = props;
+
   const [myClinic] = useGetClinic();
 
   const name =
@@ -20,12 +34,19 @@ const TableChartCard = (props: TableChartCardProps) => {
     <div
       className={cls(
         'table-chart__card',
-        query && !new RegExp(query).test(name) ? 'hidden' : ''
+        query && !new RegExp(query).test(name) ? 'hidden' : '',
+        isActivate ? '' : 'border-transparent'
       )}
+      onClick={onClick}
     >
       <div className="flex items-center gap-1 px-1.5 text-sm font-medium">
-        <div className="h-3 w-3 rounded-sm bg-red-300"></div>
-        {name}
+        <CheckableButton
+          canSee={isActivate}
+          label={name}
+          onClick={onClick}
+          hasBorder={false}
+          personalColor={USER_COLORS[+userId].deep}
+        />
       </div>
       <div>
         <div className="flex">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { endOfMonth, startOfMonth } from 'date-fns';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_STATISTICS_DOCUMENT } from '../../../graphql';
 import { useStore } from '../../../store';
 import { useGetClinic } from '../../../hooks';
@@ -14,6 +14,18 @@ import type { CountListOfEachUser } from '../../../types/commonTypes';
 export const useStatistics = () => {
   const clinicId = useStore((state) => state.pickedClinicId);
   const [clinic] = useGetClinic();
+  const [disabledUserIds, setDisabledUserIds] = useState<Set<number>>(
+    new Set()
+  );
+
+  const toggleUserId = (id: number) => {
+    const result = new Set(disabledUserIds);
+    if (result.has(id)) result.delete(id);
+    else result.add(id);
+    console.log('result.size >>>', result.size);
+
+    setDisabledUserIds(result);
+  };
 
   const [countList, setCountList] = useState<CountListOfEachUser>();
 
@@ -21,21 +33,29 @@ export const useStatistics = () => {
   const startDate = startOfMonth(date);
   const endDate = endOfMonth(date);
 
-  const { data } = useQuery<GetStatisticsQuery, GetStatisticsQueryVariables>(
-    GET_STATISTICS_DOCUMENT,
-    {
-      variables: {
-        input: {
-          startDate,
-          endDate,
-          clinicId,
-          userIds: clinic?.members
-            .filter((member) => member.accepted)
-            .map((member) => member.user.id),
+  const [callQuery, { data }] = useLazyQuery<
+    GetStatisticsQuery,
+    GetStatisticsQueryVariables
+  >(GET_STATISTICS_DOCUMENT);
+
+  useEffect(() => {
+    if (clinic?.members) {
+      const userIds = clinic.members
+        .filter((member) => member.accepted)
+        .map((member) => member.user.id);
+
+      callQuery({
+        variables: {
+          input: {
+            startDate,
+            endDate,
+            clinicId,
+            userIds,
+          },
         },
-      },
+      });
     }
-  );
+  }, [clinic?.members]);
 
   useEffect(() => {
     if (!data) return;
@@ -44,5 +64,5 @@ export const useStatistics = () => {
     setCountList(getReportsByUser(dailyReports));
   }, [data]);
 
-  return { countList, data };
+  return { countList, data, disabledUserIds, toggleUserId };
 };

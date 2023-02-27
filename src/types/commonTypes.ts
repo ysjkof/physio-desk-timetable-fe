@@ -179,6 +179,7 @@ export interface ClassNameProps {
 export interface ObjValueIsFx {
   [key: string]: () => void;
 }
+export type ObjValueIsNumber = Record<string, number>;
 
 export interface LocationState {
   createReservation?: boolean;

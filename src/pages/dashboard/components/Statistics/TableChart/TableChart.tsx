@@ -4,7 +4,11 @@ import { useDebouncedCallback } from '../../../../../hooks';
 import { SearchInput } from '../../../../../components';
 import type { TableChartProps } from '../../../../../types/propsTypes';
 
-const TableChart = ({ countList }: TableChartProps) => {
+const TableChart = ({
+  countList,
+  disabledIds,
+  toggleUserId,
+}: TableChartProps) => {
   const [query, setQuery] = useState('');
 
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -21,11 +25,20 @@ const TableChart = ({ countList }: TableChartProps) => {
         placeholder="치료사 검색"
         onChange={debounceQuery}
       />
-      <div className="flex w-fit flex-col gap-2 overflow-y-scroll">
+      <div className="flex w-fit flex-col gap-2 overflow-y-scroll p-1">
         {countList &&
           Object.entries(countList).map(([key, value]) => {
+            const numKey = Number.parseInt(key, 10);
+
             return (
-              <TableChartCard key={key} userId={key} {...value} query={query} />
+              <TableChartCard
+                key={key}
+                userId={key}
+                {...value}
+                query={query}
+                isActivate={!disabledIds.has(numKey)}
+                onClick={() => toggleUserId(numKey)}
+              />
             );
           })}
       </div>

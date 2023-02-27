@@ -20,11 +20,9 @@ const CheckableButton = ({
   icon,
 }: CheckableButtonProps) => {
   return (
-    <div
+    <button
       onClick={onClick}
-      onKeyDown={onClick}
-      role="button"
-      tabIndex={0}
+      type="button"
       className={cls(
         'flex h-fit select-none items-center gap-2 whitespace-nowrap rounded-sm px-2 py-0.5 text-gray-300',
         hasBorder ? 'border border-gray-300' : '',
@@ -37,7 +35,7 @@ const CheckableButton = ({
       {icon || (
         <Check
           className={cls('rounded-sm bg-gray-300 text-white')}
-          iconSize="SM"
+          iconSize="MD"
           style={{
             ...(canSee && {
               backgroundColor: personalColor,
@@ -46,7 +44,7 @@ const CheckableButton = ({
         />
       )}
       {label}
-    </div>
+    </button>
   );
 };
 
