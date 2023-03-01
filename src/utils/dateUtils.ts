@@ -1,23 +1,8 @@
-import {
-  differenceInMinutes,
-  intlFormat,
-  parseISO,
-  setDay,
-  startOfDay,
-} from 'date-fns';
+import { differenceInMinutes, parseISO, setDay, startOfDay } from 'date-fns';
+import { LOCALE } from '../constants/constants';
 
 export function getSunday(date: Date) {
   return startOfDay(setDay(date, 0));
-}
-
-export function getWeeks(dateOfSunday: Date) {
-  const result: { date: Date }[] = [];
-  for (let i = 0; i < 7; i += 1) {
-    const sunday = new Date(dateOfSunday);
-    sunday.setDate(sunday.getDate() + i);
-    result.push({ date: sunday });
-  }
-  return result;
 }
 
 /**
@@ -26,47 +11,57 @@ export function getWeeks(dateOfSunday: Date) {
  * @returns
  */
 export function getStringOfTime(date: Date, prefix?: boolean) {
-  return intlFormat(date, {
+  return new Intl.DateTimeFormat(LOCALE, {
     hour: '2-digit',
     hour12: !!prefix,
     minute: '2-digit',
-  });
+  }).format(date);
 }
 
 export function getStringOfDateTime(date: Date) {
-  return intlFormat(date, {
+  return new Intl.DateTimeFormat(LOCALE, {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-  });
+  }).format(date);
 }
 
 export function getStringYearMonthDay(date: Date) {
-  return intlFormat(date, {
+  return new Intl.DateTimeFormat(LOCALE, {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  });
+  }).format(date);
 }
 
 export function getStringYear(date: Date) {
-  return intlFormat(date, { year: 'numeric' });
+  return new Intl.DateTimeFormat(LOCALE, {
+    year: 'numeric',
+  }).format(date);
 }
 
 export function getStringYearMonth(date: Date) {
-  return intlFormat(date, {
+  return new Intl.DateTimeFormat(LOCALE, {
     year: 'numeric',
     month: 'long',
-  });
+  }).format(date);
 }
 
 export function getStringMonthDay(date: Date) {
-  return intlFormat(date, {
+  return new Intl.DateTimeFormat(LOCALE, {
     month: 'long',
     day: 'numeric',
-  });
+  }).format(date);
+}
+
+export function getStringDay(date: Date) {
+  return new Intl.DateTimeFormat(LOCALE, { day: 'numeric' }).format(date);
+}
+
+export function getStringWeekDay(date: Date) {
+  return new Intl.DateTimeFormat(LOCALE, { weekday: 'long' }).format(date);
 }
 
 export function getDateAndDifference(start: string, end: string) {
@@ -74,16 +69,6 @@ export function getDateAndDifference(start: string, end: string) {
   const date = getStringOfDateTime(startDate);
   const difference = differenceInMinutes(parseISO(end), startDate);
   return `${date} (${difference}분)`;
-}
-
-export function addHourToDate(fromDate: Date, hours: Date) {
-  const year = fromDate.getFullYear();
-  const month = fromDate.getMonth();
-  const date = fromDate.getDate();
-  const hour = hours.getHours();
-  const minute = hours.getMinutes();
-
-  return new Date(year, month, date, hour, minute);
 }
 
 export function getTimeLength(
@@ -101,27 +86,6 @@ export function getTimeLength(
   const minutes = minuteHeight[unit];
 
   return (ed.getTime() - sd.getTime()) / 1000 / seconds / minutes;
-}
-
-export function getWeeksOfMonth(referenceDay: Date) {
-  const result = [];
-  const firstDate = new Date(referenceDay);
-  const lastDate = new Date(firstDate);
-  firstDate.setDate(1);
-  lastDate.setMonth(lastDate.getMonth() + 1);
-  lastDate.setDate(0);
-  for (let i = 0; i < 6; i += 1) {
-    const date = new Date(firstDate);
-    date.setDate(i * 7 + 1);
-    const week = getWeeks(getSunday(date));
-    result.push(...week);
-    if (
-      firstDate.getMonth() !== week[6].date.getMonth() ||
-      (i > 0 && firstDate.getMonth() !== week[0].date.getMonth())
-    )
-      break;
-  }
-  return result;
 }
 
 export function compareDateMatch(
@@ -156,10 +120,6 @@ export function compareDateMatch(
   return options[option]();
 }
 
-export function compareSameWeek(date: Date, secondDate: Date): boolean {
-  return compareDateMatch(getSunday(date), getSunday(secondDate), 'ymd');
-}
-
 export function get4DigitHour(date: Date | string) {
   const referenceDate = typeof date === 'string' ? new Date(date) : date;
   const hour = String(referenceDate.getHours()).padStart(2, '0');
@@ -171,70 +131,9 @@ export function getFrom4DigitTime(time: string, what: 'hour' | 'minute') {
   return what === 'hour' ? time.substring(0, 2) : time.substring(3, 5);
 }
 
-/**
- * Date를 받고 그 달의 첫날짜와 끝날짜를 반환한다
- * @param {Date} date
- * @returns [startDate, endDate]
- */
-export function getMonthStartEnd(date: Date): [Date, Date] {
-  const startDate = new Date(date);
-  startDate.setHours(0, 0, 0, 0);
-  const endDate = new Date(startDate);
-  startDate.setDate(1);
-  endDate.setMonth(endDate.getMonth() + 1);
-  endDate.setDate(0);
-  endDate.setHours(23, 59, 59, 999);
-  return [startDate, endDate];
-}
-
 interface Duration {
   hour: number;
   minute: number;
-}
-
-/**
- * param1의 Date객체의 시, 분과 param2 객체의 시, 분을 비교해 Boolean을 반환한다
- */
-export function compareTableEndtime(date: Date, { hour, minute }: Duration) {
-  const hourToCompare = date.getHours();
-  const minuteToCompare = date.getMinutes();
-  return hourToCompare === hour && minuteToCompare === minute;
-}
-
-export function getDateFromYMDHM(
-  startDateYear: number,
-  startDateMonth: number,
-  startDateDate: number,
-  startDateHours?: number,
-  startDateMinutes?: number
-) {
-  const month = String(startDateMonth).padStart(2, '0');
-  const day = String(startDateDate).padStart(2, '0');
-  const ymd = `${startDateYear}-${month}-${day}`;
-  let hms = `T00:00:00.000`;
-
-  if (
-    typeof startDateHours === 'number' &&
-    typeof startDateMinutes === 'number'
-  ) {
-    const hours = String(startDateHours).padStart(2, '0');
-    const minutes = String(startDateMinutes).padStart(2, '0');
-    hms = `T${hours}:${minutes}:00.000`;
-  }
-  return new Date(ymd + hms);
-}
-
-export function getHowManyDayFromMillisecond(millisecond: number) {
-  // MILLISECOND_TO_DAY = 1000 / 60 / 60 / 24
-  return millisecond / 1000 / 60 / 60 / 24;
-}
-
-/** date가 속한 주의 요일 인덱스에 맞는 날짜를 반환 */
-export function createDateFromDay(date: Date, dayIdx: number) {
-  const newDate = new Date(date);
-  const dayGap = dayIdx - newDate.getDay();
-  newDate.setDate(newDate.getDate() + dayGap);
-  return newDate;
 }
 
 /** 새 날짜를 생성하면서 시, 분, 초, 밀리초를 초기화 한다. 초와 밀리초는 무조건 0이다. */
@@ -276,8 +175,8 @@ export function convertMinuteFromDate(date: Date) {
   return date.getTime() / 1000 / 60;
 }
 
-export function isPastDay(yesterday: Date, today: Date) {
-  return yesterday.getTime() >= today.getTime();
+export function isBeforeDateB(dateA: Date, dateB: Date) {
+  return dateA.getTime() >= dateB.getTime();
 }
 
 export function isValidDateFrom8Digit(dateString: string) {

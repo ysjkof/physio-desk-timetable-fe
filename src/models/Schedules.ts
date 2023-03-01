@@ -7,7 +7,7 @@ import {
   startOfDay,
 } from 'date-fns';
 import { getMemberState } from '../utils/commonUtils';
-import { isPastDay } from '../utils/dateUtils';
+import { isBeforeDateB } from '../utils/dateUtils';
 import type {
   ISchedules,
   MemberOfClient,
@@ -87,7 +87,7 @@ export class Schedules {
       ({ accepted, staying, manager, updatedAt }) =>
         !(
           getMemberState({ accepted, staying, manager }) === '탈퇴' &&
-          isPastDay(date, new Date(updatedAt))
+          isBeforeDateB(date, new Date(updatedAt))
         )
     );
   }

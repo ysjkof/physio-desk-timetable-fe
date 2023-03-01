@@ -2,7 +2,7 @@ import { endOfYesterday } from 'date-fns';
 import { useContext } from 'react';
 import { CalendarDate } from '../../models/CalendarDate';
 import { cls } from '../../utils/commonUtils';
-import { compareDateMatch, isPastDay } from '../../utils/dateUtils';
+import { compareDateMatch, isBeforeDateB } from '../../utils/dateUtils';
 import { DatepickerContext } from './DatepickerStore';
 
 interface DatepickerMainProps {
@@ -10,7 +10,6 @@ interface DatepickerMainProps {
 }
 
 export const DatepickerMain = ({ disablePreviousDay }: DatepickerMainProps) => {
-  const yesterDay = endOfYesterday();
   const { month } = useContext(DatepickerContext);
 
   return (
@@ -19,7 +18,7 @@ export const DatepickerMain = ({ disablePreviousDay }: DatepickerMainProps) => {
         <Title />
         {month.map((day) => {
           const isActivate = disablePreviousDay
-            ? !isPastDay(day.getDate(), yesterDay)
+            ? !isBeforeDateB(endOfYesterday(), day.getDate())
             : true;
           return (
             <CalendarDay

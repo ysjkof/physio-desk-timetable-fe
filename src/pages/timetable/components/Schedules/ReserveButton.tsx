@@ -4,7 +4,7 @@ import { endOfYesterday, set, setDay } from 'date-fns';
 import {
   getFrom4DigitTime,
   getTimeLength,
-  isPastDay,
+  isBeforeDateB,
 } from '../../../../utils/dateUtils';
 import {
   TABLE_CELL_HEIGHT,
@@ -52,7 +52,7 @@ const ReserveButton = ({
   const pickedDate = useStore((state) => state.pickedDate);
   const handleClickButton = () => {
     const btnDate = setDay(set(pickedDate, { hours, minutes }), dayIndex);
-    if (isPastDay(endOfYesterday(), btnDate)) {
+    if (isBeforeDateB(endOfYesterday(), btnDate)) {
       return setAlert({ messages: ['지나간 날은 예약할 수 없습니다.'] });
     }
     if (pickedReservation) {

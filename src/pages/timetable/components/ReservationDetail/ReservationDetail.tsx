@@ -4,7 +4,7 @@ import { getStringFromReservationState } from '../../../../utils/commonUtils';
 import {
   getStringOfDateTime,
   getStringYearMonth,
-  isPastDay,
+  isBeforeDateB,
 } from '../../../../utils/dateUtils';
 import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
@@ -30,7 +30,7 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
 
   const { deleteReservation } = useDeleteReservation();
 
-  const isEnableEdit = !isPastDay(endOfYesterday(), new Date(startDate));
+  const isEnableEdit = !isBeforeDateB(endOfYesterday(), new Date(startDate));
 
   return (
     <div className="w-[300px] pb-4">

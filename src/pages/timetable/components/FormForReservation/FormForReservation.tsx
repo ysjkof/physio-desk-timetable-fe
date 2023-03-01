@@ -89,6 +89,7 @@ const FormForReservation = ({
             hasHour
             date={getValues('startDate')}
             setParentValue={setStartDate}
+            disablePreviousDay
           />
         </InputWrapper>
         <InputWrapper label="메모" htmlFor="메모">

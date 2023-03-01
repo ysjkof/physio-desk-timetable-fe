@@ -1,7 +1,11 @@
-import { memo } from 'react';
-import { compareDateMatch } from '../../../../utils/dateUtils';
+import { memo, useEffect } from 'react';
+import {
+  compareDateMatch,
+  getStringDay,
+  getStringWeekDay,
+} from '../../../../utils/dateUtils';
 import { cls } from '../../../../utils/commonUtils';
-import { LOCALE, SCROLL_ADDRESS } from '../../../../constants/constants';
+import { SCROLL_ADDRESS } from '../../../../constants/constants';
 import type { DateTitleProps } from '../../../../types/propsTypes';
 
 const DateTitle = ({
@@ -11,12 +15,8 @@ const DateTitle = ({
   isPickedMonth,
 }: DateTitleProps) => {
   const dayNumber = date.getDay();
-  const dayString = new Intl.DateTimeFormat(LOCALE, { day: 'numeric' }).format(
-    date
-  );
-  const weekday = new Intl.DateTimeFormat(LOCALE, { weekday: 'long' }).format(
-    date
-  );
+  const dayString = getStringDay(date);
+  const weekday = getStringWeekDay(date);
 
   /**
    * table-row의 요소를 불러와 스크롤 조절함
@@ -29,6 +29,10 @@ const DateTitle = ({
       behavior: 'smooth',
     });
   };
+
+  useEffect(() => {
+    if (isToday) moveScroll();
+  }, []);
 
   return (
     <div

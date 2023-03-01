@@ -12,6 +12,7 @@ import { setPickedDate, useStore } from '../../../../store';
 import { cls } from '../../../../utils/commonUtils';
 import type { ISchedules } from '../../../../types/commonTypes';
 import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
+import { LOCALE } from '../../../../constants/constants';
 
 const EventList = ({ events }: { events: ISchedules }) => {
   const sortedEvents = events.members
@@ -130,7 +131,7 @@ interface EventListItemProps {
 const EventListItem = ({ event }: EventListItemProps) => {
   const { user, patient, startDate, endDate, prescriptions } = event;
 
-  const patientNumber = new Intl.NumberFormat('ko-KR').format(
+  const patientNumber = new Intl.NumberFormat(LOCALE).format(
     patient?.registrationNumber || 0
   );
 

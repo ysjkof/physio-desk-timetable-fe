@@ -59,6 +59,7 @@ const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
             hasHour
             date={getValues('startDate')}
             setParentValue={setStartDate}
+            disablePreviousDay
           />
         </InputWrapper>
         <InputWrapper label="종료" htmlFor="종료" required>
@@ -66,6 +67,7 @@ const FormForDayoff = ({ userId, date, closeAction }: FormForDayoffProps) => {
             hasHour
             date={getValues('endDate')}
             setParentValue={setEndDate}
+            disablePreviousDay
           />
         </InputWrapper>
         <InputWrapper label="메모" htmlFor="메모">
