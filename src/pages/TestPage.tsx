@@ -81,6 +81,7 @@ function CreateReservation() {
     tryCount: 0,
     okCount: 0,
     errors: {},
+    patientIds: new Set(),
   });
   const clinicId = useStore((state) => state.pickedClinicId);
   const [myClinic] = useGetClinic();
@@ -133,7 +134,9 @@ function CreateReservation() {
 
     let tryCount = 0;
     let okCount = 0;
+    let patientIds = new Set();
     const errors: { [key: string]: number } = {};
+
     for (let i = 0; i < lastDay.getDate(); i += 1) {
       firstDate.setDate(i + 1);
       const prescription = selectPrescriptionForTest(prescriptions);
@@ -150,6 +153,7 @@ function CreateReservation() {
         const patientRandom = Math.floor(
           Math.random() * (patients.length || 0)
         );
+        patientIds.add(patientRandom);
         const memberRandom = Math.floor(
           Math.random() * (myClinic?.members.length || 0)
         );
@@ -179,6 +183,7 @@ function CreateReservation() {
               tryCount,
               okCount,
               errors,
+              patientIds,
             });
           },
         });
@@ -198,6 +203,7 @@ function CreateReservation() {
             className="rounded-md border px-1"
             type="text"
             placeholder="yyyy-mm-dd"
+            defaultValue={'2023-03-01'}
           />
         </label>
         <button
@@ -209,6 +215,8 @@ function CreateReservation() {
       </form>
       <p>
         병원 id: {clinicId}
+        <br />
+        시도 환자 수 : {createdReservation.patientIds.size}
         <br />
         병원이름 : {myClinic?.name}
         <br />
@@ -248,7 +256,7 @@ function getOneDayReservationInputDateForTest(
     if (tm === 6) tm = 0;
     sd.setHours(th, tm, 0, 0);
     ed.setHours(th, tm + inputPrescription.requiredTime, 0, 0);
-    console.log('날짜 >>>', th, tm, sd, ed);
+    // console.log('날짜 >>>', th, tm, sd, ed);
 
     return [sd, ed];
   });
