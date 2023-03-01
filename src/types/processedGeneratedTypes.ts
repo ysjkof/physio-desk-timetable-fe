@@ -97,18 +97,5 @@ export type UserInReservation = ReservationInList['user'];
 
 // statistics
 
-type PrescriptionsOfGetStatistics =
-  GetStatisticsQuery['getStatistics']['prescriptions'];
-
-export type PrescriptionOfGetStatistics = NonNullable<
-  FlatArray<PrescriptionsOfGetStatistics, 0>
->;
-
 export type DailyReportsOfGetStatistics =
   GetStatisticsQuery['getStatistics']['dailyReports'];
-
-export type DailyReportOfGetStatistics = NonNullable<
-  FlatArray<DailyReportsOfGetStatistics, 0>
->;
-
-export type UsersOfGetStatistics = DailyReportOfGetStatistics['users'][0];
