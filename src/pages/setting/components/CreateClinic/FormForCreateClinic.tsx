@@ -1,6 +1,6 @@
 import { InputWrapper, MenuButton } from '../../../../components';
 import { REG_EXP } from '../../../../constants/regex';
-import { Input } from '../../../timetable/components/FormForReservation/InputForReserve';
+import { Input } from '../../../../components';
 import useFormForCreateClinic from '../../hooks/useFormForCreateClinic';
 
 const FormForCreateClinic = () => {
@@ -8,9 +8,14 @@ const FormForCreateClinic = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <InputWrapper label="병원 이름" align="col" error={error.nameError}>
+      <InputWrapper
+        label="병원 이름"
+        htmlFor="병원 이름"
+        align="col"
+        error={error.nameError}
+      >
         <Input
-          label="병원이름"
+          id="병원이름"
           register={register('name', { pattern: REG_EXP.clinicName.pattern })}
         />
       </InputWrapper>

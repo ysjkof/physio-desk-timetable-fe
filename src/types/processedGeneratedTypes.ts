@@ -1,4 +1,6 @@
 import type {
+  CreateReservationInput,
+  EditReservationInput,
   FindMyClinicsQuery,
   FindMyMembersQuery,
   FindPrescriptionsQuery,
@@ -76,18 +78,24 @@ export type ReservationInPatient = NonNullable<
   GetReservationsByPatientQuery['getReservationsByPatient']['results']
 >[0];
 
+// dayoff
+
+type DayoffInput = Pick<
+  CreateReservationInput,
+  'startDate' | 'endDate' | 'memo' | 'userId'
+>;
+export interface CreateDayoffInput
+  extends DayoffInput,
+    Pick<CreateReservationInput, 'clinicId'> {}
+export interface EditDayoffInput
+  extends DayoffInput,
+    Pick<EditReservationInput, 'reservationId'> {}
+
 // Users
 
 export type UserInReservation = ReservationInList['user'];
 
 // statistics
 
-type IDailyPrescriptions = GetStatisticsQuery['getStatistics']['prescriptions'];
-
-export type IDailyPrescription = NonNullable<FlatArray<IDailyPrescriptions, 0>>;
-
-type IDailyReports = GetStatisticsQuery['getStatistics']['dailyReports'];
-
-export type IDailyReport = NonNullable<FlatArray<IDailyReports, 0>>;
-
-export type IUserInDaily = IDailyReport['users'][0];
+export type DailyReportsOfGetStatistics =
+  GetStatisticsQuery['getStatistics']['dailyReports'];

@@ -3,9 +3,6 @@ import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import type { Prescription } from './generatedTypes';
 import type {
   ClinicInReservation,
-  IDailyPrescription,
-  IDailyReport,
-  IMember,
   MemberOfGetMyClinic,
   MyClinic,
   MyMembersType,
@@ -96,23 +93,23 @@ export interface UserIdAndName extends IdAndName {}
 export interface Value {
   value: unknown;
 }
-export interface IDailyPrescriptionWithCount extends IDailyPrescription {
-  count: number;
+export interface CountListOfEachUser {
+  [key: string]: PrimaryCountListItem;
 }
-export type IPrescriptionOfUser = IDailyReport['users'][0]['prescriptions'][0];
 
-export type CountLists = {
+export interface CountListWithDate extends PrimaryCountListItem {
+  date: Date;
+}
+
+export interface PrimaryCountListItem {
   reservationCount: number;
   newPatient: number;
   noshow: number;
   cancel: number;
-  visitMoreThanThirty: number;
-};
+}
 
-export interface IUserStatistics {
-  name: string;
-  counts: CountLists;
-  prescriptions: IDailyPrescriptionWithCount[];
+export interface CountLists extends PrimaryCountListItem {
+  visitMoreThanThirty: number;
 }
 
 export interface MemberState {
@@ -167,6 +164,7 @@ export interface ClassNameProps {
 export interface ObjValueIsFx {
   [key: string]: () => void;
 }
+export type ObjValueIsNumber = Record<string, number>;
 
 export interface LocationState {
   createReservation?: boolean;
@@ -185,3 +183,13 @@ export interface SettingOutletContext {
 }
 
 export type ApolloClientType = ApolloClient<NormalizedCacheObject> | null;
+
+export interface GraphData {
+  x: any;
+  y: {
+    cancel: number;
+    newPatient: number;
+    noshow: number;
+    reservationCount: number;
+  };
+}

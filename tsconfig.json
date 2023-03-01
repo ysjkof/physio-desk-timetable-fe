@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "tests", "tests/demo-todo-app.spec.ts"],
+  "include": ["src", "tests", "e2e"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "ts-node": {
     "esm": true

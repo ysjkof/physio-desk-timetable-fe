@@ -1,11 +1,11 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Input } from '../../timetable/components/FormForReservation/InputForReserve';
+import { SearchInput } from '../../../components';
 import { useDebouncedCallback, useLazySearchPatient } from '../../../hooks';
+import { getStringYearMonthDay } from '../../../utils/dateUtils';
 import type { PatientsInSearch } from '../../../types/processedGeneratedTypes';
 import type { SearchPatientFormFields } from '../../../types/formTypes';
-import { getStringYearMonthDay } from '../../../utils/dateUtils';
 
 export const SearchPatientForm = () => {
   const { patientQuery, data, loading } = useLazySearchPatient();
@@ -53,17 +53,10 @@ export const SearchPatientForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="relative rounded-md">
       <div className="relative w-44">
-        <button
-          className="position-center-y absolute right-2 rounded-md border px-2 py-0.5 shadow-sm"
-          type="submit"
-        >
-          검색
-        </button>
-        <Input
-          label="주 환자 검색창"
+        <SearchInput
+          id="주 환자 검색창"
           placeholder="환자검색"
           register={register('name', { onChange })}
-          className="pr-14"
         />
       </div>
       {patients && (

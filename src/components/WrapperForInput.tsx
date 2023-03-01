@@ -4,6 +4,7 @@ import { cls } from '../utils/commonUtils';
 
 interface InputWrapperProps extends PropsWithChildren {
   label: string;
+  htmlFor: string;
   required?: boolean;
   error?: string | false;
   align?: 'row' | 'col';
@@ -11,6 +12,7 @@ interface InputWrapperProps extends PropsWithChildren {
 const InputWrapper = ({
   children,
   label,
+  htmlFor,
   required = false,
   error,
   align = 'row',
@@ -19,7 +21,7 @@ const InputWrapper = ({
 
   return (
     <label
-      htmlFor={`form-of-reserve__input-${label}`}
+      htmlFor={htmlFor}
       className={cls(
         'input-wrapper relative flex min-h-[2.7rem] w-full justify-between text-base',
         align === 'row' ? 'items-center' : 'flex-col gap-1'

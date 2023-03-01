@@ -1,8 +1,5 @@
 import { InputWrapper, MenuButton } from '../../../../components';
-import {
-  Input,
-  Textarea,
-} from '../../../timetable/components/FormForReservation/InputForReserve';
+import { Input, Textarea } from '../../../../components';
 import { Buttons } from '../../../timetable/components/FormForReservation/FormForReservation';
 import { REG_EXP } from '../../../../constants/regex';
 import { useFormForEditPrescription } from '../../hooks/useFormForEditPrescription';
@@ -28,9 +25,14 @@ const FormForEditPrescription = ({ closeAction }: CloseAction) => {
       className="flex h-full flex-col gap-5 bg-white pt-8"
     >
       <div className="flex basis-full flex-col justify-between gap-5 px-4">
-        <InputWrapper label="이름" required error={error.nameError}>
+        <InputWrapper
+          label="이름"
+          htmlFor="이름"
+          required
+          error={error.nameError}
+        >
           <Input
-            label="이름"
+            id="이름"
             placeholder="이름"
             type="text"
             register={register('name', {
@@ -39,9 +41,13 @@ const FormForEditPrescription = ({ closeAction }: CloseAction) => {
             })}
           />
         </InputWrapper>
-        <InputWrapper label="설명" error={error.descriptionError}>
+        <InputWrapper
+          label="설명"
+          htmlFor="설명"
+          error={error.descriptionError}
+        >
           <Textarea
-            label="설명"
+            id="설명"
             placeholder="설명"
             rows={3}
             register={register('description', {

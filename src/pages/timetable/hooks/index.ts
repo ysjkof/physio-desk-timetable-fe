@@ -1,18 +1,20 @@
 import { useCreateReservation } from './useCreateReservation';
-import { useDayoff } from './useDayoff';
+import { useEditDayoff } from './useEditDayoff';
 import { useDeleteReservation } from './useDeleteReservation';
 import { useListReservations } from './useListReservations';
-import { useReserve } from './useReserve';
+import { useEditReservation } from './useEditReservation';
 import { useSchedules } from './useSchedules';
 import { useSubscriptions } from './useSubscriptions';
 import { useTableLabel } from './useTableLabel';
+import { useCreateDayoff } from './useCreateDayoff';
 
 export {
+  useCreateDayoff,
   useCreateReservation,
-  useDayoff,
+  useEditDayoff,
   useDeleteReservation,
   useListReservations,
-  useReserve,
+  useEditReservation,
   useSchedules,
   useSubscriptions,
   useTableLabel,

@@ -24,6 +24,8 @@ import Toast from './Toast';
 import LogoOfText from './LogoOfText';
 import { ClinicSelector } from './ClinicSelector';
 import { ProtectStayMember } from './ProtectStayMember';
+import SearchInput from './SearchInput';
+import { Input, InputWithRef, Textarea } from './Input';
 
 export {
   ButtonOfPages,
@@ -52,4 +54,8 @@ export {
   LogoOfText,
   ClinicSelector,
   ProtectStayMember,
+  SearchInput,
+  Input,
+  InputWithRef,
+  Textarea,
 };

@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Checkbox, InputWrapper, MenuButton } from '../../../../components';
-import { Input, Textarea } from '../FormForReservation/InputForReserve';
+import { Input, Textarea } from '../../../../components';
 import { Buttons } from '../FormForReservation/FormForReservation';
 import { GENDER_KOR } from '../../../../constants/constants';
 import { REG_EXP } from '../../../../constants/regex';
@@ -41,9 +41,9 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
       className="flex flex-col gap-5 pt-8"
     >
       <div className="flex flex-col gap-5 px-4">
-        <InputWrapper label="이름" required error={nameError}>
+        <InputWrapper label="이름" htmlFor="이름" required error={nameError}>
           <Input
-            label="이름"
+            id="이름"
             required
             register={register('name', {
               required: '이름을 입력하세요',
@@ -51,12 +51,12 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
             })}
           />
         </InputWrapper>
-        <InputWrapper label="성별" required error={genderError}>
+        <InputWrapper label="성별" htmlFor="성별" required error={genderError}>
           <div className="gender-radio flex justify-around">
             {['male', 'female'].map((gender) => (
               <Checkbox
                 key={gender}
-                id={`create-patient-form__gender-${gender}`}
+                id={`create-patient-gender-${gender}`}
                 label={GENDER_KOR[gender as 'male' | 'female']}
                 type="radio"
                 value={gender}
@@ -65,9 +65,9 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
             ))}
           </div>
         </InputWrapper>
-        <InputWrapper label="생일" error={birthError}>
+        <InputWrapper label="생일" htmlFor="생일" error={birthError}>
           <Input
-            label="생일"
+            id="생일"
             type="number"
             placeholder="생년월일 숫자만 8자를 입력하세요"
             register={register('birthday', {
@@ -75,9 +75,9 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
             })}
           />
         </InputWrapper>
-        <InputWrapper label="메모" error={memoError}>
+        <InputWrapper label="메모" htmlFor="메모" error={memoError}>
           <Textarea
-            label="메모"
+            id="메모"
             rows={3}
             register={register('memo', {
               maxLength: {

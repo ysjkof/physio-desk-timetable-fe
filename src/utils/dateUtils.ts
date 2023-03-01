@@ -51,6 +51,10 @@ export function getStringYearMonthDay(date: Date) {
   });
 }
 
+export function getStringYear(date: Date) {
+  return intlFormat(date, { year: 'numeric' });
+}
+
 export function getStringYearMonth(date: Date) {
   return intlFormat(date, {
     year: 'numeric',

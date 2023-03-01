@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { InputWrapper } from '../../../../components';
-import { Input } from '../../../timetable/components/FormForReservation/InputForReserve';
+import { Input } from '../../../../components';
 import { useMe } from '../../../../hooks';
 import { useSendChangeEmail } from '../../hooks/useSendChangeEmail';
 import type { FormForEditEmailFields } from '../../../../types/propsTypes';
@@ -38,9 +38,14 @@ const FormForEditEmail = () => {
   return (
     <div className="flex flex-col gap-2">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputWrapper label="Email" align="col" error={errors.email?.message}>
+        <InputWrapper
+          label="Email"
+          htmlFor="Email"
+          align="col"
+          error={errors.email?.message}
+        >
           <div className="flex gap-2">
-            <Input label="Email" register={register('email')} />
+            <Input id="Email" register={register('email')} />
             <button
               className="css_default-button rounded-md border border-[#8D8DAD] px-6 py-5 text-[#8D8DAD]"
               type="submit"

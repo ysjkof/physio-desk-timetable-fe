@@ -33,7 +33,7 @@ const MemberDetail = () => {
   if (!member) return <Warning>데이터가 없습니다. 잘못된 접근입니다.</Warning>;
 
   return (
-    <div className="flex h-full w-full basis-full flex-col gap-y-6 overflow-x-scroll bg-[#F9F9FF] p-10">
+    <div className="flex h-full w-full flex-col gap-y-6 bg-[#F9F9FF] p-10">
       <MemberCard member={member} />
       <CardSection countOfPatient={data?.getMember.countOfPatient || 0} />
     </div>

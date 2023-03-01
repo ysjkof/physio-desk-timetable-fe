@@ -131,7 +131,6 @@ export type CreatePrescriptionOutput = {
 export type CreateReservationInput = {
   clinicId: Scalars['Float'];
   endDate: Scalars['DateTime'];
-  isDayoff?: InputMaybe<Scalars['Boolean']>;
   memo?: InputMaybe<Scalars['String']>;
   patientId?: InputMaybe<Scalars['Float']>;
   prescriptionIds?: InputMaybe<Array<Scalars['Float']>>;

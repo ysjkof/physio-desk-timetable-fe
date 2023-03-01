@@ -5,7 +5,7 @@ import { DateForm, InputWrapper, MenuButton } from '../../../../components';
 import AutoCompleteForUser from './AutoCompleteForUser';
 import AutoCompleteForPatient from './AutoCompleteForPatient';
 import AutoCompleteForPrescription from './AutoCompleteForPrescription';
-import { Textarea } from './InputForReserve';
+import { Textarea } from '../../../../components';
 import { PickedPrescriptions } from '../../../../models';
 import { useStore } from '../../../../store';
 import { useFindPrescriptions } from '../../../../hooks';
@@ -68,31 +68,31 @@ const FormForReservation = ({
       className="flex h-full flex-col gap-5 pt-8"
     >
       <div className="flex basis-full flex-col justify-between gap-5 px-4">
-        <InputWrapper label="담당치료사" required>
+        <InputWrapper label="담당치료사" htmlFor="담당치료사" required>
           <AutoCompleteForUser
             label="담당치료사"
             setParentValue={setUserId}
             userId={userId}
           />
         </InputWrapper>
-        <InputWrapper label="환자" required>
+        <InputWrapper label="환자" htmlFor="환자" required>
           <AutoCompleteForPatient label="환자" setParentValue={setPatient} />
         </InputWrapper>
-        <InputWrapper label="처방" required>
+        <InputWrapper label="처방" htmlFor="처방" required>
           <AutoCompleteForPrescription
             setValue={setValue}
             prescriptionList={prescriptionList}
           />
         </InputWrapper>
-        <InputWrapper label="치료일정" required>
+        <InputWrapper label="치료일정" htmlFor="치료일정" required>
           <DateForm
             hasHour
             date={getValues('startDate')}
             setParentValue={setStartDate}
           />
         </InputWrapper>
-        <InputWrapper label="메모">
-          <Textarea label="메모" rows={3} register={register('memo')} />
+        <InputWrapper label="메모" htmlFor="메모">
+          <Textarea id="메모" rows={3} register={register('memo')} />
         </InputWrapper>
       </div>
       <Buttons>

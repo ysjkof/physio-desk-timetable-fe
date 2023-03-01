@@ -1,7 +1,18 @@
-import type { ReactNode } from 'react';
-import type { ISchedules, MemberWithEvent } from './commonTypes';
+import type {
+  InputHTMLAttributes,
+  ReactNode,
+  TextareaHTMLAttributes,
+} from 'react';
+import type {
+  CountListOfEachUser,
+  GraphData,
+  ISchedules,
+  MemberWithEvent,
+} from './commonTypes';
 import type { FormForEditPrescriptionFields } from './formTypes';
 import type { PrescriptionForFind } from './processedGeneratedTypes';
+import { UseFormRegisterReturn } from 'react-hook-form';
+import { GetStatisticsQuery } from './generatedTypes';
 
 // TimeTable
 export interface IUserLength {
@@ -120,4 +131,48 @@ export interface ToggleEditMode {
 
 export interface FormForEditEmailFields {
   email: string;
+}
+
+interface InputRegisterProps {
+  register?: UseFormRegisterReturn;
+}
+
+export interface InputProps
+  extends InputRegisterProps,
+    InputHTMLAttributes<HTMLInputElement> {}
+
+interface InputCommonPropsWithRegister {
+  label: string;
+  register: UseFormRegisterReturn;
+}
+
+export interface InputPropsWithRegister
+  extends InputCommonPropsWithRegister,
+    InputHTMLAttributes<HTMLInputElement> {}
+
+export interface TextareaProps
+  extends InputRegisterProps,
+    TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+interface ToggleUserIdProps {
+  toggleUserId: (id: number) => void;
+}
+interface DisabledIds {
+  disabledIds: Set<number>;
+}
+interface StatisticsUserIdProps extends ToggleUserIdProps, DisabledIds {}
+
+export interface TableChartProps extends StatisticsUserIdProps {
+  countList: CountListOfEachUser | undefined;
+}
+
+export interface GraphChartProps extends DisabledIds {
+  data: GetStatisticsQuery | undefined;
+}
+export interface DailyGraphDataProps {
+  data: GraphData[] | undefined;
+}
+
+export interface DailyGraphProps extends DailyGraphDataProps {
+  type: 'cancel' | 'newPatient' | 'noshow' | 'reservationCount';
 }

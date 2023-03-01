@@ -1,7 +1,7 @@
 import { type ChangeEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { isArrayAndValue, cls } from '../../../../utils/commonUtils';
-import { Input } from './InputForReserve';
+import { Input } from '../../../../components';
 import { useDebouncedCallback, useLazySearchPatient } from '../../../../hooks';
 import type { PatientsInSearch } from '../../../../types/processedGeneratedTypes';
 import type { SearchPatientFormFields } from '../../../../types/formTypes';
@@ -50,7 +50,7 @@ const AutoCompleteForPatient = ({
   return (
     <>
       <Input
-        label={label}
+        id={label}
         placeholder="이름을 입력하면 검색이 가능합니다."
         className={cls(
           'text-cst-blue outline-none',

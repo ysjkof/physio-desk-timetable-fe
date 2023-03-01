@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { CSSProperties, PropsWithChildren, useEffect, useState } from 'react';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cls } from '../utils/commonUtils';
@@ -9,15 +9,14 @@ interface ButtonProps extends PropsWithChildren {
 }
 interface OptionProps extends PropsWithChildren {
   onClick: () => void;
-  selected?: boolean;
+  isActivate?: boolean;
 }
 
 interface SelectboxProps extends PropsWithChildren {
-  selectedValue: string;
-  width?: string;
+  label: string;
   iconSize?: number;
   hasBorder?: boolean;
-  backgroundColor?: string;
+  style?: CSSProperties;
 }
 
 const Button = ({ children, onClick, iconSize = 14 }: ButtonProps) => {
@@ -37,26 +36,26 @@ const Button = ({ children, onClick, iconSize = 14 }: ButtonProps) => {
   );
 };
 
-const Option = ({ children, selected, onClick }: OptionProps) => {
+const Option = ({ children, isActivate, onClick }: OptionProps) => {
   return (
-    <span
+    <li
       onClick={onClick}
       onKeyDown={onClick}
       role="button"
       tabIndex={0}
       className={cls(
-        'flex w-full items-center justify-between overflow-hidden text-ellipsis whitespace-nowrap bg-inherit px-2 py-1 hover:bg-blue-200',
-        selected ? 'font-semibold' : ''
+        'flex w-full items-center justify-center text-ellipsis whitespace-nowrap bg-inherit px-2 py-1 hover:bg-blue-200',
+        isActivate ? 'bg-[#F2F2F9] font-medium' : ''
       )}
     >
-      <span>{children}</span>
-    </span>
+      {children}
+    </li>
   );
 };
 
 const Options = ({ children }: PropsWithChildren) => {
   return (
-    <ul className="absolute right-0 z-50 flex w-full flex-col border border-inherit bg-inherit shadow-cst">
+    <ul className="absolute top-9 z-50 flex max-h-60 w-full flex-col overflow-y-scroll rounded-md border border-inherit bg-inherit">
       {children}
     </ul>
   );
@@ -64,11 +63,10 @@ const Options = ({ children }: PropsWithChildren) => {
 
 const Selectbox = ({
   children,
-  selectedValue,
-  width,
+  label,
   iconSize,
   hasBorder,
-  backgroundColor = 'white',
+  style,
 }: SelectboxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((prevState) => !prevState);
@@ -76,24 +74,24 @@ const Selectbox = ({
 
   useEffect(() => {
     closeMenu();
-  }, [selectedValue]);
+  }, [label]);
 
   return (
     <div
       className={cls(
-        'relative h-8 w-full cursor-pointer',
-        hasBorder ? 'rounded-sm border border-[#606295]' : 'border-b'
+        'relative h-8 w-full cursor-pointer rounded-md bg-white',
+        hasBorder ? 'border border-[#6BA6FF]' : 'border-b'
       )}
-      style={{ width, backgroundColor }}
+      style={style}
     >
       <Button onClick={toggleMenu} iconSize={iconSize}>
-        {selectedValue}
+        {label}
       </Button>
       {isOpen && (
         <>
           {children}
           <div
-            className="fixed top-0 z-40 h-screen w-screen"
+            className="fixed top-0 left-0 z-40 h-screen w-screen"
             onClick={closeMenu}
             onKeyDown={closeMenu}
             role="button"

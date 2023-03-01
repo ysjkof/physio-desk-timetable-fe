@@ -9,7 +9,7 @@ const Setting = () => {
   const outletWidth = width - 200;
   return (
     <div className="flex text-base" style={{ width }}>
-      <div className="css_dashboard__column-container">
+      <div className="dashboard-container">
         <ProfileWithImage />
         <MenuContainer />
       </div>

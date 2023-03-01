@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import PrescriptionManagementHeader from './PrescriptionManagementHeader';
-import PrescriptionItemHeader from './PrescriptionItemHeader';
+import PrescriptionManagementController from './PrescriptionManagementController';
+import PrescriptionTableHeader from './PrescriptionTableHeader';
 import PrescriptionItem from './PrescriptionItem';
 import { CreatePrescription } from '../CreatePrescription';
 import EditPrescription from '../EditPrescription/EditPrescription';
 import { useStore } from '../../../../store';
-import { useFindPrescriptions } from '../../../../hooks';
+import { useFindPrescriptions, useWindowSize } from '../../../../hooks';
 import { ProtectStayMember, Warning } from '../../../../components';
 
 const PrescriptionManagement = () => {
+  const { height } = useWindowSize(true);
   const [showInactivate, setShowInactivate] = useState(false);
 
   const clinicId = useStore((state) => state.pickedClinicId);
@@ -30,16 +31,26 @@ const PrescriptionManagement = () => {
       clinicId={clinicId}
       fallback={<Warning type="hasNotPermission" />}
     >
-      <div className="grow whitespace-nowrap bg-[#F9F9FF] p-10">
-        <PrescriptionManagementHeader
-          seeInactivate={showInactivate}
-          setSeeInactivate={setShowInactivate}
-          count={queryData?.count}
-          maximumCount={queryData?.maximumCount}
-        />
-        <PrescriptionItemHeader />
+      <div
+        className="grow whitespace-nowrap bg-[#F9F9FF] px-10"
+        style={{ height }}
+      >
+        <div className="my-6 flex items-center justify-between gap-6">
+          <div className="flex items-baseline gap-2">
+            <h1 className="dashboard-menu-title">처방목록</h1>
+            <span className="text-[#8D8DAD]">
+              {queryData?.count || 0}/{queryData?.maximumCount || 10}
+            </span>
+          </div>
+          <PrescriptionManagementController
+            seeInactivate={showInactivate}
+            setSeeInactivate={setShowInactivate}
+          />
+        </div>
+
+        <PrescriptionTableHeader />
         <div
-          className="prescription-management-item-container"
+          className="prescription-management__table-body pb-20"
           style={{ height: 'calc(100% - 92px)' }}
         >
           {queryData?.prescriptions?.map((prescription) => (
@@ -51,6 +62,7 @@ const PrescriptionManagement = () => {
             />
           ))}
         </div>
+
         {hasCreate && <CreatePrescription closeAction={closeAction} />}
         {hasEdit && <EditPrescription closeAction={closeAction} />}
       </div>
