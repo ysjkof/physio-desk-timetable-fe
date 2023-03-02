@@ -1,13 +1,13 @@
-import { Link } from 'react-router-dom';
 import { type PropsWithChildren } from 'react';
-import LogoOfText from '../../../components/LogoOfText';
+import { Link } from 'react-router-dom';
+import { Logo } from '../../../components';
 
 export default function AuthContainer({ children }: PropsWithChildren) {
   return (
     <div className="mt-10 flex h-screen flex-col items-center lg:mt-28">
       <div className="flex w-full max-w-screen-sm flex-col items-center px-5">
         <Link className="mb-4" to="/">
-          <LogoOfText size={2} className="mb-6" />
+          <Logo className="h-10" />
         </Link>
         {children}
         <Link

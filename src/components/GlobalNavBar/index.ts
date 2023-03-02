@@ -1,3 +1,3 @@
 import GlobalNavBar from './GlobalNavBar';
 
-export default GlobalNavBar;
+export { GlobalNavBar };

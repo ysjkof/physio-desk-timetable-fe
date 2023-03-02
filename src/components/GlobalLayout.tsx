@@ -1,48 +1,54 @@
 import { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
-import { cls } from '../utils/commonUtils';
 import { useStore } from '../store';
 import Initialize from './Initialize';
 import Toast from './Toast';
 import Confirm from './Confirm';
 import Alert from './Alert';
 
-const GlobalAside = lazy(() => import('./GlobalAside'));
-const GlobalNavBar = lazy(() => import('./GlobalNavBar'));
+const GlobalAside = lazy(() => import('./GlobalAside/GlobalAside'));
+const GlobalNavBar = lazy(() => import('./GlobalNavBar/GlobalNavBar'));
+const GlobalFooter = lazy(() => import('./GlobalFooter/GlobalFooter'));
 const Loading = lazy(() => import('./Loading'));
 
 function GlobalLayout() {
   const isLoggedIn = useStore((state) => state.isLoggedIn);
 
   return (
-    <div
-      className={cls(
-        'flex h-screen overflow-hidden',
-        isLoggedIn ? '' : 'flex-col'
-      )}
-    >
-      {isLoggedIn ? (
-        <Initialize>
-          <GlobalAside />
-          <OutletWithSuspense />
-        </Initialize>
-      ) : (
-        <>
-          <GlobalNavBar />
-          <OutletWithSuspense />
-        </>
-      )}
+    <>
+      {isLoggedIn ? <SignInLayout /> : <SignOutLayout />}
       <Toast />
       <Confirm />
       <Alert />
-    </div>
+    </>
   );
 }
 
-const OutletWithSuspense = () => (
-  <Suspense fallback={<Loading />}>
-    <Outlet />
-  </Suspense>
-);
+const SignInLayout = () => {
+  return (
+    <main className="flex h-screen overflow-hidden">
+      <Initialize>
+        <GlobalAside />
+        <Suspense fallback={<Loading />}>
+          <Outlet />
+        </Suspense>
+      </Initialize>
+    </main>
+  );
+};
+
+const SignOutLayout = () => {
+  return (
+    <div className="flex h-full flex-col justify-between">
+      <GlobalNavBar />
+      <Suspense fallback={<Loading />}>
+        <main>
+          <Outlet />
+        </main>
+        <GlobalFooter />
+      </Suspense>
+    </div>
+  );
+};
 
 export default GlobalLayout;

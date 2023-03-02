@@ -12,8 +12,6 @@ import DateForm from './DateForm';
 import Timepicker from './Timepicker';
 import Modal from './Modal';
 import Checkbox from './Checkbox';
-import GlobalAside from './GlobalAside';
-import GlobalNavBar from './GlobalNavBar';
 import GlobalLayout from './GlobalLayout';
 import Warning from './Warning';
 import Confirm from './Confirm';
@@ -21,11 +19,14 @@ import Loading from './Loading';
 import NotFound from './NotFound';
 import { useLogin } from '../hooks/useLogin';
 import Toast from './Toast';
-import LogoOfText from './LogoOfText';
+import Logo from './Logo';
 import { ClinicSelector } from './ClinicSelector';
 import { ProtectStayMember } from './ProtectStayMember';
 import SearchInput from './SearchInput';
 import { Input, InputWithRef, Textarea } from './Input';
+import { GlobalNavBar } from './GlobalNavBar';
+import { GlobalAside } from './GlobalAside';
+import { GlobalFooter } from './GlobalFooter';
 
 export {
   ButtonOfPages,
@@ -42,8 +43,6 @@ export {
   Timepicker,
   Modal,
   Checkbox,
-  GlobalAside,
-  GlobalNavBar,
   GlobalLayout,
   Warning,
   Confirm,
@@ -51,11 +50,14 @@ export {
   NotFound,
   useLogin,
   Toast,
-  LogoOfText,
+  Logo,
   ClinicSelector,
   ProtectStayMember,
   SearchInput,
   Input,
   InputWithRef,
   Textarea,
+  GlobalFooter,
+  GlobalAside,
+  GlobalNavBar,
 };
