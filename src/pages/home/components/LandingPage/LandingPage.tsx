@@ -27,17 +27,14 @@ export default function LandingPage() {
           병원 예약을 <span className="text-[#5A84FF]">똑똑하게</span> 관리하는
           방법
         </h1>
-        <p className="mt-8 flex flex-col gap-2 text-center text-2xl">
-          <span className="block">
-            무울시간표는 캘린더 기반 예약 시스템에 필요한
+        <p className="mt-8 flex w-[520px] flex-wrap gap-2 px-4 text-center text-2xl">
+          <span>무울시간표는 캘린더 기반</span>
+          <span>예약 시스템에 필요한</span>
+          <span>모든걸 제공하는</span>
+          <span className="underline decoration-[#DCFFEA] decoration-8 underline-offset-0">
+            병원전용 예약 관리 서비스
           </span>
-          <span className="block">
-            모든걸 제공하는{' '}
-            <span className="underline decoration-[#DCFFEA] decoration-8 underline-offset-0">
-              병원전용 예약 관리 서비스
-            </span>
-            입니다.
-          </span>
+          <span>입니다.</span>
         </p>
 
         <Link

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "codegen": "graphql-codegen --config codegen.yml",
-    "dev": "npm run codegen & vite",
+    "dev": "npm run codegen & vite --host",
     "build": "tsc && vite build && npm run copy:redirects",
     "preview": "vite preview",
     "copy:redirects": "cp _redirects ./dist/_redirects",
