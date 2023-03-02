@@ -1,10 +1,5 @@
-import HomeTemplate from './components/template/HomeTemplate';
-import LandingPage from './components/organisms/LandingPage';
+import { LandingPage } from './components';
 
 export default function Home() {
-  return (
-    <HomeTemplate>
-      <LandingPage />
-    </HomeTemplate>
-  );
+  return <LandingPage />;
 }

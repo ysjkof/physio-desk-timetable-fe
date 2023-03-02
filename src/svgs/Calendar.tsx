@@ -1,5 +1,4 @@
 import { SVG } from '../types/commonTypes';
-import { cls } from '../utils/commonUtils';
 
 const Calendar = ({ iconSize = 'MD', ...args }: SVG) => {
   return (
@@ -10,12 +9,6 @@ const Calendar = ({ iconSize = 'MD', ...args }: SVG) => {
       stroke="currentColor"
       strokeWidth={2}
       {...args}
-      className={cls(
-        args.className || '',
-        iconSize === 'LG' ? 'h-5 w-5' : '',
-        iconSize === 'MD' ? 'h-4 w-4' : '',
-        iconSize === 'SM' ? 'h-3 w-3' : ''
-      )}
     >
       <path
         strokeLinecap="round"

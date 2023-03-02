@@ -7,7 +7,7 @@ import logoutRoute from './logoutRoute';
 import loginRoute from './loginRoute';
 
 const LandingPage = lazy(
-  () => import('../pages/home/components/organisms/LandingPage')
+  () => import('../pages/home/components/LandingPage/LandingPage')
 );
 const NotFound = lazy(() => import('../components/NotFound'));
 

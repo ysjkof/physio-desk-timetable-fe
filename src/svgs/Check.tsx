@@ -12,12 +12,6 @@ const Check = ({ iconSize = 'MD', ...args }: SVG) => {
       viewBox="0 0 20 20"
       fill="currentColor"
       {...args}
-      className={cls(
-        args.className || '',
-        iconSize === 'LG' ? 'h-5 w-5' : '',
-        iconSize === 'MD' ? 'h-4 w-4' : '',
-        iconSize === 'SM' ? 'h-3 w-3' : ''
-      )}
     >
       <path
         fillRule="evenodd"
