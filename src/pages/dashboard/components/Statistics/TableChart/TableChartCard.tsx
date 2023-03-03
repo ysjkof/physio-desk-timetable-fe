@@ -41,11 +41,10 @@ const TableChartCard = (props: TableChartCardProps) => {
     >
       <div className="flex items-center gap-1 px-1.5 text-sm font-medium">
         <CheckableButton
-          canSee={isActivate}
+          checked={isActivate}
           label={name}
           onClick={onClick}
-          hasBorder={false}
-          personalColor={USER_COLORS[+userId].deep}
+          color={USER_COLORS[+userId].deep}
         />
       </div>
       <div>

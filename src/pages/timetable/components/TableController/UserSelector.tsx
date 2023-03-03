@@ -39,10 +39,11 @@ const UserSelector = ({ members }: UserSelectorProps) => {
             return (
               <CheckableButton
                 key={i}
-                personalColor={USER_COLORS[i].deep}
-                canSee={isShowUser(member.id)}
+                color={USER_COLORS[i].deep}
+                checked={isShowUser(member.id)}
                 label={memberName}
                 onClick={() => toggleUsers(member.id)}
+                hasBorder
               />
             );
           })}

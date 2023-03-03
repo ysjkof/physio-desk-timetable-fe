@@ -67,13 +67,12 @@ const AutoCompleteForPrescription = ({
               <li key={prescription.id}>
                 <CheckableButton
                   label={prescription.name}
-                  canSee={
+                  checked={
                     !!pickedPrescriptions.prescriptions.find(
                       (id) => id === prescription.id
                     )
                   }
-                  hasBorder={false}
-                  personalColor="rgb(107 166 255)"
+                  color="rgb(107 166 255)"
                   onClick={() => toggleValue(prescription.id)}
                 />
               </li>

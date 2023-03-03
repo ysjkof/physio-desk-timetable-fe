@@ -30,17 +30,19 @@ export const ToggleShowButtons = () => {
     <div className="flex flex-col items-center gap-4 border-b py-4">
       <CheckableButton
         label="취소"
-        canSee={showCancelOfTimetable}
-        personalColor="black"
+        checked={showCancelOfTimetable}
+        color="black"
         onClick={toggleCancel}
         icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
+        hasBorder
       />
       <CheckableButton
         label="부도"
-        canSee={showNoshowOfTimetable}
-        personalColor="black"
+        checked={showNoshowOfTimetable}
+        color="black"
         onClick={toggleNoshow}
         icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
+        hasBorder
       />
     </div>
   );
