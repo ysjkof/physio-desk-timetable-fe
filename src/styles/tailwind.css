@@ -196,7 +196,7 @@
   }
 
   .graph-chart__graph-header {
-    @apply flex w-full justify-between border-l-8 pl-2 pr-6 pt-3 text-xl;
+    @apply flex w-full justify-between border-l-8 pl-2 pr-6 pt-1 text-xl;
   }
 
   .table-chart {

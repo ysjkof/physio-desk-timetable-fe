@@ -56,11 +56,11 @@ export const DailyGraph = ({ data, type }: DailyGraphProps) => {
                 axis: { stroke: '#D9D9D9' },
                 grid: { stroke: '#D9D9D9', strokeWidth: 0 },
                 tickLabels: { fontSize: 7, padding: 3, fontWeight: 300 },
-                axisLabel: { fontSize: 8, fontWeight: 400 },
+                axisLabel: { fontSize: 7, fontWeight: 400 },
               },
             },
           }}
-          height={80}
+          height={75}
         >
           <VictoryArea
             style={{

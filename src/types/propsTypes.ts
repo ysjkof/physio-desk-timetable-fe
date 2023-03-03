@@ -160,7 +160,9 @@ interface ToggleUserIdProps {
 interface DisabledIds {
   disabledIds: Set<number>;
 }
-interface StatisticsUserIdProps extends ToggleUserIdProps, DisabledIds {}
+interface StatisticsUserIdProps extends ToggleUserIdProps, DisabledIds {
+  toggleAllUser: () => void;
+}
 
 export interface TableChartProps extends StatisticsUserIdProps {
   countList: CountListOfEachUser | undefined;

@@ -27,6 +27,15 @@ export const useStatistics = () => {
 
   const [countList, setCountList] = useState<CountListOfEachUser>();
 
+  const toggleAllUser = () => {
+    const arrayedCountList = Object.keys(countList || {});
+    if (disabledUserIds.size === 0) {
+      setDisabledUserIds(new Set(arrayedCountList.map(Number)));
+      return;
+    }
+    setDisabledUserIds(new Set());
+  };
+
   const [date, setDate] = useState(new Date());
   const startDate = startOfMonth(date);
   const endDate = endOfMonth(date);
@@ -62,5 +71,13 @@ export const useStatistics = () => {
     setCountList(getReportsByUser(dailyReports));
   }, [data]);
 
-  return { countList, data, disabledUserIds, toggleUserId, date, setDate };
+  return {
+    countList,
+    data,
+    disabledUserIds,
+    toggleUserId,
+    toggleAllUser,
+    date,
+    setDate,
+  };
 };

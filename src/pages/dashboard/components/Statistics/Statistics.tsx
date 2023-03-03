@@ -6,15 +6,22 @@ import { useWindowSize } from '../../../../hooks';
 
 const Statistics = () => {
   const { height } = useWindowSize(true);
-  const { countList, data, disabledUserIds, toggleUserId, date, setDate } =
-    useStatistics();
+  const {
+    countList,
+    data,
+    disabledUserIds,
+    toggleUserId,
+    toggleAllUser,
+    date,
+    setDate,
+  } = useStatistics();
 
   return (
     <div
-      className="flex gap-4 overflow-hidden whitespace-nowrap bg-[#F9F9FF] px-10 pt-6"
+      className="flex overflow-hidden whitespace-nowrap bg-[#F9F9FF] px-10 pt-6"
       style={{ height }}
     >
-      <div className="flex grow flex-col justify-between gap-6 overflow-scroll pb-10">
+      <div className="flex grow flex-col justify-between gap-6 overflow-scroll pb-10 pr-4">
         <h1 className="dashboard-menu-title">예약통계</h1>
         <GraphChart data={data} disabledIds={disabledUserIds} />
       </div>
@@ -24,6 +31,7 @@ const Statistics = () => {
           countList={countList}
           disabledIds={disabledUserIds}
           toggleUserId={toggleUserId}
+          toggleAllUser={toggleAllUser}
         />
       </div>
     </div>
