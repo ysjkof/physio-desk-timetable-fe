@@ -34,8 +34,7 @@ const CheckableButton = ({
     >
       {icon || (
         <Check
-          className={cls('rounded-sm bg-gray-300 text-white')}
-          iconSize="MD"
+          className="h-4 w-4 rounded-sm bg-gray-300 text-white"
           style={{
             ...(canSee && {
               backgroundColor: personalColor,

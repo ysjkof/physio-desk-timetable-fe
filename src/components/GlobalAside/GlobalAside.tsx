@@ -33,7 +33,7 @@ const GlobalAside = () => {
               to="/"
               className="flex aspect-square w-11 items-center justify-center rounded-lg bg-white"
             >
-              <img src="/images/Logo.png" alt="logo" />
+              <img src="/images/logo.png" alt="logo" />
             </Link>
           </>
         )}

@@ -25,7 +25,7 @@ const TimetableTemplate = ({
     <motion.div
       animate={{ opacity: 1 }}
       id="timetable__template"
-      className="flex h-full w-full flex-col opacity-0"
+      className="flex h-full w-full flex-col text-xs opacity-0"
     >
       <div
         id="timetable__nav"

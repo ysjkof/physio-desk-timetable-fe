@@ -40,16 +40,18 @@ const Layout = ({ children }: PropsWithChildren) => {
     <header
       id="global-header"
       className={cls(
-        'sticky top-0 z-40 flex items-center bg-white px-10 py-6 transition-all duration-200',
+        'sticky top-0 z-40 flex items-center justify-center bg-white py-6 transition-all duration-200',
         isDocs ? 'shadow-md' : scrollAtTop ? '' : 'shadow-md'
       )}
     >
-      <Link to="/" className="flex items-baseline gap-2">
-        <Logo className="h-8" />
-        <span className="text-xl font-bold">Muool</span>
-      </Link>
-      <div className="flex w-full items-center justify-end gap-3 sm:gap-6 sm:text-sm">
-        {children}
+      <div className="flex w-full max-w-screen-xl items-center px-4">
+        <Link to="/" className="flex items-baseline gap-2">
+          <Logo className="h-8" />
+          <span className="text-xl font-bold">Muool</span>
+        </Link>
+        <div className="flex w-full items-center justify-end gap-6">
+          {children}
+        </div>
       </div>
     </header>
   );

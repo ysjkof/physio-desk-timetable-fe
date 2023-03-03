@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useMediaQuery } from '../../../../hooks';
 import { Check, Guard, Insights, QuickRef } from '../../../../svgs';
 
 export default function LandingPage() {
-  const [isMobile] = useMediaQuery({ minWidth: '640' });
-
   const features = [
     '한 눈에 일정 파악',
     '팀원 색깔 구별',
@@ -21,13 +18,13 @@ export default function LandingPage() {
   ];
 
   return (
-    <article className="mx-auto mt-14 flex flex-col items-center justify-center">
-      <section className="flex flex-col items-center">
-        <h1 className="text-center text-4xl font-bold">
+    <article className="landing-page">
+      <section className="items-center">
+        <h2 className="lading-page__big-title">
           병원 예약을 <span className="text-[#5A84FF]">똑똑하게</span> 관리하는
           방법
-        </h1>
-        <p className="mt-8 flex w-[520px] flex-wrap gap-2 px-4 text-center text-2xl">
+        </h2>
+        <p className="lading-page__description--small mb-8 md:w-[26rem]">
           <span>무울시간표는 캘린더 기반</span>
           <span>예약 시스템에 필요한</span>
           <span>모든걸 제공하는</span>
@@ -39,7 +36,7 @@ export default function LandingPage() {
 
         <Link
           to="sign-up"
-          className="mt-14 flex h-14 w-44 items-center justify-center rounded-full border text-2xl font-medium text-white"
+          className="landing-page__btn"
           style={{
             background:
               'linear-gradient(90deg, rgba(107,166,255,1) 0%, rgba(107,166,255,1) 10%, rgba(53,99,255,1) 100%)',
@@ -49,102 +46,102 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      <section className="relative mt-20 w-full">
-        <div className="relative z-10 h-[570px] bg-[url(images/landing-page/timetable.png)] bg-top bg-no-repeat" />
-        <div className="absolute bottom-0 z-0 block h-[230px] w-full bg-[#6BA6FF]" />
+      <section className="relative mt-4">
+        <div className="relative z-10 px-4">
+          <img src="images/landing-page/timetable.png" className="" />
+        </div>
+        <div className="absolute bottom-0 z-0 block h-1/2 w-full bg-[#6BA6FF] md:h-[230px]" />
       </section>
 
-      <section className="flex flex-col items-center py-28">
-        <h2 className="text-lg font-medium text-[#5B8DD8]">서비스 소개</h2>
-        <p className="mt-4 flex flex-col items-center text-4xl font-bold">
-          <span>물리치료실과 접수팀이 협업하기 위한</span>
+      <section className="items-center">
+        <h3 className="lading-page__small-title">서비스 소개</h3>
+        <p className="lading-page__big-title--small mb-12 tracking-tighter sm:tracking-normal md:flex md:flex-col">
+          <span className="mr-2">물리치료실과 접수팀의 협업을 위해</span>
           <span>
             <span className="text-[#6BA6FF]">서비스 목표</span>를 정했습니다.
           </span>
         </p>
 
-        <div className="mt-12 flex gap-10">
-          <div className="flex aspect-square w-[200px] flex-col items-center justify-center rounded-3xl bg-[#6BA6FF] text-2xl font-bold text-white">
-            <QuickRef className="mb-2 h-2/5 w-2/5" />
+        <div className="lading-page__card-container">
+          <div className="lading-page__card">
+            <QuickRef className="lading-page__card-icon" />
             <span>빠른</span>
             <span>일정파악</span>
           </div>
-          <div className="flex aspect-square w-[200px] flex-col items-center justify-center rounded-3xl bg-[#6BA6FF] text-2xl font-bold text-white">
-            <Insights className="mb-2 h-2/5 w-2/5" />
+          <div className="lading-page__card">
+            <Insights className="lading-page__card-icon" />
             <span>예약</span>
             <span>통계분석</span>
           </div>
-          <div className="flex aspect-square w-[200px] flex-col items-center justify-center rounded-3xl bg-[#6BA6FF] text-2xl font-bold text-white">
-            <Guard className="mb-2 h-2/5 w-2/5" />
-            <span>에약</span>
+          <div className="lading-page__card">
+            <Guard className="lading-page__card-icon" />
+            <span>예약</span>
             <span>실수방지</span>
           </div>
         </div>
       </section>
 
-      <section className="flex w-full flex-col bg-[#282F3D] text-white">
-        <div className="my-52 flex flex-col items-center">
-          <h2 className="text-lg font-medium text-[#6FA8FF]">기능 소개</h2>
-          <p className="mt-4 flex flex-col items-center gap-y-4 text-4xl font-bold">
+      <section className="mt-10 bg-[#282F3D] text-white">
+        <div className="mb-16 flex flex-col items-center pt-12">
+          <h3 className="lading-page__small-title">기능 소개</h3>
+          <p className="lading-page__big-title flex flex-col">
             <span>Muool은 아래와 같은</span>
             <span>필수 기능들 제공합니다.</span>
           </p>
 
-          <ul className="mt-14 flex max-w-4xl flex-wrap justify-between gap-y-10">
+          <ul className="landing-page__ul">
             {features.map((text, idx) => (
-              <li
-                key={idx}
-                className="flex w-[17rem] items-center whitespace-nowrap text-2xl font-bold"
-              >
-                {text && <Check className="mr-2 h-10 w-10" />}
+              <li key={idx} className="landing-page__li--half">
+                {text && <Check className="landing-page__li-icon" />}
                 {text}
               </li>
             ))}
           </ul>
         </div>
 
-        <ul className="flex flex-col gap-48">
-          <li className="flex flex-col items-center">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#6FA8FF]">
-              <span className="text-xl font-medium text-[#282F3D]">1</span>
+        <ul className="landing-page__ul flex-col">
+          <li className="landing-page__li">
+            <div className="landing-page__li-number">
+              <span className="text-xl font-medium">1</span>
             </div>
-            <p className="mt-4 flex flex-col items-center gap-y-4 text-4xl font-bold">
-              <span>여러개의 병원을</span>
-              <span>관리할 수 있습니다.</span>
+            <p className="lading-page__big-title flex flex-col">
+              여러 병원을 관리할 수 있습니다.
             </p>
-            <p className="mt-10 flex flex-col items-center gap-y-2 text-2xl">
-              <span>예전에 그만둔 병원도 소속됐던 기간의</span>
+            <p className="lading-page__description--small mb-8 md:w-96">
+              <span className="mr-2">병원을 퇴사해도 근무했던 기간의</span>
               <span>예약을 확인할 수 있습니다.</span>
             </p>
-
-            <div className="relative z-10 h-[650px] w-full bg-[url(images/landing-page/my-clinic.png)] bg-top bg-no-repeat" />
+            <div>
+              <img src="images/landing-page/my-clinic.png" />
+            </div>
           </li>
 
-          <li className="flex flex-col items-center">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#6FA8FF]">
-              <span className="text-xl font-medium text-[#282F3D]">2</span>
+          <li className="landing-page__li">
+            <div className="landing-page__li-number">
+              <span className="text-xl font-medium">2</span>
             </div>
-            <p className="mt-4 flex flex-col items-center gap-y-4 text-4xl font-bold">
-              <span>빠르게 예약상태를</span>
+            <p className="lading-page__big-title flex flex-col">
+              <span className="mr-2">빠르게 예약상태를</span>
               <span>변경할 수 있습니다.</span>
             </p>
-            <p className="mt-10 flex flex-col items-center gap-y-2 text-2xl">
+            <p className="lading-page__description--small mb-8 md:w-96">
               <span>예약 상자를 클릭하면 자세히보기 창에서</span>
-              <span>예약를 바꿀 수 있습니다.</span>
+              <span>예약를 수정할 수 있습니다.</span>
             </p>
-
-            <div className="mt-14 h-[1000px] w-full bg-[url(images/landing-page/reservation-detail.png)] bg-top bg-no-repeat" />
+            <div>
+              <img src="images/landing-page/reservation-detail.png" />
+            </div>
           </li>
 
-          <li className="flex flex-col items-center">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#6FA8FF]">
-              <span className="text-xl font-medium text-[#282F3D]">3</span>
+          <li className="landing-page__li relative">
+            <div className="landing-page__li-number">
+              <span className="text-xl font-medium">3</span>
             </div>
-            <p className="mt-4 flex flex-col items-center gap-y-4 text-4xl font-bold">
+            <p className="lading-page__big-title flex flex-col">
               <span>구성원 또는 처방을</span>
-              <span>쉽고 간단하게 바꿀 수 있습니다</span>
+              <span>쉽게 수정할 수 있습니다</span>
             </p>
-            <p className="mt-10 flex flex-col items-center gap-y-2 text-2xl">
+            <p className="lading-page__description--small mb-8">
               <span>
                 스프레드 시트처럼 열과 행을 추가하고 수식을 신경쓰면서 어렵게
                 고칠 필요가 없습니다.
@@ -153,15 +150,16 @@ export default function LandingPage() {
                 그냥 등록하면 통계에 연결된 복잡한 기능은 자동으로 처리됩니다.
               </span>
             </p>
+
+            <div className="relative z-10">
+              <img src="images/landing-page/etc-function.png" />
+            </div>
+            <div className="relative h-24 w-full">
+              <div className="position-center-x absolute bottom-0 z-0 h-44 w-screen bg-white md:h-72" />
+            </div>
           </li>
         </ul>
-        <div className="relative w-full">
-          <div className="relative z-10 mt-14 h-[1000px] bg-[url(images/landing-page/etc-function.png)] bg-top bg-no-repeat" />
-        </div>
       </section>
-      <div className="relative h-[12rem] w-full bg-transparent">
-        <div className="absolute -top-64 z-0 h-[28rem] w-full bg-white" />
-      </div>
     </article>
   );
 }
