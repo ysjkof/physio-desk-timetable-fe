@@ -21,12 +21,7 @@ const GlobalAside = () => {
       id="global-aside"
       className="relative flex h-full flex-col justify-between bg-table-aside-bg py-4 text-white"
     >
-      <div
-        className={cls(
-          'relative mb-6 flex h-28 flex-col items-center justify-center gap-y-3 px-4',
-          isBigGlobalAside ? 'w-[170px]' : 'w-fit'
-        )}
-      >
+      <div className="relative mb-6 flex h-28 flex-col items-center justify-center gap-y-3 px-4">
         {isBigGlobalAside && (
           <>
             <Link
