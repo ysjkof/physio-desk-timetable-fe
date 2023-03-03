@@ -122,7 +122,7 @@ const EventBox = ({
       onHoverStart={() => setIsHover(true)}
       onHoverEnd={() => setIsHover(false)}
       className={cls(
-        'EVENT_BOX group absolute z-30 cursor-pointer',
+        'schedules__reservation-box group ',
         !showCancelOfTimetable && isCancel ? 'hidden' : '',
         !showNoshowOfTimetable && isNoshow ? 'hidden' : '',
         isDayOff ? 'z-[31]' : ''

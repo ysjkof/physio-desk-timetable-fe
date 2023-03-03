@@ -68,7 +68,7 @@ const ReserveButton = ({
   return (
     <button
       className={cls(
-        'reserve-btn group',
+        'schedules__reserve-btn group',
         isActiveBorderTop ? ' border-t border-gray-200 first:border-t-0' : ''
       )}
       onMouseOver={activateHover}
@@ -79,7 +79,7 @@ const ReserveButton = ({
       onKeyDown={handleClickButton}
       type="button"
     >
-      <span className="reserve-btn__label">+ {label}</span>
+      <span className="schedules__reserve-btn-label">+ {label}</span>
       {pickedReservation && isHover && (
         <div
           className="absolute top-0 w-full border-2"

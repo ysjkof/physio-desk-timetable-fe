@@ -32,7 +32,7 @@ const EventList = ({ events }: { events: ISchedules }) => {
   });
 
   return (
-    <div className="flex basis-full flex-col pl-2 pr-6">
+    <div className="flex w-96 flex-col pl-2 pr-6">
       <div className="timetable-date-title">예약 목록</div>
       <div className="timetable-member-name-title flex justify-around">
         {weekDates.map((date, idx) => (
@@ -115,7 +115,7 @@ interface CalcDayBtnProps extends PropsWithChildren {
 const CalcDayBtn = ({ onClick, children }: CalcDayBtnProps) => {
   return (
     <button
-      className="flex grow items-center justify-center rounded-sm border hover:border-gray-400"
+      className="flex grow items-center justify-center whitespace-nowrap rounded-sm border hover:border-gray-400"
       type="button"
       onClick={onClick}
     >
@@ -143,14 +143,14 @@ const EventListItem = ({ event }: EventListItemProps) => {
 
   return (
     <li className="flex items-center gap-4 rounded-lg border bg-white px-4 py-3">
-      <EventListItemIcon />
+      {/* <EventListItemIcon /> */}
       <div className="flex flex-col text-base">
         <div className="flex gap-2">
           <span>{patient?.name}</span>
           <span className="text-orange-500">{patientNumber}</span>
         </div>
         <span>{user.name}</span>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-x-4">
           <span>{prescriptionsName}</span>
           <span>{time}</span>
         </div>

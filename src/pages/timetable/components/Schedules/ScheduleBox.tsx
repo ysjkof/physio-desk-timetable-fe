@@ -35,7 +35,7 @@ const ScheduleBox = ({
           <div
             key={member.id}
             className={cls(
-              'USER_COL relative w-full divide-y divide-table-line bg-table-bg hover:bg-gray-200/50',
+              'schedules__each-user-column',
               state === '탈퇴' ? 'border bg-gray-200/50 hover:bg-none' : ''
             )}
             style={{ height: labels.length * TABLE_CELL_HEIGHT }}

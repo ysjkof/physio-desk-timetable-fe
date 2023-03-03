@@ -9,7 +9,7 @@ const MemberName = ({ userLength, members }: MemberNameProps) => {
   return (
     <div
       className={cls(
-        'timetable-member-name-title flex',
+        'schedules__member-name-title',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
     >
@@ -23,7 +23,7 @@ const MemberName = ({ userLength, members }: MemberNameProps) => {
         return (
           <div
             key={member.id}
-            className="flex w-[6rem] flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium"
+            className="flex w-full min-w-[6rem] flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium"
             style={{ borderBottomColor: USER_COLORS[idx]?.deep || 'inherit' }}
           >
             <span className="h-4 overflow-hidden text-ellipsis whitespace-nowrap">

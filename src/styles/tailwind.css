@@ -59,11 +59,14 @@
     @apply pointer-events-none absolute left-0 z-[31] flex w-full border-t border-red-500 text-red-500;
   }
 
-  .reserve-btn {
+  .schedules__reserve-btn {
     @apply relative z-10 h-5 w-full cursor-pointer from-sky-500 to-indigo-500 text-center hover:bg-gradient-to-r;
   }
-  .reserve-btn__label {
+  .schedules__reserve-btn-label {
     @apply invisible mx-auto whitespace-nowrap align-middle text-white group-hover:visible;
+  }
+  .schedules__reservation-box {
+    @apply absolute z-30 cursor-pointer;
   }
   .modal-parents {
     @apply fixed top-0 left-0 z-50 h-screen w-screen cursor-default;
@@ -124,16 +127,19 @@
     @apply mt-8 w-full pl-8 text-3xl font-bold text-cst-blue;
   }
 
-  .timetable-date-title {
-    @apply mb-1 flex w-full select-none items-center justify-center gap-2 whitespace-nowrap bg-table-day-light py-0.5 text-base text-table-day-color;
-  }
-  .timetable-member-name-title {
-    @apply relative mb-1 h-9 gap-2;
-  }
-
   /* 재사용하지 않는 컴포넌트 */
+
   .schedules__column {
-    @apply flex flex-col;
+    @apply flex w-full flex-col;
+  }
+  .schedules__member-name-title {
+    @apply relative mb-1 flex h-9 gap-2;
+  }
+  .schedules__date-title {
+    @apply mb-1 flex w-full cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap bg-table-day-light py-0.5 px-2 text-base text-table-day-color hover:bg-gray-200;
+  }
+  .schedules__each-user-column {
+    @apply relative min-w-[6rem] divide-y divide-table-line bg-table-bg hover:bg-gray-200/50;
   }
 
   .dashboard-container {

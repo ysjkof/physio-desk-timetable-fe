@@ -34,11 +34,15 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
     ? weekEvents
     : weekEvents && [weekEvents[pickedDate.getDay()]];
 
+  const containerStyle = isWeekCalendar
+    ? undefined
+    : { maxWidth: 'calc(100% - 24rem)' };
+
   return (
     <div className="flex">
       {schedules.map((day, i) => {
         return (
-          <div key={i} className="schedules__column">
+          <div key={i} className="schedules__column" style={containerStyle}>
             <PaddingWrapper>
               <DateTitle
                 date={day.date}
