@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('6개의 계정 만들기', async ({ page }) => {
-  const linkToLogin = page.getByRole('link', { name: '로그인/회원가입' });
+  const linkToLogin = page.getByRole('link', { name: '회원가입', exact: true });
   const linkOfSignUp = page.getByRole('link', {
     name: '계정이 없습니까?회원가입',
   });

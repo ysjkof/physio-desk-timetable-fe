@@ -21,7 +21,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) => {
-  const linkToLogin = page.getByRole('link', { name: '로그인/회원가입' });
+  const linkToLogin = page.getByRole('link', { name: '로그인', exact: true });
   const linkToSetting = page.getByRole('link', { name: '설정' });
   const alertModal = page.locator('#alert');
   const alertCloseBtn = alertModal.getByText('창 닫기');
@@ -44,8 +44,11 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
   // 만든 병원에 사용자를 초대한다
 
   await page.getByRole('link', { name: '병원', exact: true }).click();
-  await page.getByRole('group').locator('svg').click();
-  await page.getByRole('button', { name: '빕트 정형외과의원' }).click();
+  await page.locator('.clinic-selector').getByRole('button').click();
+  await page
+    .locator('.clinic-selector ul li')
+    .getByRole('button', { name: '빕트 정형외과의원' })
+    .click();
 
   for (let i = 1; i < NAMES.length; i += 1) {
     await page.getByRole('link', { name: '직원초대' }).click();
