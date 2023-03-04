@@ -11,6 +11,9 @@ export const GET_MEMBER_DOCUMENT = gql`
       error
       member {
         ...CommonMemberFields
+        color {
+          value
+        }
         user {
           ...UserIdNameEmailFields
           role

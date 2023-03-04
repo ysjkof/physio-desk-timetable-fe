@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { USER_COLORS } from '../../../../constants/constants';
+import { DEFAULT_COLOR } from '../../../../constants/constants';
 import { CheckableButton } from '../../../../components';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
 import { cls, getMemberState } from '../../../../utils/commonUtils';
@@ -39,7 +39,7 @@ const UserSelector = ({ members }: UserSelectorProps) => {
             return (
               <CheckableButton
                 key={i}
-                color={USER_COLORS[i].deep}
+                color={member.color?.value}
                 checked={isShowUser(member.id)}
                 label={memberName}
                 onClick={() => toggleUsers(member.id)}

@@ -72,7 +72,7 @@
     @apply fixed top-0 left-0 z-50 h-screen w-screen cursor-default;
   }
   .modal-background {
-    @apply absolute h-full w-full bg-black/50;
+    @apply absolute h-full w-full cursor-default bg-black/50;
   }
   .modal-content {
     @apply relative mx-auto space-y-4 rounded-md bg-white px-14;

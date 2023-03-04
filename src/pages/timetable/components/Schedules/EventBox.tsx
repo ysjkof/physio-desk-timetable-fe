@@ -8,8 +8,8 @@ import {
   faLock,
 } from '@fortawesome/free-solid-svg-icons';
 import {
+  DEFAULT_COLOR,
   TABLE_CELL_HEIGHT,
-  USER_COLORS,
 } from '../../../../constants/constants';
 import { cls } from '../../../../utils/commonUtils';
 import TooltipForReservationDetail from './TooltipForReservation';
@@ -24,25 +24,25 @@ import type {
 } from '../../../../types/processedGeneratedTypes';
 
 interface EventBoxProps {
-  userIndex: number;
   inset: string;
   maxTableHeight: number;
   numberOfCell: number;
   event: ReservationInList;
   isSingleUser: boolean;
+  color: string | undefined;
 }
 
 const EventBox = ({
-  userIndex,
   inset,
   maxTableHeight,
   numberOfCell,
   event,
+  color,
 }: EventBoxProps) => {
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
 
-  const personalColor = USER_COLORS[userIndex]?.deep || 'inherit';
+  color = color || DEFAULT_COLOR;
 
   const isDayOff = event.state === ReservationState.DayOff;
   const isReserve = event.state === ReservationState.Reserved;
@@ -140,8 +140,8 @@ const EventBox = ({
         )}
         style={{
           ...(isReserve && {
-            borderColor: personalColor,
-            color: personalColor,
+            color,
+            borderColor: color,
           }),
         }}
       >

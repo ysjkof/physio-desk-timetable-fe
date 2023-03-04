@@ -1,14 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
-import { USER_COLORS } from '../../../../constants/constants';
 import { cls, getMemberState } from '../../../../utils/commonUtils';
 import type { MemberOfClient } from '../../../../types/commonTypes';
 
 interface MemberListItemProps {
   member: MemberOfClient;
-  userIndex: number;
 }
 
-const MemberListItem = ({ member, userIndex }: MemberListItemProps) => {
+const MemberListItem = ({ member }: MemberListItemProps) => {
   const memberState = getMemberState({
     staying: member.staying,
     accepted: member.accepted,
@@ -29,7 +27,7 @@ const MemberListItem = ({ member, userIndex }: MemberListItemProps) => {
       >
         <span
           className="aspect-square w-9 rounded-md bg-red-200 text-center text-white"
-          style={{ backgroundColor: USER_COLORS[userIndex].deep }}
+          style={{ backgroundColor: member.color?.value }}
         >
           {member.user.name.substring(0, 1)}
         </span>

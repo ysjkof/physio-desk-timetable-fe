@@ -1,10 +1,11 @@
 import { ReactNode } from 'react';
 import { Check } from '../svgs';
 import { cls } from '../utils/commonUtils';
+import { DEFAULT_COLOR } from '../constants/constants';
 
 interface CheckableButtonProps {
   label: string;
-  color: string;
+  color: string | undefined;
   checked: boolean;
   hasBorder?: boolean;
   onClick: () => void;
@@ -19,6 +20,8 @@ const CheckableButton = ({
   onClick,
   icon,
 }: CheckableButtonProps) => {
+  color = color || DEFAULT_COLOR;
+
   return (
     <button
       onClick={onClick}

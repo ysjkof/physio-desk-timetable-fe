@@ -15,6 +15,9 @@ export const GET_CLINIC_DOCUMENT = gql`
         type
         members {
           ...CommonMemberFields
+          color {
+            value
+          }
           createdAt
           updatedAt
           user {

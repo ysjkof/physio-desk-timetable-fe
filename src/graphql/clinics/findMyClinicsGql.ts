@@ -16,6 +16,9 @@ export const FIND_MY_CLINICS_DOCUMENT = gql`
         ...CommonClinicFields
         members {
           ...CommonMemberFields
+          color {
+            value
+          }
           user {
             id
             name

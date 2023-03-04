@@ -5,19 +5,19 @@ import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
 import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
 
 interface EventBoxContainerProps {
-  userIndex: number;
   events: ReservationInList[];
   labels: string[];
   labelMaxLength: number;
   isSingleUser: boolean;
+  color: string | undefined;
 }
 
 const EventBoxContainer = ({
-  userIndex,
   events,
   labels,
   labelMaxLength,
   isSingleUser,
+  color,
 }: EventBoxContainerProps) => {
   const maxTableHeight = labelMaxLength * TABLE_CELL_HEIGHT - TABLE_CELL_HEIGHT;
 
@@ -47,11 +47,11 @@ const EventBoxContainer = ({
           <EventBox
             key={event.id}
             event={event}
-            userIndex={userIndex}
             maxTableHeight={maxTableHeight}
             numberOfCell={numberOfCell}
             inset={inset}
             isSingleUser={isSingleUser}
+            color={color}
           />
         );
       })}
@@ -67,7 +67,6 @@ export default memo(EventBoxContainer, (prevProps, nextProps) => {
       nextProps.labels[nextProps.labels.length] &&
     prevProps.labelMaxLength === nextProps.labelMaxLength &&
     prevProps.events === nextProps.events &&
-    prevProps.userIndex === nextProps.userIndex &&
     prevProps.isSingleUser === nextProps.isSingleUser
   );
 });

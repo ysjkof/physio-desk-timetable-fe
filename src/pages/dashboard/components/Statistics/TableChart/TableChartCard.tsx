@@ -1,7 +1,6 @@
 import { useGetClinic } from '../../../../../hooks';
 import { cls } from '../../../../../utils/commonUtils';
 import { CheckableButton } from '../../../../../components';
-import { USER_COLORS } from '../../../../../constants/constants';
 import type { PrimaryCountListItem } from '../../../../../types/commonTypes';
 
 interface TableChartCardProps extends PrimaryCountListItem {
@@ -9,6 +8,7 @@ interface TableChartCardProps extends PrimaryCountListItem {
   query: string;
   isActivate: boolean;
   onClick: () => void;
+  color: string | undefined;
 }
 
 const TableChartCard = (props: TableChartCardProps) => {
@@ -21,6 +21,7 @@ const TableChartCard = (props: TableChartCardProps) => {
     query,
     isActivate,
     onClick,
+    color,
   } = props;
 
   const [myClinic] = useGetClinic();
@@ -44,7 +45,7 @@ const TableChartCard = (props: TableChartCardProps) => {
           checked={isActivate}
           label={name}
           onClick={onClick}
-          color={USER_COLORS[+userId].deep}
+          color={color}
         />
       </div>
       <div>

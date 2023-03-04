@@ -46,31 +46,12 @@ export const DASHBOARD_MENU_KR = {
   editProfile: '나의 정보',
 };
 
+export const DEFAULT_COLOR = 'black';
+
 export const STATISTICS_LABEL_COLORS = [
   ['#233d4d', '#fcca46', '#a1c181', '#fe7f2d', '#619b8a'],
   ['#0d3b66', '#f4d35e', '#faf0ca', '#f95738', '#ee964b'],
 ];
-
-export const USER_COLORS = [
-  // light : bg-color-100
-  { deep: '#FCA5A5', light: '#FEE2E2' },
-  { deep: '#FDBA74', light: '#FFEDD5' },
-  { deep: '#FDE047', light: '#FEF9C3' },
-  { deep: '#86EFAC', light: '#DCFCE7' },
-  { deep: '#93C5FD', light: '#DBEAFE' },
-  { deep: '#A5B4FC', light: '#E0E7FF' },
-  { deep: '#C4B5FD', light: '#EDE9FE' },
-];
-// export const USER_COLORS = [
-//   // light : bg-color-50
-//   { deep: "#FCA5A5", light: "#FEF2F2" },
-//   { deep: "#FDBA74", light: "#FFF7ED" },
-//   { deep: "#FDE047", light: "#FEFCE8" },
-//   { deep: "#86EFAC", light: "#F0FDF4" },
-//   { deep: "#93C5FD", light: "#EFF6FF" },
-//   { deep: "#A5B4FC", light: "#EEF2FF" },
-//   { deep: "#C4B5FD", light: "#F5F3FF" },
-// ];
 
 export const MUOOL = 'Muool';
 

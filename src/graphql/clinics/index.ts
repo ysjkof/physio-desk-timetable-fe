@@ -13,6 +13,7 @@ import {
 } from './_clinicsFragmentsGql';
 import { GET_MEMBER_DOCUMENT } from './getMemberGql';
 import { GET_MY_CLINICS_STATUS_DOCUMENT } from './getMyClinicsStatusGql';
+import { UPDATE_MEMBER_COLOR } from './updateMemberColorGql';
 
 export {
   ACCEPT_INVITATION_DOCUMENT,
@@ -28,4 +29,5 @@ export {
   COMMON_MEMBER_FIELDS,
   GET_MEMBER_DOCUMENT,
   GET_MY_CLINICS_STATUS_DOCUMENT,
+  UPDATE_MEMBER_COLOR,
 };

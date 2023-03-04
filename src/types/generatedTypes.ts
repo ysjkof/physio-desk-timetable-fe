@@ -48,6 +48,15 @@ export enum ClinicType {
   Personal = 'Personal'
 }
 
+export type Color = {
+  __typename?: 'Color';
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Float'];
+  members: Array<Member>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  value: Scalars['String'];
+};
+
 export type CreateAccountInput = {
   email: Scalars['String'];
   name: Scalars['String'];
@@ -489,6 +498,7 @@ export type Member = {
   __typename?: 'Member';
   accepted: Scalars['Boolean'];
   clinic: Clinic;
+  color?: Maybe<Color>;
   createdAt?: Maybe<Scalars['DateTime']>;
   id: Scalars['Float'];
   manager: Scalars['Boolean'];
@@ -529,6 +539,7 @@ export type Mutation = {
   login: LoginOutput;
   refuseInvitation: InviteUserOutput;
   sendChangeEmail: SendChangeEmailOutput;
+  updateMemberColor: UpdateMemberColorOutput;
   verifyChangeEmail: VerifyChangeEmailOutput;
   verifyEmail: VerifyEmailOutput;
 };
@@ -631,6 +642,11 @@ export type MutationRefuseInvitationArgs = {
 
 export type MutationSendChangeEmailArgs = {
   input: SendChangeEmailInput;
+};
+
+
+export type MutationUpdateMemberColorArgs = {
+  input: UpdateMemberColorInput;
 };
 
 
@@ -886,6 +902,17 @@ export type SubscriptionListenUpdateReservationArgs = {
   input: ListenUpdateReservationInput;
 };
 
+export type UpdateMemberColorInput = {
+  id: Scalars['Int'];
+  value: Scalars['String'];
+};
+
+export type UpdateMemberColorOutput = {
+  __typename?: 'UpdateMemberColorOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -993,7 +1020,7 @@ export type FindMyClinicsQueryVariables = Exact<{
 }>;
 
 
-export type FindMyClinicsQuery = { __typename?: 'Query', findMyClinics: { __typename?: 'FindMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> }> | null } };
+export type FindMyClinicsQuery = { __typename?: 'Query', findMyClinics: { __typename?: 'FindMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string } }> }> | null } };
 
 export type FindMyMembersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1005,14 +1032,14 @@ export type GetClinicQueryVariables = Exact<{
 }>;
 
 
-export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, members: Array<{ __typename?: 'Member', createdAt?: any | null, updatedAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, members: Array<{ __typename?: 'Member', createdAt?: any | null, updatedAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
 
 export type GetMemberQueryVariables = Exact<{
   input: GetMemberInput;
 }>;
 
 
-export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient?: number | null, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
+export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient?: number | null, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
 
 export type GetMyClinicsStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1039,6 +1066,13 @@ export type RefuseInvitationMutationVariables = Exact<{
 
 
 export type RefuseInvitationMutation = { __typename?: 'Mutation', refuseInvitation: { __typename?: 'InviteUserOutput', ok: boolean, error?: string | null } };
+
+export type UpdateMemberColorMutationVariables = Exact<{
+  input: UpdateMemberColorInput;
+}>;
+
+
+export type UpdateMemberColorMutation = { __typename?: 'Mutation', updateMemberColor: { __typename?: 'UpdateMemberColorOutput', ok: boolean, error?: string | null } };
 
 export type AllPatientFieldsFragment = { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null };
 

@@ -2,6 +2,7 @@ import { PropsWithChildren } from 'react';
 import { Mail, Phone } from '../../../../svgs';
 import { getMemberState } from '../../../../utils/commonUtils';
 import type { MemberOfGetMember } from '../../../../types/processedGeneratedTypes';
+import { DEFAULT_COLOR } from '../../../../constants/constants';
 
 const MemberCard = ({ member }: { member: MemberOfGetMember }) => {
   const {
@@ -9,6 +10,7 @@ const MemberCard = ({ member }: { member: MemberOfGetMember }) => {
     manager,
     staying,
     user: { name, email, role },
+    color,
   } = member;
 
   const memberState = getMemberState({ accepted, manager, staying });
@@ -17,7 +19,12 @@ const MemberCard = ({ member }: { member: MemberOfGetMember }) => {
     <div className="flex h-96 gap-6 border bg-white p-4">
       <div className="bg-[TODO:프로필사진설정] h-80 w-60 rounded-md bg-gray-100" />
       <div className="flex w-full flex-col justify-between gap-2 text-[#64648E]">
-        <h1 className="text-2xl font-bold text-[#262850]">{name}</h1>
+        <h1
+          className="text-2xl font-bold text-[#262850]"
+          style={{ color: color?.value || DEFAULT_COLOR }}
+        >
+          {name}
+        </h1>
         <div className="flex gap-2">
           <span className="badge-blue">{memberState}</span>
           <span className="badge-blue">

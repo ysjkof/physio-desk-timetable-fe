@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { compareDateMatch } from '../../../../utils/dateUtils';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
-import MemberName from './MemberName';
+import MemberNames from './MemberNames';
 import { cls } from '../../../../utils/commonUtils';
 import { useStore } from '../../../../store';
 import EventList from './EventList';
@@ -56,7 +56,7 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
             ) : (
               <>
                 <PaddingWrapper hasBorder>
-                  <MemberName members={day.members} userLength={userLength} />
+                  <MemberNames members={day.members} userLength={userLength} />
                 </PaddingWrapper>
                 <PaddingWrapper hasBorder>
                   <ScheduleBox

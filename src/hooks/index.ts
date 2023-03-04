@@ -1,3 +1,4 @@
+export * from './useUpdateMemberColor';
 export * from './useAcceptInvitation';
 export * from './useAutoComplete';
 export * from './useCreateClinic';

@@ -1,15 +1,7 @@
 import { gql } from '@apollo/client';
 import { client } from '../apollo';
-import {
-  FIND_MY_CLINICS_DOCUMENT,
-  FIND_MY_MEMBERS_DOCUMENT,
-  ME_DOCUMENT,
-} from '../graphql';
-import type {
-  FindMyClinicsQuery,
-  FindMyMembersQuery,
-  MeQuery,
-} from '../types/generatedTypes';
+import { FIND_MY_MEMBERS_DOCUMENT, ME_DOCUMENT } from '../graphql';
+import type { FindMyMembersQuery, MeQuery } from '../types/generatedTypes';
 import type { MyClinic } from '../types/processedGeneratedTypes';
 import { MyMembersType } from '../types/processedGeneratedTypes';
 
@@ -57,6 +49,18 @@ export const cacheUpdateMemberAccepted = (id: number) => {
       }
     `,
     data: { staying: true, accepted: true },
+  });
+};
+
+export const cacheUpdateMemberColor = (id: number, color: string) => {
+  client?.writeFragment({
+    id: `Member:${id}`,
+    fragment: gql`
+      fragment ColorField on Member {
+        color
+      }
+    `,
+    data: { color },
   });
 };
 

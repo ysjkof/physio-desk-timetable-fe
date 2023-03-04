@@ -13,18 +13,18 @@ import type { CreateReservationMutation } from '../../../../types/generatedTypes
 import type { PrescriptionsInReservation } from '../../../../types/processedGeneratedTypes';
 
 interface ReservationButtonsProps {
-  userIndex: number;
   date: Date;
   userId: number;
   labels: string[];
   labelMaxLength: number;
+  color: string | undefined;
 }
 const ReservationButtons = ({
-  userIndex,
   date,
   userId,
   labels,
   labelMaxLength,
+  color,
 }: ReservationButtonsProps) => {
   const pickedReservation = useStore((state) => state.pickedReservation);
 
@@ -109,9 +109,9 @@ const ReservationButtons = ({
             dayIndex={dayIndex}
             userId={userId}
             isActiveBorderTop={hasBorder(label)}
-            userIndex={userIndex}
             pickedReservation={pickedReservation}
             quickCreateReservation={() => invokeQuickCreateReservation(label)}
+            color={color}
           />
         )
       )}
@@ -127,7 +127,7 @@ export default memo(ReservationButtons, (prevProps, nextProps) => {
       nextProps.labels[nextProps.labels.length - 1];
   return (
     isSameLabels() &&
-    prevProps.userIndex === nextProps.userIndex &&
+    prevProps.color === nextProps.color &&
     prevProps.userId === nextProps.userId &&
     prevProps.labelMaxLength === nextProps.labelMaxLength &&
     compareDateMatch(prevProps.date, nextProps.date, 'ymd')

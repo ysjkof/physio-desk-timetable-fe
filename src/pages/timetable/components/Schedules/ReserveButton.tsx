@@ -7,8 +7,8 @@ import {
   isBeforeDateB,
 } from '../../../../utils/dateUtils';
 import {
+  DEFAULT_COLOR,
   TABLE_CELL_HEIGHT,
-  USER_COLORS,
 } from '../../../../constants/constants';
 import { cls } from '../../../../utils/commonUtils';
 import { setAlert, useStore } from '../../../../store';
@@ -18,20 +18,20 @@ interface ReserveBtnProps {
   label: string;
   dayIndex: number;
   userId: number;
-  userIndex: number;
   isActiveBorderTop: boolean;
   pickedReservation: PickedReservationType;
   quickCreateReservation: () => void;
+  color: string | undefined;
 }
 
 const ReserveButton = ({
   label,
   dayIndex,
   userId,
-  userIndex,
   isActiveBorderTop = false,
   pickedReservation,
   quickCreateReservation,
+  color,
 }: ReserveBtnProps) => {
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
@@ -84,7 +84,7 @@ const ReserveButton = ({
         <div
           className="absolute top-0 w-full border-2"
           style={{
-            borderColor: USER_COLORS[userIndex]?.deep ?? 'black',
+            borderColor: color || DEFAULT_COLOR,
             height: `${
               getTimeLength(
                 pickedReservation.startDate,

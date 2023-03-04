@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import TableChartCard from './TableChartCard';
-import { useDebouncedCallback } from '../../../../../hooks';
+import { useDebouncedCallback, useGetClinic } from '../../../../../hooks';
 import { CheckableButton, SearchInput } from '../../../../../components';
 import type { TableChartProps } from '../../../../../types/propsTypes';
 
@@ -10,6 +10,7 @@ const TableChart = ({
   toggleUserId,
   toggleAllUser,
 }: TableChartProps) => {
+  const [clinic] = useGetClinic();
   const [query, setQuery] = useState('');
 
   const arrayedCountList = Object.entries(countList || {});
@@ -49,6 +50,9 @@ const TableChart = ({
           arrayedCountList.map(([key, value]) => {
             const numKey = Number.parseInt(key, 10);
             pickedCount += !disabledIds.has(numKey) ? 1 : 0;
+            const color = clinic?.members.find(
+              (member) => member.user.id === +key
+            )?.color?.value;
 
             return (
               <TableChartCard
@@ -58,6 +62,7 @@ const TableChart = ({
                 query={query}
                 isActivate={!disabledIds.has(numKey)}
                 onClick={() => toggleUserId(numKey)}
+                color={color}
               />
             );
           })}

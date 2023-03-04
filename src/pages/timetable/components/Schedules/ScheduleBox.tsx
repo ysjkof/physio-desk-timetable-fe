@@ -24,7 +24,7 @@ const ScheduleBox = ({
       )}
     >
       <TimeIndicatorBar isActive={enableTimeIndicator} />
-      {members.map((member, userIndex) => {
+      {members.map((member) => {
         const { id, accepted, manager, staying } = member;
 
         if (hiddenUsers.has(id)) return null;
@@ -46,15 +46,15 @@ const ScheduleBox = ({
                 date={date}
                 labels={labels}
                 userId={member.user.id}
-                userIndex={userIndex}
+                color={member.color?.value}
               />
             )}
             <EventBoxContainer
               labelMaxLength={labelMaxLength}
               labels={labels}
               events={member.events}
-              userIndex={userIndex}
               isSingleUser={userLength === 1}
+              color={member.color?.value}
             />
           </div>
         );
