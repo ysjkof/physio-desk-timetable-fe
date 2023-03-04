@@ -5,6 +5,7 @@ import { cls } from '../utils/commonUtils';
 
 interface ButtonProps extends PropsWithChildren {
   onClick: () => void;
+  hasHoverBg?: boolean;
   iconSize?: number;
 }
 interface OptionProps extends PropsWithChildren {
@@ -16,14 +17,23 @@ interface SelectboxProps extends PropsWithChildren {
   label: string;
   iconSize?: number;
   hasBorder?: boolean;
+  hasHoverBgTitle?: boolean;
   style?: CSSProperties;
 }
 
-const Button = ({ children, onClick, iconSize = 14 }: ButtonProps) => {
+const Button = ({
+  children,
+  onClick,
+  hasHoverBg = false,
+  iconSize = 14,
+}: ButtonProps) => {
   return (
     <button
       type="button"
-      className="relative h-full w-full overflow-hidden text-ellipsis whitespace-nowrap py-1 pl-2 pr-5 text-center hover:bg-blue-200"
+      className={cls(
+        'relative h-full w-full overflow-hidden text-ellipsis whitespace-nowrap py-1 pl-2 pr-5 text-center',
+        hasHoverBg ? 'hover:bg-blue-200' : ''
+      )}
       onClick={onClick}
     >
       {children}
@@ -66,6 +76,7 @@ const Selectbox = ({
   label,
   iconSize,
   hasBorder,
+  hasHoverBgTitle = false,
   style,
 }: SelectboxProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,18 +91,22 @@ const Selectbox = ({
     <div
       className={cls(
         'relative h-8 w-full cursor-pointer rounded-md bg-white',
-        hasBorder ? 'border border-[#6BA6FF]' : 'border-b'
+        hasBorder ? 'border border-[#6BA6FF]' : ''
       )}
       style={style}
     >
-      <Button onClick={toggleMenu} iconSize={iconSize}>
+      <Button
+        onClick={toggleMenu}
+        iconSize={iconSize}
+        hasHoverBg={hasHoverBgTitle}
+      >
         {label}
       </Button>
       {isOpen && (
         <>
           {children}
           <div
-            className="fixed top-0 left-0 z-40 h-screen w-screen"
+            className="fixed top-0 left-0 z-40 h-screen w-screen cursor-default"
             onClick={closeMenu}
             onKeyDown={closeMenu}
             role="button"

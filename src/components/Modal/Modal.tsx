@@ -7,6 +7,7 @@ interface ModalProps extends CloseAction, PropsWithChildren {
   left?: number;
   right?: number;
   top?: number;
+  isTransparentBackground?: boolean;
 }
 
 export const Modal = (props: ModalProps) => {
@@ -15,14 +16,16 @@ export const Modal = (props: ModalProps) => {
 };
 
 const ModalChildrenContainer = (props: ModalProps) => {
-  const { closeAction, children, left, right, top } = props;
+  const { closeAction, children, left, right, top, isTransparentBackground } =
+    props;
 
   return (
     <div className="modal-parents flex items-center justify-center">
       <div
         className={cls(
           'modal-background',
-          top ? 'bg-transparent opacity-100' : ''
+          top ? 'bg-transparent opacity-100' : '',
+          isTransparentBackground ? 'bg-transparent' : ''
         )}
         onClick={closeAction}
         onKeyDown={closeAction}

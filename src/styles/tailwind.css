@@ -187,7 +187,7 @@
   }
 
   .clinic-selector {
-    @apply relative z-40 mx-auto flex w-[18.75rem] cursor-pointer flex-col items-center justify-center text-center;
+    @apply w-[18.75rem];
   }
   .clinic-card {
     @apply flex h-full w-80 items-center gap-4 rounded-md border bg-white p-4;

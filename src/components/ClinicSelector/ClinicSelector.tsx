@@ -1,7 +1,7 @@
 import { useFindMyMembers } from '../../hooks';
 import { useStore } from '../../store';
-import { BarsArrowDown } from '../../svgs';
 import { renameUseSplit } from '../../utils/commonUtils';
+import Selectbox from '../Selectbox';
 import ClinicSelectorBtn from './ClinicSelectorBtn';
 
 const ClinicSelector = () => {
@@ -12,17 +12,17 @@ const ClinicSelector = () => {
   )?.clinic;
 
   return (
-    <details className="clinic-selector">
-      <summary className="flex list-none items-center justify-center gap-2 py-1 text-xl">
-        {renameUseSplit(clinic?.name || '')}
-        <BarsArrowDown iconSize="LG" />
-      </summary>
-      <div className="absolute top-9 flex w-full flex-col overflow-hidden rounded-md bg-white text-base shadow-cst">
-        {myMember?.map((member) => (
-          <ClinicSelectorBtn key={member.id} member={member} />
-        ))}
-      </div>
-    </details>
+    <div className="clinic-selector">
+      <Selectbox label={renameUseSplit(clinic?.name || '')}>
+        <Selectbox.Options>
+          {myMember?.map((member) => (
+            <Selectbox.Option key={member.id} onClick={() => {}}>
+              <ClinicSelectorBtn member={member} />
+            </Selectbox.Option>
+          ))}
+        </Selectbox.Options>
+      </Selectbox>
+    </div>
   );
 };
 
