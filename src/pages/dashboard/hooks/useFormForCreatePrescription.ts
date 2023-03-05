@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useQuery } from '@apollo/client';
-import { FIND_ATOM_PRESCRIPTIONS_DOCUMENT } from '../../../graphql';
+import { GET_ATOM_PRESCRIPTIONS_DOCUMENT } from '../../../graphql';
 import { useCreatePrescription } from '../../../hooks';
 import { REG_EXP } from '../../../constants/regex';
 import { useStore } from '../../../store';
 import type {
   CreatePrescriptionMutationVariables,
-  FindAtomPrescriptionsQuery,
+  GetAtomPrescriptionsQuery,
 } from '../../../types/generatedTypes';
 import type { FormForCreatePrescriptionFields } from '../../../types/formTypes';
 
@@ -19,11 +19,11 @@ export const useFormForCreatePrescription = () => {
     reset,
   } = useForm<FormForCreatePrescriptionFields>({ mode: 'onChange' });
 
-  const { data } = useQuery<FindAtomPrescriptionsQuery>(
-    FIND_ATOM_PRESCRIPTIONS_DOCUMENT
+  const { data } = useQuery<GetAtomPrescriptionsQuery>(
+    GET_ATOM_PRESCRIPTIONS_DOCUMENT
   );
 
-  const atomPrescription = data?.findAtomPrescriptions.results || [];
+  const atomPrescription = data?.getAtomPrescriptions.results || [];
 
   const [createPrescription] = useCreatePrescription();
 

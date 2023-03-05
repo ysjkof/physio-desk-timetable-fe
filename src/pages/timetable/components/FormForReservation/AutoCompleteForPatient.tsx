@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import { isArrayAndValue, cls } from '../../../../utils/commonUtils';
 import { Input } from '../../../../components';
 import { useDebouncedCallback, useLazySearchPatient } from '../../../../hooks';
+import { getStringYearMonthDay } from '../../../../utils/dateUtils';
 import type { PatientsInSearch } from '../../../../types/processedGeneratedTypes';
 import type { SearchPatientFormFields } from '../../../../types/formTypes';
-import { getStringYearMonthDay } from '../../../../utils/dateUtils';
 
 interface AutoCompleteForPatientProps {
   label: string;
@@ -40,12 +40,12 @@ const AutoCompleteForPatient = ({
 
   useEffect(() => {
     if (loading) return;
-    if (!data || !isArrayAndValue(data.searchPatient.patients)) {
+    if (!data || !isArrayAndValue(data.getPatientBy.patients)) {
       return clearPatient();
     }
 
-    setPatients(data.searchPatient.patients);
-  }, [data?.searchPatient.patients]);
+    setPatients(data.getPatientBy.patients);
+  }, [data?.getPatientBy.patients]);
 
   return (
     <>

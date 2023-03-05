@@ -1,7 +1,7 @@
 import { UseFormRegister } from 'react-hook-form';
 import { renameUseSplit } from '../../../../utils/commonUtils';
 import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
-import { useFindMyMembers } from '../../../../hooks';
+import { useGetMyMembers } from '../../../../hooks';
 import { useStore } from '../../../../store';
 
 export const SearchCheckList = ({
@@ -13,7 +13,7 @@ export const SearchCheckList = ({
 }) => {
   const clinicId = useStore((state) => state.pickedClinicId);
 
-  const [myMembers] = useFindMyMembers();
+  const [myMembers] = useGetMyMembers();
 
   return (
     <div className="flex flex-wrap gap-6 border-b px-6 py-2">

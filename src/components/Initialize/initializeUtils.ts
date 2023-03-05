@@ -1,7 +1,7 @@
 import { LATEST_STORAGE_VERSION } from '../../constants/constants';
 import { TimeDurationOfTimetable } from '../../models';
 import {
-  setClinicId,
+  setPickedClinicId,
   setGlobalAside,
   setHiddenUsers,
   setIsWeekCalendar,
@@ -53,9 +53,9 @@ export const initPickedClinicId = (
     ...user,
   });
 
-  if (clinicId === null) return setClinicId(personalClinicId);
+  if (clinicId === null) return setPickedClinicId(personalClinicId);
 
-  setClinicId(clinicId);
+  setPickedClinicId(clinicId);
 };
 
 export const initHiddenUsers = (user: UserIdAndName) => {

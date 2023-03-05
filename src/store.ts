@@ -9,7 +9,6 @@ import type {
   TableTimeOptions,
   PickedReservationType,
   UserIdAndName,
-  IdAndName,
 } from './types/commonTypes';
 import type { HiddenUsersArr, HiddenUsersSet } from './types/storeTypes';
 import type {
@@ -66,7 +65,8 @@ export const useStore = create<ZustandStoreState>(() => initialState);
 
 // 전역
 
-export const setUser = (user: IdAndName) => useStore.setState(() => ({ user }));
+export const setUser = (user: UserIdAndName) =>
+  useStore.setState(() => ({ user }));
 
 export const setAuthToken = (_token?: string) =>
   useStore.setState(() => {
@@ -77,7 +77,7 @@ export const setAuthToken = (_token?: string) =>
     return { isLoggedIn: !!token };
   });
 
-export const setClinicId = (clinicId: number) =>
+export const setPickedClinicId = (clinicId: number) =>
   useStore.setState(() => ({ pickedClinicId: clinicId }));
 
 export const setToast = (props: ToastType) =>
@@ -149,9 +149,14 @@ export const setPickedReservation = (value: PickedReservationType) =>
 
 // store + etc(localStorage, callback ...)
 
+export const resetStoreAndLocalStorage = (user: UserIdAndName) => {
+  resetStore();
+  localStorageUtils.removeAll(user);
+};
+
 export const pickClinicId = (clinicId: number) => {
   const { user } = useStore.getState();
-  setClinicId(clinicId);
+  setPickedClinicId(clinicId);
   localStorageUtils.set({
     key: 'pickedClinicId',
     value: clinicId,

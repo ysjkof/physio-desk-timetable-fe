@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client';
 import {
   DEACTIVATE_CLINIC_DOCUMENT,
-  FIND_MY_CLINICS_DOCUMENT,
-  FIND_MY_MEMBERS_DOCUMENT,
+  GET_MY_CLINICS_DOCUMENT,
+  GET_MY_MEMBERS_DOCUMENT,
 } from '../graphql';
 import { setAlert } from '../store';
 import { client } from '../apollo';
@@ -26,7 +26,7 @@ export const useDeactivateClinic = ({ clinicId }: { clinicId: number }) => {
 
         if (ok) {
           client?.refetchQueries({
-            include: [FIND_MY_CLINICS_DOCUMENT, FIND_MY_MEMBERS_DOCUMENT],
+            include: [GET_MY_CLINICS_DOCUMENT, GET_MY_MEMBERS_DOCUMENT],
           });
           return setAlert({
             messages: [`병원이 폐쇄됐습니다`],

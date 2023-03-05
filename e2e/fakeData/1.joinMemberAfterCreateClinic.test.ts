@@ -62,13 +62,13 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
   await logoutBtn.click();
   await linkToLogin.click();
 
-  // test2~test5까지 초대 수락하고 5는 다시 탈퇴한다
+  // EMAIL[0]과 EMAIL[마지막] 제외 초대 수락한다
 
   const checkAgree = page.getByText('동의하기');
   const linkToMyClinic = page.getByRole('link', { name: '나의 병원' });
 
   for (let email of EMAIL) {
-    if (email === EMAIL[0]) continue;
+    if (email === EMAIL[0] || email === EMAIL.at(-1)) continue;
     await linkToLogin.click();
     await emailInput.fill(email);
     await passwordInput.fill(PASSWORD);
@@ -85,8 +85,9 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
 
   const confirmModal = page.locator('#confirm');
 
+  // EMAIL.at(-2)는 다시 탈퇴한다
   await linkToLogin.click();
-  await emailInput.fill(EMAIL[4]);
+  await emailInput.fill(EMAIL.at(-2) || '');
   await passwordInput.fill(PASSWORD);
   await passwordInput.press('Enter');
   await linkToSetting.click();

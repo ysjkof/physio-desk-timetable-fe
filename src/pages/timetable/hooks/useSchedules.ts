@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Schedules } from '../../../models';
-import { useListReservations } from './useListReservations';
+import { useGetReservationsByInterval } from './useGetReservationsByInterval';
 import { useStore } from '../../../store';
 import { useGetClinic } from '../../../hooks';
 import type { ISchedules, MemberWithEvent } from '../../../types/commonTypes';
@@ -12,7 +12,7 @@ export const useSchedules = () => {
 
   const [clinic] = useGetClinic();
 
-  const [reservations, { variables }] = useListReservations();
+  const [reservations, { variables }] = useGetReservationsByInterval();
 
   useEffect(() => {
     if (!reservations?.results || !clinic) return;

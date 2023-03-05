@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client';
 import { ALL_PRESCRIPTION_FIELDS } from './_prescriptionsFragmentsGql';
 
-export const FIND_PRESCRIPTIONS_DOCUMENT = gql`
+export const GET_PRESCRIPTIONS_BY_CLINIC_DOCUMENT = gql`
   ${ALL_PRESCRIPTION_FIELDS}
-  query findPrescriptions($input: FindPrescriptionsInput!) {
-    findPrescriptions(input: $input) {
+  query getPrescriptionsByClinic($input: GetPrescriptionsByClinicInput!) {
+    getPrescriptionsByClinic(input: $input) {
       ok
       error
       prescriptions {

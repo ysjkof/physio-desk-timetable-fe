@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactNode } from 'react';
-import { useFindMyMembers } from '../hooks';
+import { useGetMyMembers } from '../hooks';
 import { getMemberState } from '../utils/commonUtils';
 
 interface ProtectStayMemberProps extends PropsWithChildren {
@@ -12,7 +12,7 @@ export const ProtectStayMember = ({
   children,
   fallback,
 }: ProtectStayMemberProps) => {
-  const [myMembers] = useFindMyMembers();
+  const [myMembers] = useGetMyMembers();
   const myMember = myMembers?.find((member) => member.clinic.id === clinicId);
 
   const status = myMember

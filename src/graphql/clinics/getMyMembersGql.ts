@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const FIND_MY_MEMBERS_DOCUMENT = gql`
-  query findMyMembers {
-    findMyMembers {
+export const GET_MY_MEMBERS_DOCUMENT = gql`
+  query getMyMembers {
+    getMyMembers {
       ok
       error
       members {

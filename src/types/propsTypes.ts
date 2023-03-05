@@ -101,6 +101,7 @@ export interface ConfirmState {
   confirmAction: () => void;
   icon?: ReactNode;
   hasCheck?: boolean;
+  isPositive?: boolean;
 }
 export type ConfirmStateType = ConfirmState | undefined;
 export interface ConfirmProps extends CloseAction, ConfirmState {}

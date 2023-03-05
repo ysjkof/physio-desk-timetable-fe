@@ -1,5 +1,5 @@
 import { type ReactNode, useRef } from 'react';
-import { getMemberState } from '../../../../utils/commonUtils';
+import { cls, getMemberState } from '../../../../utils/commonUtils';
 import { DEFAULT_COLOR } from '../../../../constants/constants';
 import { Mail } from '../../../../svgs';
 import type { MemberOfGetMember } from '../../../../types/processedGeneratedTypes';
@@ -25,7 +25,17 @@ const MemberCard = ({ member }: { member: MemberOfGetMember }) => {
           {name}
         </h1>
         <div className="flex gap-2">
-          <span className="badge-blue">{memberState}</span>
+          <span
+            className={cls(
+              memberState === '수락대기'
+                ? 'badge-green'
+                : memberState === '탈퇴'
+                ? 'badge-red'
+                : 'badge-blue'
+            )}
+          >
+            {memberState}
+          </span>
         </div>
         <div className="grow overflow-y-scroll" />
         <div className="flex flex-col gap-1 border-t">

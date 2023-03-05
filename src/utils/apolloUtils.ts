@@ -1,8 +1,15 @@
 import { gql } from '@apollo/client';
 import { client } from '../apollo';
-import { FIND_MY_MEMBERS_DOCUMENT, ME_DOCUMENT } from '../graphql';
-import type { FindMyMembersQuery, MeQuery } from '../types/generatedTypes';
-import type { MyClinic } from '../types/processedGeneratedTypes';
+import { GET_MY_MEMBERS_DOCUMENT, ME_DOCUMENT } from '../graphql';
+import type {
+  UpdatePrescriptionInput,
+  GetMyMembersQuery,
+  MeQuery,
+} from '../types/generatedTypes';
+import type {
+  MyClinic,
+  UpdatePrescriptionVariables,
+} from '../types/processedGeneratedTypes';
 import { MyMembersType } from '../types/processedGeneratedTypes';
 
 export const cacheUpdateUserName = (id: number, name: string) => {
@@ -64,11 +71,28 @@ export const cacheUpdateMemberColor = (id: number, color: string) => {
   });
 };
 
+export const cacheUpdatePrescription = (
+  id: number,
+  variable: UpdatePrescriptionVariables
+) => {
+  client?.writeFragment({
+    id: `Prescription:${id}`,
+    fragment: gql`
+      fragment UpdatePrescriptionField on Prescription {
+        name
+        description
+        activate
+      }
+    `,
+    data: { ...variable },
+  });
+};
+
 export const cacheAddClinicToMyMembers = (clinic: MyClinic) => {
-  client?.cache.updateQuery<FindMyMembersQuery>(
-    { query: FIND_MY_MEMBERS_DOCUMENT },
+  client?.cache.updateQuery<GetMyMembersQuery>(
+    { query: GET_MY_MEMBERS_DOCUMENT },
     (cacheData) => {
-      if (!cacheData?.findMyMembers.members)
+      if (!cacheData?.getMyMembers.members)
         throw new Error(
           'useCreateClinic에서 캐시 업데이트 중에 clinic이 없습니다.'
         );
@@ -80,7 +104,7 @@ export const cacheAddClinicToMyMembers = (clinic: MyClinic) => {
         clinic,
         ...member,
       };
-      newData?.findMyMembers.members?.push(newMember);
+      newData?.getMyMembers.members?.push(newMember);
       return newData;
     }
   );

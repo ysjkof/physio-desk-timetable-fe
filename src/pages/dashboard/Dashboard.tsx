@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useStore } from '../../store';
-import { useFindMyMembers, useMe, useWindowSize } from '../../hooks';
+import { useGetMyMembers, useMe, useWindowSize } from '../../hooks';
 import { cls } from '../../utils/commonUtils';
 import { BrokenLine, Heart, Medicine, User } from '../../svgs';
 import { ClinicSelector } from '../../components';
@@ -27,7 +27,7 @@ const Dashboard = () => {
 const ProfileWithImage = () => {
   const [meData] = useMe();
   const clinicId = useStore((state) => state.pickedClinicId);
-  const [myMembers] = useFindMyMembers();
+  const [myMembers] = useGetMyMembers();
   const position = myMembers?.find((member) => member.clinic.id === clinicId)
     ?.manager
     ? '관리자'

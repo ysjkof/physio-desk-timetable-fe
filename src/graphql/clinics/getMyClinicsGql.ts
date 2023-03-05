@@ -5,11 +5,11 @@ import {
   COMMON_MEMBER_FIELDS,
 } from './_clinicsFragmentsGql';
 
-export const FIND_MY_CLINICS_DOCUMENT = gql`
+export const GET_MY_CLINICS_DOCUMENT = gql`
   ${COMMON_CLINIC_FIELDS}
   ${COMMON_MEMBER_FIELDS}
-  query findMyClinics($input: FindMyClinicsInput!) {
-    findMyClinics(input: $input) {
+  query getMyClinics($input: GetMyClinicsInput!) {
+    getMyClinics(input: $input) {
       ok
       error
       clinics {

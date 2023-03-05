@@ -41,14 +41,11 @@ export const SearchPatientForm = () => {
 
   useEffect(() => {
     if (loading) return;
-    if (
-      !data?.searchPatient.patients ||
-      data?.searchPatient.patients.length < 1
-    )
+    if (!data?.getPatientBy.patients || data?.getPatientBy.patients.length < 1)
       return setPatients(null);
 
-    setPatients(data.searchPatient.patients);
-  }, [data?.searchPatient.patients]);
+    setPatients(data.getPatientBy.patients);
+  }, [data?.getPatientBy.patients]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="relative rounded-md">

@@ -8,7 +8,7 @@ import AutoCompleteForPrescription from './AutoCompleteForPrescription';
 import { Textarea } from '../../../../components';
 import { PickedPrescriptions } from '../../../../models';
 import { useStore } from '../../../../store';
-import { useFindPrescriptions } from '../../../../hooks';
+import { useGetPrescriptions } from '../../../../hooks';
 import { useCreateReservation } from '../../hooks';
 import type { FormOfReserveFields } from '../../../../types/formTypes';
 import type { FormForReservationProps } from '../../../../types/propsTypes';
@@ -23,7 +23,7 @@ const FormForReservation = ({
       defaultValues: { startDate: date, userId },
     });
 
-  const [prescriptionData, { loading }] = useFindPrescriptions();
+  const [prescriptionData, { loading }] = useGetPrescriptions();
 
   const prescriptionList = useMemo(
     () => new PickedPrescriptions(prescriptionData?.prescriptions),

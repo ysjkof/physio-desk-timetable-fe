@@ -1,29 +1,29 @@
 import { useMutation } from '@apollo/client';
 import {
   CREATE_PRESCRIPTION_DOCUMENT,
-  FIND_PRESCRIPTIONS_DOCUMENT,
+  GET_PRESCRIPTIONS_BY_CLINIC_DOCUMENT,
 } from '../graphql';
 import { setAlert, setToast, useStore } from '../store';
 import { client } from '../apollo';
 import type {
   CreatePrescriptionMutation,
   CreatePrescriptionMutationVariables,
-  FindPrescriptionsQuery,
+  GetPrescriptionsByClinicQuery,
+  GetPrescriptionsByClinicQueryVariables,
 } from '../types/generatedTypes';
 import type { PrescriptionForFind } from '../types/processedGeneratedTypes';
 
 export const useCreatePrescription = () => {
-  const clinicId = useStore((state) => state.pickedClinicId);
-
-  const variables = { input: { clinicId, onlyLookUpActive: false } };
+  const id = useStore((state) => state.pickedClinicId);
+  const variables: GetPrescriptionsByClinicQueryVariables = { input: { id } };
 
   const getCombinedData = (
-    cacheData: FindPrescriptionsQuery,
+    cacheData: GetPrescriptionsByClinicQuery,
     newPrescription: PrescriptionForFind
   ) => {
     const newData = structuredClone(cacheData);
-    newData.findPrescriptions.prescriptions?.push(newPrescription);
-    newData.findPrescriptions.count += 1;
+    newData.getPrescriptionsByClinic.prescriptions?.push(newPrescription);
+    newData.getPrescriptionsByClinic.count += 1;
     return newData;
   };
 
@@ -44,10 +44,11 @@ export const useCreatePrescription = () => {
         isPositive: true,
       });
 
-      client?.cache.updateQuery<FindPrescriptionsQuery>(
-        { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
+      client?.cache.updateQuery<GetPrescriptionsByClinicQuery>(
+        { query: GET_PRESCRIPTIONS_BY_CLINIC_DOCUMENT, variables },
         (cacheData) => {
-          if (!cacheData?.findPrescriptions.prescriptions) return cacheData;
+          if (!cacheData?.getPrescriptionsByClinic.prescriptions)
+            return cacheData;
           return getCombinedData(cacheData, prescription);
         }
       );

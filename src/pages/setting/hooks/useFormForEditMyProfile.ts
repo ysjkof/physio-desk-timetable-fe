@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { setToast } from '../../../store';
-import { useEditProfile, useMe } from '../../../hooks';
+import { useUpdateProfile, useMe } from '../../../hooks';
 import type { FormForEditMyProfileFields } from '../../../types/formTypes';
 
 const useFormForEditMyProfile = () => {
@@ -13,7 +13,7 @@ const useFormForEditMyProfile = () => {
       },
     });
 
-  const [editProfile] = useEditProfile();
+  const [editProfile] = useUpdateProfile();
 
   const onSubmit: SubmitHandler<FormForEditMyProfileFields> = (data) => {
     if (!meData) return;

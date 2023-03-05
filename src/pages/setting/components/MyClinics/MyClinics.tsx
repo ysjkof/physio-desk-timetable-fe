@@ -14,7 +14,7 @@ import type {
   MyMembers,
   SettingOutletContext,
 } from '../../../../types/commonTypes';
-import { useFindMyMembers, useMe } from '../../../../hooks';
+import { useGetMyMembers, useMe } from '../../../../hooks';
 import { ClinicType } from '../../../../types/generatedTypes';
 
 const MyClinics = () => {
@@ -25,7 +25,7 @@ const MyClinics = () => {
     (member) => member.clinic.type === ClinicType.Personal
   )?.id;
 
-  const [myMembers] = useFindMyMembers();
+  const [myMembers] = useGetMyMembers();
 
   const members: MyMembers = {
     관리자: [],

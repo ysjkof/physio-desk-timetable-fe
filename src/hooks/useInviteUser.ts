@@ -23,7 +23,7 @@ export const useInviteUser = () => {
           isPositive: true,
         });
 
-        // TODO: 캐시업데이트
+        // TODO: 리페치를 캐시 업데이트로
         client?.refetchQueries({ include: [GET_CLINIC_DOCUMENT] });
       },
     }

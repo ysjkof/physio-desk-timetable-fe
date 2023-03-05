@@ -1,7 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import { useState } from 'react';
-import { SEARCH_PATIENT_DOCUMENT } from '../graphql';
-import { SearchPatientQuery } from '../types/generatedTypes';
+import { GET_PATIENT_BY_DOCUMENT } from '../graphql';
+import { GetPatientByQuery } from '../types/generatedTypes';
 import { useStore } from '../store';
 import { getDateFromStr8Digit } from '../utils/dateUtils';
 
@@ -9,8 +9,8 @@ export const useLazySearchPatient = () => {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState([1]);
 
-  const [callQuery, queryResult] = useLazyQuery<SearchPatientQuery>(
-    SEARCH_PATIENT_DOCUMENT
+  const [callQuery, queryResult] = useLazyQuery<GetPatientByQuery>(
+    GET_PATIENT_BY_DOCUMENT
   );
 
   const clinicId = useStore((state) => state.pickedClinicId);
@@ -34,7 +34,7 @@ export const useLazySearchPatient = () => {
         },
       },
       onCompleted(data) {
-        const { totalPages } = data.searchPatient;
+        const { totalPages } = data.getPatientBy;
         if (!totalPages) return;
 
         setPages(getPages(totalPages));

@@ -86,6 +86,7 @@ const TogglePrescriptionActivate = ({
       targetName: name,
       buttonText,
       hasCheck: true,
+      isPositive: !activate,
     });
   };
 

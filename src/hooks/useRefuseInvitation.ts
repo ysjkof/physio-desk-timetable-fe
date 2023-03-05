@@ -1,9 +1,10 @@
 import { useMutation } from '@apollo/client';
 import {
-  FIND_MY_CLINICS_DOCUMENT,
+  GET_MY_CLINICS_DOCUMENT,
   REFUSE_INVITATION_DOCUMENT,
 } from '../graphql';
 import { setToast } from '../store';
+import { client } from '../apollo';
 import type {
   RefuseInvitationMutation,
   RefuseInvitationMutationVariables,
@@ -18,19 +19,18 @@ export const useRefuseInvitation = ({ memberId }: { memberId: number }) => {
   const refuseInvitation = () => {
     cancelInvitationMutation({
       variables: { input: { memberId } },
-      onCompleted(data, clientOptions) {
+      onCompleted(data) {
         if (data.refuseInvitation.error)
           return setToast({
             messages: ['초대 거절 중에 에러 발생', data.refuseInvitation.error],
           });
 
-        // TODO: 캐시 업데이트
+        // TODO: 리페치를 캐시 업데이트로
         if (data.refuseInvitation.ok) {
           alert('삭제 완료');
-          clientOptions?.client?.refetchQueries({
-            include: [FIND_MY_CLINICS_DOCUMENT],
+          client?.refetchQueries({
+            include: [GET_MY_CLINICS_DOCUMENT],
           });
-          // client.refetchQueries({ include: [FIND_MY_CLINICS_DOCUMENT] });
           return;
         }
         alert('삭제 실패');

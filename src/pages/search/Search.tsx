@@ -42,7 +42,7 @@ export default function Search() {
   };
 
   const numberOfPages = createArrayFromLength(
-    data?.searchPatient.totalPages || 1
+    data?.getPatientBy.totalPages || 1
   );
 
   useEffect(() => {
@@ -69,13 +69,13 @@ export default function Search() {
           />
         </div>
         <div id="search__results" className="divide-y">
-          {!data?.searchPatient.patients ||
-          data.searchPatient.patients.length === 0 ? (
+          {!data?.getPatientBy.patients ||
+          data.getPatientBy.patients.length === 0 ? (
             <Warning>{`"${getParams.get(
               'name'
             )}"의 검색결과가 없습니다`}</Warning>
           ) : (
-            data.searchPatient.patients.map((patient, idx) => {
+            data.getPatientBy.patients.map((patient, idx) => {
               const { id, registrationNumber, name, gender, birthday, clinic } =
                 patient;
               return (

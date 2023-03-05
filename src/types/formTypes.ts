@@ -1,6 +1,6 @@
 import {
   CreatePrescriptionInput,
-  EditPrescriptionInput,
+  UpdatePrescriptionInput,
 } from './generatedTypes';
 
 export interface FormOfReserveFields {
@@ -32,7 +32,7 @@ export interface FormForCreatePrescriptionFields
   > {}
 
 export interface FormForEditPrescriptionFields
-  extends Pick<EditPrescriptionInput, 'id' | 'description' | 'name'> {}
+  extends Pick<UpdatePrescriptionInput, 'id' | 'description' | 'name'> {}
 
 export interface ConfirmFormFields {
   agree: boolean;

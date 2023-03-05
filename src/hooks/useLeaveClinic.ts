@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import {
-  FIND_MY_CLINICS_DOCUMENT,
-  FIND_MY_MEMBERS_DOCUMENT,
+  GET_MY_CLINICS_DOCUMENT,
+  GET_MY_MEMBERS_DOCUMENT,
   LEAVE_CLINIC_DOCUMENT,
 } from '../graphql';
 import { setAlert, setToast } from '../store';
@@ -24,10 +24,10 @@ export const useLeaveClinic = ({ memberId }: { memberId: number }) => {
         const { error, ok } = data.leaveClinic;
         if (error) return setToast({ messages: [`오류: ${error}`] });
 
-        // TODO: 캐시 업데이트
+        // TODO: 리페치를 캐시 업데이트로
         if (ok) {
           client?.refetchQueries({
-            include: [FIND_MY_CLINICS_DOCUMENT, FIND_MY_MEMBERS_DOCUMENT],
+            include: [GET_MY_CLINICS_DOCUMENT, GET_MY_MEMBERS_DOCUMENT],
           });
           return setAlert({
             messages: ['병원에서 탈퇴했습니다'],

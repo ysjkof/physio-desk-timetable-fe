@@ -1,64 +1,28 @@
 import { useMutation } from '@apollo/client';
-import {
-  EDIT_PRESCRIPTION_DOCUMENT,
-  FIND_PRESCRIPTIONS_DOCUMENT,
-} from '../graphql';
-import { setToast, useStore } from '../store';
+import { UPDATE_PRESCRIPTION_DOCUMENT } from '../graphql';
+import { setToast } from '../store';
+import { cacheUpdatePrescription } from '../utils/apolloUtils';
 import type {
-  EditPrescriptionMutation,
-  EditPrescriptionMutationVariables,
-  FindPrescriptionsQuery,
-  FindPrescriptionsQueryVariables,
+  UpdatePrescriptionMutation,
+  UpdatePrescriptionMutationVariables,
 } from '../types/generatedTypes';
-import { changeValueInArray } from '../utils/commonUtils';
 
 export const useTogglePrescriptionActivate = () => {
-  const clinicId = useStore((state) => state.pickedClinicId);
-
   const [callMutation] = useMutation<
-    EditPrescriptionMutation,
-    EditPrescriptionMutationVariables
-  >(EDIT_PRESCRIPTION_DOCUMENT);
+    UpdatePrescriptionMutation,
+    UpdatePrescriptionMutationVariables
+  >(UPDATE_PRESCRIPTION_DOCUMENT);
 
   const toggleActivation = (id: number, activate: boolean) => {
     const inputActivate = !activate;
     const variables = { input: { id, activate: inputActivate } };
     callMutation({
       variables,
-      onCompleted(data, clientOptions) {
-        const { error } = data.editPrescription;
+      onCompleted(data) {
+        const { error } = data.updatePrescription;
         if (error) return setToast({ messages: [error] });
 
-        const variables: FindPrescriptionsQueryVariables = {
-          input: { clinicId, onlyLookUpActive: false },
-        };
-
-        clientOptions?.client?.cache.updateQuery<FindPrescriptionsQuery>(
-          { query: FIND_PRESCRIPTIONS_DOCUMENT, variables },
-          (cacheData) => {
-            const prescriptions = cacheData?.findPrescriptions.prescriptions;
-            if (!prescriptions) return cacheData;
-
-            const index = prescriptions.findIndex(
-              (prescription) => prescription.id === id
-            );
-            if (index === -1) return cacheData;
-
-            const updatedPrescription = {
-              ...prescriptions[index],
-              activate: inputActivate,
-            };
-
-            const newData = structuredClone(cacheData);
-            newData.findPrescriptions.prescriptions = changeValueInArray(
-              prescriptions,
-              updatedPrescription,
-              index
-            );
-
-            return newData;
-          }
-        );
+        cacheUpdatePrescription(id, { activate: inputActivate });
       },
     });
   };

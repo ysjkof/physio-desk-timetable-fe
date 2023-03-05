@@ -1,26 +1,26 @@
 import { useMutation } from '@apollo/client';
 import { setAlert } from '../../../store';
-import { EDIT_RESERVATION_DOCUMENT } from '../../../graphql';
+import { UPDATE_RESERVATION_DOCUMENT } from '../../../graphql';
 import type {
-  EditReservationInput,
-  EditReservationMutation,
-  EditReservationMutationVariables,
+  UpdateReservationInput,
+  UpdateReservationMutation,
+  UpdateReservationMutationVariables,
 } from '../../../types/generatedTypes';
 
-export const useEditReservation = () => {
+export const useUpdateReservation = () => {
   const [editReservationMutation, { loading }] = useMutation<
-    EditReservationMutation,
-    EditReservationMutationVariables
-  >(EDIT_RESERVATION_DOCUMENT);
+    UpdateReservationMutation,
+    UpdateReservationMutationVariables
+  >(UPDATE_RESERVATION_DOCUMENT);
 
   const editReservation = (
-    input: EditReservationInput,
+    input: UpdateReservationInput,
     callbackAfterMutation?: () => void
   ) => {
     editReservationMutation({
       variables: { input },
       onCompleted(data) {
-        const { error } = data.editReservation;
+        const { error } = data.updateReservation;
         if (error) {
           return setAlert({ messages: [`오류: ${error}`] });
         }

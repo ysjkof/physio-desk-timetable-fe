@@ -3,17 +3,20 @@ import { Input, Textarea } from '../../../../components';
 import { Buttons } from '../../../timetable/components/FormForReservation/FormForReservation';
 import { REG_EXP } from '../../../../constants/regex';
 import { useFormForEditPrescription } from '../../hooks/useFormForEditPrescription';
-import { useGetPrescription } from '../../../../hooks';
+import { useGetPrescriptionById } from '../../../../hooks';
 import type { CloseAction } from '../../../../types/propsTypes';
 
 const FormForEditPrescription = ({ closeAction }: CloseAction) => {
-  const { data } = useGetPrescription();
-  const prescription = data?.getPrescriptions.prescriptions?.[0];
-  const defaultValues = prescription && {
-    id: prescription.id,
-    name: prescription.name,
-    description: prescription.description,
-  };
+  const { data } = useGetPrescriptionById();
+  const prescription = data?.getPrescriptionById.prescription;
+  let defaultValues;
+  if (prescription) {
+    defaultValues = {
+      id: prescription.id,
+      name: prescription.name,
+      description: prescription.description,
+    };
+  }
 
   const { handleSubmit, register, error } = useFormForEditPrescription({
     defaultValues,

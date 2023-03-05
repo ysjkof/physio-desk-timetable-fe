@@ -6,6 +6,7 @@ import { ConfirmProps } from '../types/propsTypes';
 import Modal from './Modal';
 import FormError from './FormError';
 import Checkbox from './Checkbox';
+import { cls } from '../utils/commonUtils';
 
 export default function Confirm() {
   const confirmState = useStore((state) => state.confirm);
@@ -16,8 +17,15 @@ export default function Confirm() {
 
   if (!confirmState) return null;
 
-  const { buttonText, confirmAction, messages, targetName, icon, hasCheck } =
-    confirmState;
+  const {
+    buttonText,
+    confirmAction,
+    messages,
+    targetName,
+    icon,
+    hasCheck,
+    isPositive,
+  } = confirmState;
 
   return (
     <Modal closeAction={closeToast}>
@@ -29,6 +37,7 @@ export default function Confirm() {
         messages={messages}
         targetName={targetName}
         buttonText={buttonText}
+        isPositive={isPositive}
       />
     </Modal>
   );
@@ -42,6 +51,7 @@ const ConfirmBody = ({
   messages,
   targetName,
   buttonText,
+  isPositive,
 }: ConfirmProps) => {
   const {
     handleSubmit,
@@ -98,7 +108,10 @@ const ConfirmBody = ({
         </button>
         <button
           type="submit"
-          className="css_default-button w-36 bg-[#F0817A] text-white"
+          className={cls(
+            'css_default-button w-36 text-white',
+            isPositive ? 'bg-[#6BA6FF]' : 'bg-[#F0817A]'
+          )}
         >
           {buttonText}
         </button>

@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { FIND_ATOM_PRESCRIPTIONS_DOCUMENT } from '../../../graphql';
+import { GET_ATOM_PRESCRIPTIONS_DOCUMENT } from '../../../graphql';
 import { REG_EXP } from '../../../constants/regex';
-import { useEditPrescription } from '../../../hooks/useEditPrescription';
+import { useUpdatePrescription } from '../../../hooks/useUpdatePrescription';
 import type {
-  EditPrescriptionMutationVariables,
-  FindAtomPrescriptionsQuery,
+  UpdatePrescriptionMutationVariables,
+  GetAtomPrescriptionsQuery,
 } from '../../../types/generatedTypes';
 import type { FormForEditPrescriptionFields } from '../../../types/formTypes';
 import type { UseFormForEditPrescriptionProps } from '../../../types/propsTypes';
@@ -24,12 +24,12 @@ export const useFormForEditPrescription = ({
     values: defaultValues,
   });
 
-  const { data } = useQuery<FindAtomPrescriptionsQuery>(
-    FIND_ATOM_PRESCRIPTIONS_DOCUMENT
+  const { data } = useQuery<GetAtomPrescriptionsQuery>(
+    GET_ATOM_PRESCRIPTIONS_DOCUMENT
   );
-  const atomPrescription = data?.findAtomPrescriptions.results || [];
+  const atomPrescription = data?.getAtomPrescriptions.results || [];
 
-  const [editPrescriptionMutation] = useEditPrescription();
+  const [editPrescriptionMutation] = useUpdatePrescription();
 
   const { prescriptionId } = useParams();
 
@@ -39,7 +39,7 @@ export const useFormForEditPrescription = ({
 
     const { name, description } = data;
 
-    const variables: EditPrescriptionMutationVariables = {
+    const variables: UpdatePrescriptionMutationVariables = {
       input: {
         id: +prescriptionId,
         name: name?.trim(),

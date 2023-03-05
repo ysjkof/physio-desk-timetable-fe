@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { EDIT_PROFILE_DOCUMENT } from '../graphql';
+import { UPDATE_PROFILE_DOCUMENT } from '../graphql';
 import { setToast } from '../store';
 import {
   cacheUpdatePersonalClinicName,
@@ -7,8 +7,8 @@ import {
 } from '../utils/apolloUtils';
 import {
   ClinicType,
-  type EditProfileMutation,
-  type EditProfileMutationVariables,
+  type UpdateProfileMutation,
+  type UpdateProfileMutationVariables,
 } from '../types/generatedTypes';
 import { useMe } from './useMe';
 
@@ -18,14 +18,14 @@ interface Input {
   newPassword?: string;
 }
 
-export const useEditProfile = () => {
+export const useUpdateProfile = () => {
   const [meData] = useMe();
 
-  return useMutation<EditProfileMutation, EditProfileMutationVariables>(
-    EDIT_PROFILE_DOCUMENT,
+  return useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(
+    UPDATE_PROFILE_DOCUMENT,
     {
       onCompleted(data, clientOptions) {
-        const { error } = data.editProfile;
+        const { error } = data.updateProfile;
         if (error) {
           return setToast({ messages: [error] });
         }

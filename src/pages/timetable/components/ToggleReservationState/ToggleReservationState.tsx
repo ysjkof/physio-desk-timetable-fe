@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { cls } from '../../../../utils/commonUtils';
 import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
-import { EDIT_RESERVATION_DOCUMENT } from '../../../../graphql';
+import { UPDATE_RESERVATION_DOCUMENT } from '../../../../graphql';
 import { MenuButton } from '../../../../components';
 import { XMark } from '../../../../svgs';
 import {
-  type EditReservationMutation,
+  type UpdateReservationMutation,
   ReservationState,
 } from '../../../../types/generatedTypes';
 import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
@@ -17,8 +17,8 @@ interface EditReservationStateProps {
 }
 
 const ToggleReservationState = ({ reservation }: EditReservationStateProps) => {
-  const [editReservationMutation] = useMutation<EditReservationMutation>(
-    EDIT_RESERVATION_DOCUMENT
+  const [editReservationMutation] = useMutation<UpdateReservationMutation>(
+    UPDATE_RESERVATION_DOCUMENT
   );
 
   const editState = (state: ReservationState) => {

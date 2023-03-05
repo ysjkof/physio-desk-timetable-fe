@@ -1,22 +1,17 @@
 import { gql } from '@apollo/client';
 import { COMMON_PATIENT_FIELDS } from './_patientsFragmentsGql';
 
-export const SEARCH_PATIENT_DOCUMENT = gql`
+export const GET_ALL_PATIENTS_BY_CLINIC_DOCUMENT = gql`
   ${COMMON_PATIENT_FIELDS}
-  query searchPatient($input: SearchPatientInput!) {
-    searchPatient(input: $input) {
-      error
+  query getAllPatientsByClinic($input: GetAllPatientsByClinicInput!) {
+    getAllPatientsByClinic(input: $input) {
       ok
+      error
       totalPages
       totalCount
-      patients {
+      results {
         ...CommonPatientFields
         clinic {
-          id
-          name
-        }
-        users {
-          id
           name
         }
       }

@@ -3,15 +3,17 @@ import { FormEvent, useState } from 'react';
 import {
   CREATE_ATOM_PRESCRIPTION_DOCUMENT,
   CREATE_RESERVATION_DOCUMENT,
-  FIND_ALL_PATIENTS_DOCUMENT,
-  FIND_PRESCRIPTIONS_DOCUMENT,
+  GET_ALL_PATIENTS_BY_CLINIC_DOCUMENT,
+  GET_PRESCRIPTIONS_BY_CLINIC_DOCUMENT,
 } from '../graphql';
 import { PrescriptionWithSelect } from '../types/commonTypes';
 import type {
   CreateAtomPrescriptionMutation,
   CreateReservationMutation,
-  FindAllPatientsQuery,
-  FindPrescriptionsQuery,
+  GetAllPatientsByClinicQuery,
+  GetAllPatientsByClinicQueryVariables,
+  GetPrescriptionsByClinicQuery,
+  GetPrescriptionsByClinicQueryVariables,
 } from '../types/generatedTypes';
 import { useGetClinic } from '../hooks';
 import { useStore } from '../store';
@@ -86,23 +88,18 @@ function CreateReservation() {
   const clinicId = useStore((state) => state.pickedClinicId);
   const [myClinic] = useGetClinic();
 
-  const { data: prescriptionsData } = useQuery<FindPrescriptionsQuery>(
-    FIND_PRESCRIPTIONS_DOCUMENT,
-    {
-      variables: {
-        input: {
-          clinicId,
-          onlyLookUpActive: false,
-        },
-      },
-    }
-  );
-  const { data: allPatients } = useQuery<FindAllPatientsQuery>(
-    FIND_ALL_PATIENTS_DOCUMENT,
-    {
-      variables: { input: { clinicId } },
-    }
-  );
+  const { data: prescriptionsData } = useQuery<
+    GetPrescriptionsByClinicQuery,
+    GetPrescriptionsByClinicQueryVariables
+  >(GET_PRESCRIPTIONS_BY_CLINIC_DOCUMENT, {
+    variables: { input: { id: clinicId } },
+  });
+  const { data: allPatients } = useQuery<
+    GetAllPatientsByClinicQuery,
+    GetAllPatientsByClinicQueryVariables
+  >(GET_ALL_PATIENTS_BY_CLINIC_DOCUMENT, {
+    variables: { input: { id: clinicId } },
+  });
   const [createReservationMutation] = useMutation<CreateReservationMutation>(
     CREATE_RESERVATION_DOCUMENT
   );
@@ -119,7 +116,7 @@ function CreateReservation() {
     const [year, month, day] = date.split('-');
 
     const prescriptions: PrescriptionWithSelect[] =
-      prescriptionsData?.findPrescriptions.prescriptions?.map(
+      prescriptionsData?.getPrescriptionsByClinic.prescriptions?.map(
         (prescription) => ({
           ...prescription,
           isSelect: false,
@@ -145,7 +142,7 @@ function CreateReservation() {
         prescription
       );
 
-      const patients = allPatients?.findAllPatients.results;
+      const patients = allPatients?.getAllPatientsByClinic.results;
 
       if (!patients) throw new Error('patients가 없습니다.');
 

@@ -1,24 +1,25 @@
 import type {
   CreateReservationInput,
-  EditReservationInput,
-  FindMyClinicsQuery,
-  FindMyMembersQuery,
-  FindPrescriptionsQuery,
+  UpdateReservationInput,
+  GetMyClinicsQuery,
+  GetMyMembersQuery,
   GetClinicQuery,
   GetMemberQuery,
   GetReservationsByPatientQuery,
   GetStatisticsQuery,
   GetReservationsByIntervalQuery,
   Member,
-  SearchPatientQuery,
+  GetPatientByQuery,
+  GetPrescriptionsByClinicQuery,
+  UpdatePrescriptionInput,
 } from './generatedTypes';
 
 // clinic
 
-export type ClinicsOfFindMyClinics =
-  FindMyClinicsQuery['findMyClinics']['clinics'];
+export type ClinicsOfGetMyClinics =
+  GetMyClinicsQuery['getMyClinics']['clinics'];
 
-export type MyClinic = NonNullable<FlatArray<ClinicsOfFindMyClinics, 0>>;
+export type MyClinic = NonNullable<FlatArray<ClinicsOfGetMyClinics, 0>>;
 
 export type ClinicOfGetMyClinic = GetClinicQuery['getClinic']['clinic'];
 export type ClinicOfGetMyClinicTruth = NonNullable<
@@ -35,14 +36,14 @@ export type PatientInReservation = NonNullable<
   ReservationOfGetReservationsByInterval['patient']
 >;
 
-export type PatientsInSearch = SearchPatientQuery['searchPatient']['patients'];
+export type PatientsInSearch = GetPatientByQuery['getPatientBy']['patients'];
 
 export type PatientInSearch = NonNullable<PatientsInSearch>[0];
 
 // prescriptions
 
 export type ResultOfFindPrescriptions =
-  FindPrescriptionsQuery['findPrescriptions'];
+  GetPrescriptionsByClinicQuery['getPrescriptionsByClinic'];
 
 export type PrescriptionForFind = NonNullable<
   FlatArray<ResultOfFindPrescriptions['prescriptions'], 1>
@@ -51,6 +52,8 @@ export type PrescriptionForFind = NonNullable<
 export type PrescriptionsInReservation = NonNullable<
   ReservationOfGetReservationsByInterval['prescriptions']
 >;
+
+export type UpdatePrescriptionVariables = Omit<UpdatePrescriptionInput, 'id'>;
 
 // members
 
@@ -63,7 +66,7 @@ export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'][0];
 // TODO : MyClinicMember로 이름 변경
 export type IMember = MyClinic['members'][0];
 
-export type MyMembersType = FindMyMembersQuery['findMyMembers']['members'];
+export type MyMembersType = GetMyMembersQuery['getMyMembers']['members'];
 
 export interface MemberStatusOptions
   extends Pick<Member, 'staying' | 'manager' | 'accepted'> {}
@@ -91,9 +94,9 @@ type DayoffInput = Pick<
 export interface CreateDayoffInput
   extends DayoffInput,
     Pick<CreateReservationInput, 'clinicId'> {}
-export interface EditDayoffInput
+export interface UpdateDayoffInput
   extends DayoffInput,
-    Pick<EditReservationInput, 'reservationId'> {}
+    Pick<UpdateReservationInput, 'reservationId'> {}
 
 // Users
 

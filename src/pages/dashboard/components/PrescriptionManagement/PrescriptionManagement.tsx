@@ -6,7 +6,7 @@ import PrescriptionItem from './PrescriptionItem';
 import { CreatePrescription } from '../CreatePrescription';
 import EditPrescription from '../EditPrescription/EditPrescription';
 import { useStore } from '../../../../store';
-import { useFindPrescriptions, useWindowSize } from '../../../../hooks';
+import { useGetPrescriptions, useWindowSize } from '../../../../hooks';
 import { ProtectStayMember, Warning } from '../../../../components';
 
 const PrescriptionManagement = () => {
@@ -15,7 +15,7 @@ const PrescriptionManagement = () => {
 
   const clinicId = useStore((state) => state.pickedClinicId);
 
-  const [queryData] = useFindPrescriptions();
+  const [queryData] = useGetPrescriptions();
 
   const { pathname } = useLocation();
   const hasCreate = pathname.endsWith('/create');

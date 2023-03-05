@@ -38,6 +38,8 @@ const MemberListItem = ({ member }: MemberListItemProps) => {
           className={cls(
             'w-24',
             memberState === '수락대기'
+              ? ' text-green-600'
+              : memberState === '탈퇴'
               ? 'text-caution'
               : 'text-table-day-strong'
           )}
