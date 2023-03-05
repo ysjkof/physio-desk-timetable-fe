@@ -25,7 +25,6 @@ import Medicine from './Medicine';
 import MenuOpen from './MenuOpen';
 import Pencil from './Pencil';
 import PersonPlus from './PersonPlus';
-import Phone from './Phone';
 import QuickRef from './QuickRef';
 import Table from './Table';
 import Trash from './Trash';
@@ -34,6 +33,7 @@ import User from './User';
 import UserPlus from './UserPlus';
 import VerticalCrossArrow from './VerticalCrossArrow';
 import XMark from './XMark';
+
 export {
   Guard,
   Insights,
@@ -63,7 +63,6 @@ export {
   MenuOpen,
   Pencil,
   PersonPlus,
-  Phone,
   Table,
   Trash,
   TrashPot,

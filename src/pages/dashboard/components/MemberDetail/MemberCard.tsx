@@ -1,23 +1,22 @@
-import { PropsWithChildren } from 'react';
-import { Mail, Phone } from '../../../../svgs';
+import { type ReactNode, useRef } from 'react';
 import { getMemberState } from '../../../../utils/commonUtils';
-import type { MemberOfGetMember } from '../../../../types/processedGeneratedTypes';
 import { DEFAULT_COLOR } from '../../../../constants/constants';
+import { Mail } from '../../../../svgs';
+import type { MemberOfGetMember } from '../../../../types/processedGeneratedTypes';
 
 const MemberCard = ({ member }: { member: MemberOfGetMember }) => {
   const {
     accepted,
     manager,
     staying,
-    user: { name, email, role },
+    user: { name, email },
     color,
   } = member;
 
   const memberState = getMemberState({ accepted, manager, staying });
 
   return (
-    <div className="flex h-96 gap-6 border bg-white p-4">
-      <div className="bg-[TODO:프로필사진설정] h-80 w-60 rounded-md bg-gray-100" />
+    <div className="flex h-56 gap-6 border bg-white p-4">
       <div className="flex w-full flex-col justify-between gap-2 text-[#64648E]">
         <h1
           className="text-2xl font-bold text-[#262850]"
@@ -27,37 +26,37 @@ const MemberCard = ({ member }: { member: MemberOfGetMember }) => {
         </h1>
         <div className="flex gap-2">
           <span className="badge-blue">{memberState}</span>
-          <span className="badge-blue">
-            {/* DB 수정 필요 */}
-            {role}
-          </span>
         </div>
-        <div className="grow overflow-y-scroll " />
-        <div className="flex flex-wrap items-center gap-1 ">
-          <PhoneBadge>010-0000-0000</PhoneBadge>
-          <MailBadge>{email}</MailBadge>
+        <div className="grow overflow-y-scroll" />
+        <div className="flex flex-col gap-1 border-t">
+          <TextWithIcon textContent={email} icon={<Mail />} />
         </div>
       </div>
     </div>
   );
 };
 
-const PhoneBadge = ({ children }: PropsWithChildren) => {
-  return (
-    <div className="min-w-32 flex items-center gap-1 rounded-full border py-2 px-3">
-      <Phone />
-      <span>{children}</span>
-    </div>
-  );
-};
+interface TextWithIconProps {
+  textContent: string;
+  icon: ReactNode;
+}
 
-const MailBadge = ({ children }: PropsWithChildren) => {
+const TextWithIcon = ({ textContent, icon }: TextWithIconProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const copyText = () => {
+    navigator.clipboard.writeText(textContent);
+  };
+
   return (
-    <div className="flex items-center gap-1 rounded-full border py-2 px-3 ">
-      <Mail />
-      <span className="max-w-[470px] overflow-hidden text-ellipsis">
-        {children}
-      </span>
+    <div
+      ref={ref}
+      className="tooltip mt-2 flex cursor-pointer items-center gap-x-1 px-3"
+      onClick={copyText}
+    >
+      {icon}
+      {textContent}
+      <div className="tooltip-text">눌러서 복사하기</div>
     </div>
   );
 };
