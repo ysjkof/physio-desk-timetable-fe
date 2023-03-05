@@ -11,7 +11,7 @@ import { ChevronLeft, ChevronRight, PersonPlus } from '../../../../svgs';
 import { setPickedDate, useStore } from '../../../../store';
 import { cls } from '../../../../utils/commonUtils';
 import type { ISchedules } from '../../../../types/commonTypes';
-import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
+import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 import { LOCALE } from '../../../../constants/constants';
 
 const EventList = ({ events }: { events: ISchedules }) => {
@@ -125,7 +125,7 @@ const CalcDayBtn = ({ onClick, children }: CalcDayBtnProps) => {
 };
 
 interface EventListItemProps {
-  event: ReservationInList;
+  event: ReservationOfGetReservationsByInterval;
 }
 
 const EventListItem = ({ event }: EventListItemProps) => {

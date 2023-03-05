@@ -8,7 +8,7 @@ import type {
   GetMemberQuery,
   GetReservationsByPatientQuery,
   GetStatisticsQuery,
-  ListReservationsQuery,
+  GetReservationsByIntervalQuery,
   Member,
   SearchPatientQuery,
 } from './generatedTypes';
@@ -25,11 +25,15 @@ export type ClinicOfGetMyClinicTruth = NonNullable<
   GetClinicQuery['getClinic']['clinic']
 >;
 
-export type ClinicInReservation = NonNullable<ReservationInList['clinic']>;
+export type ClinicInReservation = NonNullable<
+  ReservationOfGetReservationsByInterval['clinic']
+>;
 
 // patient
 
-export type PatientInReservation = NonNullable<ReservationInList['patient']>;
+export type PatientInReservation = NonNullable<
+  ReservationOfGetReservationsByInterval['patient']
+>;
 
 export type PatientsInSearch = SearchPatientQuery['searchPatient']['patients'];
 
@@ -45,7 +49,7 @@ export type PrescriptionForFind = NonNullable<
 >;
 
 export type PrescriptionsInReservation = NonNullable<
-  ReservationInList['prescriptions']
+  ReservationOfGetReservationsByInterval['prescriptions']
 >;
 
 // members
@@ -65,13 +69,13 @@ export interface MemberStatusOptions
   extends Pick<Member, 'staying' | 'manager' | 'accepted'> {}
 
 // reservations
-export type ResultOfListReservations =
-  | ListReservationsQuery['listReservations']
+export type ResultOfGetReservationsByInterval =
+  | GetReservationsByIntervalQuery['getReservationsByInterval']
   | null
   | undefined;
 
-export type ReservationInList = NonNullable<
-  ListReservationsQuery['listReservations']['results']
+export type ReservationOfGetReservationsByInterval = NonNullable<
+  GetReservationsByIntervalQuery['getReservationsByInterval']['results']
 >[0];
 
 export type ReservationInPatient = NonNullable<
@@ -93,7 +97,7 @@ export interface EditDayoffInput
 
 // Users
 
-export type UserInReservation = ReservationInList['user'];
+export type UserInReservation = ReservationOfGetReservationsByInterval['user'];
 
 // statistics
 

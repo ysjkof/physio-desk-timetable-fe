@@ -1,10 +1,10 @@
 import { MenuButton } from '../../../../components';
 import { cls } from '../../../../utils/commonUtils';
 import { setPickedReservation } from '../../../../store';
-import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
+import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 
 interface PickReservationProps {
-  reservation: ReservationInList;
+  reservation: ReservationOfGetReservationsByInterval;
 }
 const PickReservation = ({ reservation }: PickReservationProps) => {
   const select = () => {

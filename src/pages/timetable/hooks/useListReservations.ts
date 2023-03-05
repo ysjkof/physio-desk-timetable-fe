@@ -1,17 +1,20 @@
 import { QueryResult, useQuery } from '@apollo/client';
 import { endOfDay, nextSaturday } from 'date-fns';
 import { getSunday } from '../../../utils/dateUtils';
-import { LIST_RESERVATIONS_DOCUMENT } from '../../../graphql';
+import { GET_RESERVATIONS_BY_INTERVAL_DOCUMENT } from '../../../graphql';
 import { setToast, useStore } from '../../../store';
 import type {
-  ListReservationsQuery,
-  ListReservationsQueryVariables,
+  GetReservationsByIntervalQuery,
+  GetReservationsByIntervalQueryVariables,
 } from '../../../types/generatedTypes';
-import type { ResultOfListReservations } from '../../../types/processedGeneratedTypes';
+import type { ResultOfGetReservationsByInterval } from '../../../types/processedGeneratedTypes';
 
 export const useListReservations = (): [
-  ResultOfListReservations,
-  QueryResult<ListReservationsQuery, ListReservationsQueryVariables>
+  ResultOfGetReservationsByInterval,
+  QueryResult<
+    GetReservationsByIntervalQuery,
+    GetReservationsByIntervalQueryVariables
+  >
 ] => {
   const pickedDate = useStore((state) => state.pickedDate);
   const startDate = getSunday(pickedDate);
@@ -21,18 +24,18 @@ export const useListReservations = (): [
   const variables = { input: { startDate, endDate, clinicId } };
 
   const results = useQuery<
-    ListReservationsQuery,
-    ListReservationsQueryVariables
-  >(LIST_RESERVATIONS_DOCUMENT, {
+    GetReservationsByIntervalQuery,
+    GetReservationsByIntervalQueryVariables
+  >(GET_RESERVATIONS_BY_INTERVAL_DOCUMENT, {
     variables,
     fetchPolicy: 'cache-and-network',
     onCompleted(data) {
-      const { error } = data.listReservations;
+      const { error } = data.getReservationsByInterval;
       if (error) {
         setToast({ messages: [error] });
       }
     },
   });
 
-  return [results.data?.listReservations, results];
+  return [results.data?.getReservationsByInterval, results];
 };

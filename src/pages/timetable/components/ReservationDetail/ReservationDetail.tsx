@@ -10,10 +10,10 @@ import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
 import { Trash } from '../../../../svgs';
 import { useDeleteReservation } from '../../hooks';
-import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
+import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 
 interface ReservationDetailProps {
-  reservation: ReservationInList;
+  reservation: ReservationOfGetReservationsByInterval;
 }
 
 const ReservationDetail = ({ reservation }: ReservationDetailProps) => {

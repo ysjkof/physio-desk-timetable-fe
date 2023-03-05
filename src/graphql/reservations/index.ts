@@ -4,7 +4,7 @@ import { DELETE_RESERVATION_DOCUMENT } from './deleteReservationGql';
 import { EDIT_RESERVATION_DOCUMENT } from './editReservationGql';
 import { GET_RESERVATIONS_BY_PATIENT_DOCUMENT } from './getReservationsByPatientGql';
 import { GET_STATISTICS_DOCUMENT } from './getStasticsGql';
-import { LIST_RESERVATIONS_DOCUMENT } from './listReservationsGql';
+import { GET_RESERVATIONS_BY_INTERVAL_DOCUMENT } from './getReservationsByIntervalGql';
 import { COMMON_RESERVATION_FIELDS } from './_reservationsFragmentsGql';
 import { GET_RESERVATIONS_OF_MEMBER_DOCUMENT } from './getReservationsOfMemberGql';
 
@@ -15,7 +15,7 @@ export {
   EDIT_RESERVATION_DOCUMENT,
   GET_RESERVATIONS_BY_PATIENT_DOCUMENT,
   GET_STATISTICS_DOCUMENT,
-  LIST_RESERVATIONS_DOCUMENT,
+  GET_RESERVATIONS_BY_INTERVAL_DOCUMENT,
   COMMON_RESERVATION_FIELDS,
   GET_RESERVATIONS_OF_MEMBER_DOCUMENT,
 };

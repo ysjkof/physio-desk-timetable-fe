@@ -3,24 +3,24 @@ import { useSubscription } from '@apollo/client';
 import {
   LISTEN_DELETE_RESERVATION_DOCUMENT,
   LISTEN_UPDATE_RESERVATION_DOCUMENT,
-  LIST_RESERVATIONS_DOCUMENT,
+  GET_RESERVATIONS_BY_INTERVAL_DOCUMENT,
 } from '../../../graphql';
 import { changeValueInArray } from '../../../utils/commonUtils';
 import { LISTEN_CREATE_RESERVATION_DOCUMENT } from '../../../graphql/subscriptions/listenCreateReservationGql';
 import { useStore } from '../../../store';
 import { client } from '../../../apollo';
 import type {
-  QueryListReservationsArgs,
   ListenCreateReservationSubscription,
   ListenDeleteReservationSubscription,
   ListenUpdateReservationSubscription,
-  ListReservationsQuery as Query,
-  ListReservationsQueryVariables as Variables,
+  GetReservationsByIntervalQuery,
+  GetReservationsByIntervalQueryVariables,
+  QueryGetReservationsByIntervalArgs,
 } from '../../../types/generatedTypes';
-import type { ReservationInList } from '../../../types/processedGeneratedTypes';
+import type { ReservationOfGetReservationsByInterval } from '../../../types/processedGeneratedTypes';
 
 interface UseSubscriptionsProps {
-  variables: QueryListReservationsArgs | undefined;
+  variables: QueryGetReservationsByIntervalArgs | undefined;
 }
 
 // variables는 listReservation의 변수다.
@@ -47,65 +47,70 @@ export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
       { variables: subscriptionVariables }
     );
 
-  const cacheUpdateOptions = { query: LIST_RESERVATIONS_DOCUMENT, variables };
+  const cacheUpdateOptions = {
+    query: GET_RESERVATIONS_BY_INTERVAL_DOCUMENT,
+    variables,
+  };
 
   const updateAfterDelete = (reservationId: number) => {
-    client?.cache.updateQuery<Query, Variables>(
-      cacheUpdateOptions,
-      (cacheData) => {
-        const cacheResults = cacheData?.listReservations;
-        if (!cacheResults) return;
+    client?.cache.updateQuery<
+      GetReservationsByIntervalQuery,
+      GetReservationsByIntervalQueryVariables
+    >(cacheUpdateOptions, (cacheData) => {
+      const cacheResults = cacheData?.getReservationsByInterval;
+      if (!cacheResults) return;
 
-        const reservations = cacheResults.results?.filter(
-          (result) => result.id !== reservationId
-        );
-        const totalCount = Math.max(cacheResults.totalCount || 0 - 1, 0);
+      const reservations = cacheResults.results?.filter(
+        (result) => result.id !== reservationId
+      );
+      const totalCount = Math.max(cacheResults.totalCount || 0 - 1, 0);
 
-        const newData = structuredClone(cacheData);
-        newData.listReservations.results = reservations;
-        newData.listReservations.totalCount = totalCount;
+      const newData = structuredClone(cacheData);
+      newData.getReservationsByInterval.results = reservations;
+      newData.getReservationsByInterval.totalCount = totalCount;
 
-        return newData;
-      }
-    );
+      return newData;
+    });
   };
 
   const updateAfterUpdate = (
     reservation: ListenUpdateReservationSubscription['listenUpdateReservation']
   ) => {
-    client?.cache.updateQuery<Query, Variables>(
-      cacheUpdateOptions,
-      (cacheData) => {
-        const cacheResults = cacheData?.listReservations.results;
-        if (!cacheResults) return;
+    client?.cache.updateQuery<
+      GetReservationsByIntervalQuery,
+      GetReservationsByIntervalQueryVariables
+    >(cacheUpdateOptions, (cacheData) => {
+      const cacheResults = cacheData?.getReservationsByInterval.results;
+      if (!cacheResults) return;
 
-        const updatedIndex = cacheResults.findIndex(
-          (oldReservation) => oldReservation.id === reservation.id
-        );
-        if (updatedIndex === -1) return cacheData;
+      const updatedIndex = cacheResults.findIndex(
+        (oldReservation) => oldReservation.id === reservation.id
+      );
+      if (updatedIndex === -1) return cacheData;
 
-        const newData = structuredClone(cacheData);
-        newData.listReservations.results = changeValueInArray(
-          cacheResults,
-          reservation as ReservationInList, // 하위 필드에 id값만 받아서 경고 나타나지만 정상작동하므로 타입단언함.
-          updatedIndex
-        );
+      const newData = structuredClone(cacheData);
+      newData.getReservationsByInterval.results = changeValueInArray(
+        cacheResults,
+        reservation as ReservationOfGetReservationsByInterval, // 하위 필드에 id값만 받아서 경고 나타나지만 정상작동하므로 타입단언함.
+        updatedIndex
+      );
 
-        return newData;
-      }
-    );
+      return newData;
+    });
   };
 
-  const updateAfterCreate = (reservation: ReservationInList) => {
-    client?.cache.updateQuery<Query, Variables>(
-      cacheUpdateOptions,
-      (cacheData) => {
-        if (!cacheData) return;
-        const newData = structuredClone(cacheData);
-        newData.listReservations.results?.push(reservation);
-        return newData;
-      }
-    );
+  const updateAfterCreate = (
+    reservation: ReservationOfGetReservationsByInterval
+  ) => {
+    client?.cache.updateQuery<
+      GetReservationsByIntervalQuery,
+      GetReservationsByIntervalQueryVariables
+    >(cacheUpdateOptions, (cacheData) => {
+      if (!cacheData) return;
+      const newData = structuredClone(cacheData);
+      newData.getReservationsByInterval.results?.push(reservation);
+      return newData;
+    });
   };
 
   useEffect(() => {

@@ -20,14 +20,14 @@ import {
 import { useStore } from '../../../../store';
 import type {
   PatientInReservation,
-  ReservationInList,
+  ReservationOfGetReservationsByInterval,
 } from '../../../../types/processedGeneratedTypes';
 
 interface EventBoxProps {
   inset: string;
   maxTableHeight: number;
   numberOfCell: number;
-  event: ReservationInList;
+  event: ReservationOfGetReservationsByInterval;
   isSingleUser: boolean;
   color: string | undefined;
 }

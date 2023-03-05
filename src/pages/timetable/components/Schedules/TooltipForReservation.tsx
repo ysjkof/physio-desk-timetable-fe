@@ -1,9 +1,9 @@
 import { forwardRef } from 'react';
 import { ReservationDetail } from '../ReservationDetail';
-import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
+import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 
 interface TooltipForReservationDetailProps {
-  reservation: ReservationInList;
+  reservation: ReservationOfGetReservationsByInterval;
 }
 
 const TooltipForReservationDetail = forwardRef<

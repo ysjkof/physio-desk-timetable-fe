@@ -7,7 +7,7 @@ import type {
   MyClinic,
   MyMembersType,
   PatientInReservation,
-  ReservationInList,
+  ReservationOfGetReservationsByInterval,
   UserInReservation,
 } from './processedGeneratedTypes';
 
@@ -135,7 +135,7 @@ export interface ReserveFormType {
 //
 
 export interface MemberWithEvent extends MemberOfClient {
-  events: ReservationInList[];
+  events: ReservationOfGetReservationsByInterval[];
 }
 export interface ISchedules {
   date: Date;
@@ -147,7 +147,9 @@ export interface PickedPatient extends PatientInReservation {
   user: UserInReservation | null | undefined;
 }
 
-export type PickedReservationType = ReservationInList | undefined;
+export type PickedReservationType =
+  | ReservationOfGetReservationsByInterval
+  | undefined;
 
 export type PickedPatientType = PickedPatient | undefined | null;
 

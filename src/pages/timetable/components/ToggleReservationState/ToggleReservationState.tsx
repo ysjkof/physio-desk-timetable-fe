@@ -10,10 +10,10 @@ import {
   type EditReservationMutation,
   ReservationState,
 } from '../../../../types/generatedTypes';
-import type { ReservationInList } from '../../../../types/processedGeneratedTypes';
+import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 
 interface EditReservationStateProps {
-  reservation: ReservationInList;
+  reservation: ReservationOfGetReservationsByInterval;
 }
 
 const ToggleReservationState = ({ reservation }: EditReservationStateProps) => {

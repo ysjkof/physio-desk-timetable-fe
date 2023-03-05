@@ -46,7 +46,7 @@ export const DASHBOARD_MENU_KR = {
   editProfile: '나의 정보',
 };
 
-export const DEFAULT_COLOR = 'black';
+export const DEFAULT_COLOR = 'rgb(51, 76, 111)';
 
 export const STATISTICS_LABEL_COLORS = [
   ['#233d4d', '#fcca46', '#a1c181', '#fe7f2d', '#619b8a'],

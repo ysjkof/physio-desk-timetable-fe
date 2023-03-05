@@ -15,11 +15,11 @@ import type {
 } from '../types/commonTypes';
 import type {
   ClinicOfGetMyClinicTruth,
-  ReservationInList,
+  ReservationOfGetReservationsByInterval,
 } from '../types/processedGeneratedTypes';
 
 interface SchedulesProps {
-  data: ReservationInList[];
+  data: ReservationOfGetReservationsByInterval[];
   date: Date;
   clinic: ClinicOfGetMyClinicTruth;
 }
@@ -103,7 +103,10 @@ export class Schedules {
     return { ...member, events: [] };
   }
 
-  #addEventToForm(form: ISchedules[], events: ReservationInList[]) {
+  #addEventToForm(
+    form: ISchedules[],
+    events: ReservationOfGetReservationsByInterval[]
+  ) {
     const result = form;
     events.forEach((event) => {
       const dateIndex = result.findIndex((day) =>

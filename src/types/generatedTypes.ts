@@ -374,6 +374,20 @@ export type GetReservationOutput = {
   reservation?: Maybe<Reservation>;
 };
 
+export type GetReservationsByIntervalInput = {
+  clinicId: Scalars['Int'];
+  endDate: Scalars['DateTime'];
+  startDate: Scalars['DateTime'];
+};
+
+export type GetReservationsByIntervalOutput = {
+  __typename?: 'GetReservationsByIntervalOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  results?: Maybe<Array<Reservation>>;
+  totalCount?: Maybe<Scalars['Int']>;
+};
+
 export type GetReservationsByPatientInput = {
   id: Scalars['Int'];
   page?: Scalars['Int'];
@@ -448,20 +462,6 @@ export type LeaveClinicOutput = {
   __typename?: 'LeaveClinicOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-};
-
-export type ListReservationsInput = {
-  clinicId: Scalars['Int'];
-  endDate: Scalars['DateTime'];
-  startDate: Scalars['DateTime'];
-};
-
-export type ListReservationsOutput = {
-  __typename?: 'ListReservationsOutput';
-  error?: Maybe<Scalars['String']>;
-  ok: Scalars['Boolean'];
-  results?: Maybe<Array<Reservation>>;
-  totalCount?: Maybe<Scalars['Int']>;
 };
 
 export type ListenCreateReservationInput = {
@@ -720,10 +720,10 @@ export type Query = {
   getPatients: GetPatientsOutput;
   getPrescriptions: GetPrescriptionsOutput;
   getReservation: GetReservationOutput;
+  getReservationsByInterval: GetReservationsByIntervalOutput;
   getReservationsByPatient: GetReservationsByPatientOutput;
   getReservationsOfMember: GetReservationsOfMemberOutput;
   getStatistics: GetStatisticsOutput;
-  listReservations: ListReservationsOutput;
   me: User;
   searchPatient: SearchPatientOutput;
   searchUsers: SearchUsersOutput;
@@ -781,6 +781,11 @@ export type QueryGetReservationArgs = {
 };
 
 
+export type QueryGetReservationsByIntervalArgs = {
+  input: GetReservationsByIntervalInput;
+};
+
+
 export type QueryGetReservationsByPatientArgs = {
   input: GetReservationsByPatientInput;
 };
@@ -793,11 +798,6 @@ export type QueryGetReservationsOfMemberArgs = {
 
 export type QueryGetStatisticsArgs = {
   input: GetStatisticsInput;
-};
-
-
-export type QueryListReservationsArgs = {
-  input: ListReservationsInput;
 };
 
 
@@ -1187,6 +1187,13 @@ export type EditReservationMutationVariables = Exact<{
 
 export type EditReservationMutation = { __typename?: 'Mutation', editReservation: { __typename?: 'EditReservationOutput', ok: boolean, error?: string | null } };
 
+export type GetReservationsByIntervalQueryVariables = Exact<{
+  input: GetReservationsByIntervalInput;
+}>;
+
+
+export type GetReservationsByIntervalQuery = { __typename?: 'Query', getReservationsByInterval: { __typename?: 'GetReservationsByIntervalOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
+
 export type GetReservationsByPatientQueryVariables = Exact<{
   input: GetReservationsByPatientInput;
 }>;
@@ -1207,13 +1214,6 @@ export type GetStatisticsQueryVariables = Exact<{
 
 
 export type GetStatisticsQuery = { __typename?: 'Query', getStatistics: { __typename?: 'GetStatisticsOutput', error?: string | null, ok: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, visitRates?: Array<{ __typename?: 'VisitRate', patientId: number, visited: Array<boolean> }> | null, dailyReports?: Array<{ __typename?: 'DailyReport', date: any, reservationCount: number, noshow: number, cancel: number, newPatient: number, users: Array<{ __typename?: 'UserInDailyReport', userId: number, reservationCount: number, noshow: number, cancel: number, newPatient: number, visitMoreThanThirty: number, visitMoreThanSixty: number, visitMoreThanNinety: number, prescriptions: Array<{ __typename?: 'getStatisticsOutputPrescription', id: number, name: string, count: number }>, reservations: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, price: number, requiredTime: number }> | null, patient?: { __typename?: 'Patient', id: number, name: string } | null, lastModifier: { __typename?: 'User', id: number, name: string } }> }> }> | null } };
-
-export type ListReservationsQueryVariables = Exact<{
-  input: ListReservationsInput;
-}>;
-
-
-export type ListReservationsQuery = { __typename?: 'Query', listReservations: { __typename?: 'ListReservationsOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
 
 export type ListenCreateReservationSubscriptionVariables = Exact<{
   input: ListenCreateReservationInput;
