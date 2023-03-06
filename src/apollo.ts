@@ -3,7 +3,6 @@ import {
   createHttpLink,
   from,
   InMemoryCache,
-  NormalizedCacheObject,
   split,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
@@ -12,87 +11,82 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { printGraphQLErrors, printNetworkError } from './utils/errorUtils';
+import { localStorageUtils } from './utils/localStorageUtils';
 
-// eslint-disable-next-line import/no-mutable-exports
-let client: ApolloClient<NormalizedCacheObject> | null = null;
+const isDevelopment = import.meta.env.MODE === 'development';
 
-export const getApolloClient = (token: string | null) => {
-  const isDevelopment = import.meta.env.MODE === 'development';
+const BACKEND_URL = isDevelopment
+  ? '://localhost:3002/graphql'
+  : import.meta.env.VITE_BACKEND_URL;
 
-  const BACKEND_URL = isDevelopment
-    ? '://localhost:3002/graphql'
-    : import.meta.env.VITE_BACKEND_URL;
-
-  const wsLink = new GraphQLWsLink(
-    createClient({
-      url: isDevelopment ? `ws${BACKEND_URL}` : `wss${BACKEND_URL}`,
-      connectionParams: () => {
-        return { 'x-jwt': token };
-      },
-    })
-  );
-
-  const httpLink = createHttpLink({
-    uri: isDevelopment ? `http${BACKEND_URL}` : `https${BACKEND_URL}`,
-  });
-
-  const authLink = setContext((_, { headers }) => {
-    return {
-      headers: {
-        ...headers,
-        // 로그인 안했을때도 이 리퀘스트는 계속 요청되니 || "" 추가.
-        'x-jwt': token,
-      },
-    };
-  });
-
-  const splitLink = split(
-    ({ query }) => {
-      const definition = getMainDefinition(query);
-      return (
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'subscription'
-      );
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: isDevelopment ? `ws${BACKEND_URL}` : `wss${BACKEND_URL}`,
+    connectionParams: () => {
+      return { 'x-jwt': localStorageUtils.get({ key: 'token' }) };
     },
-    wsLink,
-    authLink.concat(httpLink)
-  );
+  })
+);
 
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors)
-      return graphQLErrors.forEach((errors) => {
-        const { locations, message, path, extensions } = errors;
+const httpLink = createHttpLink({
+  uri: isDevelopment ? `http${BACKEND_URL}` : `https${BACKEND_URL}`,
+});
 
-        if (message.includes('"$input" got invalid value'))
-          printGraphQLErrors('gotInvalidValue');
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      // token을 변수로 할당에 split과 여기서 사용하면 헤더에 x-jwt가 없다.
+      'x-jwt': localStorageUtils.get({ key: 'token' }),
+    },
+  };
+});
 
-        console.error(
-          `[GraphQL error]:
-          Message: ${message};
-          Location: ${JSON.stringify(locations)};
-          Path: ${JSON.stringify(path)};
-          Extensions :${JSON.stringify(extensions)};`
-        );
-      });
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  authLink.concat(httpLink)
+);
 
-    if (networkError) {
-      printNetworkError();
-      // const { message, name, cause, stack } = networkError;
-      // console.error(
-      //   `[Network error]:
-      //   Message: ${message};
-      //   Name: ${name};
-      //   Cause: ${cause};
-      //   Stack: ${stack};`
-      // );
-    }
-  });
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    return graphQLErrors.forEach((errors) => {
+      const { locations, message, path, extensions } = errors;
 
-  client = new ApolloClient({
-    link: from([errorLink, splitLink]),
-    cache: new InMemoryCache(),
-  });
-  return client;
-};
+      if (message.includes('"$input" got invalid value'))
+        printGraphQLErrors('gotInvalidValue');
+
+      console.error(
+        `[GraphQL error]:
+        Message: ${message};
+        Location: ${JSON.stringify(locations)};
+        Path: ${JSON.stringify(path)};
+        Extensions :${JSON.stringify(extensions)};`
+      );
+    });
+
+  if (networkError) {
+    printNetworkError();
+    const { message, name, cause, stack } = networkError;
+    console.error(
+      `[Network error]:
+      Message: ${message};
+      Name: ${name};
+      Cause: ${cause};
+      Stack: ${stack};`
+    );
+  }
+});
+
+const client = new ApolloClient({
+  link: from([errorLink, splitLink]),
+  cache: new InMemoryCache(),
+});
 
 export { client };
