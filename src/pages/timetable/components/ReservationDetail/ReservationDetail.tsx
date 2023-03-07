@@ -10,6 +10,7 @@ import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
 import { Trash } from '../../../../svgs';
 import { useDeleteReservation } from '../../hooks';
+import { setConfirm } from '../../../../store';
 import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 
 interface ReservationDetailProps {
@@ -26,9 +27,25 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
     startDate,
     memo,
     state,
+    id,
   } = reservation;
 
   const { deleteReservation } = useDeleteReservation();
+
+  const invokeDeleteReservation = () => {
+    const targetName = `"${patient?.name}"님의 \ ${getStringOfDateTime(
+      new Date(startDate)
+    )} 예약`;
+
+    setConfirm({
+      buttonText: '지우기',
+      messages: ['선택한 예약을 지웁니다'],
+      targetName,
+      confirmAction() {
+        deleteReservation({ reservationId: id });
+      },
+    });
+  };
 
   const isEnableEdit = !isBeforeDateB(endOfYesterday(), new Date(startDate));
 
@@ -81,7 +98,7 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
         {isEnableEdit && (
           <button
             type="button"
-            onClick={() => deleteReservation({ reservationId: reservation.id })}
+            onClick={invokeDeleteReservation}
             className="absolute top-16 right-4"
           >
             <Trash iconSize="LG" />

@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { DELETE_RESERVATION_DOCUMENT } from '../../../graphql';
-import type { DeleteReservationMutation } from '../../../types/generatedTypes';
 import { setAlert } from '../../../store';
+import type { DeleteReservationMutation } from '../../../types/generatedTypes';
 
 interface DeleteReservation {
   reservationId: number;
@@ -17,22 +17,18 @@ export const useDeleteReservation = () => {
     reservationId,
     closeAction,
   }: DeleteReservation) => {
-    const confirmDelete = confirm('예약을 지웁니다.');
-    if (confirmDelete) {
-      deleteReservationMutation({
-        variables: { input: { reservationId } },
-        onCompleted(data) {
-          const {
-            deleteReservation: { ok, error },
-          } = data;
-          if (error) {
-            return setAlert({ messages: [`오류: ${error}`] });
-          }
+    deleteReservationMutation({
+      variables: { input: { reservationId } },
+      onCompleted(data) {
+        const {
+          deleteReservation: { error },
+        } = data;
 
-          closeAction?.();
-        },
-      });
-    }
+        if (error) return setAlert({ messages: [`오류: ${error}`] });
+
+        closeAction?.();
+      },
+    });
   };
 
   return { deleteReservation };

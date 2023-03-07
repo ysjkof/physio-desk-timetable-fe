@@ -6,9 +6,10 @@ import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
 import { UPDATE_RESERVATION_DOCUMENT } from '../../../../graphql';
 import { MenuButton } from '../../../../components';
 import { XMark } from '../../../../svgs';
+import { setConfirm } from '../../../../store';
 import {
-  type UpdateReservationMutation,
   ReservationState,
+  type UpdateReservationMutation,
 } from '../../../../types/generatedTypes';
 import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 
@@ -21,34 +22,30 @@ const ToggleReservationState = ({ reservation }: EditReservationStateProps) => {
     UPDATE_RESERVATION_DOCUMENT
   );
 
-  const editState = (state: ReservationState) => {
-    if (reservation.state === state) return changeToReserved(reservation.id);
+  const editState = (_state: ReservationState) => {
+    const state =
+      reservation.state === _state ? ReservationState.Reserved : _state;
 
-    const ok = window.confirm(
-      `예약 상태를 ${RESERVATION_STATE_KOR[state]}(으)로 변경합니다.`
-    );
-    if (!ok) return;
-    editReservationMutation({
-      variables: {
-        input: {
-          reservationId: reservation.id,
-          state,
-        },
-      },
-    });
-  };
+    const isPositive = state === ReservationState.Reserved;
 
-  const changeToReserved = (reservationId: number) => {
-    const ok = window.confirm(
-      `예약 상태를 ${RESERVATION_STATE_KOR.Reserved}(으)로 변경합니다.`
-    );
-    if (!ok) return;
-    editReservationMutation({
-      variables: {
-        input: {
-          reservationId,
-          state: ReservationState.Reserved,
-        },
+    const targetName = `${RESERVATION_STATE_KOR[reservation.state]} -> ${
+      RESERVATION_STATE_KOR[state]
+    }`;
+
+    setConfirm({
+      buttonText: '바꾸기',
+      messages: ['예약 상태 바꾸기'],
+      isPositive,
+      targetName,
+      confirmAction() {
+        editReservationMutation({
+          variables: {
+            input: {
+              reservationId: reservation.id,
+              state,
+            },
+          },
+        });
       },
     });
   };
