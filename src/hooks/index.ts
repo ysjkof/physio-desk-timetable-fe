@@ -8,7 +8,6 @@ export * from './useDeactivateClinic';
 export * from './useDebounce';
 export * from './useDebounceCallback';
 export * from './useUpdateProfile';
-export * from './useGetMyClinics';
 export * from './useGetMyMembers';
 export * from './useGetPrescriptions';
 export * from './useGetClinic';

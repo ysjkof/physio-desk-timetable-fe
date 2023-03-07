@@ -1028,13 +1028,6 @@ export type GetMemberQueryVariables = Exact<{
 
 export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient?: number | null, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
 
-export type GetMyClinicsQueryVariables = Exact<{
-  input: GetMyClinicsInput;
-}>;
-
-
-export type GetMyClinicsQuery = { __typename?: 'Query', getMyClinics: { __typename?: 'GetMyClinicsOutput', ok: boolean, error?: string | null, clinics?: Array<{ __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string } }> }> | null } };
-
 export type GetMyClinicsStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
 

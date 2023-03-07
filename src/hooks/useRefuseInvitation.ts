@@ -1,8 +1,5 @@
 import { useMutation } from '@apollo/client';
-import {
-  GET_MY_CLINICS_DOCUMENT,
-  REFUSE_INVITATION_DOCUMENT,
-} from '../graphql';
+import { REFUSE_INVITATION_DOCUMENT } from '../graphql';
 import { setToast } from '../store';
 import { client } from '../apollo';
 import type {
@@ -29,7 +26,7 @@ export const useRefuseInvitation = ({ memberId }: { memberId: number }) => {
         if (data.refuseInvitation.ok) {
           alert('삭제 완료');
           client?.refetchQueries({
-            include: [GET_MY_CLINICS_DOCUMENT],
+            include: [],
           });
           return;
         }

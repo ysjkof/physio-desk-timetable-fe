@@ -1,7 +1,6 @@
 import { ACCEPT_INVITATION_DOCUMENT } from './acceptInvitationGql';
 import { REFUSE_INVITATION_DOCUMENT } from './refuseInvitationGql';
 import { CREATE_CLINIC_DOCUMENT } from './createClinicGql';
-import { GET_MY_CLINICS_DOCUMENT } from './getMyClinicsGql';
 import { GET_MY_MEMBERS_DOCUMENT } from './getMyMembersGql';
 import { GET_CLINIC_DOCUMENT } from './getClinicGql';
 import { DEACTIVATE_CLINIC_DOCUMENT } from './deactivateClinicGql';
@@ -19,7 +18,6 @@ export {
   ACCEPT_INVITATION_DOCUMENT,
   REFUSE_INVITATION_DOCUMENT,
   CREATE_CLINIC_DOCUMENT,
-  GET_MY_CLINICS_DOCUMENT,
   GET_MY_MEMBERS_DOCUMENT,
   GET_CLINIC_DOCUMENT,
   DEACTIVATE_CLINIC_DOCUMENT,
