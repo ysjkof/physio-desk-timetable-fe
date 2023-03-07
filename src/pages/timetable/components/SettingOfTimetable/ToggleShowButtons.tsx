@@ -1,11 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faCommentSlash } from '@fortawesome/free-solid-svg-icons';
+import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { CheckableButton } from '../../../../components';
 import {
   toggleShowCancelOfTimetable,
   toggleShowNoshowOfTimetable,
   useStore,
 } from '../../../../store';
+import { XMark } from '../../../../svgs';
 
 export const ToggleShowButtons = () => {
   const user = useStore((state) => state.user);
@@ -33,7 +34,7 @@ export const ToggleShowButtons = () => {
         checked={showCancelOfTimetable}
         color="black"
         onClick={toggleCancel}
-        icon={<FontAwesomeIcon icon={faBan} fontSize={14} />}
+        icon={<XMark className="h-5 w-5" />}
         hasBorder
       />
       <CheckableButton
@@ -41,7 +42,7 @@ export const ToggleShowButtons = () => {
         checked={showNoshowOfTimetable}
         color="black"
         onClick={toggleNoshow}
-        icon={<FontAwesomeIcon icon={faCommentSlash} fontSize={14} />}
+        icon={<FontAwesomeIcon icon={faExclamation} className="h-5 w-5" />}
         hasBorder
       />
     </div>

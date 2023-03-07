@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCancel,
   faCommentSlash,
+  faExclamation,
   faLock,
 } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -22,6 +23,7 @@ import type {
   PatientInReservation,
   ReservationOfGetReservationsByInterval,
 } from '../../../../types/processedGeneratedTypes';
+import { XMark } from '../../../../svgs';
 
 interface EventBoxProps {
   inset: string;
@@ -175,9 +177,9 @@ const StatusIcon = ({ eventState }: EventStateProps) => {
   if (eventState === ReservationState.DayOff)
     return <FontAwesomeIcon icon={faLock} className="cancel mx-auto" />;
   if (eventState === ReservationState.Canceled)
-    return <FontAwesomeIcon icon={faCancel} className="cancel" />;
+    return <XMark className="cancel h-6 w-6" />;
   if (eventState === ReservationState.NoShow)
-    return <FontAwesomeIcon icon={faCommentSlash} className="noshow" />;
+    return <FontAwesomeIcon icon={faExclamation} className="noshow h-4 w-4" />;
   return null;
 };
 

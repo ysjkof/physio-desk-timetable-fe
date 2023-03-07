@@ -10,7 +10,6 @@ import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
 import { Trash } from '../../../../svgs';
 import { useDeleteReservation } from '../../hooks';
-import { setConfirm } from '../../../../store';
 import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 
 interface ReservationDetailProps {
@@ -33,18 +32,7 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
   const { deleteReservation } = useDeleteReservation();
 
   const invokeDeleteReservation = () => {
-    const targetName = `"${patient?.name}"님의 \ ${getStringOfDateTime(
-      new Date(startDate)
-    )} 예약`;
-
-    setConfirm({
-      buttonText: '지우기',
-      messages: ['선택한 예약을 지웁니다'],
-      targetName,
-      confirmAction() {
-        deleteReservation({ reservationId: id });
-      },
-    });
+    deleteReservation({ id, patientName: patient?.name, startDate });
   };
 
   const isEnableEdit = !isBeforeDateB(endOfYesterday(), new Date(startDate));
@@ -81,11 +69,10 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
           {memo}
         </DetailBox>
         <DetailBox title="예약상태">
-          {getStringFromReservationState(state)}
-          {isEnableEdit && (
-            <div className="mt-2 ml-2 flex w-full gap-2">
-              <ToggleReservationState reservation={reservation} />
-            </div>
+          {isEnableEdit ? (
+            <ToggleReservationState reservation={reservation} />
+          ) : (
+            getStringFromReservationState(state)
           )}
         </DetailBox>
         <DetailBox title="수정정보">

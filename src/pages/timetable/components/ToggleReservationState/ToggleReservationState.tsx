@@ -1,16 +1,9 @@
-import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 import { cls } from '../../../../utils/commonUtils';
-import { RESERVATION_STATE_KOR } from '../../../../constants/constants';
-import { UPDATE_RESERVATION_DOCUMENT } from '../../../../graphql';
-import { MenuButton } from '../../../../components';
-import { XMark } from '../../../../svgs';
-import { setConfirm } from '../../../../store';
-import {
-  ReservationState,
-  type UpdateReservationMutation,
-} from '../../../../types/generatedTypes';
+import { Check, XMark } from '../../../../svgs';
+import { ReservationState } from '../../../../types/generatedTypes';
+import { useToggleReservationState } from '../../hooks';
 import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 
 interface EditReservationStateProps {
@@ -18,67 +11,49 @@ interface EditReservationStateProps {
 }
 
 const ToggleReservationState = ({ reservation }: EditReservationStateProps) => {
-  const [editReservationMutation] = useMutation<UpdateReservationMutation>(
-    UPDATE_RESERVATION_DOCUMENT
-  );
+  const { editState } = useToggleReservationState(reservation);
 
-  const editState = (_state: ReservationState) => {
-    const state =
-      reservation.state === _state ? ReservationState.Reserved : _state;
+  const isReserved = reservation.state === ReservationState.Reserved;
+  const isCanceled = reservation.state === ReservationState.Canceled;
+  const isNoShow = reservation.state === ReservationState.NoShow;
 
-    const isPositive = state === ReservationState.Reserved;
-
-    const targetName = `${RESERVATION_STATE_KOR[reservation.state]} -> ${
-      RESERVATION_STATE_KOR[state]
-    }`;
-
-    setConfirm({
-      buttonText: '바꾸기',
-      messages: ['예약 상태 바꾸기'],
-      isPositive,
-      targetName,
-      confirmAction() {
-        editReservationMutation({
-          variables: {
-            input: {
-              reservationId: reservation.id,
-              state,
-            },
-          },
-        });
-      },
-    });
-  };
+  const toggleReserved = () => editState(ReservationState.Reserved);
+  const toggleCanceled = () => editState(ReservationState.Canceled);
+  const toggleNoShow = () => editState(ReservationState.NoShow);
 
   return (
-    <>
-      <MenuButton
-        hasBorder
+    <div className="flex w-full text-sm">
+      <button
         className={cls(
-          'flex h-5 cursor-pointer items-center justify-center rounded-md border-red-400 text-xs',
-          reservation.state === ReservationState.Canceled
-            ? 'bg-red-400 text-white'
-            : 'bg-white text-red-400'
+          'flex w-full cursor-pointer items-center justify-center gap-x-2',
+          isReserved ? 'font-medium' : 'border-gray-300 text-gray-300'
         )}
-        onClick={() => editState(ReservationState.Canceled)}
+        onClick={toggleReserved}
       >
-        <XMark />
-        예약취소
-      </MenuButton>
-      <MenuButton
-        hasBorder
+        <Check className="h-4 w-4" />
+        예약
+      </button>
+      <button
         className={cls(
-          'flex h-5 cursor-pointer items-center justify-center rounded-md border-red-400 text-xs',
-          reservation.state === ReservationState.NoShow
-            ? 'bg-red-400 text-white'
-            : 'bg-white text-red-400'
+          'flex w-full cursor-pointer items-center justify-center gap-x-2',
+          isCanceled ? 'cancel font-medium' : 'border-gray-300 text-gray-300'
         )}
-        onClick={() => editState(ReservationState.NoShow)}
+        onClick={toggleCanceled}
       >
-        <FontAwesomeIcon icon={faExclamation} fontSize={16} />
-        예약부도
-      </MenuButton>
-    </>
+        <XMark className="h-5 w-5" />
+        취소
+      </button>
+      <button
+        className={cls(
+          'flex w-full cursor-pointer items-center justify-center gap-x-2',
+          isNoShow ? 'noshow font-medium' : 'border-gray-300 text-gray-300'
+        )}
+        onClick={toggleNoShow}
+      >
+        <FontAwesomeIcon icon={faExclamation} fontSize={14} />
+        부도
+      </button>
+    </div>
   );
 };
 

@@ -1,10 +1,13 @@
 import { useMutation } from '@apollo/client';
 import { DELETE_RESERVATION_DOCUMENT } from '../../../graphql';
-import { setAlert } from '../../../store';
+import { setAlert, setConfirm } from '../../../store';
 import type { DeleteReservationMutation } from '../../../types/generatedTypes';
+import { getStringOfDateTime } from '../../../utils/dateUtils';
 
 interface DeleteReservation {
-  reservationId: number;
+  id: number;
+  patientName?: string;
+  startDate?: Date;
   closeAction?: () => void;
 }
 
@@ -14,20 +17,38 @@ export const useDeleteReservation = () => {
   );
 
   const deleteReservation = ({
-    reservationId,
+    id,
+    patientName,
+    startDate,
     closeAction,
   }: DeleteReservation) => {
-    deleteReservationMutation({
-      variables: { input: { reservationId } },
-      onCompleted(data) {
-        const {
-          deleteReservation: { error },
-        } = data;
+    let targetName = '';
+    if (patientName && startDate) {
+      targetName = `"${patientName}"님의 \ ${getStringOfDateTime(
+        new Date(startDate)
+      )} 예약`;
+    }
 
-        if (error) return setAlert({ messages: [`오류: ${error}`] });
+    const confirmAction = () => {
+      deleteReservationMutation({
+        variables: { input: { reservationId: id } },
+        onCompleted(data) {
+          const {
+            deleteReservation: { error },
+          } = data;
 
-        closeAction?.();
-      },
+          if (error) return setAlert({ messages: [`오류: ${error}`] });
+
+          closeAction?.();
+        },
+      });
+    };
+
+    setConfirm({
+      buttonText: '지우기',
+      messages: ['선택한 예약을 지웁니다'],
+      targetName,
+      confirmAction,
     });
   };
 

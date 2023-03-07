@@ -324,10 +324,10 @@
   }
 
   .noshow {
-    @apply text-black;
+    @apply border-red-500 text-red-500;
   }
   .cancel {
-    @apply text-red-500;
+    @apply border-red-500 text-red-500;
   }
   .no-reserved {
     @apply border-gray-300 bg-gray-100;

@@ -1,7 +1,11 @@
 import { gql } from '@apollo/client';
 import { client } from '../apollo';
 import { GET_MY_MEMBERS_DOCUMENT, ME_DOCUMENT } from '../graphql';
-import type { GetMyMembersQuery, MeQuery } from '../types/generatedTypes';
+import type {
+  GetMyMembersQuery,
+  MeQuery,
+  ReservationState,
+} from '../types/generatedTypes';
 import type {
   MyClinic,
   UpdatePrescriptionVariables,
@@ -96,6 +100,21 @@ export const cacheUpdatePrescription = (
       }
     `,
     data: { ...variable },
+  });
+};
+
+export const cacheUpdateReservationState = (
+  id: number,
+  state: ReservationState
+) => {
+  client.writeFragment({
+    id: `Reservation:${id}`,
+    fragment: gql`
+      fragment ReservationField on Reservation {
+        sate
+      }
+    `,
+    data: { state },
   });
 };
 

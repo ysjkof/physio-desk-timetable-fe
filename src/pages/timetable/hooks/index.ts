@@ -7,6 +7,7 @@ import { useSchedules } from './useSchedules';
 import { useSubscriptions } from './useSubscriptions';
 import { useTableLabel } from './useTableLabel';
 import { useCreateDayoff } from './useCreateDayoff';
+import { useToggleReservationState } from './useToggleReservationState';
 
 export {
   useCreateDayoff,
@@ -18,4 +19,5 @@ export {
   useSchedules,
   useSubscriptions,
   useTableLabel,
+  useToggleReservationState,
 };
