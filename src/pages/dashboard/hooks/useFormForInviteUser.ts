@@ -16,13 +16,13 @@ export const useFormForInviteUser = () => {
     formState: { errors },
   } = useForm<UseFormForInviteUserFields>({ mode: 'onChange' });
 
-  const [inviteUser] = useInviteUser();
+  const { inviteUser } = useInviteUser();
 
   const onSubmit: SubmitHandler<UseFormForInviteUserFields> = (data) => {
     const { name } = data;
     if (!name) return;
 
-    inviteUser({ variables: { input: { clinicId, name } } });
+    inviteUser(clinicId, name);
   };
 
   const handleSubmit = handleSubmitWrapper(onSubmit);

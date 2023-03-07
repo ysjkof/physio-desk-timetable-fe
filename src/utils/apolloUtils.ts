@@ -1,11 +1,7 @@
 import { gql } from '@apollo/client';
 import { client } from '../apollo';
 import { GET_MY_MEMBERS_DOCUMENT, ME_DOCUMENT } from '../graphql';
-import type {
-  UpdatePrescriptionInput,
-  GetMyMembersQuery,
-  MeQuery,
-} from '../types/generatedTypes';
+import type { GetMyMembersQuery, MeQuery } from '../types/generatedTypes';
 import type {
   MyClinic,
   UpdatePrescriptionVariables,
@@ -13,7 +9,7 @@ import type {
 import { MyMembersType } from '../types/processedGeneratedTypes';
 
 export const cacheUpdateUserName = (id: number, name: string) => {
-  client?.writeFragment({
+  client.writeFragment({
     id: `User:${id}`,
     fragment: gql`
       fragment NameFields on User {
@@ -35,7 +31,7 @@ export const cacheUpdatePersonalClinicName = ({
   clinicName,
   userName,
 }: CacheUpdatePersonalClinicNameProps) => {
-  client?.writeFragment({
+  client.writeFragment({
     id: `Clinic:${clinicId}`,
     fragment: gql`
       fragment ClinicName on Clinic {
@@ -46,8 +42,11 @@ export const cacheUpdatePersonalClinicName = ({
   });
 };
 
-export const cacheUpdateMemberAccepted = (id: number) => {
-  client?.writeFragment({
+export const cacheUpdateMemberState = (
+  id: number,
+  fields: { staying?: boolean; accepted?: boolean }
+) => {
+  client.writeFragment({
     id: `Member:${id}`,
     fragment: gql`
       fragment AcceptedFields on Member {
@@ -55,12 +54,12 @@ export const cacheUpdateMemberAccepted = (id: number) => {
         accepted
       }
     `,
-    data: { staying: true, accepted: true },
+    data: fields,
   });
 };
 
 export const cacheUpdateMemberColor = (id: number, color: string) => {
-  client?.writeFragment({
+  client.writeFragment({
     id: `Member:${id}`,
     fragment: gql`
       fragment ColorField on Member {
@@ -75,7 +74,7 @@ export const cacheUpdatePrescription = (
   id: number,
   variable: UpdatePrescriptionVariables
 ) => {
-  client?.writeFragment({
+  client.writeFragment({
     id: `Prescription:${id}`,
     fragment: gql`
       fragment UpdatePrescriptionField on Prescription {
@@ -89,13 +88,13 @@ export const cacheUpdatePrescription = (
 };
 
 export const cacheAddClinicToMyMembers = (clinic: MyClinic) => {
-  client?.cache.updateQuery<GetMyMembersQuery>(
+  client.cache.updateQuery<GetMyMembersQuery>(
     { query: GET_MY_MEMBERS_DOCUMENT },
     (cacheData) => {
       if (!cacheData?.getMyMembers.members)
-        throw new Error(
-          'useCreateClinic에서 캐시 업데이트 중에 clinic이 없습니다.'
-        );
+        throw new Error('Calling cacheAddClinicToMyMembers()', {
+          cause: 'cacheData가 false입니다.',
+        });
 
       const newData = structuredClone(cacheData);
 
@@ -110,8 +109,28 @@ export const cacheAddClinicToMyMembers = (clinic: MyClinic) => {
   );
 };
 
+export const cacheUpdateDeleteMemberOfGetMyMembers = (memberId: number) => {
+  client.cache.updateQuery<GetMyMembersQuery>(
+    { query: GET_MY_MEMBERS_DOCUMENT },
+    (cacheData) => {
+      if (!cacheData?.getMyMembers.members) {
+        throw new Error('Calling cacheUpdateMemberOfGetMyMembers', {
+          cause: 'cacheData가 false입니다.',
+        });
+      }
+
+      const newData = structuredClone(cacheData);
+      const newMember = newData.getMyMembers.members.filter(
+        (member) => member.id !== memberId
+      );
+      newData.getMyMembers.members = newMember;
+      return newData;
+    }
+  );
+};
+
 export const cacheUpdateMemberOfMe = (clinic: MyClinic) => {
-  client?.cache.updateQuery<MeQuery>({ query: ME_DOCUMENT }, (cacheData) => {
+  client.cache.updateQuery<MeQuery>({ query: ME_DOCUMENT }, (cacheData) => {
     if (!cacheData?.me.members) {
       throw new Error(
         'useCreateClinic에서 캐시 업데이트 중에 members가 없습니다.'

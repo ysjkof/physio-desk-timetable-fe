@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { ACCEPT_INVITATION_DOCUMENT } from '../graphql';
 import { setAlert } from '../store';
-import { cacheUpdateMemberAccepted } from '../utils/apolloUtils';
+import { cacheUpdateMemberState } from '../utils/apolloUtils';
 import type {
   AcceptInvitationMutation,
   AcceptInvitationMutationVariables,
@@ -21,7 +21,7 @@ export const useAcceptInvitation = ({ memberId }: { memberId: number }) => {
         if (error) return setAlert({ messages: [`오류: ${error}`] });
 
         if (ok) {
-          cacheUpdateMemberAccepted(memberId);
+          cacheUpdateMemberState(memberId, { accepted: true, staying: true });
           return setAlert({
             messages: ['초대를 수락했습니다'],
             isPositive: true,
