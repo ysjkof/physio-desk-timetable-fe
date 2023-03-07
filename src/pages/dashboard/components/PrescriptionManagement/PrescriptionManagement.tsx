@@ -11,7 +11,7 @@ import { ProtectStayMember, Warning } from '../../../../components';
 
 const PrescriptionManagement = () => {
   const { height } = useWindowSize(true);
-  const [showInactivate, setShowInactivate] = useState(false);
+  const [seeInactivation, setSeeInactivation] = useState(false);
 
   const clinicId = useStore((state) => state.pickedClinicId);
 
@@ -43,8 +43,8 @@ const PrescriptionManagement = () => {
             </span>
           </div>
           <PrescriptionManagementController
-            seeInactivate={showInactivate}
-            setSeeInactivate={setShowInactivate}
+            seeInactivation={seeInactivation}
+            setSeeInactivation={setSeeInactivation}
           />
         </div>
 
@@ -58,7 +58,7 @@ const PrescriptionManagement = () => {
               key={prescription.id}
               prescription={prescription}
               clinicId={clinicId}
-              showInactivate={showInactivate}
+              seeInactivation={seeInactivation}
             />
           ))}
         </div>

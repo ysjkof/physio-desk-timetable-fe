@@ -60,7 +60,7 @@ const TableChart = ({
                 userId={key}
                 {...value}
                 query={query}
-                isActivate={!disabledIds.has(numKey)}
+                isActive={!disabledIds.has(numKey)}
                 onClick={() => toggleUserId(numKey)}
                 color={color}
               />

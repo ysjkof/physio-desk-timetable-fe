@@ -96,7 +96,7 @@ export const cacheUpdatePrescription = (
       fragment UpdatePrescriptionField on Prescription {
         name
         description
-        activate
+        isActive
       }
     `,
     data: { ...variable },

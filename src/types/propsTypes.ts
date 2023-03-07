@@ -31,6 +31,7 @@ export interface TimetableTemplateProps {
   nav: ReactNode;
   labels: ReactNode;
   columns: ReactNode;
+  eventList: ReactNode;
 }
 
 export interface SchedulesProps extends ILabels {
@@ -60,7 +61,7 @@ export interface UserSelectorProps extends TableControllerProps {}
 export interface CardProps {
   clinicId: number;
   prescription: PrescriptionForFind;
-  showInactivate: boolean;
+  seeInactivation: boolean;
 }
 
 // Common
@@ -120,10 +121,10 @@ export interface ToastProps {
 
 export type ToastType = ToastProps | undefined;
 
-export interface TogglePrescriptionActivateProps {
+export interface TogglePrescriptionActivationProps {
   id: number;
   name: string;
-  activate: boolean;
+  isActive: boolean;
 }
 
 export interface ToggleEditMode {

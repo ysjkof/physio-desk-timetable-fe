@@ -7,22 +7,25 @@ import type {
   UpdatePrescriptionMutationVariables,
 } from '../types/generatedTypes';
 
-export const useTogglePrescriptionActivate = () => {
+export const useTogglePrescriptionActivation = () => {
   const [callMutation] = useMutation<
     UpdatePrescriptionMutation,
     UpdatePrescriptionMutationVariables
   >(UPDATE_PRESCRIPTION_DOCUMENT);
 
-  const toggleActivation = (id: number, activate: boolean) => {
-    const inputActivate = !activate;
-    const variables = { input: { id, activate: inputActivate } };
+  const toggleActivation = (id: number, isActive: boolean) => {
+    const inputActive = !isActive;
+    const variables: UpdatePrescriptionMutationVariables = {
+      input: { id, isActive: inputActive },
+    };
+
     callMutation({
       variables,
       onCompleted(data) {
         const { error } = data.updatePrescription;
         if (error) return setToast({ messages: [error] });
 
-        cacheUpdatePrescription(id, { activate: inputActivate });
+        cacheUpdatePrescription(id, { isActive: inputActive });
       },
     });
   };

@@ -12,7 +12,7 @@ const SwitchWeekViewButton = () => {
     <TwoLabelSwitch
       labels={['하루', '주단위']}
       onClick={toggleWeekOrDay}
-      isActivated={isWeekCalendar}
+      isActive={isWeekCalendar}
     />
   );
 };

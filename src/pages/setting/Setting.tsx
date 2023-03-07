@@ -50,21 +50,21 @@ const MenuContainer = () => {
     <div className="flex flex-col text-sm">
       <LinkButton
         path="/setting/my-info"
-        isActivate={pathname.startsWith('/setting/my-info')}
+        isActive={pathname.startsWith('/setting/my-info')}
       >
         <User />
         나의 정보
       </LinkButton>
       <LinkButton
         path="/setting/my-clinics"
-        isActivate={pathname.startsWith('/setting/my-clinics')}
+        isActive={pathname.startsWith('/setting/my-clinics')}
       >
         <Building />
         나의 병원
       </LinkButton>
       <LinkButton
         path="/setting/clinic/create"
-        isActivate={pathname.startsWith('/setting/clinic/create')}
+        isActive={pathname.startsWith('/setting/clinic/create')}
       >
         <BuildingPlus />
         병원 만들기
@@ -74,19 +74,17 @@ const MenuContainer = () => {
 };
 
 interface LinkButtonProps extends PropsWithChildren {
-  isActivate: boolean;
+  isActive: boolean;
   path: string;
 }
 
-const LinkButton = ({ children, path, isActivate }: LinkButtonProps) => {
+const LinkButton = ({ children, path, isActive }: LinkButtonProps) => {
   return (
     <Link
       to={path}
       className={cls(
         'flex items-center gap-2 rounded-md py-2.5 px-2 pl-4 font-bold',
-        isActivate
-          ? 'bg-[#EEEEFF] text-table-aside-bg'
-          : 'text-table-day-strong'
+        isActive ? 'bg-[#EEEEFF] text-table-aside-bg' : 'text-table-day-strong'
       )}
     >
       {children}

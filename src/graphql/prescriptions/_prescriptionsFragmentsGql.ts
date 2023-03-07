@@ -7,7 +7,7 @@ export const ALL_PRESCRIPTION_FIELDS = gql`
     requiredTime
     description
     price
-    activate
+    isActive
   }
 `;
 export const COMMON_PRESCRIPTION_FIELDS = gql`

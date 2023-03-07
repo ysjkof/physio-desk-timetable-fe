@@ -17,12 +17,12 @@ export const DatepickerMain = ({ disablePreviousDay }: DatepickerMainProps) => {
       <div className="grid w-full grid-cols-[repeat(7,30px)] justify-between pr-1.5 text-center text-sm">
         <Title />
         {month.map((day) => {
-          const isActivate = disablePreviousDay
+          const isActive = disablePreviousDay
             ? !isBeforeDateB(endOfYesterday(), day.getDate())
             : true;
           return (
             <CalendarDay
-              isActivate={isActivate}
+              isActive={isActive}
               key={day.getDate().valueOf()}
               date={day}
             />
@@ -55,10 +55,10 @@ const Title = () => {
 
 interface CalendarDayProps {
   date: CalendarDate;
-  isActivate: boolean;
+  isActive: boolean;
 }
 
-const CalendarDay = ({ date, isActivate }: CalendarDayProps) => {
+const CalendarDay = ({ date, isActive }: CalendarDayProps) => {
   const { selectedDate, selectDate, closeAction } =
     useContext(DatepickerContext);
 
@@ -74,7 +74,7 @@ const CalendarDay = ({ date, isActivate }: CalendarDayProps) => {
       type="button"
       className={cls(
         'relative m-1 aspect-square w-full cursor-pointer p-1 text-center',
-        isActivate ? '' : 'pointer-events-none line-through',
+        isActive ? '' : 'pointer-events-none line-through',
         date.isSunday() ? 'sunday' : '',
         date.isSaturday() ? 'saturday' : '',
         date.isThisMonth() ? '' : 'opacity-50',

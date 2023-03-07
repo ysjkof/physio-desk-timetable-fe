@@ -10,7 +10,7 @@ interface ButtonProps extends PropsWithChildren {
 }
 interface OptionProps extends PropsWithChildren {
   onClick: () => void;
-  isActivate?: boolean;
+  isActive?: boolean;
 }
 
 interface SelectboxProps extends PropsWithChildren {
@@ -46,7 +46,7 @@ const Button = ({
   );
 };
 
-const Option = ({ children, isActivate, onClick }: OptionProps) => {
+const Option = ({ children, isActive, onClick }: OptionProps) => {
   return (
     <li
       onClick={onClick}
@@ -55,7 +55,7 @@ const Option = ({ children, isActivate, onClick }: OptionProps) => {
       tabIndex={0}
       className={cls(
         'flex w-full items-center justify-center text-ellipsis whitespace-nowrap bg-inherit px-2 py-1 hover:bg-blue-200',
-        isActivate ? 'bg-[#F2F2F9] font-medium' : ''
+        isActive ? 'bg-[#F2F2F9] font-medium' : ''
       )}
     >
       {children}

@@ -29,7 +29,7 @@ const SeeCalendarButton = () => {
     <>
       <MenuButton
         onClick={toggleCalender}
-        isActivated={showCalendarOfTimetable}
+        isActive={showCalendarOfTimetable}
         ref={buttonRef}
         hasBorder
       >

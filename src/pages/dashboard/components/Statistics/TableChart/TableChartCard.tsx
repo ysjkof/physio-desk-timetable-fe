@@ -6,7 +6,7 @@ import type { PrimaryCountListItem } from '../../../../../types/commonTypes';
 interface TableChartCardProps extends PrimaryCountListItem {
   userId: string;
   query: string;
-  isActivate: boolean;
+  isActive: boolean;
   onClick: () => void;
   color: string | undefined;
 }
@@ -19,7 +19,7 @@ const TableChartCard = (props: TableChartCardProps) => {
     reservationCount,
     userId,
     query,
-    isActivate,
+    isActive,
     onClick,
     color,
   } = props;
@@ -36,13 +36,13 @@ const TableChartCard = (props: TableChartCardProps) => {
       className={cls(
         'table-chart__card',
         query && !new RegExp(query).test(name) ? 'hidden' : '',
-        isActivate ? '' : 'border-transparent'
+        isActive ? '' : 'border-transparent'
       )}
       onClick={onClick}
     >
       <div className="flex items-center gap-1 px-1.5 text-sm font-medium">
         <CheckableButton
-          checked={isActivate}
+          checked={isActive}
           label={name}
           onClick={onClick}
           color={color}

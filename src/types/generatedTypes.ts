@@ -33,7 +33,7 @@ export type Clinic = {
   __typename?: 'Clinic';
   createdAt?: Maybe<Scalars['DateTime']>;
   id: Scalars['Float'];
-  isActivated: Scalars['Boolean'];
+  isActive: Scalars['Boolean'];
   members: Array<Member>;
   name: Scalars['String'];
   patient?: Maybe<Array<Patient>>;
@@ -236,17 +236,6 @@ export type GetMemberOutput = {
   countOfPatient?: Maybe<Scalars['Int']>;
   error?: Maybe<Scalars['String']>;
   member?: Maybe<Member>;
-  ok: Scalars['Boolean'];
-};
-
-export type GetMyClinicsInput = {
-  includeInactivate?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type GetMyClinicsOutput = {
-  __typename?: 'GetMyClinicsOutput';
-  clinics?: Maybe<Array<Clinic>>;
-  error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
 };
 
@@ -656,10 +645,10 @@ export type Patient = {
 
 export type Prescription = {
   __typename?: 'Prescription';
-  activate?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
+  isActive?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
   prescriptionAtoms?: Maybe<Array<PrescriptionAtom>>;
   price: Scalars['Int'];
@@ -682,7 +671,6 @@ export type Query = {
   getAtomPrescriptions: GetAtomPrescriptionsOutput;
   getClinic: GetClinicOutput;
   getMember: GetMemberOutput;
-  getMyClinics: GetMyClinicsOutput;
   getMyClinicsStatus: GetMyClinicsStatusOutput;
   getMyMembers: GetMyMembersOutput;
   getPatient: GetPatientOutput;
@@ -718,11 +706,6 @@ export type QueryGetClinicArgs = {
 
 export type QueryGetMemberArgs = {
   input: GetMemberInput;
-};
-
-
-export type QueryGetMyClinicsArgs = {
-  input: GetMyClinicsInput;
 };
 
 
@@ -872,9 +855,9 @@ export type UpdatePatientOutput = {
 };
 
 export type UpdatePrescriptionInput = {
-  activate?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
+  isActive?: InputMaybe<Scalars['Boolean']>;
   name?: InputMaybe<Scalars['String']>;
 };
 
@@ -989,7 +972,7 @@ export type GetStatisticsOutputPrescription = {
   name: Scalars['String'];
 };
 
-export type CommonClinicFieldsFragment = { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean };
+export type CommonClinicFieldsFragment = { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean };
 
 export type CommonMemberFieldsFragment = { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean };
 
@@ -1005,7 +988,7 @@ export type CreateClinicMutationVariables = Exact<{
 }>;
 
 
-export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean, members: Array<{ __typename?: 'Member', createdAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string } }> } | null } };
+export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean, members: Array<{ __typename?: 'Member', createdAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
 
 export type DeactivateClinicMutationVariables = Exact<{
   input: DeactivateClinicInput;
@@ -1019,7 +1002,7 @@ export type GetClinicQueryVariables = Exact<{
 }>;
 
 
-export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, members: Array<{ __typename?: 'Member', createdAt?: any | null, updatedAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean, members: Array<{ __typename?: 'Member', createdAt?: any | null, updatedAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
 
 export type GetMemberQueryVariables = Exact<{
   input: GetMemberInput;
@@ -1036,7 +1019,7 @@ export type GetMyClinicsStatusQuery = { __typename?: 'Query', getMyClinicsStatus
 export type GetMyMembersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyMembersQuery = { __typename?: 'Query', getMyMembers: { __typename?: 'getMyMembersOutput', ok: boolean, error?: string | null, members: Array<{ __typename?: 'Member', id: number, manager: boolean, accepted: boolean, staying: boolean, createdAt?: any | null, clinic: { __typename?: 'Clinic', id: number, name: string, isActivated: boolean } }> } };
+export type GetMyMembersQuery = { __typename?: 'Query', getMyMembers: { __typename?: 'getMyMembersOutput', ok: boolean, error?: string | null, members: Array<{ __typename?: 'Member', id: number, manager: boolean, accepted: boolean, staying: boolean, createdAt?: any | null, clinic: { __typename?: 'Clinic', id: number, name: string, isActive: boolean } }> } };
 
 export type InviteUserMutationVariables = Exact<{
   input: InviteUserInput;
@@ -1105,7 +1088,7 @@ export type UpdatePatientMutationVariables = Exact<{
 
 export type UpdatePatientMutation = { __typename?: 'Mutation', updatePatient: { __typename?: 'UpdatePatientOutput', ok: boolean, error?: string | null } };
 
-export type AllPrescriptionFieldsFragment = { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null };
+export type AllPrescriptionFieldsFragment = { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, isActive?: boolean | null };
 
 export type CommonPrescriptionFieldsFragment = { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number };
 
@@ -1121,7 +1104,7 @@ export type CreatePrescriptionMutationVariables = Exact<{
 }>;
 
 
-export type CreatePrescriptionMutation = { __typename?: 'Mutation', createPrescription: { __typename?: 'CreatePrescriptionOutput', ok: boolean, error?: string | null, prescription?: { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null } | null } };
+export type CreatePrescriptionMutation = { __typename?: 'Mutation', createPrescription: { __typename?: 'CreatePrescriptionOutput', ok: boolean, error?: string | null, prescription?: { __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, isActive?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null } | null } };
 
 export type GetAtomPrescriptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1140,7 +1123,7 @@ export type GetPrescriptionsByClinicQueryVariables = Exact<{
 }>;
 
 
-export type GetPrescriptionsByClinicQuery = { __typename?: 'Query', getPrescriptionsByClinic: { __typename?: 'GetPrescriptionsByClinicOutput', ok: boolean, error?: string | null, count: number, maximumCount: number, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, activate?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
+export type GetPrescriptionsByClinicQuery = { __typename?: 'Query', getPrescriptionsByClinic: { __typename?: 'GetPrescriptionsByClinicOutput', ok: boolean, error?: string | null, count: number, maximumCount: number, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number, isActive?: boolean | null, prescriptionAtoms?: Array<{ __typename?: 'PrescriptionAtom', id: number, name: string }> | null }> | null } };
 
 export type UpdatePrescriptionMutationVariables = Exact<{
   input: UpdatePrescriptionInput;
@@ -1263,7 +1246,7 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, members?: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, clinic: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActivated: boolean } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, members?: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, clinic: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
 
 export type SendChangeEmailMutationVariables = Exact<{
   input: SendChangeEmailInput;

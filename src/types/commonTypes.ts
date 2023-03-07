@@ -4,7 +4,6 @@ import type { Prescription } from './generatedTypes';
 import type {
   ClinicInReservation,
   MemberOfGetMyClinic,
-  MyClinic,
   MyMembersType,
   PatientInReservation,
   ReservationOfGetReservationsByInterval,
@@ -43,14 +42,7 @@ export interface TableDisplayOptions {
   seeCalendar: boolean;
 }
 
-export interface ClinicOfClient
-  extends Omit<MyClinic, 'members'>,
-    ClinicOfClientState {
-  members: MemberOfClient[];
-}
-export interface MemberOfClient extends MemberOfGetMyClinic {
-  canSee?: boolean;
-}
+export interface MemberOfClient extends MemberOfGetMyClinic {}
 
 type ClinicPosition = '관리자' | '직원';
 

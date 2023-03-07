@@ -1,7 +1,6 @@
 import type {
   CreateReservationInput,
   UpdateReservationInput,
-  GetMyClinicsQuery,
   GetMyMembersQuery,
   GetClinicQuery,
   GetMemberQuery,
@@ -15,11 +14,6 @@ import type {
 } from './generatedTypes';
 
 // clinic
-
-export type ClinicsOfGetMyClinics =
-  GetMyClinicsQuery['getMyClinics']['clinics'];
-
-export type MyClinic = NonNullable<FlatArray<ClinicsOfGetMyClinics, 0>>;
 
 export type ClinicOfGetMyClinic = GetClinicQuery['getClinic']['clinic'];
 export type ClinicOfGetMyClinicTruth = NonNullable<
@@ -62,9 +56,6 @@ export type MemberOfGetMember = NonNullable<
 >;
 
 export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'][0];
-
-// TODO : MyClinicMember로 이름 변경
-export type IMember = MyClinic['members'][0];
 
 export type MyMembersType = GetMyMembersQuery['getMyMembers']['members'];
 

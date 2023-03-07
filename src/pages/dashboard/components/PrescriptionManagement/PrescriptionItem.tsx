@@ -1,27 +1,30 @@
 import { Link } from 'react-router-dom';
 import { Pencil, TrashPot } from '../../../../svgs';
 import { cls } from '../../../../utils/commonUtils';
-import { useTogglePrescriptionActivate } from '../../../../hooks';
+import { useTogglePrescriptionActivation } from '../../../../hooks';
+import { setConfirm } from '../../../../store';
 import type {
   CardProps,
-  TogglePrescriptionActivateProps,
+  TogglePrescriptionActivationProps,
 } from '../../../../types/propsTypes';
-import { setConfirm } from '../../../../store';
 
-const PrescriptionItem = ({ prescription, showInactivate }: CardProps) => {
+const PrescriptionItem = ({
+  prescription,
+  seeInactivation: showInactivate,
+}: CardProps) => {
   const {
     id,
     name,
     price,
     requiredTime,
-    activate,
+    isActive,
     description,
     prescriptionAtoms,
   } = prescription;
 
-  const status = activate ? '활성' : '비활성';
+  const status = isActive ? '활성' : '비활성';
 
-  if (!showInactivate && !prescription.activate) return null;
+  if (!showInactivate && !isActive) return null;
 
   return (
     <div className="prescription-management__table-row border bg-white text-[#262850]">
@@ -41,14 +44,18 @@ const PrescriptionItem = ({ prescription, showInactivate }: CardProps) => {
       <div
         className={cls(
           'prescription-management__table-row-col6',
-          activate ? 'text-[#68BB89]' : 'text-[#AB0000]'
+          isActive ? 'text-[#68BB89]' : 'text-[#AB0000]'
         )}
       >
         {status}
       </div>
       <div className="prescription-management__table-row-col7 flex gap-7">
         <EditPrescription id={id} />
-        <TogglePrescriptionActivate id={id} name={name} activate={!!activate} />
+        <TogglePrescriptionActivation
+          id={id}
+          name={name}
+          isActive={!!isActive}
+        />
       </div>
     </div>
   );
@@ -62,20 +69,20 @@ const EditPrescription = ({ id }: { id: number }) => {
   );
 };
 
-const TogglePrescriptionActivate = ({
+const TogglePrescriptionActivation = ({
   id,
   name,
-  activate,
-}: TogglePrescriptionActivateProps) => {
-  const { toggleActivation } = useTogglePrescriptionActivate();
+  isActive,
+}: TogglePrescriptionActivationProps) => {
+  const { toggleActivation } = useTogglePrescriptionActivation();
   const invokeToggleActivation = () => {
-    toggleActivation(id, activate);
+    toggleActivation(id, isActive);
   };
 
-  const todo = activate ? '비활성' : '활성';
+  const todo = isActive ? '비활성' : '활성';
   const messages = [
     `처방을 ${todo} 합니다.`,
-    activate ? `${todo}되면 정보 수정이 불가능합니다.` : '',
+    isActive ? `${todo}되면 정보 수정이 불가능합니다.` : '',
   ];
   const buttonText = `${todo}하기`;
 
@@ -86,7 +93,7 @@ const TogglePrescriptionActivate = ({
       targetName: name,
       buttonText,
       hasCheck: true,
-      isPositive: !activate,
+      isPositive: !isActive,
     });
   };
 

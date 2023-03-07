@@ -7,14 +7,8 @@ const ClinicSelectorBtn = ({
 }: {
   member: FlatArray<MyMembersType, 1>;
 }) => {
-  const {
-    handleClick,
-    isEnable,
-    state,
-    clinicStatus,
-    clinicName,
-    isActivated,
-  } = useClinicSelectorBtn(member);
+  const { handleClick, isEnable, state, clinicStatus, clinicName, isActive } =
+    useClinicSelectorBtn(member);
 
   let memberState;
   if (state === '수락대기' || state === '탈퇴') {
@@ -30,7 +24,7 @@ const ClinicSelectorBtn = ({
         isEnable ? 'font-semibold' : '',
         state === '수락대기' ? 'order-1' : '',
         clinicName.startsWith('전용: ') ? 'order-4' : '',
-        isActivated ? 'order-3' : 'order-6',
+        isActive ? 'order-3' : 'order-6',
         state === '탈퇴' ? 'order-5' : ''
       )}
     >

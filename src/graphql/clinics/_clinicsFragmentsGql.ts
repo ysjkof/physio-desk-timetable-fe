@@ -5,7 +5,7 @@ export const COMMON_CLINIC_FIELDS = gql`
     id
     name
     type
-    isActivated
+    isActive
   }
 `;
 

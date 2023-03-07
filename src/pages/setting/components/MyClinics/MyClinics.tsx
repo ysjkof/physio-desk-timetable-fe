@@ -10,12 +10,12 @@ import { getMemberState, renameUseSplit } from '../../../../utils/commonUtils';
 import WaitingCard from './WaitingCard';
 import ClinicCard from './ClinicCard';
 import DisabledCard from './DisabledCard';
+import { useGetMyMembers, useMe } from '../../../../hooks';
+import { ClinicType } from '../../../../types/generatedTypes';
 import type {
   MyMembers,
   SettingOutletContext,
 } from '../../../../types/commonTypes';
-import { useGetMyMembers, useMe } from '../../../../hooks';
-import { ClinicType } from '../../../../types/generatedTypes';
 
 const MyClinics = () => {
   const { outletWidth } = useOutletContext<SettingOutletContext>();
@@ -36,7 +36,7 @@ const MyClinics = () => {
   };
 
   myMembers?.forEach((member) => {
-    if (!member.clinic.isActivated) {
+    if (!member.clinic.isActive) {
       members.폐쇄.push(member);
       return;
     }

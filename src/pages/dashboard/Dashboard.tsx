@@ -64,7 +64,7 @@ const LinkBtns = () => {
     <div className="flex flex-col text-sm">
       <LinkButton
         path="/dashboard/clinic/members"
-        isActivate={
+        isActive={
           pathname.startsWith('/dashboard/clinic/members') &&
           !pathname.endsWith('/invite')
         }
@@ -74,21 +74,21 @@ const LinkBtns = () => {
       </LinkButton>
       <LinkButton
         path="/dashboard/clinic/members/invite"
-        isActivate={pathname.startsWith('/dashboard/clinic/members/invite')}
+        isActive={pathname.startsWith('/dashboard/clinic/members/invite')}
       >
         <FontAwesomeIcon icon={faPlus} fontSize="1rem" />
         직원초대
       </LinkButton>
       <LinkButton
         path="/dashboard/clinic/prescriptions"
-        isActivate={pathname.startsWith('/dashboard/clinic/prescriptions')}
+        isActive={pathname.startsWith('/dashboard/clinic/prescriptions')}
       >
         <Medicine />
         처방등록 및 관리
       </LinkButton>
       <LinkButton
         path="/dashboard/clinic/statistics"
-        isActivate={pathname.startsWith('/dashboard/clinic/statistics')}
+        isActive={pathname.startsWith('/dashboard/clinic/statistics')}
       >
         <BrokenLine />
         통계
@@ -98,19 +98,17 @@ const LinkBtns = () => {
 };
 
 interface LinkButtonProps extends PropsWithChildren {
-  isActivate: boolean;
+  isActive: boolean;
   path: string;
 }
 
-const LinkButton = ({ children, path, isActivate }: LinkButtonProps) => {
+const LinkButton = ({ children, path, isActive }: LinkButtonProps) => {
   return (
     <Link
       to={path}
       className={cls(
         'flex items-center gap-2 rounded-md py-2.5 px-2 pl-4 font-bold',
-        isActivate
-          ? 'bg-[#EEEEFF] text-table-aside-bg'
-          : 'text-table-day-strong'
+        isActive ? 'bg-[#EEEEFF] text-table-aside-bg' : 'text-table-day-strong'
       )}
     >
       {children}

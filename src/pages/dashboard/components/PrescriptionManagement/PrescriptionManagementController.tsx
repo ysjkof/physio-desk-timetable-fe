@@ -3,14 +3,14 @@ import { TwoLabelSwitch } from '../../../../components';
 import CreatePrescriptionButton from './CreatePrescriptionButton';
 
 const PrescriptionManagementController = ({
-  seeInactivate,
-  setSeeInactivate,
+  seeInactivation,
+  setSeeInactivation,
 }: {
-  seeInactivate: boolean;
-  setSeeInactivate: Dispatch<React.SetStateAction<boolean>>;
+  seeInactivation: boolean;
+  setSeeInactivation: Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const toggleActivate = () => {
-    setSeeInactivate((prev) => !prev);
+  const toggleActivation = () => {
+    setSeeInactivation((prev) => !prev);
   };
 
   return (
@@ -19,8 +19,8 @@ const PrescriptionManagementController = ({
         <span>비활성 상태</span>
         <TwoLabelSwitch
           labels={['숨기기', '보기']}
-          onClick={toggleActivate}
-          isActivated={seeInactivate}
+          onClick={toggleActivation}
+          isActive={seeInactivation}
         />
       </div>
       <div>

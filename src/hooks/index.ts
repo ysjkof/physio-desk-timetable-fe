@@ -22,5 +22,5 @@ export * from './useNavCreatePatient';
 export * from './useRefuseInvitation';
 export * from './useLazySearchPatient';
 export * from './useHiddenUsers';
-export * from './useTogglePrescriptionActivate';
+export * from './useTogglePrescriptionActivation';
 export * from './useWindowSize';

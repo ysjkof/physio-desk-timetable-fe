@@ -14,7 +14,7 @@ export const GET_MY_MEMBERS_DOCUMENT = gql`
         clinic {
           id
           name
-          isActivated
+          isActive
         }
       }
     }

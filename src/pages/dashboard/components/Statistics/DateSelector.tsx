@@ -40,7 +40,7 @@ const DateSelector = ({ date, setDate }: DateSelectorProps) => {
             <Selectbox.Option
               key={year.getTime()}
               onClick={() => setYear(year.getFullYear())}
-              isActivate={isSameYear(year, date)}
+              isActive={isSameYear(year, date)}
             >
               {getStringYear(year)}
             </Selectbox.Option>
@@ -57,7 +57,7 @@ const DateSelector = ({ date, setDate }: DateSelectorProps) => {
             <Selectbox.Option
               key={idx}
               onClick={() => setMonth(idx)}
-              isActivate={idx === date.getMonth()}
+              isActive={idx === date.getMonth()}
             >
               {`${idx + 1}월`}
             </Selectbox.Option>

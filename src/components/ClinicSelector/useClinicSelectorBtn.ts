@@ -8,10 +8,10 @@ export const useClinicSelectorBtn = (member: FlatArray<MyMembersType, 1>) => {
     accepted,
     manager,
     staying,
-    clinic: { isActivated },
+    clinic: { isActive },
   } = member;
 
-  const clinicStatus = isActivated ? '' : '폐쇄';
+  const clinicStatus = isActive ? '' : '폐쇄';
   const state = getMemberState({ accepted, manager, staying });
   const clinicName = addStatusToUserName(member.clinic.name);
 
@@ -44,6 +44,6 @@ export const useClinicSelectorBtn = (member: FlatArray<MyMembersType, 1>) => {
     state,
     clinicStatus,
     clinicName,
-    isActivated,
+    isActive,
   };
 };

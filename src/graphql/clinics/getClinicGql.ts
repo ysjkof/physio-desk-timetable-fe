@@ -13,6 +13,7 @@ export const GET_CLINIC_DOCUMENT = gql`
         id
         name
         type
+        isActive
         members {
           ...CommonMemberFields
           color {

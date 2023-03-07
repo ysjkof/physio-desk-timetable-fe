@@ -2,7 +2,7 @@ import { cls } from '../utils/commonUtils';
 
 type Label = string;
 interface SwitchProps {
-  isActivated: boolean;
+  isActive: boolean;
   labels: [Label, Label];
   onClick: () => void;
 }
@@ -24,7 +24,7 @@ const SwitchLabel = ({ label }: SwitchLabelType) => {
   );
 };
 
-const MovingBox = ({ isActivated }: Pick<SwitchProps, 'isActivated'>) => {
+const MovingBox = ({ isActive }: Pick<SwitchProps, 'isActive'>) => {
   return (
     <div
       className={cls(
@@ -35,14 +35,14 @@ const MovingBox = ({ isActivated }: Pick<SwitchProps, 'isActivated'>) => {
         aria-hidden="true"
         className={cls(
           'h-full w-1/2 transform rounded-sm bg-white transition duration-200 ease-in-out',
-          isActivated ? 'translate-x-full' : 'translate-x-0'
+          isActive ? 'translate-x-full' : 'translate-x-0'
         )}
       />
     </div>
   );
 };
 
-const TwoLabelSwitch = ({ isActivated, labels, onClick }: SwitchProps) => {
+const TwoLabelSwitch = ({ isActive, labels, onClick }: SwitchProps) => {
   return (
     <div
       className="relative flex h-8 w-fit cursor-pointer select-none items-center justify-center rounded-sm border border-gray-200 bg-gray-200"
@@ -54,7 +54,7 @@ const TwoLabelSwitch = ({ isActivated, labels, onClick }: SwitchProps) => {
       {labels.map((label) => (
         <SwitchLabel key={label} label={label} />
       ))}
-      <MovingBox isActivated={isActivated} />
+      <MovingBox isActive={isActive} />
     </div>
   );
 };
