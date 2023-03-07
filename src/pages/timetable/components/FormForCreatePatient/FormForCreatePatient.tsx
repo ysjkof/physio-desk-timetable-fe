@@ -8,6 +8,7 @@ import { useCreatePatient } from '../../../../hooks';
 import { isValidDateFrom8Digit } from '../../../../utils/dateUtils';
 import type { FormForCreatePatientFields } from '../../../../types/formTypes';
 import type { CloseAction } from '../../../../types/propsTypes';
+import { Gender } from '../../../../types/commonTypes';
 
 const FormForCreatePatient = ({ closeAction }: CloseAction) => {
   const { createPatientMutation } = useCreatePatient();
@@ -57,7 +58,7 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
               <Checkbox
                 key={gender}
                 id={`create-patient-gender-${gender}`}
-                label={GENDER_KOR[gender as 'male' | 'female']}
+                label={GENDER_KOR[gender as Gender]}
                 type="radio"
                 value={gender}
                 register={register('gender', { required: '성별을 선택하세요' })}

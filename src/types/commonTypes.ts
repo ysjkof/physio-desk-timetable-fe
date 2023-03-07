@@ -195,3 +195,5 @@ export interface GraphData {
     reservationCount: number;
   };
 }
+
+export type Gender = 'male' | 'female';

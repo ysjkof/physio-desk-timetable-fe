@@ -9,7 +9,7 @@ import { PropsWithChildren } from 'react';
 import { getStringOfTime } from '../../../../utils/dateUtils';
 import { ChevronLeft, ChevronRight, PersonPlus } from '../../../../svgs';
 import { setPickedDate, useStore } from '../../../../store';
-import { cls } from '../../../../utils/commonUtils';
+import { cls, formatNumber } from '../../../../utils/commonUtils';
 import type { ISchedules } from '../../../../types/commonTypes';
 import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 import { LOCALE } from '../../../../constants/constants';
@@ -131,9 +131,7 @@ interface EventListItemProps {
 const EventListItem = ({ event }: EventListItemProps) => {
   const { user, patient, startDate, endDate, prescriptions } = event;
 
-  const patientNumber = new Intl.NumberFormat(LOCALE).format(
-    patient?.registrationNumber || 0
-  );
+  const patientNumber = formatNumber(patient?.registrationNumber);
 
   const prescriptionsName = prescriptions?.map((p) => p.name).join();
 

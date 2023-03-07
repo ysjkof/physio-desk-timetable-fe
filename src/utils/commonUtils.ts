@@ -1,3 +1,4 @@
+import { LOCALE } from '../constants/constants';
 import type { MemberStatusType } from '../types/commonTypes';
 import type { ReservationState } from '../types/generatedTypes';
 import type { MemberStatusOptions } from '../types/processedGeneratedTypes';
@@ -147,4 +148,8 @@ export function sortByBoolean(
   if (bool1 > bool2) return -1;
   if (bool1 < bool2) return 1;
   return 0;
+}
+
+export function formatNumber(number: number | undefined) {
+  return new Intl.NumberFormat(LOCALE).format(number || 0);
 }

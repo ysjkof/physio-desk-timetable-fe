@@ -1,6 +1,9 @@
 import { PropsWithChildren } from 'react';
 import { endOfYesterday } from 'date-fns';
-import { getStringFromReservationState } from '../../../../utils/commonUtils';
+import {
+  formatNumber,
+  getStringFromReservationState,
+} from '../../../../utils/commonUtils';
 import {
   getStringOfDateTime,
   getStringYearMonth,
@@ -10,7 +13,9 @@ import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
 import { Trash } from '../../../../svgs';
 import { useDeleteReservation } from '../../hooks';
+import { GENDER_KOR, LOCALE } from '../../../../constants/constants';
 import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
+import type { Gender } from '../../../../types/commonTypes';
 
 interface ReservationDetailProps {
   reservation: ReservationOfGetReservationsByInterval;
@@ -35,6 +40,14 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
     deleteReservation({ id, patientName: patient?.name, startDate });
   };
 
+  const patientNumber = formatNumber(patient?.registrationNumber);
+  const stringGender = patient?.gender
+    ? GENDER_KOR[patient.gender as Gender]
+    : '';
+  const stringBirthday = patient?.birthday
+    ? getStringYearMonth(new Date(patient?.birthday))
+    : '미입력';
+
   const isEnableEdit = !isBeforeDateB(endOfYesterday(), new Date(startDate));
 
   return (
@@ -48,10 +61,10 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
       </div>
       <div className="space-y-2 border-t border-navy pt-2">
         <DetailBox title="환자정보">
-          <li>등록번호 : {patient?.registrationNumber}</li>
+          <li>등록번호 : {patientNumber}</li>
           <li>이름 : {patient?.name}</li>
-          <li>성별 : {patient?.gender}</li>
-          <li>생일 : {getStringYearMonth(new Date(patient?.birthday))}</li>
+          <li>성별 : {stringGender}</li>
+          <li>생일 : {stringBirthday}</li>
         </DetailBox>
         <DetailBox title="담당치료사">
           <li>{user.name}</li>

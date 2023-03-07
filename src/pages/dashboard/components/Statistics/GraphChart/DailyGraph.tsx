@@ -3,6 +3,7 @@ import { VictoryArea, VictoryAxis, VictoryChart } from 'victory';
 import { Loading } from '../../../../../components';
 import type { DailyGraphProps } from '../../../../../types/propsTypes';
 import { LOCALE } from '../../../../../constants/constants';
+import { formatNumber } from '../../../../../utils/commonUtils';
 
 export const DailyGraph = ({ data, type }: DailyGraphProps) => {
   const total = data?.reduce((acc, cur) => acc + cur.y[type], 0) || 0;
@@ -32,9 +33,7 @@ export const DailyGraph = ({ data, type }: DailyGraphProps) => {
       >
         <h2>{TITLE[type]}</h2>
         <div className="flex items-center gap-8">
-          <span className="text-base">
-            전체 {new Intl.NumberFormat(LOCALE).format(total)}명
-          </span>
+          <span className="text-base">전체 {formatNumber(total)}명</span>
           <FormOfYDomainMax setYDomainMax={setYDomainMax} />
         </div>
       </div>

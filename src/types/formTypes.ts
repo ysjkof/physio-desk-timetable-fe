@@ -1,4 +1,5 @@
-import {
+import type { Gender } from './commonTypes';
+import type {
   CreatePrescriptionInput,
   UpdatePrescriptionInput,
 } from './generatedTypes';
@@ -20,7 +21,7 @@ export interface FormForDayoffFields {
 
 export interface FormForCreatePatientFields {
   name: string;
-  gender: 'male' | 'female';
+  gender: Gender;
   birthday?: number;
   memo?: string;
 }
