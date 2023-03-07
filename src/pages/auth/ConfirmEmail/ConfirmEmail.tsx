@@ -1,14 +1,15 @@
-import { gql, useApolloClient, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { MUOOL } from '../../../constants/constants';
 import { VERIFY_EMAIL_DOCUMENT } from '../../../graphql';
 import { useMe } from '../../../hooks';
+import { setAlert } from '../../../store';
+import { cacheUpdateUserVerified } from '../../../utils/apolloUtils';
 import type { VerifyEmailMutation } from '../../../types/generatedTypes';
 
 export default function ConfirmEmail() {
-  const client = useApolloClient();
   const navigate = useNavigate();
   const [meData] = useMe();
 
@@ -47,39 +48,27 @@ export default function ConfirmEmail() {
         },
         onCompleted(data) {
           const {
-            verifyEmail: { error },
+            verifyEmail: { error, ok },
           } = data;
 
           if (error) {
             return setMessage(error);
           }
 
-          if (meData) {
-            // Reading and Writing Data to the cache guide: writeFragment
-            // Fragment는 전체 DB에서 수정하고 싶은 일부분이다.
-            client.writeFragment({
-              // 캐시에서 User:1 이런식으로 돼 있기 때문에 아래처럼.
-              id: `User:${meData.id}`,
-              // 이하 cache로 보내서 업데이트 됐으면 하는 프래그먼트로. 무엇을 바꾸고 싶은지 선언
-              fragment: gql`
-                fragment VerifiedField on User {
-                  verified
-                }
-              `,
-              // 그 data를 보냄.
-              data: {
-                verified: true,
-              },
-            });
-          }
-          const successMessage = '이메일 인증됐습니다.';
+          if (!ok)
+            throw new Error('Calling ConfirmEmail(). response ok is falsy.');
 
-          if (confirm(`${successMessage}확인을 누르면 시간표로 이동합니다.`)) {
-            navigate('/');
+          if (meData) {
+            cacheUpdateUserVerified(meData.id);
           }
+
+          setAlert({
+            messages: ['이메일 인증됐습니다'],
+            isPositive: true,
+          });
+          navigate('/');
         },
       });
-      return;
     }
 
     intervalUpdateMessage('코드가 없습니다. 잘못된 접근입니다.');

@@ -20,6 +20,18 @@ export const cacheUpdateUserName = (id: number, name: string) => {
   });
 };
 
+export const cacheUpdateUserVerified = (id: number) => {
+  client.writeFragment({
+    id: `User:${id}`,
+    fragment: gql`
+      fragment VerifiedFields on User {
+        verified
+      }
+    `,
+    data: { verified: true },
+  });
+};
+
 interface CacheUpdatePersonalClinicNameProps {
   clinicId: number;
   clinicName: string;
