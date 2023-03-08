@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 import { addDays, startOfDay } from 'date-fns';
 import { TABLE_TIME_GAP } from './constants/constants';
 import {
@@ -61,7 +62,9 @@ const initialState: ZustandStoreState = {
   pickedReservation: undefined,
 };
 
-export const useStore = create<ZustandStoreState>(() => initialState);
+export const useStore = create<ZustandStoreState>()(
+  devtools(() => initialState)
+);
 
 // 전역
 
