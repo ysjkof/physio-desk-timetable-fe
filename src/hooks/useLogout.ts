@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { resetStore } from '../store';
 import { localStorageUtils } from '../utils/localStorageUtils';
+import { client } from '../apollo';
 
 export const useLogout = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ export const useLogout = () => {
   const logout = () => {
     localStorageUtils.remove({ key: 'token' });
     resetStore();
+    client.clearStore();
     navigate('/');
   };
 

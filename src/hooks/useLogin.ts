@@ -1,12 +1,15 @@
+import { useNavigate } from 'react-router-dom';
 import { setAuthToken } from '../store';
 import { localStorageUtils } from '../utils/localStorageUtils';
 
 export const useLogin = () => {
-  const login = (token: string, callback?: () => void) => {
+  const navigate = useNavigate();
+  const login = (token: string) => {
     localStorageUtils.set({ key: 'token', value: token });
+
     setAuthToken(token);
 
-    if (callback) callback();
+    navigate('/');
   };
 
   return login;

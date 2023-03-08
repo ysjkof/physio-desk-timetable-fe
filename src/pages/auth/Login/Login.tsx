@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { setAlert } from '../../../store';
 import { REG_EXP } from '../../../constants/regex';
@@ -12,7 +11,6 @@ import FormError from '../../../components/FormError';
 import type { LoginInput, LoginMutation } from '../../../types/generatedTypes';
 
 export default function Login() {
-  const navigate = useNavigate();
   const {
     register,
     getValues,
@@ -53,7 +51,7 @@ export default function Login() {
           }
 
           if (ok && token) {
-            return login(token, () => navigate('/'));
+            return login(token);
           }
         },
       });
