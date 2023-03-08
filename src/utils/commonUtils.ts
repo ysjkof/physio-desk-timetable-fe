@@ -153,3 +153,17 @@ export function sortByBoolean(
 export function formatNumber(number: number | undefined) {
   return new Intl.NumberFormat(LOCALE).format(number || 0);
 }
+
+export function parseJsonOrString(item: string) {
+  try {
+    return JSON.parse(item);
+  } catch (error) {
+    if (
+      error instanceof SyntaxError &&
+      error.message.endsWith('is not valid JSON')
+    ) {
+      return item;
+    }
+    throw error;
+  }
+}

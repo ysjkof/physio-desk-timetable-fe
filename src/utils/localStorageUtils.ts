@@ -1,4 +1,4 @@
-import { changeValueInArray } from './commonUtils';
+import { changeValueInArray, parseJsonOrString } from './commonUtils';
 import type {
   GenerateStorageKey,
   GetPrivateStorage,
@@ -33,7 +33,8 @@ class LocalStorage {
     const storageKey = this.#generateKey({ key, id, name });
     const item = localStorage.getItem(storageKey);
     if (!item || item === 'undefined') return null;
-    return JSON.parse(item);
+
+    return parseJsonOrString(item);
   }
 
   // 로그인 유저의 id와 name이다.
