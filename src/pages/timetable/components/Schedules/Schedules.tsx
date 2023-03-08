@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { compareDateMatch } from '../../../../utils/dateUtils';
 import DateTitle from './DateTitle';
 import ScheduleBox from './ScheduleBox';
 import MemberNames from './MemberNames';
 import { cls } from '../../../../utils/commonUtils';
 import { useStore } from '../../../../store';
-import EventList from './EventList';
 import type { SchedulesProps } from '../../../../types/propsTypes';
 
 const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
@@ -34,15 +33,11 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
     ? weekEvents
     : weekEvents && [weekEvents[pickedDate.getDay()]];
 
-  const containerStyle = isWeekCalendar
-    ? undefined
-    : { maxWidth: 'calc(100% - 24rem)' };
-
   return (
     <div className="flex">
       {schedules.map((day, i) => {
         return (
-          <div key={i} className="schedules__column" style={containerStyle}>
+          <div key={i} className="schedules__column">
             <PaddingWrapper>
               <DateTitle
                 date={day.date}
@@ -77,7 +72,6 @@ const Schedules = ({ weekEvents, labels }: SchedulesProps) => {
           </div>
         );
       })}
-      {!isWeekCalendar && <EventList events={schedules[0]} />}
     </div>
   );
 };

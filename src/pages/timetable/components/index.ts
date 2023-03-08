@@ -1,4 +1,5 @@
 import { CreatePatient } from './CreatePatient';
+import { EventList } from './EventList';
 import { ReserveOrDayoff } from './ReserveOrDayoff';
 import { Schedules } from './Schedules';
 import { TableController } from './TableController';
@@ -12,4 +13,5 @@ export {
   TableController,
   TimeLabels,
   TimetableTemplate,
+  EventList,
 };

@@ -6,15 +6,17 @@ import { useSchedules, useSubscriptions, useTableLabel } from './hooks';
 import { MUOOL } from '../../constants/constants';
 import {
   CreatePatient,
+  EventList,
   ReserveOrDayoff,
   Schedules,
   TableController,
   TimeLabels,
   TimetableTemplate,
 } from './components';
-import type { LocationState } from '../../types/commonTypes';
-import { setToast } from '../../store';
+import { setToast, useStore } from '../../store';
 import { useMe } from '../../hooks';
+
+import type { LocationState } from '../../types/commonTypes';
 
 const Loading = lazy(() => import('../../components/Loading'));
 
@@ -37,6 +39,9 @@ const TimeTable = () => {
       messages: ['이메일 인증을 하면 모든 기능을 사용할 수 있습니다.'],
     });
   }
+
+  const pickedDate = useStore((state) => state.pickedDate);
+
   useEffect(() => {
     clearLocationState();
   }, []);
@@ -56,6 +61,7 @@ const TimeTable = () => {
             <Schedules labels={labels} weekEvents={schedules} />
           </AnimatePresence>
         }
+        eventList={<EventList events={[schedules[pickedDate.getDay()]][0]} />}
       />
       {locationState?.createReservation && <ReserveOrDayoff />}
       {locationState?.createPatient && <CreatePatient />}

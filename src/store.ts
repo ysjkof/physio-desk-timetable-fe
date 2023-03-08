@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { addDays } from 'date-fns';
+import { addDays, startOfDay } from 'date-fns';
 import { TABLE_TIME_GAP } from './constants/constants';
 import {
   localStorageUtils,
@@ -57,7 +57,7 @@ const initialState: ZustandStoreState = {
     gap: TABLE_TIME_GAP,
   },
   hiddenUsers: new Set(),
-  pickedDate: new Date(),
+  pickedDate: startOfDay(new Date()),
   pickedReservation: undefined,
 };
 

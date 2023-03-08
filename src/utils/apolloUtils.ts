@@ -7,7 +7,7 @@ import type {
   ReservationState,
 } from '../types/generatedTypes';
 import type {
-  MyClinic,
+  ClinicOfGetMyClinicTruth,
   UpdatePrescriptionVariables,
 } from '../types/processedGeneratedTypes';
 import { MyMembersType } from '../types/processedGeneratedTypes';
@@ -118,7 +118,7 @@ export const cacheUpdateReservationState = (
   });
 };
 
-export const cacheAddClinicToMyMembers = (clinic: MyClinic) => {
+export const cacheAddClinicToMyMembers = (clinic: ClinicOfGetMyClinicTruth) => {
   client.cache.updateQuery<GetMyMembersQuery>(
     { query: GET_MY_MEMBERS_DOCUMENT },
     (cacheData) => {
@@ -160,7 +160,7 @@ export const cacheUpdateDeleteMemberOfGetMyMembers = (memberId: number) => {
   );
 };
 
-export const cacheUpdateMemberOfMe = (clinic: MyClinic) => {
+export const cacheUpdateMemberOfMe = (clinic: ClinicOfGetMyClinicTruth) => {
   client.cache.updateQuery<MeQuery>({ query: ME_DOCUMENT }, (cacheData) => {
     if (!cacheData?.me.members) {
       throw new Error(

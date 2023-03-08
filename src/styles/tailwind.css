@@ -181,11 +181,26 @@
   .schedules__member-name-title {
     @apply relative mb-1 flex h-9 gap-2;
   }
+  .schedules__member-name-item {
+    @apply flex w-full min-w-[6rem] flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium;
+  }
   .schedules__date-title {
     @apply mb-1 flex w-full cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap bg-table-day-light py-0.5 px-2 text-base text-table-day-color hover:bg-gray-200;
   }
   .schedules__each-user-column {
     @apply relative min-w-[6rem] divide-y divide-table-line bg-table-bg hover:bg-gray-200/50;
+  }
+  .event-list {
+    @apply flex flex-col pl-2 pr-6;
+  }
+  .event-list__date-btn {
+    @apply mb-2 flex h-9 w-full items-center justify-center border-b-2 font-medium;
+  }
+  .event-list__change-day-btn {
+    @apply flex h-9 grow items-center justify-center whitespace-nowrap rounded-sm border px-1 hover:border-gray-400;
+  }
+  .event-list__list-item {
+    @apply flex items-center gap-4 rounded-lg border border-l-4 bg-white px-3 py-1.5 text-sm;
   }
 
   .dashboard-container {

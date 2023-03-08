@@ -68,7 +68,7 @@ const MemberNameItem = ({ member, hasSetting }: MemberNameItemProps) => {
   return (
     <div
       key={id}
-      className="flex w-full min-w-[6rem] flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium"
+      className="schedules__member-name-item"
       style={{ borderBottomColor: color || DEFAULT_COLOR }}
     >
       <span className="h-4 overflow-hidden text-ellipsis whitespace-nowrap">

@@ -8,8 +8,10 @@ const TimetableTemplate = ({
   nav,
   labels,
   columns,
+  eventList,
 }: TimetableTemplateProps) => {
   const isBigGlobalAside = useStore((state) => state.isBigGlobalAside);
+  const isWeekCalendar = useStore((state) => state.isWeekCalendar);
 
   const { height, width, changeHeight, changeWidth } = useWindowSize(true);
   const navRef = useRef<HTMLDivElement>(null);
@@ -36,21 +38,26 @@ const TimetableTemplate = ({
       </div>
       <div
         id="timetable__body"
-        className="flex overflow-y-scroll"
+        className="flex"
         style={{
           height: `${height - extraMargin}px`,
           width: `${width}px`,
         }}
       >
-        <div
-          id="timetable__labels"
-          className="sticky left-0 z-[32] bg-white pt-[73px]"
-        >
-          {labels}
+        <div className="flex h-full w-full overflow-y-scroll">
+          <div
+            id="timetable__labels"
+            className="sticky left-0 z-[32] bg-white pt-[73px]"
+          >
+            {labels}
+          </div>
+          <div id="timetable__columns" className="">
+            {columns}
+          </div>
         </div>
-        <div id="timetable__columns" className="w-full">
-          {columns}
-        </div>
+        {!isWeekCalendar && (
+          <div className="h-full w-[26rem] overflow-hidden">{eventList}</div>
+        )}
       </div>
     </motion.div>
   );

@@ -16,6 +16,8 @@ const ScheduleBox = ({
 }: ScheduleBoxProps) => {
   const hiddenUsers = useStore((state) => state.hiddenUsers);
 
+  const height = (labels.length - 1) * TABLE_CELL_HEIGHT;
+
   return (
     <div
       className={cls(
@@ -38,7 +40,7 @@ const ScheduleBox = ({
               'schedules__each-user-column',
               state === '탈퇴' ? 'border bg-gray-200/50 hover:bg-none' : ''
             )}
-            style={{ height: labels.length * TABLE_CELL_HEIGHT }}
+            style={{ height }}
           >
             {state === '탈퇴' || (
               <ReservationButtons

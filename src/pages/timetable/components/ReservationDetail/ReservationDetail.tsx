@@ -32,6 +32,7 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
     memo,
     state,
     id,
+    isFirst,
   } = reservation;
 
   const { deleteReservation } = useDeleteReservation();
