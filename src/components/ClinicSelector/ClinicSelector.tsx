@@ -13,7 +13,7 @@ const ClinicSelector = () => {
 
   return (
     <div className="clinic-selector">
-      <Selectbox label={renameUseSplit(clinic?.name || '')}>
+      <Selectbox label={renameUseSplit(clinic?.name || '')} isBigTitle>
         <Selectbox.Options>
           {myMember?.map((member) => (
             <Selectbox.Option key={member.id} onClick={() => {}}>

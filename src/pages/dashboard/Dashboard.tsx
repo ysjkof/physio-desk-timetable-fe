@@ -17,7 +17,9 @@ const Dashboard = () => {
         <LinkBtns />
       </div>
       <div className="flex w-full flex-col divide-y">
-        <ClinicSelector />
+        <div className="flex justify-center p-3">
+          <ClinicSelector />
+        </div>
         <Outlet />
       </div>
     </div>
