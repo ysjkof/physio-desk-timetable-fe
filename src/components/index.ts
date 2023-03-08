@@ -12,7 +12,6 @@ import DateForm from './DateForm';
 import Timepicker from './Timepicker';
 import Modal from './Modal';
 import Checkbox from './Checkbox';
-import GlobalLayout from './GlobalLayout';
 import Warning from './Warning';
 import Confirm from './Confirm';
 import Loading from './Loading';
@@ -27,6 +26,7 @@ import { Input, InputWithRef, Textarea } from './Input';
 import { GlobalNavBar } from './GlobalNavBar';
 import { GlobalAside } from './GlobalAside';
 import { GlobalFooter } from './GlobalFooter';
+import { GlobalLayout, SignInLayout, SignOutLayout } from './GlobalLayout';
 
 export {
   ButtonOfPages,
@@ -60,4 +60,6 @@ export {
   GlobalFooter,
   GlobalAside,
   GlobalNavBar,
+  SignInLayout,
+  SignOutLayout,
 };
