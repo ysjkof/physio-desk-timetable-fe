@@ -62,9 +62,10 @@ const initialState: ZustandStoreState = {
   pickedReservation: undefined,
 };
 
-export const useStore = create<ZustandStoreState>()(
-  devtools(() => initialState)
-);
+export const useStore =
+  process.env.NODE_ENV !== 'production'
+    ? create<ZustandStoreState>()(devtools(() => initialState))
+    : create<ZustandStoreState>(() => initialState);
 
 // 전역
 
