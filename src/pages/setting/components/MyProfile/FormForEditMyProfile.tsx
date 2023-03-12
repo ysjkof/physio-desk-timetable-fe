@@ -46,7 +46,7 @@ const FormForEditMyProfile = ({ toggleEditMode }: ToggleEditMode) => {
           type="submit"
           className="w-full rounded-md bg-cst-blue py-6 text-base font-medium text-white"
         >
-          만들기
+          적용하기
         </MenuButton>
       </div>
     </form>

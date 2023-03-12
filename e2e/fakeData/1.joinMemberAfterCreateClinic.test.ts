@@ -12,10 +12,6 @@ const EMAIL = [
 const PASSWORD = '123';
 const CLINIC_NAME = '빕트 정형외과의원';
 
-test.afterAll(async ({ page }) => {
-  await page.close();
-});
-
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5173');
 });
@@ -58,9 +54,7 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
     await alertCloseBtn.click();
   }
 
-  const logoutBtn = page.getByRole('button').getByText('로그아웃');
-  await logoutBtn.click();
-  await linkToLogin.click();
+  await page.getByRole('button').getByText('로그아웃').click();
 
   // EMAIL[0]과 EMAIL[마지막] 제외 초대 수락한다
 
@@ -99,4 +93,6 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
   await checkAgree.click();
   await confirmModal.getByRole('button').getByText('탈퇴하기').click();
   await expect(alertModal).toHaveText(/병원에서 탈퇴했습니다/);
+
+  await page.close();
 });

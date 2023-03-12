@@ -32,6 +32,7 @@ const WaitingCard = ({ memberId, icon, name, createAt }: WaitingCardProps) => {
       targetName: name,
       buttonText: '수락하기',
       hasCheck: true,
+      isPositive: true,
     });
   };
 

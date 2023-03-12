@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { DEFAULT_COLOR } from '../../../../constants/constants';
 import { CheckableButton } from '../../../../components';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
 import { cls, getMemberState } from '../../../../utils/commonUtils';
