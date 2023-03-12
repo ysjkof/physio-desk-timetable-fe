@@ -36,6 +36,11 @@ export class Schedules {
   }
 
   getMembers(): MemberWithEvent[] {
+    // console.log(
+    //   'this.#value >>>',
+    //   this.#value.find((v) => v.members.find((m) => m.user.name === '양석진'))
+    // );
+    // TODO: 멤버 고치기
     const initValue: MemberWithEvent[] = [];
     return this.#value.reduce((cur, acc) => {
       if (cur.length >= acc.members.length) return cur;

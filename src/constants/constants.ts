@@ -66,4 +66,4 @@ export const LABEL_VISIBLE_MINUTES = ['00', '30'];
 
 export const LABEL_COLORS = ['#333779', '#DDDDEF'];
 
-export const LATEST_STORAGE_VERSION = new Date('2023-02-12T00:00:00.000Z');
+export const LATEST_STORAGE_VERSION = new Date('2023-03-08T00:00:00.000Z');

@@ -24,6 +24,11 @@ export const useSchedules = () => {
     });
 
     setSchedules(schedulesClass.get());
+    console.log(
+      'schedulesClass.getMembers() >>>',
+      schedulesClass.getMembers().flatMap((a) => a.user.name)
+    );
+
     setMembers(schedulesClass.getMembers());
   }, [reservations, clinic]);
 
