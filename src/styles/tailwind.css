@@ -270,7 +270,7 @@
     @apply sticky top-0 flex w-fit flex-col items-center rounded-md border border-[#A0A0C2] bg-white p-4 pb-0;
   }
   .table-chart__card {
-    @apply rounded-md border-2 border-[#A0A0C2] px-2 py-1.5 shadow-md last:mb-8;
+    @apply cursor-pointer select-none rounded-md border-2 border-[#A0A0C2] px-2 py-1.5 shadow-md last:mb-8;
   }
   .table-chart__card-field {
     @apply w-10 text-center text-sm text-[#A0A0C2] first:w-12 [&:nth-child(3)]:w-12;

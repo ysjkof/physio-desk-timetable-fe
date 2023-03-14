@@ -13,10 +13,10 @@ interface TableChartCardProps extends PrimaryCountListItem {
 
 const TableChartCard = (props: TableChartCardProps) => {
   const {
-    cancel,
-    newPatient,
-    noshow,
-    reservationCount,
+    cancel = 0,
+    newPatient = 0,
+    noshow = 0,
+    reservationCount = 0,
     query,
     isActive,
     onClick,

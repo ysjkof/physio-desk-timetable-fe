@@ -66,6 +66,7 @@ export const useStatistics = () => {
 
   useEffect(() => {
     if (!data) return;
+    if (!clinic?.members) throw '병원의 정보가 없습니다';
     const { dailyReports, prescriptions, visitRates } = data.getStatistics;
 
     setCountList(getReportsByUser(dailyReports));

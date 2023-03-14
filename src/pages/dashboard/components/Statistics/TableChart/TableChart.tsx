@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import TableChartCard from './TableChartCard';
 import { useDebouncedCallback, useGetClinic } from '../../../../../hooks';
 import { CheckableButton, SearchInput } from '../../../../../components';
+import { getMemberState } from '../../../../../utils/commonUtils';
 import type { TableChartProps } from '../../../../../types/propsTypes';
 
 const TableChart = ({
@@ -13,14 +14,21 @@ const TableChart = ({
   const [clinic] = useGetClinic();
   const [query, setQuery] = useState('');
 
-  const arrayedCountList = Object.entries(countList || {});
+  const membersWithoutWaiting = clinic?.members.filter(
+    ({ staying, accepted, manager }) =>
+      getMemberState({ staying, accepted, manager }) === '수락대기'
+        ? false
+        : true
+  );
 
-  let pickedCount = arrayedCountList.reduce((acc, [key]) => {
-    const numKey = Number.parseInt(key, 10);
-    return acc + (disabledIds.has(numKey) ? 0 : 1);
-  }, 0);
+  let pickedCount =
+    membersWithoutWaiting?.reduce((acc, member) => {
+      return acc + (disabledIds.has(member.user.id) ? 0 : 1);
+    }, 0) || 0;
 
-  const checked = arrayedCountList.length !== disabledIds.size;
+  const checked = Boolean(
+    membersWithoutWaiting && membersWithoutWaiting.length !== disabledIds.size
+  );
 
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -44,25 +52,24 @@ const TableChart = ({
             label="전체"
             onClick={toggleAllUser}
           />
-          {pickedCount} / {arrayedCountList.length}명
+          {pickedCount} / {membersWithoutWaiting?.length}명
         </div>
         {countList &&
-          arrayedCountList.map(([key, value]) => {
-            const numKey = Number.parseInt(key, 10);
-            pickedCount += !disabledIds.has(numKey) ? 1 : 0;
-            const color = clinic?.members.find(
-              (member) => member.user.id === +key
-            )?.color?.value;
+          membersWithoutWaiting?.map((member) => {
+            const {
+              user: { id: userId },
+            } = member;
+
+            const countListItem = countList[userId];
 
             return (
               <TableChartCard
-                key={key}
-                userId={key}
-                {...value}
+                key={userId}
+                member={member}
+                {...countListItem}
                 query={query}
-                isActive={!disabledIds.has(numKey)}
-                onClick={() => toggleUserId(numKey)}
-                color={color}
+                isActive={!disabledIds.has(userId)}
+                onClick={() => toggleUserId(userId)}
               />
             );
           })}
