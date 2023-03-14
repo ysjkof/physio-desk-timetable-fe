@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { RgbStringColorPicker } from 'react-colorful';
-import { cls, getMemberState } from '../../../../utils/commonUtils';
+import { cls } from '../../../../utils/commonUtils';
 import { useStore } from '../../../../store';
 import { EllipsisVertical } from '../../../../svgs';
 import { MenuButton, Modal } from '../../../../components';
 import { useMe } from '../../../../hooks';
 import { DEFAULT_COLOR } from '../../../../constants/constants';
 import { useUpdateMemberColor } from '../../../../hooks';
+import { Member } from '../../../../models';
 import type { MemberWithEvent } from '../../../../types/commonTypes';
 import type { MemberNameProps } from '../../../../types/propsTypes';
 
@@ -41,12 +42,12 @@ interface MemberNameItemProps {
   member: MemberWithEvent;
   hasSetting: boolean;
 }
-const MemberNameItem = ({ member, hasSetting }: MemberNameItemProps) => {
-  const { id, accepted, manager, staying, user } = member;
+const MemberNameItem = (props: MemberNameItemProps) => {
+  const { member: _member, hasSetting } = props;
 
-  const state = getMemberState({ accepted, manager, staying });
+  const member = new Member(_member);
 
-  const [color, setColor] = useState(member.color?.value);
+  const [color, setColor] = useState(member.getColor());
   const selectColor = (newColor: string) => {
     setColor(newColor);
   };
@@ -55,29 +56,28 @@ const MemberNameItem = ({ member, hasSetting }: MemberNameItemProps) => {
   const openSetting = () => setOpen(true);
   const closeSetting = () => {
     setOpen(false);
-    setColor(member.color?.value);
+    setColor(member.getColor());
   };
 
   const { updateMemberColor } = useUpdateMemberColor();
 
   const update = () => {
-    if (!color || color === member.color?.value) return;
-    updateMemberColor(id, color);
+    if (!color || color === member.getColor()) return;
+    updateMemberColor(_member.id, color);
   };
 
   return (
     <div
-      key={id}
       className="schedules__member-name-item"
       style={{ borderBottomColor: color || DEFAULT_COLOR }}
     >
       <span className="h-4 overflow-hidden text-ellipsis whitespace-nowrap">
-        {state === '탈퇴' && '탈퇴'}
+        {member.getState() === '탈퇴' && '탈퇴'}
       </span>
 
       <div className="flex justify-between">
         <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-          {user.name}
+          {member.getName()}
         </span>
         {hasSetting && (
           <button onClick={openSetting}>

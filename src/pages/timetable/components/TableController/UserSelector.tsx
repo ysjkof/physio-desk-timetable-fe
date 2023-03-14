@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { CheckableButton } from '../../../../components';
 import { ChevronLeft, ChevronRight } from '../../../../svgs';
-import { cls, getMemberState } from '../../../../utils/commonUtils';
+import { cls } from '../../../../utils/commonUtils';
 import { toggleHiddenUsers, useStore } from '../../../../store';
+import { Member } from '../../../../models';
 import type { UserSelectorProps } from '../../../../types/propsTypes';
 
 const UserSelector = ({ members }: UserSelectorProps) => {
@@ -26,22 +27,17 @@ const UserSelector = ({ members }: UserSelectorProps) => {
       />
       {isSpreading && (
         <div className="flex flex-wrap items-center gap-2">
-          {members.map((member, i) => {
-            const { accepted, manager, staying } = member;
-            const state = getMemberState({ accepted, manager, staying });
-
-            let memberName = member.user.name;
-            if (state === '탈퇴') {
-              memberName = `${memberName} (탈퇴)`;
-            }
+          {members.map((_member, i) => {
+            const member = new Member(_member);
+            const nameAndState = member.getFormattedNameWithStateIfWithdrawn();
 
             return (
               <CheckableButton
                 key={i}
-                color={member.color?.value}
-                checked={isShowUser(member.id)}
-                label={memberName}
-                onClick={() => toggleUsers(member.id)}
+                color={_member.color?.value}
+                checked={isShowUser(_member.id)}
+                label={nameAndState}
+                onClick={() => toggleUsers(_member.id)}
                 hasBorder
               />
             );

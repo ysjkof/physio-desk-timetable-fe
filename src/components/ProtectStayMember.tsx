@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from 'react';
 import { useGetMyMembers } from '../hooks';
-import { getMemberState } from '../utils/commonUtils';
+import { getMemberState, isMemberActive } from '../utils/commonUtils';
 
 interface ProtectStayMemberProps extends PropsWithChildren {
   clinicId: number | undefined;
@@ -23,7 +23,7 @@ export const ProtectStayMember = ({
       })
     : null;
 
-  if (status === '탈퇴' || status === '수락대기') return <>{fallback}</>;
+  if (status && !isMemberActive(status)) return <>{fallback}</>;
 
   return <>{children}</>;
 };

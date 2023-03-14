@@ -1,25 +1,28 @@
 import { Link, useParams } from 'react-router-dom';
-import { cls, getMemberState } from '../../../../utils/commonUtils';
+import { cls } from '../../../../utils/commonUtils';
+import { Member } from '../../../../models';
 import type { MemberOfClient } from '../../../../types/commonTypes';
 
 interface MemberListItemProps {
   member: MemberOfClient;
 }
 
-const MemberListItem = ({ member }: MemberListItemProps) => {
-  const memberState = getMemberState({
-    staying: member.staying,
-    accepted: member.accepted,
-    manager: member.manager,
-  });
+const MemberListItem = (props: MemberListItemProps) => {
+  const { member: _member } = props;
+
+  const member = new Member(_member);
+  const memberState = member.getState();
+  const memberName = member.getName();
+  const color = member.getColor();
 
   const { memberId } = useParams();
-  const enabled = member.id === Number(memberId);
+  const _memberId = '' + _member.id;
+  const enabled = _memberId === memberId;
 
   return (
-    <li key={member.id}>
+    <li key={_memberId}>
       <Link
-        to={`${member.id}`}
+        to={_memberId}
         className={cls(
           'flex items-center justify-between gap-4 py-4 px-4 text-base',
           enabled ? 'bg-[#EEEEFF]' : ''
@@ -27,13 +30,11 @@ const MemberListItem = ({ member }: MemberListItemProps) => {
       >
         <span
           className="aspect-square w-9 rounded-md bg-red-200 text-center text-white"
-          style={{ backgroundColor: member.color?.value }}
+          style={{ backgroundColor: color }}
         >
-          {member.user.name.substring(0, 1)}
+          {memberName.substring(0, 1)}
         </span>
-        <span className="basis-full text-table-aside-bg">
-          {member.user.name}
-        </span>
+        <span className="basis-full text-table-aside-bg">{memberName}</span>
         <span
           className={cls(
             'w-24',

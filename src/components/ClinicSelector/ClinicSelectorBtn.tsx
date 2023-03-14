@@ -1,4 +1,4 @@
-import { cls } from '../../utils/commonUtils';
+import { cls, isMemberActive } from '../../utils/commonUtils';
 import { useClinicSelectorBtn } from './useClinicSelectorBtn';
 import type { MyMembersType } from '../../types/processedGeneratedTypes';
 
@@ -10,10 +10,7 @@ const ClinicSelectorBtn = ({
   const { handleClick, isEnable, state, clinicStatus, clinicName, isActive } =
     useClinicSelectorBtn(member);
 
-  let memberState;
-  if (state === '수락대기' || state === '탈퇴') {
-    memberState = state;
-  }
+  const memberState = !isMemberActive(state) && state;
 
   return (
     <button

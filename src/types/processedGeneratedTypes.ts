@@ -55,6 +55,8 @@ export type MemberOfGetMember = NonNullable<
   GetMemberQuery['getMember']['member']
 >;
 
+export type MembersOfGetMyClinic = ClinicOfGetMyClinicTruth['members'];
+
 export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'][0];
 
 export type MyMembersType = GetMyMembersQuery['getMyMembers']['members'];

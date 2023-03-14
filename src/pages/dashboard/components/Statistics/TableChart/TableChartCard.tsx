@@ -1,14 +1,14 @@
-import { useGetClinic } from '../../../../../hooks';
 import { cls } from '../../../../../utils/commonUtils';
 import { CheckableButton } from '../../../../../components';
+import { Member } from '../../../../../models';
 import type { PrimaryCountListItem } from '../../../../../types/commonTypes';
+import type { MemberOfGetMyClinic } from '../../../../../types/processedGeneratedTypes';
 
 interface TableChartCardProps extends PrimaryCountListItem {
-  userId: string;
+  member: MemberOfGetMyClinic;
   query: string;
   isActive: boolean;
   onClick: () => void;
-  color: string | undefined;
 }
 
 const TableChartCard = (props: TableChartCardProps) => {
@@ -17,25 +17,21 @@ const TableChartCard = (props: TableChartCardProps) => {
     newPatient,
     noshow,
     reservationCount,
-    userId,
     query,
     isActive,
     onClick,
-    color,
+    member: _member,
   } = props;
 
-  const [myClinic] = useGetClinic();
-
-  const name =
-    myClinic?.members.find(
-      (member) => member.user.id === Number.parseInt(userId, 10)
-    )?.user.name || '';
+  const member = new Member(_member);
+  const nameAndState = member.getFormattedNameWithStateIfWithdrawn();
+  const color = member.getColor();
 
   return (
     <div
       className={cls(
         'table-chart__card',
-        query && !new RegExp(query).test(name) ? 'hidden' : '',
+        query && !new RegExp(query).test(member.getName()) ? 'hidden' : '',
         isActive ? '' : 'border-transparent'
       )}
       onClick={onClick}
@@ -43,7 +39,7 @@ const TableChartCard = (props: TableChartCardProps) => {
       <div className="flex items-center gap-1 px-1.5 text-sm font-medium">
         <CheckableButton
           checked={isActive}
-          label={name}
+          label={nameAndState}
           onClick={onClick}
           color={color}
         />

@@ -36,6 +36,11 @@ export function getStringFromReservationState(
   return korWord[state];
 }
 
+export function isMemberActive(state: MemberStatusType) {
+  if (state === '탈퇴' || state === '수락대기') return false;
+  return true;
+}
+
 export function getMemberState({
   staying,
   accepted,

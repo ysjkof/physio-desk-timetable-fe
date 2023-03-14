@@ -1,9 +1,10 @@
-import { cls, getMemberState } from '../../../../utils/commonUtils';
+import { cls } from '../../../../utils/commonUtils';
 import TimeIndicatorBar from '../TimeIndicatorBar';
 import ReservationButtons from './ReserveButtons';
 import EventBoxContainer from './EventBoxContainer';
 import { useStore } from '../../../../store';
 import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
+import { Member } from '../../../../models';
 import type { ScheduleBoxProps } from '../../../../types/propsTypes';
 
 const ScheduleBox = ({
@@ -26,16 +27,17 @@ const ScheduleBox = ({
       )}
     >
       <TimeIndicatorBar isActive={enableTimeIndicator} />
-      {members.map((member) => {
-        const { id, accepted, manager, staying } = member;
+      {members.map((_member) => {
+        const member = new Member(_member);
+        if (hiddenUsers.has(_member.id)) return null;
 
-        if (hiddenUsers.has(id)) return null;
-
-        const state = getMemberState({ accepted, manager, staying });
+        const userId = _member.user.id;
+        const state = member.getState();
+        const color = member.getColor();
 
         return (
           <div
-            key={member.id}
+            key={userId}
             className={cls(
               'schedules__each-user-column',
               state === '탈퇴' ? 'border bg-gray-200/50 hover:bg-none' : ''
@@ -47,16 +49,16 @@ const ScheduleBox = ({
                 labelMaxLength={labelMaxLength}
                 date={date}
                 labels={labels}
-                userId={member.user.id}
-                color={member.color?.value}
+                userId={userId}
+                color={color}
               />
             )}
             <EventBoxContainer
               labelMaxLength={labelMaxLength}
               labels={labels}
-              events={member.events}
+              events={_member.events}
               isSingleUser={userLength === 1}
-              color={member.color?.value}
+              color={color}
             />
           </div>
         );

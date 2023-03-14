@@ -1,3 +1,4 @@
+export * from './Member';
 export * from './Calendar';
 export * from './PickedPrescriptions';
 export * from './Schedules';
