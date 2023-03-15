@@ -1,5 +1,4 @@
 import { type PropsWithChildren } from 'react';
-import { useOutletContext } from 'react-router-dom';
 import {
   BuildingLarge,
   BuildingLargeWithBan,
@@ -12,14 +11,9 @@ import ClinicCard from './ClinicCard';
 import DisabledCard from './DisabledCard';
 import { useGetMyMembers, useMe } from '../../../../hooks';
 import { ClinicType } from '../../../../types/generatedTypes';
-import type {
-  MyMembers,
-  SettingOutletContext,
-} from '../../../../types/commonTypes';
+import type { MyMembers } from '../../../../types/commonTypes';
 
 const MyClinics = () => {
-  const { outletWidth } = useOutletContext<SettingOutletContext>();
-
   const [meData] = useMe();
   const personalClinicId = meData?.members?.find(
     (member) => member.clinic.type === ClinicType.Personal
@@ -49,10 +43,7 @@ const MyClinics = () => {
   });
 
   return (
-    <div
-      style={{ width: outletWidth }}
-      className="overflow-y-scroll px-14 py-10"
-    >
+    <div className="h-full overflow-y-scroll px-14 py-10">
       <Title />
       <div className="mt-10 flex flex-col gap-10">
         <ClinicsContainer title="수락대기 병원">

@@ -1,12 +1,8 @@
-import { useOutletContext } from 'react-router-dom';
 import FormForCreateClinic from './FormForCreateClinic';
-import type { SettingOutletContext } from '../../../../types/commonTypes';
 
 const CreateClinic = () => {
-  const { outletWidth } = useOutletContext<SettingOutletContext>();
-
   return (
-    <div style={{ width: outletWidth }} className="px-14 py-10">
+    <div className="px-14 py-10">
       <Title />
       <div className="mt-10 flex w-[460px] flex-col gap-4">
         <FormForCreateClinic />

@@ -204,7 +204,7 @@
   }
 
   .dashboard-container {
-    @apply flex h-full w-[200px] flex-col gap-y-10 border-r border-r-table-line px-4 pt-8;
+    @apply flex h-full flex-col gap-y-10 border-r border-r-table-line px-4 pt-8;
   }
 
   .member-management {

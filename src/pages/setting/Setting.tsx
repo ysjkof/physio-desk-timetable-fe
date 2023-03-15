@@ -3,17 +3,24 @@ import { PropsWithChildren } from 'react';
 import { useMe, useWindowSize } from '../../hooks';
 import { cls } from '../../utils/commonUtils';
 import { Building, BuildingPlus, User } from '../../svgs';
+import { DASHBOARD_CONTAINER_WIDTH } from '../../constants/constants';
 
 const Setting = () => {
   const { width } = useWindowSize(true);
-  const outletWidth = width - 200;
+  const outletWidth = width - DASHBOARD_CONTAINER_WIDTH;
+
   return (
     <div className="flex text-base" style={{ width }}>
-      <div className="dashboard-container">
+      <div
+        className="dashboard-container"
+        style={{ width: DASHBOARD_CONTAINER_WIDTH }}
+      >
         <ProfileWithImage />
         <MenuContainer />
       </div>
-      <Outlet context={{ outletWidth }} />
+      <div style={{ width: outletWidth }}>
+        <Outlet />
+      </div>
     </div>
   );
 };
@@ -21,20 +28,9 @@ const Setting = () => {
 const ProfileWithImage = () => {
   const [meData] = useMe();
 
-  const profileImageUrl = 'maybe-profile-image.png';
-
   return (
     <div className="flex flex-col items-center">
       <div className="relative mb-2 h-20 w-20 overflow-hidden rounded-full bg-gray-200">
-        <img
-          src={profileImageUrl}
-          className="position-center absolute z-10 h-full w-full bg-white bg-cover p-3"
-          alt="프로필 사진"
-          onError={(event) => {
-            // eslint-disable-next-line no-param-reassign
-            event.currentTarget.style.display = 'none';
-          }}
-        />
         <User className="position-center-x absolute top-3 h-full w-4/6 fill-white stroke-white" />
       </div>
       <div className="text-base">
