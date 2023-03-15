@@ -40,7 +40,7 @@ const ScheduleBox = ({
             key={userId}
             className={cls(
               'schedules__each-user-column',
-              state === '탈퇴' ? 'border bg-gray-200/50 hover:bg-none' : ''
+              state === '탈퇴' ? 'border bg-gray-200/50' : ''
             )}
             style={{ height }}
           >
