@@ -2,28 +2,23 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCancel,
-  faCommentSlash,
-  faExclamation,
-  faLock,
-} from '@fortawesome/free-solid-svg-icons';
+import { faExclamation, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
   DEFAULT_COLOR,
   TABLE_CELL_HEIGHT,
 } from '../../../../constants/constants';
 import { cls } from '../../../../utils/commonUtils';
 import TooltipForReservationDetail from './TooltipForReservation';
-import {
-  type Reservation,
-  ReservationState,
-} from '../../../../types/generatedTypes';
 import { useStore } from '../../../../store';
+import { XMark } from '../../../../svgs';
 import type {
   PatientInReservation,
   ReservationOfGetReservationsByInterval,
 } from '../../../../types/processedGeneratedTypes';
-import { XMark } from '../../../../svgs';
+import {
+  type Reservation,
+  ReservationState,
+} from '../../../../types/generatedTypes';
 
 interface EventBoxProps {
   inset: string;
@@ -124,7 +119,7 @@ const EventBox = ({
       onHoverStart={() => setIsHover(true)}
       onHoverEnd={() => setIsHover(false)}
       className={cls(
-        'schedules__reservation-box group ',
+        'schedules__event-box group ',
         !showCancelOfTimetable && isCancel ? 'hidden' : '',
         !showNoshowOfTimetable && isNoshow ? 'hidden' : '',
         isDayOff ? 'z-[31]' : ''
@@ -137,7 +132,7 @@ const EventBox = ({
         role="button"
         tabIndex={0}
         className={cls(
-          'relative flex h-full flex-col items-start justify-center overflow-hidden border-l-4 bg-white pl-0.5',
+          'schedules__event-box-main',
           !isReserve ? 'no-reserved' : ''
         )}
         style={{

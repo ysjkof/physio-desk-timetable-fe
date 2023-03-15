@@ -111,8 +111,11 @@
   .schedules__reserve-btn-label {
     @apply invisible mx-auto whitespace-nowrap align-middle text-white group-hover:visible;
   }
-  .schedules__reservation-box {
+  .schedules__event-box {
     @apply absolute z-30 cursor-pointer;
+  }
+  .schedules__event-box-main {
+    @apply relative mr-0.5 flex h-full flex-col items-start justify-center overflow-hidden border-l-4 bg-white pl-0.5;
   }
   .modal-parents {
     @apply fixed top-0 left-0 z-50 h-screen w-screen cursor-default;
