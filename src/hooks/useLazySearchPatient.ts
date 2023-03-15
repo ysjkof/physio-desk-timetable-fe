@@ -1,9 +1,9 @@
 import { useLazyQuery } from '@apollo/client';
 import { useState } from 'react';
 import { GET_PATIENT_BY_DOCUMENT } from '../graphql';
-import { GetPatientByQuery } from '../types/generatedTypes';
 import { useStore } from '../store';
 import { getDateFromStr8Digit } from '../utils/dateUtils';
+import type { GetPatientByQuery } from '../types/generatedTypes';
 
 export const useLazySearchPatient = () => {
   const [page, setPage] = useState(1);
@@ -43,10 +43,10 @@ export const useLazySearchPatient = () => {
     });
   };
 
-  const getPages = (total: number): number[] => {
+  const getPages = (totalPages: number): number[] => {
     const pagesArray = [];
-    const LOOP_LIMIT = 1000;
-    for (let i = 0; i < total; i += 1) {
+    const LOOP_LIMIT = 10000;
+    for (let i = 0; i < totalPages; i += 1) {
       pagesArray.push(i + 1);
       if (i > LOOP_LIMIT) break;
     }

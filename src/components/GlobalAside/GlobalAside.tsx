@@ -22,16 +22,15 @@ const GlobalAside = () => {
       className="relative flex h-full flex-col justify-between bg-table-aside-bg py-4 text-white"
     >
       <div className="relative mb-6 flex h-28 flex-col items-center justify-center gap-y-3 px-4">
-        {isBigGlobalAside && (
-          <>
-            <Link
-              to="/"
-              className="flex aspect-square w-11 items-center justify-center rounded-lg bg-white"
-            >
-              <img src="/images/logo.png" alt="logo" />
-            </Link>
-          </>
-        )}
+        <Link
+          to="/"
+          className={cls(
+            'flex aspect-square items-center justify-center rounded-lg bg-white',
+            isBigGlobalAside ? 'w-11' : 'absolute w-9'
+          )}
+        >
+          <img src="/images/logo.png" alt="logo" />
+        </Link>
       </div>
       <button
         type="button"
