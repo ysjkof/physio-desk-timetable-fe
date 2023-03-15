@@ -1,6 +1,6 @@
 import { UseFormRegister } from 'react-hook-form';
 import { renameUseSplit } from '../../../../utils/commonUtils';
-import Checkbox from '../../../../_legacy_components/molecules/Checkbox';
+import { Checkbox } from '../../../../components';
 import { useGetMyMembers } from '../../../../hooks';
 import { useStore } from '../../../../store';
 
