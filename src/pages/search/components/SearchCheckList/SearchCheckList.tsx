@@ -1,5 +1,9 @@
 import { UseFormRegister } from 'react-hook-form';
-import { renameUseSplit } from '../../../../utils/commonUtils';
+import {
+  getMemberState,
+  isMembersWaiting,
+  renameUseSplit,
+} from '../../../../utils/commonUtils';
 import { Checkbox } from '../../../../components';
 import { useGetMyMembers } from '../../../../hooks';
 import { useStore } from '../../../../store';
@@ -15,9 +19,14 @@ export const SearchCheckList = ({
 
   const [myMembers] = useGetMyMembers();
 
+  const memberWithoutWaiting = myMembers?.filter(
+    ({ accepted, staying }) =>
+      !isMembersWaiting(getMemberState({ accepted, staying }))
+  );
+
   return (
     <div className="flex flex-wrap gap-6 border-b px-6 py-2">
-      {myMembers?.map((member) => (
+      {memberWithoutWaiting?.map((member) => (
         <Checkbox
           key={member.clinic.id}
           id={`search__clinic-${member.clinic.id}`}
