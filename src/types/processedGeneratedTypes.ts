@@ -62,7 +62,8 @@ export type MemberOfGetMyClinic = ClinicOfGetMyClinicTruth['members'][0];
 export type MyMembersType = GetMyMembersQuery['getMyMembers']['members'];
 
 export interface MemberStatusOptions
-  extends Pick<Member, 'staying' | 'manager' | 'accepted'> {}
+  extends Pick<Member, 'staying' | 'accepted'>,
+    Partial<Pick<Member, 'manager'>> {}
 
 // reservations
 export type ResultOfGetReservationsByInterval =
