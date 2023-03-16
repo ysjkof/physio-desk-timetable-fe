@@ -1,8 +1,11 @@
 import { memo } from 'react';
-import { get4DigitHour, getTimeLength } from '../../../../utils/dateUtils';
+import {
+  get4DigitHour,
+  getTimeLength,
+} from '../../../../../../utils/dateUtils';
 import EventBox from './EventBox';
-import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
-import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
+import { TABLE_CELL_HEIGHT } from '../../../../../../constants/constants';
+import type { ReservationOfGetReservationsByInterval } from '../../../../../../types/processedGeneratedTypes';
 
 interface EventBoxContainerProps {
   events: ReservationOfGetReservationsByInterval[];

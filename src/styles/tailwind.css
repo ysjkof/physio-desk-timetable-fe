@@ -80,10 +80,6 @@
     @apply flex w-96 flex-col items-center py-8;
   }
 
-  .dashboard-menu-title {
-    @apply text-2xl font-semibold text-[#262850];
-  }
-
   .sunday {
     @apply text-red-400;
   }
@@ -101,22 +97,7 @@
   .emphasize-ring {
     @apply ring-2 ring-green-500;
   }
-  .time-indicator-bar {
-    @apply pointer-events-none absolute left-0 z-[31] flex w-full border-t border-red-500 text-red-500;
-  }
 
-  .schedules__reserve-btn {
-    @apply relative z-10 h-5 w-full cursor-pointer from-sky-500 to-indigo-500 text-center hover:bg-gradient-to-r;
-  }
-  .schedules__reserve-btn-label {
-    @apply invisible mx-auto whitespace-nowrap align-middle text-white group-hover:visible;
-  }
-  .schedules__event-box {
-    @apply absolute z-30 cursor-pointer;
-  }
-  .schedules__event-box-main {
-    @apply relative mr-0.5 flex h-full flex-col items-start justify-center overflow-hidden border-l-4 bg-white pl-0.5;
-  }
   .modal-parents {
     @apply fixed top-0 left-0 z-50 h-screen w-screen cursor-default;
   }
@@ -150,10 +131,6 @@
     @apply cursor-pointer after:absolute after:top-full after:left-[19.5%] after:border-8  after:border-t-black after:border-b-transparent after:border-l-transparent after:border-r-transparent;
   }
 
-  .user-cols-divide {
-    @apply border-r border-x-gray-500 last:border-r-transparent;
-  }
-
   .mdx-img {
     @apply bg-photo bg-center bg-no-repeat;
   }
@@ -177,24 +154,66 @@
   }
 
   /* 재사용하지 않는 컴포넌트 */
-
+  #timetable {
+    @apply flex h-full w-full flex-col text-xs opacity-0;
+  }
+  #timetable__nav {
+    @apply relative z-[34] mt-4 px-2;
+  }
+  #timetable__main {
+    @apply flex;
+  }
+  #timetable__schedules {
+    @apply flex h-full w-full overflow-hidden;
+  }
+  #timetable__schedules-list {
+    @apply h-full w-[26rem] overflow-hidden;
+  }
+  #schedules__time-label {
+    @apply sticky left-0 z-[33] bg-white;
+  }
+  #schedules__column-header {
+    @apply sticky top-0 z-[32] flex;
+  }
+  #schedules__column-body {
+    @apply flex;
+  }
   .schedules__column {
-    @apply flex w-full flex-col;
-  }
-  .schedules__member-name-title {
-    @apply relative mb-1 flex h-9 gap-2;
-  }
-  .schedules__member-name-item {
-    @apply flex w-full min-w-[6rem] flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium;
+    @apply flex w-full flex-col bg-white;
   }
   .schedules__date-title {
     @apply mb-1 flex w-full cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap bg-table-day-light py-0.5 px-2 text-base text-table-day-color hover:bg-gray-200 hover:text-gray-700;
   }
+  .schedules__member-name-title {
+    @apply relative z-20 mb-1 flex h-9 gap-2;
+  }
+  .schedules__member-name-item {
+    @apply flex w-full min-w-[6rem] flex-col justify-between rounded-sm border border-b-2 border-table-bg px-1 pb-0.5 font-medium;
+  }
+  .schedules__users-column {
+    @apply relative flex gap-2;
+  }
   .schedules__each-user-column {
     @apply relative w-full min-w-[6rem] divide-y divide-table-line bg-table-bg;
   }
+  .time-indicator-bar {
+    @apply pointer-events-none absolute left-0 z-[31] flex w-full border-t border-red-500 text-red-500;
+  }
+  .schedules__reserve-btn {
+    @apply relative z-10 h-5 w-full cursor-pointer from-sky-500 to-indigo-500 text-center hover:bg-gradient-to-r;
+  }
+  .schedules__reserve-btn-label {
+    @apply invisible mx-auto whitespace-nowrap align-middle text-white group-hover:visible;
+  }
+  .schedules__event-box {
+    @apply absolute z-30 cursor-pointer hover:z-[32] hover:shadow-cst;
+  }
+  .schedules__event-box-main {
+    @apply relative mr-0.5 flex h-full flex-col items-start justify-center overflow-hidden border-l-4 bg-white pl-0.5;
+  }
+
   .event-list {
-    @apply flex flex-col pl-2 pr-6;
+    @apply flex h-full flex-col pl-2 pr-6;
   }
   .event-list__date-btn {
     @apply mb-2 flex h-9 w-full items-center justify-center border-b-2 font-medium;
@@ -209,15 +228,16 @@
   .dashboard-container {
     @apply flex h-full flex-col gap-y-10 border-r border-r-table-line px-4 pt-8;
   }
+  .dashboard-menu-title {
+    @apply text-2xl font-semibold text-[#262850];
+  }
 
   .member-management {
     @apply flex h-full;
   }
-
   .member-management__nav {
     @apply flex h-full w-[360px] flex-col border-r border-r-table-line pt-6;
   }
-
   .member-management__member-detail-container {
     @apply relative flex grow flex-col items-center justify-center;
   }
@@ -260,15 +280,12 @@
   .graph-chart {
     @apply flex grow flex-col gap-8;
   }
-
   .graph-chart__total-graph {
     @apply relative overflow-hidden rounded-md border border-[#A0A0C2] bg-white;
   }
-
   .graph-chart__graph-header {
     @apply flex w-full justify-between border-l-8 pl-2 pr-6 pt-1 text-xl;
   }
-
   .table-chart {
     @apply sticky top-0 flex w-fit flex-col items-center rounded-md border border-[#A0A0C2] bg-white p-4 pb-0;
   }

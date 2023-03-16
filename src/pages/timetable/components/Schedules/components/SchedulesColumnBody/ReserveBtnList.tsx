@@ -4,13 +4,17 @@ import {
   compareDateMatch,
   createDate,
   getFrom4DigitTime,
-} from '../../../../utils/dateUtils';
-import { setPickedReservation, setToast, useStore } from '../../../../store';
-import ReserveButton from './ReserveButton';
-import { CREATE_RESERVATION_DOCUMENT } from '../../../../graphql';
-import { LABEL_VISIBLE_MINUTES } from '../../../../constants/constants';
-import type { CreateReservationMutation } from '../../../../types/generatedTypes';
-import type { PrescriptionsInReservation } from '../../../../types/processedGeneratedTypes';
+} from '../../../../../../utils/dateUtils';
+import {
+  setPickedReservation,
+  setToast,
+  useStore,
+} from '../../../../../../store';
+import ReserveBtn from './ReserveBtn';
+import { CREATE_RESERVATION_DOCUMENT } from '../../../../../../graphql';
+import { LABEL_VISIBLE_MINUTES } from '../../../../../../constants/constants';
+import type { CreateReservationMutation } from '../../../../../../types/generatedTypes';
+import type { PrescriptionsInReservation } from '../../../../../../types/processedGeneratedTypes';
 
 interface ReservationButtonsProps {
   date: Date;
@@ -19,7 +23,7 @@ interface ReservationButtonsProps {
   labelMaxLength: number;
   color: string | undefined;
 }
-const ReservationButtons = ({
+const ReserveBtnList = ({
   date,
   userId,
   labels,
@@ -103,7 +107,7 @@ const ReservationButtons = ({
     <>
       {labels.map((label, idx) =>
         idx === labelMaxLength - 1 ? null : (
-          <ReserveButton
+          <ReserveBtn
             key={label}
             label={label}
             dayIndex={dayIndex}
@@ -119,7 +123,7 @@ const ReservationButtons = ({
   );
 };
 
-export default memo(ReservationButtons, (prevProps, nextProps) => {
+export default memo(ReserveBtnList, (prevProps, nextProps) => {
   const isSameLabels = () =>
     prevProps.labels[0] === nextProps.labels[0] &&
     prevProps.labels[1] === nextProps.labels[1] &&

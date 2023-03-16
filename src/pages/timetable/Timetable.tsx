@@ -2,7 +2,7 @@ import { lazy, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSchedules, useSubscriptions, useTableLabel } from './hooks';
+import { useTimetable, useSubscriptions } from './hooks';
 import { MUOOL } from '../../constants/constants';
 import {
   CreatePatient,
@@ -10,27 +10,22 @@ import {
   ReserveOrDayoff,
   Schedules,
   TableController,
-  TimeLabels,
   TimetableTemplate,
 } from './components';
 import { setToast, useStore } from '../../store';
 import { useMe } from '../../hooks';
-
 import type { LocationState } from '../../types/commonTypes';
 
 const Loading = lazy(() => import('../../components/Loading'));
 
 const TimeTable = () => {
-  const { labels } = useTableLabel();
-  const { schedules, members, variables } = useSchedules();
-  useSubscriptions({ variables });
-
+  const pickedDate = useStore((state) => state.pickedDate);
   const locationState = useLocation().state as LocationState;
-
   const navigate = useNavigate();
-  const clearLocationState = () => {
-    navigate('', { state: null });
-  };
+
+  const { schedules, members, variables } = useTimetable();
+
+  useSubscriptions({ variables });
 
   const [meData] = useMe();
 
@@ -40,9 +35,11 @@ const TimeTable = () => {
     });
   }
 
-  const pickedDate = useStore((state) => state.pickedDate);
-
   useEffect(() => {
+    const clearLocationState = () => {
+      navigate('', { state: null });
+    };
+
     clearLocationState();
   }, []);
 
@@ -55,10 +52,9 @@ const TimeTable = () => {
       </Helmet>
       <TimetableTemplate
         nav={<TableController members={members} />}
-        labels={<TimeLabels labels={labels} />}
         columns={
           <AnimatePresence>
-            <Schedules labels={labels} weekEvents={schedules} />
+            <Schedules weekEvents={schedules} />
           </AnimatePresence>
         }
         eventList={<EventList events={[schedules[pickedDate.getDay()]][0]} />}

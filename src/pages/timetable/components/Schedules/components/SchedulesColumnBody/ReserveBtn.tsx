@@ -5,14 +5,14 @@ import {
   getFrom4DigitTime,
   getTimeLength,
   isBeforeDateB,
-} from '../../../../utils/dateUtils';
+} from '../../../../../../utils/dateUtils';
 import {
   DEFAULT_COLOR,
   TABLE_CELL_HEIGHT,
-} from '../../../../constants/constants';
-import { cls } from '../../../../utils/commonUtils';
-import { setAlert, useStore } from '../../../../store';
-import type { PickedReservationType } from '../../../../types/commonTypes';
+} from '../../../../../../constants/constants';
+import { cls } from '../../../../../../utils/commonUtils';
+import { setAlert, useStore } from '../../../../../../store';
+import type { PickedReservationType } from '../../../../../../types/commonTypes';
 
 interface ReserveBtnProps {
   label: string;
@@ -24,7 +24,7 @@ interface ReserveBtnProps {
   color: string | undefined;
 }
 
-const ReserveButton = ({
+const ReserveBtn = ({
   label,
   dayIndex,
   userId,
@@ -99,4 +99,4 @@ const ReserveButton = ({
   );
 };
 
-export default ReserveButton;
+export default ReserveBtn;

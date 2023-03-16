@@ -13,7 +13,7 @@ import { PickReservation } from '../PickReservation';
 import { ToggleReservationState } from '../ToggleReservationState';
 import { Trash } from '../../../../svgs';
 import { useDeleteReservation } from '../../hooks';
-import { GENDER_KOR, LOCALE } from '../../../../constants/constants';
+import { GENDER_KOR } from '../../../../constants/constants';
 import type { ReservationOfGetReservationsByInterval } from '../../../../types/processedGeneratedTypes';
 import type { Gender } from '../../../../types/commonTypes';
 

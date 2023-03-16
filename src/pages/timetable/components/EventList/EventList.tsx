@@ -42,7 +42,7 @@ const EventList = ({ events }: { events: ISchedules }) => {
   });
 
   return (
-    <div className="event-list h-full overflow-y-scroll">
+    <div className="event-list overflow-y-scroll">
       <div className="sticky top-0 bg-white shadow-b">
         <div className="schedules__date-title">예약 목록</div>
         <div className="flex justify-around">

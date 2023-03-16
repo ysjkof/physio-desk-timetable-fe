@@ -3,7 +3,7 @@ import { useUpdateDayoff } from './useUpdateDayoff';
 import { useDeleteReservation } from './useDeleteReservation';
 import { useGetReservationsByInterval } from './useGetReservationsByInterval';
 import { useUpdateReservation } from './useUpdateReservation';
-import { useSchedules } from './useSchedules';
+import { useTimetable } from './useTimetable';
 import { useSubscriptions } from './useSubscriptions';
 import { useTableLabel } from './useTableLabel';
 import { useCreateDayoff } from './useCreateDayoff';
@@ -16,7 +16,7 @@ export {
   useDeleteReservation,
   useGetReservationsByInterval,
   useUpdateReservation,
-  useSchedules,
+  useTimetable,
   useSubscriptions,
   useTableLabel,
   useToggleReservationState,

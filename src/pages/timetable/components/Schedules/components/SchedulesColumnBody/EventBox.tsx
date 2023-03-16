@@ -6,19 +6,19 @@ import { faExclamation, faLock } from '@fortawesome/free-solid-svg-icons';
 import {
   DEFAULT_COLOR,
   TABLE_CELL_HEIGHT,
-} from '../../../../constants/constants';
-import { cls } from '../../../../utils/commonUtils';
+} from '../../../../../../constants/constants';
+import { cls } from '../../../../../../utils/commonUtils';
 import TooltipForReservationDetail from './TooltipForReservation';
-import { useStore } from '../../../../store';
-import { XMark } from '../../../../svgs';
+import { useStore } from '../../../../../../store';
+import { XMark } from '../../../../../../svgs';
 import type {
   PatientInReservation,
   ReservationOfGetReservationsByInterval,
-} from '../../../../types/processedGeneratedTypes';
+} from '../../../../../../types/processedGeneratedTypes';
 import {
   type Reservation,
   ReservationState,
-} from '../../../../types/generatedTypes';
+} from '../../../../../../types/generatedTypes';
 
 interface EventBoxProps {
   inset: string;
@@ -62,7 +62,7 @@ const EventBox = ({
 
     const { clientHeight: userColsWidth } = eventBoxParentElement;
 
-    const columnContainer = document.getElementById('timetable__template');
+    const columnContainer = document.getElementById('timetable');
     if (!columnContainer) throw new Error('스케쥴 컨테이너가 없습니다.');
 
     const { clientHeight: columnViewportHeight } = columnContainer;
@@ -113,13 +113,12 @@ const EventBox = ({
   return (
     <motion.div
       ref={eventBox}
-      whileHover={{ zIndex: 32 }}
       initial={{ y: 10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       onHoverStart={() => setIsHover(true)}
       onHoverEnd={() => setIsHover(false)}
       className={cls(
-        'schedules__event-box group ',
+        'schedules__event-box group',
         !showCancelOfTimetable && isCancel ? 'hidden' : '',
         !showNoshowOfTimetable && isNoshow ? 'hidden' : '',
         isDayOff ? 'z-[31]' : ''

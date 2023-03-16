@@ -19,7 +19,7 @@ export interface IUserLength {
   userLength: number;
 }
 
-export interface ILabels {
+export interface LabelsProps {
   labels: string[];
 }
 
@@ -29,12 +29,11 @@ interface IDate {
 
 export interface TimetableTemplateProps {
   nav: ReactNode;
-  labels: ReactNode;
   columns: ReactNode;
   eventList: ReactNode;
 }
 
-export interface SchedulesProps extends ILabels {
+export interface SchedulesProps {
   weekEvents: ISchedules[];
 }
 
@@ -46,7 +45,7 @@ export interface MemberNameProps extends IUserLength {
   members: MemberWithEvent[];
 }
 
-export interface ScheduleBoxProps extends MemberNameProps, ILabels, IDate {
+export interface ScheduleBoxProps extends MemberNameProps, LabelsProps, IDate {
   labelMaxLength: number;
   enableTimeIndicator: boolean;
 }
@@ -179,4 +178,9 @@ export interface DailyGraphDataProps {
 
 export interface DailyGraphProps extends DailyGraphDataProps {
   type: 'cancel' | 'newPatient' | 'noshow' | 'reservationCount';
+}
+
+export interface SchedulesColumnProps {
+  schedules: ISchedules[];
+  userLength: number;
 }

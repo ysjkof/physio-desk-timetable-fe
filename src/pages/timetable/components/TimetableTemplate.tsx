@@ -6,7 +6,6 @@ import type { TimetableTemplateProps } from '../../../types/propsTypes';
 
 const TimetableTemplate = ({
   nav,
-  labels,
   columns,
   eventList,
 }: TimetableTemplateProps) => {
@@ -14,6 +13,7 @@ const TimetableTemplate = ({
   const isWeekCalendar = useStore((state) => state.isWeekCalendar);
 
   const { height, width, changeHeight, changeWidth } = useWindowSize(true);
+
   const navRef = useRef<HTMLDivElement>(null);
   const extraMargin = 20;
 
@@ -24,39 +24,20 @@ const TimetableTemplate = ({
   }, [isBigGlobalAside]);
 
   return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      id="timetable__template"
-      className="flex h-full w-full flex-col text-xs opacity-0"
-    >
-      <div
-        id="timetable__nav"
-        className="relative z-[34] mt-4 px-2"
-        ref={navRef}
-      >
+    <motion.div animate={{ opacity: 1 }} id="timetable">
+      <div id="timetable__nav" ref={navRef}>
         {nav}
       </div>
       <div
-        id="timetable__body"
-        className="flex"
+        id="timetable__main"
         style={{
           height: `${height - extraMargin}px`,
           width: `${width}px`,
         }}
       >
-        <div className="flex h-full w-full overflow-y-scroll">
-          <div
-            id="timetable__labels"
-            className="sticky left-0 z-[32] bg-white pt-[73px]"
-          >
-            {labels}
-          </div>
-          <div id="timetable__columns" className="">
-            {columns}
-          </div>
-        </div>
+        <div id="timetable__schedules">{columns}</div>
         {!isWeekCalendar && (
-          <div className="h-full w-[26rem] overflow-hidden">{eventList}</div>
+          <div id="timetable__schedules-list">{eventList}</div>
         )}
       </div>
     </motion.div>

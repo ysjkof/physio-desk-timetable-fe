@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { RgbStringColorPicker } from 'react-colorful';
-import { cls } from '../../../../utils/commonUtils';
-import { useStore } from '../../../../store';
-import { EllipsisVertical } from '../../../../svgs';
-import { MenuButton, Modal } from '../../../../components';
-import { useMe } from '../../../../hooks';
-import { DEFAULT_COLOR } from '../../../../constants/constants';
-import { useUpdateMemberColor } from '../../../../hooks';
-import { Member } from '../../../../models';
-import type { MemberWithEvent } from '../../../../types/commonTypes';
-import type { MemberNameProps } from '../../../../types/propsTypes';
+import { cls } from '../../../../../../utils/commonUtils';
+import { useStore } from '../../../../../../store';
+import { EllipsisVertical } from '../../../../../../svgs';
+import { MenuButton, Modal } from '../../../../../../components';
+import { useMe } from '../../../../../../hooks';
+import { DEFAULT_COLOR } from '../../../../../../constants/constants';
+import { useUpdateMemberColor } from '../../../../../../hooks';
+import { Member } from '../../../../../../models';
+import type { MemberWithEvent } from '../../../../../../types/commonTypes';
+import type { MemberNameProps } from '../../../../../../types/propsTypes';
 
 const MemberNames = ({ userLength, members }: MemberNameProps) => {
   const hiddenUsers = useStore((state) => state.hiddenUsers);

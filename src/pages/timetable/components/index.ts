@@ -3,7 +3,7 @@ import { EventList } from './EventList';
 import { ReserveOrDayoff } from './ReserveOrDayoff';
 import { Schedules } from './Schedules';
 import { TableController } from './TableController';
-import { TimeLabels } from './TimeLabels';
+import { TimeLabels } from './Schedules/components/TimeLabels';
 import TimetableTemplate from './TimetableTemplate';
 
 export {

@@ -1,11 +1,11 @@
-import { cls } from '../../../../utils/commonUtils';
-import TimeIndicatorBar from '../TimeIndicatorBar';
-import ReservationButtons from './ReserveButtons';
+import { cls } from '../../../../../../utils/commonUtils';
+import TimeIndicatorBar from '../../../TimeIndicatorBar';
+import ReserveBtnList from './ReserveBtnList';
 import EventBoxContainer from './EventBoxContainer';
-import { useStore } from '../../../../store';
-import { TABLE_CELL_HEIGHT } from '../../../../constants/constants';
-import { Member } from '../../../../models';
-import type { ScheduleBoxProps } from '../../../../types/propsTypes';
+import { useStore } from '../../../../../../store';
+import { TABLE_CELL_HEIGHT } from '../../../../../../constants/constants';
+import { Member } from '../../../../../../models';
+import type { ScheduleBoxProps } from '../../../../../../types/propsTypes';
 
 const ScheduleBox = ({
   userLength,
@@ -22,7 +22,7 @@ const ScheduleBox = ({
   return (
     <div
       className={cls(
-        'relative flex gap-2',
+        'schedules__users-column',
         userLength === 1 ? 'border-x-inherit' : ''
       )}
     >
@@ -45,7 +45,7 @@ const ScheduleBox = ({
             style={{ height }}
           >
             {state === '탈퇴' || (
-              <ReservationButtons
+              <ReserveBtnList
                 labelMaxLength={labelMaxLength}
                 date={date}
                 labels={labels}

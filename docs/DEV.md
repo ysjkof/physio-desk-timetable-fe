@@ -78,13 +78,9 @@ App.tsx에서 localStorage에 저장된 설정을 불러오고 비교해서 전�
 reserve-btn : 10
 time-indicator-bar : 31
 event-box : 30 { hover: 32, DayOff : 31 }
-table-labels : 32
-table-sub-header : 32
-TABLE_HEADER : 34
-USER_VIEW_CONTROLLER : 35
-dropdown menu in Header : 50(table-clinic-selector과 겹침)
+schedule\_\_column-label : 33
+schedule\_\_column-header : 32
 Toast : 50
-Tool-tip : 31
 Selectbox : 50
 modal-parents : 50
 

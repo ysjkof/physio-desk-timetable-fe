@@ -5,7 +5,7 @@ import { useStore } from '../../../store';
 import { useGetClinic } from '../../../hooks';
 import type { ISchedules, MemberWithEvent } from '../../../types/commonTypes';
 
-export const useSchedules = () => {
+export const useTimetable = () => {
   const pickedDate = useStore((state) => state.pickedDate);
   const [schedules, setSchedules] = useState<ISchedules[] | null>(null);
   const [members, setMembers] = useState<MemberWithEvent[]>([]);
@@ -24,10 +24,6 @@ export const useSchedules = () => {
     });
 
     setSchedules(schedulesClass.get());
-    console.log(
-      'schedulesClass.getMembers() >>>',
-      schedulesClass.getMembers().flatMap((a) => a.user.name)
-    );
 
     setMembers(schedulesClass.getMembers());
   }, [reservations, clinic]);

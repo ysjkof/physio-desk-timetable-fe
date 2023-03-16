@@ -3,10 +3,10 @@ import {
   compareDateMatch,
   getStringDay,
   getStringWeekDay,
-} from '../../../../utils/dateUtils';
-import { cls } from '../../../../utils/commonUtils';
-import { SCROLL_ADDRESS } from '../../../../constants/constants';
-import type { DateTitleProps } from '../../../../types/propsTypes';
+} from '../../../../../../utils/dateUtils';
+import { cls } from '../../../../../../utils/commonUtils';
+import { SCROLL_ADDRESS } from '../../../../../../constants/constants';
+import type { DateTitleProps } from '../../../../../../types/propsTypes';
 
 const DateTitle = ({
   userLength,
