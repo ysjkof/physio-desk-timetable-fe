@@ -14,20 +14,20 @@ import type {
   MemberWithEvent,
 } from '../types/commonTypes';
 import type {
-  ClinicOfGetMyClinicTruth,
+  MemberOfGetReservationsByInterval,
   ReservationOfGetReservationsByInterval,
 } from '../types/processedGeneratedTypes';
 
 interface SchedulesProps {
   data: ReservationOfGetReservationsByInterval[];
   date: Date;
-  clinic: ClinicOfGetMyClinicTruth;
+  members: MemberOfGetReservationsByInterval[];
 }
 export class Schedules {
   #value: ISchedules[];
 
-  constructor({ data, date, clinic }: SchedulesProps) {
-    const form = this.#createForm(date, clinic);
+  constructor({ data, date, members }: SchedulesProps) {
+    const form = this.#createForm(date, members);
     this.#value = this.#addEventToForm(form, data);
   }
 
@@ -48,11 +48,14 @@ export class Schedules {
     }, initValue);
   }
 
-  #createForm(date: Date, clinic: ClinicOfGetMyClinicTruth): ISchedules[] {
+  #createForm(
+    date: Date,
+    members: MemberOfGetReservationsByInterval[]
+  ): ISchedules[] {
     const week = this.#createWeek(date);
     return week.map((date) => ({
       date,
-      members: this.#createMembersForTable(clinic, date),
+      members: this.#createMembersForTable(members, date),
     }));
   }
 
@@ -67,10 +70,10 @@ export class Schedules {
   }
 
   #createMembersForTable(
-    clinic: ClinicOfGetMyClinicTruth,
+    members: MemberOfGetReservationsByInterval[],
     date: Date
   ): MemberWithEvent[] {
-    const membersInRange = this.filterOutOfCreatedAt(clinic.members, date);
+    const membersInRange = this.filterOutOfCreatedAt(members, date);
     const withoutLeftMember = this.filterLeftMember(membersInRange, date);
     const membersForTable = this.#filterWithoutWait(withoutLeftMember);
 
@@ -81,13 +84,16 @@ export class Schedules {
     });
   }
 
-  filterOutOfCreatedAt(members: MemberOfClient[], date: Date) {
+  filterOutOfCreatedAt(
+    members: MemberOfGetReservationsByInterval[],
+    date: Date
+  ) {
     return members.filter(
       ({ createdAt }) => startOfDay(new Date(createdAt)) <= date
     );
   }
 
-  filterLeftMember(members: MemberOfClient[], date: Date) {
+  filterLeftMember(members: MemberOfGetReservationsByInterval[], date: Date) {
     return members.filter(
       ({ accepted, staying, manager, updatedAt }) =>
         !(
@@ -97,14 +103,14 @@ export class Schedules {
     );
   }
 
-  #filterWithoutWait(members: MemberOfClient[]) {
+  #filterWithoutWait(members: MemberOfGetReservationsByInterval[]) {
     return members.filter(
       ({ accepted, staying, manager }) =>
         getMemberState({ accepted, staying, manager }) !== '수락대기'
     );
   }
 
-  #addKeyToMember(member: MemberOfClient) {
+  #addKeyToMember(member: MemberOfGetReservationsByInterval) {
     return { ...member, events: [] };
   }
 

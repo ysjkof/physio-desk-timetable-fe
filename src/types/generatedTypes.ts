@@ -330,6 +330,7 @@ export type GetReservationsByIntervalInput = {
 export type GetReservationsByIntervalOutput = {
   __typename?: 'GetReservationsByIntervalOutput';
   error?: Maybe<Scalars['String']>;
+  members?: Maybe<Array<Member>>;
   ok: Scalars['Boolean'];
   results?: Maybe<Array<Reservation>>;
   totalCount?: Maybe<Scalars['Int']>;
@@ -1160,7 +1161,7 @@ export type GetReservationsByIntervalQueryVariables = Exact<{
 }>;
 
 
-export type GetReservationsByIntervalQuery = { __typename?: 'Query', getReservationsByInterval: { __typename?: 'GetReservationsByIntervalOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
+export type GetReservationsByIntervalQuery = { __typename?: 'Query', getReservationsByInterval: { __typename?: 'GetReservationsByIntervalOutput', ok: boolean, error?: string | null, totalCount?: number | null, members?: Array<{ __typename?: 'Member', id: number, accepted: boolean, staying: boolean, manager: boolean, updatedAt?: any | null, createdAt?: any | null, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string } }> | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
 
 export type GetReservationsByMemberQueryVariables = Exact<{
   input: GetReservationsByMemberInput;

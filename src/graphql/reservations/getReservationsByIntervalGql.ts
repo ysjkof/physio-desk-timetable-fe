@@ -14,6 +14,21 @@ export const GET_RESERVATIONS_BY_INTERVAL_DOCUMENT = gql`
       ok
       error
       totalCount
+      members {
+        id
+        accepted
+        staying
+        manager
+        color {
+          value
+        }
+        updatedAt
+        createdAt
+        user {
+          id
+          name
+        }
+      }
       results {
         ...CommonReservationFields
         user {

@@ -65,6 +65,10 @@ export interface MemberStatusOptions
   extends Pick<Member, 'staying' | 'accepted'>,
     Partial<Pick<Member, 'manager'>> {}
 
+export type MemberOfGetReservationsByInterval = NonNullable<
+  GetReservationsByIntervalQuery['getReservationsByInterval']['members']
+>[0];
+
 // reservations
 export type ResultOfGetReservationsByInterval =
   | GetReservationsByIntervalQuery['getReservationsByInterval']

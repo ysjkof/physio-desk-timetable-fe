@@ -1,9 +1,9 @@
-import type { MemberOfGetMyClinic } from '../types/processedGeneratedTypes';
 import { getMemberState, isMemberActive } from '../utils/commonUtils';
+import type { MemberOfGetReservationsByInterval } from '../types/processedGeneratedTypes';
 
 export class Member {
   #member;
-  constructor(member: MemberOfGetMyClinic) {
+  constructor(member: MemberOfGetReservationsByInterval) {
     this.#member = member;
   }
 

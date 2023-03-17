@@ -4,6 +4,7 @@ import type { Prescription } from './generatedTypes';
 import type {
   ClinicInReservation,
   MemberOfGetMyClinic,
+  MemberOfGetReservationsByInterval,
   MyMembersType,
   PatientInReservation,
   ReservationOfGetReservationsByInterval,
@@ -126,7 +127,7 @@ export interface ReserveFormType {
 
 //
 
-export interface MemberWithEvent extends MemberOfClient {
+export interface MemberWithEvent extends MemberOfGetReservationsByInterval {
   events: ReservationOfGetReservationsByInterval[];
 }
 export interface ISchedules {

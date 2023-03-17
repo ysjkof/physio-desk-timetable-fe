@@ -2,31 +2,28 @@ import { useEffect, useState } from 'react';
 import { Schedules } from '../../../models';
 import { useGetReservationsByInterval } from './useGetReservationsByInterval';
 import { useStore } from '../../../store';
-import { useGetClinic } from '../../../hooks';
 import type { ISchedules, MemberWithEvent } from '../../../types/commonTypes';
 
 export const useTimetable = () => {
   const pickedDate = useStore((state) => state.pickedDate);
-  const [schedules, setSchedules] = useState<ISchedules[] | null>(null);
+
+  const [schedules, setSchedules] = useState<ISchedules[]>();
   const [members, setMembers] = useState<MemberWithEvent[]>([]);
 
-  const [clinic] = useGetClinic();
-
-  const [reservations, { variables }] = useGetReservationsByInterval();
+  const [reservations, { variables, loading }] = useGetReservationsByInterval();
 
   useEffect(() => {
-    if (!reservations?.results || !clinic) return;
+    if (!reservations?.results) return;
 
     const schedulesClass = new Schedules({
       data: reservations.results,
       date: pickedDate,
-      clinic,
+      members: reservations.members || [],
     });
 
     setSchedules(schedulesClass.get());
-
     setMembers(schedulesClass.getMembers());
-  }, [reservations, clinic]);
+  }, [reservations?.results]);
 
-  return { schedules, members, variables };
+  return { schedules, members, variables, loading };
 };

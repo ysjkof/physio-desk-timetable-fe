@@ -18,10 +18,12 @@ const SchedulesColumnBody = ({
       {schedules.map((day, i) => {
         return (
           <div key={i} className="schedules__column">
-            {day.members.length === 0 ? (
-              <p className="text-center">멤버가 없습니다</p>
-            ) : (
-              <PaddingWrapper hasBorder>
+            <PaddingWrapper hasBorder>
+              {day.members.length === 0 ? (
+                <p className="break-keep text-center">
+                  선택한 날짜를 확인하세요
+                </p>
+              ) : (
                 <ScheduleBox
                   date={day.date}
                   labels={labels}
@@ -34,8 +36,8 @@ const SchedulesColumnBody = ({
                     'ymd'
                   )}
                 />
-              </PaddingWrapper>
-            )}
+              )}
+            </PaddingWrapper>
           </div>
         );
       })}

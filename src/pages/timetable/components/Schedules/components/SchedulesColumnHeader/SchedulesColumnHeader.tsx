@@ -26,13 +26,17 @@ const SchedulesColumnHeader = ({
                 isPickedMonth={compareDateMatch(pickedDate, day.date, 'ym')}
               />
             </PaddingWrapper>
-            {day.members.length === 0 ? (
-              <p className="text-center">멤버가 없습니다</p>
-            ) : (
-              <PaddingWrapper hasBorder>
+            <PaddingWrapper hasBorder>
+              {day.members.length === 0 ? (
+                <div className="schedules__member-name-title">
+                  <p className="schedules__member-name-item break-keep text-center">
+                    정보가 없습니다
+                  </p>
+                </div>
+              ) : (
                 <MemberNames members={day.members} userLength={userLength} />
-              </PaddingWrapper>
-            )}
+              )}
+            </PaddingWrapper>
           </div>
         );
       })}
