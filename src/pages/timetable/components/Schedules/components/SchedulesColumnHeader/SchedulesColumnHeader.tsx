@@ -3,12 +3,9 @@ import DateTitle from './DateTitle';
 import MemberNames from './MemberNames';
 import { useStore } from '../../../../../../store';
 import PaddingWrapper from '../PaddingWrapper';
-import type { SchedulesColumnProps } from '../../../../../../types/propsTypes';
+import type { SchedulesColumnHeaderProps } from '../../../../../../types/propsTypes';
 
-const SchedulesColumnHeader = ({
-  schedules,
-  userLength,
-}: SchedulesColumnProps) => {
+const SchedulesColumnHeader = ({ schedules }: SchedulesColumnHeaderProps) => {
   const today = new Date();
 
   const pickedDate = useStore((state) => state.pickedDate);
@@ -21,7 +18,6 @@ const SchedulesColumnHeader = ({
             <PaddingWrapper>
               <DateTitle
                 date={day.date}
-                userLength={userLength}
                 isToday={compareDateMatch(today, day.date, 'ymd')}
                 isPickedMonth={compareDateMatch(pickedDate, day.date, 'ym')}
               />
@@ -34,7 +30,7 @@ const SchedulesColumnHeader = ({
                   </p>
                 </div>
               ) : (
-                <MemberNames members={day.members} userLength={userLength} />
+                <MemberNames members={day.members} />
               )}
             </PaddingWrapper>
           </div>

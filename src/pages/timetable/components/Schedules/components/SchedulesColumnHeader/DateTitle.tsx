@@ -8,12 +8,7 @@ import { cls } from '../../../../../../utils/commonUtils';
 import { SCROLL_ADDRESS } from '../../../../../../constants/constants';
 import type { DateTitleProps } from '../../../../../../types/propsTypes';
 
-const DateTitle = ({
-  userLength,
-  date,
-  isToday,
-  isPickedMonth,
-}: DateTitleProps) => {
+const DateTitle = ({ date, isToday, isPickedMonth }: DateTitleProps) => {
   const dayNumber = date.getDay();
   const dayString = getStringDay(date);
   const weekday = getStringWeekDay(date);
@@ -39,7 +34,6 @@ const DateTitle = ({
       id={SCROLL_ADDRESS + date}
       className={cls(
         'schedules__date-title',
-        userLength === 1 ? 'border-x-inherit' : '',
         isPickedMonth ? '' : 'opacity-50',
         isToday ? 'bg-table-day-strong font-bold text-white' : '',
         dayNumber === 0 ? 'sunday' : '',
@@ -59,7 +53,6 @@ const DateTitle = ({
 export default memo(DateTitle, (prevProps, nextProps) => {
   return (
     compareDateMatch(prevProps.date, nextProps.date, 'ymd') &&
-    prevProps.isToday === nextProps.isToday &&
-    prevProps.userLength === nextProps.userLength
+    prevProps.isToday === nextProps.isToday
   );
 });

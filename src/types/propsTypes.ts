@@ -15,7 +15,7 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 import { GetStatisticsQuery } from './generatedTypes';
 
 // TimeTable
-export interface IUserLength {
+export interface UserLengthProps {
   userLength: number;
 }
 
@@ -37,15 +37,19 @@ export interface SchedulesProps {
   weekEvents: ISchedules[];
 }
 
-export interface DateTitleProps extends IUserLength, IDate {
+export interface DateTitleProps extends IDate {
   isToday: boolean;
   isPickedMonth: boolean;
 }
-export interface MemberNameProps extends IUserLength {
+export interface MemberNameProps {
   members: MemberWithEvent[];
 }
 
-export interface ScheduleBoxProps extends MemberNameProps, LabelsProps, IDate {
+export interface ScheduleBoxProps
+  extends MemberNameProps,
+    LabelsProps,
+    IDate,
+    UserLengthProps {
   labelMaxLength: number;
   enableTimeIndicator: boolean;
 }
@@ -182,5 +186,14 @@ export interface DailyGraphProps extends DailyGraphDataProps {
 
 export interface SchedulesColumnProps {
   schedules: ISchedules[];
-  userLength: number;
+}
+
+export interface SchedulesColumnHeaderProps extends SchedulesColumnProps {
+  schedules: ISchedules[];
+}
+
+export interface SchedulesColumnBodyProps
+  extends SchedulesColumnProps,
+    UserLengthProps {
+  schedules: ISchedules[];
 }

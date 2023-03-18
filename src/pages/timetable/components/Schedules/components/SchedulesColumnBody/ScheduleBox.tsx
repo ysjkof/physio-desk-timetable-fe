@@ -20,12 +20,7 @@ const ScheduleBox = ({
   const height = (labels.length - 1) * TABLE_CELL_HEIGHT;
 
   return (
-    <div
-      className={cls(
-        'schedules__users-column',
-        userLength === 1 ? 'border-x-inherit' : ''
-      )}
-    >
+    <div className="schedules__users-column">
       <TimeIndicatorBar isActive={enableTimeIndicator} />
       {members.map((_member) => {
         const member = new Member(_member);

@@ -3,12 +3,12 @@ import ScheduleBox from './ScheduleBox';
 import { useStore } from '../../../../../../store';
 import { useTableLabel } from '../../../../hooks';
 import PaddingWrapper from '../PaddingWrapper';
-import type { SchedulesColumnProps } from '../../../../../../types/propsTypes';
+import type { SchedulesColumnBodyProps } from '../../../../../../types/propsTypes';
 
 const SchedulesColumnBody = ({
   schedules,
   userLength,
-}: SchedulesColumnProps) => {
+}: SchedulesColumnBodyProps) => {
   const pickedDate = useStore((state) => state.pickedDate);
 
   const { labels } = useTableLabel();

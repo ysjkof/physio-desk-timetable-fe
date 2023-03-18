@@ -11,18 +11,13 @@ import { Member } from '../../../../../../models';
 import type { MemberWithEvent } from '../../../../../../types/commonTypes';
 import type { MemberNameProps } from '../../../../../../types/propsTypes';
 
-const MemberNames = ({ userLength, members }: MemberNameProps) => {
+const MemberNames = ({ members }: MemberNameProps) => {
   const hiddenUsers = useStore((state) => state.hiddenUsers);
 
   const [me] = useMe();
 
   return (
-    <div
-      className={cls(
-        'schedules__member-name-title',
-        userLength === 1 ? 'border-x-inherit' : ''
-      )}
-    >
+    <div className="schedules__member-name-title">
       {members.map((member) => {
         if (hiddenUsers.has(member.id)) return null;
 
