@@ -57,6 +57,7 @@ const AutoCompleteForPatient = ({
           patients ? 'rounded-b-none border-2 border-b-0 border-cst-blue' : ''
         )}
         register={register('name', { onChange })}
+        autoComplete="off"
       />
       {patients && (
         <ul className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white">

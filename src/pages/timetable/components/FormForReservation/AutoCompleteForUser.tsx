@@ -59,6 +59,7 @@ const AutoCompleteForUser = ({
           members ? 'rounded-b-none border-2 border-b-0 border-cst-blue' : ''
         )}
         register={register('name', { onChange: handleInputChange })}
+        autoComplete="off"
       />
       {members && (
         <ul className="absolute z-10 w-full rounded-md rounded-t-none border-2 border-t-0 border-cst-blue bg-white">
