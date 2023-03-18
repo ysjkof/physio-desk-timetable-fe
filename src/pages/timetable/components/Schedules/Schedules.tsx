@@ -12,8 +12,8 @@ const Schedules = ({ weekEvents }: SchedulesProps) => {
   return (
     <div className="flex h-full w-full overflow-y-scroll">
       <TimeLabels />
-      <div>
-        <SchedulesColumnHeader userLength={userLength} schedules={schedules} />
+      <div className="grow">
+        <SchedulesColumnHeader schedules={schedules} />
         <SchedulesColumnBody userLength={userLength} schedules={schedules} />
       </div>
     </div>
