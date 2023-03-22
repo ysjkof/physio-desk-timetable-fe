@@ -3,6 +3,7 @@ import { MemberDetail } from './MemberDetail';
 import { PrescriptionManagement } from './PrescriptionManagement';
 import { MemberManagement } from './MemberManagement';
 import { Statistics } from './Statistics';
+import { ProfileWithImage } from './ProfileWithImage';
 
 export {
   NotSelected,
@@ -10,4 +11,5 @@ export {
   PrescriptionManagement,
   MemberManagement,
   Statistics,
+  ProfileWithImage,
 };

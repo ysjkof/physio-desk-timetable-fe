@@ -1,9 +1,10 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { PropsWithChildren } from 'react';
-import { useMe, useWindowSize } from '../../hooks';
+import { useWindowSize } from '../../hooks';
 import { cls } from '../../utils/commonUtils';
 import { Building, BuildingPlus, User } from '../../svgs';
 import { DASHBOARD_CONTAINER_WIDTH } from '../../constants/constants';
+import { ProfileWithImage } from '../dashboard/components';
 
 const Setting = () => {
   const { width } = useWindowSize(true);
@@ -20,21 +21,6 @@ const Setting = () => {
       </div>
       <div style={{ width: outletWidth }}>
         <Outlet />
-      </div>
-    </div>
-  );
-};
-
-const ProfileWithImage = () => {
-  const [meData] = useMe();
-
-  return (
-    <div className="flex flex-col items-center">
-      <div className="relative mb-2 h-20 w-20 overflow-hidden rounded-full bg-gray-200">
-        <User className="position-center-x absolute top-3 h-full w-4/6 fill-white stroke-white" />
-      </div>
-      <div className="text-base">
-        <span>{meData?.name}</span>
       </div>
     </div>
   );

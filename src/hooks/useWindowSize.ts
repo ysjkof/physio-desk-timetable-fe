@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
  * 반환하는 width = View Port Width - Global Aside Width
  */
 export const useWindowSize = (hasEventListener?: boolean) => {
+  const [isLoading, setLoading] = useState(true);
   const [height, setHeight] = useState(window.innerHeight);
   const [width, setWidth] = useState(window.innerWidth);
   const [minusToHeight, setMinusToHeight] = useState(0);
@@ -25,9 +26,7 @@ export const useWindowSize = (hasEventListener?: boolean) => {
   };
 
   const getHeight = () => {
-    const GNBHeight =
-      document.querySelector('.clinic-selector')?.clientHeight || 0;
-    setHeight(window.innerHeight - GNBHeight - minusToHeight);
+    setHeight(window.innerHeight - minusToHeight);
   };
 
   const getWidth = () => {
@@ -39,6 +38,11 @@ export const useWindowSize = (hasEventListener?: boolean) => {
   const delayedGetHeight = () => setTimeout(getHeightAndWidth, 0);
 
   useEffect(() => {
+    getHeightAndWidth();
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
     let timer: NodeJS.Timeout | null = null;
 
     const debounceDelayedGetHeight = () => {
@@ -49,10 +53,11 @@ export const useWindowSize = (hasEventListener?: boolean) => {
 
     if (hasEventListener) {
       window.addEventListener('resize', debounceDelayedGetHeight);
+      setLoading(false);
       return () =>
         window.removeEventListener('resize', debounceDelayedGetHeight);
     }
   }, [hasEventListener, minusToHeight, minusToWidth]);
 
-  return { height, width, changeHeight, changeWidth };
+  return { height, width, changeHeight, changeWidth, isLoading };
 };

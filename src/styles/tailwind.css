@@ -270,7 +270,7 @@
     @apply w-full max-w-[70px];
   }
 
-  .clinic-selector {
+  #clinic-selector {
     @apply w-[18.75rem];
   }
   .clinic-card {

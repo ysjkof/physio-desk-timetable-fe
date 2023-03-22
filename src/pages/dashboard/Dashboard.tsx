@@ -1,25 +1,27 @@
+import { type PropsWithChildren } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { PropsWithChildren } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useStore } from '../../store';
-import { useGetMyMembers, useMe, useWindowSize } from '../../hooks';
+import { useWindowSize } from '../../hooks';
 import { cls } from '../../utils/commonUtils';
-import { BrokenLine, Heart, Medicine, User } from '../../svgs';
+import { BrokenLine, Heart, Medicine } from '../../svgs';
 import { ClinicSelector } from '../../components';
 import { DASHBOARD_CONTAINER_WIDTH } from '../../constants/constants';
+import { ProfileWithImage } from './components';
 
 const Dashboard = () => {
-  const { width } = useWindowSize(true);
+  const { width, isLoading } = useWindowSize(true);
   const outletWidth = width - DASHBOARD_CONTAINER_WIDTH;
 
+  if (isLoading) return null;
+
   return (
-    <div className="flex text-base" style={{ width }}>
+    <div className="flex text-base">
       <div
         className="dashboard-container"
         style={{ width: DASHBOARD_CONTAINER_WIDTH }}
       >
-        <ProfileWithImage />
+        <ProfileWithImage hasPosition />
         <LinkBtns />
       </div>
       <div
@@ -30,28 +32,6 @@ const Dashboard = () => {
           <ClinicSelector />
         </div>
         <Outlet />
-      </div>
-    </div>
-  );
-};
-
-const ProfileWithImage = () => {
-  const [meData] = useMe();
-  const clinicId = useStore((state) => state.pickedClinicId);
-  const [myMembers] = useGetMyMembers();
-  const position = myMembers?.find((member) => member.clinic.id === clinicId)
-    ?.manager
-    ? '관리자'
-    : '직원';
-
-  return (
-    <div className="flex flex-col items-center">
-      <div className="relative mb-2 h-20 w-20 overflow-hidden rounded-full bg-gray-200">
-        <User className="position-center-x absolute top-3 h-full w-4/6 fill-white stroke-white" />
-      </div>
-      <div className="text-base">
-        <span className="mr-1">{position}</span>
-        <span>{meData?.name}</span>
       </div>
     </div>
   );
