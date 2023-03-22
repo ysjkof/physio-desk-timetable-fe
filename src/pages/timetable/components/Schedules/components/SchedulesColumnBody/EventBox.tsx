@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,12 +34,11 @@ const EventBox = ({
   maxTableHeight,
   numberOfCell,
   event,
-  color,
+  color = DEFAULT_COLOR,
 }: EventBoxProps) => {
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
-
-  color = color || DEFAULT_COLOR;
+  const eventBox = useRef<HTMLDivElement>(null);
 
   const isDayOff = event.state === ReservationState.DayOff;
   const isReserve = event.state === ReservationState.Reserved;
@@ -47,61 +46,7 @@ const EventBox = ({
   const isNoshow = event.state === ReservationState.NoShow;
 
   let height = numberOfCell * TABLE_CELL_HEIGHT;
-
   if (height > maxTableHeight) height = maxTableHeight;
-
-  const eventBox = useRef<HTMLDivElement>(null);
-  const tooltip = useRef<HTMLDivElement>(null);
-
-  const positioningTooltip = () => {
-    if (!eventBox.current || !tooltip.current) return;
-
-    const { clientHeight: boxHeight, parentElement: eventBoxParentElement } =
-      eventBox.current;
-    if (!eventBoxParentElement) throw new Error('이벤트 박스가 없습니다.');
-
-    const { clientHeight: userColsWidth } = eventBoxParentElement;
-
-    const columnContainer = document.getElementById('timetable');
-    if (!columnContainer) throw new Error('스케쥴 컨테이너가 없습니다.');
-
-    const { clientHeight: columnViewportHeight } = columnContainer;
-
-    const {
-      right: tooltipRight,
-      width: tooltipWidth,
-      bottom: tooltipBottom,
-    } = tooltip.current.getBoundingClientRect();
-
-    if (tooltipRight > userColsWidth) {
-      tooltip.current.classList.remove('left-[90px]');
-      tooltip.current.style.left = `-${tooltipWidth}px`;
-    }
-
-    if (tooltipBottom > columnViewportHeight) {
-      tooltip.current.classList.remove('top-5');
-
-      const boxTop = +inset.split('px')[0];
-      const boxBottom = boxHeight + boxTop;
-      const isOverflow = maxTableHeight < boxBottom;
-
-      if (isOverflow) {
-        tooltip.current.style.bottom = `${boxBottom - maxTableHeight}px`;
-      } else {
-        tooltip.current.style.top = `-${
-          tooltipBottom - columnViewportHeight
-        }px`;
-      }
-    }
-  };
-
-  function onClickBox() {
-    navigate('', { state: { reservationId: event.id } });
-  }
-
-  useEffect(() => {
-    if (isHover) positioningTooltip();
-  }, [isHover]);
 
   const showCancelOfTimetable = useStore(
     (state) => state.showCancelOfTimetable
@@ -109,6 +54,10 @@ const EventBox = ({
   const showNoshowOfTimetable = useStore(
     (state) => state.showNoshowOfTimetable
   );
+
+  const onClickBox = () => {
+    navigate('', { state: { reservationId: event.id } });
+  };
 
   return (
     <motion.div
@@ -157,7 +106,10 @@ const EventBox = ({
         />
       </div>
       {isHover && (
-        <TooltipForReservationDetail reservation={event} ref={tooltip} />
+        <TooltipForReservationDetail
+          reservation={event}
+          boxRect={eventBox.current?.getBoundingClientRect()}
+        />
       )}
     </motion.div>
   );
