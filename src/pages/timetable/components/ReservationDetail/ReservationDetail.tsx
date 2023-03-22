@@ -83,6 +83,11 @@ const ReservationDetail = ({ reservation }: ReservationDetailProps) => {
           {memo}
         </DetailBox>
         <DetailBox title="예약상태">
+          {isFirst && (
+            <span className="badge-blue absolute top-0.5 left-20 text-xs">
+              신환
+            </span>
+          )}
           {isEnableEdit ? (
             <ToggleReservationState reservation={reservation} />
           ) : (
@@ -123,7 +128,7 @@ const DetailBox = ({
   children,
 }: DetailBoxProps) => {
   return (
-    <div className="px-4">
+    <div className="relative px-4">
       <div className="text-base font-medium text-navy">{title}</div>
       {isParagraph ? (
         <p className="mx-4 max-h-16 min-h-[1rem] overflow-y-scroll break-words rounded-sm py-1">
