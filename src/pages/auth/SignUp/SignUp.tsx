@@ -74,7 +74,7 @@ export default function SignUp() {
 
       createAccountMutation({
         variables: {
-          input: { name, email, password },
+          input: { name: name.trim(), email: email.trim(), password },
         },
         onCompleted,
       });
