@@ -36,7 +36,7 @@ const ModalChildrenContainer = (props: ModalProps) => {
         className={
           top
             ? 'absolute'
-            : 'relative mx-auto w-fit space-y-4 rounded-md bg-white'
+            : 'relative mx-auto w-fit space-y-4 overflow-hidden rounded-md bg-white'
         }
         style={{
           ...(top && { top }),

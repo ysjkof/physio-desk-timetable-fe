@@ -27,7 +27,7 @@ const ReserveOrDayoff = () => {
 
   return (
     <Modal closeAction={closeModal}>
-      <div className="w-96 rounded-sm border">
+      <div className="w-96">
         <Navigation>
           <Tab isActive={isReserve} onClick={seeReserve}>
             환자예약
