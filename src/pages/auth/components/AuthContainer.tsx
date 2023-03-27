@@ -4,7 +4,7 @@ import { Logo } from '../../../components';
 
 export default function AuthContainer({ children }: PropsWithChildren) {
   return (
-    <div className="mt-10 flex h-screen flex-col items-center lg:mt-28">
+    <div className="my-10 flex flex-col items-center">
       <div className="flex w-full max-w-screen-sm flex-col items-center px-5">
         <Link className="mb-4" to="/">
           <Logo className="h-10" />
