@@ -106,6 +106,16 @@ export type CreateDayOffOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type CreateNewVerificationInput = {
+  email: Scalars['String'];
+};
+
+export type CreateNewVerificationOutput = {
+  __typename?: 'CreateNewVerificationOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type CreatePatientInput = {
   birthday?: InputMaybe<Scalars['DateTime']>;
   clinicId?: InputMaybe<Scalars['Int']>;
@@ -449,6 +459,7 @@ export type LoginInput = {
 
 export type LoginOutput = {
   __typename?: 'LoginOutput';
+  authRequired?: Maybe<Scalars['Boolean']>;
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
   token?: Maybe<Scalars['String']>;
@@ -484,6 +495,7 @@ export type Mutation = {
   createAtomPrescription: CreateAtomPrescriptionOutput;
   createClinic: CreateClinicOutput;
   createDayOff: CreateDayOffOutput;
+  createNewVerification: CreateNewVerificationOutput;
   createPatient: CreatePatientOutput;
   createPrescription: CreatePrescriptionOutput;
   createReservation: CreateReservationOutput;
@@ -527,6 +539,11 @@ export type MutationCreateClinicArgs = {
 
 export type MutationCreateDayOffArgs = {
   input: CreateDayOffInput;
+};
+
+
+export type MutationCreateNewVerificationArgs = {
+  input: CreateNewVerificationInput;
 };
 
 
@@ -1230,6 +1247,13 @@ export type CreateAccountMutationVariables = Exact<{
 
 export type CreateAccountMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'CreateAccountOutput', ok: boolean, error?: string | null } };
 
+export type CreateNewVerificationMutationVariables = Exact<{
+  input: CreateNewVerificationInput;
+}>;
+
+
+export type CreateNewVerificationMutation = { __typename?: 'Mutation', createNewVerification: { __typename?: 'CreateNewVerificationOutput', ok: boolean, error?: string | null } };
+
 export type GetUsersByNameQueryVariables = Exact<{
   input: GetUsersByNameInput;
 }>;
@@ -1242,7 +1266,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', ok: boolean, error?: string | null, token?: string | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', ok: boolean, error?: string | null, token?: string | null, authRequired?: boolean | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 

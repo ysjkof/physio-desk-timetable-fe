@@ -6,6 +6,7 @@ export const LOGIN_DOCUMENT = gql`
       ok
       error
       token
+      authRequired
     }
   }
 `;

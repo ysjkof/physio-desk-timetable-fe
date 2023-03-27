@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
-import { setAlert } from '../../../store';
+import { setAlert, setConfirm } from '../../../store';
 import { REG_EXP } from '../../../constants/regex';
 import { MUOOL } from '../../../constants/constants';
 import { LOGIN_DOCUMENT } from '../../../graphql';
@@ -9,6 +9,7 @@ import { MenuButton, useLogin } from '../../../components';
 import { Input } from '../../../components';
 import FormError from '../../../components/FormError';
 import type { LoginInput, LoginMutation } from '../../../types/generatedTypes';
+import { useCreateNewVerification } from '../../../hooks';
 
 export default function Login() {
   const {
@@ -29,6 +30,7 @@ export default function Login() {
 
   const login = useLogin();
 
+  const createNewVerification = useCreateNewVerification();
   const onSubmit = () => {
     if (!loading) {
       const { email, password } = getValues();
@@ -43,8 +45,20 @@ export default function Login() {
         },
         onCompleted(data) {
           const {
-            login: { ok, token, error },
+            login: { ok, token, error, authRequired },
           } = data;
+
+          if (authRequired) {
+            return setConfirm({
+              messages: ['이메일 인증에서 회원가입을 완료해야 됩니다.'],
+              buttonText: '다시보내기',
+              confirmAction: () => {
+                createNewVerification(email);
+              },
+              targetName:
+                '10분 이상 지나도 인증 이메일이 오지 않으면 다시보내기를 눌러주세요',
+            });
+          }
 
           if (error) {
             return setAlert({ messages: [error] });

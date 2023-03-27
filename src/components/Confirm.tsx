@@ -81,7 +81,7 @@ const ConfirmBody = ({
         {messages.map(
           (message) => message && <span key={message}>{message}</span>
         )}
-        <span className="mt-1 text-base font-medium text-[#8D8DAD]">
+        <span className="mt-1 break-keep px-10 text-base font-medium text-[#8D8DAD]">
           {targetName}
         </span>
       </div>
