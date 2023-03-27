@@ -1,6 +1,5 @@
 import { useEffect, type PropsWithChildren, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ROUTES } from '../../router/routes';
+import { Link } from 'react-router-dom';
 import { cls } from '../../utils/commonUtils';
 import Logo from '../Logo';
 
@@ -13,24 +12,16 @@ function GlobalNavBar() {
 }
 
 const Layout = ({ children }: PropsWithChildren) => {
-  const location = useLocation();
-  const { pathname } = location;
-
-  const isDocs = pathname.startsWith(ROUTES.docs);
-
   const [scrollAtTop, SetScrollAtTop] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
-        SetScrollAtTop(false);
-      } else {
-        SetScrollAtTop(true);
-      }
+      if (window.scrollY > 0) return SetScrollAtTop(false);
+      if (scrollAtTop) return;
+      SetScrollAtTop(true);
     };
 
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.addEventListener('scroll', handleScroll);
     };
@@ -40,8 +31,8 @@ const Layout = ({ children }: PropsWithChildren) => {
     <header
       id="global-header"
       className={cls(
-        'sticky top-0 z-40 flex items-center justify-center bg-white py-6 transition-all duration-200',
-        isDocs ? 'shadow-md' : scrollAtTop ? '' : 'shadow-md'
+        'sticky top-0 z-40 flex items-center justify-center bg-white transition-all duration-200',
+        scrollAtTop ? ' py-6' : 'pt-3 pb-1 shadow-md'
       )}
     >
       <div className="flex w-full max-w-screen-xl items-center px-4">
