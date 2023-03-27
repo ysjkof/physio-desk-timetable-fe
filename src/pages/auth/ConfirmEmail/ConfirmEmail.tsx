@@ -4,31 +4,29 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { MUOOL } from '../../../constants/constants';
 import { VERIFY_EMAIL_DOCUMENT } from '../../../graphql';
-import { useMe } from '../../../hooks';
 import { setAlert } from '../../../store';
-import { cacheUpdateUserVerified } from '../../../utils/apolloUtils';
 import type { VerifyEmailMutation } from '../../../types/generatedTypes';
 
 export default function ConfirmEmail() {
   const navigate = useNavigate();
-  const [meData] = useMe();
 
   const [message, setMessage] = useState(
     '화면을 닫지 말고 기다려주세요. 확인 중입니다.'
   );
 
-  if (meData?.verified) {
-    navigate('/');
-  }
+  const [errMsg, setErrMsg] = useState('');
 
   const [verifyEmail] = useMutation<VerifyEmailMutation>(VERIFY_EMAIL_DOCUMENT);
 
-  const intervalUpdateMessage = (error: string | null | undefined) => {
+  const intervalUpdateMessage = () => {
     let i = 5;
-    setMessage(`${error} ${i}초 뒤에 홈으로 이동합니다.`);
+    const WILL_GO_HOME_AFTER_SECOND = '초 뒤 첫 화면으로 갑니다';
+
+    setMessage(`${i}${WILL_GO_HOME_AFTER_SECOND}`);
+
     const errorMessage = () => {
       i -= 1;
-      setMessage(`${error} ${i}초 뒤에 홈으로 이동합니다.`);
+      setMessage(`${i}${WILL_GO_HOME_AFTER_SECOND}`);
       if (i < 1) {
         clearInterval(interval);
       }
@@ -51,40 +49,39 @@ export default function ConfirmEmail() {
             verifyEmail: { error, ok },
           } = data;
 
-          if (error) {
-            return setMessage(error);
-          }
+          if (error) return setErrMsg(error);
 
-          if (!ok)
+          if (!ok) {
             throw new Error('Calling ConfirmEmail(). response ok is falsy.');
-
-          if (meData) {
-            cacheUpdateUserVerified(meData.id);
           }
 
           setAlert({
             messages: ['이메일 인증됐습니다'],
             isPositive: true,
           });
+
           navigate('/');
         },
       });
     }
 
-    intervalUpdateMessage('코드가 없습니다. 잘못된 접근입니다.');
+    intervalUpdateMessage();
+
     const timeoutId = setTimeout(navigate, 5000, '/');
     return () => clearTimeout(timeoutId);
-  }, [meData]);
+  }, []);
 
   return (
-    <div className="mt-52 flex flex-col items-center justify-center">
+    <div className="flex h-full w-full flex-col items-center justify-center">
       <Helmet>
         <title>이메일 인증 | {MUOOL}</title>
       </Helmet>
       <h2 className="mb-4 text-lg font-medium">이메일 인증</h2>
-      <h4 className="animate-pulse text-base font-medium text-red-600">
+      <p className="animate-pulse text-base font-medium text-red-600">
+        {errMsg}
+        <br />
         {message}
-      </h4>
+      </p>
     </div>
   );
 }
