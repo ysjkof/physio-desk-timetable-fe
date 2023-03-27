@@ -13,9 +13,9 @@ import {
   MyProfile,
 } from '../pages/setting/components';
 import Search from '../pages/search/Search';
+import { DASHBOARD, LOGIN, PATIENT_SEARCH, SETTING, TIMETABLE } from './routes';
 
 const ProtectRoute = lazy(() => import('./ProtectRoute'));
-const Warning = lazy(() => import('../components/Warning'));
 
 const TimeTable = lazy(() => import('../pages/timetable/Timetable'));
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'));
@@ -23,17 +23,21 @@ const Setting = lazy(() => import('../pages/setting/Setting'));
 
 const loginRoute = [
   {
-    path: 'tt',
+    path: TIMETABLE,
     element: (
-      <ProtectRoute whenFail="/login" failWhenLogout>
+      <ProtectRoute whenFail={LOGIN} failWhenLogout>
         <TimeTable />
       </ProtectRoute>
     ),
   },
   {
-    path: 'dashboard/clinic/members',
+    path: PATIENT_SEARCH,
+    element: <Search />,
+  },
+  {
+    path: DASHBOARD.member.root,
     element: (
-      <ProtectRoute whenFail="/login" failWhenLogout>
+      <ProtectRoute whenFail={LOGIN} failWhenLogout>
         <Dashboard />
       </ProtectRoute>
     ),
@@ -44,21 +48,21 @@ const loginRoute = [
         children: [
           { path: '', element: <NotSelected /> },
           {
-            path: ':memberId',
+            path: DASHBOARD.member.detail,
             element: <MemberDetail />,
           },
         ],
       },
       {
-        path: 'invite',
+        path: DASHBOARD.member.invite,
         element: <InviteUser />,
       },
     ],
   },
   {
-    path: 'dashboard/clinic/prescriptions',
+    path: DASHBOARD.prescriptions.root,
     element: (
-      <ProtectRoute whenFail="/login" failWhenLogout>
+      <ProtectRoute whenFail={LOGIN} failWhenLogout>
         <Dashboard />
       </ProtectRoute>
     ),
@@ -67,16 +71,16 @@ const loginRoute = [
         path: '',
         element: <PrescriptionManagement />,
         children: [
-          { path: 'create', element: <></> },
-          { path: ':prescriptionId/edit', element: <></> },
+          { path: DASHBOARD.prescriptions.create, element: <></> },
+          { path: DASHBOARD.prescriptions.edit, element: <></> },
         ],
       },
     ],
   },
   {
-    path: 'dashboard/clinic/statistics',
+    path: DASHBOARD.statistics.root,
     element: (
-      <ProtectRoute whenFail="/login" failWhenLogout>
+      <ProtectRoute whenFail={LOGIN} failWhenLogout>
         <Dashboard />
       </ProtectRoute>
     ),
@@ -88,34 +92,26 @@ const loginRoute = [
     ],
   },
   {
-    path: 'setting',
+    path: SETTING.root,
     element: (
-      <ProtectRoute whenFail="/" failWhenLogout>
+      <ProtectRoute whenFail={LOGIN} failWhenLogout>
         <Setting />
       </ProtectRoute>
     ),
     children: [
       {
-        path: 'my-info',
+        path: SETTING.myInfo,
         element: <MyProfile />,
       },
       {
-        path: 'my-clinics',
+        path: SETTING.myClinics,
         element: <MyClinics />,
       },
       {
-        path: 'clinic/create',
+        path: SETTING.createClinic,
         element: <CreateClinic />,
       },
     ],
-  },
-  {
-    path: 'search',
-    element: (
-      <ProtectRoute whenFail={<Warning type="verifyEmail" />} failWhenLogout>
-        <Search />
-      </ProtectRoute>
-    ),
   },
 ];
 
