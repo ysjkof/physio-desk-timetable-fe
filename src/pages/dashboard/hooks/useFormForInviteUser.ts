@@ -1,7 +1,7 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useInviteUser } from '../../../hooks';
 import { REG_EXP } from '../../../constants/regex';
-import { useStore } from '../../../store';
+import { setConfirm, useStore } from '../../../store';
 
 interface UseFormForInviteUserFields {
   name: string;
@@ -22,7 +22,15 @@ export const useFormForInviteUser = () => {
     const { name } = data;
     if (!name) return;
 
-    inviteUser(clinicId, name);
+    setConfirm({
+      buttonText: '초대하기',
+      confirmAction: () => {
+        inviteUser(clinicId, name);
+      },
+      messages: [`${name}님을 초대합니다`],
+      targetName: '',
+      isPositive: true,
+    });
   };
 
   const handleSubmit = handleSubmitWrapper(onSubmit);
