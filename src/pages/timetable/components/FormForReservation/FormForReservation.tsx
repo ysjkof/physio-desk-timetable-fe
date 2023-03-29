@@ -1,5 +1,6 @@
 import { useMemo, type PropsWithChildren } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { addMinutes } from 'date-fns';
 import { DateForm, InputWrapper, MenuButton } from '../../../../components';
 import AutoCompleteForUser from './AutoCompleteForUser';
@@ -65,8 +66,11 @@ const FormForReservation = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex h-full flex-col gap-5 pt-8"
+      className="relative flex h-full  flex-col gap-5 pt-8"
     >
+      {prescriptionList.getAll().length === 0 && (
+        <AlertNoPrescriptionAndGoCreate closeAction={closeAction} />
+      )}
       <div className="flex basis-full flex-col justify-between gap-5 px-4">
         <InputWrapper label="담당치료사" htmlFor="담당치료사" required>
           <AutoCompleteForUser
@@ -120,4 +124,33 @@ export default FormForReservation;
 
 export const Buttons = ({ children }: PropsWithChildren) => {
   return <div className="flex gap-4 bg-light-gray px-4 py-4">{children}</div>;
+};
+
+const AlertNoPrescriptionAndGoCreate = ({
+  closeAction,
+}: {
+  closeAction: () => void;
+}) => {
+  return (
+    <div className="absolute top-0 z-10 flex h-full w-full flex-col items-center justify-center gap-y-4 bg-black/60">
+      <div className="flex w-full flex-col items-center gap-y-6 rounded-md bg-white py-6">
+        <p>처방이 없습니다.</p>
+        <div className="flex w-full items-center gap-4 px-4">
+          <MenuButton
+            type="button"
+            className="w-full bg-close-bg text-base font-medium text-font-gray"
+            onClick={closeAction}
+          >
+            닫기
+          </MenuButton>
+          <Link
+            className="flex h-full w-full items-center justify-center bg-cst-blue text-center text-base font-medium text-white"
+            to="/dashboard/clinic/prescriptions/create"
+          >
+            처방 만들기
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 };

@@ -41,7 +41,7 @@ const AutoCompleteForPrescription = ({
       <div>
         처방이 없습니다.
         <Link
-          className="font-medium text-blue-500"
+          className="ml-2 font-medium text-blue-500"
           to="/dashboard/clinic/prescriptions/create"
         >
           만들기
