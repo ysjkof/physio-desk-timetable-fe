@@ -25,7 +25,7 @@ const FormForInviteUser = () => {
         type="submit"
         className="mt-6 w-36 rounded-md bg-cst-blue py-6 text-base font-medium text-white"
       >
-        만들기
+        초대하기
       </MenuButton>
     </form>
   );
