@@ -10,7 +10,10 @@ import type {
   MemberWithEvent,
 } from './commonTypes';
 import type { FormForEditPrescriptionFields } from './formTypes';
-import type { PrescriptionForFind } from './processedGeneratedTypes';
+import type {
+  MemberOfGetMyClinic,
+  PrescriptionForFind,
+} from './processedGeneratedTypes';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { GetStatisticsQuery } from './generatedTypes';
 
@@ -171,6 +174,7 @@ interface StatisticsUserIdProps extends ToggleUserIdProps, DisabledIds {
 
 export interface TableChartProps extends StatisticsUserIdProps {
   countList: CountListOfEachUser | undefined;
+  members: MemberOfGetMyClinic[];
 }
 
 export interface GraphChartProps extends DisabledIds {

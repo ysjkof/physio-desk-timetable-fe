@@ -1,34 +1,21 @@
 import { ChangeEvent, useState } from 'react';
 import TableChartCard from './TableChartCard';
-import { useDebouncedCallback, useGetClinic } from '../../../../../hooks';
+import { useDebouncedCallback } from '../../../../../hooks';
 import { CheckableButton, SearchInput } from '../../../../../components';
-import { getMemberState } from '../../../../../utils/commonUtils';
 import type { TableChartProps } from '../../../../../types/propsTypes';
 
-const TableChart = ({
-  countList,
-  disabledIds,
-  toggleUserId,
-  toggleAllUser,
-}: TableChartProps) => {
-  const [clinic] = useGetClinic();
+const TableChart = (props: TableChartProps) => {
+  const { countList, disabledIds, toggleUserId, toggleAllUser, members } =
+    props;
+
   const [query, setQuery] = useState('');
 
-  const membersWithoutWaiting = clinic?.members.filter(
-    ({ staying, accepted, manager }) =>
-      getMemberState({ staying, accepted, manager }) === '수락대기'
-        ? false
-        : true
-  );
-
   let pickedCount =
-    membersWithoutWaiting?.reduce((acc, member) => {
+    members.reduce((acc, member) => {
       return acc + (disabledIds.has(member.user.id) ? 0 : 1);
     }, 0) || 0;
 
-  const checked = Boolean(
-    membersWithoutWaiting && membersWithoutWaiting.length !== disabledIds.size
-  );
+  const checked = Boolean(members.length !== disabledIds.size);
 
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -52,10 +39,10 @@ const TableChart = ({
             label="전체"
             onClick={toggleAllUser}
           />
-          {pickedCount} / {membersWithoutWaiting?.length}명
+          {pickedCount} / {members.length}명
         </div>
         {countList &&
-          membersWithoutWaiting?.map((member) => {
+          members.map((member) => {
             const {
               user: { id: userId },
             } = member;

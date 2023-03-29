@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { endOfMonth, startOfMonth } from 'date-fns';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { GET_STATISTICS_DOCUMENT } from '../../../graphql';
 import { useStore } from '../../../store';
 import { useGetClinic } from '../../../hooks';
@@ -10,6 +10,7 @@ import type {
   GetStatisticsQueryVariables,
 } from '../../../types/generatedTypes';
 import type { CountListOfEachUser } from '../../../types/commonTypes';
+import { getMemberState } from '../../../utils/commonUtils';
 
 export const useStatistics = () => {
   const clinicId = useStore((state) => state.pickedClinicId);
@@ -18,19 +19,28 @@ export const useStatistics = () => {
     new Set()
   );
 
+  const membersWithoutWaiting =
+    clinic?.members.filter(({ staying, accepted, manager }) =>
+      getMemberState({ staying, accepted, manager }) === '수락대기'
+        ? false
+        : true
+    ) || [];
+
   const toggleUserId = (id: number) => {
-    const result = new Set(disabledUserIds);
-    if (result.has(id)) result.delete(id);
-    else result.add(id);
-    setDisabledUserIds(result);
+    const disabledIds = new Set(disabledUserIds);
+
+    if (!disabledIds.has(id)) disabledIds.add(id);
+    else disabledIds.delete(id);
+    setDisabledUserIds(disabledIds);
   };
 
   const [countList, setCountList] = useState<CountListOfEachUser>();
 
   const toggleAllUser = () => {
-    const arrayedCountList = Object.keys(countList || {});
     if (disabledUserIds.size === 0) {
-      setDisabledUserIds(new Set(arrayedCountList.map(Number)));
+      setDisabledUserIds(
+        new Set(membersWithoutWaiting.map((member) => member.user.id))
+      );
       return;
     }
     setDisabledUserIds(new Set());
@@ -80,5 +90,6 @@ export const useStatistics = () => {
     toggleAllUser,
     date,
     setDate,
+    members: membersWithoutWaiting,
   };
 };

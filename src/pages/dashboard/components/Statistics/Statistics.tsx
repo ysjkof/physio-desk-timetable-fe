@@ -14,6 +14,7 @@ const Statistics = () => {
     toggleAllUser,
     date,
     setDate,
+    members,
   } = useStatistics();
 
   return (
@@ -32,6 +33,7 @@ const Statistics = () => {
           disabledIds={disabledUserIds}
           toggleUserId={toggleUserId}
           toggleAllUser={toggleAllUser}
+          members={members}
         />
       </div>
     </div>
