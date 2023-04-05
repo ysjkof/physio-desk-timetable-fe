@@ -6,6 +6,7 @@ import { useDebouncedCallback, useLazySearchPatient } from '../../../../hooks';
 import { getStringYearMonthDay } from '../../../../utils/dateUtils';
 import type { PatientsInSearch } from '../../../../types/processedGeneratedTypes';
 import type { SearchPatientFormFields } from '../../../../types/formTypes';
+import FormError from '../../../../components/FormError';
 
 interface AutoCompleteForPatientProps {
   label: string;
@@ -17,8 +18,13 @@ const AutoCompleteForPatient = ({
   setParentValue,
 }: AutoCompleteForPatientProps) => {
   const [patients, setPatients] = useState<PatientsInSearch>();
+  const [error, setError] = useState('');
 
   const clearPatient = () => setPatients(undefined);
+  const clearPatientAndError = () => {
+    clearPatient();
+    setError('');
+  };
 
   const { register, setValue } = useForm<SearchPatientFormFields>();
 
@@ -28,7 +34,7 @@ const AutoCompleteForPatient = ({
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    if (!value) return clearPatient();
+    if (!value) return clearPatientAndError();
     debounceQuery(value);
   };
 
@@ -40,10 +46,13 @@ const AutoCompleteForPatient = ({
 
   useEffect(() => {
     if (loading) return;
-    if (!data || !isArrayAndValue(data.getPatientBy.patients)) {
+    if (!data) {
       return clearPatient();
     }
-
+    if (!isArrayAndValue(data.getPatientBy.patients)) {
+      setError('없는 이름입니다');
+      return clearPatient();
+    }
     setPatients(data.getPatientBy.patients);
   }, [data?.getPatientBy.patients]);
 
@@ -89,6 +98,7 @@ const AutoCompleteForPatient = ({
           })}
         </ul>
       )}
+      {error && <FormError error={error} textAlign="left" />}
     </>
   );
 };
