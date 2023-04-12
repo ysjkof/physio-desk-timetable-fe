@@ -12,17 +12,26 @@ import { useStore } from '../../../../store';
 import { useGetPrescriptions } from '../../../../hooks';
 import { useCreateReservation } from '../../hooks';
 import type { FormOfReserveFields } from '../../../../types/formTypes';
-import type { FormForReservationProps } from '../../../../types/propsTypes';
+import type {
+  CloseAction,
+  FormForReservationProps,
+} from '../../../../types/propsTypes';
 
 const FormForReservation = ({
   date,
   userId,
   closeAction,
 }: FormForReservationProps) => {
-  const { register, setValue, getValues, handleSubmit } =
-    useForm<FormOfReserveFields>({
-      defaultValues: { startDate: date, userId },
-    });
+  const {
+    register,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+    clearErrors,
+  } = useForm<FormOfReserveFields>({
+    defaultValues: { startDate: date, userId },
+  });
 
   const [prescriptionData, { loading }] = useGetPrescriptions();
 
@@ -50,6 +59,7 @@ const FormForReservation = ({
       patientId,
       prescriptionIds: prescriptions,
     };
+
     createReservation(formData, closeAction);
   };
 
@@ -79,13 +89,28 @@ const FormForReservation = ({
             userId={userId}
           />
         </InputWrapper>
-        <InputWrapper label="환자" htmlFor="환자" required>
-          <AutoCompleteForPatient label="환자" setParentValue={setPatient} />
+        <InputWrapper
+          label="환자"
+          htmlFor="환자"
+          required
+          error={errors.patientId ? '환자를 선택하세요' : ''}
+        >
+          <AutoCompleteForPatient
+            label="환자"
+            setParentValue={setPatient}
+            clearErrors={clearErrors}
+          />
         </InputWrapper>
-        <InputWrapper label="처방" htmlFor="처방" required>
+        <InputWrapper
+          label="처방"
+          htmlFor="처방"
+          required
+          error={errors.prescriptions ? '처방을 선택하세요' : ''}
+        >
           <AutoCompleteForPrescription
             setValue={setValue}
             prescriptionList={prescriptionList}
+            clearErrors={clearErrors}
           />
         </InputWrapper>
         <InputWrapper label="치료일정" htmlFor="치료일정" required>
@@ -126,11 +151,7 @@ export const Buttons = ({ children }: PropsWithChildren) => {
   return <div className="flex gap-4 bg-light-gray px-4 py-4">{children}</div>;
 };
 
-const AlertNoPrescriptionAndGoCreate = ({
-  closeAction,
-}: {
-  closeAction: () => void;
-}) => {
+const AlertNoPrescriptionAndGoCreate = ({ closeAction }: CloseAction) => {
   return (
     <div className="absolute top-0 z-10 flex h-full w-full flex-col items-center justify-center gap-y-4 bg-black/60">
       <div className="flex w-full flex-col items-center gap-y-6 rounded-md bg-white py-6">

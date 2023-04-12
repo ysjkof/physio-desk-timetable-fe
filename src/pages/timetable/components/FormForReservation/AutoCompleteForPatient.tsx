@@ -1,21 +1,26 @@
 import { type ChangeEvent, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { UseFormClearErrors, useForm } from 'react-hook-form';
 import { isArrayAndValue, cls } from '../../../../utils/commonUtils';
 import { Input } from '../../../../components';
 import { useDebouncedCallback, useLazySearchPatient } from '../../../../hooks';
 import { getStringYearMonthDay } from '../../../../utils/dateUtils';
-import type { PatientsInSearch } from '../../../../types/processedGeneratedTypes';
-import type { SearchPatientFormFields } from '../../../../types/formTypes';
 import FormError from '../../../../components/FormError';
+import type { PatientsInSearch } from '../../../../types/processedGeneratedTypes';
+import type {
+  FormOfReserveFields,
+  SearchPatientFormFields,
+} from '../../../../types/formTypes';
 
 interface AutoCompleteForPatientProps {
   label: string;
   setParentValue: (patientId: number) => void;
+  clearErrors: UseFormClearErrors<FormOfReserveFields>;
 }
 
 const AutoCompleteForPatient = ({
   label,
   setParentValue,
+  clearErrors: clearParentErrors,
 }: AutoCompleteForPatientProps) => {
   const [patients, setPatients] = useState<PatientsInSearch>();
   const [error, setError] = useState('');
@@ -34,7 +39,7 @@ const AutoCompleteForPatient = ({
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    if (!value) return clearPatientAndError();
+    clearPatientAndError();
     debounceQuery(value);
   };
 
@@ -42,6 +47,7 @@ const AutoCompleteForPatient = ({
     setValue('name', name);
     setParentValue(id);
     clearPatient();
+    clearParentErrors();
   };
 
   useEffect(() => {

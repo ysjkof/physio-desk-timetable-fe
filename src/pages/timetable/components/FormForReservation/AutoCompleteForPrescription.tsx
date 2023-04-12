@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { useForm, type UseFormSetValue } from 'react-hook-form';
+import {
+  useForm,
+  UseFormClearErrors,
+  type UseFormSetValue,
+} from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { isArrayAndValue } from '../../../../utils/commonUtils';
 import { PickedPrescriptions } from '../../../../models';
@@ -11,11 +15,13 @@ import type { PickedPrescription } from '../../../../types/commonTypes';
 interface AutoCompleteForPrescriptionProps {
   prescriptionList: PickedPrescriptions;
   setValue: UseFormSetValue<FormOfReserveFields>;
+  clearErrors: UseFormClearErrors<FormOfReserveFields>;
 }
 
 const AutoCompleteForPrescription = ({
   prescriptionList,
   setValue: setValueOfParentInput,
+  clearErrors: clearParentErrors,
 }: AutoCompleteForPrescriptionProps) => {
   const [isInputMode, setIsInputMode] = useState(false);
 
@@ -32,6 +38,7 @@ const AutoCompleteForPrescription = ({
     setPickedPrescriptions({ ...freshSelection.get() });
     setValue('prescriptions', freshSelection.getNames());
     setValueOfParentInput('prescriptions', freshSelection.get().prescriptions);
+    clearParentErrors();
   };
 
   const prescriptions = prescriptionList.getAll();
