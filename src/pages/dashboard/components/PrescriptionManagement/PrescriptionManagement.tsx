@@ -8,6 +8,8 @@ import EditPrescription from '../EditPrescription/EditPrescription';
 import { useStore } from '../../../../store';
 import { useGetPrescriptions, useWindowSize } from '../../../../hooks';
 import { ProtectStayMember, Warning } from '../../../../components';
+import { Helmet } from 'react-helmet-async';
+import { MUOOL } from '../../../../constants/constants';
 
 const PrescriptionManagement = () => {
   const { height } = useWindowSize(true);
@@ -27,46 +29,50 @@ const PrescriptionManagement = () => {
   };
 
   return (
-    <ProtectStayMember
-      clinicId={clinicId}
-      fallback={<Warning type="hasNotPermission" />}
-    >
-      <div
-        className="grow whitespace-nowrap bg-[#F9F9FF] px-10"
-        style={{ height }}
+    <>
+      <Helmet title={`처방관리 | ${MUOOL}`} />
+
+      <ProtectStayMember
+        clinicId={clinicId}
+        fallback={<Warning type="hasNotPermission" />}
       >
-        <div className="my-6 flex items-center justify-between gap-6">
-          <div className="flex items-baseline gap-2">
-            <h1 className="dashboard-menu-title">처방목록</h1>
-            <span className="text-[#8D8DAD]">
-              {queryData?.count || 0}/{queryData?.maximumCount || 10}
-            </span>
-          </div>
-          <PrescriptionManagementController
-            seeInactivation={seeInactivation}
-            setSeeInactivation={setSeeInactivation}
-          />
-        </div>
-
-        <PrescriptionTableHeader />
         <div
-          className="prescription-management__table-body pb-20"
-          style={{ height: 'calc(100% - 92px)' }}
+          className="grow whitespace-nowrap bg-[#F9F9FF] px-10"
+          style={{ height }}
         >
-          {queryData?.prescriptions?.map((prescription) => (
-            <PrescriptionItem
-              key={prescription.id}
-              prescription={prescription}
-              clinicId={clinicId}
+          <div className="my-6 flex items-center justify-between gap-6">
+            <div className="flex items-baseline gap-2">
+              <h1 className="dashboard-menu-title">처방목록</h1>
+              <span className="text-[#8D8DAD]">
+                {queryData?.count || 0}/{queryData?.maximumCount || 10}
+              </span>
+            </div>
+            <PrescriptionManagementController
               seeInactivation={seeInactivation}
+              setSeeInactivation={setSeeInactivation}
             />
-          ))}
-        </div>
+          </div>
 
-        {hasCreate && <CreatePrescription closeAction={closeAction} />}
-        {hasEdit && <EditPrescription closeAction={closeAction} />}
-      </div>
-    </ProtectStayMember>
+          <PrescriptionTableHeader />
+          <div
+            className="prescription-management__table-body pb-20"
+            style={{ height: 'calc(100% - 92px)' }}
+          >
+            {queryData?.prescriptions?.map((prescription) => (
+              <PrescriptionItem
+                key={prescription.id}
+                prescription={prescription}
+                clinicId={clinicId}
+                seeInactivation={seeInactivation}
+              />
+            ))}
+          </div>
+
+          {hasCreate && <CreatePrescription closeAction={closeAction} />}
+          {hasEdit && <EditPrescription closeAction={closeAction} />}
+        </div>
+      </ProtectStayMember>
+    </>
   );
 };
 

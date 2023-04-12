@@ -2,6 +2,8 @@ import { useState } from 'react';
 import FormForEditMyProfile from './FormForEditMyProfile';
 import FormForEditEmail from './FormForEditEmail';
 import { useMe } from '../../../../hooks';
+import { Helmet } from 'react-helmet-async';
+import { MUOOL } from '../../../../constants/constants';
 
 const MyProfile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -11,19 +13,22 @@ const MyProfile = () => {
   };
 
   return (
-    <div className="px-14 py-10">
-      <Title />
-      <div className="mt-10 flex w-[460px] flex-col gap-4">
-        {isEditMode ? (
-          <>
-            <FormForEditEmail />
-            <FormForEditMyProfile toggleEditMode={toggleEditMode} />
-          </>
-        ) : (
-          <ProfileMain toggleEditMode={toggleEditMode} />
-        )}
+    <>
+      <Helmet title={`나의 정보 | ${MUOOL}`} />
+      <div className="px-14 py-10">
+        <Title />
+        <div className="mt-10 flex w-[460px] flex-col gap-4">
+          {isEditMode ? (
+            <>
+              <FormForEditEmail />
+              <FormForEditMyProfile toggleEditMode={toggleEditMode} />
+            </>
+          ) : (
+            <ProfileMain toggleEditMode={toggleEditMode} />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

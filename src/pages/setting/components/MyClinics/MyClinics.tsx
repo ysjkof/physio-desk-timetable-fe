@@ -12,6 +12,8 @@ import DisabledCard from './DisabledCard';
 import { useGetMyMembers, useMe } from '../../../../hooks';
 import { ClinicType } from '../../../../types/generatedTypes';
 import type { MyMembers } from '../../../../types/commonTypes';
+import { Helmet } from 'react-helmet-async';
+import { MUOOL } from '../../../../constants/constants';
 
 const MyClinics = () => {
   const [meData] = useMe();
@@ -43,74 +45,77 @@ const MyClinics = () => {
   });
 
   return (
-    <div className="h-full overflow-y-scroll px-14 py-10">
-      <Title />
-      <div className="mt-10 flex flex-col gap-10">
-        <ClinicsContainer title="수락대기 병원">
-          {members.수락대기.map((member) => (
-            <WaitingCard
-              key={member.id}
-              memberId={member.id}
-              icon={<HourglassWithArrow className="h-full w-full" />}
-              name={member.clinic.name}
-              createAt={member.createdAt}
-            />
-          ))}
-        </ClinicsContainer>
-        <ClinicsContainer title="가입한 병원">
-          {members.직원.map((member) => (
-            <ClinicCard
-              key={member.id}
-              memberId={member.id}
-              clinicId={member.clinic.id}
-              icon={<BuildingLarge className="h-full w-full" />}
-              name={member.clinic.name}
-              memberRole="직원"
-              isPersonal={member.clinic.id === personalClinicId}
-              createAt={member.createdAt}
-            />
-          ))}
-          {members.관리자.map((member) => (
-            <ClinicCard
-              key={member.id}
-              memberId={member.id}
-              clinicId={member.clinic.id}
-              icon={<BuildingLarge className="h-full w-full" />}
-              name={renameUseSplit(member.clinic.name)}
-              memberRole="관리자"
-              isPersonal={member.clinic.id === personalClinicId}
-              createAt={member.createdAt}
-            />
-          ))}
-        </ClinicsContainer>
-        <ClinicsContainer title="탈퇴한 병원">
-          {members.탈퇴.map((member) => (
-            <DisabledCard
-              key={member.id}
-              icon={
-                <BuildingLargeWithX className="h-full w-full stroke-[#5C5E80]" />
-              }
-              name={member.clinic.name}
-              memberRole={member.manager ? '관리자' : '직원'}
-              createAt={member.createdAt}
-            />
-          ))}
-        </ClinicsContainer>
-        <ClinicsContainer title="폐쇄한 병원">
-          {members.폐쇄.map((member) => (
-            <DisabledCard
-              key={member.id}
-              icon={
-                <BuildingLargeWithBan className="h-full w-full stroke-[#5C5E80]" />
-              }
-              name={member.clinic.name}
-              memberRole={member.manager ? '관리자' : '직원'}
-              createAt={member.createdAt}
-            />
-          ))}
-        </ClinicsContainer>
+    <>
+      <Helmet title={`나의 병원 | ${MUOOL}`} />
+      <div className="h-full overflow-y-scroll px-14 py-10">
+        <Title />
+        <div className="mt-10 flex flex-col gap-10">
+          <ClinicsContainer title="수락대기 병원">
+            {members.수락대기.map((member) => (
+              <WaitingCard
+                key={member.id}
+                memberId={member.id}
+                icon={<HourglassWithArrow className="h-full w-full" />}
+                name={member.clinic.name}
+                createAt={member.createdAt}
+              />
+            ))}
+          </ClinicsContainer>
+          <ClinicsContainer title="가입한 병원">
+            {members.직원.map((member) => (
+              <ClinicCard
+                key={member.id}
+                memberId={member.id}
+                clinicId={member.clinic.id}
+                icon={<BuildingLarge className="h-full w-full" />}
+                name={member.clinic.name}
+                memberRole="직원"
+                isPersonal={member.clinic.id === personalClinicId}
+                createAt={member.createdAt}
+              />
+            ))}
+            {members.관리자.map((member) => (
+              <ClinicCard
+                key={member.id}
+                memberId={member.id}
+                clinicId={member.clinic.id}
+                icon={<BuildingLarge className="h-full w-full" />}
+                name={renameUseSplit(member.clinic.name)}
+                memberRole="관리자"
+                isPersonal={member.clinic.id === personalClinicId}
+                createAt={member.createdAt}
+              />
+            ))}
+          </ClinicsContainer>
+          <ClinicsContainer title="탈퇴한 병원">
+            {members.탈퇴.map((member) => (
+              <DisabledCard
+                key={member.id}
+                icon={
+                  <BuildingLargeWithX className="h-full w-full stroke-[#5C5E80]" />
+                }
+                name={member.clinic.name}
+                memberRole={member.manager ? '관리자' : '직원'}
+                createAt={member.createdAt}
+              />
+            ))}
+          </ClinicsContainer>
+          <ClinicsContainer title="폐쇄한 병원">
+            {members.폐쇄.map((member) => (
+              <DisabledCard
+                key={member.id}
+                icon={
+                  <BuildingLargeWithBan className="h-full w-full stroke-[#5C5E80]" />
+                }
+                name={member.clinic.name}
+                memberRole={member.manager ? '관리자' : '직원'}
+                createAt={member.createdAt}
+              />
+            ))}
+          </ClinicsContainer>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

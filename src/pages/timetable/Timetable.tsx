@@ -47,9 +47,7 @@ const TimeTable = () => {
 
   return (
     <>
-      <Helmet>
-        <title>시간표 | {MUOOL}</title>
-      </Helmet>
+      <Helmet title={`시간표 | ${MUOOL}`} />
       <TimetableTemplate
         nav={<TableController members={members} />}
         columns={

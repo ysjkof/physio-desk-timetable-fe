@@ -1,13 +1,18 @@
+import { Helmet } from 'react-helmet-async';
 import FormForCreateClinic from './FormForCreateClinic';
+import { MUOOL } from '../../../../constants/constants';
 
 const CreateClinic = () => {
   return (
-    <div className="px-14 py-10">
-      <Title />
-      <div className="mt-10 flex w-[460px] flex-col gap-4">
-        <FormForCreateClinic />
+    <>
+      <Helmet title={`병원 만들기 | ${MUOOL}`} />
+      <div className="px-14 py-10">
+        <Title />
+        <div className="mt-10 flex w-[460px] flex-col gap-4">
+          <FormForCreateClinic />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

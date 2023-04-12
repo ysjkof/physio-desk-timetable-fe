@@ -74,9 +74,7 @@ export default function Login() {
 
   return (
     <>
-      <Helmet>
-        <title>로그인 | {MUOOL}</title>
-      </Helmet>
+      <Helmet title={`로그인 | ${MUOOL}`} />
 
       <h2 className="mb-8 text-center text-base font-semibold">
         무울시간표에 로그인

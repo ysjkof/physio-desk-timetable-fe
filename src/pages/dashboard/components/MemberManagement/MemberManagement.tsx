@@ -6,6 +6,8 @@ import MemberList from './MemberList';
 import { useGetClinic } from '../../../../hooks';
 import { ProtectStayMember, Warning } from '../../../../components';
 import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
+import { MUOOL } from '../../../../constants/constants';
+import { Helmet } from 'react-helmet-async';
 
 const MemberManagement = () => {
   const [myClinic] = useGetClinic();
@@ -23,27 +25,32 @@ const MemberManagement = () => {
   }, [myClinic, searchInput]);
 
   return (
-    <ProtectStayMember
-      clinicId={myClinic?.id}
-      fallback={<Warning type="hasNotPermission" />}
-    >
-      <div className="member-management">
-        <div className="member-management__nav overflow-y-scroll">
-          <h1 className="dashboard-menu-title mb-6 px-10">직원열람 및 관리</h1>
-          <div className="mb-6 px-10">
-            <SearchMember
-              members={myClinic?.members}
-              setSearchInput={setSearchInput}
-            />
+    <>
+      <Helmet title={`직원 관리 | ${MUOOL}`} />
+      <ProtectStayMember
+        clinicId={myClinic?.id}
+        fallback={<Warning type="hasNotPermission" />}
+      >
+        <div className="member-management">
+          <div className="member-management__nav overflow-y-scroll">
+            <h1 className="dashboard-menu-title mb-6 px-10">
+              직원열람 및 관리
+            </h1>
+            <div className="mb-6 px-10">
+              <SearchMember
+                members={myClinic?.members}
+                setSearchInput={setSearchInput}
+              />
+            </div>
+            <AlignmentButtons setMembers={setMembers} />
+            <MemberList members={members} />
           </div>
-          <AlignmentButtons setMembers={setMembers} />
-          <MemberList members={members} />
+          <div className="member-management__member-detail-container">
+            <Outlet />
+          </div>
         </div>
-        <div className="member-management__member-detail-container">
-          <Outlet />
-        </div>
-      </div>
-    </ProtectStayMember>
+      </ProtectStayMember>
+    </>
   );
 };
 

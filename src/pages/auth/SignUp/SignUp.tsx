@@ -83,9 +83,7 @@ export default function SignUp() {
 
   return (
     <>
-      <Helmet>
-        <title>계정 만들기 | {MUOOL}</title>
-      </Helmet>
+      <Helmet title={`회원가입 | ${MUOOL}`} />
 
       <h2 className="mb-8 text-center text-base font-semibold">
         계정을 만드세요

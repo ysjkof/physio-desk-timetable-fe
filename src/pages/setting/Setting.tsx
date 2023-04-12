@@ -3,26 +3,30 @@ import { PropsWithChildren } from 'react';
 import { useWindowSize } from '../../hooks';
 import { cls } from '../../utils/commonUtils';
 import { Building, BuildingPlus, User } from '../../svgs';
-import { DASHBOARD_CONTAINER_WIDTH } from '../../constants/constants';
+import { DASHBOARD_CONTAINER_WIDTH, MUOOL } from '../../constants/constants';
 import { ProfileWithImage } from '../dashboard/components';
+import { Helmet } from 'react-helmet-async';
 
 const Setting = () => {
   const { width } = useWindowSize(true);
   const outletWidth = width - DASHBOARD_CONTAINER_WIDTH;
 
   return (
-    <div className="flex text-base" style={{ width }}>
-      <div
-        className="dashboard-container"
-        style={{ width: DASHBOARD_CONTAINER_WIDTH }}
-      >
-        <ProfileWithImage />
-        <MenuContainer />
+    <>
+      <Helmet title={`설정 | ${MUOOL}`} />
+      <div className="flex text-base" style={{ width }}>
+        <div
+          className="dashboard-container"
+          style={{ width: DASHBOARD_CONTAINER_WIDTH }}
+        >
+          <ProfileWithImage />
+          <MenuContainer />
+        </div>
+        <div style={{ width: outletWidth }}>
+          <Outlet />
+        </div>
       </div>
-      <div style={{ width: outletWidth }}>
-        <Outlet />
-      </div>
-    </div>
+    </>
   );
 };
 
