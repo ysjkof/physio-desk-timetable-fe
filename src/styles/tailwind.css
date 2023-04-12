@@ -116,7 +116,7 @@
     @apply w-full rounded-md border py-1 pr-5 text-right shadow-sm transition-colors focus:border-green-500 focus:outline-none focus:ring-green-500;
   }
   .date-form__input {
-    @apply w-full rounded-md border py-1 pr-5 text-right text-sm text-cst-blue shadow-sm transition-colors focus:border-cst-blue focus:outline-none focus:ring-1 focus:ring-cst-blue;
+    @apply w-full py-1.5 pr-5 text-right text-sm text-cst-blue outline-none transition-colors focus:bg-cst-blue/20;
   }
 
   .bubble-arrow-t-center {

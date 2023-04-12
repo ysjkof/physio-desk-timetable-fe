@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { cls } from '../../utils/commonUtils';
+import { cls, getPositionRef } from '../../utils/commonUtils';
 import Datepicker from '../Datepicker';
 import Timepicker from '../Timepicker';
 import { InputForDateForm } from './InputForDateForm';
+import FormError from '../FormError';
+import Modal from '../Modal';
+import { isValidDay, isValidMonth } from '../../utils/dateUtils';
 import type { HoursAndMinutes } from '../../types/commonTypes';
 
 interface DateFormFields {
@@ -21,13 +24,16 @@ interface DateFormProps {
   setParentValue: (date: Date) => void;
 }
 
-export const DateForm = ({
-  date,
-  hasHour = false,
-  disablePreviousDay,
-  setParentValue,
-}: DateFormProps) => {
-  const { register, setValue, getValues } = useForm<DateFormFields>();
+export const DateForm = (props: DateFormProps) => {
+  const { date, hasHour = false, disablePreviousDay, setParentValue } = props;
+  const {
+    register,
+    setValue,
+    getValues,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm<DateFormFields>({ mode: 'onChange' });
 
   const [hasDatepicker, setHasDatepicker] = useState(false);
   const [hasTimepicker, setHasTimepicker] = useState(false);
@@ -46,8 +52,18 @@ export const DateForm = ({
     closeDatepicker();
     setHasTimepicker(true);
   };
+  const closeDatepickerAndTimepicker = () => {
+    closeDatepicker();
+    closeTimepicker();
+  };
+
+  const setParentValueAndCloseModal = () => {
+    setParentDate();
+    closeDatepickerAndTimepicker();
+  };
 
   const setDate = (date: Date) => {
+    clearErrors();
     setValue('year', date.getFullYear());
     setValue('month', date.getMonth() + 1);
     setValue('day', date.getDate());
@@ -62,6 +78,18 @@ export const DateForm = ({
 
   const setParentDate = () => {
     const { year, month, day, hours, minutes } = getValues();
+
+    if (!isValidMonth(month)) {
+      setValue('month', date?.getMonth() || 0);
+      return setError('month', {
+        message: '1월부터 12월까지 입력할 수 있습니다',
+      });
+    }
+
+    if (!isValidDay(new Date(year, month - 1), day)) {
+      setValue('day', date?.getDate() || 0);
+      return setError('day', { message: '없는 날짜입니다' });
+    }
 
     const monthStr = String(month).padStart(2, '0');
     const dayStr = String(day).padStart(2, '0');
@@ -87,31 +115,44 @@ export const DateForm = ({
     setDateTime(date);
   }, [date]);
 
+  const getError = () => {
+    let message = '';
+    const error = Object.values(errors)[0];
+    if (error?.message) {
+      message = error.message;
+    }
+    return message;
+  };
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { top, left, right } = getPositionRef(containerRef);
+
   return (
     <div
       className={cls(
-        'relative grid w-full gap-1',
+        'relative grid w-full overflow-hidden rounded-md border',
         hasHour
           ? 'grid-cols-[1fr_repeat(4,_0.7fr)]'
           : 'grid-cols-[1fr_repeat(2,_0.7fr)]'
       )}
-      onBlur={setParentDate}
+      onBlur={setParentValueAndCloseModal}
+      ref={containerRef}
     >
       <InputForDateForm
         label="년"
-        register={register('year')}
+        register={register('year', { max: 12, min: 1 })}
         className="date-form__input"
         onFocus={openDatepicker}
       />
       <InputForDateForm
         label="월"
-        register={register('month')}
+        register={register('month', { max: 12, min: 1 })}
         className="date-form__input"
         onFocus={openDatepicker}
       />
       <InputForDateForm
         label="일"
-        register={register('day')}
+        register={register('day', { max: 31, min: 1 })}
         className="date-form__input"
         onFocus={openDatepicker}
       />
@@ -137,20 +178,31 @@ export const DateForm = ({
         </>
       )}
       {hasDatepicker && (
-        <div className="absolute left-0 top-8 z-10 bg-white">
+        <Modal
+          closeAction={closeDatepicker}
+          isTransparentBackground
+          top={top}
+          left={left}
+        >
           <Datepicker
             closeAction={closeDatepicker}
             selectedDate={date || new Date()}
             selectDate={setDate}
             disablePreviousDay={disablePreviousDay}
           />
-        </div>
+        </Modal>
       )}
       {hasTimepicker && (
-        <div className="absolute right-0 top-8 z-10 bg-white">
+        <Modal
+          closeAction={closeTimepicker}
+          isTransparentBackground
+          top={top}
+          left={right && right - 100}
+        >
           <Timepicker closeAction={closeTimepicker} setTime={setTime} />
-        </div>
+        </Modal>
       )}
+      <FormError error={getError()} top="30px" textAlign="left" />
     </div>
   );
 };

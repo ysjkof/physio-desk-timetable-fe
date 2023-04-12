@@ -1,4 +1,10 @@
-import { differenceInMinutes, parseISO, setDay, startOfDay } from 'date-fns';
+import {
+  differenceInMinutes,
+  lastDayOfMonth,
+  parseISO,
+  setDay,
+  startOfDay,
+} from 'date-fns';
 import { LOCALE } from '../constants/constants';
 
 export function getSunday(date: Date) {
@@ -131,11 +137,6 @@ export function getFrom4DigitTime(time: string, what: 'hour' | 'minute') {
   return what === 'hour' ? time.substring(0, 2) : time.substring(3, 5);
 }
 
-interface Duration {
-  hour: number;
-  minute: number;
-}
-
 /** 새 날짜를 생성하면서 시, 분, 초, 밀리초를 초기화 한다. 초와 밀리초는 무조건 0이다. */
 export function createDate(
   date?: string | Date,
@@ -208,3 +209,12 @@ export function getDateFromStr8Digit(dateString: string) {
   const day = parseInt(dateString.substring(6, 8), 10);
   return new Date(year, month, day);
 }
+
+export const isValidMonth = (month: number) =>
+  Number.isInteger(+month) && month > 0 && month < 13;
+
+export const isValidDay = (date: Date, day: number) => {
+  const lastDay = lastDayOfMonth(date).getDate();
+  if (day > lastDay) return false;
+  return true;
+};

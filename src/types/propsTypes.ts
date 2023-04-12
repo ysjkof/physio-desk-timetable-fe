@@ -84,7 +84,7 @@ export interface UseAutoCompleteProps<T> {
   initialValue?: T | null;
 }
 
-export interface DatepickerProps extends Partial<CloseAction> {
+export interface DatepickerProps extends CloseAction {
   selectedDate: Date;
   selectDate: (date: Date) => void;
   disablePreviousDay?: boolean;
