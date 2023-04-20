@@ -11,6 +11,7 @@ const Input = ({ register, ...args }: InputProps) => {
     <input
       {...args}
       {...register}
+      autoComplete="off"
       className={cls('input', args.className || '')}
     />
   );
@@ -49,7 +50,7 @@ const Textarea = ({ register, ...args }: TextareaProps) => {
     <textarea
       {...args}
       {...register}
-      className="w-full rounded-md border py-2 px-3 placeholder:text-sm"
+      className="w-full rounded-md border px-3 py-2 placeholder:text-sm"
     />
   );
 };
