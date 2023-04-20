@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <Helmet title={MUOOL} />
-      <LandingPage />;
+      <LandingPage />
     </>
   );
 }
