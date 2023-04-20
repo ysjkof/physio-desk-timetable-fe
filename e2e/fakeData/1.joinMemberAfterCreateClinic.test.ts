@@ -20,7 +20,10 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
   const linkToLogin = page.getByRole('link', { name: '로그인', exact: true });
   const linkToSetting = page.getByRole('link', { name: '설정' });
   const alertModal = page.locator('#alert');
+  const confirmModal = page.locator('#confirm');
   const alertCloseBtn = alertModal.getByText('창 닫기');
+  const confirmAcceptBtn = confirmModal.getByText('초대하기');
+  const confirmCloseBtn = confirmModal.getByText('초대하기');
   const emailInput = page.getByPlaceholder('Email을 입력하세요');
   const passwordInput = page.getByPlaceholder('비밀번호를 입력하세요');
 
@@ -40,17 +43,18 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
   // 만든 병원에 사용자를 초대한다
 
   await page.getByRole('link', { name: '병원', exact: true }).click();
-  await page.locator('.clinic-selector').getByRole('button').click();
+  await page.locator('#clinic-selector').getByRole('button').click();
   await page
-    .locator('.clinic-selector ul li')
+    .locator('#clinic-selector ul li')
     .getByRole('button', { name: '빕트 정형외과의원' })
     .click();
 
   for (let i = 1; i < NAMES.length; i += 1) {
     await page.getByRole('link', { name: '직원초대' }).click();
     await page.getByLabel('직원 이름').fill(NAMES[i]);
-    await page.getByRole('button', { name: '만들기' }).click();
-    await expect(page.getByText(/을 초대했습니다*/)).toBeVisible();
+    await page.getByRole('button', { name: '초대하기' }).click();
+    await expect(page.getByText(/을 초대합니다*/)).toBeVisible();
+    await confirmCloseBtn.click();
     await alertCloseBtn.click();
   }
 
@@ -76,8 +80,6 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
     await alertCloseBtn.click();
     await page.getByRole('button', { name: '로그아웃' }).click();
   }
-
-  const confirmModal = page.locator('#confirm');
 
   // EMAIL.at(-2)는 다시 탈퇴한다
   await linkToLogin.click();

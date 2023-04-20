@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
   await page.getByPlaceholder('비밀번호를 입력하세요').fill(PASSWORD);
   await page.getByPlaceholder('비밀번호를 입력하세요').press('Enter');
 
-  const clinicSelector = page.locator('.clinic-selector');
+  const clinicSelector = page.locator('#clinic-selector');
   await clinicSelector.click();
   await clinicSelector.getByText(CLINIC_NAME).click();
 });

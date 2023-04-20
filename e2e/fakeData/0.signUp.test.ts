@@ -11,16 +11,14 @@ const EMAIL = [
 ];
 const PASSWORD = '123';
 
-test.afterAll(async ({ page }) => {
-  await page.close();
-});
-
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5173');
 });
 
 test('6개의 계정 만들기', async ({ page }) => {
-  const linkToLogin = page.getByRole('link', { name: '회원가입', exact: true });
+  const linkToLogin = page
+    .locator('header')
+    .getByRole('link', { name: '회원가입', exact: true });
   const linkOfSignUp = page.getByRole('link', {
     name: '계정이 없습니까?회원가입',
   });
@@ -31,9 +29,7 @@ test('6개의 계정 만들기', async ({ page }) => {
   const signupName = page.getByPlaceholder('이름을 입력하세요');
   const passwordInput = page.getByPlaceholder('비밀번호를 입력하세요');
   const alertCloseBtn = page.locator('#alert').getByText('창 닫기');
-  const alertContainer = page.getByText(
-    /입력한 주소로 인증 이메일을 전송했습니다./
-  );
+  const alertContainer = page.getByText(/인증 이메일 전송을 요청했습니다./);
 
   for (const email of EMAIL) {
     await linkToLogin.click();
@@ -47,4 +43,6 @@ test('6개의 계정 만들기', async ({ page }) => {
     await expect(alertContainer).toBeVisible();
     await alertCloseBtn.click();
   }
+
+  await page.close();
 });
