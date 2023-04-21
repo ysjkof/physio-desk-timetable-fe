@@ -3,9 +3,9 @@ import { useMutation } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
 import { setAlert, setConfirm } from '../../../store';
 import { REG_EXP } from '../../../constants/regex';
-import { MUOOL } from '../../../constants/constants';
+import { MUOOL, isProduction } from '../../../constants/constants';
 import { LOGIN_DOCUMENT } from '../../../graphql';
-import { MenuButton, useLogin } from '../../../components';
+import { InputWrapper, MenuButton, useLogin } from '../../../components';
 import { Input } from '../../../components';
 import FormError from '../../../components/FormError';
 import type { LoginInput, LoginMutation } from '../../../types/generatedTypes';
@@ -84,34 +84,48 @@ export default function Login() {
         onSubmit={handleSubmit(onSubmit)}
         className="relative mb-6 grid w-full gap-4"
       >
-        <Input
-          type="email"
-          placeholder="Email을 입력하세요"
-          maxLength={REG_EXP.email.maxLength}
-          register={register('email', {
-            required: 'Email을 입력하세요',
-            pattern: REG_EXP.email.pattern,
-          })}
-        />
+        <InputWrapper
+          label="이메일"
+          htmlFor="email"
+          error={
+            errors.email?.message ||
+            (errors.email?.type === 'pattern' && REG_EXP.email.condition)
+          }
+        >
+          <Input
+            type="email"
+            placeholder="Email을 입력하세요"
+            maxLength={REG_EXP.email.maxLength}
+            register={register('email', {
+              required: 'Email을 입력하세요',
+              pattern: REG_EXP.email.pattern,
+            })}
+          />
+        </InputWrapper>
 
-        <Input
-          type="password"
-          placeholder="비밀번호를 입력하세요"
-          register={register('password', {
-            required: '비밀번호를 입력하세요',
-            pattern:
-              process.env.NODE_ENV === 'production'
-                ? REG_EXP.password.pattern
-                : undefined,
-          })}
-        />
+        <InputWrapper
+          label="비밀번호"
+          htmlFor="password"
+          error={
+            errors.password?.message ||
+            (errors.password?.type === 'pattern' && REG_EXP.password.condition)
+          }
+        >
+          <Input
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            register={register('password', {
+              required: '비밀번호를 입력하세요',
+              pattern: isProduction ? REG_EXP.password.pattern : undefined,
+            })}
+          />
+        </InputWrapper>
         <MenuButton
           type="submit"
           className="rounded-md bg-[#6BA6FF] text-base font-bold text-white"
         >
           로그인
         </MenuButton>
-        {printErrorText && <FormError top="-1.75rem" error={printErrorText} />}
       </form>
     </>
   );

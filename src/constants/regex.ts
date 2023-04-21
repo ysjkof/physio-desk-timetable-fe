@@ -7,7 +7,7 @@ export const REG_EXP = {
   email: {
     pattern:
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    condition: 'Email형식으로 입력',
+    condition: '이메일 형태(muool@muool.com)로 입력',
     maxLength: 50,
   },
   password: {
