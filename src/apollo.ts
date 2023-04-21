@@ -12,11 +12,9 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { printGraphQLErrors, printNetworkError } from './utils/errorUtils';
 import { localStorageUtils } from './utils/localStorageUtils';
-import { isProduction } from './constants/constants';
+import { BACKEND_ORIGIN } from './router/routes';
 
-const BACKEND_URL = isProduction
-  ? `${import.meta.env.VITE_BACKEND_ORIGIN}/graphql`
-  : 'http://localhost:3002/graphql';
+const BACKEND_URL = `${BACKEND_ORIGIN}/graphql`;
 
 const BACKEND_WS_URL = BACKEND_URL.replace('http', 'ws');
 

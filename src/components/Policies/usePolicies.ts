@@ -1,27 +1,24 @@
 import { useEffect, useState } from 'react';
 import { setAlert } from '../../store';
+import type { PoliciesType } from '../../types/commonTypes';
 import {
-  개인정보_수집_이용_동의_URL,
-  개인정보_처리방침_URL,
-  서비스_이용약관_URL,
-} from '../../constants/constants';
-
-type PoliciesType =
-  | '서비스_이용약관_URL'
-  | '개인정보_수집_이용_동의_URL'
-  | '개인정보_처리방침_URL';
+  BACKEND_ORIGIN,
+  PRIVACY_POLICY,
+  SIGN_UP_AGREEMENTS,
+  TERM_AND_CONDITIONS,
+} from '../../router/routes';
 
 export const usePolicies = (type: PoliciesType) => {
   const [html, setHtml] = useState('empty');
 
   const URL = {
-    서비스_이용약관_URL,
-    개인정보_수집_이용_동의_URL,
-    개인정보_처리방침_URL,
+    TERM_AND_CONDITIONS,
+    SIGN_UP_AGREEMENTS,
+    PRIVACY_POLICY,
   };
 
   useEffect(() => {
-    fetch(URL[type])
+    fetch(`${BACKEND_ORIGIN}${URL[type]}`)
       .then((res) => {
         return res.json();
       })

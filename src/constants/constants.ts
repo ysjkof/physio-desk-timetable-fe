@@ -76,11 +76,3 @@ export const PRODUCT_NAME = '무울시간표';
 export const COMPANY_NAME = '도히';
 export const OWNER_NAME = '이성진';
 export const CONTACT_EMAIL = 'muool.owner@gmail.com';
-
-const BACKEND_ORIGIN = isProduction
-  ? import.meta.env.VITE_BACKEND_ORIGIN
-  : 'http://localhost:3002';
-
-export const 서비스_이용약관_URL = `${BACKEND_ORIGIN}/policies/terms-and-conditions`;
-export const 개인정보_수집_이용_동의_URL = `${BACKEND_ORIGIN}/policies/sign-up-agreements`;
-export const 개인정보_처리방침_URL = `${BACKEND_ORIGIN}/policies/privacy-policy`;

@@ -1,3 +1,9 @@
+import { isProduction } from '../constants/constants';
+
+export const BACKEND_ORIGIN = isProduction
+  ? import.meta.env.VITE_BACKEND_ORIGIN
+  : 'http://localhost:3002';
+
 export const ROOT = '/';
 
 // timetable

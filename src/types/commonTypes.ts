@@ -186,3 +186,8 @@ export interface GraphData {
 }
 
 export type Gender = 'male' | 'female';
+
+export type PoliciesType =
+  | 'TERM_AND_CONDITIONS'
+  | 'SIGN_UP_AGREEMENTS'
+  | 'PRIVACY_POLICY';
