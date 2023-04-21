@@ -12,25 +12,24 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { printGraphQLErrors, printNetworkError } from './utils/errorUtils';
 import { localStorageUtils } from './utils/localStorageUtils';
+import { isProduction } from './constants/constants';
 
-const isDevelopment = import.meta.env.MODE === 'development';
+const BACKEND_URL = isProduction
+  ? `${import.meta.env.VITE_BACKEND_ORIGIN}/graphql`
+  : 'http://localhost:3002/graphql';
 
-const BACKEND_URL = isDevelopment
-  ? '://localhost:3002/graphql'
-  : import.meta.env.VITE_BACKEND_URL;
+const BACKEND_WS_URL = BACKEND_URL.replace('http', 'ws');
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: isDevelopment ? `ws${BACKEND_URL}` : `wss${BACKEND_URL}`,
+    url: BACKEND_WS_URL,
     connectionParams: () => {
       return { 'x-jwt': localStorageUtils.get({ key: 'token' }) };
     },
   })
 );
 
-const httpLink = createHttpLink({
-  uri: isDevelopment ? `http${BACKEND_URL}` : `https${BACKEND_URL}`,
-});
+const httpLink = createHttpLink({ uri: BACKEND_URL });
 
 const authLink = setContext((_, { headers }) => {
   return {

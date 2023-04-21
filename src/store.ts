@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { addDays, startOfDay } from 'date-fns';
-import { TABLE_TIME_GAP } from './constants/constants';
+import { TABLE_TIME_GAP, isProduction } from './constants/constants';
 import {
   localStorageUtils,
   updateLocalStorageHiddenUsers,
@@ -62,10 +62,9 @@ const initialState: ZustandStoreState = {
   pickedReservation: undefined,
 };
 
-export const useStore =
-  process.env.NODE_ENV !== 'production'
-    ? create<ZustandStoreState>()(devtools(() => initialState))
-    : create<ZustandStoreState>(() => initialState);
+export const useStore = !isProduction
+  ? create<ZustandStoreState>()(devtools(() => initialState))
+  : create<ZustandStoreState>(() => initialState);
 
 // 전역
 
