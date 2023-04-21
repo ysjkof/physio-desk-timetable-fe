@@ -10,7 +10,7 @@ const SignOutLayout = () => {
     <div className="flex h-full flex-col justify-between">
       <GlobalNavBar />
       <Suspense fallback={<Loading />}>
-        <main>
+        <main className="grow">
           <Outlet />
         </main>
         <GlobalFooter />

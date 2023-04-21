@@ -1,5 +1,7 @@
 import { ReservationState } from '../types/generatedTypes';
 
+export const isProduction = import.meta.env.PROD;
+
 // 한국 표준시(韓國標準時, KST, Korea Standard Time) = UTC+09:00
 export const UTC_OPTION_KST = { string: '+0900', hour: 9, minute: 0 };
 export const UTC_OPTION = {
@@ -69,3 +71,16 @@ export const LABEL_VISIBLE_MINUTES = ['00', '30'];
 export const LABEL_COLORS = ['#333779', '#DDDDEF'];
 
 export const LATEST_STORAGE_VERSION = new Date('2023-03-08T00:00:00.000Z');
+
+export const PRODUCT_NAME = '무울시간표';
+export const COMPANY_NAME = '도히';
+export const OWNER_NAME = '이성진';
+export const CONTACT_EMAIL = 'muool.owner@gmail.com';
+
+const BACKEND_ORIGIN = isProduction
+  ? import.meta.env.VITE_BACKEND_ORIGIN
+  : 'http://localhost:3002';
+
+export const 서비스_이용약관_URL = `${BACKEND_ORIGIN}/policies/terms-and-conditions`;
+export const 개인정보_수집_이용_동의_URL = `${BACKEND_ORIGIN}/policies/sign-up-agreements`;
+export const 개인정보_처리방침_URL = `${BACKEND_ORIGIN}/policies/privacy-policy`;

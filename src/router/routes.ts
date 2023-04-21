@@ -35,3 +35,8 @@ export const SETTING = {
 export const LOGIN = '/login';
 export const SIGN_UP = '/sign-up';
 export const AUTHENTICATE_EMAIL = '/authenticate/email'; // `authenticate/email/code=<인증코드>`
+
+// policies
+export const TERM_AND_CONDITIONS = '/policies/terms-and-conditions';
+export const SIGN_UP_AGREEMENTS = '/policies/sign-up-agreements';
+export const PRIVACY_POLICY = '/policies/privacy-policy';
