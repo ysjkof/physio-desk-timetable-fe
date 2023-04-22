@@ -4,13 +4,12 @@ import { RouterProvider } from 'react-router';
 import router from './router/router';
 import './styles/tailwind.css';
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
 import ga4 from 'react-ga4';
 
 if (import.meta.env.VITE_SENTRY_DNS) {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DNS,
-    integrations: [new BrowserTracing()],
+    integrations: [new Sentry.BrowserTracing()],
     tracesSampleRate: 1,
   });
 }
