@@ -3,7 +3,8 @@ import {
   COMPANY_NAME,
   CONTACT_EMAIL,
   OWNER_NAME,
-  PRODUCT_NAME,
+  INSTAGRAM_SERVICE_USERNAME,
+  SERVICE_NAME,
 } from '../../constants/constants';
 import { Link } from 'react-router-dom';
 import { PRIVACY_POLICY, TERM_AND_CONDITIONS } from '../../router/routes';
@@ -13,7 +14,9 @@ const GlobalFooter = () => {
     <footer className="border-t border-[#D9D9D9] bg-[#F8F8F8] pb-16 pt-10">
       <div className="mx-auto flex flex-wrap gap-x-32 gap-y-12 px-4 md:max-w-4xl">
         <div>
-          <ColumnTitle>{PRODUCT_NAME}</ColumnTitle>
+          <ColumnTitle>
+            {SERVICE_NAME.ko}({SERVICE_NAME.en})
+          </ColumnTitle>
           <p className="text-xs">
             회사 : {COMPANY_NAME}
             <br />
@@ -28,11 +31,11 @@ const GlobalFooter = () => {
             <br />
             인스타그램 :
             <a
-              href="https://www.instagram.com/muool.owner"
+              href={`https://www.instagram.com/${INSTAGRAM_SERVICE_USERNAME}`}
               className="ml-1"
               target="_blank"
             >
-              {CONTACT_EMAIL.split('@')[0]}
+              {INSTAGRAM_SERVICE_USERNAME}
             </a>
           </p>
         </div>

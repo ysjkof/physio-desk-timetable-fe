@@ -83,20 +83,20 @@ class LocalStorage {
 }
 
 export const PRIVATE_LOCAL_STORAGE_KEY_VALUE = {
-  clinicLists: 'muool-clinic-lists',
-  viewOption: 'muool-view-option',
-  tableTime: 'muool-table-time',
-  pickedClinicId: 'muool-picked-clinic-id',
-  showCancelOfTimetable: 'muool-show-cancel-of-timetable',
-  showNoshowOfTimetable: 'muool-show-noshow-of-timetable',
-  hiddenUsers: 'muool-hidden-users',
+  clinicLists: 'physio-desk-clinic-lists',
+  viewOption: 'physio-desk-view-option',
+  tableTime: 'physio-desk-table-time',
+  pickedClinicId: 'physio-desk-picked-clinic-id',
+  showCancelOfTimetable: 'physio-desk-show-cancel-of-timetable',
+  showNoshowOfTimetable: 'physio-desk-show-noshow-of-timetable',
+  hiddenUsers: 'physio-desk-hidden-users',
 } as const;
 
 export const PUBLIC_LOCAL_STORAGE_KEY_VALUE = {
-  token: 'muool-token',
-  createdAt: 'muool-createdAt',
-  isBigGlobalAside: 'muool-is-big-global-aside',
-  isWeekCalendar: 'muool-is-week-calendar',
+  token: 'physio-desk-token',
+  createdAt: 'physio-desk-createdAt',
+  isBigGlobalAside: 'physio-desk-is-big-global-aside',
+  isWeekCalendar: 'physio-desk-is-week-calendar',
 } as const;
 
 export const LOCAL_STORAGE_KEY_VALUE = {

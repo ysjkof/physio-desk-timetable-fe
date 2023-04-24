@@ -3,13 +3,12 @@ import { useMutation } from '@apollo/client';
 import { Helmet } from 'react-helmet-async';
 import { setAlert, setConfirm } from '../../../store';
 import { REG_EXP } from '../../../constants/regex';
-import { MUOOL, isProduction } from '../../../constants/constants';
+import { SERVICE_NAME, isProduction } from '../../../constants/constants';
 import { LOGIN_DOCUMENT } from '../../../graphql';
 import { InputWrapper, MenuButton, useLogin } from '../../../components';
 import { Input } from '../../../components';
-import FormError from '../../../components/FormError';
-import type { LoginInput, LoginMutation } from '../../../types/generatedTypes';
 import { useCreateNewVerification } from '../../../hooks';
+import type { LoginInput, LoginMutation } from '../../../types/generatedTypes';
 
 export default function Login() {
   const {
@@ -18,12 +17,6 @@ export default function Login() {
     formState: { errors },
     handleSubmit,
   } = useForm<LoginInput>({ mode: 'onChange' });
-
-  const printErrorText =
-    errors.email?.message || errors.email?.type === 'pattern'
-      ? REG_EXP.email.condition
-      : errors.password?.message ||
-        (errors.password?.type === 'pattern' && REG_EXP.password.condition);
 
   const [loginMutation, { loading }] =
     useMutation<LoginMutation>(LOGIN_DOCUMENT);
@@ -74,10 +67,10 @@ export default function Login() {
 
   return (
     <>
-      <Helmet title={`로그인 | ${MUOOL}`} />
+      <Helmet title={`로그인 | ${SERVICE_NAME.ko}`} />
 
       <h2 className="mb-8 text-center text-base font-semibold">
-        무울시간표에 로그인
+        {SERVICE_NAME.ko}에 로그인
       </h2>
 
       <form

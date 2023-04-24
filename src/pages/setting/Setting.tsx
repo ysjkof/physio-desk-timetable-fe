@@ -3,7 +3,10 @@ import { PropsWithChildren } from 'react';
 import { useWindowSize } from '../../hooks';
 import { cls } from '../../utils/commonUtils';
 import { Building, BuildingPlus, User } from '../../svgs';
-import { DASHBOARD_CONTAINER_WIDTH, MUOOL } from '../../constants/constants';
+import {
+  DASHBOARD_CONTAINER_WIDTH,
+  SERVICE_NAME,
+} from '../../constants/constants';
 import { ProfileWithImage } from '../dashboard/components';
 import { Helmet } from 'react-helmet-async';
 
@@ -13,7 +16,7 @@ const Setting = () => {
 
   return (
     <>
-      <Helmet title={`설정 | ${MUOOL}`} />
+      <Helmet title={`설정 | ${SERVICE_NAME.ko}`} />
       <div className="flex text-base" style={{ width }}>
         <div
           className="dashboard-container"
@@ -69,7 +72,7 @@ const LinkButton = ({ children, path, isActive }: LinkButtonProps) => {
     <Link
       to={path}
       className={cls(
-        'flex items-center gap-2 rounded-md py-2.5 px-2 pl-4 font-bold',
+        'flex items-center gap-2 rounded-md px-2 py-2.5 pl-4 font-bold',
         isActive ? 'bg-[#EEEEFF] text-table-aside-bg' : 'text-table-day-strong'
       )}
     >

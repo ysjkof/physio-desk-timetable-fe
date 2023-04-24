@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import FormForCreateClinic from './FormForCreateClinic';
-import { MUOOL } from '../../../../constants/constants';
+import { SERVICE_NAME } from '../../../../constants/constants';
 
 const CreateClinic = () => {
   return (
     <>
-      <Helmet title={`병원 만들기 | ${MUOOL}`} />
+      <Helmet title={`병원 만들기 | ${SERVICE_NAME.ko}`} />
       <div className="px-14 py-10">
         <Title />
         <div className="mt-10 flex w-[460px] flex-col gap-4">

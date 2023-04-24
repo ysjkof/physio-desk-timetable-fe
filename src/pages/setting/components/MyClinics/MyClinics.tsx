@@ -13,7 +13,7 @@ import { useGetMyMembers, useMe } from '../../../../hooks';
 import { ClinicType } from '../../../../types/generatedTypes';
 import type { MyMembers } from '../../../../types/commonTypes';
 import { Helmet } from 'react-helmet-async';
-import { MUOOL } from '../../../../constants/constants';
+import { SERVICE_NAME } from '../../../../constants/constants';
 
 const MyClinics = () => {
   const [meData] = useMe();
@@ -46,7 +46,7 @@ const MyClinics = () => {
 
   return (
     <>
-      <Helmet title={`나의 병원 | ${MUOOL}`} />
+      <Helmet title={`나의 병원 | ${SERVICE_NAME.ko}`} />
       <div className="h-full overflow-y-scroll px-14 py-10">
         <Title />
         <div className="mt-10 flex flex-col gap-10">

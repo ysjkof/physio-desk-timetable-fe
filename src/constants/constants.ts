@@ -57,8 +57,6 @@ export const STATISTICS_LABEL_COLORS = [
   ['#0d3b66', '#f4d35e', '#faf0ca', '#f95738', '#ee964b'],
 ];
 
-export const MUOOL = 'Muool';
-
 export const GENDER_KOR = {
   male: '남성',
   female: '여성',
@@ -72,7 +70,11 @@ export const LABEL_COLORS = ['#333779', '#DDDDEF'];
 
 export const LATEST_STORAGE_VERSION = new Date('2023-03-08T00:00:00.000Z');
 
-export const PRODUCT_NAME = '무울시간표';
+// product info
+export const SERVICE_NAME = { ko: '피지오데스크', en: 'Physio Desk' };
 export const COMPANY_NAME = '도히';
 export const OWNER_NAME = '이성진';
-export const CONTACT_EMAIL = 'muool.owner@gmail.com';
+export const CONTACT_EMAIL = 'dohi.physiodesk@gmail.com';
+export const INSTAGRAM_SERVICE_USERNAME = 'physio_desk';
+
+export const GA4_TRACKING_ID = 'G-5B55DVGX1C';

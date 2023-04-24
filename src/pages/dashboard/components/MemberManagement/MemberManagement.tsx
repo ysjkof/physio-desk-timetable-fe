@@ -6,7 +6,7 @@ import MemberList from './MemberList';
 import { useGetClinic } from '../../../../hooks';
 import { ProtectStayMember, Warning } from '../../../../components';
 import type { MemberOfGetMyClinic } from '../../../../types/processedGeneratedTypes';
-import { MUOOL } from '../../../../constants/constants';
+import { SERVICE_NAME } from '../../../../constants/constants';
 import { Helmet } from 'react-helmet-async';
 
 const MemberManagement = () => {
@@ -26,7 +26,7 @@ const MemberManagement = () => {
 
   return (
     <>
-      <Helmet title={`직원 관리 | ${MUOOL}`} />
+      <Helmet title={`직원 관리 | ${SERVICE_NAME.ko}`} />
       <ProtectStayMember
         clinicId={myClinic?.id}
         fallback={<Warning type="hasNotPermission" />}

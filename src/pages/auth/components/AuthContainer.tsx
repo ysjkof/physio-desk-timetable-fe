@@ -5,9 +5,10 @@ import { Logo } from '../../../components';
 export default function AuthContainer({ children }: PropsWithChildren) {
   return (
     <div className="my-10 flex h-full grow flex-col items-center">
-      <div className="flex h-full w-full max-w-screen-sm grow flex-col items-center px-5">
+      <div className="flex h-full w-full max-w-screen-sm grow flex-col items-center px-5 overflow-hidden
+      ">
         <Link className="mb-4" to="/">
-          <Logo className="h-10" />
+          <Logo size="4xl" />
         </Link>
         {children}
         <Link

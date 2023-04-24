@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import { MUOOL } from '../../../constants/constants';
+import { SERVICE_NAME } from '../../../constants/constants';
 import { VERIFY_EMAIL_DOCUMENT } from '../../../graphql';
 import { setAlert } from '../../../store';
 import type { VerifyEmailMutation } from '../../../types/generatedTypes';
@@ -74,7 +74,7 @@ export default function ConfirmEmail() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <Helmet>
-        <title>이메일 인증 | {MUOOL}</title>
+        <title>이메일 인증 | {SERVICE_NAME.ko}</title>
       </Helmet>
       <h2 className="mb-4 text-lg font-medium">이메일 인증</h2>
       <p className="animate-pulse text-base font-medium text-red-600">

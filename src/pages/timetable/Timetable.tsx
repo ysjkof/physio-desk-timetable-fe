@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTimetable, useSubscriptions } from './hooks';
-import { MUOOL } from '../../constants/constants';
+import { SERVICE_NAME } from '../../constants/constants';
 import {
   CreatePatient,
   EventList,
@@ -47,7 +47,7 @@ const TimeTable = () => {
 
   return (
     <>
-      <Helmet title={`시간표 | ${MUOOL}`} />
+      <Helmet title={`시간표 | ${SERVICE_NAME.ko}`} />
       <TimetableTemplate
         nav={<TableController members={members} />}
         columns={

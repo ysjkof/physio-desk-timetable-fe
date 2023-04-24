@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Check, Guard, Insights, QuickRef } from '../../../../svgs';
+import { SERVICE_NAME } from '../../../../constants/constants';
 
 export default function LandingPage() {
   const features = [
@@ -25,7 +26,7 @@ export default function LandingPage() {
           방법
         </h2>
         <p className="lading-page__description--small mb-8 md:w-[26rem]">
-          <span>무울시간표는 캘린더 기반</span>
+          <span>{SERVICE_NAME.ko}는 캘린더 기반</span>
           <span>예약 시스템에 필요한</span>
           <span>모든걸 제공하는</span>
           <span className="underline decoration-[#DCFFEA] decoration-8 underline-offset-0">
@@ -85,7 +86,7 @@ export default function LandingPage() {
         <div className="mb-16 flex flex-col items-center pt-12">
           <h3 className="lading-page__small-title">기능 소개</h3>
           <p className="lading-page__big-title flex flex-col">
-            <span>Muool은 아래와 같은</span>
+            <span>{SERVICE_NAME.ko}은 아래와 같은</span>
             <span>필수 기능들 제공합니다.</span>
           </p>
 

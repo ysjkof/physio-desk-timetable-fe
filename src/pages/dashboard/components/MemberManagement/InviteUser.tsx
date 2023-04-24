@@ -3,7 +3,7 @@ import FormForInviteUser from './FormForInviteUser';
 import { ClinicType } from '../../../../types/generatedTypes';
 import { ProtectStayMember, Warning } from '../../../../components';
 import { Helmet } from 'react-helmet-async';
-import { MUOOL } from '../../../../constants/constants';
+import { SERVICE_NAME } from '../../../../constants/constants';
 
 const InviteUser = () => {
   const [myClinic] = useGetClinic();
@@ -12,7 +12,7 @@ const InviteUser = () => {
 
   return (
     <>
-      <Helmet title={`직원 초대 | ${MUOOL}`} />
+      <Helmet title={`직원 초대 | ${SERVICE_NAME.ko}`} />
       <ProtectStayMember
         clinicId={myClinic?.id}
         fallback={<Warning type="hasNotPermission" />}

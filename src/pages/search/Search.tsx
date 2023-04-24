@@ -12,7 +12,7 @@ import {
   SearchPatientForm,
   SearchTitle,
 } from './components';
-import { GENDER_KOR, MUOOL } from '../../constants/constants';
+import { GENDER_KOR, SERVICE_NAME } from '../../constants/constants';
 import { useStore } from '../../store';
 
 export default function Search() {
@@ -52,7 +52,7 @@ export default function Search() {
   return (
     <>
       <Helmet>
-        <title>검색 | {MUOOL}</title>
+        <title>검색 | {SERVICE_NAME.ko}</title>
       </Helmet>
       <div
         className="mx-auto w-full overflow-y-scroll border-t bg-white pb-16"

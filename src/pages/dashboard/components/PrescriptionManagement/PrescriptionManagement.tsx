@@ -9,7 +9,7 @@ import { useStore } from '../../../../store';
 import { useGetPrescriptions, useWindowSize } from '../../../../hooks';
 import { ProtectStayMember, Warning } from '../../../../components';
 import { Helmet } from 'react-helmet-async';
-import { MUOOL } from '../../../../constants/constants';
+import { SERVICE_NAME } from '../../../../constants/constants';
 
 const PrescriptionManagement = () => {
   const { height } = useWindowSize(true);
@@ -30,7 +30,7 @@ const PrescriptionManagement = () => {
 
   return (
     <>
-      <Helmet title={`처방관리 | ${MUOOL}`} />
+      <Helmet title={`처방관리 | ${SERVICE_NAME.ko}`} />
 
       <ProtectStayMember
         clinicId={clinicId}

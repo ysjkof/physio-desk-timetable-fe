@@ -7,13 +7,14 @@ export const REG_EXP = {
   email: {
     pattern:
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    condition: '이메일 형태(muool@muool.com)로 입력',
+    condition: '이메일 형태(abc@google.com)로 입력',
     maxLength: 50,
   },
   password: {
-    pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,30}$/,
-    condition: '8~30자로 영문자, 숫자, 특수문자를 사용',
-    maxLength: 30,
+    pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,50}$/,
+    condition: '8~50자로 영문자, 숫자, 특수문자를 사용',
+    minLength: 8,
+    maxLength: 50,
   },
   personName: {
     // pattern: /^[가-힣a-zA-Z\d\. ,.'-]{2,20}$/i,

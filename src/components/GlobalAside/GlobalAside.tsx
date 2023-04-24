@@ -4,6 +4,7 @@ import { cls } from '../../utils/commonUtils';
 import { CogSixTooth, Building, Table, MenuOpen } from '../../svgs';
 import { useLogout } from '../../hooks';
 import { toggleIsBigGlobalAside, useStore } from '../../store';
+import Logo from '../Logo';
 
 const GlobalAside = () => {
   const isBigGlobalAside = useStore((state) => state.isBigGlobalAside);
@@ -16,26 +17,28 @@ const GlobalAside = () => {
 
   const logout = useLogout();
 
+  const logoSize = isBigGlobalAside ? 'xl' : 'xs';
+
   return (
     <aside
       id="global-aside"
       className="relative flex h-full flex-col justify-between bg-table-aside-bg py-4 text-white"
     >
-      <div className="relative mb-6 flex h-28 flex-col items-center justify-center gap-y-3 px-4">
+      <div className="relative mb-6 flex h-28 flex-col items-center pt-7">
         <Link
           to="/"
           className={cls(
-            'flex aspect-square items-center justify-center rounded-lg bg-white',
-            isBigGlobalAside ? 'w-11' : 'absolute w-9'
+            'flex items-center justify-center ',
+            isBigGlobalAside ? 'w-12' : 'absolute w-9'
           )}
         >
-          <img src="/images/logo.png" alt="logo" />
+          <Logo size={logoSize} isVertical />
         </Link>
       </div>
       <button
         type="button"
         onClick={toggleAside}
-        className="absolute -top-0.5 -right-2.5 z-40 w-fit rounded-full bg-inherit p-1"
+        className="absolute -right-2.5 -top-0.5 z-40 w-fit rounded-full bg-inherit p-1"
       >
         <MenuOpen
           className={cls('h-7 w-7', isBigGlobalAside ? '' : '-scale-x-100')}
@@ -88,7 +91,7 @@ const Li = ({ to, children, selected }: LiProps) => {
       <Link
         to={to}
         className={cls(
-          'flex h-full w-full items-center gap-1 py-1.5 px-4 text-left',
+          'flex h-full w-full items-center gap-1 px-4 py-1.5 text-left',
           selected ? 'bg-[#7477B2] font-medium text-white' : 'hover:text-white'
         )}
       >

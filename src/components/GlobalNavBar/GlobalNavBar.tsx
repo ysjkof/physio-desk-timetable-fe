@@ -32,13 +32,12 @@ const Layout = ({ children }: PropsWithChildren) => {
       id="global-header"
       className={cls(
         'sticky top-0 z-40 flex items-center justify-center bg-white transition-all duration-200',
-        scrollAtTop ? ' py-6' : 'pt-3 pb-1 shadow-md'
+        scrollAtTop ? ' py-6' : 'pb-1 pt-3 shadow-md'
       )}
     >
       <div className="flex w-full max-w-screen-xl items-center px-4">
         <Link to="/" className="flex items-baseline gap-2">
-          <Logo className="h-8" />
-          <span className="text-xl font-bold">Muool</span>
+          <Logo />
         </Link>
         <div className="flex w-full items-center justify-end gap-6">
           {children}

@@ -3,7 +3,7 @@ import FormForEditMyProfile from './FormForEditMyProfile';
 import FormForEditEmail from './FormForEditEmail';
 import { useMe } from '../../../../hooks';
 import { Helmet } from 'react-helmet-async';
-import { MUOOL } from '../../../../constants/constants';
+import { SERVICE_NAME } from '../../../../constants/constants';
 
 const MyProfile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -14,7 +14,7 @@ const MyProfile = () => {
 
   return (
     <>
-      <Helmet title={`나의 정보 | ${MUOOL}`} />
+      <Helmet title={`나의 정보 | ${SERVICE_NAME.ko}`} />
       <div className="px-14 py-10">
         <Title />
         <div className="mt-10 flex w-[460px] flex-col gap-4">

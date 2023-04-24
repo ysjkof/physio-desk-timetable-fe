@@ -4,7 +4,7 @@ import { TableChart } from './TableChart';
 import { useStatistics } from '../../hooks/useStatistics';
 import { useWindowSize } from '../../../../hooks';
 import { Helmet } from 'react-helmet-async';
-import { MUOOL } from '../../../../constants/constants';
+import { SERVICE_NAME } from '../../../../constants/constants';
 
 const Statistics = () => {
   const { height } = useWindowSize(true);
@@ -21,7 +21,7 @@ const Statistics = () => {
 
   return (
     <>
-      <Helmet title={`통계 | ${MUOOL}`} />
+      <Helmet title={`통계 | ${SERVICE_NAME.ko}`} />
       <div
         className="flex overflow-hidden whitespace-nowrap bg-[#F9F9FF] px-10 pt-6"
         style={{ height }}
