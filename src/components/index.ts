@@ -27,7 +27,6 @@ import { GlobalNavBar } from './GlobalNavBar';
 import { GlobalAside } from './GlobalAside';
 import { GlobalFooter } from './GlobalFooter';
 import { GlobalLayout, SignInLayout, SignOutLayout } from './GlobalLayout';
-import InjectGA4 from './InjectGA4';
 
 export {
   ButtonOfPages,
@@ -63,5 +62,4 @@ export {
   GlobalNavBar,
   SignInLayout,
   SignOutLayout,
-  InjectGA4,
 };
