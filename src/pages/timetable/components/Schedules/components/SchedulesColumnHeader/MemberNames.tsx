@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RgbStringColorPicker } from 'react-colorful';
 import { cls } from '../../../../../../utils/commonUtils';
 import { useStore } from '../../../../../../store';
@@ -49,8 +49,9 @@ const MemberNameItem = (props: MemberNameItemProps) => {
 
   const [isOpen, setOpen] = useState(false);
   const openSetting = () => setOpen(true);
-  const closeSetting = () => {
-    setOpen(false);
+  const closeSetting = () => setOpen(false);
+  const closeSettingAnsRecoveryColor = () => {
+    closeSetting();
     setColor(member.getColor());
   };
 
@@ -58,6 +59,7 @@ const MemberNameItem = (props: MemberNameItemProps) => {
 
   const update = () => {
     if (!color || color === member.getColor()) return;
+    closeSetting();
     updateMemberColor(_member.id, color);
   };
 
@@ -90,7 +92,7 @@ const MemberNameItem = (props: MemberNameItemProps) => {
               <MenuButton
                 type="button"
                 className="w-full bg-close-bg text-base font-medium text-font-gray"
-                onClick={closeSetting}
+                onClick={closeSettingAnsRecoveryColor}
               >
                 취소
               </MenuButton>
