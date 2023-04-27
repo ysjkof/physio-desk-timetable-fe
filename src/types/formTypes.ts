@@ -1,5 +1,6 @@
 import type { Gender } from './commonTypes';
 import type {
+  CreateAccountInput,
   CreatePrescriptionInput,
   UpdatePrescriptionInput,
 } from './generatedTypes';
@@ -39,8 +40,13 @@ export interface ConfirmFormFields {
   agree: boolean;
 }
 
-export interface FormForEditMyProfileFields {
-  name?: string;
+export interface CreateAccountForm extends CreateAccountInput {
+  confirmPassword: CreateAccountInput['password'];
+  requiredAgreements: boolean;
+}
+
+export interface FormForEditMyProfileFields
+  extends Pick<Partial<CreateAccountInput>, 'name' | 'nickname'> {
   currentPassword?: string;
   newPassword1?: string;
   newPassword2?: string;

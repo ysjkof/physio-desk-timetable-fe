@@ -60,6 +60,7 @@ export type Color = {
 export type CreateAccountInput = {
   email: Scalars['String'];
   name: Scalars['String'];
+  nickname: Scalars['String'];
   password: Scalars['String'];
 };
 
@@ -887,8 +888,8 @@ export type UpdatePrescriptionOutput = {
 
 export type UpdateProfileInput = {
   currentPassword?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
   newPassword?: InputMaybe<Scalars['String']>;
+  nickname?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateProfileOutput = {
@@ -920,6 +921,7 @@ export type User = {
   id: Scalars['Float'];
   members?: Maybe<Array<Member>>;
   name: Scalars['String'];
+  nickname: Scalars['String'];
   notice?: Maybe<Array<Notice>>;
   password: Scalars['String'];
   role: UserRole;
@@ -1006,7 +1008,7 @@ export type CreateClinicMutationVariables = Exact<{
 }>;
 
 
-export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean, members: Array<{ __typename?: 'Member', createdAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+export type CreateClinicMutation = { __typename?: 'Mutation', createClinic: { __typename?: 'CreateClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean, members: Array<{ __typename?: 'Member', createdAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, user: { __typename?: 'User', id: number, name: string, nickname: string, email: string } }> } | null } };
 
 export type DeactivateClinicMutationVariables = Exact<{
   input: DeactivateClinicInput;
@@ -1020,14 +1022,14 @@ export type GetClinicQueryVariables = Exact<{
 }>;
 
 
-export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean, members: Array<{ __typename?: 'Member', createdAt?: any | null, updatedAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string, email: string } }> } | null } };
+export type GetClinicQuery = { __typename?: 'Query', getClinic: { __typename?: 'GetClinicOutput', ok: boolean, error?: string | null, clinic?: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean, members: Array<{ __typename?: 'Member', createdAt?: any | null, updatedAt?: any | null, id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string, nickname: string, email: string } }> } | null } };
 
 export type GetMemberQueryVariables = Exact<{
   input: GetMemberInput;
 }>;
 
 
-export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient?: number | null, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', role: UserRole, id: number, name: string, email: string } } | null } };
+export type GetMemberQuery = { __typename?: 'Query', getMember: { __typename?: 'GetMemberOutput', ok: boolean, error?: string | null, countOfPatient?: number | null, member?: { __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', role: UserRole, id: number, name: string, nickname: string, email: string } } | null } };
 
 export type GetMyClinicsStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1178,7 +1180,7 @@ export type GetReservationsByIntervalQueryVariables = Exact<{
 }>;
 
 
-export type GetReservationsByIntervalQuery = { __typename?: 'Query', getReservationsByInterval: { __typename?: 'GetReservationsByIntervalOutput', ok: boolean, error?: string | null, totalCount?: number | null, members?: Array<{ __typename?: 'Member', id: number, accepted: boolean, staying: boolean, manager: boolean, updatedAt?: any | null, createdAt?: any | null, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string } }> | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
+export type GetReservationsByIntervalQuery = { __typename?: 'Query', getReservationsByInterval: { __typename?: 'GetReservationsByIntervalOutput', ok: boolean, error?: string | null, totalCount?: number | null, members?: Array<{ __typename?: 'Member', id: number, accepted: boolean, staying: boolean, manager: boolean, updatedAt?: any | null, createdAt?: any | null, color?: { __typename?: 'Color', value: string } | null, user: { __typename?: 'User', id: number, name: string } }> | null, results?: Array<{ __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, nickname: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null }> | null } };
 
 export type GetReservationsByMemberQueryVariables = Exact<{
   input: GetReservationsByMemberInput;
@@ -1213,7 +1215,7 @@ export type ListenCreateReservationSubscriptionVariables = Exact<{
 }>;
 
 
-export type ListenCreateReservationSubscription = { __typename?: 'Subscription', listenCreateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null } };
+export type ListenCreateReservationSubscription = { __typename?: 'Subscription', listenCreateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number, name: string }, patient?: { __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, memo?: string | null } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, nickname: string, email: string }, clinic: { __typename?: 'Clinic', id: number, name: string }, prescriptions?: Array<{ __typename?: 'Prescription', id: number, name: string, requiredTime: number, description?: string | null, price: number }> | null } };
 
 export type ListenDeleteReservationSubscriptionVariables = Exact<{
   input: ListenDeleteReservationInput;
@@ -1227,11 +1229,11 @@ export type ListenUpdateReservationSubscriptionVariables = Exact<{
 }>;
 
 
-export type ListenUpdateReservationSubscription = { __typename?: 'Subscription', listenUpdateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number }, patient?: { __typename?: 'Patient', id: number, name: string } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, email: string }, clinic: { __typename?: 'Clinic', id: number }, prescriptions?: Array<{ __typename?: 'Prescription', id: number }> | null } };
+export type ListenUpdateReservationSubscription = { __typename?: 'Subscription', listenUpdateReservation: { __typename?: 'Reservation', id: number, startDate: any, endDate: any, state: ReservationState, memo?: string | null, isFirst: boolean, user: { __typename?: 'User', id: number }, patient?: { __typename?: 'Patient', id: number, name: string } | null, lastModifier: { __typename?: 'User', updatedAt?: any | null, id: number, name: string, nickname: string, email: string }, clinic: { __typename?: 'Clinic', id: number }, prescriptions?: Array<{ __typename?: 'Prescription', id: number }> | null } };
 
 export type UserEmailAndVerifyFieldsFragment = { __typename?: 'User', email: string, verified: boolean };
 
-export type UserIdNameEmailFieldsFragment = { __typename?: 'User', id: number, name: string, email: string };
+export type UserIdNameNicknameEmailFieldsFragment = { __typename?: 'User', id: number, name: string, nickname: string, email: string };
 
 export type CheckAdminQueryVariables = Exact<{
   code: Scalars['String'];
@@ -1259,7 +1261,7 @@ export type GetUsersByNameQueryVariables = Exact<{
 }>;
 
 
-export type GetUsersByNameQuery = { __typename?: 'Query', getUsersByName: { __typename?: 'GetUsersByNameOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'User', id: number, name: string, email: string }> | null } };
+export type GetUsersByNameQuery = { __typename?: 'Query', getUsersByName: { __typename?: 'GetUsersByNameOutput', ok: boolean, error?: string | null, totalCount?: number | null, results?: Array<{ __typename?: 'User', id: number, name: string, nickname: string, email: string }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -1271,7 +1273,7 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, email: string, role: UserRole, verified: boolean, members?: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, clinic: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', role: UserRole, verified: boolean, id: number, name: string, nickname: string, email: string, members?: Array<{ __typename?: 'Member', id: number, accepted: boolean, manager: boolean, staying: boolean, clinic: { __typename?: 'Clinic', id: number, name: string, type: ClinicType, isActive: boolean } }> | null, notice?: Array<{ __typename?: 'Notice', message: string, read: boolean }> | null } };
 
 export type SendChangeEmailMutationVariables = Exact<{
   input: SendChangeEmailInput;

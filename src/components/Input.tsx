@@ -12,7 +12,11 @@ const Input = ({ register, ...args }: InputProps) => {
       {...args}
       {...register}
       autoComplete="off"
-      className={cls('input', args.className || '')}
+      className={cls(
+        'input',
+        args.disabled ? 'pointer-events-none border-gray-200 bg-gray-200' : '',
+        args.className || ''
+      )}
     />
   );
 };

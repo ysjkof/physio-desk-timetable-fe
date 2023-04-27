@@ -5,14 +5,10 @@ import { setAlert } from '../../../../store';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import type {
-  CreateAccountInput,
   CreateAccountMutation,
+  CreateAccountMutationVariables,
 } from '../../../../types/generatedTypes';
-
-interface CreateAccountForm extends CreateAccountInput {
-  confirmPassword: CreateAccountInput['password'];
-  requiredAgreements: boolean;
-}
+import type { CreateAccountForm } from '../../../../types/formTypes';
 
 export const useSignUp = () => {
   const navigate = useNavigate();
@@ -26,17 +22,24 @@ export const useSignUp = () => {
     mode: 'onChange',
   });
 
-  const [createAccountMutation, { loading }] =
-    useMutation<CreateAccountMutation>(CREATE_ACCOUNT_DOCUMENT);
+  const [createAccountMutation, { loading }] = useMutation<
+    CreateAccountMutation,
+    CreateAccountMutationVariables
+  >(CREATE_ACCOUNT_DOCUMENT);
 
   const onSubmit = () => {
     if (!loading) {
-      const { name, email, password } = getValues();
-      if (!name || !email || !password) return;
+      const { name, nickname, email, password } = getValues();
+      if (!name || !nickname || !email || !password) return;
 
       createAccountMutation({
         variables: {
-          input: { name: name.trim(), email: email.trim(), password },
+          input: {
+            name: name.trim(),
+            nickname: nickname.trim(),
+            email: email.trim(),
+            password,
+          },
         },
         onCompleted,
       });
@@ -74,6 +77,9 @@ export const useSignUp = () => {
   const nameError =
     errors.name?.message ||
     (errors.name?.type === 'pattern' && REG_EXP.personName.condition);
+  const nicknameError =
+    errors.nickname?.message ||
+    (errors.nickname?.type === 'pattern' && REG_EXP.personName.condition);
   const passwordError =
     errors.password?.message ||
     (errors.password?.type === 'pattern' && REG_EXP.password.condition);
@@ -87,6 +93,7 @@ export const useSignUp = () => {
     register,
     emailError,
     nameError,
+    nicknameError,
     passwordError,
     confirmPasswordError,
     agreementError,

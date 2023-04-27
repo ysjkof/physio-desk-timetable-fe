@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { UPDATE_PROFILE_DOCUMENT } from '../graphql';
-import { setToast } from '../store';
+import { setAlert } from '../store';
 import {
   cacheUpdatePersonalClinicName,
   cacheUpdateUserName,
@@ -26,15 +26,14 @@ export const useUpdateProfile = () => {
     {
       onCompleted(data, clientOptions) {
         const { error } = data.updateProfile;
-        if (error) {
-          return setToast({ messages: [error] });
-        }
+
+        if (error) return setAlert({ messages: [error] });
         if (!meData) throw new Error('meData가 없습니다');
 
         const profileInput: Input = clientOptions?.variables?.input;
         const newName = profileInput.name;
 
-        setToast({ messages: ['사용자 정보 수정완료'] });
+        setAlert({ messages: ['사용자 정보 수정완료'] });
 
         const prevName = meData.name;
         if (!newName || prevName === newName) return;
@@ -43,7 +42,7 @@ export const useUpdateProfile = () => {
           (member) => member.clinic.type === ClinicType.Personal
         )?.clinic;
         if (!personalClinic)
-          return setToast({
+          return setAlert({
             messages: ['meData에서 개인용 병원을 찾지 못했습니다'],
           });
 

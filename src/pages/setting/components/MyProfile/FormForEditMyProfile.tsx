@@ -9,7 +9,10 @@ const FormForEditMyProfile = ({ toggleEditMode }: ToggleEditMode) => {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <InputWrapper label="이름" htmlFor="이름" align="col">
-        <Input id="이름" register={register('name')} />
+        <Input id="이름" register={register('name')} disabled />
+      </InputWrapper>
+      <InputWrapper label="별명" htmlFor="별명" align="col">
+        <Input id="별명" register={register('nickname')} />
       </InputWrapper>
       <InputWrapper label="현재 비밀번호" htmlFor="현재 비밀번호" align="col">
         <Input

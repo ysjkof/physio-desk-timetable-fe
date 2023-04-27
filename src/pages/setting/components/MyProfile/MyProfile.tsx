@@ -49,6 +49,7 @@ const ProfileMain = ({ toggleEditMode }: { toggleEditMode: () => void }) => {
     <div className="flex w-80 flex-col gap-4">
       <ProfileItem title="Email" textContent={meData?.email || '-'} />
       <ProfileItem title="이름" textContent={meData?.name || '-'} />
+      <ProfileItem title="별명" textContent={meData?.nickname || '-'} />
       <button
         onClick={toggleEditMode}
         type="button"
@@ -70,7 +71,9 @@ const ProfileItem = ({
   return (
     <div className="flex flex-col gap-1">
       <span className="text-[#8D8DAD]">{title}</span>
-      <span className="input text-[#5D5A5A]">{textContent}</span>
+      <span className="input border-transparent text-[#5D5A5A]">
+        {textContent}
+      </span>
     </div>
   );
 };

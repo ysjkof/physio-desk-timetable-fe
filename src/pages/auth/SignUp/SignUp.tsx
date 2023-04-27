@@ -12,6 +12,7 @@ export default function SignUp() {
     register,
     emailError,
     nameError,
+    nicknameError,
     passwordError,
     confirmPasswordError,
     agreementError,
@@ -46,6 +47,18 @@ export default function SignUp() {
             maxLength={REG_EXP.personName.maxLength}
             register={register('name', {
               required: '이름을 입력하세요',
+              pattern: REG_EXP.personName.pattern,
+            })}
+          />
+        </InputWrapper>
+        <InputWrapper label="별명" htmlFor="nickname" error={nicknameError}>
+          <Input
+            name="nickname"
+            type="text"
+            placeholder="화면에 표시됩니다"
+            maxLength={REG_EXP.personName.maxLength}
+            register={register('nickname', {
+              required: '별명을 입력하세요',
               pattern: REG_EXP.personName.pattern,
             })}
           />
