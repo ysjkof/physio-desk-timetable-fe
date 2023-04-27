@@ -55,12 +55,20 @@ export default function SignUp() {
             name="password"
             type="password"
             placeholder="비밀번호"
-            minLength={REG_EXP.password.minLength}
-            maxLength={REG_EXP.password.maxLength}
-            register={register('password', {
-              required: '비밀번호를 입력하세요',
-              pattern: isProduction ? REG_EXP.password.pattern : undefined,
-            })}
+            {...(isProduction
+              ? {
+                  minLength: REG_EXP.password.minLength,
+                  maxLength: REG_EXP.password.maxLength,
+                  register: register('password', {
+                    required: '비밀번호를 입력하세요',
+                    pattern: REG_EXP.password.pattern,
+                  }),
+                }
+              : {
+                  register: register('password', {
+                    required: '비밀번호를 입력하세요',
+                  }),
+                })}
           />
         </InputWrapper>
         <InputWrapper
