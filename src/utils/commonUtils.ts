@@ -176,3 +176,21 @@ export function parseJsonOrString(item: string) {
     throw error;
   }
 }
+
+export function formatPhoneNumber(_phoneNumber: string | undefined | null) {
+  if (!_phoneNumber) return '';
+  const phoneNumber = _phoneNumber.replace(/\D/g, '');
+  const first = phoneNumber.slice(0, 3);
+  let second = '*';
+  let third = '*';
+
+  if (phoneNumber.length === 11) {
+    second = phoneNumber.slice(3, 7);
+    third = phoneNumber.slice(7);
+  } else if (phoneNumber.length === 10) {
+    second = phoneNumber.slice(3, 6);
+    third = phoneNumber.slice(6);
+  }
+
+  return `${first}-${second}-${third}`;
+}

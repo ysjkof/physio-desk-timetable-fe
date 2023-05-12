@@ -8,6 +8,7 @@ import { BrokenLine, Heart, Medicine } from '../../svgs';
 import { ClinicSelector } from '../../components';
 import { DASHBOARD_CONTAINER_WIDTH } from '../../constants/constants';
 import { ProfileWithImage } from './components';
+import { DASHBOARD } from '../../router/routes';
 
 const Dashboard = () => {
   const { width, isLoading } = useWindowSize(true);
@@ -53,25 +54,34 @@ const LinkBtns = () => {
         직원열람 및 관리
       </LinkButton>
       <LinkButton
-        path="/dashboard/clinic/members/invite"
-        isActive={pathname.startsWith('/dashboard/clinic/members/invite')}
+        path={`${DASHBOARD.member.root}/${DASHBOARD.member.invite}`}
+        isActive={pathname.startsWith(
+          `${DASHBOARD.member.root}/${DASHBOARD.member.invite}`
+        )}
       >
         <FontAwesomeIcon icon={faPlus} fontSize="1rem" />
         직원초대
       </LinkButton>
       <LinkButton
-        path="/dashboard/clinic/prescriptions"
-        isActive={pathname.startsWith('/dashboard/clinic/prescriptions')}
+        path={DASHBOARD.prescriptions.root}
+        isActive={pathname.startsWith(DASHBOARD.prescriptions.root)}
       >
         <Medicine />
         처방등록 및 관리
       </LinkButton>
       <LinkButton
-        path="/dashboard/clinic/statistics"
-        isActive={pathname.startsWith('/dashboard/clinic/statistics')}
+        path={DASHBOARD.statistics.root}
+        isActive={pathname.startsWith(DASHBOARD.statistics.root)}
       >
         <BrokenLine />
         통계
+      </LinkButton>
+      <LinkButton
+        path={DASHBOARD.messages.root}
+        isActive={pathname.startsWith(DASHBOARD.messages.root)}
+      >
+        <BrokenLine />
+        문자메시지
       </LinkButton>
     </div>
   );
@@ -87,7 +97,7 @@ const LinkButton = ({ children, path, isActive }: LinkButtonProps) => {
     <Link
       to={path}
       className={cls(
-        'flex items-center gap-2 whitespace-nowrap rounded-md py-2.5 px-2 pl-4 font-bold',
+        'flex items-center gap-2 whitespace-nowrap rounded-md px-2 py-2.5 pl-4 font-bold',
         isActive ? 'bg-[#EEEEFF] text-table-aside-bg' : 'text-table-day-strong'
       )}
     >

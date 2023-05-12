@@ -17,5 +17,6 @@ export const COMMON_PATIENT_FIELDS = gql`
     name
     gender
     birthday
+    phone
   }
 `;

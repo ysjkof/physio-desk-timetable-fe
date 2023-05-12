@@ -3,25 +3,33 @@ import { useState } from 'react';
 import { GET_PATIENT_BY_DOCUMENT } from '../graphql';
 import { useStore } from '../store';
 import { getDateFromStr8Digit } from '../utils/dateUtils';
-import type { GetPatientByQuery } from '../types/generatedTypes';
+import type {
+  GetPatientByInput,
+  GetPatientByQuery,
+  GetPatientByQueryVariables,
+} from '../types/generatedTypes';
+
+interface PatientQueryInput extends Pick<GetPatientByInput, 'page' | 'query'> {
+  clinicIds?: number[];
+}
 
 export const useLazySearchPatient = () => {
-  const [page, setPage] = useState(1);
   const [pages, setPages] = useState([1]);
 
-  const [callQuery, queryResult] = useLazyQuery<GetPatientByQuery>(
-    GET_PATIENT_BY_DOCUMENT
-  );
+  const [callQuery, queryResult] = useLazyQuery<
+    GetPatientByQuery,
+    GetPatientByQueryVariables
+  >(GET_PATIENT_BY_DOCUMENT);
 
   const clinicId = useStore((state) => state.pickedClinicId);
 
-  const patientQuery = (name: string, clinicIds?: number[]) => {
-    if (queryResult.loading || !name) return;
+  const patientQuery = ({ page, query, clinicIds }: PatientQueryInput) => {
+    if (queryResult.loading || !query) return;
 
-    let query: string | Date = name.trim();
+    let _query: string | Date = query.trim();
 
-    if (parseInt(query, 10)) {
-      if (query.length === 8) query = getDateFromStr8Digit(name);
+    if (parseInt(_query, 10)) {
+      if (query.length === 8) _query = getDateFromStr8Digit(query);
       else return;
     }
 
@@ -53,9 +61,5 @@ export const useLazySearchPatient = () => {
     return pagesArray;
   };
 
-  const changePage = (pageNumber: number) => {
-    setPage(pageNumber);
-  };
-
-  return { ...queryResult, patientQuery, pages, page, changePage };
+  return { ...queryResult, patientQuery, pages };
 };

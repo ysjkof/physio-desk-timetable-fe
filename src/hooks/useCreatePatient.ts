@@ -17,7 +17,7 @@ export const useCreatePatient = () => {
   >(CREATE_PATIENT_DOCUMENT);
 
   const createPatientMutation = (
-    { name, gender, memo, birthday }: FormForCreatePatientFields,
+    { name, gender, memo, birthday, phone }: FormForCreatePatientFields,
     closeAction: () => void
   ) => {
     if (loading) return;
@@ -30,6 +30,7 @@ export const useCreatePatient = () => {
           memo,
           clinicId,
           ...(birthday && { birthday: getDateFromStr8Digit(String(birthday)) }),
+          ...(phone && { phone: '' + phone }),
         },
       },
       onCompleted(data) {

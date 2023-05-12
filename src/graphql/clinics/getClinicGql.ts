@@ -14,6 +14,7 @@ export const GET_CLINIC_DOCUMENT = gql`
         name
         type
         isActive
+        phone
         members {
           ...CommonMemberFields
           color {

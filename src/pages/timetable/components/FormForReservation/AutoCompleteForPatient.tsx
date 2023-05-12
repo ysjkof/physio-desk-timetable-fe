@@ -40,7 +40,8 @@ const AutoCompleteForPatient = ({
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     clearPatientAndError();
-    debounceQuery(value);
+    // TODO: page 처리
+    debounceQuery({ query: value });
   };
 
   const select = (id: number, name: string) => {

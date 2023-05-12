@@ -54,7 +54,10 @@ const Textarea = ({ register, ...args }: TextareaProps) => {
     <textarea
       {...args}
       {...register}
-      className="w-full rounded-md border px-3 py-2 placeholder:text-sm"
+      className={cls(
+        'rounded-md border px-3 py-2 placeholder:text-sm',
+        args.className ? args.className : 'w-full'
+      )}
     />
   );
 };

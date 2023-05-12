@@ -2,8 +2,10 @@ import { lazy } from 'react';
 import {
   MemberDetail,
   MemberManagement,
+  MessagesManagement,
   NotSelected,
   PrescriptionManagement,
+  SendMessage,
   Statistics,
 } from '../pages/dashboard/components';
 import InviteUser from '../pages/dashboard/components/MemberManagement/InviteUser';
@@ -88,6 +90,25 @@ const loginRoute = [
       {
         path: '',
         element: <Statistics />,
+      },
+    ],
+  },
+  {
+    path: DASHBOARD.messages.root,
+    element: (
+      <ProtectRoute whenFail={LOGIN} failWhenLogout>
+        <Dashboard />
+      </ProtectRoute>
+    ),
+    children: [
+      {
+        path: '',
+        element: <MessagesManagement />,
+        children: [
+          { path: '', element: <SendMessage /> },
+          { path: DASHBOARD.messages.booking, element: 'booking' },
+          { path: DASHBOARD.messages.results, element: 'results' },
+        ],
       },
     ],
   },

@@ -76,6 +76,17 @@ const FormForCreatePatient = ({ closeAction }: CloseAction) => {
             })}
           />
         </InputWrapper>
+        <InputWrapper label="연락처" htmlFor="연락처" error={birthError}>
+          <Input
+            id="연락처"
+            type="number"
+            placeholder="전화번호를 숫자만 입력하세요"
+            register={register('phone', {
+              maxLength: 11,
+              minLength: 9,
+            })}
+          />
+        </InputWrapper>
         <InputWrapper label="메모" htmlFor="메모" error={memoError}>
           <Textarea
             id="메모"

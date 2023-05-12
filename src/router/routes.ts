@@ -25,7 +25,12 @@ export const DASHBOARD = {
     edit: ':prescriptionId/edit',
   },
   statistics: {
-    root: 'dashboard/clinic/statistics',
+    root: '/dashboard/clinic/statistics',
+  },
+  messages: {
+    root: '/dashboard/clinic/messages',
+    booking: 'booking',
+    results: 'results',
   },
 };
 

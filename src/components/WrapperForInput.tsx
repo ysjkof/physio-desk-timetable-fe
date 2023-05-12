@@ -29,8 +29,7 @@ const InputWrapper = ({
     >
       <span
         className={cls(
-          'w-40 text-form-label',
-          align === 'row' ? 'ml-5' : '',
+          'w-40 text-form-label ml-5',
           required
             ? 'before:absolute before:-left-2 before:ml-4 before:text-red-700 before:content-["*"]'
             : ''

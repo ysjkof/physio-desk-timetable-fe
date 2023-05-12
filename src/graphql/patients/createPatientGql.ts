@@ -9,10 +9,6 @@ export const CREATE_PATIENT_DOCUMENT = gql`
       error
       patient {
         ...AllPatientFields
-        clinic {
-          id
-          name
-        }
         users {
           id
           name

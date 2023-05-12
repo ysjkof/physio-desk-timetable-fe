@@ -25,6 +25,7 @@ export interface FormForCreatePatientFields {
   gender: Gender;
   birthday?: number;
   memo?: string;
+  phone?: string;
 }
 
 export interface FormForCreatePrescriptionFields
@@ -56,6 +57,8 @@ export interface PropsWithName {
   name: string;
 }
 
-export interface FormForCreateClinicFields extends PropsWithName {}
+export interface FormForCreateClinicFields extends PropsWithName {
+  phone?: string;
+}
 
 export interface SearchPatientFormFields extends PropsWithName {}

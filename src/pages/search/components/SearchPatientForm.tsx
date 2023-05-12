@@ -36,7 +36,7 @@ export const SearchPatientForm = () => {
     const { value } = event.target;
     if (!value) return setPatients(null);
 
-    debounceQuery(value);
+    debounceQuery({ query: value });
   };
 
   useEffect(() => {

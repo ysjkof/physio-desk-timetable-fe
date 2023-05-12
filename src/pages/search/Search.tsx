@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
@@ -20,7 +20,8 @@ export default function Search() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { patientQuery, data, page, changePage } = useLazySearchPatient();
+  const { patientQuery, data } = useLazySearchPatient();
+  const [page, setPage] = useState(1);
 
   const { register, getValues } = useForm<{ clinicIds: number[] }>({
     defaultValues: { clinicIds: [clinicId] },
@@ -35,10 +36,7 @@ export default function Search() {
     if (!name) return navigate(-1);
 
     const { clinicIds } = getValues();
-    patientQuery(
-      name,
-      clinicIds.map((id) => +id)
-    );
+    patientQuery({ query: name, clinicIds: clinicIds.map((id) => +id), page });
   };
 
   const numberOfPages = createArrayFromLength(
@@ -103,7 +101,7 @@ export default function Search() {
               key={pageNumber}
               page={pageNumber}
               isActive={pageNumber === page}
-              changePage={changePage}
+              changePage={setPage}
               hasBorder
             />
           ))}
