@@ -15,6 +15,9 @@ import type {
   GetReservationsByIntervalQuery,
   GetReservationsByIntervalQueryVariables,
   QueryGetReservationsByIntervalArgs,
+  ListenDeleteReservationSubscriptionVariables,
+  ListenUpdateReservationSubscriptionVariables,
+  ListenCreateReservationSubscriptionVariables,
 } from '../../../types/generatedTypes';
 import type { ReservationOfGetReservationsByInterval } from '../../../types/processedGeneratedTypes';
 
@@ -28,22 +31,20 @@ export const useSubscriptions = ({ variables }: UseSubscriptionsProps) => {
 
   const subscriptionVariables = { input: { clinicId } };
 
-  const { loading: loadingOfDelete, data: deleteResult } =
-    useSubscription<ListenDeleteReservationSubscription>(
-      LISTEN_DELETE_RESERVATION_DOCUMENT,
-      { variables: subscriptionVariables }
-    );
+  const { loading: loadingOfDelete, data: deleteResult } = useSubscription<
+    ListenDeleteReservationSubscription,
+    ListenDeleteReservationSubscriptionVariables
+  >(LISTEN_DELETE_RESERVATION_DOCUMENT, { variables: subscriptionVariables });
 
-  const result = useSubscription<ListenUpdateReservationSubscription>(
-    LISTEN_UPDATE_RESERVATION_DOCUMENT,
-    { variables: subscriptionVariables }
-  );
+  useSubscription<
+    ListenUpdateReservationSubscription,
+    ListenUpdateReservationSubscriptionVariables
+  >(LISTEN_UPDATE_RESERVATION_DOCUMENT, { variables: subscriptionVariables });
 
-  const { loading: loadingOfCreate, data: createResult } =
-    useSubscription<ListenCreateReservationSubscription>(
-      LISTEN_CREATE_RESERVATION_DOCUMENT,
-      { variables: subscriptionVariables }
-    );
+  const { loading: loadingOfCreate, data: createResult } = useSubscription<
+    ListenCreateReservationSubscription,
+    ListenCreateReservationSubscriptionVariables
+  >(LISTEN_CREATE_RESERVATION_DOCUMENT, { variables: subscriptionVariables });
 
   const cacheUpdateOptions = {
     query: GET_RESERVATIONS_BY_INTERVAL_DOCUMENT,

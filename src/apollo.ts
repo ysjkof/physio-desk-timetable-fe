@@ -51,7 +51,9 @@ const splitLink = split(
   authLink.concat(httpLink)
 );
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+const errorLink = onError((errorHandler) => {
+  const { graphQLErrors, networkError } = errorHandler;
+
   if (graphQLErrors)
     return graphQLErrors.forEach((errors) => {
       const { locations, message, path, extensions } = errors;
