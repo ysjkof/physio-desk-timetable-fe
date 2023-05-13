@@ -11,6 +11,7 @@ const EMAIL = [
 ];
 const PASSWORD = '123';
 const CLINIC_NAME = '빕트 정형외과의원';
+const CLINIC_PHONE = '0312221111';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:5173');
@@ -18,7 +19,7 @@ test.beforeEach(async ({ page }) => {
 
 test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) => {
   const linkToLogin = page.getByRole('link', { name: '로그인', exact: true });
-  const linkToSetting = page.getByRole('link', { name: '설정' });
+  const linkToSetting = page.getByRole('link', { name: '설정', exact: true });
   const alertModal = page.locator('#alert');
   const confirmModal = page.locator('#confirm');
   const alertCloseBtn = alertModal.getByText('창 닫기');
@@ -37,6 +38,8 @@ test('병원 만들고 멤버 초대, 수락, 탈퇴 하기', async ({ page }) =
   await page.getByRole('link', { name: '병원 만들기' }).click();
   await page.locator('[id="병원이름"]').fill(CLINIC_NAME);
   await page.locator('[id="병원이름"]').press('Enter');
+  await page.locator('#연락처').fill(CLINIC_PHONE);
+  await page.locator('#연락처').press('Enter');
   await expect(page.getByText(/을 만들었습니다/)).toBeVisible();
   alertCloseBtn.click();
 
