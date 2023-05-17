@@ -11,7 +11,9 @@ import type {
   GetPatientByQuery,
   GetPrescriptionsByClinicQuery,
   UpdatePrescriptionInput,
+  GetMessagesEachPatientQuery,
 } from './generatedTypes';
+import { GetMessagesByPatientQuery } from './generatedTypes';
 
 // clinic
 
@@ -104,3 +106,14 @@ export type UserInReservation = ReservationOfGetReservationsByInterval['user'];
 
 export type DailyReportsOfGetStatistics =
   GetStatisticsQuery['getStatistics']['dailyReports'];
+
+// messages
+
+export type messagesEachPatient = NonNullable<
+  GetMessagesEachPatientQuery['getMessagesEachPatient']['results']
+>[0];
+export type messageEachPatient = messagesEachPatient['message'];
+
+export type messagesWithContentByPatient = NonNullable<
+  GetMessagesByPatientQuery['getMessagesByPatient']['results']
+>['messages'];

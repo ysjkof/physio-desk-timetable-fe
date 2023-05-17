@@ -1,14 +1,41 @@
 import {
   differenceInMinutes,
+  endOfDay,
+  isToday,
+  isYesterday,
   lastDayOfMonth,
+  lastDayOfWeek,
   parseISO,
   setDay,
   startOfDay,
+  startOfWeek,
 } from 'date-fns';
 import { LOCALE } from '../constants/constants';
+import { TwoDate } from '../types/commonTypes';
 
 export function getSunday(date: Date) {
   return startOfDay(setDay(date, 0));
+}
+
+function convertDateFromString(date: string | Date) {
+  return date instanceof Date ? date : new Date(date);
+}
+export function getStringOfTimeOrDate(
+  date: Date | string,
+  hasWeekday?: boolean
+) {
+  date = convertDateFromString(date);
+  if (isToday(date)) return getStringOfTime(date);
+  if (isYesterday(date)) return '어제';
+  return getStringYearMonthDay(date);
+}
+
+export function getStringOfDateOrTodayYesterday(date: Date | string) {
+  date = convertDateFromString(date);
+  const weekday = getStringWeekDay(date, 'short');
+  if (isToday(date)) return `오늘 (${weekday})`;
+  if (isYesterday(date)) return `어제 (${weekday})`;
+  return `${getStringYearMonthDay(date)} (${weekday})`;
 }
 
 /**
@@ -16,7 +43,8 @@ export function getSunday(date: Date) {
  * @param date
  * @returns
  */
-export function getStringOfTime(date: Date, prefix?: boolean) {
+export function getStringOfTime(date: Date | string, prefix?: boolean) {
+  date = convertDateFromString(date);
   return new Intl.DateTimeFormat(LOCALE, {
     hour: '2-digit',
     hour12: !!prefix,
@@ -24,7 +52,8 @@ export function getStringOfTime(date: Date, prefix?: boolean) {
   }).format(date);
 }
 
-export function getStringOfDateTime(date: Date) {
+export function getStringOfDateTime(date: Date | string) {
+  date = convertDateFromString(date);
   return new Intl.DateTimeFormat(LOCALE, {
     year: 'numeric',
     month: 'numeric',
@@ -35,10 +64,21 @@ export function getStringOfDateTime(date: Date) {
 }
 
 export function getStringYearMonthDay(date: Date) {
+  date = convertDateFromString(date);
   return new Intl.DateTimeFormat(LOCALE, {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
+  }).format(date);
+}
+
+export function getStringYearMonthDayWeekday(date: Date) {
+  date = convertDateFromString(date);
+  return new Intl.DateTimeFormat(LOCALE, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    weekday: 'short',
   }).format(date);
 }
 
@@ -66,8 +106,8 @@ export function getStringDay(date: Date) {
   return new Intl.DateTimeFormat(LOCALE, { day: 'numeric' }).format(date);
 }
 
-export function getStringWeekDay(date: Date) {
-  return new Intl.DateTimeFormat(LOCALE, { weekday: 'long' }).format(date);
+export function getStringWeekDay(date: Date, type: 'short' | 'long' = 'long') {
+  return new Intl.DateTimeFormat(LOCALE, { weekday: type }).format(date);
 }
 
 export function getDateAndDifference(start: string, end: string) {
@@ -218,3 +258,13 @@ export const isValidDay = (date: Date, day: number) => {
   if (day > lastDay) return false;
   return true;
 };
+
+export const startAndLastOfThisWeek = (): TwoDate => {
+  const today = new Date();
+  return [startOfWeek(today), lastDayOfWeek(today)];
+};
+
+export const startAndLastOfDay = (date: Date): TwoDate => [
+  startOfDay(date),
+  endOfDay(date),
+];

@@ -30,7 +30,7 @@ export const DASHBOARD = {
   messages: {
     root: '/dashboard/clinic/messages',
     booking: 'booking',
-    results: 'results',
+    // results: 'results',
   },
 };
 

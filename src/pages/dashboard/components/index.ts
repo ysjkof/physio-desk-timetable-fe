@@ -4,7 +4,7 @@ import { PrescriptionManagement } from './PrescriptionManagement';
 import { MemberManagement } from './MemberManagement';
 import { Statistics } from './Statistics';
 import { ProfileWithImage } from './ProfileWithImage';
-import { MessagesManagement, SendMessage } from './MessagesManagement';
+import { MessagesManagement } from './MessagesManagement';
 
 export {
   NotSelected,
@@ -14,5 +14,4 @@ export {
   Statistics,
   ProfileWithImage,
   MessagesManagement,
-  SendMessage,
 };

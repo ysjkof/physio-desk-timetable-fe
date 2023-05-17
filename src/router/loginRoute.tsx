@@ -5,7 +5,6 @@ import {
   MessagesManagement,
   NotSelected,
   PrescriptionManagement,
-  SendMessage,
   Statistics,
 } from '../pages/dashboard/components';
 import InviteUser from '../pages/dashboard/components/MemberManagement/InviteUser';
@@ -16,6 +15,7 @@ import {
 } from '../pages/setting/components';
 import Search from '../pages/search/Search';
 import { DASHBOARD, LOGIN, PATIENT_SEARCH, SETTING, TIMETABLE } from './routes';
+import { Messages } from '../pages/dashboard/components/MessagesManagement';
 
 const ProtectRoute = lazy(() => import('./ProtectRoute'));
 
@@ -105,9 +105,8 @@ const loginRoute = [
         path: '',
         element: <MessagesManagement />,
         children: [
-          { path: '', element: <SendMessage /> },
+          { path: '', element: <Messages /> },
           { path: DASHBOARD.messages.booking, element: 'booking' },
-          { path: DASHBOARD.messages.results, element: 'results' },
         ],
       },
     ],

@@ -1,5 +1,5 @@
 module.exports = {
-  content: ['./index.html', './src/**/*.{ts,tsx,mdx}'],
+  content: ['./index.html', './src/{components,pages}/**/*.tsx'],
   theme: {
     extend: {
       boxShadow: {

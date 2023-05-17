@@ -20,8 +20,7 @@ export default function Search() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { patientQuery, data } = useLazySearchPatient();
-  const [page, setPage] = useState(1);
+  const { data, page, patientQuery, setPage } = useLazySearchPatient();
 
   const { register, getValues } = useForm<{ clinicIds: number[] }>({
     defaultValues: { clinicIds: [clinicId] },
@@ -36,7 +35,7 @@ export default function Search() {
     if (!name) return navigate(-1);
 
     const { clinicIds } = getValues();
-    patientQuery({ query: name, clinicIds: clinicIds.map((id) => +id), page });
+    patientQuery({ query: name, clinicIds: clinicIds.map((id) => +id) });
   };
 
   const numberOfPages = createArrayFromLength(

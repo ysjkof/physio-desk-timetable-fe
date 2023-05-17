@@ -35,6 +35,7 @@ export type Clinic = {
   id: Scalars['Float'];
   isActive: Scalars['Boolean'];
   members: Array<Member>;
+  messages?: Maybe<Array<Messages>>;
   name: Scalars['String'];
   patient?: Maybe<Array<Patient>>;
   phone?: Maybe<Scalars['String']>;
@@ -253,6 +254,65 @@ export type GetMemberOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type GetMessagesByPatientInput = {
+  page?: InputMaybe<Scalars['Int']>;
+  patientId: Scalars['Int'];
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+export type GetMessagesByPatientOutput = {
+  __typename?: 'GetMessagesByPatientOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  results?: Maybe<GetMessagesByPatientResult>;
+};
+
+export type GetMessagesByPatientResult = {
+  __typename?: 'GetMessagesByPatientResult';
+  hasMore: Scalars['Boolean'];
+  messages: Array<Messages>;
+  patient: Patient;
+  totalCount: Scalars['Int'];
+};
+
+export type GetMessagesEachPatientInput = {
+  clinicId: Scalars['Int'];
+  dates: Array<Scalars['DateTime']>;
+  page?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+export type GetMessagesEachPatientOutput = {
+  __typename?: 'GetMessagesEachPatientOutput';
+  error?: Maybe<Scalars['String']>;
+  hasMore?: Maybe<Scalars['Boolean']>;
+  ok: Scalars['Boolean'];
+  results?: Maybe<Array<MessageEachPatient>>;
+};
+
+export type GetMessagesFromNcpOutput = {
+  __typename?: 'GetMessagesFromNCPOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  response?: Maybe<MessagesResponseFromNcp>;
+};
+
+export type GetMessagesInput = {
+  clinicId: Scalars['Int'];
+  dates: Array<Scalars['DateTime']>;
+  page?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+export type GetMessagesOutput = {
+  __typename?: 'GetMessagesOutput';
+  error?: Maybe<Scalars['String']>;
+  hasMore?: Maybe<Scalars['Boolean']>;
+  ok: Scalars['Boolean'];
+  results?: Maybe<Array<Messages>>;
+  totalCount?: Maybe<Scalars['Int']>;
+};
+
 export type GetMyClinicsStatusOutput = {
   __typename?: 'GetMyClinicsStatusOutput';
   clinics?: Maybe<Array<MemberStatus>>;
@@ -269,6 +329,7 @@ export type GetPatientByInput = {
 export type GetPatientByOutput = {
   __typename?: 'GetPatientByOutput';
   error?: Maybe<Scalars['String']>;
+  hasMore: Scalars['Boolean'];
   ok: Scalars['Boolean'];
   patients?: Maybe<Array<Patient>>;
   totalCount?: Maybe<Scalars['Int']>;
@@ -381,6 +442,18 @@ export type GetReservationsByPatientOutput = {
   totalPages?: Maybe<Scalars['Int']>;
 };
 
+export type GetSendingResultFromNcpByRequestTimeInput = {
+  requestEndTime: Scalars['DateTime'];
+  requestStartTime: Scalars['DateTime'];
+};
+
+export type GetSendingResultFromNcpOutput = {
+  __typename?: 'GetSendingResultFromNCPOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+  response?: Maybe<SendingResult>;
+};
+
 export type GetStatisticsInput = {
   clinicId?: InputMaybe<Scalars['Int']>;
   endDate: Scalars['DateTime'];
@@ -490,6 +563,75 @@ export type MemberStatus = {
   manager: Scalars['Boolean'];
   name: Scalars['String'];
   staying: Scalars['Boolean'];
+};
+
+export type MessageEachPatient = {
+  __typename?: 'MessageEachPatient';
+  id: Scalars['Int'];
+  message: Messages;
+};
+
+export type MessageFileFromNcp = {
+  __typename?: 'MessageFileFromNCP';
+  fileId: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type MessageFromNcp = {
+  __typename?: 'MessageFromNCP';
+  completeTime: Scalars['String'];
+  content: Scalars['String'];
+  contentType: Scalars['String'];
+  countryCode: Scalars['String'];
+  files?: Maybe<Array<MessageFileFromNcp>>;
+  from: Scalars['String'];
+  requestTime: Scalars['String'];
+  status: MessageStatus;
+  statusCode: Scalars['String'];
+  statusMessage: Scalars['String'];
+  statusName: Scalars['String'];
+  telcoCode: Scalars['String'];
+  to: Scalars['String'];
+};
+
+export enum MessageStatus {
+  Completed = 'COMPLETED',
+  Processing = 'PROCESSING',
+  Ready = 'READY'
+}
+
+export enum MessageType {
+  Lms = 'LMS',
+  Sms = 'SMS'
+}
+
+export type Messages = {
+  __typename?: 'Messages';
+  clinic: Clinic;
+  completeTime?: Maybe<Scalars['DateTime']>;
+  content: Scalars['String'];
+  contentType: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['Float'];
+  messageId: Scalars['String'];
+  patient: Patient;
+  requestId: Scalars['String'];
+  requestTime: Scalars['DateTime'];
+  status: MessageStatus;
+  statusCode?: Maybe<Scalars['String']>;
+  statusName?: Maybe<StatusName>;
+  telcoCode?: Maybe<Scalars['String']>;
+  to: Scalars['String'];
+  type: MessageType;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user: User;
+};
+
+export type MessagesResponseFromNcp = {
+  __typename?: 'MessagesResponseFromNCP';
+  messages: Array<MessageFromNcp>;
+  statusCode: Scalars['String'];
+  statusName: Scalars['String'];
 };
 
 export type Mutation = {
@@ -664,6 +806,7 @@ export type Patient = {
   id: Scalars['Float'];
   isNew?: Maybe<Scalars['Boolean']>;
   memo?: Maybe<Scalars['String']>;
+  messages?: Maybe<Array<Messages>>;
   name: Scalars['String'];
   phone?: Maybe<Scalars['String']>;
   registrationNumber: Scalars['Int'];
@@ -700,6 +843,10 @@ export type Query = {
   getAtomPrescriptions: GetAtomPrescriptionsOutput;
   getClinic: GetClinicOutput;
   getMember: GetMemberOutput;
+  getMessages: GetMessagesOutput;
+  getMessagesByPatient: GetMessagesByPatientOutput;
+  getMessagesEachPatient: GetMessagesEachPatientOutput;
+  getMessagesFromNCP: GetMessagesFromNcpOutput;
   getMyClinicsStatus: GetMyClinicsStatusOutput;
   getMyMembers: GetMyMembersOutput;
   getPatient: GetPatientOutput;
@@ -711,6 +858,7 @@ export type Query = {
   getReservationsByInterval: GetReservationsByIntervalOutput;
   getReservationsByMember: GetReservationsByMemberOutput;
   getReservationsByPatient: GetReservationsByPatientOutput;
+  getSendingResultFromNCPByRequestTime: GetSendingResultFromNcpOutput;
   getStatistics: GetStatisticsOutput;
   getUsersByName: GetUsersByNameOutput;
   me: User;
@@ -735,6 +883,26 @@ export type QueryGetClinicArgs = {
 
 export type QueryGetMemberArgs = {
   input: GetMemberInput;
+};
+
+
+export type QueryGetMessagesArgs = {
+  input: GetMessagesInput;
+};
+
+
+export type QueryGetMessagesByPatientArgs = {
+  input: GetMessagesByPatientInput;
+};
+
+
+export type QueryGetMessagesEachPatientArgs = {
+  input: GetMessagesEachPatientInput;
+};
+
+
+export type QueryGetMessagesFromNcpArgs = {
+  messageId: Scalars['String'];
 };
 
 
@@ -780,6 +948,11 @@ export type QueryGetReservationsByMemberArgs = {
 
 export type QueryGetReservationsByPatientArgs = {
   input: GetReservationsByPatientInput;
+};
+
+
+export type QueryGetSendingResultFromNcpByRequestTimeArgs = {
+  input: GetSendingResultFromNcpByRequestTimeInput;
 };
 
 
@@ -836,8 +1009,9 @@ export type SendChangeEmailOutput = {
 };
 
 export type SendMessageInput = {
+  clinicId: Scalars['Int'];
   content: Scalars['String'];
-  to: Scalars['String'];
+  patientId?: InputMaybe<Scalars['Int']>;
 };
 
 export type SendMessageOutput = {
@@ -845,6 +1019,43 @@ export type SendMessageOutput = {
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
 };
+
+export type SendingResult = {
+  __typename?: 'SendingResult';
+  hasMore: Scalars['Boolean'];
+  itemCount: Scalars['Int'];
+  messages: Array<SendingResultMessage>;
+  pageIndex: Scalars['Int'];
+  pageSize: Scalars['Int'];
+  statusCode: Scalars['String'];
+  statusName: StatusName;
+};
+
+export type SendingResultMessage = {
+  __typename?: 'SendingResultMessage';
+  campaignId: Scalars['String'];
+  completeTime?: Maybe<Scalars['String']>;
+  contentType: Scalars['String'];
+  countryCode: Scalars['String'];
+  from: Scalars['String'];
+  messageId: Scalars['String'];
+  requestId: Scalars['String'];
+  requestTime: Scalars['String'];
+  status: MessageStatus;
+  statusCode?: Maybe<Scalars['String']>;
+  statusMessage?: Maybe<Scalars['String']>;
+  statusName?: Maybe<StatusName>;
+  telcoCode?: Maybe<Scalars['String']>;
+  to: Scalars['String'];
+  type: MessageType;
+};
+
+export enum StatusName {
+  Fail = 'FAIL',
+  Reserved = 'RESERVED',
+  Scheduled = 'SCHEDULED',
+  Success = 'SUCCESS'
+}
 
 export type Subscription = {
   __typename?: 'Subscription';
@@ -942,6 +1153,7 @@ export type User = {
   email: Scalars['String'];
   id: Scalars['Float'];
   members?: Maybe<Array<Member>>;
+  messages?: Maybe<Array<Messages>>;
   name: Scalars['String'];
   nickname: Scalars['String'];
   notice?: Maybe<Array<Notice>>;
@@ -1091,6 +1303,34 @@ export type UpdateMemberColorMutationVariables = Exact<{
 
 export type UpdateMemberColorMutation = { __typename?: 'Mutation', updateMemberColor: { __typename?: 'UpdateMemberColorOutput', ok: boolean, error?: string | null } };
 
+export type GetMessagesQueryVariables = Exact<{
+  input: GetMessagesInput;
+}>;
+
+
+export type GetMessagesQuery = { __typename?: 'Query', getMessages: { __typename?: 'GetMessagesOutput', ok: boolean, error?: string | null, totalCount?: number | null, hasMore?: boolean | null, results?: Array<{ __typename?: 'Messages', id: number, to: string, completeTime?: any | null, status: MessageStatus, statusName?: StatusName | null, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, phone?: string | null } }> | null } };
+
+export type GetSendingResultFromNcpByRequestTimeQueryVariables = Exact<{
+  input: GetSendingResultFromNcpByRequestTimeInput;
+}>;
+
+
+export type GetSendingResultFromNcpByRequestTimeQuery = { __typename?: 'Query', getSendingResultFromNCPByRequestTime: { __typename?: 'GetSendingResultFromNCPOutput', ok: boolean, error?: string | null, response?: { __typename?: 'SendingResult', statusCode: string, statusName: StatusName, pageIndex: number, pageSize: number, itemCount: number, hasMore: boolean, messages: Array<{ __typename?: 'SendingResultMessage', requestId: string, messageId: string, requestTime: string, contentType: string, type: MessageType, countryCode: string, from: string, to: string, completeTime?: string | null, telcoCode?: string | null, status: MessageStatus, statusCode?: string | null, statusName?: StatusName | null, statusMessage?: string | null }> } | null } };
+
+export type GetMessagesByPatientQueryVariables = Exact<{
+  input: GetMessagesByPatientInput;
+}>;
+
+
+export type GetMessagesByPatientQuery = { __typename?: 'Query', getMessagesByPatient: { __typename?: 'GetMessagesByPatientOutput', ok: boolean, error?: string | null, results?: { __typename?: 'GetMessagesByPatientResult', totalCount: number, hasMore: boolean, messages: Array<{ __typename?: 'Messages', id: number, content: string, completeTime?: any | null, status: MessageStatus, statusName?: StatusName | null, type: MessageType, to: string, user: { __typename?: 'User', id: number, name: string } }>, patient: { __typename?: 'Patient', id: number, name: string } } | null } };
+
+export type GetMessagesEachPatientQueryVariables = Exact<{
+  input: GetMessagesEachPatientInput;
+}>;
+
+
+export type GetMessagesEachPatientQuery = { __typename?: 'Query', getMessagesEachPatient: { __typename?: 'GetMessagesEachPatientOutput', ok: boolean, error?: string | null, hasMore?: boolean | null, results?: Array<{ __typename?: 'MessageEachPatient', id: number, message: { __typename?: 'Messages', to: string, completeTime?: any | null, status: MessageStatus, statusName?: StatusName | null, user: { __typename?: 'User', id: number, name: string }, patient: { __typename?: 'Patient', id: number, name: string, phone?: string | null } } }> | null } };
+
 export type SendMessageMutationVariables = Exact<{
   input: SendMessageInput;
 }>;
@@ -1121,7 +1361,7 @@ export type GetPatientByQueryVariables = Exact<{
 }>;
 
 
-export type GetPatientByQuery = { __typename?: 'Query', getPatientBy: { __typename?: 'GetPatientByOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, patients?: Array<{ __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, phone?: string | null, clinic: { __typename?: 'Clinic', id: number, name: string }, users?: Array<{ __typename?: 'User', id: number, name: string }> | null }> | null } };
+export type GetPatientByQuery = { __typename?: 'Query', getPatientBy: { __typename?: 'GetPatientByOutput', error?: string | null, ok: boolean, totalPages?: number | null, totalCount?: number | null, hasMore: boolean, patients?: Array<{ __typename?: 'Patient', id: number, registrationNumber: number, name: string, gender: string, birthday?: any | null, phone?: string | null, clinic: { __typename?: 'Clinic', id: number, name: string }, users?: Array<{ __typename?: 'User', id: number, name: string }> | null }> | null } };
 
 export type GetPatientsQueryVariables = Exact<{
   input: GetPatientsInput;

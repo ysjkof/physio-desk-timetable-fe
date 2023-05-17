@@ -1,3 +1,4 @@
+export * from './useLazyGetMessagesEachPatient';
 export * from './useCreateNewVerification';
 export * from './useUpdateMemberColor';
 export * from './useAcceptInvitation';

@@ -191,3 +191,5 @@ export type PoliciesType =
   | 'TERM_AND_CONDITIONS'
   | 'SIGN_UP_AGREEMENTS'
   | 'PRIVACY_POLICY';
+
+export type TwoDate = [Date, Date];

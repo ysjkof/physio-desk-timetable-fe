@@ -1,4 +1,4 @@
 import MessagesManagement from './MessagesManagement';
-import { SendMessage } from './SendMessage';
+import Messages from './Messages';
 
-export { MessagesManagement, SendMessage };
+export { MessagesManagement, Messages };

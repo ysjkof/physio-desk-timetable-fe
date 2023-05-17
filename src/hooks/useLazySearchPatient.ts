@@ -9,11 +9,12 @@ import type {
   GetPatientByQueryVariables,
 } from '../types/generatedTypes';
 
-interface PatientQueryInput extends Pick<GetPatientByInput, 'page' | 'query'> {
+interface PatientQueryInput extends Pick<GetPatientByInput, 'query'> {
   clinicIds?: number[];
 }
 
 export const useLazySearchPatient = () => {
+  const [page, setPage] = useState(1);
   const [pages, setPages] = useState([1]);
 
   const [callQuery, queryResult] = useLazyQuery<
@@ -23,11 +24,10 @@ export const useLazySearchPatient = () => {
 
   const clinicId = useStore((state) => state.pickedClinicId);
 
-  const patientQuery = ({ page, query, clinicIds }: PatientQueryInput) => {
+  const patientQuery = ({ query, clinicIds }: PatientQueryInput) => {
     if (queryResult.loading || !query) return;
 
     let _query: string | Date = query.trim();
-
     if (parseInt(_query, 10)) {
       if (query.length === 8) _query = getDateFromStr8Digit(query);
       else return;
@@ -36,7 +36,7 @@ export const useLazySearchPatient = () => {
     callQuery({
       variables: {
         input: {
-          page,
+          page: 1,
           query,
           clinicIds: clinicIds || [clinicId],
         },
@@ -49,6 +49,7 @@ export const useLazySearchPatient = () => {
       },
       fetchPolicy: 'network-only',
     });
+    setPage(1);
   };
 
   const getPages = (totalPages: number): number[] => {
@@ -61,5 +62,5 @@ export const useLazySearchPatient = () => {
     return pagesArray;
   };
 
-  return { ...queryResult, patientQuery, pages };
+  return { ...queryResult, patientQuery, pages, page, setPage };
 };

@@ -194,3 +194,7 @@ export function formatPhoneNumber(_phoneNumber: string | undefined | null) {
 
   return `${first}-${second}-${third}`;
 }
+
+export function getByteLength(str: string) {
+  return new TextEncoder().encode(str).length;
+}

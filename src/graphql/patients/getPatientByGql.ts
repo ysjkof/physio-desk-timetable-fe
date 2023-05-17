@@ -9,6 +9,7 @@ export const GET_PATIENT_BY_DOCUMENT = gql`
       ok
       totalPages
       totalCount
+      hasMore
       patients {
         ...CommonPatientFields
         clinic {

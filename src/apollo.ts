@@ -56,7 +56,15 @@ const errorLink = onError((errorHandler) => {
 
   if (graphQLErrors)
     return graphQLErrors.forEach((errors) => {
-      const { locations, message, path, extensions } = errors;
+      const {
+        locations,
+        message,
+        path,
+        extensions,
+        stack,
+        cause,
+        originalError,
+      } = errors;
 
       if (message.includes('"$input" got invalid value'))
         printGraphQLErrors('gotInvalidValue');
@@ -66,7 +74,10 @@ const errorLink = onError((errorHandler) => {
         Message: ${message};
         Location: ${JSON.stringify(locations)};
         Path: ${JSON.stringify(path)};
-        Extensions :${JSON.stringify(extensions)};`
+        Extensions :${JSON.stringify(extensions)};
+        originalError :${JSON.stringify(originalError)};
+        Stack :${JSON.stringify(stack)};
+        Cause :${JSON.stringify(cause)};`
       );
     });
 
