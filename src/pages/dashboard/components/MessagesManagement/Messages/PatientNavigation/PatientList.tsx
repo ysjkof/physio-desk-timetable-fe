@@ -38,12 +38,12 @@ export const PatientList = ({
           const title = name ? name : to;
           const isActivated = patient?.id === id;
           const isFailed = statusName === StatusName.Fail;
-          const pickListItem = () => pickPatient({ id, name, to });
+          const pickListItem = () => pickPatient({ patient: { id, name, to } });
           return (
             <li
               key={id}
               className={cls(
-                'flex flex-col px-2 py-3 hover:bg-gray-300',
+                'flex flex-col py-3 hover:bg-gray-300 px-4',
                 isActivated ? 'border-transparent bg-gray-200' : 'border-b'
               )}
               role="button"

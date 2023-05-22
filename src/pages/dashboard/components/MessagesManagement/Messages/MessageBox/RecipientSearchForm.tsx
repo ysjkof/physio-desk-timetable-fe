@@ -1,26 +1,24 @@
-import { PropsWithChildren } from 'react';
+import { MouseEvent, PropsWithChildren, useContext } from 'react';
 import { PatientsInSearch } from '../../../../../../types/processedGeneratedTypes';
 import { getStringYearMonthDay } from '../../../../../../utils/dateUtils';
 import { formatPhoneNumber } from '../../../../../../utils/commonUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { PatientAtMessage } from '..';
 import { useRecipientSearchForm } from './useRecipientSearchForm';
+import { MessagesContext } from '../MessagesContext';
 
 interface RecipientSearchFormProps {
   hasPickedPatient: boolean;
-  pickPatient: (patient: PatientAtMessage) => void;
 }
 
 export const RecipientSearchForm = ({
   hasPickedPatient,
-  pickPatient,
 }: RecipientSearchFormProps) => {
   const { hasMorePages, patients, handleInputOnChange, fetchMore } =
     useRecipientSearchForm();
 
   return (
-    <form className="relative w-full">
+    <div className="relative w-full">
       <label className="relative">
         <FontAwesomeIcon
           icon={faMagnifyingGlass}
@@ -39,10 +37,9 @@ export const RecipientSearchForm = ({
         hasMorePages={hasMorePages}
         patients={patients}
         hasPickedPatient={hasPickedPatient}
-        pickPatient={pickPatient}
         fetchMore={fetchMore}
       />
-    </form>
+    </div>
   );
 };
 
@@ -55,10 +52,10 @@ const PopUp = ({
   hasPickedPatient,
   hasMorePages,
   patients,
-  pickPatient,
   fetchMore,
 }: PopUpProps) => {
   if (!patients || hasPickedPatient || patients.length < 1) return null;
+  const { pickPatient } = useContext(MessagesContext);
   return (
     <ul className="absolute top-12 z-10 max-h-72 w-80 overflow-y-scroll rounded-md bg-white text-base shadow-cst">
       {patients.map((patient) => {
@@ -69,8 +66,14 @@ const PopUp = ({
           : EMPTY;
         const _phone = phone ? formatPhoneNumber(phone) : EMPTY;
 
-        const selectPatient = () =>
-          pickPatient({ id: patient.id, name, to: patient.phone });
+        const selectPatient = (e: MouseEvent<HTMLButtonElement>) => {
+          e.stopPropagation();
+          pickPatient({
+            patient: { id: patient.id, name, to: patient.phone },
+            isNewMessage: true,
+          });
+        };
+
         return (
           <li
             key={patient.id}

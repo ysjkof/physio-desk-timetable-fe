@@ -1,12 +1,15 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useContext } from 'react';
 import { useSendMessageForm } from './useSendMessageForm';
 import { type PatientAtMessage } from '..';
+import { MessagesContext } from '../MessagesContext';
 
-interface FormForSendMessageProps {
-  patient: PatientAtMessage | undefined;
-}
+// interface FormForSendMessageProps {
+//   patient: PatientAtMessage | undefined;
+//   isNewMessage: boolean;
+// }
 
-export const FormForSendMessage = ({ patient }: FormForSendMessageProps) => {
+export const FormForSendMessage = () => {
+  const { patient, isNewMessage } = useContext(MessagesContext);
   const {
     preview,
     bytes,
@@ -16,6 +19,7 @@ export const FormForSendMessage = ({ patient }: FormForSendMessageProps) => {
     handleSubmit,
   } = useSendMessageForm(patient);
 
+  console.log('FormForSendMessage', patient, isNewMessage);
   if (!patient) return null;
   return (
     <form

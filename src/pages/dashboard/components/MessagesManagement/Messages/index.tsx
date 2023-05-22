@@ -1,7 +1,6 @@
 import { type Reducer, useReducer, useState } from 'react';
 import { endOfYesterday, startOfYesterday } from 'date-fns';
-import { MessagesContext } from './MessagesContext';
-import { MessageFilter } from './MessageFilter';
+import { MessagesContext, PickPatientInput } from './MessagesContext';
 import { PatientNavigation } from './PatientNavigation';
 import { MessageBox } from './MessageBox';
 import {
@@ -28,23 +27,44 @@ const defaultDateRange: DateRange = {
 };
 
 const Messages = () => {
+  const [patient, setPatient] = useState<PatientAtMessage>();
+  const [isNewMessage, setIsNewMessage] = useState(false);
+  const clearPatient = () => setPatient(undefined);
+
+  const dateRangeReducer: Reducer<DateRange, PickedRangeType> = (
+    state,
+    type
+  ) => {
+    switch (type) {
+      case 'today':
+        clearPatient();
+        return { value: startAndLastOfDay(new Date()), type };
+      case 'yesterday':
+        clearPatient();
+        return { value: [startOfYesterday(), endOfYesterday()], type };
+      case 'thisWeek':
+        clearPatient();
+        return { value: startAndLastOfThisWeek(), type };
+      case 'all':
+        clearPatient();
+        return { value: [new Date(0), new Date()], type };
+      default:
+        throw new Error('Unhandled action');
+    }
+  };
   const [dateRange, setDateRange] = useReducer<DateRangeReducer>(
     dateRangeReducer,
     defaultDateRange
   );
 
-  const [patient, setPatient] = useState<PatientAtMessage>();
-  const [isNewMessage, setIsNewMessage] = useState(false);
-
-  const clearPatient = () => setPatient(undefined);
-  const pickPatient = (patient: PatientAtMessage) => {
+  const pickPatient = ({ patient, isNewMessage = false }: PickPatientInput) => {
     const to = patient.to;
     if (!to) return setAlert({ messages: ['전화번호가 없습니다.'] });
-    setIsNewMessage(false);
+    setIsNewMessage(isNewMessage);
     setPatient(patient);
   };
   const toggleNewMessageAndResetPatient = () => {
-    setIsNewMessage((prev) => !prev);
+    setIsNewMessage(!isNewMessage);
     setPatient(undefined);
   };
 
@@ -55,16 +75,12 @@ const Messages = () => {
         isNewMessage,
         patient,
         pickPatient,
+        setDateRange,
         toggleNewMessageAndResetPatient,
       }}
     >
       <div className="flex h-full divide-x overflow-y-hidden overflow-x-scroll rounded-md border bg-white shadow">
-        <MessageFilter
-          dateRange={dateRange}
-          setDateRange={setDateRange}
-          clearPatient={clearPatient}
-        />
-        <PatientNavigation dates={dateRange} />
+        <PatientNavigation />
         <MessageBox />
       </div>
     </MessagesContext.Provider>
@@ -73,18 +89,3 @@ const Messages = () => {
 
 export default Messages;
 export { Messages };
-
-const dateRangeReducer: Reducer<DateRange, PickedRangeType> = (state, type) => {
-  switch (type) {
-    case 'today':
-      return { value: startAndLastOfDay(new Date()), type };
-    case 'yesterday':
-      return { value: [startOfYesterday(), endOfYesterday()], type };
-    case 'thisWeek':
-      return { value: startAndLastOfThisWeek(), type };
-    case 'all':
-      return { value: [new Date(0), new Date()], type };
-    default:
-      throw new Error('Unhandled action');
-  }
-};

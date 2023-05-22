@@ -16,7 +16,7 @@ const MessagesManagement = () => {
       >
         <div className="my-6 flex max-w-4xl items-center justify-between gap-6">
           <Header />
-          <Navigation />
+          {/* <Navigation /> */}
         </div>
 
         <div

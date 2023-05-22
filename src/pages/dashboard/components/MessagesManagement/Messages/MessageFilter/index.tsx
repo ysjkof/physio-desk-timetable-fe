@@ -1,11 +1,7 @@
+import { useContext } from 'react';
 import { cls } from '../../../../../../utils/commonUtils';
-import { DateRange, PickedRangeType } from '..';
-
-interface MessageFilterProps {
-  dateRange: DateRange;
-  setDateRange: React.Dispatch<PickedRangeType>;
-  clearPatient: () => void;
-}
+import { MessagesContext } from '../MessagesContext';
+import { type PickedRangeType } from '..';
 
 const PICKED_RANGE_KR = {
   thisWeek: '이번주',
@@ -14,30 +10,23 @@ const PICKED_RANGE_KR = {
   all: '전체',
 } as const;
 
-export const MessageFilter = ({
-  dateRange,
-  setDateRange,
-  clearPatient,
-}: MessageFilterProps) => {
+export const MessageFilter = () => {
+  const { dateRange, setDateRange } = useContext(MessagesContext);
   const setToday = () => {
     setDateRange('today');
-    clearPatient();
   };
   const setYesterday = () => {
     setDateRange('yesterday');
-    clearPatient();
   };
   const setThisWeek = () => {
     setDateRange('thisWeek');
-    clearPatient();
   };
   const setAll = () => {
     setDateRange('all');
-    clearPatient();
   };
 
   return (
-    <div className="flex flex-col py-2">
+    <div className="flex py-2 px-2 border-b justify-between">
       <FilterButton
         onClick={setToday}
         pickedRange={dateRange.type}
@@ -72,7 +61,7 @@ const FilterButton = ({ onClick, type, pickedRange }: FilterButtonProps) => {
   return (
     <button
       className={cls(
-        'mx-2 rounded-md px-6 py-1',
+        'rounded-md w-full py-1',
         pickedRange === type ? 'bg-cst-blue text-white' : ''
       )}
       onClick={onClick}

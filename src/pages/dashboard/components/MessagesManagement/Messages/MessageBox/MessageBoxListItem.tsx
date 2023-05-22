@@ -34,7 +34,7 @@ export const MessageBoxListItem = ({
 
   const isFailed = statusName === StatusName.Fail;
   return (
-    <li className="mb-4 flex w-full max-w-sm items-center justify-between">
+    <li className="mb-6 flex w-full max-w-sm items-center justify-between">
       <div className="w-full min-w-[19rem] whitespace-pre-wrap break-words rounded-xl bg-white px-3 py-2 shadow">
         <p className="text-sm">{content}</p>
         <MessageListItemFooter

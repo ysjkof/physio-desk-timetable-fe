@@ -7,22 +7,9 @@ import { Recipient } from './Recipient';
 import { MessageBoxListItem } from './MessageBoxListItem';
 import { MessagesContext } from '../MessagesContext';
 import { MoreDataBtn } from '../components/MoreDataBtn';
-import { type PatientAtMessage } from '..';
 
-export interface MessageBoxProps {
-  setPatient: React.Dispatch<
-    React.SetStateAction<PatientAtMessage | undefined>
-  >;
-  setIsNewMessage: React.Dispatch<React.SetStateAction<boolean>>;
-}
 export const MessageBox = () => {
-  const {
-    patient,
-    isNewMessage,
-    pickPatient,
-    toggleNewMessageAndResetPatient,
-  } = useContext(MessagesContext);
-
+  const { patient, isNewMessage } = useContext(MessagesContext);
   const { messages, ulRef, hasMore, fetchMore } = useMessageBox({
     patientId: patient?.id,
     isNewMessage,
@@ -33,7 +20,7 @@ export const MessageBox = () => {
 
   return (
     <div className="flex grow flex-col bg-gray-100">
-      <Recipient inputMode={isNewMessage} pickPatient={pickPatient} />
+      <Recipient />
       <ul
         className="flex grow flex-col items-center overflow-y-scroll px-4 pt-4"
         ref={ulRef}
@@ -62,7 +49,7 @@ export const MessageBox = () => {
           );
         })}
       </ul>
-      <FormForSendMessage patient={patient} />
+      <FormForSendMessage />
     </div>
   );
 };

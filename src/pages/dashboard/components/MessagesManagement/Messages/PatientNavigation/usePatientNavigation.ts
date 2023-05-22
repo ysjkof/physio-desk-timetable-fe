@@ -9,11 +9,9 @@ export const usePatientNavigation = ({ dates }: usePatientNavigationProps) => {
   const { patients, hasMorePage, fetchMore, getMessagesEachPatient } =
     useLazyGetMessagesEachPatient();
 
-  const handleSubmit = () => {};
-
   useEffect(() => {
     getMessagesEachPatient(dates.value);
   }, [dates]);
 
-  return { patients, hasMorePage, fetchMore, handleSubmit };
+  return { patients, hasMorePage, fetchMore };
 };
