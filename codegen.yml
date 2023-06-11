@@ -3,4 +3,3 @@ documents: ['src/graphql/**/*Gql.ts']
 generates:
   src/types/generatedTypes.ts:
     { plugins: ['typescript', 'typescript-operations'] }
-watch: true
