@@ -93,24 +93,24 @@ const loginRoute = [
       },
     ],
   },
-  {
-    path: DASHBOARD.messages.root,
-    element: (
-      <ProtectRoute whenFail={LOGIN} failWhenLogout>
-        <Dashboard />
-      </ProtectRoute>
-    ),
-    children: [
-      {
-        path: '',
-        element: <MessagesManagement />,
-        children: [
-          { path: '', element: <Messages /> },
-          { path: DASHBOARD.messages.booking, element: 'booking' },
-        ],
-      },
-    ],
-  },
+  // {
+  //   path: DASHBOARD.messages.root,
+  //   element: (
+  //     <ProtectRoute whenFail={LOGIN} failWhenLogout>
+  //       <Dashboard />
+  //     </ProtectRoute>
+  //   ),
+  //   children: [
+  //     {
+  //       path: '',
+  //       element: <MessagesManagement />,
+  //       children: [
+  //         { path: '', element: <Messages /> },
+  //         { path: DASHBOARD.messages.booking, element: 'booking' },
+  //       ],
+  //     },
+  //   ],
+  // },
   {
     path: SETTING.root,
     element: (

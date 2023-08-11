@@ -76,13 +76,13 @@ const LinkBtns = () => {
         <BrokenLine />
         통계
       </LinkButton>
-      <LinkButton
+      {/* <LinkButton
         path={DASHBOARD.messages.root}
         isActive={pathname.startsWith(DASHBOARD.messages.root)}
       >
         <BrokenLine />
         문자메시지
-      </LinkButton>
+      </LinkButton> */}
     </div>
   );
 };
