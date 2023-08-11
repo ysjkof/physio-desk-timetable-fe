@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamation, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +8,7 @@ import {
 } from '../../../../../../constants/constants';
 import { cls } from '../../../../../../utils/commonUtils';
 import TooltipForReservationDetail from './TooltipForReservation';
-import { useStore } from '../../../../../../store';
+import { setPickedReservation, useStore } from '../../../../../../store';
 import { XMark } from '../../../../../../svgs';
 import type {
   PatientInReservation,
@@ -36,7 +35,6 @@ const EventBox = ({
   event,
   color = DEFAULT_COLOR,
 }: EventBoxProps) => {
-  const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const eventBox = useRef<HTMLDivElement>(null);
 
@@ -54,9 +52,11 @@ const EventBox = ({
   const showNoshowOfTimetable = useStore(
     (state) => state.showNoshowOfTimetable
   );
+  const isCopyMode = useStore((state) => state.isCopyMode);
 
   const onClickBox = () => {
-    navigate('', { state: { reservationId: event.id } });
+    if (!isCopyMode) return;
+    setPickedReservation(event);
   };
 
   return (

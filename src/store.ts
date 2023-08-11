@@ -35,6 +35,7 @@ interface ZustandStoreState {
   hiddenUsers: HiddenUsersSet;
   pickedDate: Date;
   pickedReservation: PickedReservationType;
+  isCopyMode: boolean;
 }
 
 const initialState: ZustandStoreState = {
@@ -60,6 +61,7 @@ const initialState: ZustandStoreState = {
   hiddenUsers: new Set(),
   pickedDate: startOfDay(new Date()),
   pickedReservation: undefined,
+  isCopyMode: false,
 };
 
 export const useStore = !isProduction
@@ -149,6 +151,9 @@ export const setPickedDate = (value?: Date, calcBy?: number) =>
 
 export const setPickedReservation = (value: PickedReservationType) =>
   useStore.setState(() => ({ pickedReservation: value }));
+
+export const setIsCopyMode = (value: boolean) =>
+  useStore.setState(() => ({ isCopyMode: value }));
 
 // store + etc(localStorage, callback ...)
 

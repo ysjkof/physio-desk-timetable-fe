@@ -12,7 +12,12 @@ import {
   TableController,
   TimetableTemplate,
 } from './components';
-import { setToast, useStore } from '../../store';
+import {
+  setIsCopyMode,
+  setPickedReservation,
+  setToast,
+  useStore,
+} from '../../store';
 import { useMe } from '../../hooks';
 import type { LocationState } from '../../types/commonTypes';
 
@@ -20,6 +25,7 @@ const Loading = lazy(() => import('../../components/Loading'));
 
 const TimeTable = () => {
   const pickedDate = useStore((state) => state.pickedDate);
+  const pickedReservation = useStore((state) => state.pickedReservation);
   const locationState = useLocation().state as LocationState;
   const navigate = useNavigate();
 
@@ -39,9 +45,34 @@ const TimeTable = () => {
     const clearLocationState = () => {
       navigate('', { state: null });
     };
-
     clearLocationState();
   }, []);
+
+  useEffect(() => {
+    const clearLocationState = () => {
+      navigate('', { state: null });
+    };
+    clearLocationState();
+
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Esc') return setPickedReservation(undefined);
+      if (event.key === 'Alt') {
+        if (pickedReservation) setPickedReservation(undefined);
+        setIsCopyMode(true);
+      }
+    };
+    const handleKeyup = (event: KeyboardEvent) => {
+      if (event.key === 'Alt') {
+        setIsCopyMode(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeydown);
+    window.addEventListener('keyup', handleKeyup);
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+      window.removeEventListener('keyup', handleKeyup);
+    };
+  }, [pickedReservation]);
 
   if (!schedules) return <Loading />;
 

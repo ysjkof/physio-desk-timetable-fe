@@ -11,7 +11,7 @@ import {
   TABLE_CELL_HEIGHT,
 } from '../../../../../../constants/constants';
 import { cls } from '../../../../../../utils/commonUtils';
-import { setAlert, useStore } from '../../../../../../store';
+import { setAlert, setIsCopyMode, useStore } from '../../../../../../store';
 import type { PickedReservationType } from '../../../../../../types/commonTypes';
 
 interface ReserveBtnProps {
@@ -57,6 +57,7 @@ const ReserveBtn = ({
     }
     if (pickedReservation) {
       quickCreateReservation();
+      setIsCopyMode(false);
     } else {
       openReserveModal();
     }
